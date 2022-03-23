@@ -7,17 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Conversions.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.IDomain", "Dfe.Academies.Conversions.IDomain\Dfe.Academies.Conversions.IDomain.csproj", "{1916E8AB-3167-457D-AD1B-1EC4C1A92373}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Domain.Test", "Dfe.Academies.Conversions.Domain.Test\Dfe.Academies.Conversions.Domain.Test.csproj", "{4AD797FA-0D14-45D8-86BF-B965056764D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Domain.UnitTest", "Dfe.Academies.Conversions.Domain.UnitTest\Dfe.Academies.Conversions.Domain.UnitTest.csproj", "{4AD797FA-0D14-45D8-86BF-B965056764D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Data", "Dfe.Academies.Conversions.Data\Dfe.Academies.Conversions.Data.csproj", "{F3DF5081-0CB4-4E8C-AD99-54CAF1851D4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.IData", "Dfe.Academies.Conversions.IData\Dfe.Academies.Conversions.IData.csproj", "{C4106FE4-3F23-4F04-8DEE-88D29D6B8DD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Data.Test", "Dfe.Academies.Conversions.Data.Test\Dfe.Academies.Conversions.Data.Test.csproj", "{81E513D6-87D8-40C5-BF83-B4CAC0FBF775}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Data.UnitTest", "Dfe.Academies.Conversions.Data.UnitTest\Dfe.Academies.Conversions.Data.UnitTest.csproj", "{81E513D6-87D8-40C5-BF83-B4CAC0FBF775}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Service", "Dfe.Academies.Conversions.Service\Dfe.Academies.Conversions.Service.csproj", "{EAA3B7AE-4E52-4774-9B23-D79F6E80E9BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Service.Test", "Dfe.Academies.Conversions.Service.Test\Dfe.Academies.Conversions.Service.Test.csproj", "{106EB485-0E64-418A-A9E9-FD3AC4773D51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.Service.UnitTest", "Dfe.Academies.Conversions.Service.UnitTest\Dfe.Academies.Conversions.Service.UnitTest.csproj", "{106EB485-0E64-418A-A9E9-FD3AC4773D51}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Conversions.IntegrationTest", "Dfe.Academies.Conversions.IntegrationTest\Dfe.Academies.Conversions.IntegrationTest.csproj", "{4D399515-0544-4A26-B8F0-586012BF436D}"
 EndProject
