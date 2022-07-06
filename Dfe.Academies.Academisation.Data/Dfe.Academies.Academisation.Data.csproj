@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dfe.Academies.Conversions.IData\Dfe.Academies.Conversions.IData.csproj" />
-    <ProjectReference Include="..\Dfe.Academies.Conversions.IDomain\Dfe.Academies.Conversions.IDomain.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.IData\Dfe.Academies.Academisation.IData.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
   </ItemGroup>
 
 </Project>
