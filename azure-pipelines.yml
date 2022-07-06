@@ -35,8 +35,8 @@ steps:
     arguments: '--output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: Academies External'
+  displayName: 'Publish Artifact: Academies Academisation API'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'AcademiesExternalBuild'
+    ArtifactName: 'AcademiesAcademisationApiBuild'
     publishLocation: 'Container'
