@@ -1,4 +1,6 @@
+using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -7,16 +9,18 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	public class HelloWorldController : ControllerBase
 	{
 		private readonly ILogger<HelloWorldController> _logger;
+		private readonly HelloWorldOptions _helloWorldOptions;
 
-		public HelloWorldController(ILogger<HelloWorldController> logger)
+		public HelloWorldController(ILogger<HelloWorldController> logger, IOptions<HelloWorldOptions> helloWorldOptions)
 		{
 			_logger = logger;
+			_helloWorldOptions = helloWorldOptions.Value;
 		}
 
 		[HttpGet]
-		public IEnumerable<string> Get()
+		public string Get()
 		{
-			return new List<string> { "hello", "world" };
+			return $"hello {_helloWorldOptions.Greeting}";
 		}
 	}
 }
