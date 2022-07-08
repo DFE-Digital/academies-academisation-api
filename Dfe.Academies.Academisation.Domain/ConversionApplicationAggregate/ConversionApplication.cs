@@ -27,6 +27,6 @@ public class ConversionApplication : IConversionApplication
 			throw new ValidationException(validationResult.ToString());
 		}
 
-		return new ConversionApplication(applicationType, initialContributor);
+		return new(applicationType, initialContributor);
 	}
 }
