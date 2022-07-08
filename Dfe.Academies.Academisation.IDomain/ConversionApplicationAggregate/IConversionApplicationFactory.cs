@@ -2,6 +2,6 @@
 {
 	public interface IConversionApplicationFactory
 	{
-		public IConversionApplication Create(ApplicationType applicationType, IContributorDetails initialContributor);
+		Task<IConversionApplication> Create(ApplicationType applicationType, IContributorDetails initialContributor);
 	}
 }

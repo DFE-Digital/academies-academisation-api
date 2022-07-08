@@ -11,9 +11,9 @@ namespace Dfe.Academies.Academisation.Service
 			_factory = factory;
 		}
 
-		public IConversionApplication Create(ApplicationType applicationType, IContributorDetails initialContributor)
+		public async Task<IConversionApplication> Create(ApplicationType applicationType, IContributorDetails initialContributor)
 		{
-			IConversionApplication application = _factory.Create(applicationType, initialContributor);
+			IConversionApplication application = await _factory.Create(applicationType, initialContributor);
 
 			// ToDo: Save to Database
 

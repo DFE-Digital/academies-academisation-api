@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ConversionApplicationAggregate\" />
+  </ItemGroup>
+
 </Project>
