@@ -7,10 +7,10 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate
 	{
 		public CreateConversionApplicationValidator()
 		{
-			RuleFor(details => details.RoleOther)
+			RuleFor(details => details.OtherRoleName)
 				.NotNull()
 				.When(details => details.Role == ContributorRole.Other)
-				.WithMessage("RoleOther must be specified if Role is Other");
+				.WithMessage("OtherRoleName must be specified if Role is Other");
 		}
 	}
 }

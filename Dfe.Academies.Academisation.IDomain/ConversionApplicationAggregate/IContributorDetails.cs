@@ -10,6 +10,6 @@
 
 		ContributorRole Role { get; }
 
-		string? RoleOther { get; }
+		string? OtherRoleName { get; }
 	}
 }

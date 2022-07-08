@@ -8,6 +8,6 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate
 		string LastName,
 		string EmailAddress,
 		ContributorRole Role,
-		string? RoleOther
+		string? OtherRoleName
 	) : IContributorDetails;
 }
