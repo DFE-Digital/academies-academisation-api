@@ -12,8 +12,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat, null)]
-//		[InlineData(ApplicationType.FormAMat, "")]
-		public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType, string otherRoleName)
+        [InlineData(ApplicationType.FormAMat, "")]
+        public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType, string otherRoleName)
 		{
 			// Arrange
 			ConversionApplicationFactory target = new();
@@ -25,8 +25,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat, null)]
-		//		[InlineData(ApplicationType.FormAMat, "")]
-		public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType, string otherRoleName)
+        [InlineData(ApplicationType.FormAMat, "")]
+        public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType, string otherRoleName)
 		{
 			// Arrange
 			ConversionApplicationFactory target = new();
@@ -37,6 +37,17 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 
 			// Assert
 			Assert.IsType<ConversionApplication>(result);
+		}
+
+		[Fact]
+		public async Task EmailAddressIsInvalid___ThrowsException()
+        {
+			// Arrange
+			ConversionApplicationFactory target = new();
+			ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
+
+			// Act and Assert
+			await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(ApplicationType.FormAMat, contributor));
 		}
 	}
 }

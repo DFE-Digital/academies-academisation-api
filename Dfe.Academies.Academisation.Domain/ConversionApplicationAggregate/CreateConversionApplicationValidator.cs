@@ -8,9 +8,12 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate
 		public CreateConversionApplicationValidator()
 		{
 			RuleFor(details => details.OtherRoleName)
-				.NotNull()
+				.NotEmpty()
 				.When(details => details.Role == ContributorRole.Other)
 				.WithMessage("OtherRoleName must be specified if Role is Other");
+
+			RuleFor(details => details.EmailAddress)
+				.EmailAddress();
 		}
 	}
 }
