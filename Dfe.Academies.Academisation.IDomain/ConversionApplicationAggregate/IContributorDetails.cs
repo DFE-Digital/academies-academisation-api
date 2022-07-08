@@ -1,15 +1,14 @@
-﻿namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate
+﻿namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+
+public interface IContributorDetails
 {
-	public interface IContributorDetails
-	{
-		string FirstName { get; }
+	string FirstName { get; }
 
-		string LastName { get; }
+	string LastName { get; }
 
-		string EmailAddress { get; }
+	string EmailAddress { get; }
 
-		ContributorRole Role { get; }
+	ContributorRole Role { get; }
 
-		string? OtherRoleName { get; }
-	}
+	string? OtherRoleName { get; }
 }
