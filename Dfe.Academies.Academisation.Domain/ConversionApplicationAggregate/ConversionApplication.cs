@@ -14,7 +14,7 @@ public class ConversionApplication : IConversionApplication
 		_contributors.Add(new Contributor(initialContributor));
 	}
 
-	public ApplicationType ApplicationType { get; init; }
+	public ApplicationType ApplicationType { get; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 

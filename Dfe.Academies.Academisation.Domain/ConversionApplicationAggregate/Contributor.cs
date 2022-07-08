@@ -11,5 +11,5 @@ public class Contributor : IContributor
 
 	public int Id { get; }
 
-	public IContributorDetails Details { get; internal set; }
+	public IContributorDetails Details { get; }
 }
