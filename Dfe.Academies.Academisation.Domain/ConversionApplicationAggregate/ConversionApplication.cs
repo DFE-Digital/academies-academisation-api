@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 public class ConversionApplication : IConversionApplication
 {
 	private readonly List<IContributor> _contributors = new();
-	private readonly static CreateConversionApplicationValidator _createValidator = new();
+	private static readonly CreateConversionApplicationValidator CreateValidator = new();
 
 	private ConversionApplication(ApplicationType applicationType, IContributorDetails initialContributor)
 	{
@@ -20,7 +20,7 @@ public class ConversionApplication : IConversionApplication
 
 	internal static async Task<ConversionApplication> Create(ApplicationType applicationType, IContributorDetails initialContributor)
 	{
-		var validationResult = await _createValidator.ValidateAsync(initialContributor);
+		var validationResult = await CreateValidator.ValidateAsync(initialContributor);
 
 		if (!validationResult.IsValid)
 		{
