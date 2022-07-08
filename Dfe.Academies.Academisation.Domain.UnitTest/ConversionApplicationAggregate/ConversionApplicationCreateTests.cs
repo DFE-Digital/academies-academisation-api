@@ -4,39 +4,38 @@ using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggregate
+namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggregate;
+
+public class ConversionApplicationCreateTests
 {
-	public class ConversionApplicationCreateTests
-	{
-		private readonly Faker faker = new();
+	private readonly Faker faker = new();
 
-		[Theory]
-		[InlineData(ApplicationType.FormAMat, null)]
+	[Theory]
+	[InlineData(ApplicationType.FormAMat, null)]
 //		[InlineData(ApplicationType.FormAMat, "")]
-		public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType, string otherRoleName)
-		{
-			// Arrange
-			ConversionApplicationFactory target = new();
-			ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.Other, otherRoleName);
+	public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType, string otherRoleName)
+	{
+		// Arrange
+		ConversionApplicationFactory target = new();
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.Other, otherRoleName);
 
-			// Act & Assert
-			await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(applicationType, contributor));
-		}
+		// Act & Assert
+		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(applicationType, contributor));
+	}
 
-		[Theory]
-		[InlineData(ApplicationType.FormAMat, null)]
-		//		[InlineData(ApplicationType.FormAMat, "")]
-		public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType, string otherRoleName)
-		{
-			// Arrange
-			ConversionApplicationFactory target = new();
-			ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.ChairOfGovernors, otherRoleName);
+	[Theory]
+	[InlineData(ApplicationType.FormAMat, null)]
+	//		[InlineData(ApplicationType.FormAMat, "")]
+	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType, string otherRoleName)
+	{
+		// Arrange
+		ConversionApplicationFactory target = new();
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.ChairOfGovernors, otherRoleName);
 
-			// Act
-			var result = await target.Create(applicationType, contributor);
+		// Act
+		var result = await target.Create(applicationType, contributor);
 
-			// Assert
-			Assert.IsType<ConversionApplication>(result);
-		}
+		// Assert
+		Assert.IsType<ConversionApplication>(result);
 	}
 }

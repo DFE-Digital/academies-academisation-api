@@ -1,9 +1,8 @@
-﻿namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate
+﻿namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+
+public enum ApplicationType
 {
-	public enum ApplicationType
-	{
-		JoinAMat = 0,
-		FormAMat = 1,
-		FormASat = 2
-	}
+	JoinAMat = 0,
+	FormAMat = 1,
+	FormASat = 2
 }

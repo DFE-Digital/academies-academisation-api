@@ -1,9 +1,8 @@
-﻿namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate
-{
-	public interface IConversionApplication
-	{
-		ApplicationType ApplicationType { get; }
+﻿namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
-		IReadOnlyCollection<IContributor> Contributors { get; }
-	}
+public interface IConversionApplication
+{
+	ApplicationType ApplicationType { get; }
+
+	IReadOnlyCollection<IContributor> Contributors { get; }
 }
