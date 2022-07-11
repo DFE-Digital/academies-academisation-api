@@ -2,5 +2,5 @@
 
 public interface IAdvisoryBoardDecisionFactory
 {
-    Task<IAdvisoryBoardDecision> Create(IAdvisoryBoardDecisionDetails details);
+    Task<IAdvisoryBoardDecision> Create(int projectId, IAdvisoryBoardDecisionDetails details);
 }

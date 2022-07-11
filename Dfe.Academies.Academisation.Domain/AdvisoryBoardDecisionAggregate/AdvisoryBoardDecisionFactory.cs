@@ -4,8 +4,8 @@ namespace Dfe.Academies.Academisation.Domain.AdvisoryBoardDecisionAggregate;
 
 public class AdvisoryBoardDecisionFactory : IAdvisoryBoardDecisionFactory
 {
-    public async Task<IAdvisoryBoardDecision> Create(IAdvisoryBoardDecisionDetails details)
+    public async Task<IAdvisoryBoardDecision> Create(int projectId, IAdvisoryBoardDecisionDetails details)
     {
-        return await AdvisoryBoardDecision.Create(details);
+        return await AdvisoryBoardDecision.Create(projectId, details);
     }
 }

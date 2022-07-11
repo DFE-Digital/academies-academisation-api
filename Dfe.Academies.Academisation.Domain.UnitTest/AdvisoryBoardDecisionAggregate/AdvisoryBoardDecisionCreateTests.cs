@@ -35,7 +35,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act 
-        var result = await target.Create(details);
+        var result = await target.Create(_faker.Random.Int(), details);
         
         //Assert
         Assert.IsType<AdvisoryBoardDecision>(result);
@@ -59,7 +59,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act 
-        var result = await target.Create(details);
+        var result = await target.Create(_faker.Random.Int(), details);
         
         //Assert
         Assert.Equal(details, result.Details);
@@ -88,7 +88,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act 
-        var result = await target.Create(details);
+        var result = await target.Create(_faker.Random.Int(), details);
         
         //Assert
         Assert.IsType<AdvisoryBoardDecision>(result);
@@ -117,7 +117,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act 
-        var result = await target.Create(details);
+        var result = await target.Create(_faker.Random.Int(), details);
         
         //Assert
         Assert.Equal(details, result.Details);
@@ -146,7 +146,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act 
-        var result = await target.Create(details);
+        var result = await target.Create(_faker.Random.Int(), details);
         
         //Assert
         Assert.IsType<AdvisoryBoardDecision>(result);
@@ -175,10 +175,34 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act 
-        var result = await target.Create(details);
+        var result = await target.Create(_faker.Random.Int(), details);
         
         //Assert
         Assert.Equal(details, result.Details);
+    }
+    
+    [Fact]
+    private async Task DetailsAreValid__ReturnsAdvisoryBoardDecisionWithExpectedProjectIdSet()
+    {
+        // Arrange
+        var projectId = _faker.Random.Int();
+        
+        AdvisoryBoardDecisionFactory target = new();
+        AdvisoryBoardDecisionDetails details = new(
+            Decision: AdvisoryBoardDecisions.Approved,
+            ApprovedConditionsSet: false,
+            ApprovedConditionsDetails: null,
+            DeclinedReasons: null,
+            DeclinedOtherReason: null,
+            DeferredReasons: null,
+            DeferredOtherReason: null,
+            AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
+        
+        // Act 
+        var result = await target.Create(projectId, details);
+        
+        //Assert
+        Assert.Equal(projectId, result.ProjectId);
     }
     
     [Fact]
@@ -197,7 +221,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: default);
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
 
     [Fact]
@@ -216,7 +240,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
 
     [Fact]
@@ -235,7 +259,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Theory]
@@ -257,7 +281,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
 
     [Fact]
@@ -275,7 +299,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
 
     [Fact]
@@ -293,7 +317,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -311,7 +335,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -330,7 +354,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -349,7 +373,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Theory]
@@ -371,7 +395,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -389,7 +413,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -407,7 +431,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -425,7 +449,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     
@@ -449,7 +473,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -468,7 +492,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Theory]
@@ -490,7 +514,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -508,7 +532,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -526,7 +550,7 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
     
     [Fact]
@@ -544,6 +568,6 @@ public class AdvisoryBoardDecisionCreateTests
             AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1));
         
         // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+        await Assert.ThrowsAsync<ValidationException>(() => target.Create(_faker.Random.Int(), details));
     }
 }

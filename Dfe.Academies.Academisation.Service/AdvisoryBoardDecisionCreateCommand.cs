@@ -12,9 +12,9 @@ public class AdvisoryBoardDecisionCreateCommand
 		_factory = factory;
 	}
 
-	public async Task<IAdvisoryBoardDecision> Create(IAdvisoryBoardDecisionDetails details)
+	public async Task<IAdvisoryBoardDecision> Create(int projectId, IAdvisoryBoardDecisionDetails details)
 	{
-		var advisoryBoardDecision = await _factory.Create(details);
+		var advisoryBoardDecision = await _factory.Create(projectId, details);
 
 		//ToDo: Save to Database
 
