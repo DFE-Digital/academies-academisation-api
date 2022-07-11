@@ -10,6 +10,6 @@ public record AdvisoryBoardDecisionDetails(
     List<AdvisoryBoardDeclinedReasons>? DeclinedReasons,
     string? DeclinedOtherReason,
     List<AdvisoryBoardDeferredReasons>? DeferredReasons,
-    string DeferredOtherReason,
+    string? DeferredOtherReason,
     DateTime AdvisoryBoardDecisionDate
 ) : IAdvisoryBoardDecisionDetails;
