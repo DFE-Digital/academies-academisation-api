@@ -10,44 +10,43 @@ public class ConversionApplicationCreateTests
 {
 	private readonly Faker faker = new();
 
-		[Theory]
-		[InlineData(ApplicationType.FormAMat, null)]
-        [InlineData(ApplicationType.FormAMat, "")]
-        public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType, string otherRoleName)
-		{
-			// Arrange
-			ConversionApplicationFactory target = new();
-			ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.Other, otherRoleName);
+	[Theory]
+	[InlineData(ApplicationType.FormAMat, null)]
+	[InlineData(ApplicationType.FormAMat, "")]
+	public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType, string otherRoleName)
+	{
+		// Arrange
+		ConversionApplicationFactory target = new();
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.Other, otherRoleName);
 
 		// Act & Assert
 		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(applicationType, contributor));
 	}
 
-		[Theory]
-		[InlineData(ApplicationType.FormAMat, null)]
-        [InlineData(ApplicationType.FormAMat, "")]
-        public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType, string otherRoleName)
-		{
-			// Arrange
-			ConversionApplicationFactory target = new();
-			ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.ChairOfGovernors, otherRoleName);
+	[Theory]
+	[InlineData(ApplicationType.FormAMat, null)]
+	[InlineData(ApplicationType.FormAMat, "")]
+	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType, string otherRoleName)
+	{
+		// Arrange
+		ConversionApplicationFactory target = new();
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.ChairOfGovernors, otherRoleName);
 
 		// Act
 		var result = await target.Create(applicationType, contributor);
 
-			// Assert
-			Assert.IsType<ConversionApplication>(result);
-		}
+		// Assert
+		Assert.IsType<ConversionApplication>(result);
+	}
 
-		[Fact]
-		public async Task EmailAddressIsInvalid___ThrowsException()
-        {
-			// Arrange
-			ConversionApplicationFactory target = new();
-			ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
+	[Fact]
+	public async Task EmailAddressIsInvalid___ThrowsException()
+	{
+		// Arrange
+		ConversionApplicationFactory target = new();
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
 
-			// Act and Assert
-			await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(ApplicationType.FormAMat, contributor));
-		}
+		// Act and Assert
+		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(ApplicationType.FormAMat, contributor));
 	}
 }
