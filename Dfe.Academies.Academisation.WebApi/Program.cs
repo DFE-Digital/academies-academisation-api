@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<HelloWorldOptions>(
-    builder.Configuration.GetSection(HelloWorldOptions.Name));
+	builder.Configuration.GetSection(HelloWorldOptions.Name));
 
 var app = builder.Build();
 
