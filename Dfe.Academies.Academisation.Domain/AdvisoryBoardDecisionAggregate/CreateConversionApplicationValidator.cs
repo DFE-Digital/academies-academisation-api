@@ -123,7 +123,8 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 			.Null()
 			.When(details => 
 				details.Decision is AdvisoryBoardDecisions.Declined && 
-				!details.DeclinedReasons!.Contains(AdvisoryBoardDeclinedReasons.Other))
+				details.DeclinedReasons is not null &&
+				!details.DeclinedReasons.Contains(AdvisoryBoardDeclinedReasons.Other))
 			.WithMessage(details =>
 				NullMessage(
 					nameof(details.DeclinedOtherReason)) +
@@ -162,6 +163,7 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 			.NotEmpty()
 			.When(details =>
 				details.Decision is AdvisoryBoardDecisions.Deferred &&
+				details.DeferredReasons is not null &&
 				details.DeferredReasons!.Contains(AdvisoryBoardDeferredReasons.Other))
 			.WithMessage(details =>
 				NotEmptyMessage(
@@ -177,7 +179,8 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 			.Null()
 			.When(details =>
 				details.Decision is AdvisoryBoardDecisions.Deferred &&
-				!details.DeferredReasons!.Contains(AdvisoryBoardDeferredReasons.Other))
+				details.DeferredReasons is not null &&
+				details.DeferredReasons!.Contains(AdvisoryBoardDeferredReasons.Other))
 			.WithMessage(details =>
 				NullMessage(
 					nameof(details.DeclinedOtherReason)) +
