@@ -2,25 +2,21 @@ using Dfe.Academies.Academisation.WebApi.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
-builder.Services.Configure<HelloWorldOptions>(
-	builder.Configuration.GetSection(HelloWorldOptions.Name));
+builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(HelloWorldOptions.Name));
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwagger()
+    .UseSwaggerUI()
+    .UseHttpsRedirection()
+    .UseAuthorization();
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+app.MapHealthChecks("/healthcheck") ;
 app.MapControllers();
 
 app.Run();
