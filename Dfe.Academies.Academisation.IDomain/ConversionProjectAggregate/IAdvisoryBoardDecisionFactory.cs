@@ -1,4 +1,4 @@
-﻿namespace Dfe.Academies.Academisation.IDomain.AdvisoryBoardDecisionAggregate;
+﻿namespace Dfe.Academies.Academisation.IDomain.ConversionProjectAggregate;
 
 public interface IAdvisoryBoardDecisionFactory
 {

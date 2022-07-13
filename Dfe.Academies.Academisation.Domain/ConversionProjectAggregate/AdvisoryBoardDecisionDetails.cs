@@ -1,6 +1,6 @@
-﻿using Dfe.Academies.Academisation.IDomain.AdvisoryBoardDecisionAggregate;
+﻿using Dfe.Academies.Academisation.IDomain.ConversionProjectAggregate;
 
-namespace Dfe.Academies.Academisation.Domain.AdvisoryBoardDecisionAggregate;
+namespace Dfe.Academies.Academisation.Domain.ConversionProjectAggregate;
 
 public record AdvisoryBoardDecisionDetails(
 

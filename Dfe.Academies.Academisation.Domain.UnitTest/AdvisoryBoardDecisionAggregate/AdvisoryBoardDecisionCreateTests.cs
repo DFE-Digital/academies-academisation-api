@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bogus;
+using Dfe.Academies.Academisation.Domain.ConversionProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionProjectAggregate;
 using Xunit;
-
-using Dfe.Academies.Academisation.Domain.AdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.AdvisoryBoardDecisionAggregate;
 using ValidationException = FluentValidation.ValidationException;
 
 

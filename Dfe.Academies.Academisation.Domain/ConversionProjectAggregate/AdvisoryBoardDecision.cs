@@ -1,7 +1,7 @@
-﻿using Dfe.Academies.Academisation.IDomain.AdvisoryBoardDecisionAggregate;
+﻿using Dfe.Academies.Academisation.IDomain.ConversionProjectAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.AdvisoryBoardDecisionAggregate;
+namespace Dfe.Academies.Academisation.Domain.ConversionProjectAggregate;
 
 public class AdvisoryBoardDecision : IAdvisoryBoardDecision
 {

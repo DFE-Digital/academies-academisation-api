@@ -1,5 +1,5 @@
 ﻿
-using Dfe.Academies.Academisation.IDomain.AdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service;
 
