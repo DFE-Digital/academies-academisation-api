@@ -5,45 +5,39 @@ namespace Dfe.Academies.Academisation.Domain.ConversionProjectAggregate;
 
 public class ConversionProject : IConversionProject
 {
-    public int Id { get; set; }
-    
-    public IAdvisoryBoardDecision? AdvisoryBoardDecision { get; private set; }
+	public int Id { get; set; }
 
-    private CreateAdvisoryBoardDecisionValidator CreateAdvisoryBoardDecisionValidator { get; } = new();
+	public IAdvisoryBoardDecision? AdvisoryBoardDecision { get; private set; }
 
-    private ConversionProject(int projectId)
-    {
-        Id = projectId;
-    }
+	private CreateAdvisoryBoardDecisionValidator CreateAdvisoryBoardDecisionValidator { get; } = new();
 
-    internal static async Task<ConversionProject> Create(int projectId)
-    {
-        
-        //var validationResult = await CreateValidator.ValidateAsync(details);
+	private ConversionProject(int projectId)
+	{
+		Id = projectId;
+	}
 
-        // if (validationResult.IsValid)
-        // {
-        //     return new(projectId, details);
-        // }
+	internal static async Task<ConversionProject> Create(int projectId)
+	{
+		//var validationResult = await CreateValidator.ValidateAsync(details);
 
-        // throw new ValidationException(validationResult.ToString());
+		// if (validationResult.IsValid)
+		// {
+		//     return new(projectId, details);
+		// }
+
+		// throw new ValidationException(validationResult.ToString());
 
 
-        await Task.CompletedTask;
-        return new(projectId);
-    }
+		await Task.CompletedTask;
+		return new(projectId);
+	}
 
-    public async Task AddAdvisoryBoardDecision(IAdvisoryBoardDecisionDetails details)
-    {
-        var validationResult = await CreateAdvisoryBoardDecisionValidator.ValidateAsync(details);
+	public async Task AddAdvisoryBoardDecision(IAdvisoryBoardDecisionDetails details)
+	{
+		var validationResult = await CreateAdvisoryBoardDecisionValidator.ValidateAsync(details);
 
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.ToString());
-        }
-        
-        AdvisoryBoardDecision = new AdvisoryBoardDecision(Id, details);
-    }
-    
+		if (!validationResult.IsValid) throw new ValidationException(validationResult.ToString());
+
+		AdvisoryBoardDecision = new AdvisoryBoardDecision(Id, details);
+	}
 }
-

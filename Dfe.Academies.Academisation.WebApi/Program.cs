@@ -12,11 +12,11 @@ builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(H
 var app = builder.Build();
 
 app.UseSwagger()
-    .UseSwaggerUI()
-    .UseHttpsRedirection()
-    .UseAuthorization();
+	.UseSwaggerUI()
+	.UseHttpsRedirection()
+	.UseAuthorization();
 
-app.MapHealthChecks("/healthcheck") ;
+app.MapHealthChecks("/healthcheck");
 app.MapControllers();
 
 app.Run();

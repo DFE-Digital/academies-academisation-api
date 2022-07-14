@@ -13,24 +13,29 @@ public class ConversionApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType, string otherRoleName)
+	public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType,
+		string otherRoleName)
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.Other, otherRoleName);
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(),
+			ContributorRole.Other, otherRoleName);
 
 		// Act & Assert
-		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(applicationType, contributor));
+		await Assert.ThrowsAsync<FluentValidation.ValidationException>(
+			() => target.Create(applicationType, contributor));
 	}
 
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType, string otherRoleName)
+	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType,
+		string otherRoleName)
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(), ContributorRole.ChairOfGovernors, otherRoleName);
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(),
+			ContributorRole.ChairOfGovernors, otherRoleName);
 
 		// Act
 		var result = await target.Create(applicationType, contributor);
@@ -44,9 +49,11 @@ public class ConversionApplicationCreateTests
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
+		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(),
+			faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
 
 		// Act and Assert
-		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() => target.Create(ApplicationType.FormAMat, contributor));
+		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() =>
+			target.Create(ApplicationType.FormAMat, contributor));
 	}
 }

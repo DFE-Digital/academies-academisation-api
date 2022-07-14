@@ -11,9 +11,10 @@ public class ApplicationCreateCommand
 		_factory = factory;
 	}
 
-	public async Task<IConversionApplication> Create(ApplicationType applicationType, IContributorDetails initialContributor)
+	public async Task<IConversionApplication> Create(ApplicationType applicationType,
+		IContributorDetails initialContributor)
 	{
-		IConversionApplication application = await _factory.Create(applicationType, initialContributor);
+		var application = await _factory.Create(applicationType, initialContributor);
 
 		// ToDo: Save to Database
 

@@ -2,7 +2,7 @@
 
 public enum AdvisoryBoardDeclinedReasons
 {
-    Finance = 0,
-    Performance = 1,
-    Other = 2
+	Finance = 0,
+	Performance = 1,
+	Other = 2
 }

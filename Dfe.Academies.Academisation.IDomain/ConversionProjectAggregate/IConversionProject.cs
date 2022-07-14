@@ -2,7 +2,7 @@
 
 public interface IConversionProject
 {
-    int Id { get; set; }
-    IAdvisoryBoardDecision? AdvisoryBoardDecision { get; }
-    Task AddAdvisoryBoardDecision(IAdvisoryBoardDecisionDetails details);
+	int Id { get; set; }
+	IAdvisoryBoardDecision? AdvisoryBoardDecision { get; }
+	Task AddAdvisoryBoardDecision(IAdvisoryBoardDecisionDetails details);
 }

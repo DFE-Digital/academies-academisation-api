@@ -13,20 +13,71 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 		ValidateDecisionDate();
 	}
 
-	private static string NotNullMessage(string target) => $"{target} should not be null";
-	private static string NullMessage(string target) => $"{target} should be null";
-	private static string WhenIsNotSuffix(string target, string value) => $" when {target} is not {value}";
-	private static string WhenIsSuffix(string target, string value) => $" when {target} is {value}";
-	private static string NotEmptyMessage(string target) => $"{target} should not be null or empty";
-	private static string EmptyMessage(string target) => $"{target} should be null or empty";
-	private static string AndSuffix(string conditional, string value) => $" and {conditional} is {value}";
-	private static string OrSuffix(string conditional, string value) => $" or {conditional} is {value}";
-	private static string AndContainsSuffix(string target, string value) => $" and {target} contains {value}";
-	private static string AndNotContainsSuffix(string target, string value) => $" and {target} does not contain {value}";
-	private static string OrNotContainsSuffix(string target, string value) => $" or {target} does not contain {value}";
-	private static string NotSetDateMessage(string target) => $"{target} must be set to a valid date";
-	private static string FutureDateMessage(string target) => $"{target} must not be in the future";
-	
+	private static string NotNullMessage(string target)
+	{
+		return $"{target} should not be null";
+	}
+
+	private static string NullMessage(string target)
+	{
+		return $"{target} should be null";
+	}
+
+	private static string WhenIsNotSuffix(string target, string value)
+	{
+		return $" when {target} is not {value}";
+	}
+
+	private static string WhenIsSuffix(string target, string value)
+	{
+		return $" when {target} is {value}";
+	}
+
+	private static string NotEmptyMessage(string target)
+	{
+		return $"{target} should not be null or empty";
+	}
+
+	private static string EmptyMessage(string target)
+	{
+		return $"{target} should be null or empty";
+	}
+
+	private static string AndSuffix(string conditional, string value)
+	{
+		return $" and {conditional} is {value}";
+	}
+
+	private static string OrSuffix(string conditional, string value)
+	{
+		return $" or {conditional} is {value}";
+	}
+
+	private static string AndContainsSuffix(string target, string value)
+	{
+		return $" and {target} contains {value}";
+	}
+
+	private static string AndNotContainsSuffix(string target, string value)
+	{
+		return $" and {target} does not contain {value}";
+	}
+
+	private static string OrNotContainsSuffix(string target, string value)
+	{
+		return $" or {target} does not contain {value}";
+	}
+
+	private static string NotSetDateMessage(string target)
+	{
+		return $"{target} must be set to a valid date";
+	}
+
+	private static string FutureDateMessage(string target)
+	{
+		return $"{target} must not be in the future";
+	}
+
 	private void ValidateApprovedDecision()
 	{
 		RuleFor(details => details.ApprovedConditionsSet)
@@ -36,47 +87,47 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 				NotNullMessage(
 					nameof(details.ApprovedConditionsSet)) +
 				WhenIsSuffix(
-					nameof(details.Decision), 
+					nameof(details.Decision),
 					nameof(AdvisoryBoardDecisions.Approved)));
-				
+
 		RuleFor(details => details.ApprovedConditionsSet)
 			.Null()
 			.When(details => details.Decision is not AdvisoryBoardDecisions.Approved)
 			.WithMessage(details =>
 				NullMessage(
 					nameof(details.ApprovedConditionsSet)) +
-			    WhenIsNotSuffix(
-				    nameof(details.Decision), 
-				    nameof(AdvisoryBoardDecisions.Approved)));
-		
+				WhenIsNotSuffix(
+					nameof(details.Decision),
+					nameof(AdvisoryBoardDecisions.Approved)));
+
 		RuleFor(details => details.ApprovedConditionsDetails)
 			.NotEmpty()
-			.When(details => 
-				details.Decision is AdvisoryBoardDecisions.Approved && 
+			.When(details =>
+				details.Decision is AdvisoryBoardDecisions.Approved &&
 				details.ApprovedConditionsSet is true)
 			.WithMessage(details =>
 				NotEmptyMessage(
 					nameof(details.ApprovedConditionsDetails)) +
 				WhenIsSuffix(
-					nameof(details.Decision), 
+					nameof(details.Decision),
 					nameof(AdvisoryBoardDecisions.Approved)) +
 				AndSuffix(
 					nameof(details.ApprovedConditionsSet),
 					bool.TrueString));
-		
+
 		RuleFor(details => details.ApprovedConditionsDetails)
 			.Empty()
-			.When(details => 
-				details.Decision is not AdvisoryBoardDecisions.Approved || 
+			.When(details =>
+				details.Decision is not AdvisoryBoardDecisions.Approved ||
 				details.ApprovedConditionsSet is false)
 			.WithMessage(details =>
 				EmptyMessage(
 					nameof(details.ApprovedConditionsDetails)) +
 				WhenIsNotSuffix(
 					nameof(details.Decision),
-					nameof(AdvisoryBoardDecisions.Approved)) + 
+					nameof(AdvisoryBoardDecisions.Approved)) +
 				OrSuffix(
-					nameof(details.ApprovedConditionsSet), 
+					nameof(details.ApprovedConditionsSet),
 					bool.FalseString));
 	}
 
@@ -90,7 +141,7 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 				NotEmptyMessage(
 					nameof(details.DeclinedReasons)) +
 				WhenIsSuffix(
-					nameof(details.Decision), 
+					nameof(details.Decision),
 					nameof(AdvisoryBoardDecisions.Declined)));
 
 		RuleFor(details => details.DeclinedReasons)
@@ -100,7 +151,7 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 				EmptyMessage(
 					nameof(details.DeclinedReasons)) +
 				WhenIsNotSuffix(
-					nameof(details.Decision), 
+					nameof(details.Decision),
 					nameof(AdvisoryBoardDecisions.Declined)));
 
 		RuleFor(details => details.DeclinedOtherReason)
@@ -121,10 +172,10 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 
 		RuleFor(details => details.DeclinedOtherReason)
 			.Null()
-			.When(details => 
+			.When(details =>
 				details.Decision is not AdvisoryBoardDecisions.Declined ||
-				details.DeclinedReasons is not null &&
-				!details.DeclinedReasons.Contains(AdvisoryBoardDeclinedReasons.Other))
+				(details.DeclinedReasons is not null &&
+				 !details.DeclinedReasons.Contains(AdvisoryBoardDeclinedReasons.Other)))
 			.WithMessage(details =>
 				NullMessage(
 					nameof(details.DeclinedOtherReason)) +
@@ -132,7 +183,7 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 					nameof(details.Decision),
 					nameof(AdvisoryBoardDecisions.Declined)) +
 				OrNotContainsSuffix(
-					nameof(details.DeclinedReasons), 
+					nameof(details.DeclinedReasons),
 					nameof(AdvisoryBoardDeclinedReasons.Other)));
 	}
 
@@ -152,11 +203,11 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 		RuleFor(details => details.DeferredReasons)
 			.Null()
 			.When(details => details.Decision is not AdvisoryBoardDecisions.Deferred)
-			.WithMessage(details => 
+			.WithMessage(details =>
 				NullMessage(
 					nameof(details.DeferredReasons)) +
 				WhenIsNotSuffix(
-					nameof(details.Decision), 
+					nameof(details.Decision),
 					nameof(AdvisoryBoardDecisions.Deferred)));
 
 		RuleFor(details => details.DeferredOtherReason)
@@ -179,8 +230,8 @@ internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisor
 			.Null()
 			.When(details =>
 				details.Decision is not AdvisoryBoardDecisions.Deferred ||
-				details.DeferredReasons is not null &&
-				!details.DeferredReasons.Contains(AdvisoryBoardDeferredReasons.Other))
+				(details.DeferredReasons is not null &&
+				 !details.DeferredReasons.Contains(AdvisoryBoardDeferredReasons.Other)))
 			.WithMessage(details =>
 				NullMessage(
 					nameof(details.DeferredOtherReason)) +
