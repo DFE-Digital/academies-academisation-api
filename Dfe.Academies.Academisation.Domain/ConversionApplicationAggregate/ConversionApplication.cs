@@ -18,14 +18,12 @@ public class ConversionApplication : IConversionApplication
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
-	internal static async Task<ConversionApplication> Create(ApplicationType applicationType, IContributorDetails initialContributor)
+	internal static async Task<ConversionApplication> Create(ApplicationType applicationType,
+		IContributorDetails initialContributor)
 	{
 		var validationResult = await CreateValidator.ValidateAsync(initialContributor);
 
-		if (!validationResult.IsValid)
-		{
-			throw new ValidationException(validationResult.ToString());
-		}
+		if (!validationResult.IsValid) throw new ValidationException(validationResult.ToString());
 
 		return new(applicationType, initialContributor);
 	}
