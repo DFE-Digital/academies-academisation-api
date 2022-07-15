@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Runtime.CompilerServices;
+using FluentValidation;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 
@@ -15,9 +16,15 @@ public class ConversionApplication : IConversionApplication
 		_contributors.Add(new Contributor(initialContributor));
 	}
 
+	public int ApplicationId { get; set; }
 	public ApplicationType ApplicationType { get; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
+	
+	public void SetApplicationId(int applicationId)
+	{
+		ApplicationId = applicationId;
+	}
 
 	internal static async Task<ConversionApplication> Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
@@ -29,3 +36,4 @@ public class ConversionApplication : IConversionApplication
 		return new(applicationType, initialContributor);
 	}
 }
+
