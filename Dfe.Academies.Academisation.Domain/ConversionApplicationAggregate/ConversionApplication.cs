@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
