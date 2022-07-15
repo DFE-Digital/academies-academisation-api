@@ -2,7 +2,12 @@
 
 public class ApplicationCreateRequestModel
 {
-	public int ApplicationType { get; }
-	List<ContributorDetailsRequestModel> Contributors { get; set; }
-}
+	public ApplicationCreateRequestModel(int applicationType, List<ContributorDetailsRequestModel> contributors)
+	{
+		ApplicationType = applicationType;
+		Contributors = contributors;
+	}
 
+	public int ApplicationType { get; }
+	public IReadOnlyCollection<ContributorDetailsRequestModel> Contributors { get; }
+}

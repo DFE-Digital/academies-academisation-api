@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest
 
 		public async void Create_CallsRepository_WithCorrectValues()
 		{
-
+			await Task.CompletedTask;
 		}
 	}
 }
