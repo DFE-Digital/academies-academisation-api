@@ -1,11 +1,22 @@
-﻿namespace Dfe.Academies.Academisation.IService.RequestModels
+﻿using Dfe.Academies.Academisation.Domain.Core;
+
+namespace Dfe.Academies.Academisation.IService.RequestModels
 {
 	public class ContributorDetailsRequestModel
 	{
-		public string? FirstName { get; set; }
-		public string? LastName { get; set; }
-		public string? EmailAddress { get; set; }
-		public int Role { get; set; }
-		public string? OtherRoleName { get; set; }
+		public ContributorDetailsRequestModel(string firstName, string lastName, string emailAddress, ContributorRole role, string? otherRoleName)
+		{
+			FirstName = firstName;
+			LastName = lastName;
+			EmailAddress = emailAddress;
+			Role = role;
+			OtherRoleName = otherRoleName;
+		}
+
+		public string FirstName { get; }
+		public string LastName { get; }
+		public string EmailAddress { get; }
+		public ContributorRole Role { get; }
+		public string? OtherRoleName { get; }
 	}
 }

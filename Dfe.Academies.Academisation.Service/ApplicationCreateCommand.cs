@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
+using Dfe.Academies.Academisation.Service.Mappers;
 
 namespace Dfe.Academies.Academisation.Service;
 
@@ -14,9 +15,10 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 		_factory = factory;
 	}
 
-	public async Task<ApplicationServiceModel> Create(ApplicationCreateRequestModel conversionApplicationRequestModel)
+	public async Task<ApplicationServiceModel> Create(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
-		IConversionApplication application = await _factory.Create(conversionApplicationRequestModel.ApplicationType, null);
+		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
+		IConversionApplication application = await _factory.Create(applicationType, contributorDetails);
 
 		// ToDo: Save to Database
 

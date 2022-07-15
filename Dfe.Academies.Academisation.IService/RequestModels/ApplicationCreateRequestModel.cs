@@ -4,12 +4,12 @@ namespace Dfe.Academies.Academisation.IService.RequestModels;
 
 public class ApplicationCreateRequestModel
 {
-	public ApplicationCreateRequestModel(ApplicationType applicationType, List<ContributorDetailsRequestModel> contributors)
+	public ApplicationCreateRequestModel(ApplicationType applicationType, ContributorDetailsRequestModel contributor)
 	{
 		ApplicationType = applicationType;
-		Contributors = contributors;
+		Contributor = contributor;
 	}
 
 	public ApplicationType ApplicationType { get; }
-	public IReadOnlyCollection<ContributorDetailsRequestModel> Contributors { get; }
+	public ContributorDetailsRequestModel Contributor { get; }
 }
