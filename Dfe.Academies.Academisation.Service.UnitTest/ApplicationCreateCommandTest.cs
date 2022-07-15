@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Moq;
 using Xunit;
 
@@ -7,7 +8,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest
 	public class ApplicationCreateCommandTest
 	{
 		private static Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new ();
-		private static Mock<IContributorDetails> _contributerDetails = new ();
+		private static Mock<ContributorDetails> _contributerDetails = new ();
 
 		//[Theory]
 		//[InlineData(ApplicationType.FormAMat)]

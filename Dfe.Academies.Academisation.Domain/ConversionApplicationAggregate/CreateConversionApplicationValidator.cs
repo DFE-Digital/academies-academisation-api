@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
-internal class CreateConversionApplicationValidator : AbstractValidator<IContributorDetails>
+internal class CreateConversionApplicationValidator : AbstractValidator<ContributorDetails>
 {
 	public CreateConversionApplicationValidator()
 	{
