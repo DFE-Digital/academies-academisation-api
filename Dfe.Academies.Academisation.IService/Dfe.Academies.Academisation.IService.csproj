@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Domain.Core\Dfe.Academies.Academisation.Domain.Core.csproj" />
+  </ItemGroup>
+
 </Project>

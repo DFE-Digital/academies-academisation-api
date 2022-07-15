@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
@@ -17,7 +16,7 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 
 	public async Task<ApplicationServiceModel> Create(ApplicationCreateRequestModel conversionApplicationRequestModel)
 	{
-		IConversionApplication application = await _factory.Create((ApplicationType) conversionApplicationRequestModel.ApplicationType, null);
+		IConversionApplication application = await _factory.Create(conversionApplicationRequestModel.ApplicationType, null);
 
 		// ToDo: Save to Database
 

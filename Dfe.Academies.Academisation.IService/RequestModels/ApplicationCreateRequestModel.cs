@@ -1,13 +1,15 @@
-﻿namespace Dfe.Academies.Academisation.IService.RequestModels;
+﻿using Dfe.Academies.Academisation.Domain.Core;
+
+namespace Dfe.Academies.Academisation.IService.RequestModels;
 
 public class ApplicationCreateRequestModel
 {
-	public ApplicationCreateRequestModel(int applicationType, List<ContributorDetailsRequestModel> contributors)
+	public ApplicationCreateRequestModel(ApplicationType applicationType, List<ContributorDetailsRequestModel> contributors)
 	{
 		ApplicationType = applicationType;
 		Contributors = contributors;
 	}
 
-	public int ApplicationType { get; }
+	public ApplicationType ApplicationType { get; }
 	public IReadOnlyCollection<ContributorDetailsRequestModel> Contributors { get; }
 }
