@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation.IntegrationTest", "Dfe.Academies.Academisation.IntegrationTest\Dfe.Academies.Academisation.IntegrationTest.csproj", "{4D399515-0544-4A26-B8F0-586012BF436D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Academisation.WebApi", "Dfe.Academies.Academisation.WebApi\Dfe.Academies.Academisation.WebApi.csproj", "{E05A0F6B-0AE5-4BB9-B3A5-C51329B79F39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation.WebApi", "Dfe.Academies.Academisation.WebApi\Dfe.Academies.Academisation.WebApi.csproj", "{E05A0F6B-0AE5-4BB9-B3A5-C51329B79F39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Academisation.IService", "Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj", "{CA1ADDB7-DE46-4B55-BA77-621DA848FF53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{E05A0F6B-0AE5-4BB9-B3A5-C51329B79F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E05A0F6B-0AE5-4BB9-B3A5-C51329B79F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E05A0F6B-0AE5-4BB9-B3A5-C51329B79F39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1ADDB7-DE46-4B55-BA77-621DA848FF53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1ADDB7-DE46-4B55-BA77-621DA848FF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1ADDB7-DE46-4B55-BA77-621DA848FF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1ADDB7-DE46-4B55-BA77-621DA848FF53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
