@@ -1,13 +1,46 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Dfe.Academies.Academisation.Data;
 
 public class AcademisationContext : DbContext
 {
-	public DbSet<ConversionApplicationState> ConversionApplications { get; set; }
-	public DbSet<ContributorState> Contributors { get; set; }
 	
+	private const string ConnectionStringName = "SQLAZURECONNSTR_ConnectionString";
+	private const string ConfigurationMissing = "Could not retrieve connection string from configuration";
+	
+	public DbSet<ConversionApplicationState> ConversionApplications { get; set; }
+	public DbSet<ConversionApplicationContributorState> Contributors { get; set; }
+	
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		if (optionsBuilder.IsConfigured) return;
+        
+		var connectionString = Environment.GetEnvironmentVariable(ConnectionStringName) 
+		                       ?? throw new ApplicationException(ConfigurationMissing);
+		optionsBuilder.UseSqlServer(connectionString);
+	}
+	
+	public override int SaveChanges() 
+	{
+		var currentDateTime = DateTime.UtcNow;
+		
+		var entities = ChangeTracker.Entries<BaseEntity>().ToList();
+		
+		foreach (var entity in entities.Where(e => e.State == EntityState.Added)) 
+		{
+			entity.Entity.CreatedOn = currentDateTime;
+			entity.Entity.LastModifiedOn = currentDateTime;
+		}
 
+		foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = currentDateTime;
+		}
+
+		return base.SaveChanges();
+	}
+	
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);

@@ -3,10 +3,10 @@ using Dfe.Academies.Academisation.Domain.Core;
 
 namespace Dfe.Academies.Academisation.Data;
 
-[Table(name: "Contributor", Schema = "acad")]
-public class ContributorState
+[Table(name: "Contributor", Schema = "acd")]
+public class ConversionApplicationContributorState : BaseEntity
 {
-	public ContributorState(ContributorDetails details)
+	public ConversionApplicationContributorState(ContributorDetails details)
 	{
 		(FirstName, LastName, EmailAddress, Role, OtherRoleName) = details;
 	}

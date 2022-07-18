@@ -17,11 +17,9 @@ public class ApplicationCreateDataCommand : IApplicationCreateDataCommand
 		// convert 'conversionApplication' to ConversionApplicationState
 		ConversionApplicationState conversionApplicationState = new(conversionApplication);
 		
-		// save to database
 		_context.ConversionApplications.Add(conversionApplicationState);
 		await _context.SaveChangesAsync();
 
-		// mutate 'conversionApplication' to set Id
 		conversionApplication.SetApplicationId(conversionApplicationState.ConversionApplicationId);
 	}
 }
