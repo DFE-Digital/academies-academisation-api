@@ -1,3 +1,4 @@
+using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
@@ -15,6 +16,7 @@ builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(H
 
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IConversionApplicationFactory, ConversionApplicationFactory>();
+builder.Services.AddDbContext<AcademisationContext>();
 
 var app = builder.Build();
 

@@ -17,6 +17,7 @@ public class ConversionApplicationState : BaseEntity
 	}
 
 	public int ConversionApplicationId { get; set; }
+	
 	public ApplicationType ApplicationType { get; set; }
 	
 	public HashSet<ConversionApplicationContributorState> Contributors { get; set; }

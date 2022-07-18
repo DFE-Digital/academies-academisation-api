@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dfe.Academies.Academisation.Data.ExtensionMethods;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Dfe.Academies.Academisation.Data;
@@ -9,17 +10,17 @@ public class AcademisationContext : DbContext
 	private const string ConnectionStringName = "SQLAZURECONNSTR_ConnectionString";
 	private const string ConfigurationMissing = "Could not retrieve connection string from configuration";
 	
-	public DbSet<ConversionApplicationState> ConversionApplications { get; set; }
-	public DbSet<ConversionApplicationContributorState> Contributors { get; set; }
+	public virtual DbSet<ConversionApplicationState> ConversionApplications { get; set; }
+	public virtual DbSet<ConversionApplicationContributorState> Contributors { get; set; }
 	
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
-		if (optionsBuilder.IsConfigured) return;
-        
-		var connectionString = Environment.GetEnvironmentVariable(ConnectionStringName) 
-		                       ?? throw new ApplicationException(ConfigurationMissing);
-		optionsBuilder.UseSqlServer(connectionString);
-	}
+	// protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	// {
+	// 	if (optionsBuilder.IsConfigured) return;
+ //        
+	// 	var connectionString = Environment.GetEnvironmentVariable(ConnectionStringName) 
+	// 	                       ?? throw new ApplicationException(ConfigurationMissing);
+	// 	optionsBuilder.UseSqlServer(connectionString);
+	// }
 	
 	public override int SaveChanges() 
 	{
@@ -43,6 +44,9 @@ public class AcademisationContext : DbContext
 	
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
+		modelBuilder.Entity<ConversionApplicationState>()
+			.HasEnum(e => e.ApplicationType);
+		
 		base.OnModelCreating(modelBuilder);
 	}
 }

@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>6f4c8083-5fb2-462d-8a9e-0edd188d37d3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj" />

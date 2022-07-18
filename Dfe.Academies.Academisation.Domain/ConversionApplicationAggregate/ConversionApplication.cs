@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using FluentValidation;
+﻿using FluentValidation;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 
