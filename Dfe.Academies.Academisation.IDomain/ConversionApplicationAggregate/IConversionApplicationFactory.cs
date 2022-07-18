@@ -1,6 +1,8 @@
-﻿namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core;
+
+namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
 public interface IConversionApplicationFactory
 {
-	Task<IConversionApplication> Create(ApplicationType applicationType, IContributorDetails initialContributor);
+	Task<IConversionApplication> Create(ApplicationType applicationType, ContributorDetails initialContributor);
 }
