@@ -14,6 +14,13 @@ public class ConversionApplication : IConversionApplication
 		ApplicationType = applicationType;
 		_contributors.Add(new(initialContributor));
 	}
+	public ConversionApplication(int applicationId, ApplicationType applicationType, Dictionary<int, ContributorDetails> contributors)
+	{
+		ApplicationType = applicationType;
+		ApplicationId = applicationId;
+		var contributersEnumerable = contributors.Select(c => new Contributor(c.Key, c.Value));
+		_contributors.AddRange(contributersEnumerable);
+	}
 
 	public int ApplicationId { get; private set; }
 	public ApplicationType ApplicationType { get; }

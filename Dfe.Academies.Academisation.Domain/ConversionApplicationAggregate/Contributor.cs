@@ -5,8 +5,13 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
 public class Contributor : IContributor
 {
-	public Contributor(ContributorDetails details)
+	internal Contributor(ContributorDetails details)
 	{
+		Details = details;
+	}
+	internal Contributor(int id, ContributorDetails details)
+	{
+		Id = id;
 		Details = details;
 	}
 
