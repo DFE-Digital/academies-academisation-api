@@ -1,7 +1,7 @@
 ﻿using Dfe.Academies.Academisation.IData;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Data;
+namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 
 public class ApplicationCreateDataCommand : IApplicationCreateDataCommand
 {

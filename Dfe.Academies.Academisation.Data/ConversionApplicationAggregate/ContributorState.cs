@@ -2,7 +2,7 @@
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Data;
+namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 
 [Table(name: "ConversionApplicationContributor", Schema = "acd")]
 public class ContributorState : BaseEntity

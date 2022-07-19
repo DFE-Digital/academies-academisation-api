@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bogus;
+using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using FluentAssertions;
@@ -76,7 +77,7 @@ public class ConversionApplicationStateCreateTests
 		//arrange
 		var result = ConversionApplicationState.MapFromDomain(conversionApplication);
 
-		//act
+		//assert
 		result.Should().BeEquivalentTo(expected);
 	}
 }
