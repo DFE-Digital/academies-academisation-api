@@ -14,8 +14,8 @@ public static class EntityTypeBuilderExtensions
 		entityBuilder
 			.Property(propertyExpression)
 			.HasConversion(
-				v => v.ToString(),
-				v => (TProperty)Enum.Parse(typeof(TProperty), v)
+				p => p.ToString(),
+				p => (TProperty)Enum.Parse(typeof(TProperty), p)
 			);
 	}
 }

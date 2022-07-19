@@ -15,11 +15,11 @@ public class ApplicationCreateDataCommand : IApplicationCreateDataCommand
 	public async Task Execute(IConversionApplication conversionApplication)
 	{
 		// convert 'conversionApplication' to ConversionApplicationState
-		ConversionApplicationState conversionApplicationState = new(conversionApplication);
+		var conversionApplicationState = ConversionApplicationState.Create(conversionApplication);
 		
 		_context.ConversionApplications.Add(conversionApplicationState);
 		await _context.SaveChangesAsync();
 
-		conversionApplication.SetApplicationId(conversionApplicationState.ConversionApplicationId);
+		conversionApplication.SetApplicationId(conversionApplicationState.Id);
 	}
 }

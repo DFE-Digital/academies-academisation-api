@@ -1,27 +1,15 @@
 ﻿using Dfe.Academies.Academisation.Data.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Dfe.Academies.Academisation.Data;
 
 public class AcademisationContext : DbContext
 {
+	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }
 	
-	private const string ConnectionStringName = "SQLAZURECONNSTR_ConnectionString";
-	private const string ConfigurationMissing = "Could not retrieve connection string from configuration";
-	
-	public virtual DbSet<ConversionApplicationState> ConversionApplications { get; set; }
-	public virtual DbSet<ConversionApplicationContributorState> Contributors { get; set; }
-	
-	// protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	// {
-	// 	if (optionsBuilder.IsConfigured) return;
- //        
-	// 	var connectionString = Environment.GetEnvironmentVariable(ConnectionStringName) 
-	// 	                       ?? throw new ApplicationException(ConfigurationMissing);
-	// 	optionsBuilder.UseSqlServer(connectionString);
-	// }
-	
+	public DbSet<ConversionApplicationState> ConversionApplications { get; set; } = null!;
+	public DbSet<ContributorState> Contributors { get; set; } = null!;
+
 	public override int SaveChanges() 
 	{
 		var currentDateTime = DateTime.UtcNow;

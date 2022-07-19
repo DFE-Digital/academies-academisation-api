@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 
 public class ConversionApplicationCreateTests
 {
-	private readonly Faker faker = new();
+	private readonly Faker _faker = new();
 
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
@@ -19,7 +19,7 @@ public class ConversionApplicationCreateTests
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(),
+		ContributorDetails contributor = new(_faker.Name.FirstName(), _faker.Name.LastName(), _faker.Internet.Email(),
 			ContributorRole.Other, otherRoleName);
 
 		// Act & Assert
@@ -35,7 +35,7 @@ public class ConversionApplicationCreateTests
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Internet.Email(),
+		ContributorDetails contributor = new(_faker.Name.FirstName(), _faker.Name.LastName(), _faker.Internet.Email(),
 			ContributorRole.ChairOfGovernors, otherRoleName);
 
 		// Act
@@ -50,8 +50,8 @@ public class ConversionApplicationCreateTests
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(faker.Name.FirstName(), faker.Name.LastName(),
-			faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
+		ContributorDetails contributor = new(_faker.Name.FirstName(), _faker.Name.LastName(),
+			_faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
 
 		// Act and Assert
 		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() =>
