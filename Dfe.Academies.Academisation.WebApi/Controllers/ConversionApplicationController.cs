@@ -9,18 +9,25 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ApiController]
 	public class ConversionApplicationController : ControllerBase
 	{
-		public ConversionApplicationController(IApplicationCreateCommand applicationCreateCommand)
+		private readonly IApplicationCreateCommand _applicationCreateCommand;
+		private readonly IApplicationGetQuery _applicationGetQuery;
+
+		public ConversionApplicationController(IApplicationCreateCommand applicationCreateCommand, IApplicationGetQuery applicationGetQuery)
 		{
 			_applicationCreateCommand = applicationCreateCommand;
+			_applicationGetQuery = applicationGetQuery;
 		}
 
-		private readonly IApplicationCreateCommand _applicationCreateCommand;
-
-		// POST api/<ConversionApplicationController>
 		[HttpPost]
 		public async Task<ApplicationServiceModel> Post([FromBody] ApplicationCreateRequestModel request)
 		{
 			return await _applicationCreateCommand.Create(request);
+		}
+
+		[HttpGet]
+		public async Task<ApplicationServiceModel> Get(int id)
+		{
+			return await _applicationGetQuery.Execute(id);
 		}
 	}
 }
