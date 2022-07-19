@@ -12,13 +12,13 @@ public class ConversionApplicationState : BaseEntity
 	[ForeignKey("ConversionApplicationId")]
 	public HashSet<ContributorState> Contributors { get; set; } = null!;
 
-	public static ConversionApplicationState Create(IConversionApplication conversionApplication)
+	public static ConversionApplicationState MapFromDomain(IConversionApplication conversionApplication)
 	{
 		return new()
 		{
 			ApplicationType = conversionApplication.ApplicationType,
 			Contributors = conversionApplication.Contributors
-				.Select(ContributorState.Create)
+				.Select(ContributorState.MapFromDomain)
 				.ToHashSet()
 		};
 	}

@@ -13,7 +13,7 @@ public class ContributorState : BaseEntity
 	public ContributorRole Role { get; set; }
 	public string? OtherRoleName { get; set; }
 	
-	public static ContributorState Create(IContributor contributor)
+	public static ContributorState MapFromDomain(IContributor contributor)
 	{
 		return new()
 		{

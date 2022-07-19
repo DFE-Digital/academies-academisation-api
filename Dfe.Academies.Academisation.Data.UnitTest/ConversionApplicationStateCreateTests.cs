@@ -36,7 +36,7 @@ public class ConversionApplicationStateCreateTests
 		var conversionApplication = await _factory.Create(expectedApplicationType, initialContributor);
 
 		//arrange
-		var result = ConversionApplicationState.Create(conversionApplication);
+		var result = ConversionApplicationState.MapFromDomain(conversionApplication);
 
 		//act
 		Assert.IsType<ConversionApplicationState>(result);
@@ -74,7 +74,7 @@ public class ConversionApplicationStateCreateTests
 		};
 		
 		//arrange
-		var result = ConversionApplicationState.Create(conversionApplication);
+		var result = ConversionApplicationState.MapFromDomain(conversionApplication);
 
 		//act
 		result.Should().BeEquivalentTo(expected);
