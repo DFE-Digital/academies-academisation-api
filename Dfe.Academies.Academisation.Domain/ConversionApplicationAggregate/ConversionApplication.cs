@@ -6,18 +6,25 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
 public class ConversionApplication : IConversionApplication
 {
-	private readonly List<IContributor> _contributors = new();
+	private readonly List<Contributor> _contributors = new();
 	private static readonly CreateConversionApplicationValidator CreateValidator = new();
 
 	private ConversionApplication(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
 		ApplicationType = applicationType;
-		_contributors.Add(new Contributor(initialContributor));
+		_contributors.Add(new(initialContributor));
 	}
 
+	public int ApplicationId { get; private set; }
 	public ApplicationType ApplicationType { get; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
+
+	public void SetIdsOnCreate(int applicationId, int contributorId)
+	{
+		ApplicationId = applicationId;
+		_contributors.Single().Id = contributorId;
+	}
 
 	internal static async Task<ConversionApplication> Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
@@ -29,3 +36,4 @@ public class ConversionApplication : IConversionApplication
 		return new(applicationType, initialContributor);
 	}
 }
+

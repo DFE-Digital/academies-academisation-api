@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IData;
+using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
@@ -8,20 +9,22 @@ namespace Dfe.Academies.Academisation.Service;
 
 public class ApplicationCreateCommand : IApplicationCreateCommand
 {
-	private readonly IConversionApplicationFactory _factory;
+	private readonly IConversionApplicationFactory _domainFactory;
+	private readonly IApplicationCreateDataCommand _dataCommand;
 
-	public ApplicationCreateCommand(IConversionApplicationFactory factory)
+	public ApplicationCreateCommand(IConversionApplicationFactory domainFactory, IApplicationCreateDataCommand dataCommand)
 	{
-		_factory = factory;
+		_domainFactory = domainFactory;
+		_dataCommand = dataCommand;
 	}
 
 	public async Task<ApplicationServiceModel> Create(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
 		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
-		IConversionApplication application = await _factory.Create(applicationType, contributorDetails);
+		var application = await _domainFactory.Create(applicationType, contributorDetails);
 
-		// ToDo: Save to Database
+		await _dataCommand.Execute(application);
 
-		return new();
+		return ApplicationServiceModelMapper.FromDomain(application);
 	}
 }
