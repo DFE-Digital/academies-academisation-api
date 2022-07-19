@@ -5,7 +5,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers;
 
 internal static class ApplicationServiceModelMapper
 {
-	internal static ApplicationServiceModel FromDomain(IConversionApplication conversionApplication)
+	internal static ApplicationServiceModel MapFromDomain(this IConversionApplication conversionApplication)
 	{
 		return new()
 		{

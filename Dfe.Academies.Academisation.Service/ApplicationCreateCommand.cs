@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.IData;
+﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
@@ -18,13 +18,13 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 		_dataCommand = dataCommand;
 	}
 
-	public async Task<ApplicationServiceModel> Create(ApplicationCreateRequestModel applicationCreateRequestModel)
+	public async Task<ApplicationServiceModel> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
 		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
 		var application = await _domainFactory.Create(applicationType, contributorDetails);
 
 		await _dataCommand.Execute(application);
 
-		return ApplicationServiceModelMapper.FromDomain(application);
+		return ApplicationServiceModelMapper.MapFromDomain(application);
 	}
 }

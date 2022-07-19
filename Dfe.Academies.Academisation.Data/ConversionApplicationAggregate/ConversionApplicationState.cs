@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
@@ -21,5 +22,14 @@ public class ConversionApplicationState : BaseEntity
 				.Select(ContributorState.MapFromDomain)
 				.ToHashSet()
 		};
+	}
+
+	public IConversionApplication MapToDomain()
+	{
+		var contributorsDictionary = Contributors.ToDictionary(
+			c => c.Id,
+			c => new ContributorDetails(c.FirstName, c.LastName, c.EmailAddress, c.Role, c.OtherRoleName));
+
+		return new ConversionApplication(Id, ApplicationType, contributorsDictionary);
 	}
 }
