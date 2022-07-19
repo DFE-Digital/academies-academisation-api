@@ -1,7 +1,7 @@
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IData;
+using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.Service;
