@@ -21,7 +21,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost]
 		public async Task<ApplicationServiceModel> Post([FromBody] ApplicationCreateRequestModel request)
 		{
-			return await _applicationCreateCommand.Create(request);
+			return await _applicationCreateCommand.Execute(request);
 		}
 
 		[HttpGet]

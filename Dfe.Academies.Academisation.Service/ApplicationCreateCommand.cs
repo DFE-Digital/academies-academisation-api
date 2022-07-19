@@ -18,7 +18,7 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 		_dataCommand = dataCommand;
 	}
 
-	public async Task<ApplicationServiceModel> Create(ApplicationCreateRequestModel applicationCreateRequestModel)
+	public async Task<ApplicationServiceModel> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
 		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
 		var application = await _domainFactory.Create(applicationType, contributorDetails);
