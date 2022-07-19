@@ -11,7 +11,8 @@ public class AcademisationContext : DbContext
 	public DbSet<ConversionApplicationState> ConversionApplications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 
-	public override int SaveChanges() 
+
+	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
 	{
 		var currentDateTime = DateTime.UtcNow;
 		
@@ -28,9 +29,9 @@ public class AcademisationContext : DbContext
 			entity.Entity.LastModifiedOn = currentDateTime;
 		}
 
-		return base.SaveChanges();
+		return base.SaveChangesAsync(cancellationToken);
 	}
-	
+
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.Entity<ConversionApplicationState>()
