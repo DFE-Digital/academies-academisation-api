@@ -25,6 +25,6 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 
 		await _dataCommand.Execute(application);
 
-		return ApplicationServiceModelMapper.FromDomain(application);
+		return ApplicationServiceModelMapper.MapFromDomain(application);
 	}
 }
