@@ -4,7 +4,7 @@ using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 
-[Table(name: "ConversionApplication", Schema = "acd")]
+[Table(name: "ConversionApplication", Schema = "academisation")]
 public class ConversionApplicationState : BaseEntity
 {
 	public ApplicationType ApplicationType { get; set; }

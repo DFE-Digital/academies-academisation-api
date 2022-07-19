@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationCreateCommand = applicationCreateCommand;
 		}
 
-		IApplicationCreateCommand _applicationCreateCommand;
+		private readonly IApplicationCreateCommand _applicationCreateCommand;
 
 		// POST api/<ConversionApplicationController>
 		[HttpPost]

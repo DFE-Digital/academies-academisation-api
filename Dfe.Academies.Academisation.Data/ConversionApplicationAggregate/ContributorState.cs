@@ -4,7 +4,7 @@ using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 
-[Table(name: "ConversionApplicationContributor", Schema = "acd")]
+[Table(name: "ConversionApplicationContributor", Schema = "academisation")]
 public class ContributorState : BaseEntity
 {
 	public string FirstName { get; set; } = null!;
