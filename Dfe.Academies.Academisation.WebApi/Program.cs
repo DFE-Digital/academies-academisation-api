@@ -1,5 +1,7 @@
 using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IData;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.Service;
@@ -16,6 +18,7 @@ builder.Services.AddHealthChecks();
 builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(HelloWorldOptions.Name));
 
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
+builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IConversionApplicationFactory, ConversionApplicationFactory>();
 
 builder.Services.AddDbContext<AcademisationContext>(options => options

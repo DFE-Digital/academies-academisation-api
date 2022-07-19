@@ -14,12 +14,13 @@ public class ApplicationCreateDataCommand : IApplicationCreateDataCommand
 	
 	public async Task Execute(IConversionApplication conversionApplication)
 	{
-		// convert 'conversionApplication' to ConversionApplicationState
 		var conversionApplicationState = ConversionApplicationState.MapFromDomain(conversionApplication);
 		
 		_context.ConversionApplications.Add(conversionApplicationState);
 		await _context.SaveChangesAsync();
 
-		conversionApplication.SetApplicationId(conversionApplicationState.Id);
+		conversionApplication.SetIdsOnCreate(
+			conversionApplicationState.Id,
+			conversionApplicationState.Contributors.Single().Id);
 	}
 }

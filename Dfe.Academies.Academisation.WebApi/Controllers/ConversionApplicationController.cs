@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
+using Dfe.Academies.Academisation.IService.ServiceModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -17,9 +18,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 		// POST api/<ConversionApplicationController>
 		[HttpPost]
-		public async Task Post([FromBody] ApplicationCreateRequestModel request)
+		public async Task<ApplicationServiceModel> Post([FromBody] ApplicationCreateRequestModel request)
 		{
-			await _applicationCreateCommand.Create(request);
+			return await _applicationCreateCommand.Create(request);
 		}
 	}
 }

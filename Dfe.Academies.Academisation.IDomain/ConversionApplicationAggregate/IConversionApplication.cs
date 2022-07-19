@@ -9,5 +9,5 @@ public interface IConversionApplication
 
 	IReadOnlyCollection<IContributor> Contributors { get; }
 
-	void SetApplicationId(int applicationId);
+	void SetIdsOnCreate(int applicationId, int conversionId);
 }

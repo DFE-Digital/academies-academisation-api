@@ -10,7 +10,7 @@ public class Contributor : IContributor
 		Details = details;
 	}
 
-	public int Id { get; }
+	public int Id { get; internal set; }
 
 	public ContributorDetails Details { get; }
 }
