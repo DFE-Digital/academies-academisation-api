@@ -16,6 +16,20 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'New manifest for tool'
+  inputs:
+    command: custom
+    custom: 'new'
+    arguments: tool-manifest
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install EF Tool'
+  inputs:
+    command: custom
+    custom: 'tool'
+    arguments: install dotnet-ef --version 6.0.5
+
+- task: DotNetCoreCLI@2
   displayName: 'Restore all project dependencies'
   inputs:
     command: 'restore'
@@ -26,6 +40,19 @@ steps:
   inputs:
     command: 'build'
     projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Create SQL Scripts'
+  inputs:
+    command: custom
+    custom: 'ef '
+    arguments: migrations script --output $(Build.SourcesDirectory)/SQL/DbMigrationScript.sql --idempotent -p Dfe.Academies.Academisation.Data -s Dfe.Academies.Academisation.WebApi -c AcademisationContext
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: SQLScripts'
+  inputs:
+    PathtoPublish: $(Build.SourcesDirectory)/SQL/DbMigrationScript.sql
+    ArtifactName: SQLScripts
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish web projects'
