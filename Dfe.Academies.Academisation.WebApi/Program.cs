@@ -20,6 +20,8 @@ builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(H
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IConversionApplicationFactory, ConversionApplicationFactory>();
+builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
+builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"]));

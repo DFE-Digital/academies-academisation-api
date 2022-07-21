@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 {
@@ -14,7 +15,10 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 
 		public async Task<IConversionApplication> Execute(int id)
 		{
-			ConversionApplicationState conversionApplicationState =  await _context.ConversionApplications.FindAsync(id) ?? throw new ArgumentException($"Entity with value {id} not found");
+			var conversionApplicationState = await _context.ConversionApplications
+				.AsNoTracking()
+				.Include(a => a.Contributors)
+				.SingleAsync(a => a.Id == id);
 
 			return conversionApplicationState.MapToDomain();
 		}
