@@ -3,9 +3,9 @@
     public enum DecisionMadeBy
     {
         RegionalDirectorForRegion = 0,
-        OtherRegionalDirectory = 2,
-        Minister = 3,
-        DirectorGeneral = 4,
-        None = 5
+        OtherRegionalDirector = 1,
+        Minister = 2,
+        DirectorGeneral = 3,
+        None = 4
     }
 }
