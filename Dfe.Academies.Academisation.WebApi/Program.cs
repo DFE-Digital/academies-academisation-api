@@ -24,7 +24,10 @@ builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
 builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
-	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"]));
+	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"], optionsBuilder =>
+	{
+		optionsBuilder.MigrationsHistoryTable("__AcademisationMigrationsHistory");
+	}));
 
 var app = builder.Build();
 
