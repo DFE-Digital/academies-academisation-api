@@ -23,9 +23,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation.WebApi", "Dfe.Academies.Academisation.WebApi\Dfe.Academies.Academisation.WebApi.csproj", "{E05A0F6B-0AE5-4BB9-B3A5-C51329B79F39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Academisation.IService", "Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj", "{CA1ADDB7-DE46-4B55-BA77-621DA848FF53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation.IService", "Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj", "{CA1ADDB7-DE46-4B55-BA77-621DA848FF53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Academisation.Domain.Core", "Dfe.Academies.Academisation.Domain.Core\Dfe.Academies.Academisation.Domain.Core.csproj", "{DA0F0AB0-2A90-4307-8ABA-44AAC88795A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation.Domain.Core", "Dfe.Academies.Academisation.Domain.Core\Dfe.Academies.Academisation.Domain.Core.csproj", "{DA0F0AB0-2A90-4307-8ABA-44AAC88795A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DEBF73E9-6537-4824-9BCF-0638CECEF7DA}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
