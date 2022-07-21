@@ -26,7 +26,7 @@ builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"], optionsBuilder =>
 	{
-		optionsBuilder.MigrationsHistoryTable("__AcademisationMigrationsHistory");
+		optionsBuilder.MigrationsHistoryTable("__EFMigrationsHistory", "academisation");
 	}));
 
 var app = builder.Build();
