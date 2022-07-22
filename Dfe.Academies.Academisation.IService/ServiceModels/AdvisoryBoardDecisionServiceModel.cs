@@ -1,8 +1,8 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core;
 
-namespace Dfe.Academies.Academisation.IService.RequestModels;
+namespace Dfe.Academies.Academisation.IService.ServiceModels;
 
-public class AdvisoryBoardDecisionCreateRequestModel
+public class AdvisoryBoardDecisionServiceModel
 {
 	public int ConversionProjectId { get; set; }
 	public AdvisoryBoardDecisions Decision { get; set; }

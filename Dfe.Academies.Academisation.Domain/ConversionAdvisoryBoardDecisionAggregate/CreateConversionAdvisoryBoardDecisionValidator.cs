@@ -1,12 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core;
-using Dfe.Academies.Academisation.IDomain.ConversionProjectAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ConversionProjectAggregate;
+namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 
-internal class CreateAdvisoryBoardDecisionValidator : AbstractValidator<IAdvisoryBoardDecisionDetails>
+internal class CreateConversionAdvisoryBoardDecisionValidator : AbstractValidator<AdvisoryBoardDecisionDetails>
 {
-	public CreateAdvisoryBoardDecisionValidator()
+	public CreateConversionAdvisoryBoardDecisionValidator()
 	{
 		ValidateApprovedDecision();
 		ValidateDeclinedDecision();

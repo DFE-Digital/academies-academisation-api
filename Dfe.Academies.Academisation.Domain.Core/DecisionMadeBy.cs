@@ -1,11 +1,10 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core
+﻿namespace Dfe.Academies.Academisation.Domain.Core;
+
+public enum DecisionMadeBy
 {
-    public enum DecisionMadeBy
-    {
-        RegionalDirectorForRegion = 0,
-        OtherRegionalDirector = 1,
-        Minister = 2,
-        DirectorGeneral = 3,
-        None = 4
-    }
+	RegionalDirectorForRegion = 0,
+	OtherRegionalDirector = 1,
+	Minister = 2,
+	DirectorGeneral = 3,
+	None = 4
 }

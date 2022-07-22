@@ -23,7 +23,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsApproved_AndDetailsAreValid___SetsAdvisoryBoardDecision(bool approvedConditionsSet)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -51,7 +51,7 @@ public class AddAdvisoryBoardDecisionTests
         bool approvedConditionsSet)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -78,7 +78,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsDeclined_AndDetailsAreValid___SetsAdvisoryBoardDecision(bool declinedOtherSet)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -111,7 +111,7 @@ public class AddAdvisoryBoardDecisionTests
         bool declinedOtherSet)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -143,7 +143,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsDeferred_AndDetailsAreValid___SetsAdvisoryBoardDecision(bool deferredOtherSet)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -176,7 +176,7 @@ public class AddAdvisoryBoardDecisionTests
         bool deferredOtherSet)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -206,7 +206,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DetailsAreValid__SetsAdvisoryBoardDecisionWithExpectedProjectId()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -232,7 +232,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task AdvisoryBoardDecisionDateIsDefault___ThrowsException()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -255,7 +255,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task AdvisoryBoardDecisionDateIsFutureDate___ThrowsException()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -278,7 +278,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsApproved_WhenApprovedConditionsSetIsNull___ThrowsException()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -306,7 +306,7 @@ public class AddAdvisoryBoardDecisionTests
             string? value)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -329,7 +329,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task
         DecisionIsApproved__WhenApprovedConditionsSetIsFalse_AndApprovedConditionsDetailsIsNotEmpty___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -351,7 +351,7 @@ public class AddAdvisoryBoardDecisionTests
     [Fact]
     private async Task DecisionIsApproved_AndDeclinedReasonsIsNotNull___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -373,7 +373,7 @@ public class AddAdvisoryBoardDecisionTests
     [Fact]
     private async Task DecisionIsApproved_AndDeferredReasonsIsNotNull___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -396,7 +396,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsDeclined_WhenDeclinedReasonsIsNull___ThrowsException()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -419,7 +419,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsDeclined_WhenDeclinedReasonsIsEmpty___ThrowsException()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -447,7 +447,7 @@ public class AddAdvisoryBoardDecisionTests
             string declinedOtherReason)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
 
@@ -470,7 +470,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task
         DecisionIsDeclined__WhenDeclinedReasonsDoesNotContainOther_AndDeclinedOtherReasonIsNotEmpty___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -491,7 +491,7 @@ public class AddAdvisoryBoardDecisionTests
     [Fact]
     private async Task DecisionIsDeclined_AndApprovedConditionsSetIsNotNull___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -512,7 +512,7 @@ public class AddAdvisoryBoardDecisionTests
     [Fact]
     private async Task DecisionIsDeclined_AndDeferredReasonsIsNotNull___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -535,7 +535,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsDeferred_WhenDeferredReasonsIsNull___ThrowsException()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -557,7 +557,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task DecisionIsDeferred_WhenDeferredReasonsIsEmpty___ThrowsException()
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -584,7 +584,7 @@ public class AddAdvisoryBoardDecisionTests
             string declinedOtherReason)
     {
         // Arrange
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -606,7 +606,7 @@ public class AddAdvisoryBoardDecisionTests
     private async Task
         DecisionIsDeferred__WhenDeferredReasonsDoesNotContainOther_AndDeferredOtherReasonIsNotEmpty___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -627,7 +627,7 @@ public class AddAdvisoryBoardDecisionTests
     [Fact]
     private async Task DecisionIsDeferred_AndApprovedConditionsSetIsNotNull___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -648,7 +648,7 @@ public class AddAdvisoryBoardDecisionTests
     [Fact]
     private async Task DecisionIsDeferred_AndDeclinedReasonsIsNotNull___ThrowsException()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
@@ -669,7 +669,7 @@ public class AddAdvisoryBoardDecisionTests
     [Fact]
     private async Task DecisionIsMade_ByDirectorGeneral___ReturnsDecision()
     {
-        ConversionProjectFactory target = new();
+        AdvisoryBoardDecisionFactory target = new();
         var project = await target.Create(_faker.Random.Int(1, 1000));
 
         AdvisoryBoardDecisionDetails details = new(
