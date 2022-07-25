@@ -17,7 +17,7 @@ public class ConversionApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsOther_OtherRoleNameIsNull___ThrowsException(ApplicationType applicationType,
+	public async Task RoleIsOther_OtherRoleNameIsNull___ReturnsValidationErrorResult(ApplicationType applicationType,
 		string otherRoleName)
 	{
 		// Arrange
@@ -25,9 +25,14 @@ public class ConversionApplicationCreateTests
 		ContributorDetails contributor = new(_faker.Name.FirstName(), _faker.Name.LastName(), _faker.Internet.Email(),
 			ContributorRole.Other, otherRoleName);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<FluentValidation.ValidationException>(
-			() => target.Create(applicationType, contributor));
+		// Act
+		var result = await target.Create(applicationType, contributor);
+
+		// Assert
+		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
+
+		var validationErrorResult = result as CreateValidationErrorResult<IConversionApplication>;
+		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == "OtherRoleName");
 	}
 
 	[Theory]
