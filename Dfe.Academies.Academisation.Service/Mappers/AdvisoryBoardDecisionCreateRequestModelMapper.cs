@@ -8,6 +8,7 @@ internal static class AdvisoryBoardDecisionCreateRequestModelMapper
     internal static AdvisoryBoardDecisionDetails AsDomain(this AdvisoryBoardDecisionCreateRequestModel model)
     {
         return new(
+            model.ConversionProjectId,
             model.Decision,
             model.ApprovedConditionsSet,
             model.ApprovedConditionsDetails,

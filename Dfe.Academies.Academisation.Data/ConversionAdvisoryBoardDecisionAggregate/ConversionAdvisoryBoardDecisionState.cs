@@ -26,7 +26,7 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
     {
         return new()
         {
-            ConversionProjectId = decision.Id,
+            ConversionProjectId = decision.AdvisoryBoardDecisionDetails.ConversionProjectId,
             Decision = decision.AdvisoryBoardDecisionDetails.Decision,
             ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
             ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
