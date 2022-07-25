@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Core;
 
-public abstract class CreateResult
+public abstract class CreateResult<T>
 {
 	protected CreateResult(ResultType resultType)
 	{

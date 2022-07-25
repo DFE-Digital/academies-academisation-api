@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Core;
 
-internal class CreateValidationErrorResult : CreateResult
+internal class CreateValidationErrorResult<T> : CreateResult<T>
 {
 	public CreateValidationErrorResult(IDictionary<string, IReadOnlyCollection<string>> validationErrors)
 		: base(ResultType.ValidationError)
