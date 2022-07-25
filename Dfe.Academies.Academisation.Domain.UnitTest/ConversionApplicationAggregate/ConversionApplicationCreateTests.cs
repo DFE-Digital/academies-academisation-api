@@ -1,7 +1,9 @@
 ﻿using Bogus;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -42,7 +44,10 @@ public class ConversionApplicationCreateTests
 		var result = await target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<ConversionApplication>(result);
+		Assert.IsType<CreateSuccessResult<IConversionApplication>>(result);
+
+		var successResult = result as CreateSuccessResult<IConversionApplication>;
+		Assert.IsType<ConversionApplication>(successResult!.Payload);
 	}
 
 	[Fact]

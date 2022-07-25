@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
@@ -30,7 +31,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.ReturnsAsync(conversionApplicationMock.Object);
+				.ReturnsAsync(new CreateSuccessResult<IConversionApplication>(conversionApplicationMock.Object));
 
 			ApplicationCreateCommand sut = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 

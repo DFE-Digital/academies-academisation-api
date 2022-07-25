@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Mappers;
+using Dfe.Academies.Academisation.Core;
 
 namespace Dfe.Academies.Academisation.Service;
 
@@ -21,10 +22,20 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 	public async Task<ApplicationServiceModel> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
 		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
-		var application = await _domainFactory.Create(applicationType, contributorDetails);
+		var result = await _domainFactory.Create(applicationType, contributorDetails);
 
-		await _dataCommand.Execute(application);
+		if (result is CreateValidationErrorResult<IConversionApplication> domainValidationErrorResult)
+		{
+			throw new NotImplementedException();
+		}
 
-		return ApplicationServiceModelMapper.MapFromDomain(application);
+		if (result is not CreateSuccessResult<IConversionApplication> domainSuccessResult)
+		{
+			throw new NotImplementedException("Other CreateResult types not expected");
+		}
+
+		await _dataCommand.Execute(domainSuccessResult.Payload);
+
+		return ApplicationServiceModelMapper.MapFromDomain(domainSuccessResult.Payload);
 	}
 }
