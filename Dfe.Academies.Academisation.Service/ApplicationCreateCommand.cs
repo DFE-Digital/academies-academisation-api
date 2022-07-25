@@ -19,14 +19,14 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 		_dataCommand = dataCommand;
 	}
 
-	public async Task<ApplicationServiceModel> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
+	public async Task<CreateResult<ApplicationServiceModel>> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
 		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
 		var result = await _domainFactory.Create(applicationType, contributorDetails);
 
 		if (result is CreateValidationErrorResult<IConversionApplication> domainValidationErrorResult)
 		{
-			throw new NotImplementedException();
+			return domainValidationErrorResult.MapToPayloadType<ApplicationServiceModel>();
 		}
 
 		if (result is not CreateSuccessResult<IConversionApplication> domainSuccessResult)
@@ -36,6 +36,6 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 
 		await _dataCommand.Execute(domainSuccessResult.Payload);
 
-		return ApplicationServiceModelMapper.MapFromDomain(domainSuccessResult.Payload);
+		return domainSuccessResult.MapToPayloadType(ApplicationServiceModelMapper.MapFromDomain);
 	}
 }

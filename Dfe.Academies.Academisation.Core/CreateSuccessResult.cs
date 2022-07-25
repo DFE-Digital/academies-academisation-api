@@ -1,11 +1,16 @@
 ﻿namespace Dfe.Academies.Academisation.Core;
 
-public class CreateSuccessResult<T> : CreateResult<T>
+public class CreateSuccessResult<TPayload> : CreateResult<TPayload>
 {
-	public CreateSuccessResult(T payload) : base(ResultType.Success)
+	public CreateSuccessResult(TPayload payload) : base(ResultType.Success)
 	{
 		Payload = payload;
 	}
 
-	public T Payload { get; }
+	public TPayload Payload { get; }
+
+	public CreateSuccessResult<TDestinationPayload> MapToPayloadType<TDestinationPayload>(Func<TPayload, TDestinationPayload> mapper)
+	{
+		return new CreateSuccessResult<TDestinationPayload>(mapper.Invoke(Payload));
+	}
 }

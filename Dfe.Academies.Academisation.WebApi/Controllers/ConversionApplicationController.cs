@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IService;
+﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost]
 		public async Task<ApplicationServiceModel> Post([FromBody] ApplicationCreateRequestModel request)
 		{
-			return await _applicationCreateCommand.Execute(request);
+
+			var result = await _applicationCreateCommand.Execute(request);
+
+			if (result is not CreateSuccessResult<ApplicationServiceModel> successResult)
+			{
+				// ToDo: map validation errors to HTTP 400
+				throw new NotImplementedException();
+			}
+
+			return successResult.Payload;
 		}
 
 		[HttpGet]
