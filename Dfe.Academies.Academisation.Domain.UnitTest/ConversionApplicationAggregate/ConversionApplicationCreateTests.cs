@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -32,7 +33,7 @@ public class ConversionApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsConversionApplication(ApplicationType applicationType,
+	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsWrappedConversionApplication(ApplicationType applicationType,
 		string otherRoleName)
 	{
 		// Arrange
@@ -51,15 +52,20 @@ public class ConversionApplicationCreateTests
 	}
 
 	[Fact]
-	public async Task EmailAddressIsInvalid___ThrowsException()
+	public async Task EmailAddressIsInvalid___ReturnsValidationErrorResult()
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
 		ContributorDetails contributor = new(_faker.Name.FirstName(), _faker.Name.LastName(),
 			_faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
 
-		// Act and Assert
-		await Assert.ThrowsAsync<FluentValidation.ValidationException>(() =>
-			target.Create(ApplicationType.FormAMat, contributor));
+		// Act
+		var result = await target.Create(ApplicationType.JoinAMat, contributor);
+
+		// Assert
+		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
+
+		var validationErrorResult = result as CreateValidationErrorResult<IConversionApplication>;
+		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == "EmailAddress");
 	}
 }

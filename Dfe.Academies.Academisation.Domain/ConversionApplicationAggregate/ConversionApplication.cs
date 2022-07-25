@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.Core;
+using System.Linq;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
@@ -41,7 +42,8 @@ public class ConversionApplication : IConversionApplication
 
 		if (!validationResult.IsValid)
 		{
-			throw new ValidationException(validationResult.ToString());
+			return new CreateValidationErrorResult<IConversionApplication>(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
 		return new CreateSuccessResult<IConversionApplication>(new ConversionApplication(applicationType, initialContributor));

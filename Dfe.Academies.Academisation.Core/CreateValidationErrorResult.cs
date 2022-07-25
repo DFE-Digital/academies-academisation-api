@@ -2,11 +2,11 @@
 
 public class CreateValidationErrorResult<T> : CreateResult<T>
 {
-	public CreateValidationErrorResult(IDictionary<string, IReadOnlyCollection<string>> validationErrors)
+	public CreateValidationErrorResult(IEnumerable<ValidationError> validationErrors)
 		: base(ResultType.ValidationError)
 	{
-		ValidationErrors = validationErrors;
+		ValidationErrors = validationErrors.ToList().AsReadOnly();
 	}
 
-	public IDictionary<string, IReadOnlyCollection<string>> ValidationErrors { get; }
+	public IReadOnlyCollection<ValidationError> ValidationErrors { get; }
 }
