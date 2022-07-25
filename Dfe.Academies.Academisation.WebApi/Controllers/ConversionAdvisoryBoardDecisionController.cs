@@ -17,8 +17,10 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
     }
 
     [HttpPost]
-    public async Task Post([FromBody] AdvisoryBoardDecisionCreateRequestModel request)
+    public async Task<IActionResult> Post([FromBody] AdvisoryBoardDecisionCreateRequestModel request)
     {
-        await _createCommand.Execute(request);        
+        await _createCommand.Execute(request);
+
+        return new CreatedResult(string.Empty, null);
     }
 }
