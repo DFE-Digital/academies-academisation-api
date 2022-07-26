@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Bogus;
 using Dfe.Academies.Academisation.Domain.ConversionProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionProjectAggregate;
@@ -12,10 +13,10 @@ public class CreateTests
 	[Fact]
 	public async Task ReturnsTypeConversionsProject()
 	{
-		ConversionProjectFactory target = new();
-		var project = await target.Create(_faker.Random.Int(1, 1000));
+		AdvisoryBoardDecisionFactory target = new();
+		var project = await target.Create(new Faker<AdvisoryBoardDecisionDetails>().create());
 
-		Assert.IsType<ConversionProject>(project);
+		Assert.IsType<AdvisoryBoardDecision>(project);
 	}
 
     [Fact]
@@ -23,7 +24,7 @@ public class CreateTests
     {
 		var expectedId = _faker.Random.Int(1, 1000);
 
-		ConversionProjectFactory target = new();
+		AdvisoryBoardDecisionFactory target = new();
 		var project = await target.Create(expectedId);
 
 		Assert.Equal(expectedId, project.Id);

@@ -1,24 +1,23 @@
-﻿using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.Data.ExtensionMethods;
+﻿using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data;
 
 public class AcademisationContext : DbContext
 {
-	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }
-	
+	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }	
 	public DbSet<ConversionApplicationState> ConversionApplications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
+	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionStates { get; set; } = null!;
 
-
-	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
 	{
 		var currentDateTime = DateTime.UtcNow;
-		
+
 		var entities = ChangeTracker.Entries<BaseEntity>().ToList();
-		
-		foreach (var entity in entities.Where(e => e.State == EntityState.Added)) 
+
+		foreach (var entity in entities.Where(e => e.State == EntityState.Added))
 		{
 			entity.Entity.CreatedOn = currentDateTime;
 			entity.Entity.LastModifiedOn = currentDateTime;
@@ -34,9 +33,32 @@ public class AcademisationContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
+		modelBuilder.HasDefaultSchema("academisation");
 		modelBuilder.Entity<ConversionApplicationState>()
-			.HasEnum(e => e.ApplicationType);
-		
+			.Property(e => e.ApplicationType)
+			.HasConversion<string>();
+
+		OnAdvisoryBoardDecisionCreating(modelBuilder);
+
 		base.OnModelCreating(modelBuilder);
+	}
+
+	private static void OnAdvisoryBoardDecisionCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>()
+			.Property(e => e.DecisionMadeBy)
+			.HasConversion<string>();
+
+		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>()
+			.Property(e => e.Reason)
+			.HasConversion<string>();
+
+		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>()
+			.Property(e => e.Reason)
+			.HasConversion<string>();
+
+		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>()
+			.Property(e => e.Decision)
+			.HasConversion<string>();
 	}
 }

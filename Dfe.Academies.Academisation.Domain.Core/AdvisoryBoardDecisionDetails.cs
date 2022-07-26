@@ -1,7 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
-using Dfe.Academies.Academisation.IDomain.ConversionProjectAggregate;
-
-namespace Dfe.Academies.Academisation.Domain.ConversionProjectAggregate;
+﻿namespace Dfe.Academies.Academisation.Domain.Core;
 
 public record AdvisoryBoardDecisionDetails(
 	AdvisoryBoardDecisions Decision,
@@ -13,4 +10,4 @@ public record AdvisoryBoardDecisionDetails(
 	string? DeferredOtherReason,
 	DateTime AdvisoryBoardDecisionDate,
 	DecisionMadeBy DecisionMadeBy
-) : IAdvisoryBoardDecisionDetails;
+);
