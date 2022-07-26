@@ -9,9 +9,9 @@ using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
-using Dfe.Academies.Academisation.IService.Queries;
+using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.Service.Commands;
-using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Academisation.Service;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.EntityFrameworkCore;
 
