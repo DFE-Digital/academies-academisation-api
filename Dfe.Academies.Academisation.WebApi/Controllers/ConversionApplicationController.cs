@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("conversion-application")]
 	[ApiController]
 	public class ConversionApplicationController : ControllerBase
 	{
@@ -19,10 +19,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationGetQuery = applicationGetQuery;
 		}
 
+		[ProducesResponseType(StatusCodes.Status201Created)]
 		[HttpPost]
-		public async Task<ApplicationServiceModel> Post([FromBody] ApplicationCreateRequestModel request)
+		public async Task<ActionResult<ApplicationServiceModel>> Post([FromBody] ApplicationCreateRequestModel request)
 		{
-
 			var result = await _applicationCreateCommand.Execute(request);
 
 			if (result is not CreateSuccessResult<ApplicationServiceModel> successResult)
@@ -31,10 +31,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				throw new NotImplementedException();
 			}
 
-			return successResult.Payload;
+			return CreatedAtRoute("Get", new { id = successResult.Payload.ApplicationId }, successResult.Payload);
 		}
 
-		[HttpGet]
+		[HttpGet("{id}", Name="Get")]
 		public async Task<ApplicationServiceModel> Get(int id)
 		{
 			return await _applicationGetQuery.Execute(id);
