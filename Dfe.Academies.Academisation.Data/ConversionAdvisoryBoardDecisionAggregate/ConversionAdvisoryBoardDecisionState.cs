@@ -8,7 +8,7 @@ namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggreg
 public class ConversionAdvisoryBoardDecisionState : BaseEntity
 {
     public int ConversionProjectId { get; set; }
-    public AdvisoryBoardDecisions Decision { get; set; }
+    public AdvisoryBoardDecision Decision { get; set; }
     public bool? ApprovedConditionsSet { get; set; }
     public string? ApprovedConditionsDetails { get; set; }
         

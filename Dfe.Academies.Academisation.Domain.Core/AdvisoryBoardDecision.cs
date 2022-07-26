@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Domain.Core;
 
-public enum AdvisoryBoardDecisions
+public enum AdvisoryBoardDecision
 {
     Approved = 0,
     Declined = 1,

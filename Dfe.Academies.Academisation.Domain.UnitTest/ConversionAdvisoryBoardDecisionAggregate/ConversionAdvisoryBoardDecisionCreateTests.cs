@@ -26,7 +26,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			approvedConditionsSet,
 			approvedConditionsSet ? GetRandomString : null,
 			null,
@@ -53,7 +53,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			approvedConditionsSet,
 			approvedConditionsSet ? GetRandomString : null,
 			null,
@@ -78,13 +78,13 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 	{
 		// Arrange
 		ConversionAdvisoryBoardDecisionFactory target = new();
-		List<AdvisoryBoardDeclinedReasons> declinedReasons = declinedOtherSet
-			? new() {AdvisoryBoardDeclinedReasons.Other}
-			: new() {AdvisoryBoardDeclinedReasons.Performance};
+		List<AdvisoryBoardDeclinedReason> declinedReasons = declinedOtherSet
+			? new() {AdvisoryBoardDeclinedReason.Other}
+			: new() {AdvisoryBoardDeclinedReason.Performance};
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			declinedReasons,
@@ -109,13 +109,13 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 	{
 		// Arrange
 		ConversionAdvisoryBoardDecisionFactory target = new();
-		List<AdvisoryBoardDeclinedReasons> declinedReasons = declinedOtherSet
-			? new() {AdvisoryBoardDeclinedReasons.Other}
-			: new() {AdvisoryBoardDeclinedReasons.Performance};
+		List<AdvisoryBoardDeclinedReason> declinedReasons = declinedOtherSet
+			? new() {AdvisoryBoardDeclinedReason.Other}
+			: new() {AdvisoryBoardDeclinedReason.Performance};
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			declinedReasons,
@@ -140,13 +140,13 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 	{
 		// Arrange
 		ConversionAdvisoryBoardDecisionFactory target = new();
-		List<AdvisoryBoardDeferredReasons> deferredReasons = deferredOtherSet
-			? new() {AdvisoryBoardDeferredReasons.Other}
-			: new() {AdvisoryBoardDeferredReasons.PerformanceConcerns};
+		List<AdvisoryBoardDeferredReason> deferredReasons = deferredOtherSet
+			? new() {AdvisoryBoardDeferredReason.Other}
+			: new() {AdvisoryBoardDeferredReason.PerformanceConcerns};
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Deferred,
+			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
 			null,
@@ -171,13 +171,13 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 	{
 		// Arrange
 		ConversionAdvisoryBoardDecisionFactory target = new();
-		List<AdvisoryBoardDeferredReasons> deferredReasons = deferredOtherSet
-			? new() {AdvisoryBoardDeferredReasons.Other}
-			: new() {AdvisoryBoardDeferredReasons.PerformanceConcerns};
+		List<AdvisoryBoardDeferredReason> deferredReasons = deferredOtherSet
+			? new() {AdvisoryBoardDeferredReason.Other}
+			: new() {AdvisoryBoardDeferredReason.PerformanceConcerns};
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Deferred,
+			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
 			null,
@@ -201,7 +201,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			false,
 			null,
 			null,
@@ -222,7 +222,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			false,
 			null,
 			null,
@@ -243,7 +243,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			null,
 			null,
 			null,
@@ -269,7 +269,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			true,
 			value,
 			null,
@@ -290,7 +290,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			false,
 			GetRandomString,
 			null,
@@ -310,7 +310,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			false,
 			null,
 			new(),
@@ -330,7 +330,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Approved,
+			AdvisoryBoardDecision.Approved,
 			false,
 			null,
 			null,
@@ -351,7 +351,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			null,
@@ -372,7 +372,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			new(),
@@ -398,10 +398,10 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
-			new() {AdvisoryBoardDeclinedReasons.Other},
+			new() {AdvisoryBoardDeclinedReason.Other},
 			declinedOtherReason,
 			null,
 			null,
@@ -421,10 +421,10 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
-			new() {AdvisoryBoardDeclinedReasons.Performance},
+			new() {AdvisoryBoardDeclinedReason.Performance},
 			GetRandomString,
 			null,
 			null,
@@ -443,10 +443,10 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			false,
 			null,
-			new() {AdvisoryBoardDeclinedReasons.Performance},
+			new() {AdvisoryBoardDeclinedReason.Performance},
 			null,
 			null,
 			null,
@@ -465,7 +465,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			null,
@@ -489,7 +489,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Deferred,
+			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
 			null,
@@ -512,7 +512,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Deferred,
+			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
 			null,
@@ -540,12 +540,12 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Deferred,
+			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
 			null,
 			null,
-			new() {AdvisoryBoardDeferredReasons.Other},
+			new() {AdvisoryBoardDeferredReason.Other},
 			declinedOtherReason,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -563,12 +563,12 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Deferred,
+			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
 			null,
 			null,
-			new() {AdvisoryBoardDeferredReasons.PerformanceConcerns},
+			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
 			GetRandomString,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -585,12 +585,12 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			false,
 			null,
 			null,
 			null,
-			new() {AdvisoryBoardDeferredReasons.PerformanceConcerns},
+			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -607,12 +607,12 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecisions.Declined,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			new(),
 			null,
-			new() {AdvisoryBoardDeferredReasons.PerformanceConcerns},
+			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());

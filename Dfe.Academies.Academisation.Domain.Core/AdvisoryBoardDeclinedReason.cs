@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Domain.Core;
 
-public enum AdvisoryBoardDeclinedReasons
+public enum AdvisoryBoardDeclinedReason
 {
     Finance = 0,
     Performance = 1,

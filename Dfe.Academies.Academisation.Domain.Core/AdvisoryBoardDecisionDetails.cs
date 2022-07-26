@@ -2,12 +2,12 @@
 
 public record AdvisoryBoardDecisionDetails(
 	int ConversionProjectId,
-	AdvisoryBoardDecisions Decision,
+	AdvisoryBoardDecision Decision,
 	bool? ApprovedConditionsSet,
 	string? ApprovedConditionsDetails,
-	List<AdvisoryBoardDeclinedReasons>? DeclinedReasons,
+	List<AdvisoryBoardDeclinedReason>? DeclinedReasons,
 	string? DeclinedOtherReason,
-	List<AdvisoryBoardDeferredReasons>? DeferredReasons,
+	List<AdvisoryBoardDeferredReason>? DeferredReasons,
 	string? DeferredOtherReason,
 	DateTime AdvisoryBoardDecisionDate,
 	DecisionMadeBy DecisionMadeBy
