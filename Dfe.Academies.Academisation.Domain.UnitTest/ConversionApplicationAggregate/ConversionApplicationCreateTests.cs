@@ -26,7 +26,7 @@ public class ConversionApplicationCreateTests
 			ContributorRole.Other, otherRoleName);
 
 		// Act
-		var result = await target.Create(applicationType, contributor);
+		var result = target.Create(applicationType, contributor);
 
 		// Assert
 		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
@@ -47,7 +47,7 @@ public class ConversionApplicationCreateTests
 			ContributorRole.ChairOfGovernors, otherRoleName);
 
 		// Act
-		var result = await target.Create(applicationType, contributor);
+		var result = target.Create(applicationType, contributor);
 
 		// Assert
 		Assert.IsType<CreateSuccessResult<IConversionApplication>>(result);
@@ -65,7 +65,7 @@ public class ConversionApplicationCreateTests
 			_faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
 
 		// Act
-		var result = await target.Create(ApplicationType.JoinAMat, contributor);
+		var result = target.Create(ApplicationType.JoinAMat, contributor);
 
 		// Assert
 		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);

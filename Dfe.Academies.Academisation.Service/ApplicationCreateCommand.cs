@@ -22,7 +22,7 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 	public async Task<CreateResult<ApplicationServiceModel>> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
 		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
-		var result = await _domainFactory.Create(applicationType, contributorDetails);
+		var result = _domainFactory.Create(applicationType, contributorDetails);
 
 		if (result is CreateValidationErrorResult<IConversionApplication> domainValidationErrorResult)
 		{

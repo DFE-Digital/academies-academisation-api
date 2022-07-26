@@ -6,9 +6,9 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
 public class ConversionApplicationFactory : IConversionApplicationFactory
 {
-	public async Task<CreateResult<IConversionApplication>> Create(ApplicationType applicationType,
+	public CreateResult<IConversionApplication> Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
-		return await ConversionApplication.Create(applicationType, initialContributor);
+		return ConversionApplication.Create(applicationType, initialContributor);
 	}
 }
