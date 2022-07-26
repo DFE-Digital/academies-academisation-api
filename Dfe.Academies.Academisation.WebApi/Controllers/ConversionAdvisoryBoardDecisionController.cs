@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers;
 
-[Route("api/conversion-project/AdvisoryBoardDecision")]
+[Route("api/conversion-project/advisory-board-decision")]
 [ApiController]
 [ProducesResponseType(201)]
 public class ConversionAdvisoryBoardDecisionController : ControllerBase
@@ -17,8 +17,10 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
     }
 
     [HttpPost]
-    public async Task Post([FromBody] AdvisoryBoardDecisionCreateRequestModel request)
+    public async Task<IActionResult> Post([FromBody] AdvisoryBoardDecisionCreateRequestModel request)
     {
-        await _createCommand.Execute(request);        
+        await _createCommand.Execute(request);
+
+        return new CreatedResult(string.Empty, null);
     }
 }
