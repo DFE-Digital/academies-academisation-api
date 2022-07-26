@@ -6,16 +6,16 @@ namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggr
 
 public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 {
-	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; private set; }
-	public int Id { get; set; }
-
-	private static CreateConversionAdvisoryBoardDecisionValidator CreateConversionAdvisoryBoardDecisionValidator { get; } = new();
-
 	private ConversionAdvisoryBoardDecision(AdvisoryBoardDecisionDetails details)
 	{
 		AdvisoryBoardDecisionDetails = details;
 	}
 
+	private static readonly CreateConversionAdvisoryBoardDecisionValidator CreateConversionAdvisoryBoardDecisionValidator  = new();
+	
+	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }
+	public int Id { get; set; }
+	
 	internal static async Task<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
 	{
 		var validationResult = await CreateConversionAdvisoryBoardDecisionValidator.ValidateAsync(details);
