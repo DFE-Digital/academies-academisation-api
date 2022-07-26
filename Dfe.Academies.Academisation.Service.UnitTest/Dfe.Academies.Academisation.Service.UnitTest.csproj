@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	 <ProjectReference Include="..\Dfe.Academies.Academisation.Core\Dfe.Academies.Academisation.Core.csproj" />
 	 <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
 	 <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Service\Dfe.Academies.Academisation.Service.csproj" />

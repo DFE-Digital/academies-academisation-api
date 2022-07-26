@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Core;
+using System.Linq;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
@@ -33,14 +35,18 @@ public class ConversionApplication : IConversionApplication
 		_contributors.Single().Id = contributorId;
 	}
 
-	internal static async Task<ConversionApplication> Create(ApplicationType applicationType,
+	internal static async Task<CreateResult<IConversionApplication>> Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
 		var validationResult = await CreateValidator.ValidateAsync(initialContributor);
 
-		if (!validationResult.IsValid) throw new ValidationException(validationResult.ToString());
+		if (!validationResult.IsValid)
+		{
+			return new CreateValidationErrorResult<IConversionApplication>(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
 
-		return new(applicationType, initialContributor);
+		return new CreateSuccessResult<IConversionApplication>(new ConversionApplication(applicationType, initialContributor));
 	}
 }
 

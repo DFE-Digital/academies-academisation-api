@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
@@ -17,7 +18,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]
 		[InlineData(ApplicationType.JoinAMat)]
-		public async void ApplicationReturnedFromFactory___ApplicationPassedToDataLayer(ApplicationType applicationType)
+		public async void ApplicationReturnedFromFactory___ApplicationPassedToDataLayer_ServiceModelReturned(ApplicationType applicationType)
 		{
 			// arrange
 			var applicationCreateRequestModel = new ApplicationCreateRequestModelBuilder()
@@ -30,18 +31,45 @@ namespace Dfe.Academies.Academisation.Service.UnitTest
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.ReturnsAsync(conversionApplicationMock.Object);
+				.ReturnsAsync(new CreateSuccessResult<IConversionApplication>(conversionApplicationMock.Object));
 
-			ApplicationCreateCommand sut = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
 			// act
-			var result = await sut.Execute(applicationCreateRequestModel);
+			var result = await subject.Execute(applicationCreateRequestModel);
 
 			// assert
 			_applicationCreateDataCommandMock
 				.Verify(x => x.Execute(It.Is<IConversionApplication>(y => y == conversionApplicationMock.Object)), Times.Once());
 
-			Assert.IsType<ApplicationServiceModel>(result);
+			var successResult = result as CreateSuccessResult<ApplicationServiceModel>;
+			Assert.IsType<ApplicationServiceModel>(successResult!.Payload);
+		}
+
+		[Theory]
+		[InlineData(ApplicationType.FormAMat)]
+		[InlineData(ApplicationType.JoinAMat)]
+		public async void ValidationErrorReturnedFromFactory___ApplicationNotPassedToDataLayer_ValidationErrorReturned(ApplicationType applicationType)
+		{
+			// arrange
+			var applicationCreateRequestModel = new ApplicationCreateRequestModelBuilder()
+				.WithApplicationType(applicationType)
+				.Build();
+
+			_conversionApplicationFactoryMock
+				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
+				.ReturnsAsync(new CreateValidationErrorResult<IConversionApplication>(new List<ValidationError>()));
+
+			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+
+			// act
+			var result = await subject.Execute(applicationCreateRequestModel);
+
+			// assert
+			_applicationCreateDataCommandMock
+				.Verify(x => x.Execute(It.IsAny<IConversionApplication>()), Times.Never());
+
+			Assert.IsType<CreateValidationErrorResult<ApplicationServiceModel>>(result);
 		}
 	}
 }
