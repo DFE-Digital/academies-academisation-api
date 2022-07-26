@@ -41,32 +41,6 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.IsType<ConversionAdvisoryBoardDecision>(result);
-	}
-
-	[Theory]
-	[InlineData(true)]
-	[InlineData(false)]
-	private async Task DecisionIsApproved_AndDetailsAreValid___SetsExpectedAdvisoryBoardDecisionDetails(
-		bool approvedConditionsSet)
-	{
-		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
-		AdvisoryBoardDecisionDetails details = new(
-			ConversionProjectId,
-			AdvisoryBoardDecision.Approved,
-			approvedConditionsSet,
-			approvedConditionsSet ? GetRandomString : null,
-			null,
-			null,
-			null,
-			null,
-			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>());
-
-		// Act 
-		var result = await target.Create(details);
-
-		//Assert
 		Assert.Equal(details, result.AdvisoryBoardDecisionDetails);
 	}
 
@@ -99,36 +73,6 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.IsType<ConversionAdvisoryBoardDecision>(result);
-	}
-
-	[Theory]
-	[InlineData(true)]
-	[InlineData(false)]
-	private async Task DecisionIsDeclined_AndDetailsAreValid___SetsExpectedAdvisoryBoardDecisionDetails(
-		bool declinedOtherSet)
-	{
-		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
-		List<AdvisoryBoardDeclinedReason> declinedReasons = declinedOtherSet
-			? new() {AdvisoryBoardDeclinedReason.Other}
-			: new() {AdvisoryBoardDeclinedReason.Performance};
-
-		AdvisoryBoardDecisionDetails details = new(
-			ConversionProjectId,
-			AdvisoryBoardDecision.Declined,
-			null,
-			null,
-			declinedReasons,
-			declinedOtherSet ? GetRandomString : null,
-			null,
-			null,
-			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>());
-
-		// Act 
-		var result = await target.Create(details);
-
-		//Assert
 		Assert.Equal(details, result.AdvisoryBoardDecisionDetails);
 	}
 
@@ -161,36 +105,6 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.IsType<ConversionAdvisoryBoardDecision>(result);
-	}
-
-	[Theory]
-	[InlineData(true)]
-	[InlineData(false)]
-	private async Task DecisionIsDeferred_AndDetailsAreValid__SetsExpectedAdvisoryBoardDecision(
-		bool deferredOtherSet)
-	{
-		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
-		List<AdvisoryBoardDeferredReason> deferredReasons = deferredOtherSet
-			? new() {AdvisoryBoardDeferredReason.Other}
-			: new() {AdvisoryBoardDeferredReason.PerformanceConcerns};
-
-		AdvisoryBoardDecisionDetails details = new(
-			ConversionProjectId,
-			AdvisoryBoardDecision.Deferred,
-			null,
-			null,
-			null,
-			null,
-			deferredReasons,
-			deferredOtherSet ? GetRandomString : null,
-			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>());
-
-		// Act 
-		var result = await target.Create(details);
-
-		//Assert
 		Assert.Equal(details, result.AdvisoryBoardDecisionDetails);
 	}
 
