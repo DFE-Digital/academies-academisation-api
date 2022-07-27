@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ExtensionMethods\**" />
+    <EmbeddedResource Remove="ExtensionMethods\**" />
+    <None Remove="ExtensionMethods\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dfe.Academies.Academisation.Domain.Core\Dfe.Academies.Academisation.Domain.Core.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IData\Dfe.Academies.Academisation.IData.csproj" />
