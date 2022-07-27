@@ -65,6 +65,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// act
 			var result = await subject.Post(requestModel);
 
+			// assert
+			Assert.IsType<BadRequestObjectResult>(result.Result);
 			var validationErrorResult = (BadRequestObjectResult)result.Result!;
 			var validationerrors = (IReadOnlyCollection<ValidationError>)validationErrorResult.Value!;
 			Assert.Equal(expectedValidationError, validationerrors);
