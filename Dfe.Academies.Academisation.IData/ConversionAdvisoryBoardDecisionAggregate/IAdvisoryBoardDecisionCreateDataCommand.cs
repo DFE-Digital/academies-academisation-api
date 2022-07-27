@@ -4,5 +4,5 @@ namespace Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggre
 
 public interface IAdvisoryBoardDecisionCreateDataCommand
 {
-    Task<int> Execute(IConversionAdvisoryBoardDecision decision);
+    Task Execute(IConversionAdvisoryBoardDecision decision);
 }

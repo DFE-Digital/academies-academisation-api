@@ -12,14 +12,13 @@ public class AdvisoryBoardDecisionCreateDataCommand : IAdvisoryBoardDecisionCrea
         _context = context;
     }
 
-    public async Task<int> Execute(IConversionAdvisoryBoardDecision decision)
+    public async Task Execute(IConversionAdvisoryBoardDecision decision)
     {
         var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
 
         await _context.ConversionAdvisoryBoardDecisionStates.AddAsync(decisionState);
         await _context.SaveChangesAsync();
 
-        return decisionState.Id;
-
+        decision.SetId(decision.Id);
     }
 }

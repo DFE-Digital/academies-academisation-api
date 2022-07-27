@@ -39,8 +39,8 @@ public class AdvisoryBoardDecisionCreateCommand : IAdvisoryBoardDecisionCreateCo
     private async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> ExecuteDataCommand(
         CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult)
     {
-        var id = await _createDataCommand.Execute(successResult.Payload);
-        successResult.Payload.Id = id;
+        await _createDataCommand.Execute(successResult.Payload);
+        
         return successResult.MapToPayloadType(ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain);
     }
 }

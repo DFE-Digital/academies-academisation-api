@@ -14,7 +14,7 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 	private static readonly CreateConversionAdvisoryBoardDecisionValidator CreateConversionAdvisoryBoardDecisionValidator  = new();
 	
 	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }
-	public int Id { get; set; }
+	public int Id { get; private set;  }
 	
 	internal static CreateResult<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
 	{
@@ -25,5 +25,9 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 				new ConversionAdvisoryBoardDecision(details))
 			: new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(
 				validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
-	}	
+	}
+
+	public void SetId(int id) => Id = Id != default 
+		? id 
+		: throw new ArgumentOutOfRangeException(nameof(id));
 }
