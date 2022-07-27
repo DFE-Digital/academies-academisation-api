@@ -5,6 +5,16 @@
 
 ### EntityFramework and Migrations
 
+Set your database connection string in user secrets:
+
+"AcademiesDatabaseConnectionString": "connection string here"
+
+Install the Entity Framework Core CLI Tools:
+
+```
+dotnet tool install --global dotnet-ef
+```
+
 ### Generating migrations
 
 To generate migrations use the following command from the WebApi folder:
