@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Bogus;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Xunit;
-using ValidationException = FluentValidation.ValidationException;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionAdvisoryBoardDecisionAggregate;
 
@@ -13,17 +14,17 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 {
 	private readonly Faker _faker = new();
 	private const int ConversionProjectId = 1;
+	
+	private readonly ConversionAdvisoryBoardDecisionFactory _target = new();
 
 	private string GetRandomString => _faker.Random.String(1, 20, '\u0020', '\u007f');
 
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	private async Task DecisionIsApproved_AndDetailsAreValid___ReturnConversionAdvisoryBoardDecision(
-		bool approvedConditionsSet)
+	private void DecisionIsApproved_AndDetailsAreValid___ReturnCreateSuccessResult(bool approvedConditionsSet)
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -37,25 +38,23 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			_faker.PickRandom<DecisionMadeBy>());
 
 		// Act
-		var result = await target.Create(details);
+		var result = (CreateSuccessResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
 		//Assert
-		Assert.IsType<ConversionAdvisoryBoardDecision>(result);
-		Assert.Equal(details, result.AdvisoryBoardDecisionDetails);
+		Assert.IsType<ConversionAdvisoryBoardDecision>(result.Payload);
+		Assert.Equal(details, result.Payload.AdvisoryBoardDecisionDetails);
 	}
-
+	
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	private async Task DecisionIsDeclined_AndDetailsAreValid___ReturnsConversionAdvisoryBoardDecision(
-		bool declinedOtherSet)
+	private void DecisionIsDeclined_AndDetailsAreValid___ReturnCreateSuccessResult(bool declinedOtherSet)
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		List<AdvisoryBoardDeclinedReason> declinedReasons = declinedOtherSet
 			? new() {AdvisoryBoardDeclinedReason.Other}
 			: new() {AdvisoryBoardDeclinedReason.Performance};
-
+	
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -68,26 +67,27 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 
-		// Act 
-		var result = await target.Create(details);
+		// Act
+		var result = _target.Create(details);
+
+		var test = (CreateSuccessResult<IConversionAdvisoryBoardDecision>) result;
 
 		//Assert
-		Assert.IsType<ConversionAdvisoryBoardDecision>(result);
-		Assert.Equal(details, result.AdvisoryBoardDecisionDetails);
+		Assert.IsType<ConversionAdvisoryBoardDecision>(test.Payload);
+		Assert.Equal(details, test.Payload.AdvisoryBoardDecisionDetails);
 	}
-
+	
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	private async Task DecisionIsDeferred_AndDetailsAreValid___ReturnsConversionAdvisoryBoardDecision(
+	private void DecisionIsDeferred_AndDetailsAreValid___ReturnCreateSuccessResult(
 		bool deferredOtherSet)
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		List<AdvisoryBoardDeferredReason> deferredReasons = deferredOtherSet
 			? new() {AdvisoryBoardDeferredReason.Other}
 			: new() {AdvisoryBoardDeferredReason.PerformanceConcerns};
-
+	
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
@@ -99,20 +99,19 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			deferredOtherSet ? GetRandomString : null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-
-		// Act 
-		var result = await target.Create(details);
+	
+		// Act
+		var result = (CreateSuccessResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
 		//Assert
-		Assert.IsType<ConversionAdvisoryBoardDecision>(result);
-		Assert.Equal(details, result.AdvisoryBoardDecisionDetails);
+		Assert.IsType<ConversionAdvisoryBoardDecision>(result.Payload);
+		Assert.Equal(details, result.Payload.AdvisoryBoardDecisionDetails);
 	}
-
+	
 	[Fact]
-	private async Task AdvisoryBoardDecisionDateIsDefault___ThrowsException()
+	private void AdvisoryBoardDecisionDateIsDefault___ReturnsCreateValidationErrorResult()
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -124,16 +123,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			default,
 			_faker.PickRandom<DecisionMadeBy>());
+		
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
 	}
-
+	
 	[Fact]
-	private async Task AdvisoryBoardDecisionDateIsFutureDate___ThrowsException()
+	private void AdvisoryBoardDecisionDateIsFutureDate___ReturnsCreateValidationErrorResult()
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -145,16 +148,22 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsApproved_WhenApprovedConditionsSetIsNull___ThrowsException()
+	private void DecisionIsApproved_WhenApprovedConditionsSetIsNull___ReturnsCreateValidationErrorResult()
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
+		
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -166,21 +175,24 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)));
 	}
-
+	
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
 	[InlineData("  ")]
-	private async Task
-		DecisionIsApproved__WhenApprovedConditionsSetIsTrue_AndApprovedConditionsDetailsIsEmpty___ThrowsException(
+	private void DecisionIsApproved__WhenApprovedConditionsSetIsTrue_AndApprovedConditionsDetailsIsEmpty___ReturnsCreateValidationErrorResult(
 			string? value)
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -192,16 +204,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)));
 	}
-
+	
 	[Fact]
-	private async Task
-		DecisionIsApproved__WhenApprovedConditionsSetIsFalse_AndApprovedConditionsDetailsIsNotEmpty___ThrowsException()
+	private void DecisionIsApproved__WhenApprovedConditionsSetIsFalse_AndApprovedConditionsDetailsIsNotEmpty___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -213,15 +229,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsApproved_AndDeclinedReasonsIsNotNull___ThrowsException()
+	private void DecisionIsApproved_AndDeclinedReasonsIsNotNull___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -233,15 +254,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsApproved_AndDeferredReasonsIsNotNull___ThrowsException()
+	private void DecisionIsApproved_AndDeferredReasonsIsNotNull___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
+		//Arrange	
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
@@ -253,16 +279,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsDeclined_WhenDeclinedReasonsIsNull___ThrowsException()
+	private void DecisionIsDeclined_WhenDeclinedReasonsIsNull___ReturnsCreateValidationErrorResult()
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -274,16 +304,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsDeclined_WhenDeclinedReasonsIsEmpty___ThrowsException()
+	private void DecisionIsDeclined_WhenDeclinedReasonsIsEmpty___ReturnsCreateValidationErrorResult()
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -295,21 +329,23 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
 	}
-
+	
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
 	[InlineData("  ")]
-	private async Task
-		DecisionIsDeclined__WhenDeclinedReasonsContainsOther_AndDeclinedOtherReasonIsEmpty___ThrowsException(
-			string declinedOtherReason)
+	private void DecisionIsDeclined__WhenDeclinedReasonsContainsOther_AndDeclinedOtherReasonIsEmpty___ReturnsCreateValidationErrorResult(string declinedOtherReason)
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -321,18 +357,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason)));
 	}
-
+	
 	[Fact]
-	private async Task
-		DecisionIsDeclined__WhenDeclinedReasonsDoesNotContainOther_AndDeclinedOtherReasonIsNotEmpty___ThrowsException()
+	private void DecisionIsDeclined__WhenDeclinedReasonsDoesNotContainOther_AndDeclinedOtherReasonIsNotEmpty___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -344,17 +382,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsDeclined_AndApprovedConditionsSetIsNotNull___ThrowsException()
+	private void DecisionIsDeclined_AndApprovedConditionsSetIsNotNull___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -366,17 +407,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsDeclined_AndDeferredReasonsIsNotNull___ThrowsException()
+	private void DecisionIsDeclined_AndDeferredReasonsIsNotNull___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -388,19 +432,21 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
 	}
-
-
+	
+	
 	[Fact]
-	private async Task DecisionIsDeferred_WhenDeferredReasonsIsNull___ThrowsException()
+	private void DecisionIsDeferred_WhenDeferredReasonsIsNull___ReturnsCreateValidationErrorResult()
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
@@ -412,18 +458,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsDeferred_WhenDeferredReasonsIsEmpty___ThrowsException()
+	private void DecisionIsDeferred_WhenDeferredReasonsIsEmpty___ReturnsCreateValidationErrorResult()
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
@@ -435,23 +483,23 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
 	}
-
+	
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
 	[InlineData("  ")]
-	private async Task
-		DecisionIsDeferred__WhenDeferredReasonsContainsOther_AndDeferredOtherReasonIsEmpty___ThrowsException(
-			string declinedOtherReason)
+	private void DecisionIsDeferred__WhenDeferredReasonsContainsOther_AndDeferredOtherReasonIsEmpty___ReturnsCreateValidationErrorResult(string declinedOtherReason)
 	{
 		// Arrange
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
@@ -463,18 +511,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			declinedOtherReason,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason)));
 	}
-
+	
 	[Fact]
-	private async Task
-		DecisionIsDeferred__WhenDeferredReasonsDoesNotContainOther_AndDeferredOtherReasonIsNotEmpty___ThrowsException()
+	private void DecisionIsDeferred__WhenDeferredReasonsDoesNotContainOther_AndDeferredOtherReasonIsNotEmpty___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
@@ -486,17 +536,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			GetRandomString,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsDeferred_AndApprovedConditionsSetIsNotNull___ThrowsException()
+	private void DecisionIsDeferred_AndApprovedConditionsSetIsNotNull___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -508,17 +561,20 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)));
 	}
-
+	
 	[Fact]
-	private async Task DecisionIsDeferred_AndDeclinedReasonsIsNotNull___ThrowsException()
+	private void DecisionIsDeferred_AndDeclinedReasonsIsNotNull___ReturnsCreateValidationErrorResult()
 	{
-		ConversionAdvisoryBoardDecisionFactory target = new();
-
-
+		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -530,8 +586,13 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
+	
+		// Act
+		var result = (CreateValidationErrorResult<IConversionAdvisoryBoardDecision>) _target.Create(details);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ValidationException>(() => target.Create(details));
+		//Assert
+		Assert.NotEmpty(result.ValidationErrors);
+		Assert.True(result.ValidationErrors.Any(e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
 	}
 }

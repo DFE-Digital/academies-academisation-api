@@ -2,8 +2,9 @@
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels;
 
-public class AdvisoryBoardDecisionServiceModel
+public class ConversionAdvisoryBoardDecisionServiceModel
 {
+	public int AdvisoryBoardDecisionId { get; set; }
 	public int ConversionProjectId { get; set; }
 	public AdvisoryBoardDecision Decision { get; set; }
 	public bool? ApprovedConditionsSet { get; set; }
