@@ -22,7 +22,7 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
     public DateTime AdvisoryBoardDecisionDate { get; set; }
     public DecisionMadeBy DecisionMadeBy { get; set; }
 
-    internal static ConversionAdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
+    public static ConversionAdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
     {
         return new()
         {
