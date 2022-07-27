@@ -30,9 +30,8 @@ public class AdvisoryBoardDecisionCreateCommand : IAdvisoryBoardDecisionCreateCo
             CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
                 await ExecuteDataCommand(successResult),
             CreateValidationErrorResult<IConversionAdvisoryBoardDecision> errorResult =>
-                errorResult.MapToPayloadType<ConversionAdvisoryBoardDecisionServiceModel>(),
-
-            _ => throw new NotImplementedException("Other CreateResult types not expected")
+                errorResult.MapToPayloadType<ConversionAdvisoryBoardDecisionServiceModel>(), 
+            _ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
         };
     }
 
