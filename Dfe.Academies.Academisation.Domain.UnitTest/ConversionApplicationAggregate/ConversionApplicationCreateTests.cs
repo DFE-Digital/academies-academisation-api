@@ -3,9 +3,6 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggregate;
@@ -17,7 +14,7 @@ public class ConversionApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsOther_OtherRoleNameIsNull___ReturnsValidationErrorResult(ApplicationType applicationType,
+	public void RoleIsOther_OtherRoleNameIsNull___ReturnsValidationErrorResult(ApplicationType applicationType,
 		string otherRoleName)
 	{
 		// Arrange
@@ -38,7 +35,7 @@ public class ConversionApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsWrappedConversionApplication(ApplicationType applicationType,
+	public void RoleIsChair_OtherRoleNameIsNull___ReturnsWrappedConversionApplication(ApplicationType applicationType,
 		string otherRoleName)
 	{
 		// Arrange
@@ -57,7 +54,7 @@ public class ConversionApplicationCreateTests
 	}
 
 	[Fact]
-	public async Task EmailAddressIsInvalid___ReturnsValidationErrorResult()
+	public void EmailAddressIsInvalid___ReturnsValidationErrorResult()
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
