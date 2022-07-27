@@ -20,7 +20,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 	}
 
 	[Fact]
-	public void ___ShouldReturnExpectedConversionAdvisoryBoardDecisionState()
+	public void ShouldReturnConversionAdvisoryBoardDecisionState()
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
