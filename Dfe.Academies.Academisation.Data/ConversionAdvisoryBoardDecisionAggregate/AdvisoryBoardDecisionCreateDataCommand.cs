@@ -18,5 +18,7 @@ public class AdvisoryBoardDecisionCreateDataCommand : IAdvisoryBoardDecisionCrea
 
         await _context.ConversionAdvisoryBoardDecisionStates.AddAsync(decisionState);
         await _context.SaveChangesAsync();
+
+        decision.SetId(decision.Id);
     }
 }

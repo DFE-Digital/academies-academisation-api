@@ -4,6 +4,8 @@ namespace Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAgg
 
 public interface IConversionAdvisoryBoardDecision
 {
-	int Id { get; set; }
-	AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }	
+	public int Id { get; }
+	AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }
+
+	void SetId(int id);
 }

@@ -1,6 +1,6 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
+﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using ValidationException = FluentValidation.ValidationException;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 
@@ -14,14 +14,20 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 	private static readonly CreateConversionAdvisoryBoardDecisionValidator CreateConversionAdvisoryBoardDecisionValidator  = new();
 	
 	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }
-	public int Id { get; set; }
+	public int Id { get; private set;  }
 	
-	internal static async Task<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
+	internal static CreateResult<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
 	{
-		var validationResult = await CreateConversionAdvisoryBoardDecisionValidator.ValidateAsync(details);
+		var validationResult = CreateConversionAdvisoryBoardDecisionValidator.Validate(details);
 
-		if (!validationResult.IsValid) throw new ValidationException(validationResult.ToString());
+		return validationResult.IsValid
+			? new CreateSuccessResult<IConversionAdvisoryBoardDecision>(
+				new ConversionAdvisoryBoardDecision(details))
+			: new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(
+				validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
+	}
 
-		return new ConversionAdvisoryBoardDecision(details);
-	}	
+	public void SetId(int id) => Id = Id != default 
+		? id 
+		: throw new ArgumentOutOfRangeException(nameof(id));
 }
