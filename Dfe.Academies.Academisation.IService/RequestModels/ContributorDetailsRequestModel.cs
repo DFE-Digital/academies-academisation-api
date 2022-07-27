@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
+﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IService.RequestModels
 {

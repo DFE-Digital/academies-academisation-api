@@ -1,15 +1,15 @@
 ﻿using Bogus;
-using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService.RequestModels;
 
-namespace Dfe.Academies.Academisation.Service.UnitTest
+namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 {
 	internal class ApplicationCreateRequestModelBuilder
 	{
 		private ApplicationType _applicationType = ApplicationType.JoinAMat;
 		private ContributorDetailsRequestModel _contributorDetailsRequestModel = new ContributorDetailsRequestModelBuilder().Build();
 
-		private static Faker _faker = new ();
+		private static Faker _faker = new();
 
 
 		public ApplicationCreateRequestModel Build()

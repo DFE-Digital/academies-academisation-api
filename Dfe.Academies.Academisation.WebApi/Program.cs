@@ -11,9 +11,9 @@ using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.Service.Commands;
-using Dfe.Academies.Academisation.Service;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.EntityFrameworkCore;
+using Dfe.Academies.Academisation.Service.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 

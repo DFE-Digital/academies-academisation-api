@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.Core;
 using System.Linq;
+using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
