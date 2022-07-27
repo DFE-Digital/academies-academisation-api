@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
+﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService.RequestModels;
 
 namespace Dfe.Academies.Academisation.Service.Mappers

@@ -1,4 +1,4 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core;
+﻿namespace Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 
 public enum ContributorRole
 {

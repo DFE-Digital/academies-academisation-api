@@ -1,19 +1,21 @@
 ﻿using Bogus;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
+using Dfe.Academies.Academisation.Service.Commands;
+using Dfe.Academies.Academisation.Service.UnitTest.Helpers;
 using Moq;
 using Xunit;
 
-namespace Dfe.Academies.Academisation.Service.UnitTest
+namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
 		private readonly Faker _faker = new Faker();
-		private static Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new ();
-		private static Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new ();
+		private static Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
+		private static Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]

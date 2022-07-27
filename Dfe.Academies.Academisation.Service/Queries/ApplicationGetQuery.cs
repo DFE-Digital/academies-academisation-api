@@ -4,7 +4,7 @@ using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Mappers;
 
-namespace Dfe.Academies.Academisation.Service
+namespace Dfe.Academies.Academisation.Service.Queries
 {
 	public class ApplicationGetQuery : IApplicationGetQuery
 	{

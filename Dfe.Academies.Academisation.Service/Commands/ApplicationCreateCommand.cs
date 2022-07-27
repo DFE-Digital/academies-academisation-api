@@ -6,7 +6,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Mappers;
 using Dfe.Academies.Academisation.Core;
 
-namespace Dfe.Academies.Academisation.Service;
+namespace Dfe.Academies.Academisation.Service.Commands;
 
 public class ApplicationCreateCommand : IApplicationCreateCommand
 {
