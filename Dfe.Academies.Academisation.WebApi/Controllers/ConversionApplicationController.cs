@@ -20,18 +20,18 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[HttpPost]
 		public async Task<ActionResult<ApplicationServiceModel>> Post([FromBody] ApplicationCreateRequestModel request)
 		{
 			var result = await _applicationCreateCommand.Execute(request);
 
-			if (result is not CreateSuccessResult<ApplicationServiceModel> successResult)
+			return result switch
 			{
-				// ToDo: map validation errors to HTTP 400
-				throw new NotImplementedException();
-			}
-
-			return CreatedAtRoute("Get", new { id = successResult.Payload.ApplicationId }, successResult.Payload);
+				CreateSuccessResult<ApplicationServiceModel> successResult => CreatedAtRoute("Get", new { id = successResult.Payload.ApplicationId }, successResult.Payload),
+				CreateValidationErrorResult<ApplicationServiceModel> validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
 		}
 
 		[HttpGet("{id}", Name="Get")]

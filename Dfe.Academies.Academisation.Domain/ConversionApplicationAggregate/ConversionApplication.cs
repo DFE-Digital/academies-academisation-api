@@ -20,8 +20,8 @@ public class ConversionApplication : IConversionApplication
 	{
 		ApplicationType = applicationType;
 		ApplicationId = applicationId;
-		var contributersEnumerable = contributors.Select(c => new Contributor(c.Key, c.Value));
-		_contributors.AddRange(contributersEnumerable);
+		var contributorsEnumerable = contributors.Select(c => new Contributor(c.Key, c.Value));
+		_contributors.AddRange(contributorsEnumerable);
 	}
 
 	public int ApplicationId { get; private set; }
