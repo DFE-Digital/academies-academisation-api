@@ -35,10 +35,10 @@ public class ConversionApplication : IConversionApplication
 		_contributors.Single().Id = contributorId;
 	}
 
-	internal static async Task<CreateResult<IConversionApplication>> Create(ApplicationType applicationType,
+	internal static CreateResult<IConversionApplication> Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
-		var validationResult = await CreateValidator.ValidateAsync(initialContributor);
+		var validationResult = CreateValidator.Validate(initialContributor);
 
 		if (!validationResult.IsValid)
 		{

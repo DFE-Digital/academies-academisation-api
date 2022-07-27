@@ -3,9 +3,6 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggregate;
@@ -17,7 +14,7 @@ public class ConversionApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsOther_OtherRoleNameIsNull___ReturnsValidationErrorResult(ApplicationType applicationType,
+	public void RoleIsOther_OtherRoleNameIsNull___ReturnsValidationErrorResult(ApplicationType applicationType,
 		string otherRoleName)
 	{
 		// Arrange
@@ -26,7 +23,7 @@ public class ConversionApplicationCreateTests
 			ContributorRole.Other, otherRoleName);
 
 		// Act
-		var result = await target.Create(applicationType, contributor);
+		var result = target.Create(applicationType, contributor);
 
 		// Assert
 		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
@@ -38,7 +35,7 @@ public class ConversionApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public async Task RoleIsChair_OtherRoleNameIsNull___ReturnsWrappedConversionApplication(ApplicationType applicationType,
+	public void RoleIsChair_OtherRoleNameIsNull___ReturnsWrappedConversionApplication(ApplicationType applicationType,
 		string otherRoleName)
 	{
 		// Arrange
@@ -47,7 +44,7 @@ public class ConversionApplicationCreateTests
 			ContributorRole.ChairOfGovernors, otherRoleName);
 
 		// Act
-		var result = await target.Create(applicationType, contributor);
+		var result = target.Create(applicationType, contributor);
 
 		// Assert
 		Assert.IsType<CreateSuccessResult<IConversionApplication>>(result);
@@ -57,7 +54,7 @@ public class ConversionApplicationCreateTests
 	}
 
 	[Fact]
-	public async Task EmailAddressIsInvalid___ReturnsValidationErrorResult()
+	public void EmailAddressIsInvalid___ReturnsValidationErrorResult()
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
@@ -65,7 +62,7 @@ public class ConversionApplicationCreateTests
 			_faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
 
 		// Act
-		var result = await target.Create(ApplicationType.JoinAMat, contributor);
+		var result = target.Create(ApplicationType.JoinAMat, contributor);
 
 		// Assert
 		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);

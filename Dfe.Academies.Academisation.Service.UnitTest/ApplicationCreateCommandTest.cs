@@ -31,7 +31,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.ReturnsAsync(new CreateSuccessResult<IConversionApplication>(conversionApplicationMock.Object));
+				.Returns(new CreateSuccessResult<IConversionApplication>(conversionApplicationMock.Object));
 
 			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
@@ -58,7 +58,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.ReturnsAsync(new CreateValidationErrorResult<IConversionApplication>(new List<ValidationError>()));
+				.Returns(new CreateValidationErrorResult<IConversionApplication>(new List<ValidationError>()));
 
 			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
