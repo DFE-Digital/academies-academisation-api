@@ -37,9 +37,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 			// assert
 			Assert.IsType<CreatedAtRouteResult>(result.Result);
-
-			var thing = subject.RouteData;
-
 			var createdResult = (CreatedAtRouteResult)result.Result!;
 			Assert.Equal(applicationServiceModel, createdResult.Value);
 			Assert.Equal("Get", createdResult.RouteName);

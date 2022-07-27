@@ -20,6 +20,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[HttpPost]
 		public async Task<ActionResult<ApplicationServiceModel>> Post([FromBody] ApplicationCreateRequestModel request)
 		{
