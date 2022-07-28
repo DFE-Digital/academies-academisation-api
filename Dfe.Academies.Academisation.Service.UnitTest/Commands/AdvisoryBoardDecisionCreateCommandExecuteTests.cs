@@ -20,8 +20,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		}
 		
 		private readonly Fixture _fixture = new();
-		private readonly Faker _faker = new();
-		
+
 		private readonly Mock<IAdvisoryBoardDecisionCreateDataCommand> _mockDataCommand;
 		private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory;
 		private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision;
@@ -58,19 +57,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		public async Task RequestModelIsValid___ReturnsExpectedConversionAdvisoryBoardDecisionServiceModel()
 		{
 			//Arrange
-			AdvisoryBoardDecisionDetails details = new(
-				ConversionProjectId: _faker.Random.Int(1, 1000),
-				Decision: AdvisoryBoardDecision.Declined,
-				ApprovedConditionsSet: null,
-				ApprovedConditionsDetails: null,
-				DeclinedReasons: new(),
-				DeclinedOtherReason: null,
-				DeferredReasons: new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
-				DeferredOtherReason: null,
-				AdvisoryBoardDecisionDate: DateTime.UtcNow.AddDays(-1),
-				DecisionMadeBy: _faker.PickRandom<DecisionMadeBy>()
-			);
-
+			var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
+			
 			var expected = new ConversionAdvisoryBoardDecisionServiceModel
 			{
 				ConversionProjectId = details.ConversionProjectId,
