@@ -26,6 +26,7 @@ public class ConversionApplication : IConversionApplication
 
 	public int ApplicationId { get; private set; }
 	public ApplicationType ApplicationType { get; }
+	public ApplicationStatus Status { get; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
