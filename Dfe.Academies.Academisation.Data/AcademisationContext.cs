@@ -38,6 +38,10 @@ public class AcademisationContext : DbContext
 			.Property(e => e.ApplicationType)
 			.HasConversion<string>();
 
+		modelBuilder.Entity<ConversionApplicationState>()
+			.Property(e => e.ApplicationStatus)
+			.HasConversion<string>();
+
 		OnAdvisoryBoardDecisionCreating(modelBuilder);
 
 		base.OnModelCreating(modelBuilder);

@@ -10,22 +10,26 @@ public class ConversionApplication : IConversionApplication
 {
 	private readonly List<Contributor> _contributors = new();
 	private static readonly CreateConversionApplicationValidator CreateValidator = new();
+	private static readonly SubmitConversionApplicationValidator SubmitValidator = new();
 
 	private ConversionApplication(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
+		ApplicationStatus = ApplicationStatus.InProgress;
 		ApplicationType = applicationType;
 		_contributors.Add(new(initialContributor));
 	}
-	public ConversionApplication(int applicationId, ApplicationType applicationType, Dictionary<int, ContributorDetails> contributors)
+	public ConversionApplication(int applicationId, ApplicationType applicationType, Dictionary<int, ContributorDetails> contributors, ApplicationStatus applicationStatus)
 	{
 		ApplicationType = applicationType;
 		ApplicationId = applicationId;
+		ApplicationStatus = applicationStatus;
 		var contributorsEnumerable = contributors.Select(c => new Contributor(c.Key, c.Value));
 		_contributors.AddRange(contributorsEnumerable);
 	}
 
 	public int ApplicationId { get; private set; }
 	public ApplicationType ApplicationType { get; }
+	public ApplicationStatus ApplicationStatus { get; private set; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
@@ -33,6 +37,21 @@ public class ConversionApplication : IConversionApplication
 	{
 		ApplicationId = applicationId;
 		_contributors.Single().Id = contributorId;
+	}
+
+	public CommandResult Submit()
+	{
+		var validationResult = SubmitValidator.Validate(this);
+
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
+
+		ApplicationStatus = ApplicationStatus.Submitted;
+
+		return new CommandSuccessResult();
 	}
 
 	internal static CreateResult<IConversionApplication> Create(ApplicationType applicationType,
