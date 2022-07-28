@@ -27,8 +27,8 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
         return result switch
         {
             CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel> successResult => CreatedAtRoute(
-                    "ConversionAdvisoryBoardDecisionGet", 
-                    successResult.Payload.AdvisoryBoardDecisionId, 
+                    HttpMethods.Get, 
+                    new { Id = successResult.Payload.AdvisoryBoardDecisionId}, 
                     successResult.Payload),
             CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel> validationErrorResult =>
                 new BadRequestObjectResult(validationErrorResult.ValidationErrors),
@@ -36,7 +36,7 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
         };
     }
     
-    [HttpGet("{id:int}", Name = "ConversionAdvisoryBoardDecisionGet")]
+    [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> Get(int id)
