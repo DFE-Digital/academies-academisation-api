@@ -129,8 +129,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate));
 	}
 	
 	[Fact]
@@ -155,8 +155,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate));
 	}
 	
 	[Fact]
@@ -181,8 +181,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet));
 	}
 	
 	[Theory]
@@ -210,8 +210,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails));
 	}
 	
 	[Fact]
@@ -235,8 +235,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails));
 	}
 	
 	[Fact]
@@ -260,8 +260,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons));
 	}
 	
 	[Fact]
@@ -285,8 +285,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons));
 	}
 	
 	[Fact]
@@ -310,8 +310,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons));
 	}
 	
 	[Fact]
@@ -335,8 +335,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons));
 	}
 	
 	[Theory]
@@ -363,8 +363,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason));
 	}
 	
 	[Fact]
@@ -388,8 +388,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason));
 	}
 	
 	[Fact]
@@ -413,8 +413,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet));
 	}
 	
 	[Fact]
@@ -438,8 +438,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons));
 	}
 	
 	
@@ -464,8 +464,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons));
 	}
 	
 	[Fact]
@@ -489,8 +489,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons));
 	}
 	
 	[Theory]
@@ -517,8 +517,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason));
 	}
 	
 	[Fact]
@@ -542,8 +542,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason));
 	}
 	
 	[Fact]
@@ -567,8 +567,8 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet));
 	}
 	
 	[Fact]
@@ -592,7 +592,7 @@ public class ConversionAdvisoryBoardDecisionCreateTests
 
 		//Assert
 		Assert.NotEmpty(result.ValidationErrors);
-		Assert.True(result.ValidationErrors.Any(e =>
-			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)));
+		Assert.Contains(result.ValidationErrors, e =>
+			e.PropertyName == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons));
 	}
 }
