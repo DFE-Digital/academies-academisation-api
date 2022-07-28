@@ -17,6 +17,7 @@ public class ConversionApplicationState : BaseEntity
 	{
 		return new()
 		{
+			ApplicationStatus = conversionApplication.ApplicationStatus,
 			ApplicationType = conversionApplication.ApplicationType,
 			Contributors = conversionApplication.Contributors
 				.Select(ContributorState.MapFromDomain)
@@ -30,6 +31,6 @@ public class ConversionApplicationState : BaseEntity
 			c => c.Id,
 			c => new ContributorDetails(c.FirstName, c.LastName, c.EmailAddress, c.Role, c.OtherRoleName));
 
-		return new ConversionApplication(Id, ApplicationType, contributorsDictionary);
+		return new ConversionApplication(Id, ApplicationType, contributorsDictionary, ApplicationStatus);
 	}
 }

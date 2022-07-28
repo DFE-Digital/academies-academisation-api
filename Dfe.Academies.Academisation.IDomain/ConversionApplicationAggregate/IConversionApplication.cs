@@ -6,8 +6,10 @@ public interface IConversionApplication
 {
 	int ApplicationId { get; }
 	ApplicationType ApplicationType { get; }
+	ApplicationStatus ApplicationStatus { get; }
 
 	IReadOnlyCollection<IContributor> Contributors { get; }
 
 	void SetIdsOnCreate(int applicationId, int conversionId);
+	void Submit();
 }

@@ -13,20 +13,22 @@ public class ConversionApplication : IConversionApplication
 
 	private ConversionApplication(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
+		ApplicationStatus = ApplicationStatus.InProgress;
 		ApplicationType = applicationType;
 		_contributors.Add(new(initialContributor));
 	}
-	public ConversionApplication(int applicationId, ApplicationType applicationType, Dictionary<int, ContributorDetails> contributors)
+	public ConversionApplication(int applicationId, ApplicationType applicationType, Dictionary<int, ContributorDetails> contributors, ApplicationStatus applicationStatus)
 	{
 		ApplicationType = applicationType;
 		ApplicationId = applicationId;
+		ApplicationStatus = applicationStatus;
 		var contributorsEnumerable = contributors.Select(c => new Contributor(c.Key, c.Value));
 		_contributors.AddRange(contributorsEnumerable);
 	}
 
 	public int ApplicationId { get; private set; }
 	public ApplicationType ApplicationType { get; }
-	public ApplicationStatus Status { get; }
+	public ApplicationStatus ApplicationStatus { get; private set; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
@@ -34,6 +36,11 @@ public class ConversionApplication : IConversionApplication
 	{
 		ApplicationId = applicationId;
 		_contributors.Single().Id = contributorId;
+	}
+
+	public void Submit()
+	{
+		ApplicationStatus = ApplicationStatus.Submitted;
 	}
 
 	internal static CreateResult<IConversionApplication> Create(ApplicationType applicationType,
