@@ -10,6 +10,7 @@ public class ConversionApplication : IConversionApplication
 {
 	private readonly List<Contributor> _contributors = new();
 	private static readonly CreateConversionApplicationValidator CreateValidator = new();
+	private static readonly SubmitConversionApplicationValidator SubmitValidator = new();
 
 	private ConversionApplication(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
@@ -38,9 +39,19 @@ public class ConversionApplication : IConversionApplication
 		_contributors.Single().Id = contributorId;
 	}
 
-	public void Submit()
+	public CommandResult Submit()
 	{
+		var validationResult = SubmitValidator.Validate(this);
+
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
+
 		ApplicationStatus = ApplicationStatus.Submitted;
+
+		return new CommandSuccessResult();
 	}
 
 	internal static CreateResult<IConversionApplication> Create(ApplicationType applicationType,
