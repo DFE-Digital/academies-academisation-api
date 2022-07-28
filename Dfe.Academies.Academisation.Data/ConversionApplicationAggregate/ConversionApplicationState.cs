@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 public class ConversionApplicationState : BaseEntity
 {
 	public ApplicationType ApplicationType { get; set; }
-
+	public ApplicationStatus ApplicationStatus { get; set; }
 	[ForeignKey("ConversionApplicationId")]
 	public HashSet<ContributorState> Contributors { get; set; } = null!;
 
