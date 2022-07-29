@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
@@ -27,12 +26,21 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
 
         return result switch
         {
-            // TODO: use CreatedAtRoute once get controller is implemented
-            CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel> successResult =>
-                new CreatedResult(string.Empty, successResult.Payload),
+            CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel> successResult => CreatedAtRoute(
+                    HttpMethods.Get, 
+                    new { Id = successResult.Payload.AdvisoryBoardDecisionId}, 
+                    successResult.Payload),
             CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel> validationErrorResult =>
                 new BadRequestObjectResult(validationErrorResult.ValidationErrors),
             _ => throw new NotImplementedException()
         };
+    }
+    
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> Get(int id)
+    {
+        return await Task.FromResult(new ConversionAdvisoryBoardDecisionServiceModel());
     }
 }
