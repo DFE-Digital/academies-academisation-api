@@ -21,16 +21,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		
 		private readonly Fixture _fixture = new();
 
-		private readonly Mock<IAdvisoryBoardDecisionCreateDataCommand> _mockDataCommand;
-		private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory;
-		private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision;
-		
-		public AdvisoryBoardDecisionCreateCommandExecuteTests()
-		{
-			_mockDataCommand = new();
-			_mockDecisionFactory = new();
-			_mockDecision = new();
-		}
+		private readonly Mock<IAdvisoryBoardDecisionCreateDataCommand> _mockDataCommand = new();
+		private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory = new();
+		private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
 		
 		[Fact]
 		public async Task RequestModelIsValid___CallsExecuteOnDataCommand()

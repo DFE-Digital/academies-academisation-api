@@ -27,7 +27,7 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 				validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
 	}
 
-	public void SetId(int id) => Id = id != default 
+	public void SetId(int id) => Id = Id == default 
 		? id 
-		: throw new ArgumentOutOfRangeException(nameof(id));
+		: throw new InvalidOperationException("Cannot assign an id when the id has already been set");
 }
