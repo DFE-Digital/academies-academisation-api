@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bogus;
+﻿using Bogus;
 using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
-using FluentAssertions;
-using Xunit;
-using Moq;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using FluentAssertions;
+using Moq;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest;
 
@@ -25,7 +24,7 @@ public class ConversionApplicationStateTests
 	[Fact]
 	public void MapFromDomain___ConversionApplicationStateReturned()
 	{
-		//arrange
+		// arrange
 		const ApplicationType expectedApplicationType = ApplicationType.FormAMat;
 
 		ContributorDetails initialContributorDetails = new(
@@ -58,10 +57,10 @@ public class ConversionApplicationStateTests
 			}
 		};
 		
-		//arrange
+		// act
 		var result = ConversionApplicationState.MapFromDomain(mockConversionApplication.Object);
 
-		//assert
+		// assert
 		Assert.IsType<ConversionApplicationState>(result);
 		result.Should().BeEquivalentTo(expected);
 	}
