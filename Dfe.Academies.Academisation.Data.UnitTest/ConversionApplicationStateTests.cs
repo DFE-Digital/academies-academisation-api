@@ -11,12 +11,12 @@ using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest;
 
-public class ConversionApplicationStateCreateTests
+public class ConversionApplicationStateTests
 {
 	private readonly Faker _faker;
 	private readonly ConversionApplicationFactory _factory;
 
-	public ConversionApplicationStateCreateTests()
+	public ConversionApplicationStateTests()
 	{
 		_faker = new();
 		_factory = new();
