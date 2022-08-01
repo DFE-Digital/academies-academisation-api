@@ -14,7 +14,7 @@ public class ConversionApplicationCreateTests
 	private readonly Fixture _fixture = new();
 
 	[Fact]
-	public void ContributorValid___ReturnsSuccesResult()
+	public void ContributorValid___ReturnsSuccessResult()
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
