@@ -23,35 +23,7 @@ public class ConversionApplicationStateCreateTests
 	}
 
 	[Fact]
-	public async Task ShouldReturnConversionApplicationState()
-	{
-		//act
-		const ApplicationType expectedApplicationType = ApplicationType.FormAMat;
-
-		ContributorDetails initialContributorDetails = new(
-			FirstName: _faker.Name.FirstName(),
-			LastName: _faker.Name.LastName(),
-			EmailAddress: _faker.Internet.Email(),
-			ContributorRole.ChairOfGovernors,
-			OtherRoleName: null
-		);
-		
-		var mockConversionApplication = new Mock<IConversionApplication>();
-		var mockContributor = new Mock<IContributor>();
-
-		mockContributor.SetupGet(x => x.Details).Returns(initialContributorDetails);
-		mockConversionApplication.SetupGet(x => x.ApplicationType).Returns(expectedApplicationType);
-		mockConversionApplication.SetupGet(x => x.Contributors).Returns(new List<IContributor>(new [] { mockContributor.Object }));
-
-		//arrange
-		var result = ConversionApplicationState.MapFromDomain(mockConversionApplication.Object);
-
-		//act
-		Assert.IsType<ConversionApplicationState>(result);
-	}
-	
-	[Fact]
-	public async Task ShouldReturnExpectedConversionApplicationState()
+	public void MapFromDomain___ConversionApplicationStateReturned()
 	{
 		//arrange
 		const ApplicationType expectedApplicationType = ApplicationType.FormAMat;
@@ -90,6 +62,7 @@ public class ConversionApplicationStateCreateTests
 		var result = ConversionApplicationState.MapFromDomain(mockConversionApplication.Object);
 
 		//assert
+		Assert.IsType<ConversionApplicationState>(result);
 		result.Should().BeEquivalentTo(expected);
 	}
 }
