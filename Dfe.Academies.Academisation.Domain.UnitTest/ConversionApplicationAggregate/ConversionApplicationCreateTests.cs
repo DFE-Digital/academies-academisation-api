@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using System.Linq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggregate;
@@ -31,6 +32,10 @@ public class ConversionApplicationCreateTests
 
 		// Assert
 		Assert.IsType<CreateSuccessResult<IConversionApplication>>(result);
+
+		var successResult = (CreateSuccessResult<IConversionApplication>)result;
+		Assert.Equal(ApplicationStatus.InProgress, successResult.Payload.ApplicationStatus);
+		Assert.Single(successResult.Payload.Contributors, c => c.Details == contributor);
 	}
 
 	[Theory]
