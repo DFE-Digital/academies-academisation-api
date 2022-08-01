@@ -44,7 +44,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
-		public async Task Post_ServiceReturnsValidationErrorResult_BadRequestResponseReturned()
+		public async Task Post___ServiceReturnsValidationErrorResult___BadRequestResponseReturned()
 		{
 			// arrange
 			var mockCreateCommand = new Mock<IApplicationCreateCommand>();
