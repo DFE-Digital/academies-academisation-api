@@ -8,14 +8,13 @@ internal static class ApplicationContributorServiceModelMapper
 {
 	internal static ApplicationContributorServiceModel FromDomain(IContributor contributor)
 	{
-		return new()
-		{
-			ContributorId = contributor.Id,
-			FirstName = contributor.Details.FirstName,
-			LastName = contributor.Details.LastName,
-			EmailAddress = contributor.Details.EmailAddress,
-			Role = contributor.Details.Role,
-			OtherRoleName = contributor.Details.OtherRoleName
-		};
+		return new(
+			contributor.Id,
+			contributor.Details.FirstName,
+			contributor.Details.LastName,
+			contributor.Details.EmailAddress,
+			contributor.Details.Role,
+			contributor.Details.OtherRoleName
+		);
 	} 
 }

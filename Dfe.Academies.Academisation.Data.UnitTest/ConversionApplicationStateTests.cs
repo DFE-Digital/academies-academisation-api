@@ -1,59 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bogus;
+﻿using Bogus;
 using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
-using FluentAssertions;
-using Xunit;
-using Moq;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using FluentAssertions;
+using Moq;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest;
 
-public class ConversionApplicationStateCreateTests
+public class ConversionApplicationStateTests
 {
 	private readonly Faker _faker;
 	private readonly ConversionApplicationFactory _factory;
 
-	public ConversionApplicationStateCreateTests()
+	public ConversionApplicationStateTests()
 	{
 		_faker = new();
 		_factory = new();
 	}
 
 	[Fact]
-	public async Task ShouldReturnConversionApplicationState()
+	public void MapFromDomain___ConversionApplicationStateReturned()
 	{
-		//act
-		const ApplicationType expectedApplicationType = ApplicationType.FormAMat;
-
-		ContributorDetails initialContributorDetails = new(
-			FirstName: _faker.Name.FirstName(),
-			LastName: _faker.Name.LastName(),
-			EmailAddress: _faker.Internet.Email(),
-			ContributorRole.ChairOfGovernors,
-			OtherRoleName: null
-		);
-		
-		var mockConversionApplication = new Mock<IConversionApplication>();
-		var mockContributor = new Mock<IContributor>();
-
-		mockContributor.SetupGet(x => x.Details).Returns(initialContributorDetails);
-		mockConversionApplication.SetupGet(x => x.ApplicationType).Returns(expectedApplicationType);
-		mockConversionApplication.SetupGet(x => x.Contributors).Returns(new List<IContributor>(new [] { mockContributor.Object }));
-
-		//arrange
-		var result = ConversionApplicationState.MapFromDomain(mockConversionApplication.Object);
-
-		//act
-		Assert.IsType<ConversionApplicationState>(result);
-	}
-	
-	[Fact]
-	public async Task ShouldReturnExpectedConversionApplicationState()
-	{
-		//arrange
+		// arrange
 		const ApplicationType expectedApplicationType = ApplicationType.FormAMat;
 
 		ContributorDetails initialContributorDetails = new(
@@ -86,10 +57,11 @@ public class ConversionApplicationStateCreateTests
 			}
 		};
 		
-		//arrange
+		// act
 		var result = ConversionApplicationState.MapFromDomain(mockConversionApplication.Object);
 
-		//assert
+		// assert
+		Assert.IsType<ConversionApplicationState>(result);
 		result.Should().BeEquivalentTo(expected);
 	}
 }

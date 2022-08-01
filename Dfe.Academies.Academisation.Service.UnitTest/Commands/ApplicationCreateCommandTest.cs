@@ -1,5 +1,4 @@
-﻿using Bogus;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
@@ -13,7 +12,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
-		private readonly Faker _faker = new Faker();
 		private static Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
 		private static Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 

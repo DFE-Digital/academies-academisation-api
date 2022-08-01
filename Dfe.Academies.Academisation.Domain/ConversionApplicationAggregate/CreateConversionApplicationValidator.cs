@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
@@ -15,5 +14,11 @@ internal class CreateConversionApplicationValidator : AbstractValidator<Contribu
 
 		RuleFor(details => details.EmailAddress)
 			.EmailAddress();
+
+		RuleFor(details => details.FirstName)
+			.NotEmpty();
+
+		RuleFor(details => details.LastName)
+			.NotEmpty();
 	}
 }
