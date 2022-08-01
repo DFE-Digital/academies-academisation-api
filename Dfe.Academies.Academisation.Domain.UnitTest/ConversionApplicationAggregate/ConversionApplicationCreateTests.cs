@@ -40,8 +40,12 @@ public class ConversionApplicationCreateTests
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(_faker.Name.FirstName(), _faker.Name.LastName(), _faker.Internet.Email(),
-			ContributorRole.ChairOfGovernors, otherRoleName);
+		ContributorDetails contributor = new(
+			_faker.Name.FirstName(),
+			_faker.Name.LastName(),
+			_faker.Internet.Email(),
+			ContributorRole.ChairOfGovernors, 
+			otherRoleName);
 
 		// Act
 		var result = target.Create(applicationType, contributor);
@@ -58,8 +62,12 @@ public class ConversionApplicationCreateTests
 	{
 		// Arrange
 		ConversionApplicationFactory target = new();
-		ContributorDetails contributor = new(_faker.Name.FirstName(), _faker.Name.LastName(),
-			_faker.Random.Chars(count: 20).ToString()!, ContributorRole.ChairOfGovernors, null);
+		ContributorDetails contributor = new(
+			_faker.Name.FirstName(), 
+			_faker.Name.LastName(),
+			_faker.Random.Chars(count: 20).ToString()!, 
+			ContributorRole.ChairOfGovernors, 
+			null);
 
 		// Act
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
@@ -69,5 +77,30 @@ public class ConversionApplicationCreateTests
 
 		var validationErrorResult = result as CreateValidationErrorResult<IConversionApplication>;
 		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == "EmailAddress");
+	}
+
+	[Theory]
+	[InlineData("","lastname","FirstName")]
+	[InlineData("firstname", "", "LastName")]
+	public void NameIsInvalid___ReturnsValidationErrorResult(string firstName, string lastName, string expectedValidationError)
+	{
+		// Arrange
+		ConversionApplicationFactory target = new();
+		ContributorDetails contributor = new(
+			firstName, 
+			lastName,
+			_faker.Random.Chars(count: 20).ToString()!, 
+			ContributorRole.ChairOfGovernors, 
+			null);
+
+		// Act
+		var result = target.Create(ApplicationType.JoinAMat, contributor);
+
+		// Assert
+		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
+
+		var validationErrorResult = result as CreateValidationErrorResult<IConversionApplication>;
+		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == expectedValidationError);
+
 	}
 }
