@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dfe.Academies.Academisation.IService.Commands;
+using Dfe.Academies.Academisation.IService.Query;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 
@@ -24,6 +25,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		
 		private readonly Fixture _fixture = new();
 		private readonly Mock<IAdvisoryBoardDecisionCreateCommand> _mockCreateCommand = new();
+		private readonly Mock<IConversionAdvisoryBoardDecisionGetQuery> _mockGetQuery = new();
 
 		[Fact]
 		public async Task CommandReturnsCreateSuccessResult___ReturnsCreateAtRouteResult()
@@ -35,7 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				.Setup(c => c.Execute(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()))
 				.ReturnsAsync(new CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>(decisionServiceModel));
 
-			var subject = new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object);
+			var subject = new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object, _mockGetQuery.Object);
 
 			//Act
 			var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>());
@@ -59,7 +61,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				.ReturnsAsync(
 					new CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel>(expectedValidationErrors));
 
-			var subject = new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object);
+			var subject = new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object, _mockGetQuery.Object);
 
 			//Act
 			var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>());
@@ -78,7 +80,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				.Setup(c => c.Execute(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()))
 				.ReturnsAsync(new UnhandledCreateResult());
 
-			var subject = new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object);
+			var subject = new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object, _mockGetQuery.Object);
 
 			//Act
 			await Assert.ThrowsAsync<NotImplementedException>(() => subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()));

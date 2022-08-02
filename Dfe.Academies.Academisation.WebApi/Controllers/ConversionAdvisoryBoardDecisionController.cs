@@ -1,6 +1,6 @@
-﻿using System.Net;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +12,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers;
 public class ConversionAdvisoryBoardDecisionController : ControllerBase
 {
     private readonly IAdvisoryBoardDecisionCreateCommand _decisionCreateCommand;
+    private readonly IConversionAdvisoryBoardDecisionGetQuery _decisionGetQuery;
 
-    public ConversionAdvisoryBoardDecisionController(IAdvisoryBoardDecisionCreateCommand decisionCreateCommand)
+    public ConversionAdvisoryBoardDecisionController(IAdvisoryBoardDecisionCreateCommand decisionCreateCommand, IConversionAdvisoryBoardDecisionGetQuery decisionGetQuery)
     {
         _decisionCreateCommand = decisionCreateCommand;
+        _decisionGetQuery = decisionGetQuery;
     }
 
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -42,6 +44,10 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> Get(int id)
     {
-        return await Task.FromResult(new ConversionAdvisoryBoardDecisionServiceModel());
+        var result = await _decisionGetQuery.Execute(id);
+
+        return result is null
+            ? NotFound()
+            : new OkObjectResult(result);
     }
 }
