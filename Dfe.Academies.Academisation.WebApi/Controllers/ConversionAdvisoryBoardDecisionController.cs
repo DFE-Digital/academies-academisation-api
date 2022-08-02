@@ -39,7 +39,7 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
         };
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{projectId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByProjectId(int projectId)
