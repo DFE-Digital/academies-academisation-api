@@ -13,13 +13,13 @@ namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggreg
 			_context = context;
 		}
 
-		public async Task<IConversionAdvisoryBoardDecision?> Execute(int id)
+		public async Task<IConversionAdvisoryBoardDecision?> Execute(int projectId)
 		{
 			var state = await _context.ConversionAdvisoryBoardDecisions
 				.Include(s => s.DeclinedReasons)
 				.Include(s => s.DeferredReasons)
 				.AsNoTracking()
-				.SingleOrDefaultAsync(s => s.Id == id);
+				.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
 			
 			return state?.MapToDomain();
 		}

@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object, _mockGetQuery.Object);
 
 			//Act
-			var result = await subject.Get(It.IsAny<int>());
+			var result = await subject.GetByProjectId(It.IsAny<int>());
 			
 			//Assert
 			var foundResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -48,7 +48,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				new ConversionAdvisoryBoardDecisionController(_mockCreateCommand.Object, _mockGetQuery.Object);
 
 			//Act
-			var result = await subject.Get(It.IsAny<int>());
+			var result = await subject.GetByProjectId(It.IsAny<int>());
 			
 			//Assert
 			Assert.IsType<NotFoundResult>(result.Result);

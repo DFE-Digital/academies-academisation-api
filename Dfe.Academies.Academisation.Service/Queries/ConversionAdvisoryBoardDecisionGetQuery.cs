@@ -14,9 +14,9 @@ public class ConversionAdvisoryBoardDecisionGetQuery : IConversionAdvisoryBoardD
 		_query = query;
 	}
 
-	public async Task<ConversionAdvisoryBoardDecisionServiceModel?> Execute(int id)
+	public async Task<ConversionAdvisoryBoardDecisionServiceModel?> Execute(int projectId)
 	{
-		var decision = await _query.Execute(id);
+		var decision = await _query.Execute(projectId);
 		return decision?.MapFromDomain();
 	}
 }

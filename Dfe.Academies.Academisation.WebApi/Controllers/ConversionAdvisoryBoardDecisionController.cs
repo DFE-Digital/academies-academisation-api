@@ -42,9 +42,9 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> Get(int id)
+    public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByProjectId(int projectId)
     {
-        var result = await _decisionGetQuery.Execute(id);
+        var result = await _decisionGetQuery.Execute(projectId);
 
         return result is null
             ? NotFound()
