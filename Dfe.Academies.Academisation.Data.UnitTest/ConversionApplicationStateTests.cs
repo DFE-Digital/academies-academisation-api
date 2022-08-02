@@ -12,19 +12,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest;
 
 public class ConversionApplicationStateTests
 {
-	private readonly Faker _faker;
-	private readonly ConversionApplicationFactory _factory;
-
-	public ConversionApplicationStateTests()
-	{
-		_faker = new();
-		_factory = new();
-	}
+	private readonly Faker _faker = new();
 
 	[Fact]
 	public void MapFromDomain___ConversionApplicationStateReturned()
 	{
-		// arrange
+		//Arrange
 		const ApplicationType expectedApplicationType = ApplicationType.FormAMat;
 
 		ContributorDetails initialContributorDetails = new(
@@ -57,11 +50,13 @@ public class ConversionApplicationStateTests
 			}
 		};
 		
-		// act
+		//Act
 		var result = ConversionApplicationState.MapFromDomain(mockConversionApplication.Object);
 
-		// assert
-		Assert.IsType<ConversionApplicationState>(result);
-		result.Should().BeEquivalentTo(expected);
+		//Assert
+		Assert.Multiple(
+			() => Assert.IsType<ConversionApplicationState>(result),
+			() => Assert.Equivalent(expected, result)
+		);
 	}
 }
