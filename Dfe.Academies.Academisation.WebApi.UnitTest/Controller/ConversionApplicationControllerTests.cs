@@ -59,8 +59,42 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _subject.Post(requestModel);
 
 			// assert
-			var validationErrorResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-			var validationErrors = (IReadOnlyCollection<ValidationError>)validationErrorResult.Value!;
+			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestResult.Value);
+			Assert.Equal(expectedValidationError, validationErrors);
+		}
+
+		[Fact]
+		public async Task Submit___ServiceReturnsSuccess___SuccessResponseReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+
+			_submitCommandMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(new CommandSuccessResult());
+
+			// act
+			var result = await _subject.Submit(applicationId);
+
+			// assert
+			var createdResult = Assert.IsType<OkResult>(result);
+		}
+
+
+		[Fact]
+		public async Task Submit___ServiceReturnsValidationError___BadRequestReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+
+			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
+			_submitCommandMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(new CommandValidationErrorResult(expectedValidationError));
+
+			// act
+			var result = await _subject.Submit(applicationId);
+
+			// assert
+			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestResult.Value);
 			Assert.Equal(expectedValidationError, validationErrors);
 		}
 	}

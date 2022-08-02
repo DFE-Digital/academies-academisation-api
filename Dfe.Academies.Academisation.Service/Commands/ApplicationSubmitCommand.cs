@@ -1,9 +1,10 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IService.Commands;
 
 namespace Dfe.Academies.Academisation.Service.Commands
 {
-	public class ApplicationSubmitCommand
+	public class ApplicationSubmitCommand : IApplicationSubmitCommand
 	{
 		private readonly IApplicationGetDataQuery _dataQuery;
 		private readonly IApplicationUpdateDataCommand _dataCommand;
