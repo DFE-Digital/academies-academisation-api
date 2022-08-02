@@ -8,7 +8,8 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate
 		public SubmitConversionApplicationValidator()
 		{
 			RuleFor(application => application.ApplicationStatus)
-				.Equal(ApplicationStatus.InProgress);
+				.Equal(ApplicationStatus.InProgress)
+				.WithMessage("Application must be In Progress to submit");
 		}
 	}
 }
