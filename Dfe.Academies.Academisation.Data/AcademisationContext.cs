@@ -9,7 +9,7 @@ public class AcademisationContext : DbContext
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }	
 	public DbSet<ConversionApplicationState> ConversionApplications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
-	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionStates { get; set; } = null!;
+	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
 	{

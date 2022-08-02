@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 
@@ -41,5 +42,23 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
             AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
             DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy
         };
+    }
+
+    public IConversionAdvisoryBoardDecision MapToDomain()
+    {
+        AdvisoryBoardDecisionDetails details = new(
+            ConversionProjectId,
+            Decision,
+            ApprovedConditionsSet,
+            ApprovedConditionsDetails,
+            DeclinedReasons!.Select(reason => reason.Reason).ToList(),
+            DeclinedOtherReason,
+            DeferredReasons!.Select(reason => reason.Reason).ToList(),
+            DeferredOtherReason,
+            AdvisoryBoardDecisionDate,
+            DecisionMadeBy
+        );
+
+        return new ConversionAdvisoryBoardDecision(Id, details);
     }
 }

@@ -16,7 +16,7 @@ public class AdvisoryBoardDecisionCreateDataCommand : IAdvisoryBoardDecisionCrea
     {
         var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
 
-        await _context.ConversionAdvisoryBoardDecisionStates.AddAsync(decisionState);
+        await _context.ConversionAdvisoryBoardDecisions.AddAsync(decisionState);
         await _context.SaveChangesAsync();
 
         decision.SetId(decisionState.Id);

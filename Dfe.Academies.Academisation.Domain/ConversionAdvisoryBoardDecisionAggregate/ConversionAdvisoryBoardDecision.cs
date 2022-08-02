@@ -10,6 +10,11 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 	{
 		AdvisoryBoardDecisionDetails = details;
 	}
+	
+	public ConversionAdvisoryBoardDecision(int id, AdvisoryBoardDecisionDetails details) : this(details)
+	{
+		Id = id;
+	}
 
 	private static readonly CreateConversionAdvisoryBoardDecisionValidator CreateConversionAdvisoryBoardDecisionValidator  = new();
 	
