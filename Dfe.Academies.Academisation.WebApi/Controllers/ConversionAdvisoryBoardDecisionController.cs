@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Net;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
@@ -32,7 +33,7 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
                     successResult.Payload),
             CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel> validationErrorResult =>
                 new BadRequestObjectResult(validationErrorResult.ValidationErrors),
-            _ => throw new NotImplementedException()
+            _ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
         };
     }
     
