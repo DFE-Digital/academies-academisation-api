@@ -13,14 +13,14 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 			_context = context;
 		}
 
-		public async Task<IConversionApplication> Execute(int id)
+		public async Task<IConversionApplication?> Execute(int id)
 		{
 			var conversionApplicationState = await _context.ConversionApplications
 				.AsNoTracking()
 				.Include(a => a.Contributors)
-				.SingleAsync(a => a.Id == id);
+				.SingleOrDefaultAsync(a => a.Id == id);
 
-			return conversionApplicationState.MapToDomain();
+			return conversionApplicationState?.MapToDomain();
 		}
 	}
 }

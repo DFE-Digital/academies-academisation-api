@@ -79,7 +79,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var createdResult = Assert.IsType<OkResult>(result);
 		}
 
-
 		[Fact]
 		public async Task Submit___ServiceReturnsValidationError___BadRequestReturned()
 		{

@@ -4,6 +4,6 @@ namespace Dfe.Academies.Academisation.IData.ConversionApplicationAggregate
 {
 	public interface IApplicationGetDataQuery
 	{
-		Task<IConversionApplication> Execute(int id);
+		Task<IConversionApplication?> Execute(int id);
 	}
 }
