@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService.RequestModels;
@@ -110,5 +111,21 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			Assert.IsType<NotFoundResult>(result.Result);
 		}
 
+		[Fact]
+		public async Task Get____ServiceReturnsApplication___SuccessResponseReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+			var applicationServiceModel = fixture.Create<ApplicationServiceModel>();
+
+			_getQueryMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(applicationServiceModel);
+
+			// act
+			var result = await _subject.Get(applicationId);
+
+			// assert
+			var getResult = Assert.IsType<OkObjectResult>(result.Result);
+			Assert.Equal(applicationServiceModel, getResult.Value);
+		}
 	}
 }

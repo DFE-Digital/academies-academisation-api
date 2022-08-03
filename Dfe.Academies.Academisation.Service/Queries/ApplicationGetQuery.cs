@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<ApplicationServiceModel?> Execute(int id)
 		{
-			IConversionApplication application = await _applicationGetDataQuery.Execute(id);
+			var application = await _applicationGetDataQuery.Execute(id);
 			return application?.MapFromDomain();
 		}
 	}
