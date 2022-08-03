@@ -4,6 +4,6 @@ namespace Dfe.Academies.Academisation.IService
 {
 	public interface IApplicationGetQuery
 	{
-		Task<ApplicationServiceModel> Execute(int id);
+		Task<ApplicationServiceModel?> Execute(int id);
 	}
 }

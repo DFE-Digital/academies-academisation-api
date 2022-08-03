@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService.RequestModels;
@@ -79,7 +80,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var createdResult = Assert.IsType<OkResult>(result);
 		}
 
-
 		[Fact]
 		public async Task Submit___ServiceReturnsValidationError___BadRequestReturned()
 		{
@@ -96,6 +96,36 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestResult.Value);
 			Assert.Equal(expectedValidationError, validationErrors);
+		}
+
+		[Fact]
+		public async Task Get___QueryReturnsNull___NotFoundReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+
+			// act
+			var result = await _subject.Get(applicationId);
+
+			// assert
+			Assert.IsType<NotFoundResult>(result.Result);
+		}
+
+		[Fact]
+		public async Task Get____ServiceReturnsApplication___SuccessResponseReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+			var applicationServiceModel = fixture.Create<ApplicationServiceModel>();
+
+			_getQueryMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(applicationServiceModel);
+
+			// act
+			var result = await _subject.Get(applicationId);
+
+			// assert
+			var getResult = Assert.IsType<OkObjectResult>(result.Result);
+			Assert.Equal(applicationServiceModel, getResult.Value);
 		}
 	}
 }
