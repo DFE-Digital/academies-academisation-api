@@ -17,6 +17,7 @@ public class ConversionApplicationState : BaseEntity
 	{
 		return new()
 		{
+			Id = conversionApplication.ApplicationId,
 			ApplicationStatus = conversionApplication.ApplicationStatus,
 			ApplicationType = conversionApplication.ApplicationType,
 			Contributors = conversionApplication.Contributors
