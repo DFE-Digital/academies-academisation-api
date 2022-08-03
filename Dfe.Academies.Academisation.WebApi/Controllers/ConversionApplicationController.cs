@@ -38,9 +38,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpGet("{id}", Name = "Get")]
-		public async Task<ApplicationServiceModel> Get(int id)
+		public async Task<ActionResult<ApplicationServiceModel>> Get(int id)
 		{
-			return await _applicationGetQuery.Execute(id);
+			var result = await _applicationGetQuery.Execute(id);
+			return result is null ? NotFound() : Ok(result);
 		}
 
 		[HttpPost("submit/{id}", Name = "Submit")]

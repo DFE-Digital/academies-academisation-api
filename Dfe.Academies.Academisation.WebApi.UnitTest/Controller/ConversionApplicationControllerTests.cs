@@ -96,5 +96,19 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestResult.Value);
 			Assert.Equal(expectedValidationError, validationErrors);
 		}
+
+		[Fact]
+		public async Task Get___QueryReturnsNull___NotFoundReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+
+			// act
+			var result = await _subject.Get(applicationId);
+
+			// assert
+			Assert.IsType<NotFoundResult>(result.Result);
+		}
+
 	}
 }
