@@ -11,6 +11,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels
 	{
 		public int ApplicationId { get; set; } 
 		public ApplicationType ApplicationType { get; set; }
+		public ApplicationStatus ApplicationStatus { get; set; }
 
 		public IReadOnlyCollection<ApplicationContributorServiceModel> Contributors { get; set; }
 	}

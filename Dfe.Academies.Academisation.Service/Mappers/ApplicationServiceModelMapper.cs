@@ -11,6 +11,7 @@ internal static class ApplicationServiceModelMapper
 		{
 			ApplicationId = conversionApplication.ApplicationId,
 			ApplicationType = conversionApplication.ApplicationType,
+			ApplicationStatus = conversionApplication.ApplicationStatus,
 			Contributors = conversionApplication.Contributors
 				.Select(ApplicationContributorServiceModelMapper.FromDomain)
 				.ToList()
