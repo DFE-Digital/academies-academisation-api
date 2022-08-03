@@ -20,9 +20,9 @@ public class ConversionAdvisoryBoardDecisionStateGetTests
 		
 		List<ConversionAdvisoryBoardDecisionState> data = new()
 		{
-			_fixture.Build<ConversionAdvisoryBoardDecisionState>().With(s => s.Id, 1).Create(),
-			_fixture.Build<ConversionAdvisoryBoardDecisionState>().With(s => s.Id, 2).Create(),
-			_fixture.Build<ConversionAdvisoryBoardDecisionState>().With(s => s.Id, 3).Create(),
+			_fixture.Build<ConversionAdvisoryBoardDecisionState>().With(s => s.ConversionProjectId, 1).Create(),
+			_fixture.Build<ConversionAdvisoryBoardDecisionState>().With(s => s.ConversionProjectId, 2).Create(),
+			_fixture.Build<ConversionAdvisoryBoardDecisionState>().With(s => s.ConversionProjectId, 3).Create(),
 		};
 		
 		_mockContext.ConversionAdvisoryBoardDecisions.AddRange(data);
@@ -32,17 +32,17 @@ public class ConversionAdvisoryBoardDecisionStateGetTests
 	[Fact]
 	public async Task WhenRecordExists___ShouldReturnExpectedConversionAdvisoryBoardDecision()
 	{
-		const int expectedId = 2;
+		const int expectedProjectId = 2;
 		AdvisoryBoardDecisionGetDataQuery query = new(_mockContext);
 
 		//Act
-		var result = await query.Execute(expectedId);
+		var result = await query.Execute(expectedProjectId);
 
 		//Assert
 		Assert.Multiple(
 			() => Assert.NotNull(result),
 			() => Assert.IsType<ConversionAdvisoryBoardDecision>(result),
-			() => Assert.Equal(expectedId, result!.Id)
+			() => Assert.Equal(expectedProjectId, result!.AdvisoryBoardDecisionDetails.ConversionProjectId)
 		);
 	}
 

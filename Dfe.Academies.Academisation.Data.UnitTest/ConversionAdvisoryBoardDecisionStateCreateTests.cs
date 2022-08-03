@@ -3,7 +3,6 @@ using System.Linq;
 using Bogus;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
-using FluentAssertions;
 using Xunit;
 using Moq;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -98,6 +97,6 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 		var result = ConversionAdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
 		
 		//assert
-		result.Should().BeEquivalentTo(expected);
+		Assert.Equivalent(expected, result);
 	}
 }

@@ -10,6 +10,7 @@ using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggrega
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,8 @@ builder.Services.AddScoped<IAdvisoryBoardDecisionCreateDataCommand, AdvisoryBoar
 // Queries
 builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
 builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
+builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataQuery, AdvisoryBoardDecisionGetDataQuery>();
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],

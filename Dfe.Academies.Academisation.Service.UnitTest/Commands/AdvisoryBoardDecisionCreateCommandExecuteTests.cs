@@ -1,12 +1,10 @@
 using AutoFixture;
-using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
-using FluentAssertions;
 using Moq;
 using Xunit;
 
@@ -81,7 +79,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>) await target.Execute(new());
 
 			//Assert
-			result.Payload.Should().BeEquivalentTo(expected);
+			Assert.Equivalent(expected, result.Payload);
 		}
 		
 		[Fact]
