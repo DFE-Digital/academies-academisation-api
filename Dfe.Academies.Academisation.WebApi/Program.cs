@@ -42,6 +42,8 @@ builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(H
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IConversionApplicationFactory, ConversionApplicationFactory>();
+builder.Services.AddScoped<IApplicationSubmitCommand, ApplicationSubmitCommand>();
+builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 
 builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
