@@ -32,6 +32,6 @@ public class ConversionApplicationState : BaseEntity
 			c => c.Id,
 			c => new ContributorDetails(c.FirstName, c.LastName, c.EmailAddress, c.Role, c.OtherRoleName));
 
-		return new ConversionApplication(Id, ApplicationType, contributorsDictionary, ApplicationStatus);
+		return new ConversionApplication(Id, ApplicationType, ApplicationStatus, contributorsDictionary, new Dictionary<int, ApplyingSchoolDetails>());
 	}
 }

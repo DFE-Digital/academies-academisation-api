@@ -1,14 +1,13 @@
-﻿using FluentValidation;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.Core;
-using System.Linq;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
 public class ConversionApplication : IConversionApplication
 {
 	private readonly List<Contributor> _contributors = new();
+	private readonly List<ApplyingSchool> _schools = new();
 	private static readonly CreateConversionApplicationValidator CreateValidator = new();
 	private static readonly SubmitConversionApplicationValidator SubmitValidator = new();
 
@@ -18,13 +17,16 @@ public class ConversionApplication : IConversionApplication
 		ApplicationType = applicationType;
 		_contributors.Add(new(initialContributor));
 	}
-	public ConversionApplication(int applicationId, ApplicationType applicationType, Dictionary<int, ContributorDetails> contributors, ApplicationStatus applicationStatus)
+
+	public ConversionApplication(int applicationId, ApplicationType applicationType, ApplicationStatus applicationStatus,
+		Dictionary<int, ContributorDetails> contributors,
+		Dictionary<int, ApplyingSchoolDetails> schools)
 	{
-		ApplicationType = applicationType;
 		ApplicationId = applicationId;
+		ApplicationType = applicationType;
 		ApplicationStatus = applicationStatus;
-		var contributorsEnumerable = contributors.Select(c => new Contributor(c.Key, c.Value));
-		_contributors.AddRange(contributorsEnumerable);
+		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
+		_schools = schools.Select(s => new ApplyingSchool(s.Key, s.Value)).ToList();
 	}
 
 	public int ApplicationId { get; private set; }
@@ -32,6 +34,8 @@ public class ConversionApplication : IConversionApplication
 	public ApplicationStatus ApplicationStatus { get; private set; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
+
+	public IReadOnlyCollection<IApplyingSchool> Schools => _schools.AsReadOnly();
 
 	public void SetIdsOnCreate(int applicationId, int contributorId)
 	{

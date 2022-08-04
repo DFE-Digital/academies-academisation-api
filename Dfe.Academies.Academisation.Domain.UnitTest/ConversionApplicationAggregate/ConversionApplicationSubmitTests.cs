@@ -1,7 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using System.Collections.Generic;
 using Xunit;
 
@@ -13,7 +12,12 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 		public void ApplicationStatusIsSubmitted___ValidationError()
 		{
 			// arrange
-			ConversionApplication subject = new(1, ApplicationType.FormAMat, new Dictionary<int, ContributorDetails>(), ApplicationStatus.Submitted);
+			ConversionApplication subject = new(
+				1,
+				ApplicationType.FormAMat,
+				ApplicationStatus.Submitted,
+				new Dictionary<int, ContributorDetails>(),
+				new Dictionary<int, ApplyingSchoolDetails>());
 
 			// act
 			var result = subject.Submit();
@@ -26,7 +30,12 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 		public void ApplicationStatusIsInProgress___Success()
 		{
 			// arrange
-			ConversionApplication subject = new(1, ApplicationType.FormAMat, new Dictionary<int, ContributorDetails>(), ApplicationStatus.InProgress);
+			ConversionApplication subject = new(
+				1,
+				ApplicationType.FormAMat,
+				ApplicationStatus.InProgress,
+				new Dictionary<int, ContributorDetails>(),
+				new Dictionary<int, ApplyingSchoolDetails>());
 
 			// act
 			var result = subject.Submit();
