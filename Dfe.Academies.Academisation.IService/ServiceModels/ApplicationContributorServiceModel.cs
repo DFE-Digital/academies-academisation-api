@@ -8,5 +8,4 @@ public record ApplicationContributorServiceModel(
 	string LastName,
 	string EmailAddress,
 	ContributorRole Role,
-	string? OtherRoleName
-);
+	string? OtherRoleName);
