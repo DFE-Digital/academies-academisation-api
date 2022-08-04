@@ -2,5 +2,4 @@
 
 public record ApplyingSchoolServiceModel (
 	int Id,
-	string Urn
-	);
+	int Urn);

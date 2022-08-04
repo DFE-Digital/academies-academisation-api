@@ -28,6 +28,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			Mock<IConversionApplication> conversionApplicationMock = new Mock<IConversionApplication>();
 			conversionApplicationMock.SetupGet(x => x.Contributors)
 				.Returns(new List<IContributor>().AsReadOnly());
+			conversionApplicationMock.SetupGet(x => x.Schools)
+				.Returns(new List<IApplyingSchool>().AsReadOnly());
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
