@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 
-[Table(name: "ApplyingSchool")]
-public class ApplyingSchoolState : BaseEntity
+[Table(name: "ApplicationSchool")]
+public class ApplicationSchoolState : BaseEntity
 {
 	public int Urn { get; set; }
 
-	public static ApplyingSchoolState MapFromDomain(IApplyingSchool applyingSchool)
+	public static ApplicationSchoolState MapFromDomain(IApplicationSchool applyingSchool)
 	{
 		return new()
 		{
@@ -18,8 +18,8 @@ public class ApplyingSchoolState : BaseEntity
 		};
 	}
 
-	public ApplyingSchoolDetails MapToDomain()
+	public ApplicationSchoolDetails MapToDomain()
 	{
-		return new ApplyingSchoolDetails(Urn);
+		return new ApplicationSchoolDetails(Urn);
 	}
 }

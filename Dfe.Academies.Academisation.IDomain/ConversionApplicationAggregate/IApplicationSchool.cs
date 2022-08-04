@@ -2,8 +2,8 @@
 
 namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
-public interface IApplyingSchool
+public interface IApplicationSchool
 {
 	public int Id { get; }
-	public ApplyingSchoolDetails Details { get; }
+	public ApplicationSchoolDetails Details { get; }
 }

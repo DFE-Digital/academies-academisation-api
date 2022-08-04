@@ -1,5 +1,5 @@
 ﻿namespace Dfe.Academies.Academisation.IService.ServiceModels;
 
-public record ApplyingSchoolServiceModel (
+public record ApplicationSchoolServiceModel (
 	int Id,
 	int Urn);

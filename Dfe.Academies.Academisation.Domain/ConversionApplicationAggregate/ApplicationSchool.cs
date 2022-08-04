@@ -3,19 +3,19 @@ using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 
-public class ApplyingSchool : IApplyingSchool
+public class ApplicationSchool : IApplicationSchool
 {
-	public ApplyingSchool(ApplyingSchoolDetails details)
+	public ApplicationSchool(ApplicationSchoolDetails details)
 	{
 		Details = details;
 	}
 
-	public ApplyingSchool(int id, ApplyingSchoolDetails details) : this(details)
+	public ApplicationSchool(int id, ApplicationSchoolDetails details) : this(details)
 	{
 		Id = id;
 	}
 
 	public int Id { get; internal set; }
 
-	public ApplyingSchoolDetails Details { get; }
+	public ApplicationSchoolDetails Details { get; }
 }

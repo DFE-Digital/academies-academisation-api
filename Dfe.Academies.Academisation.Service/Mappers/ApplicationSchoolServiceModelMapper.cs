@@ -3,9 +3,9 @@ using Dfe.Academies.Academisation.IService.ServiceModels;
 
 namespace Dfe.Academies.Academisation.Service.Mappers;
 
-internal static class ApplyingSchoolServiceModelMapper
+internal static class ApplicationSchoolServiceModelMapper
 {
-	internal static ApplyingSchoolServiceModel FromDomain(IApplyingSchool school)
+	internal static ApplicationSchoolServiceModel FromDomain(IApplicationSchool school)
 	{
 		return new(
 			school.Id,

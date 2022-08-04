@@ -11,7 +11,7 @@ public interface IConversionApplication
 
 	IReadOnlyCollection<IContributor> Contributors { get; }
 
-	IReadOnlyCollection<IApplyingSchool> Schools { get; }
+	IReadOnlyCollection<IApplicationSchool> Schools { get; }
 
 	void SetIdsOnCreate(int applicationId, int conversionId);
 	CommandResult Submit();

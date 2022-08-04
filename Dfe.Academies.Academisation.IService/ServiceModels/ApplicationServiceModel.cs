@@ -10,5 +10,5 @@ public class ApplicationServiceModel
 
 	public IReadOnlyCollection<ApplicationContributorServiceModel> Contributors { get; set; }
 
-	public IReadOnlyCollection<ApplyingSchoolServiceModel> Schools { get; set; }
+	public IReadOnlyCollection<ApplicationSchoolServiceModel> Schools { get; set; }
 }

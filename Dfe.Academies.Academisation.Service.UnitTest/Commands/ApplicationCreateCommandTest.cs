@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			conversionApplicationMock.SetupGet(x => x.Contributors)
 				.Returns(new List<IContributor>().AsReadOnly());
 			conversionApplicationMock.SetupGet(x => x.Schools)
-				.Returns(new List<IApplyingSchool>().AsReadOnly());
+				.Returns(new List<IApplicationSchool>().AsReadOnly());
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))

@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 				ApplicationType.FormAMat,
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, ApplyingSchoolDetails>());
+				new Dictionary<int, ApplicationSchoolDetails>());
 
 			// act
 			var result = subject.Submit();
@@ -35,7 +35,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 				ApplicationType.FormAMat,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, ApplyingSchoolDetails>());
+				new Dictionary<int, ApplicationSchoolDetails>());
 
 			// act
 			var result = subject.Submit();

@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 public class ConversionApplication : IConversionApplication
 {
 	private readonly List<Contributor> _contributors = new();
-	private readonly List<ApplyingSchool> _schools = new();
+	private readonly List<ApplicationSchool> _schools = new();
 	private static readonly CreateConversionApplicationValidator CreateValidator = new();
 	private static readonly SubmitConversionApplicationValidator SubmitValidator = new();
 
@@ -20,13 +20,13 @@ public class ConversionApplication : IConversionApplication
 
 	public ConversionApplication(int applicationId, ApplicationType applicationType, ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
-		Dictionary<int, ApplyingSchoolDetails> schools)
+		Dictionary<int, ApplicationSchoolDetails> schools)
 	{
 		ApplicationId = applicationId;
 		ApplicationType = applicationType;
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
-		_schools = schools.Select(s => new ApplyingSchool(s.Key, s.Value)).ToList();
+		_schools = schools.Select(s => new ApplicationSchool(s.Key, s.Value)).ToList();
 	}
 
 	public int ApplicationId { get; private set; }
@@ -35,7 +35,7 @@ public class ConversionApplication : IConversionApplication
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
-	public IReadOnlyCollection<IApplyingSchool> Schools => _schools.AsReadOnly();
+	public IReadOnlyCollection<IApplicationSchool> Schools => _schools.AsReadOnly();
 
 	public void SetIdsOnCreate(int applicationId, int contributorId)
 	{

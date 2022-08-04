@@ -15,7 +15,7 @@ internal static class ApplicationServiceModelMapper
 			Contributors = conversionApplication.Contributors
 				.Select(ApplicationContributorServiceModelMapper.FromDomain).ToList(),
 			Schools = conversionApplication.Schools
-				.Select(ApplyingSchoolServiceModelMapper.FromDomain).ToList()
+				.Select(ApplicationSchoolServiceModelMapper.FromDomain).ToList()
 		};
 	}
 }

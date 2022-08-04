@@ -9,7 +9,7 @@ public class AcademisationContext : DbContext
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }	
 	public DbSet<ConversionApplicationState> ConversionApplications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
-	public DbSet<ApplyingSchoolState> Schools { get; set; } = null!;
+	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
 
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
