@@ -11,7 +11,19 @@ public class AcademisationContext : DbContext
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
+	public override int SaveChanges()
+	{
+		SetModifiedAndCreatedDates();
+		return base.SaveChanges();
+	}
+
 	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+	{
+		SetModifiedAndCreatedDates();
+		return base.SaveChangesAsync(cancellationToken);
+	}
+
+	private void SetModifiedAndCreatedDates()
 	{
 		var currentDateTime = DateTime.UtcNow;
 
@@ -27,8 +39,6 @@ public class AcademisationContext : DbContext
 		{
 			entity.Entity.LastModifiedOn = currentDateTime;
 		}
-
-		return base.SaveChangesAsync(cancellationToken);
 	}
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
