@@ -50,4 +50,21 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
             ? NotFound()
             : new OkObjectResult(result);
     }
+    
+    [HttpPut("decisionId:int")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Put([FromBody] AdvisoryBoardDecisionCreateRequestModel request)
+    {
+        var result = await _decisionCreateCommand.Execute(request);
+
+        return result switch
+        {
+            CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel> successResult => new OkResult(),
+            CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel> validationErrorResult =>
+                new BadRequestObjectResult(validationErrorResult.ValidationErrors),
+            _ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
+        };
+    }
+    
 }
