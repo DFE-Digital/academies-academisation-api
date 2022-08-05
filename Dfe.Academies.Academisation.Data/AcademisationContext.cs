@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Data;
 public class AcademisationContext : DbContext
 {
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }	
-	public DbSet<ConversionApplicationState> ConversionApplications { get; set; } = null!;
+	public DbSet<ApplicationState> ConversionApplications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
 
@@ -36,11 +36,11 @@ public class AcademisationContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.HasDefaultSchema("academisation");
-		modelBuilder.Entity<ConversionApplicationState>()
+		modelBuilder.Entity<ApplicationState>()
 			.Property(e => e.ApplicationType)
 			.HasConversion<string>();
 
-		modelBuilder.Entity<ConversionApplicationState>()
+		modelBuilder.Entity<ApplicationState>()
 			.Property(e => e.ApplicationStatus)
 			.HasConversion<string>();
 

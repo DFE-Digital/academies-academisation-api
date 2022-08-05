@@ -14,7 +14,7 @@ public class ApplicationCreateDataCommand : IApplicationCreateDataCommand
 	
 	public async Task Execute(IApplication conversionApplication)
 	{
-		var conversionApplicationState = ConversionApplicationState.MapFromDomain(conversionApplication);
+		var conversionApplicationState = ApplicationState.MapFromDomain(conversionApplication);
 		
 		_context.ConversionApplications.Add(conversionApplicationState);
 		await _context.SaveChangesAsync();

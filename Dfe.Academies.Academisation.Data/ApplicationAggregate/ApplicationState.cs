@@ -6,7 +6,7 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 
 [Table(name: "ConversionApplication")]
-public class ConversionApplicationState : BaseEntity
+public class ApplicationState : BaseEntity
 {
 	public ApplicationType ApplicationType { get; set; }
 	public ApplicationStatus ApplicationStatus { get; set; }
@@ -15,7 +15,7 @@ public class ConversionApplicationState : BaseEntity
 	[ForeignKey("ConversionApplicationId")]
 	public HashSet<ApplicationSchoolState> Schools { get; set; } = new();
 
-	public static ConversionApplicationState MapFromDomain(IApplication conversionApplication)
+	public static ApplicationState MapFromDomain(IApplication conversionApplication)
 	{
 		return new()
 		{

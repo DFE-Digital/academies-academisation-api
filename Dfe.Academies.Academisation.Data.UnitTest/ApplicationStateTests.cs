@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest;
 
-public class ConversionApplicationStateTests
+public class ApplicationStateTests
 {
 	private readonly Faker _faker = new();
 
@@ -34,7 +34,7 @@ public class ConversionApplicationStateTests
 		mockConversionApplication.SetupGet(x => x.Contributors).Returns(new List<IContributor>(new[] { mockContributor.Object }));
 		mockConversionApplication.SetupGet(x => x.Schools).Returns(new List<ISchool>());
 
-		var expected = new ConversionApplicationState
+		var expected = new ApplicationState
 		{
 			ApplicationType = expectedApplicationType,
 			Contributors = new() {
@@ -50,11 +50,11 @@ public class ConversionApplicationStateTests
 		};
 		
 		//Act
-		var result = ConversionApplicationState.MapFromDomain(mockConversionApplication.Object);
+		var result = ApplicationState.MapFromDomain(mockConversionApplication.Object);
 
 		//Assert
 		Assert.Multiple(
-			() => Assert.IsType<ConversionApplicationState>(result),
+			() => Assert.IsType<ApplicationState>(result),
 			() => Assert.Equivalent(expected, result)
 		);
 	}
