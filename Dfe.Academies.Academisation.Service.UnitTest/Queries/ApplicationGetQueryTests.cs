@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 {
-	public class ConversionApplicationGetQueryTests
+	public class ApplicationGetQueryTests
 	{
 		private readonly Mock<IApplicationGetDataQuery> _mockDataQuery = new ();
 

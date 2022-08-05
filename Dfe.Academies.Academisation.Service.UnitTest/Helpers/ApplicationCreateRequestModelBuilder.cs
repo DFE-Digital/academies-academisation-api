@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 	internal class ApplicationCreateRequestModelBuilder
 	{
 		private ApplicationType _applicationType = ApplicationType.JoinAMat;
-		private ContributorDetailsRequestModel _contributorDetailsRequestModel = new ContributorDetailsRequestModelBuilder().Build();
+		private ContributorRequestModel _contributorDetailsRequestModel = new ContributorDetailsRequestModelBuilder().Build();
 
 		private static Faker _faker = new();
 
@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 			return this;
 		}
 
-		public ApplicationCreateRequestModelBuilder WithContributorDetails(ContributorDetailsRequestModel contributorDetailsRequestModel)
+		public ApplicationCreateRequestModelBuilder WithContributorDetails(ContributorRequestModel contributorDetailsRequestModel)
 		{
 			_contributorDetailsRequestModel = contributorDetailsRequestModel;
 			return this;
@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 		private ContributorRole _contributorRole = ContributorRole.ChairOfGovernors;
 		private string? _role = null;
 
-		public ContributorDetailsRequestModel Build()
+		public ContributorRequestModel Build()
 		{
 			return new(_firstName, _lastName, _email, _contributorRole, _role);
 		}

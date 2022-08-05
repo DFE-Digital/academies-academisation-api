@@ -2,9 +2,9 @@
 
 namespace Dfe.Academies.Academisation.IService.RequestModels
 {
-	public class ContributorDetailsRequestModel
+	public class ContributorRequestModel
 	{
-		public ContributorDetailsRequestModel(string firstName, string lastName, string emailAddress, ContributorRole role, string? otherRoleName)
+		public ContributorRequestModel(string firstName, string lastName, string emailAddress, ContributorRole role, string? otherRoleName)
 		{
 			FirstName = firstName;
 			LastName = lastName;
