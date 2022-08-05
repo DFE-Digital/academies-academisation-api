@@ -12,8 +12,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
-		private static Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
-		private static Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
+		private static readonly Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
+		private static readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]

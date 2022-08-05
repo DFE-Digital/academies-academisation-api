@@ -1,9 +1,7 @@
 ﻿using Bogus;
 using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
-using FluentAssertions;
 using Moq;
 using System.Collections.Generic;
 using Xunit;

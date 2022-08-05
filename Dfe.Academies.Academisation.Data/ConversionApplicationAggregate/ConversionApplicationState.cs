@@ -11,9 +11,9 @@ public class ConversionApplicationState : BaseEntity
 	public ApplicationType ApplicationType { get; set; }
 	public ApplicationStatus ApplicationStatus { get; set; }
 	[ForeignKey("ConversionApplicationId")]
-	public HashSet<ContributorState> Contributors { get; set; } = new HashSet<ContributorState>();
+	public HashSet<ContributorState> Contributors { get; set; } = new();
 	[ForeignKey("ConversionApplicationId")]
-	public HashSet<ApplicationSchoolState> Schools { get; set; } = new HashSet<ApplicationSchoolState>();
+	public HashSet<ApplicationSchoolState> Schools { get; set; } = new();
 
 	public static ConversionApplicationState MapFromDomain(IConversionApplication conversionApplication)
 	{
@@ -41,6 +41,6 @@ public class ConversionApplicationState : BaseEntity
 			s => s.Id,
 			s => s.MapToDomain());
 
-		return new ConversionApplication(Id, ApplicationType, ApplicationStatus, contributorsDictionary, new Dictionary<int, ApplicationSchoolDetails>());
+		return new ConversionApplication(Id, ApplicationType, ApplicationStatus, contributorsDictionary, schoolsDictionary);
 	}
 }
