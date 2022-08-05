@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -20,7 +20,7 @@ public class Application : IApplication
 
 	public Application(int applicationId, ApplicationType applicationType, ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
-		Dictionary<int, ApplicationSchoolDetails> schools)
+		Dictionary<int, SchoolDetails> schools)
 	{
 		ApplicationId = applicationId;
 		ApplicationType = applicationType;

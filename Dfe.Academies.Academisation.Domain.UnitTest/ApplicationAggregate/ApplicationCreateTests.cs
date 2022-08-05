@@ -2,14 +2,13 @@
 using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using System.Linq;
 using Xunit;
 
-namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate;
 
-public class ConversionApplicationCreateTests
+public class ApplicationCreateTests
 {
 	private readonly Faker _faker = new();
 	private readonly Fixture _fixture = new();
@@ -75,7 +74,7 @@ public class ConversionApplicationCreateTests
 			_faker.Name.FirstName(),
 			_faker.Name.LastName(),
 			_faker.Internet.Email(),
-			ContributorRole.ChairOfGovernors, 
+			ContributorRole.ChairOfGovernors,
 			otherRoleName);
 
 		// Act
@@ -94,10 +93,10 @@ public class ConversionApplicationCreateTests
 		// Arrange
 		ApplicationFactory target = new();
 		ContributorDetails contributor = new(
-			_faker.Name.FirstName(), 
+			_faker.Name.FirstName(),
 			_faker.Name.LastName(),
-			_faker.Random.Chars(count: 20).ToString()!, 
-			ContributorRole.ChairOfGovernors, 
+			_faker.Random.Chars(count: 20).ToString()!,
+			ContributorRole.ChairOfGovernors,
 			null);
 
 		// Act
@@ -111,17 +110,17 @@ public class ConversionApplicationCreateTests
 	}
 
 	[Theory]
-	[InlineData("","lastname","FirstName")]
+	[InlineData("", "lastname", "FirstName")]
 	[InlineData("firstname", "", "LastName")]
 	public void ContributorNameIsInvalid___ReturnsValidationErrorResult(string firstName, string lastName, string expectedValidationError)
 	{
 		// Arrange
 		ApplicationFactory target = new();
 		ContributorDetails contributor = new(
-			firstName, 
+			firstName,
 			lastName,
-			_faker.Random.Chars(count: 20).ToString()!, 
-			ContributorRole.ChairOfGovernors, 
+			_faker.Random.Chars(count: 20).ToString()!,
+			ContributorRole.ChairOfGovernors,
 			null);
 
 		// Act

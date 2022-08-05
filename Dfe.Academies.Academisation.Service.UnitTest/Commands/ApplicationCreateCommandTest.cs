@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
@@ -12,8 +12,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
-		private static readonly Mock<IApplicationFactory> _conversionApplicationFactoryMock = new();
-		private static readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
+		private readonly Mock<IApplicationFactory> _conversionApplicationFactoryMock = new();
+		private readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]

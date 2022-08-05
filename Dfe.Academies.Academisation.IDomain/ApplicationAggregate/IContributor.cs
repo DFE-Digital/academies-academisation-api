@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 

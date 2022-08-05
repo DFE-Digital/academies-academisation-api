@@ -1,12 +1,12 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggregate
+namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 {
-	public class ConversionApplicationSubmitTests
+	public class ApplicationSubmitTests
 	{
 		[Fact]
 		public void ApplicationStatusIsSubmitted___ValidationError()
@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 				ApplicationType.FormAMat,
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, ApplicationSchoolDetails>());
+				new Dictionary<int, SchoolDetails>());
 
 			// act
 			var result = subject.Submit();
@@ -35,7 +35,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionApplicationAggre
 				ApplicationType.FormAMat,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, ApplicationSchoolDetails>());
+				new Dictionary<int, SchoolDetails>());
 
 			// act
 			var result = subject.Submit();

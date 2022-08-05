@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,8 +18,8 @@ public class ApplicationSchoolState : BaseEntity
 		};
 	}
 
-	public ApplicationSchoolDetails MapToDomain()
+	public SchoolDetails MapToDomain()
 	{
-		return new ApplicationSchoolDetails(Urn);
+		return new SchoolDetails(Urn);
 	}
 }
