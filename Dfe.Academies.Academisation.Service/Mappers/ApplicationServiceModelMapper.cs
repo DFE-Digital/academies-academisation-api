@@ -7,14 +7,13 @@ internal static class ApplicationServiceModelMapper
 {
 	internal static ApplicationServiceModel MapFromDomain(this IConversionApplication conversionApplication)
 	{
-		return new()
-		{
-			ApplicationId = conversionApplication.ApplicationId,
-			ApplicationType = conversionApplication.ApplicationType,
-			ApplicationStatus = conversionApplication.ApplicationStatus,
-			Contributors = conversionApplication.Contributors
-				.Select(ApplicationContributorServiceModelMapper.FromDomain)
-				.ToList()
-		};
+		return new(
+			conversionApplication.ApplicationId,
+			conversionApplication.ApplicationType,
+			conversionApplication.ApplicationStatus,
+			conversionApplication.Contributors
+				.Select(ApplicationContributorServiceModelMapper.FromDomain).ToList(),
+			conversionApplication.Schools
+				.Select(ApplicationSchoolServiceModelMapper.FromDomain).ToList());
 	}
 }

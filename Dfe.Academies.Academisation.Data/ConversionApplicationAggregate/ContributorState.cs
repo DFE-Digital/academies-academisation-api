@@ -17,6 +17,7 @@ public class ContributorState : BaseEntity
 	{
 		return new()
 		{
+			Id = contributor.Id,
 			FirstName = contributor.Details.FirstName,
 			LastName = contributor.Details.LastName,
 			EmailAddress = contributor.Details.EmailAddress,

@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.IService.ServiceModels
-{
-	public class ApplicationServiceModel
-	{
-		public int ApplicationId { get; set; } 
-		public ApplicationType ApplicationType { get; set; }
-		public ApplicationStatus ApplicationStatus { get; set; }
+namespace Dfe.Academies.Academisation.IService.ServiceModels;
 
-		public IReadOnlyCollection<ApplicationContributorServiceModel> Contributors { get; set; }
-	}
-}
+public record ApplicationServiceModel (
+	int ApplicationId,
+	ApplicationType ApplicationType,
+	ApplicationStatus ApplicationStatus,
+	IReadOnlyCollection<ApplicationContributorServiceModel> Contributors,
+	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools);

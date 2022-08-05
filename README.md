@@ -17,14 +17,14 @@ dotnet tool install --global dotnet-ef
 
 ### Generating migrations
 
-To generate migrations use the following command from the WebApi folder:
+To generate migrations, change to the WebApi directory and run the following command:
 
 ```
 dotnet ef migrations add <MIGRATION_NAME> --project ..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj --startup-project Dfe.Academies.Academisation.WebApi.csproj --context Dfe.Academies.Academisation.Data.AcademisationContext 
 ```
 
 ### Applying migrations
-To apply a set of migrations to the database, use `dotnet ef database update`:
+To apply a set of migrations to the database, change to the WebApi directory and run the following command:
 
 ```
 dotnet ef database update --project ..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj --startup-project Dfe.Academies.Academisation.WebApi.csproj --context Dfe.Academies.Academisation.Data.AcademisationContext

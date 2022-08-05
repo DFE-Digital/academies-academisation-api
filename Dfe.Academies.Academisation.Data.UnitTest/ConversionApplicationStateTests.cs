@@ -1,9 +1,7 @@
 ﻿using Bogus;
 using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
-using FluentAssertions;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
@@ -34,6 +32,7 @@ public class ConversionApplicationStateTests
 		mockContributor.SetupGet(x => x.Details).Returns(initialContributorDetails);
 		mockConversionApplication.SetupGet(x => x.ApplicationType).Returns(expectedApplicationType);
 		mockConversionApplication.SetupGet(x => x.Contributors).Returns(new List<IContributor>(new[] { mockContributor.Object }));
+		mockConversionApplication.SetupGet(x => x.Schools).Returns(new List<IApplicationSchool>());
 
 		var expected = new ConversionApplicationState
 		{

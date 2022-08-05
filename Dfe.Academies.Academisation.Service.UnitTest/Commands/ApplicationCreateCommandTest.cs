@@ -12,8 +12,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
-		private static Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
-		private static Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
+		private static readonly Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
+		private static readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]
@@ -28,6 +28,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			Mock<IConversionApplication> conversionApplicationMock = new Mock<IConversionApplication>();
 			conversionApplicationMock.SetupGet(x => x.Contributors)
 				.Returns(new List<IContributor>().AsReadOnly());
+			conversionApplicationMock.SetupGet(x => x.Schools)
+				.Returns(new List<IApplicationSchool>().AsReadOnly());
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
