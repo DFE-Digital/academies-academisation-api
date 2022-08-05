@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 			_context = context;
 		}
 
-		public async Task<IConversionApplication?> Execute(int id)
+		public async Task<IApplication?> Execute(int id)
 		{
 			var conversionApplicationState = await _context.ConversionApplications
 				.AsNoTracking()

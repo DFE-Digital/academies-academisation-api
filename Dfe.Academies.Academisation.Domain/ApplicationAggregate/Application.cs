@@ -1,24 +1,24 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-public class ConversionApplication : IConversionApplication
+public class Application : IApplication
 {
 	private readonly List<Contributor> _contributors = new();
-	private readonly List<ApplicationSchool> _schools = new();
-	private static readonly CreateConversionApplicationValidator CreateValidator = new();
-	private static readonly SubmitConversionApplicationValidator SubmitValidator = new();
+	private readonly List<School> _schools = new();
+	private static readonly CreateApplicationValidator CreateValidator = new();
+	private static readonly SubmitApplicationValidator SubmitValidator = new();
 
-	private ConversionApplication(ApplicationType applicationType, ContributorDetails initialContributor)
+	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
 		ApplicationStatus = ApplicationStatus.InProgress;
 		ApplicationType = applicationType;
 		_contributors.Add(new(initialContributor));
 	}
 
-	public ConversionApplication(int applicationId, ApplicationType applicationType, ApplicationStatus applicationStatus,
+	public Application(int applicationId, ApplicationType applicationType, ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
 		Dictionary<int, ApplicationSchoolDetails> schools)
 	{
@@ -26,7 +26,7 @@ public class ConversionApplication : IConversionApplication
 		ApplicationType = applicationType;
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
-		_schools = schools.Select(s => new ApplicationSchool(s.Key, s.Value)).ToList();
+		_schools = schools.Select(s => new School(s.Key, s.Value)).ToList();
 	}
 
 	public int ApplicationId { get; private set; }
@@ -35,7 +35,7 @@ public class ConversionApplication : IConversionApplication
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
-	public IReadOnlyCollection<IApplicationSchool> Schools => _schools.AsReadOnly();
+	public IReadOnlyCollection<ISchool> Schools => _schools.AsReadOnly();
 
 	public void SetIdsOnCreate(int applicationId, int contributorId)
 	{
@@ -58,18 +58,18 @@ public class ConversionApplication : IConversionApplication
 		return new CommandSuccessResult();
 	}
 
-	internal static CreateResult<IConversionApplication> Create(ApplicationType applicationType,
+	internal static CreateResult<IApplication> Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
 		var validationResult = CreateValidator.Validate(initialContributor);
 
 		if (!validationResult.IsValid)
 		{
-			return new CreateValidationErrorResult<IConversionApplication>(
+			return new CreateValidationErrorResult<IApplication>(
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		return new CreateSuccessResult<IConversionApplication>(new ConversionApplication(applicationType, initialContributor));
+		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
 	}
 }
 

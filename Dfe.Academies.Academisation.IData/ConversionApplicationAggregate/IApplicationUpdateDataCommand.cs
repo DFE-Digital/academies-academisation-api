@@ -1,9 +1,9 @@
-﻿using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IData.ConversionApplicationAggregate
 {
 	public interface IApplicationUpdateDataCommand
 	{
-		Task Execute(IConversionApplication conversionApplication);
+		Task Execute(IApplication conversionApplication);
 	}
 }

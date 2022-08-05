@@ -1,9 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-public interface IConversionApplication
+public interface IApplication
 {
 	int ApplicationId { get; }
 	ApplicationType ApplicationType { get; }
@@ -11,7 +11,7 @@ public interface IConversionApplication
 
 	IReadOnlyCollection<IContributor> Contributors { get; }
 
-	IReadOnlyCollection<IApplicationSchool> Schools { get; }
+	IReadOnlyCollection<ISchool> Schools { get; }
 
 	void SetIdsOnCreate(int applicationId, int conversionId);
 	CommandResult Submit();

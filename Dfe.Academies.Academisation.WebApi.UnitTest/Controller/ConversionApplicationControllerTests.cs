@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService.RequestModels;

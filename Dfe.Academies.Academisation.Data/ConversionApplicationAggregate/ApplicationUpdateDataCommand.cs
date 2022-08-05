@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 {
@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 			_context = context;
 		}
 
-		public async Task Execute(IConversionApplication conversionApplication)
+		public async Task Execute(IApplication conversionApplication)
 		{
 			ConversionApplicationState state = ConversionApplicationState.MapFromDomain(conversionApplication);
 

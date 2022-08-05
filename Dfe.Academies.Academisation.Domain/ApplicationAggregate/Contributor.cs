@@ -1,7 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
 public class Contributor : IContributor
 {

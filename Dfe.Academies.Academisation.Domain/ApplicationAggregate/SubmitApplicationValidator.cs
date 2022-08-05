@@ -1,11 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate
+namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
 {
-	internal class SubmitConversionApplicationValidator : AbstractValidator<ConversionApplication>
+	internal class SubmitApplicationValidator : AbstractValidator<Application>
 	{
-		public SubmitConversionApplicationValidator()
+		public SubmitApplicationValidator()
 		{
 			RuleFor(application => application.ApplicationStatus)
 				.Equal(ApplicationStatus.InProgress)

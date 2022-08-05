@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Commands;
 using Moq;
 using Xunit;
@@ -14,7 +14,7 @@ public class ApplicationSubmitCommandTests
 
 	private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
 	private readonly Mock<IApplicationUpdateDataCommand> _updateDataCommandMock = new();
-	private readonly Mock<IConversionApplication> _conversionApplicationMock = new();
+	private readonly Mock<IApplication> _conversionApplicationMock = new();
 	private readonly int _applicationId;
 
 	private readonly ApplicationSubmitCommand _subject;

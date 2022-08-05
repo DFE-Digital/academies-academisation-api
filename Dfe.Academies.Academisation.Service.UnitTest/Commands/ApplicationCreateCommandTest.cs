@@ -1,7 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
 using Dfe.Academies.Academisation.Service.UnitTest.Helpers;
@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
-		private static readonly Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
+		private static readonly Mock<IApplicationFactory> _conversionApplicationFactoryMock = new();
 		private static readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 
 		[Theory]
@@ -25,15 +25,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.WithApplicationType(applicationType)
 				.Build();
 
-			Mock<IConversionApplication> conversionApplicationMock = new Mock<IConversionApplication>();
+			Mock<IApplication> conversionApplicationMock = new Mock<IApplication>();
 			conversionApplicationMock.SetupGet(x => x.Contributors)
 				.Returns(new List<IContributor>().AsReadOnly());
 			conversionApplicationMock.SetupGet(x => x.Schools)
-				.Returns(new List<IApplicationSchool>().AsReadOnly());
+				.Returns(new List<ISchool>().AsReadOnly());
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.Returns(new CreateSuccessResult<IConversionApplication>(conversionApplicationMock.Object));
+				.Returns(new CreateSuccessResult<IApplication>(conversionApplicationMock.Object));
 
 			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
@@ -42,7 +42,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 			// assert
 			_applicationCreateDataCommandMock
-				.Verify(x => x.Execute(It.Is<IConversionApplication>(y => y == conversionApplicationMock.Object)), Times.Once());
+				.Verify(x => x.Execute(It.Is<IApplication>(y => y == conversionApplicationMock.Object)), Times.Once());
 
 			var successResult = result as CreateSuccessResult<ApplicationServiceModel>;
 			Assert.IsType<ApplicationServiceModel>(successResult!.Payload);
@@ -60,7 +60,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 			_conversionApplicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.Returns(new CreateValidationErrorResult<IConversionApplication>(new List<ValidationError>()));
+				.Returns(new CreateValidationErrorResult<IApplication>(new List<ValidationError>()));
 
 			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 			// assert
 			_applicationCreateDataCommandMock
-				.Verify(x => x.Execute(It.IsAny<IConversionApplication>()), Times.Never());
+				.Verify(x => x.Execute(It.IsAny<IApplication>()), Times.Never());
 
 			Assert.IsType<CreateValidationErrorResult<ApplicationServiceModel>>(result);
 		}

@@ -1,11 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-internal class CreateConversionApplicationValidator : AbstractValidator<ContributorDetails>
+internal class CreateApplicationValidator : AbstractValidator<ContributorDetails>
 {
-	public CreateConversionApplicationValidator()
+	public CreateApplicationValidator()
 	{
 		RuleFor(details => details.OtherRoleName)
 			.NotEmpty()

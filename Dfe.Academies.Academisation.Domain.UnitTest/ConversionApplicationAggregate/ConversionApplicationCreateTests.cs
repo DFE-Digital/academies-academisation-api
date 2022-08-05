@@ -1,9 +1,9 @@
 ﻿using AutoFixture;
 using Bogus;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using System.Linq;
 using Xunit;
 
@@ -18,7 +18,7 @@ public class ConversionApplicationCreateTests
 	public void ContributorValid___ReturnsSuccessResult()
 	{
 		// Arrange
-		ConversionApplicationFactory target = new();
+		ApplicationFactory target = new();
 		ContributorDetails contributor = new(
 			_faker.Name.FirstName(),
 			_faker.Name.LastName(),
@@ -31,9 +31,9 @@ public class ConversionApplicationCreateTests
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateSuccessResult<IConversionApplication>>(result);
+		Assert.IsType<CreateSuccessResult<IApplication>>(result);
 
-		var successResult = (CreateSuccessResult<IConversionApplication>)result;
+		var successResult = (CreateSuccessResult<IApplication>)result;
 		Assert.Equal(ApplicationStatus.InProgress, successResult.Payload.ApplicationStatus);
 		Assert.Single(successResult.Payload.Contributors, c => c.Details == contributor);
 	}
@@ -45,7 +45,7 @@ public class ConversionApplicationCreateTests
 		string otherRoleName)
 	{
 		// Arrange
-		ConversionApplicationFactory target = new();
+		ApplicationFactory target = new();
 		ContributorDetails contributor = new(
 			_faker.Name.FirstName(),
 			_faker.Name.LastName(),
@@ -57,9 +57,9 @@ public class ConversionApplicationCreateTests
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
+		Assert.IsType<CreateValidationErrorResult<IApplication>>(result);
 
-		var validationErrorResult = result as CreateValidationErrorResult<IConversionApplication>;
+		var validationErrorResult = result as CreateValidationErrorResult<IApplication>;
 		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == "OtherRoleName");
 	}
 
@@ -70,7 +70,7 @@ public class ConversionApplicationCreateTests
 		string otherRoleName)
 	{
 		// Arrange
-		ConversionApplicationFactory target = new();
+		ApplicationFactory target = new();
 		ContributorDetails contributor = new(
 			_faker.Name.FirstName(),
 			_faker.Name.LastName(),
@@ -82,17 +82,17 @@ public class ConversionApplicationCreateTests
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateSuccessResult<IConversionApplication>>(result);
+		Assert.IsType<CreateSuccessResult<IApplication>>(result);
 
-		var successResult = result as CreateSuccessResult<IConversionApplication>;
-		Assert.IsType<ConversionApplication>(successResult!.Payload);
+		var successResult = result as CreateSuccessResult<IApplication>;
+		Assert.IsType<Application>(successResult!.Payload);
 	}
 
 	[Fact]
 	public void ContributorEmailAddressIsInvalid___ReturnsValidationErrorResult()
 	{
 		// Arrange
-		ConversionApplicationFactory target = new();
+		ApplicationFactory target = new();
 		ContributorDetails contributor = new(
 			_faker.Name.FirstName(), 
 			_faker.Name.LastName(),
@@ -104,9 +104,9 @@ public class ConversionApplicationCreateTests
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
 
 		// Assert
-		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
+		Assert.IsType<CreateValidationErrorResult<IApplication>>(result);
 
-		var validationErrorResult = result as CreateValidationErrorResult<IConversionApplication>;
+		var validationErrorResult = result as CreateValidationErrorResult<IApplication>;
 		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == "EmailAddress");
 	}
 
@@ -116,7 +116,7 @@ public class ConversionApplicationCreateTests
 	public void ContributorNameIsInvalid___ReturnsValidationErrorResult(string firstName, string lastName, string expectedValidationError)
 	{
 		// Arrange
-		ConversionApplicationFactory target = new();
+		ApplicationFactory target = new();
 		ContributorDetails contributor = new(
 			firstName, 
 			lastName,
@@ -128,9 +128,9 @@ public class ConversionApplicationCreateTests
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
 
 		// Assert
-		Assert.IsType<CreateValidationErrorResult<IConversionApplication>>(result);
+		Assert.IsType<CreateValidationErrorResult<IApplication>>(result);
 
-		var validationErrorResult = result as CreateValidationErrorResult<IConversionApplication>;
+		var validationErrorResult = result as CreateValidationErrorResult<IApplication>;
 		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == expectedValidationError);
 	}
 }

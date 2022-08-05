@@ -1,11 +1,11 @@
-﻿using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 
 namespace Dfe.Academies.Academisation.Service.Mappers;
 
 internal static class ApplicationServiceModelMapper
 {
-	internal static ApplicationServiceModel MapFromDomain(this IConversionApplication conversionApplication)
+	internal static ApplicationServiceModel MapFromDomain(this IApplication conversionApplication)
 	{
 		return new(
 			conversionApplication.ApplicationId,
