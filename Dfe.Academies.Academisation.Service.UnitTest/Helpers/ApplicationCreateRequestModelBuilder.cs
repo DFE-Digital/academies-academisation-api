@@ -7,14 +7,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 	internal class ApplicationCreateRequestModelBuilder
 	{
 		private ApplicationType _applicationType = ApplicationType.JoinAMat;
-		private ContributorRequestModel _contributorDetailsRequestModel = new ContributorDetailsRequestModelBuilder().Build();
+		private ContributorRequestModel _contributorRequestModel = new ContributorRequestModelBuilder().Build();
 
 		private static Faker _faker = new();
 
 
 		public ApplicationCreateRequestModel Build()
 		{
-			return new ApplicationCreateRequestModel(_applicationType, _contributorDetailsRequestModel);
+			return new ApplicationCreateRequestModel(_applicationType, _contributorRequestModel);
 		}
 
 		public ApplicationCreateRequestModelBuilder WithApplicationType(ApplicationType applicationType)
@@ -25,12 +25,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 
 		public ApplicationCreateRequestModelBuilder WithContributorDetails(ContributorRequestModel contributorDetailsRequestModel)
 		{
-			_contributorDetailsRequestModel = contributorDetailsRequestModel;
+			_contributorRequestModel = contributorDetailsRequestModel;
 			return this;
 		}
 	}
 
-	internal class ContributorDetailsRequestModelBuilder
+	internal class ContributorRequestModelBuilder
 	{
 		private static readonly Faker _faker = new Faker();
 
@@ -45,7 +45,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 			return new(_firstName, _lastName, _email, _contributorRole, _role);
 		}
 
-		public ContributorDetailsRequestModelBuilder WithContributorRole(ContributorRole contributorRole)
+		public ContributorRequestModelBuilder WithContributorRole(ContributorRole contributorRole)
 		{
 			_contributorRole = contributorRole;
 			if (contributorRole == ContributorRole.Other)

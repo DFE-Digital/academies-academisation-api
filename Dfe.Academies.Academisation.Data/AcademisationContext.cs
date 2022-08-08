@@ -1,5 +1,5 @@
-﻿using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data;
@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Data;
 public class AcademisationContext : DbContext
 {
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }	
-	public DbSet<ApplicationState> ConversionApplications { get; set; } = null!;
+	public DbSet<ApplicationState> Applications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
 

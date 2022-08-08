@@ -13,17 +13,17 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
-	public class ConversionApplicationControllerTests
+	public class ApplicationControllerTests
 	{
 		private readonly Fixture fixture = new();
 		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
 		private readonly Mock<IApplicationGetQuery> _getQueryMock = new();
 		private readonly Mock<IApplicationSubmitCommand> _submitCommandMock = new();
-		private readonly ConversionApplicationController _subject;
+		private readonly ApplicationController _subject;
 
-		public ConversionApplicationControllerTests()
+		public ApplicationControllerTests()
 		{
-			_subject = new ConversionApplicationController(_createCommandMock.Object, _getQueryMock.Object, _submitCommandMock.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _submitCommandMock.Object);
 		}
 
 		[Fact]

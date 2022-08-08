@@ -65,7 +65,7 @@ public class ApplicationCreateTests
 	[Theory]
 	[InlineData(ApplicationType.FormAMat, null)]
 	[InlineData(ApplicationType.FormAMat, "")]
-	public void ContributorRoleIsChair_OtherRoleNameIsNull___ReturnsWrappedConversionApplication(ApplicationType applicationType,
+	public void ContributorRoleIsChair_OtherRoleNameIsNull___ReturnsWrappedApplication(ApplicationType applicationType,
 		string otherRoleName)
 	{
 		// Arrange

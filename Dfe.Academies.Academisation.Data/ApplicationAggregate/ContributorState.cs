@@ -2,7 +2,7 @@
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.Data.ApplicationAggregate;
 
 [Table(name: "ConversionApplicationContributor")]
 public class ContributorState : BaseEntity
@@ -12,7 +12,7 @@ public class ContributorState : BaseEntity
 	public string EmailAddress { get; set; } = null!;
 	public ContributorRole Role { get; set; }
 	public string? OtherRoleName { get; set; }
-	
+
 	public static ContributorState MapFromDomain(IContributor contributor)
 	{
 		return new()

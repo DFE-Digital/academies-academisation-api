@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Commands;
 using Moq;
@@ -14,7 +14,7 @@ public class ApplicationSubmitCommandTests
 
 	private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
 	private readonly Mock<IApplicationUpdateDataCommand> _updateDataCommandMock = new();
-	private readonly Mock<IApplication> _conversionApplicationMock = new();
+	private readonly Mock<IApplication> _applicationMock = new();
 	private readonly int _applicationId;
 
 	private readonly ApplicationSubmitCommand _subject;
@@ -29,26 +29,26 @@ public class ApplicationSubmitCommandTests
 	public async Task SubmitSuccessful___PassedToDataLayer_SuccessReturned()
 	{
 		// arrange
-		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_conversionApplicationMock.Object);
-		_conversionApplicationMock.Setup(x => x.Submit()).Returns(new CommandSuccessResult());
+		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_applicationMock.Setup(x => x.Submit()).Returns(new CommandSuccessResult());
 		
 		// act
 		var result = await _subject.Execute(_applicationId);
 
 		// assert
 		Assert.IsType<CommandSuccessResult>(result);
-		_conversionApplicationMock.Verify(x => x.Submit(), Times.Once());
-		_updateDataCommandMock.Verify(x => x.Execute(_conversionApplicationMock.Object), Times.Once);
+		_applicationMock.Verify(x => x.Submit(), Times.Once());
+		_updateDataCommandMock.Verify(x => x.Execute(_applicationMock.Object), Times.Once);
 	}
 
 	[Fact]
 	public async Task SubmitUnsuccessful___NotPassedToUpdateDataCommand_ValidationErrorsReturned()
 	{
 		// arrange
-		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_conversionApplicationMock.Object);
+		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
 
 		CommandValidationErrorResult commandValidationErrorResult = new(new List<ValidationError>());
-		_conversionApplicationMock.Setup(x => x.Submit()).Returns(commandValidationErrorResult);
+		_applicationMock.Setup(x => x.Submit()).Returns(commandValidationErrorResult);
 
 		// act
 		var result = await _subject.Execute(_applicationId);
@@ -56,7 +56,7 @@ public class ApplicationSubmitCommandTests
 		// assert
 		Assert.IsType<CommandValidationErrorResult>(result);
 		Assert.Equal(commandValidationErrorResult, result);
-		_conversionApplicationMock.Verify(x => x.Submit(), Times.Once());
-		_updateDataCommandMock.Verify(x => x.Execute(_conversionApplicationMock.Object), Times.Never);
+		_applicationMock.Verify(x => x.Submit(), Times.Once());
+		_updateDataCommandMock.Verify(x => x.Execute(_applicationMock.Object), Times.Never);
 	}
 }

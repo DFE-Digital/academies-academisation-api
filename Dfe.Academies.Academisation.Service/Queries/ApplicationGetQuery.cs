@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Mappers;

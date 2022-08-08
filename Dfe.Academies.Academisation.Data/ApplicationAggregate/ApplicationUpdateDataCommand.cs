@@ -1,7 +1,7 @@
-﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
+namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 {
 	public class ApplicationUpdateDataCommand : IApplicationUpdateDataCommand
 	{
@@ -12,11 +12,11 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 			_context = context;
 		}
 
-		public async Task Execute(IApplication conversionApplication)
+		public async Task Execute(IApplication application)
 		{
-			ApplicationState state = ApplicationState.MapFromDomain(conversionApplication);
+			ApplicationState state = ApplicationState.MapFromDomain(application);
 
-			_context.ConversionApplications.Update(state);
+			_context.Applications.Update(state);
 			await _context.SaveChangesAsync();
 		}
 	}

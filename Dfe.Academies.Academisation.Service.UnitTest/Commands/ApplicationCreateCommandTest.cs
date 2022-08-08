@@ -1,6 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
-		private readonly Mock<IApplicationFactory> _conversionApplicationFactoryMock = new();
+		private readonly Mock<IApplicationFactory> _applicationFactoryMock = new();
 		private readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 
 		[Theory]
@@ -25,24 +25,24 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.WithApplicationType(applicationType)
 				.Build();
 
-			Mock<IApplication> conversionApplicationMock = new Mock<IApplication>();
-			conversionApplicationMock.SetupGet(x => x.Contributors)
+			Mock<IApplication> applicationMock = new();
+			applicationMock.SetupGet(x => x.Contributors)
 				.Returns(new List<IContributor>().AsReadOnly());
-			conversionApplicationMock.SetupGet(x => x.Schools)
+			applicationMock.SetupGet(x => x.Schools)
 				.Returns(new List<ISchool>().AsReadOnly());
 
-			_conversionApplicationFactoryMock
+			_applicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.Returns(new CreateSuccessResult<IApplication>(conversionApplicationMock.Object));
+				.Returns(new CreateSuccessResult<IApplication>(applicationMock.Object));
 
-			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
 			// act
 			var result = await subject.Execute(applicationCreateRequestModel);
 
 			// assert
 			_applicationCreateDataCommandMock
-				.Verify(x => x.Execute(It.Is<IApplication>(y => y == conversionApplicationMock.Object)), Times.Once());
+				.Verify(x => x.Execute(It.Is<IApplication>(y => y == applicationMock.Object)), Times.Once());
 
 			var successResult = result as CreateSuccessResult<ApplicationServiceModel>;
 			Assert.IsType<ApplicationServiceModel>(successResult!.Payload);
@@ -58,11 +58,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.WithApplicationType(applicationType)
 				.Build();
 
-			_conversionApplicationFactoryMock
+			_applicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
 				.Returns(new CreateValidationErrorResult<IApplication>(new List<ValidationError>()));
 
-			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
 			// act
 			var result = await subject.Execute(applicationCreateRequestModel);

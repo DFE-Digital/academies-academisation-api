@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
-	[Route("conversion-application")]
+	[Route("application")]
 	[ApiController]
-	public class ConversionApplicationController : ControllerBase
+	public class ApplicationController : ControllerBase
 	{
 		private readonly IApplicationCreateCommand _applicationCreateCommand;
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 
-		public ConversionApplicationController(IApplicationCreateCommand applicationCreateCommand, IApplicationGetQuery applicationGetQuery, IApplicationSubmitCommand applicationSubmitCommand)
+		public ApplicationController(IApplicationCreateCommand applicationCreateCommand, IApplicationGetQuery applicationGetQuery, IApplicationSubmitCommand applicationSubmitCommand)
 		{
 			_applicationCreateCommand = applicationCreateCommand;
 			_applicationGetQuery = applicationGetQuery;

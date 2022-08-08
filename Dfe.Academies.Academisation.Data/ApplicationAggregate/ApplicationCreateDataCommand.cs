@@ -1,26 +1,26 @@
-﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.Data.ApplicationAggregate;
 
 public class ApplicationCreateDataCommand : IApplicationCreateDataCommand
 {
 	private readonly AcademisationContext _context;
-	
+
 	public ApplicationCreateDataCommand(AcademisationContext context)
 	{
 		_context = context;
 	}
-	
-	public async Task Execute(IApplication conversionApplication)
+
+	public async Task Execute(IApplication application)
 	{
-		var conversionApplicationState = ApplicationState.MapFromDomain(conversionApplication);
-		
-		_context.ConversionApplications.Add(conversionApplicationState);
+		var applicationState = ApplicationState.MapFromDomain(application);
+
+		_context.Applications.Add(applicationState);
 		await _context.SaveChangesAsync();
 
-		conversionApplication.SetIdsOnCreate(
-			conversionApplicationState.Id,
-			conversionApplicationState.Contributors.Single().Id);
+		application.SetIdsOnCreate(
+			applicationState.Id,
+			applicationState.Contributors.Single().Id);
 	}
 }

@@ -3,7 +3,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
+namespace Dfe.Academies.Academisation.Data.ApplicationAggregate;
 
 [Table(name: "ConversionApplication")]
 public class ApplicationState : BaseEntity
@@ -15,17 +15,17 @@ public class ApplicationState : BaseEntity
 	[ForeignKey("ConversionApplicationId")]
 	public HashSet<ApplicationSchoolState> Schools { get; set; } = new();
 
-	public static ApplicationState MapFromDomain(IApplication conversionApplication)
+	public static ApplicationState MapFromDomain(IApplication application)
 	{
 		return new()
 		{
-			Id = conversionApplication.ApplicationId,
-			ApplicationStatus = conversionApplication.ApplicationStatus,
-			ApplicationType = conversionApplication.ApplicationType,
-			Contributors = conversionApplication.Contributors
+			Id = application.ApplicationId,
+			ApplicationStatus = application.ApplicationStatus,
+			ApplicationType = application.ApplicationType,
+			Contributors = application.Contributors
 				.Select(ContributorState.MapFromDomain)
 				.ToHashSet(),
-			Schools = conversionApplication.Schools
+			Schools = application.Schools
 				.Select(ApplicationSchoolState.MapFromDomain)
 				.ToHashSet()
 		};

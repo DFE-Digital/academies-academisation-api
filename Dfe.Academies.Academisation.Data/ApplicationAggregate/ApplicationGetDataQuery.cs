@@ -1,8 +1,8 @@
-﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
+namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 {
 	public class ApplicationGetDataQuery : IApplicationGetDataQuery
 	{
@@ -15,12 +15,12 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 
 		public async Task<IApplication?> Execute(int id)
 		{
-			var conversionApplicationState = await _context.ConversionApplications
+			var applicationState = await _context.Applications
 				.AsNoTracking()
 				.Include(a => a.Contributors)
 				.SingleOrDefaultAsync(a => a.Id == id);
 
-			return conversionApplicationState?.MapToDomain();
+			return applicationState?.MapToDomain();
 		}
 	}
 }

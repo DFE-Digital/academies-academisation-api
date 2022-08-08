@@ -1,9 +1,9 @@
-﻿using Bogus;
-using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
+﻿using System.Collections.Generic;
+using Bogus;
+using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Moq;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest;
@@ -13,7 +13,7 @@ public class ApplicationStateTests
 	private readonly Faker _faker = new();
 
 	[Fact]
-	public void MapFromDomain___ConversionApplicationStateReturned()
+	public void MapFromDomain___ApplicationStateReturned()
 	{
 		//Arrange
 		const ApplicationType expectedApplicationType = ApplicationType.FormAMat;
@@ -26,13 +26,13 @@ public class ApplicationStateTests
 			OtherRoleName: null
 		);
 
-		var mockConversionApplication = new Mock<IApplication>();
+		var mockApplication = new Mock<IApplication>();
 		var mockContributor = new Mock<IContributor>();
 
 		mockContributor.SetupGet(x => x.Details).Returns(initialContributorDetails);
-		mockConversionApplication.SetupGet(x => x.ApplicationType).Returns(expectedApplicationType);
-		mockConversionApplication.SetupGet(x => x.Contributors).Returns(new List<IContributor>(new[] { mockContributor.Object }));
-		mockConversionApplication.SetupGet(x => x.Schools).Returns(new List<ISchool>());
+		mockApplication.SetupGet(x => x.ApplicationType).Returns(expectedApplicationType);
+		mockApplication.SetupGet(x => x.Contributors).Returns(new List<IContributor>(new[] { mockContributor.Object }));
+		mockApplication.SetupGet(x => x.Schools).Returns(new List<ISchool>());
 
 		var expected = new ApplicationState
 		{
@@ -50,7 +50,7 @@ public class ApplicationStateTests
 		};
 		
 		//Act
-		var result = ApplicationState.MapFromDomain(mockConversionApplication.Object);
+		var result = ApplicationState.MapFromDomain(mockApplication.Object);
 
 		//Assert
 		Assert.Multiple(
