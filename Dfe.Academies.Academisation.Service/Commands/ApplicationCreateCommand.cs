@@ -1,19 +1,19 @@
-﻿using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IService;
+﻿using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Mappers;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Service.Commands;
 
 public class ApplicationCreateCommand : IApplicationCreateCommand
 {
-	private readonly IConversionApplicationFactory _domainFactory;
+	private readonly IApplicationFactory _domainFactory;
 	private readonly IApplicationCreateDataCommand _dataCommand;
 
-	public ApplicationCreateCommand(IConversionApplicationFactory domainFactory, IApplicationCreateDataCommand dataCommand)
+	public ApplicationCreateCommand(IApplicationFactory domainFactory, IApplicationCreateDataCommand dataCommand)
 	{
 		_domainFactory = domainFactory;
 		_dataCommand = dataCommand;
@@ -24,12 +24,12 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
 		var result = _domainFactory.Create(applicationType, contributorDetails);
 
-		if (result is CreateValidationErrorResult<IConversionApplication> domainValidationErrorResult)
+		if (result is CreateValidationErrorResult<IApplication> domainValidationErrorResult)
 		{
 			return domainValidationErrorResult.MapToPayloadType<ApplicationServiceModel>();
 		}
 
-		if (result is not CreateSuccessResult<IConversionApplication> domainSuccessResult)
+		if (result is not CreateSuccessResult<IApplication> domainSuccessResult)
 		{
 			throw new NotImplementedException("Other CreateResult types not expected");
 		}

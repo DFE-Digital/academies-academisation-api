@@ -1,19 +1,19 @@
-﻿using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+﻿using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 
 namespace Dfe.Academies.Academisation.Service.Mappers;
 
 internal static class ApplicationServiceModelMapper
 {
-	internal static ApplicationServiceModel MapFromDomain(this IConversionApplication conversionApplication)
+	internal static ApplicationServiceModel MapFromDomain(this IApplication application)
 	{
 		return new(
-			conversionApplication.ApplicationId,
-			conversionApplication.ApplicationType,
-			conversionApplication.ApplicationStatus,
-			conversionApplication.Contributors
+			application.ApplicationId,
+			application.ApplicationType,
+			application.ApplicationStatus,
+			application.Contributors
 				.Select(ApplicationContributorServiceModelMapper.FromDomain).ToList(),
-			conversionApplication.Schools
+			application.Schools
 				.Select(ApplicationSchoolServiceModelMapper.FromDomain).ToList());
 	}
 }

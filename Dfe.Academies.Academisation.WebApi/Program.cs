@@ -1,13 +1,9 @@
 using System.Text.Json.Serialization;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Data.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Query;
@@ -15,6 +11,10 @@ using Dfe.Academies.Academisation.Service.Commands;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.EntityFrameworkCore;
 using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +41,7 @@ builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(H
 // Commands
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
-builder.Services.AddScoped<IConversionApplicationFactory, ConversionApplicationFactory>();
+builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IApplicationSubmitCommand, ApplicationSubmitCommand>();
 builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 

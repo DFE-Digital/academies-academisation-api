@@ -1,7 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.IData.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
 using Dfe.Academies.Academisation.Service.UnitTest.Helpers;
@@ -12,8 +12,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 {
 	public class ApplicationCreateCommandTest
 	{
-		private static readonly Mock<IConversionApplicationFactory> _conversionApplicationFactoryMock = new();
-		private static readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
+		private readonly Mock<IApplicationFactory> _applicationFactoryMock = new();
+		private readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]
@@ -25,24 +25,24 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.WithApplicationType(applicationType)
 				.Build();
 
-			Mock<IConversionApplication> conversionApplicationMock = new Mock<IConversionApplication>();
-			conversionApplicationMock.SetupGet(x => x.Contributors)
+			Mock<IApplication> applicationMock = new();
+			applicationMock.SetupGet(x => x.Contributors)
 				.Returns(new List<IContributor>().AsReadOnly());
-			conversionApplicationMock.SetupGet(x => x.Schools)
-				.Returns(new List<IApplicationSchool>().AsReadOnly());
+			applicationMock.SetupGet(x => x.Schools)
+				.Returns(new List<ISchool>().AsReadOnly());
 
-			_conversionApplicationFactoryMock
+			_applicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.Returns(new CreateSuccessResult<IConversionApplication>(conversionApplicationMock.Object));
+				.Returns(new CreateSuccessResult<IApplication>(applicationMock.Object));
 
-			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
 			// act
 			var result = await subject.Execute(applicationCreateRequestModel);
 
 			// assert
 			_applicationCreateDataCommandMock
-				.Verify(x => x.Execute(It.Is<IConversionApplication>(y => y == conversionApplicationMock.Object)), Times.Once());
+				.Verify(x => x.Execute(It.Is<IApplication>(y => y == applicationMock.Object)), Times.Once());
 
 			var successResult = result as CreateSuccessResult<ApplicationServiceModel>;
 			Assert.IsType<ApplicationServiceModel>(successResult!.Payload);
@@ -58,18 +58,18 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.WithApplicationType(applicationType)
 				.Build();
 
-			_conversionApplicationFactoryMock
+			_applicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.Returns(new CreateValidationErrorResult<IConversionApplication>(new List<ValidationError>()));
+				.Returns(new CreateValidationErrorResult<IApplication>(new List<ValidationError>()));
 
-			ApplicationCreateCommand subject = new(_conversionApplicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
 
 			// act
 			var result = await subject.Execute(applicationCreateRequestModel);
 
 			// assert
 			_applicationCreateDataCommandMock
-				.Verify(x => x.Execute(It.IsAny<IConversionApplication>()), Times.Never());
+				.Verify(x => x.Execute(It.IsAny<IApplication>()), Times.Never());
 
 			Assert.IsType<CreateValidationErrorResult<ApplicationServiceModel>>(result);
 		}

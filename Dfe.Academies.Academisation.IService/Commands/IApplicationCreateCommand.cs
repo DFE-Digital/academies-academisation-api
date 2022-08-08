@@ -6,5 +6,5 @@ namespace Dfe.Academies.Academisation.IService;
 
 public interface IApplicationCreateCommand
 {
-	Task<CreateResult<ApplicationServiceModel>> Execute(ApplicationCreateRequestModel conversionApplicationRequestModel);
+	Task<CreateResult<ApplicationServiceModel>> Execute(ApplicationCreateRequestModel applicationRequestModel);
 }

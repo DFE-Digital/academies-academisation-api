@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IData.ConversionApplicationAggregate;
+using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
 
 namespace Dfe.Academies.Academisation.Service.Commands
