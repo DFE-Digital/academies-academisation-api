@@ -15,7 +15,7 @@ namespace Dfe.Academies.Academisation.Data.ConversionApplicationAggregate
 		public async Task Execute(IConversionApplication conversionApplication)
 		{
 			ConversionApplicationState state = ConversionApplicationState.MapFromDomain(conversionApplication);
-			
+
 			_context.ConversionApplications.Update(state);
 			await _context.SaveChangesAsync();
 		}
