@@ -1,11 +1,16 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
+﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core;
 
 namespace Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 
 public interface IConversionAdvisoryBoardDecision
 {
-	public int Id { get; }
+	int Id { get; }
+	DateTime CreatedOn { get; }
+	DateTime LastModifiedOn { get; }
 	AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }
-
 	void SetId(int id);
+	CommandResult Update(AdvisoryBoardDecisionDetails details);
+	
+
 }

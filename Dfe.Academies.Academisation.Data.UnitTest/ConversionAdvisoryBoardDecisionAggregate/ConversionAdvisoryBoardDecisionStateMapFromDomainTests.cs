@@ -3,11 +3,11 @@ using System.Linq;
 using Bogus;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
-using Xunit;
-using Moq;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
+using Moq;
+using Xunit;
 
-namespace Dfe.Academies.Academisation.Data.UnitTest;
+namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecisionAggregate;
 
 public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 {
@@ -18,6 +18,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
+			default,
 			_faker.Random.Int(1, 1000),
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -47,6 +48,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails expectedDetails = new(
+			default,
 			_faker.Random.Int(1, 1000),
 			AdvisoryBoardDecision.Declined,
 			null,

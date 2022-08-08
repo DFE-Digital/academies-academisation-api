@@ -1,9 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
-using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Mappers;
 
@@ -11,37 +9,39 @@ namespace Dfe.Academies.Academisation.Service.Commands;
 
 public class AdvisoryBoardDecisionUpdateCommand : IAdvisoryBoardDecisionUpdateCommand
 {
-	private readonly IAdvisoryBoardDecisionUpdateDataCommand _command;
-	private readonly IConversionAdvisoryBoardDecisionFactory _factory;
+	private readonly IAdvisoryBoardDecisionGetDataByDecisionIdQuery _getDataQuery;
+	private readonly IAdvisoryBoardDecisionUpdateDataCommand _updateDataCommand;
 
 	public AdvisoryBoardDecisionUpdateCommand(
-		IConversionAdvisoryBoardDecisionFactory factory,
-		IAdvisoryBoardDecisionUpdateDataCommand command)
+		IAdvisoryBoardDecisionUpdateDataCommand updateDataCommand, 
+		IAdvisoryBoardDecisionGetDataByDecisionIdQuery getDataQuery)
 	{
-		_command = command;
-		_factory = factory;
+		_updateDataCommand = updateDataCommand;
+		_getDataQuery = getDataQuery;
 	}
 
-	public async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> Execute(
-		AdvisoryBoardDecisionCreateRequestModel requestModel)
+	public async Task<CommandResult> Execute(ConversionAdvisoryBoardDecisionServiceModel serviceModel)
 	{
-		var result = _factory.Create(requestModel.AsDomain());
+		if (serviceModel.AdvisoryBoardDecisionId == default) return new CommandNotFoundResult();
+		
+		var existingDecision = await _getDataQuery.Execute(serviceModel.AdvisoryBoardDecisionId);
 
+		if (existingDecision is null) return new CommandNotFoundResult();
+
+		var result = existingDecision.Update(serviceModel.FromService());
+		
 		return result switch
 		{
-			CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
-				await ExecuteDataCommand(successResult),
-			CreateValidationErrorResult<IConversionAdvisoryBoardDecision> errorResult =>
-				errorResult.MapToPayloadType<ConversionAdvisoryBoardDecisionServiceModel>(), 
+			CommandSuccessResult => await ExecuteDataCommand(existingDecision),
+			CommandValidationErrorResult errorResult => errorResult,
 			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
 		};
 	}
 
-	private async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> ExecuteDataCommand(
-		CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult)
+	private async Task<CommandResult> ExecuteDataCommand(IConversionAdvisoryBoardDecision decision)
 	{
-		await _command.Execute(successResult.Payload);
-        
-		return successResult.MapToPayloadType(ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain);
+		await _updateDataCommand.Execute(decision);
+
+		return new CommandSuccessResult();
 	}
 }

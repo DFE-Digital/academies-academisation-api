@@ -7,9 +7,9 @@ namespace Dfe.Academies.Academisation.Service.Queries;
 
 public class ConversionAdvisoryBoardDecisionGetQuery : IConversionAdvisoryBoardDecisionGetQuery
 {
-	private readonly IAdvisoryBoardDecisionGetDataQuery _query;
+	private readonly IAdvisoryBoardDecisionGetDataByProjectIdQuery _query;
 
-	public ConversionAdvisoryBoardDecisionGetQuery(IAdvisoryBoardDecisionGetDataQuery query)
+	public ConversionAdvisoryBoardDecisionGetQuery(IAdvisoryBoardDecisionGetDataByProjectIdQuery query)
 	{
 		_query = query;
 	}

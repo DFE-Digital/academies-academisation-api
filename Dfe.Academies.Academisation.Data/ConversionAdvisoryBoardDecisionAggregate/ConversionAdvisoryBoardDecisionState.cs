@@ -8,20 +8,20 @@ namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggreg
 [Table(name: "ConversionAdvisoryBoardDecision")]
 public class ConversionAdvisoryBoardDecisionState : BaseEntity
 {
-    public int ConversionProjectId { get; set; }
-    public AdvisoryBoardDecision Decision { get; set; }
-    public bool? ApprovedConditionsSet { get; set; }
-    public string? ApprovedConditionsDetails { get; set; }
+    public int ConversionProjectId { get; init; }
+    public AdvisoryBoardDecision Decision { get; init; }
+    public bool? ApprovedConditionsSet { get; init; }
+    public string? ApprovedConditionsDetails { get; init; }
         
     [ForeignKey(nameof(ConversionAdvisoryBoardDecisionDeclinedReasonState.AdvisoryBoardDecisionId))]
-    public HashSet<ConversionAdvisoryBoardDecisionDeclinedReasonState>? DeclinedReasons { get; set; }
-    public string? DeclinedOtherReason { get; set; }
+    public HashSet<ConversionAdvisoryBoardDecisionDeclinedReasonState>? DeclinedReasons { get; init; }
+    public string? DeclinedOtherReason { get; init; }
         
     [ForeignKey(nameof(ConversionAdvisoryBoardDecisionDeferredReasonState.AdvisoryBoardDecisionId))]
-    public HashSet<ConversionAdvisoryBoardDecisionDeferredReasonState>? DeferredReasons { get; set; }
-    public string? DeferredOtherReason { get; set; }
-    public DateTime AdvisoryBoardDecisionDate { get; set; }
-    public DecisionMadeBy DecisionMadeBy { get; set; }
+    public HashSet<ConversionAdvisoryBoardDecisionDeferredReasonState>? DeferredReasons { get; init; }
+    public string? DeferredOtherReason { get; init; }
+    public DateTime AdvisoryBoardDecisionDate { get; init; }
+    public DecisionMadeBy DecisionMadeBy { get; init; }
 
     public static ConversionAdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
     {
@@ -41,13 +41,16 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
                 .ToHashSet(),
             DeferredOtherReason = decision.AdvisoryBoardDecisionDetails.DeferredOtherReason,
             AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
-            DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy
+            DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,
+            CreatedOn = decision.CreatedOn,
+            LastModifiedOn = decision.LastModifiedOn
         };
     }
 
     public IConversionAdvisoryBoardDecision MapToDomain()
     {
-        AdvisoryBoardDecisionDetails details = new(
+        var details = new AdvisoryBoardDecisionDetails(
+            Id,
             ConversionProjectId,
             Decision,
             ApprovedConditionsSet,
@@ -59,7 +62,7 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
             AdvisoryBoardDecisionDate,
             DecisionMadeBy
         );
-
-        return new ConversionAdvisoryBoardDecision(Id, details);
+        
+        return new ConversionAdvisoryBoardDecision(Id, details, CreatedOn, LastModifiedOn);
     }
 }

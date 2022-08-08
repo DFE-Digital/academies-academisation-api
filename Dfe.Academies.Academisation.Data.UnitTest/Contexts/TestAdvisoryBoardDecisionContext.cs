@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 
@@ -17,21 +18,29 @@ public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 	{
 		using var context = CreateContext();
 		context.Database.EnsureCreated();
+
+		var timestamp = DateTime.UtcNow;
 		
 		var seed = new List<ConversionAdvisoryBoardDecisionState>
 		{
 			_fixture.Build<ConversionAdvisoryBoardDecisionState>()
 				.With(d => d.Id, 1)
 				.With(d => d.ConversionProjectId, 1)
+				.With(d => d.CreatedOn, timestamp)
+				.With(d => d.LastModifiedOn, timestamp)
 				.Create(),
 			_fixture.Build<ConversionAdvisoryBoardDecisionState>()
 				.With(d => d.Id, 2)
 				.With(d => d.ConversionProjectId, 2)
+				.With(d => d.CreatedOn, timestamp)
+				.With(d => d.LastModifiedOn, timestamp)
 				.Create(),
 			_fixture.Build<ConversionAdvisoryBoardDecisionState>()
 				.With(d => d.Id, 3)
 				.With(d => d.ConversionProjectId, 3)
-				.Create(),
+				.With(d => d.CreatedOn, timestamp)
+				.With(d => d.LastModifiedOn, timestamp)
+				.Create()
 		};
 		
 		context.AddRange(seed);

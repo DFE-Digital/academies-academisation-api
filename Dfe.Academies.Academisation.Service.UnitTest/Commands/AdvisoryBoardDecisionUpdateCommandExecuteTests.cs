@@ -1,116 +1,135 @@
-using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
 using Moq;
 using Xunit;
 
-namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
+namespace Dfe.Academies.Academisation.Service.UnitTest.Commands;
+
+public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 {
-	public class AdvisoryBoardDecisionUpdateCommandExecuteTests
+	private class UnhandledCommandResult : CommandResult { }
+
+	private readonly Mock<IAdvisoryBoardDecisionGetDataByDecisionIdQuery> _mockDataQuery = new();
+	private readonly Mock<IAdvisoryBoardDecisionUpdateDataCommand> _mockDataCommand = new();
+	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
+
+	[Fact]
+	public async Task AdvisoryBoardDecisionIdIsDefault___ReturnsBadResult()
 	{
-		private class UnhandledCreateResult : CreateResult<IConversionAdvisoryBoardDecision>
-		{
-			public UnhandledCreateResult() : base(default) { }
-		}
+		//Arrange
+		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+
+		//Act
+		var result = await target.Execute(new());
+			
+		//Assert
+		Assert.IsType<CommandNotFoundResult>(result);
+	}
 		
-		private readonly Fixture _fixture = new();
+	[Fact]
+	public async Task CallsExecuteOnQueryCommand()
+	{
+		//Arrange
+		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
 
-		private readonly Mock<IAdvisoryBoardDecisionUpdateDataCommand> _mockDataCommand = new();
-		private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory = new();
-		private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
+		//Act
+		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
+
+		//Assert
+		_mockDataQuery.Verify(c => c.Execute(It.IsAny<int>()), Times.Once);
+	}
+			
+	[Fact]
+	public async Task DataQueryReturnsNull__ReturnsCommandNotFoundResult()
+	{
+		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+			
+		//Act
+		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
+	
+		//Assert
+		Assert.IsType<CommandNotFoundResult>(result);
+	}
+
+	[Fact]
+	public async Task DecisionUpdateReturnsUnhandledCommandResult__ThrowsException()
+	{
+		//Arrange
+		_mockDecision
+			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new UnhandledCommandResult());
+			
+		_mockDataQuery
+			.Setup(d => d.Execute(It.IsAny<int>()))
+			.ReturnsAsync(_mockDecision.Object);
+			
+		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+			
+		//Act & Assert
+		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new() { AdvisoryBoardDecisionId = 1}));
+	}
 		
-		[Fact]
-		public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
-		{
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
+	[Fact]
+	public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
+	{
+		_mockDecision
+			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new CommandValidationErrorResult(new List<ValidationError>()));
 
-			_mockDecision
-				.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-				.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
+		_mockDataQuery
+			.Setup(q => q.Execute(It.IsAny<int>()))
+			.ReturnsAsync(_mockDecision.Object);
 			
-			var target = new AdvisoryBoardDecisionUpdateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
 			
-			//Act
-			_ = await target.Execute(new());
-
-			//Assert
-			_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
-		}
+		//Act
+		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
+	
+		//Assert
+		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
+	}
 		
-		[Fact]
-		public async Task RequestModelIsValid___ReturnsExpectedConversionAdvisoryBoardDecisionServiceModel()
-		{
-			//Arrange
-			var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-			
-			var expected = new ConversionAdvisoryBoardDecisionServiceModel
-			{
-				ConversionProjectId = details.ConversionProjectId,
-				Decision = details.Decision,
-				ApprovedConditionsSet = details.ApprovedConditionsSet,
-				ApprovedConditionsDetails = details.ApprovedConditionsDetails,
-				DeclinedReasons = details.DeclinedReasons,
-				DeclinedOtherReason = details.DeclinedOtherReason,
-				DeferredReasons = details.DeferredReasons,
-				DeferredOtherReason = details.DeferredOtherReason,
-				AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
-				DecisionMadeBy = details.DecisionMadeBy
-			};
-			
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
+	[Fact]
+	public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
+	{
+		_mockDecision
+			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new CommandSuccessResult());
 
-			_mockDecision
-				.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-				.Returns(details);
-			
-			var target = new AdvisoryBoardDecisionUpdateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
-			
-			//Act
-			var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>) await target.Execute(new());
+		_mockDataQuery
+			.Setup(q => q.Execute(It.IsAny<int>()))
+			.ReturnsAsync(_mockDecision.Object);
 
-			//Assert
-			Assert.Equivalent(expected, result.Payload);
-		}
-		
-		[Fact]
-		public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
-		{
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(Enumerable.Empty<ValidationError>()));
+		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+			
+		//Act
+		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
+	
+		//Assert
+		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
+	}
 
-			var target = new AdvisoryBoardDecisionUpdateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
-			
-			//Act
-			_ = await target.Execute(new());
-			
-			//Assert
-			_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
-		}
-		
-		[Fact] 
-		public async Task FactoryReturnsUnhandledCreateResult___ThrowsException()
-		{
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new UnhandledCreateResult());
-			
-			var target = new AdvisoryBoardDecisionUpdateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+	[Fact]
+	public async Task RequestModelIsValid___ReturnsCommandSuccessResult()
+	{
+		//Arrange
+		_mockDecision
+			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new CommandSuccessResult());
 
-			//Act && Assert
-			await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new()));
-		}
+		_mockDataQuery
+			.Setup(q => q.Execute(It.IsAny<int>()))
+			.ReturnsAsync(_mockDecision.Object);
+			
+		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+
+		//Act
+		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
+	
+		//Assert
+		Assert.IsType<CommandSuccessResult>(result);
 	}
 }
