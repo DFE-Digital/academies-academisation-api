@@ -8,109 +8,108 @@ using Dfe.Academies.Academisation.Service.Commands;
 using Moq;
 using Xunit;
 
-namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
+namespace Dfe.Academies.Academisation.Service.UnitTest.Commands;
+
+public class AdvisoryBoardDecisionCreateCommandExecuteTests
 {
-	public class AdvisoryBoardDecisionCreateCommandExecuteTests
+	private class UnhandledCreateResult : CreateResult<IConversionAdvisoryBoardDecision>
 	{
-		private class UnhandledCreateResult : CreateResult<IConversionAdvisoryBoardDecision>
-		{
-			public UnhandledCreateResult() : base(default) { }
-		}
+		public UnhandledCreateResult() : base(default) { }
+	}
 		
-		private readonly Fixture _fixture = new();
+	private readonly Fixture _fixture = new();
 
-		private readonly Mock<IAdvisoryBoardDecisionCreateDataCommand> _mockDataCommand = new();
-		private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory = new();
-		private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
+	private readonly Mock<IAdvisoryBoardDecisionCreateDataCommand> _mockDataCommand = new();
+	private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory = new();
+	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
 		
-		[Fact]
-		public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
-		{
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
+	[Fact]
+	public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
+	{
+		//Arrange
+		_mockDecisionFactory
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
 
-			_mockDecision
-				.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-				.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
+		_mockDecision
+			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
+			.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
 			
-			var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 			
-			//Act
-			_ = await target.Execute(new());
+		//Act
+		_ = await target.Execute(new());
 
-			//Assert
-			_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
-		}
+		//Assert
+		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
+	}
 		
-		[Fact]
-		public async Task RequestModelIsValid___ReturnsExpectedConversionAdvisoryBoardDecisionServiceModel()
+	[Fact]
+	public async Task RequestModelIsValid___ReturnsExpectedConversionAdvisoryBoardDecisionServiceModel()
+	{
+		//Arrange
+		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
+			
+		var expected = new ConversionAdvisoryBoardDecisionServiceModel
 		{
-			//Arrange
-			var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
+			ConversionProjectId = details.ConversionProjectId,
+			Decision = details.Decision,
+			ApprovedConditionsSet = details.ApprovedConditionsSet,
+			ApprovedConditionsDetails = details.ApprovedConditionsDetails,
+			DeclinedReasons = details.DeclinedReasons,
+			DeclinedOtherReason = details.DeclinedOtherReason,
+			DeferredReasons = details.DeferredReasons,
+			DeferredOtherReason = details.DeferredOtherReason,
+			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
+			DecisionMadeBy = details.DecisionMadeBy
+		};
 			
-			var expected = new ConversionAdvisoryBoardDecisionServiceModel
-			{
-				ConversionProjectId = details.ConversionProjectId,
-				Decision = details.Decision,
-				ApprovedConditionsSet = details.ApprovedConditionsSet,
-				ApprovedConditionsDetails = details.ApprovedConditionsDetails,
-				DeclinedReasons = details.DeclinedReasons,
-				DeclinedOtherReason = details.DeclinedOtherReason,
-				DeferredReasons = details.DeferredReasons,
-				DeferredOtherReason = details.DeferredOtherReason,
-				AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
-				DecisionMadeBy = details.DecisionMadeBy
-			};
-			
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
+		//Arrange
+		_mockDecisionFactory
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
 
-			_mockDecision
-				.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-				.Returns(details);
+		_mockDecision
+			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
+			.Returns(details);
 			
-			var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 			
-			//Act
-			var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>) await target.Execute(new());
+		//Act
+		var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>) await target.Execute(new());
 
-			//Assert
-			Assert.Equivalent(expected, result.Payload);
-		}
+		//Assert
+		Assert.Equivalent(expected, result.Payload);
+	}
 		
-		[Fact]
-		public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
-		{
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(Enumerable.Empty<ValidationError>()));
+	[Fact]
+	public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
+	{
+		//Arrange
+		_mockDecisionFactory
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(Enumerable.Empty<ValidationError>()));
 
-			var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 			
-			//Act
-			_ = await target.Execute(new());
+		//Act
+		_ = await target.Execute(new());
 			
-			//Assert
-			_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
-		}
+		//Assert
+		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
+	}
 		
-		[Fact] 
-		public async Task FactoryReturnsUnhandledCreateResult___ThrowsException()
-		{
-			//Arrange
-			_mockDecisionFactory
-				.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-				.Returns(new UnhandledCreateResult());
+	[Fact] 
+	public async Task FactoryReturnsUnhandledCreateResult___ThrowsException()
+	{
+		//Arrange
+		_mockDecisionFactory
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
+			.Returns(new UnhandledCreateResult());
 			
-			var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 
-			//Act && Assert
-			await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new()));
-		}
+		//Act && Assert
+		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new()));
 	}
 }

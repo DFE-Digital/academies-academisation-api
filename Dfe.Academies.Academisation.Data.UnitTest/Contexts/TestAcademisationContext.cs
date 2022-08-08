@@ -26,5 +26,17 @@ public abstract class TestAcademisationContext : IDisposable
 
 	protected abstract void SeedData();
 
-	public void Dispose() => _connection.Dispose();
+	private void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			_connection.Dispose();
+		}
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
 }

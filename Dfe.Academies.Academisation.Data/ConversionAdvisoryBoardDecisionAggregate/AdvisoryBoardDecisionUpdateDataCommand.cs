@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 
@@ -17,20 +16,8 @@ public class AdvisoryBoardDecisionUpdateDataCommand : IAdvisoryBoardDecisionUpda
 	{
 		var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
 		
-		var existingState = await _context.ConversionAdvisoryBoardDecisions
-			.AsNoTracking()
-			.SingleOrDefaultAsync(d => d.Id == decision.Id);
-
-		if (existingState is null)
-		{
-			_context.Add(decisionState);
-		}
-		else
-		{
-			decisionState.CreatedOn = existingState.CreatedOn;
-			_context.Update(decisionState);
-		}
-	
+		_context.Update(decisionState);
+		
 		await _context.SaveChangesAsync();
 	}
 }

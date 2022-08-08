@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries;
 public class ConversionAdvisoryBoardDecisionGetQueryTests
 {
 	private readonly Fixture _fixture = new();
-	private readonly Mock<IAdvisoryBoardDecisionGetDataQuery> _mockDataQuery = new();
+	private readonly Mock<IAdvisoryBoardDecisionGetDataByProjectIdQuery> _mockDataQuery = new();
 
 	[Fact]
 	public async Task WhenDataQueryReturnIsNotNull___ReturnsExpectedServiceModel()
@@ -21,7 +21,7 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 		const int expectedId = 1;
 
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-		ConversionAdvisoryBoardDecision data = new(expectedId, details);
+		ConversionAdvisoryBoardDecision data = new(expectedId, details, default, default);
 		
 		_mockDataQuery.Setup(q => q.Execute(expectedId))
 			.ReturnsAsync(data);

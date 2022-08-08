@@ -45,15 +45,18 @@ builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IApplicationSubmitCommand, ApplicationSubmitCommand>();
 builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 
-builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionCreateDataCommand, AdvisoryBoardDecisionCreateDataCommand>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateCommand, AdvisoryBoardDecisionUpdateCommand>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateDataCommand, AdvisoryBoardDecisionUpdateDataCommand>();
 
 // Queries
 builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
 builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
-builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataQuery, AdvisoryBoardDecisionGetDataQuery>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],

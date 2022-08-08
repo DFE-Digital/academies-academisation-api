@@ -10,7 +10,6 @@
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.17.0" />
     <PackageReference Include="Bogus" Version="34.0.2" />
-    <PackageReference Include="EntityFrameworkCore.Testing.Moq" Version="4.0.2" />
     <PackageReference Include="FluentAssertions" Version="6.7.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
