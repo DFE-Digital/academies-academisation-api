@@ -8,8 +8,8 @@ public class Application : IApplication
 {
 	private readonly List<Contributor> _contributors = new();
 	private readonly List<School> _schools = new();
-	private static readonly CreateApplicationValidator CreateValidator = new();
-	private static readonly SubmitApplicationValidator SubmitValidator = new();
+	private readonly SubmitApplicationValidator submitValidator = new();
+	private readonly UpdateApplicationValidator updateValidator = new();
 
 	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
@@ -43,9 +43,28 @@ public class Application : IApplication
 		_contributors.Single().Id = contributorId;
 	}
 
+	public CommandResult Update(
+		ApplicationType applicationType,
+		ApplicationStatus applicationStatus,
+		Dictionary<int, ContributorDetails> contributors,
+		Dictionary<int, SchoolDetails> schools)
+	{
+		var validationResult = updateValidator.Validate((applicationType, applicationStatus, contributors, schools, this));
+
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
+
+		// ToDo: mutate this
+
+		return new CommandSuccessResult();
+	}
+
 	public CommandResult Submit()
 	{
-		var validationResult = SubmitValidator.Validate(this);
+		var validationResult = submitValidator.Validate(this);
 
 		if (!validationResult.IsValid)
 		{
@@ -61,7 +80,7 @@ public class Application : IApplication
 	internal static CreateResult<IApplication> Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
-		var validationResult = CreateValidator.Validate(initialContributor);
+		var validationResult = new CreateApplicationValidator().Validate(initialContributor);
 
 		if (!validationResult.IsValid)
 		{
