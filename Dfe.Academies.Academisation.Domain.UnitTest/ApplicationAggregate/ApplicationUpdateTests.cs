@@ -28,7 +28,31 @@ public class ApplicationUpdateTests
 
 		// assert
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		Assert.Single(validationErrorResult.ValidationErrors, v => v.PropertyName == "ApplicationStatus");
+
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		var expectedPropertyName = nameof(Application.ApplicationStatus);
+		Assert.Equal(expectedPropertyName, error.PropertyName);
+	}
+
+	[Fact]
+	public void ApplicationStatusChanged___ValidationErrorReturnid()
+	{
+		// arrange
+		var subject = BuildApplication(ApplicationStatus.InProgress);
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			ApplicationStatus.Submitted,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+
+		// assert
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		var expectedPropertyName = nameof(Application.ApplicationStatus);
+		Assert.Equal(expectedPropertyName, error.PropertyName);
 	}
 
 	[Theory]
@@ -37,7 +61,6 @@ public class ApplicationUpdateTests
 	{
 		// arrange
 		var subject = BuildApplication(ApplicationStatus.InProgress, existing);
-		var expectedPropertyName = nameof(Application.ApplicationType);
 
 		// act
 		var result = subject.Update(
@@ -48,7 +71,9 @@ public class ApplicationUpdateTests
 
 		// assert
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		var expectedPropertyName = nameof(Application.ApplicationType);
 		Assert.Equal(expectedPropertyName, error.PropertyName);
 	}
 

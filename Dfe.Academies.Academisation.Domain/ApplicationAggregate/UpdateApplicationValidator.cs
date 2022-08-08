@@ -18,10 +18,16 @@ internal class UpdateApplicationValidator
 			.WithMessage("Application must be InProgress to use Update")
 			.OverridePropertyName(nameof(Application.ApplicationStatus));
 
-		RuleFor(x => x.existing.ApplicationType)
+		RuleFor(x => x.status)
+			.Must(x => false)
+			.When(x => x.status != x.existing.ApplicationStatus)
+			.WithMessage("Cannot change the status using this operation. To submit, use the Submit operation.")
+			.OverridePropertyName(nameof(Application.ApplicationStatus));
+
+		RuleFor(x => x.type)
 			.Must(x => false)
 			.When(x => x.type != x.existing.ApplicationType)
-			.WithMessage("Cannot change the status using this operation. To submit, use the Submit operation.")
+			.WithMessage("Cannot change the type using this operation of an existing Application. Please start a new one.")
 			.OverridePropertyName(nameof(Application.ApplicationType));
 	}
 }
