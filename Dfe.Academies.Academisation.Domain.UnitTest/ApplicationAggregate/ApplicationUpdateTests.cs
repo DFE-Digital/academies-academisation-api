@@ -145,6 +145,36 @@ public class ApplicationUpdateTests
 		Assert.Equivalent(expected, subject);
 	}
 
+	[Fact]
+	public void ExistingInProgress_SchoolAdded___SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+
+		var newSchool = _fixture.Create<SchoolDetails>();
+
+		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
+		schoolsUpdated.Add(_fixture.Create<int>() , newSchool);
+		
+		Application expected = new(
+			subject.ApplicationId,
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		Assert.IsAssignableFrom<CommandSuccessResult>(result);
+		Assert.Equivalent(expected, subject);
+	}
+
 	private Application BuildApplication(ApplicationStatus applicationStatus, ApplicationType? type = null)
 	{
 		Application application = new(

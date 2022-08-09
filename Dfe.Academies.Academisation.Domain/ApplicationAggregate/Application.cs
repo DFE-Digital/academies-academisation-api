@@ -66,13 +66,12 @@ public class Application : IApplication
 			if (existingSchool != null)
 			{
 				_schools.Remove(existingSchool);
-
-				_schools.Add(new School(
-					school.Key,
-					new SchoolDetails(
-						school.Value.Urn,
-						school.Value.ProposedNewSchoolName)));
 			}
+			_schools.Add(new School(
+				school.Key,
+				new SchoolDetails(
+					school.Value.Urn,
+					school.Value.ProposedNewSchoolName)));
 		}
 
 		return new CommandSuccessResult();
