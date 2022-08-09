@@ -15,7 +15,6 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		var timestamp = DateTime.UtcNow;
 		
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			1,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -49,8 +48,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
     		var timestamp = DateTime.UtcNow;
             
     		AdvisoryBoardDecisionDetails details = new(
-    			default,
-    			1,
+	            1,
     			AdvisoryBoardDecision.Approved,
     			true,
     			null,

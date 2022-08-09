@@ -8,7 +8,6 @@ public static class AdvisoryBoardDecisionDetailsMapper
 	public static AdvisoryBoardDecisionDetails ToDomain(this ConversionAdvisoryBoardDecisionServiceModel serviceModel)
 	{
 		return new(
-			serviceModel.AdvisoryBoardDecisionId,
 			serviceModel.ConversionProjectId,
 			serviceModel.Decision,
 			serviceModel.ApprovedConditionsSet,

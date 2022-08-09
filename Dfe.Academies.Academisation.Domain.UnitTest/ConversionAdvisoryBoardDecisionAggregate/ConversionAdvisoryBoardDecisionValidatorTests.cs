@@ -23,7 +23,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			approvedConditionsSet,
@@ -54,7 +53,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			: new() {AdvisoryBoardDeclinedReason.Performance};
 	
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -84,7 +82,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			: new() {AdvisoryBoardDeferredReason.PerformanceConcerns};
 	
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -108,7 +105,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -138,7 +134,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -168,7 +163,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			null,
@@ -202,7 +196,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			true,
@@ -232,7 +225,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -262,7 +254,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -292,7 +283,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange	
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -322,7 +312,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -352,7 +341,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -386,7 +374,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -416,7 +403,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -446,7 +432,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			false,
@@ -476,7 +461,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -507,7 +491,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -537,7 +520,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -571,7 +553,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -601,7 +582,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -631,7 +611,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			false,
@@ -661,7 +640,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,

@@ -38,7 +38,6 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			true,
