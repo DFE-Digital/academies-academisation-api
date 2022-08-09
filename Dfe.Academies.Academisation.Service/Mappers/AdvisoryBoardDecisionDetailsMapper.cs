@@ -5,7 +5,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers;
 
 public static class AdvisoryBoardDecisionDetailsMapper
 {
-	public static AdvisoryBoardDecisionDetails FromService(this ConversionAdvisoryBoardDecisionServiceModel serviceModel)
+	public static AdvisoryBoardDecisionDetails ToDomain(this ConversionAdvisoryBoardDecisionServiceModel serviceModel)
 	{
 		return new(
 			serviceModel.AdvisoryBoardDecisionId,

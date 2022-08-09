@@ -28,20 +28,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		//Assert
 		Assert.IsType<BadRequestCommandResult>(result);
 	}
-		
-	[Fact]
-	public async Task CallsExecuteOnQueryCommand()
-	{
-		//Arrange
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
-
-		//Act
-		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
-
-		//Assert
-		_mockDataQuery.Verify(c => c.Execute(It.IsAny<int>()), Times.Once);
-	}
-			
+	
 	[Fact]
 	public async Task DataQueryReturnsNull__ReturnsCommandNotFoundResult()
 	{
@@ -73,7 +60,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	}
 		
 	[Fact]
-	public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
+	public async Task DomainReturnsValidatorError_DoesNotCallExecuteOnDataCommand()
 	{
 		_mockDecision
 			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
@@ -93,7 +80,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	}
 		
 	[Fact]
-	public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
+	public async Task DomainReturnsSuccess___CallsExecuteOnDataCommand()
 	{
 		_mockDecision
 			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
@@ -113,7 +100,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	}
 
 	[Fact]
-	public async Task RequestModelIsValid___ReturnsCommandSuccessResult()
+	public async Task DomainReturnsSuccess___ReturnsCommandSuccessResult()
 	{
 		//Arrange
 		_mockDecision
