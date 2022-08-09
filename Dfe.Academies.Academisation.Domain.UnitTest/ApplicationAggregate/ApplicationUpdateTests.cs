@@ -111,20 +111,38 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
-	public void ExistingInProgress_TypeUnchanged___SuccessReturned()
+	public void ExistingInProgress_SchoolChanged___SuccessReturned_Mutated()
 	{
 		// arrange
-		var subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+
+		var proposedNewSchoolName = $"{_faker.Company.CompanyName()} School";
+
+		var contributorsUpdated = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
+
+		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
+		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
+		schoolsUpdated[randomSchoolKey] = new SchoolDetails(
+			schoolsUpdated[randomSchoolKey].Urn,
+			proposedNewSchoolName);
+
+		Application expected = new(
+			subject.ApplicationId,
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			contributorsUpdated,
+			schoolsUpdated);
 
 		// act
 		var result = subject.Update(
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+			schoolsUpdated);
 
 		// assert
 		Assert.IsAssignableFrom<CommandSuccessResult>(result);
+		Assert.Equivalent(expected, subject);
 	}
 
 	private Application BuildApplication(ApplicationStatus applicationStatus, ApplicationType? type = null)
@@ -139,7 +157,7 @@ public class ApplicationUpdateTests
 		return application;
 	}
 
-	private static IEnumerable<object[]> BuildRandomDifferentTypes()
+	public static IEnumerable<object[]> BuildRandomDifferentTypes()
 	{
 		var existing = new Fixture().Create<ApplicationType>();
 

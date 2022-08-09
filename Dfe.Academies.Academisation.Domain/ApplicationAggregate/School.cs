@@ -17,5 +17,5 @@ public class School : ISchool
 
 	public int Id { get; internal set; }
 
-	public SchoolDetails Details { get; }
+	public SchoolDetails Details { get; set; }
 }

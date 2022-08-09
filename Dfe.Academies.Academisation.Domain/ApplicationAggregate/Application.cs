@@ -57,7 +57,23 @@ public class Application : IApplication
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		// ToDo: mutate this
+		// ToDo: mutate contributors
+
+		foreach (var school in schools)
+		{
+			var existingSchool = _schools.SingleOrDefault(s => s.Id == school.Key);
+
+			if (existingSchool != null)
+			{
+				_schools.Remove(existingSchool);
+
+				_schools.Add(new School(
+					school.Key,
+					new SchoolDetails(
+						school.Value.Urn,
+						school.Value.ProposedNewSchoolName)));
+			}
+		}
 
 		return new CommandSuccessResult();
 	}
