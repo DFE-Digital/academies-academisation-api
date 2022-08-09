@@ -42,6 +42,20 @@ public class ApplicationSubmitCommandTests
 	}
 
 	[Fact]
+	public async Task NotFound___NotPassedToDataLayer_NotFoundReturned()
+	{
+		// arrange
+		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync((IApplication?)null);
+
+		// act
+		var result = await _subject.Execute(_applicationId);
+
+		// assert
+		Assert.IsType<NotFoundCommandResult>(result);
+		_updateDataCommandMock.Verify(x => x.Execute(It.IsAny<IApplication>()), Times.Never);
+	}
+
+	[Fact]
 	public async Task SubmitUnsuccessful___NotPassedToUpdateDataCommand_ValidationErrorsReturned()
 	{
 		// arrange
