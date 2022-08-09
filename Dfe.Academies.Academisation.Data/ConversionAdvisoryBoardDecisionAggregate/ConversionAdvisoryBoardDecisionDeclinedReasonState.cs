@@ -7,5 +7,5 @@ namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggreg
 public class ConversionAdvisoryBoardDecisionDeclinedReasonState : BaseEntity
 {
 	public int AdvisoryBoardDecisionId { get; set; }
-	public AdvisoryBoardDeclinedReason Reason { get; set; }
+	public AdvisoryBoardDeclinedReason Reason { get; init; }
 }

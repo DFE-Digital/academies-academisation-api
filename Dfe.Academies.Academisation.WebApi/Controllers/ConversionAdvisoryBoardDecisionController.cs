@@ -12,12 +12,14 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers;
 public class ConversionAdvisoryBoardDecisionController : ControllerBase
 {
     private readonly IAdvisoryBoardDecisionCreateCommand _decisionCreateCommand;
+    private readonly IAdvisoryBoardDecisionUpdateCommand _decisionUpdateCommand;
     private readonly IConversionAdvisoryBoardDecisionGetQuery _decisionGetQuery;
 
-    public ConversionAdvisoryBoardDecisionController(IAdvisoryBoardDecisionCreateCommand decisionCreateCommand, IConversionAdvisoryBoardDecisionGetQuery decisionGetQuery)
+    public ConversionAdvisoryBoardDecisionController(IAdvisoryBoardDecisionCreateCommand decisionCreateCommand, IConversionAdvisoryBoardDecisionGetQuery decisionGetQuery, IAdvisoryBoardDecisionUpdateCommand updateCommand)
     {
         _decisionCreateCommand = decisionCreateCommand;
         _decisionGetQuery = decisionGetQuery;
+        _decisionUpdateCommand = updateCommand;
     }
 
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -50,4 +52,22 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
             ? NotFound()
             : new OkObjectResult(result);
     }
+    
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Put([FromBody] ConversionAdvisoryBoardDecisionServiceModel request)
+    {
+        var result = await _decisionUpdateCommand.Execute(request);
+
+        return result switch
+        {
+            CommandSuccessResult => new OkResult(),
+            NotFoundCommandResult => new BadRequestResult(),
+            BadRequestCommandResult => new BadRequestResult(),
+            CommandValidationErrorResult validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
+            _ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
+        };
+    }
+    
 }

@@ -11,19 +11,27 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 		AdvisoryBoardDecisionDetails = details;
 	}
 	
-	public ConversionAdvisoryBoardDecision(int id, AdvisoryBoardDecisionDetails details) : this(details)
+	public ConversionAdvisoryBoardDecision(
+		int id,
+		AdvisoryBoardDecisionDetails details,
+		DateTime createdOn,
+		DateTime lastModifiedOn) : this(details)
 	{
 		Id = id;
+		CreatedOn = createdOn;
+		LastModifiedOn = lastModifiedOn;
 	}
 
-	private static readonly CreateConversionAdvisoryBoardDecisionValidator CreateConversionAdvisoryBoardDecisionValidator  = new();
+	private static readonly ConversionAdvisoryBoardDecisionValidator Validator = new();
 	
-	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }
+	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; private set; }
 	public int Id { get; private set;  }
+	public DateTime CreatedOn { get; }
+	public DateTime LastModifiedOn { get; }
 	
 	internal static CreateResult<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
 	{
-		var validationResult = CreateConversionAdvisoryBoardDecisionValidator.Validate(details);
+		var validationResult = Validator.Validate(details);
 
 		return validationResult.IsValid
 			? new CreateSuccessResult<IConversionAdvisoryBoardDecision>(
@@ -32,6 +40,22 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 				validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
 	}
 
+	public CommandResult Update(AdvisoryBoardDecisionDetails details)
+	{
+		var validationResult = Validator.Validate(details);
+
+		if (!validationResult.IsValid)
+		{
+			var validationError = validationResult.Errors
+				.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage));
+
+			return new CommandValidationErrorResult(validationError);
+		}
+		
+		AdvisoryBoardDecisionDetails = details;
+		return new CommandSuccessResult();
+	}
+	
 	public void SetId(int id) => Id = Id == default 
 		? id 
 		: throw new InvalidOperationException("Cannot assign an id when the id has already been set");

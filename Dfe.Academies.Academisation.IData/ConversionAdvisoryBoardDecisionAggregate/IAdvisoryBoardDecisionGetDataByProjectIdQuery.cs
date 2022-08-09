@@ -2,7 +2,7 @@
 
 namespace Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 
-public interface IAdvisoryBoardDecisionGetDataQuery
+public interface IAdvisoryBoardDecisionGetDataByProjectIdQuery
 {
 	Task<IConversionAdvisoryBoardDecision?> Execute(int projectId);
 }

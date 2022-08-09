@@ -13,24 +13,34 @@ public class AcademisationContext : DbContext
 
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
+	public override int SaveChanges()
+	{
+		SetModifiedAndCreatedDates();
+		return base.SaveChanges();
+	}
+
 	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
 	{
-		var currentDateTime = DateTime.UtcNow;
+		SetModifiedAndCreatedDates();
+		return base.SaveChangesAsync(cancellationToken);
+	}
+
+	private void SetModifiedAndCreatedDates()
+	{
+		var timestamp = DateTime.UtcNow;
 
 		var entities = ChangeTracker.Entries<BaseEntity>().ToList();
 
 		foreach (var entity in entities.Where(e => e.State == EntityState.Added))
 		{
-			entity.Entity.CreatedOn = currentDateTime;
-			entity.Entity.LastModifiedOn = currentDateTime;
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
 		}
 
 		foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
 		{
-			entity.Entity.LastModifiedOn = currentDateTime;
+			entity.Entity.LastModifiedOn = timestamp;
 		}
-
-		return base.SaveChangesAsync(cancellationToken);
 	}
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)

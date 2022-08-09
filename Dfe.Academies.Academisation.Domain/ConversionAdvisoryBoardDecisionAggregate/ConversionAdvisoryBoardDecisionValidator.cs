@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 
-internal class CreateConversionAdvisoryBoardDecisionValidator : AbstractValidator<AdvisoryBoardDecisionDetails>
+public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<AdvisoryBoardDecisionDetails>
 {
-	public CreateConversionAdvisoryBoardDecisionValidator()
+	public ConversionAdvisoryBoardDecisionValidator()
 	{
 		ValidateApprovedDecision();
 		ValidateDeclinedDecision();
