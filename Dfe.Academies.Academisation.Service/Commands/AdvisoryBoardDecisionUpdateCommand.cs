@@ -28,7 +28,7 @@ public class AdvisoryBoardDecisionUpdateCommand : IAdvisoryBoardDecisionUpdateCo
 
 		if (existingDecision is null) return new NotFoundCommandResult();
 
-		var result = existingDecision.Update(serviceModel.FromService());
+		var result = existingDecision.Update(serviceModel.ToDomain());
 		
 		return result switch
 		{
