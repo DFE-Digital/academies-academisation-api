@@ -43,7 +43,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 	}
 	
 	[Fact]
-    	public void ValidatorReturnsValidationErrorResult__ReturnsCommandValidationErrorResult_DecisionNotMutated()
+    	public void ValidatorReturnsValidationErrorResult___ReturnsCommandValidationErrorResult_DecisionNotMutated()
     	{
     		//Arrange 
     		var timestamp = DateTime.UtcNow;
