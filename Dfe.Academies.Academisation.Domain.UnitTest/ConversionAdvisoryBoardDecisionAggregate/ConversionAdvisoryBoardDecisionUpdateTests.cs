@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionAdvisoryBoardDec
 public class ConversionAdvisoryBoardDecisionUpdateTests
 {
 	[Fact]
-	public void DetailsAreValid___ReturnsCommandSuccessResult_DecisionMutated()
+	public void ValidatorReturnsSuccessResult__ReturnsCommandSuccessResult_DecisionMutated()
 	{
 		//Arrange 
 		var timestamp = DateTime.UtcNow;
@@ -43,7 +43,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 	}
 	
 	[Fact]
-    	public void DetailsAreInvalid___ReturnsCommandValidationErrorResult_DecisionNotMutated()
+    	public void ValidatorReturnsValidationErrorResult__ReturnsCommandValidationErrorResult_DecisionNotMutated()
     	{
     		//Arrange 
     		var timestamp = DateTime.UtcNow;
