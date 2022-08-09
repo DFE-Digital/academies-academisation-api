@@ -60,7 +60,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	}
 		
 	[Fact]
-	public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
+	public async Task DomainReturnsValidatorError_DoesNotCallExecuteOnDataCommand()
 	{
 		_mockDecision
 			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
@@ -80,7 +80,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	}
 		
 	[Fact]
-	public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
+	public async Task DomainReturnsSuccess___CallsExecuteOnDataCommand()
 	{
 		_mockDecision
 			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
@@ -100,7 +100,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	}
 
 	[Fact]
-	public async Task RequestModelIsValid___ReturnsCommandSuccessResult()
+	public async Task DomainReturnsSuccess___ReturnsCommandSuccessResult()
 	{
 		//Arrange
 		_mockDecision
