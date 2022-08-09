@@ -28,20 +28,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		//Assert
 		Assert.IsType<BadRequestCommandResult>(result);
 	}
-		
-	[Fact]
-	public async Task CallsExecuteOnQueryCommand()
-	{
-		//Arrange
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
-
-		//Act
-		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
-
-		//Assert
-		_mockDataQuery.Verify(c => c.Execute(It.IsAny<int>()), Times.Once);
-	}
-			
+	
 	[Fact]
 	public async Task DataQueryReturnsNull__ReturnsCommandNotFoundResult()
 	{
