@@ -22,11 +22,11 @@ public class AdvisoryBoardDecisionUpdateCommand : IAdvisoryBoardDecisionUpdateCo
 
 	public async Task<CommandResult> Execute(ConversionAdvisoryBoardDecisionServiceModel serviceModel)
 	{
-		if (serviceModel.AdvisoryBoardDecisionId == default) return new CommandNotFoundResult();
+		if (serviceModel.AdvisoryBoardDecisionId == default) return new NotFoundCommandResult();
 		
 		var existingDecision = await _getDataQuery.Execute(serviceModel.AdvisoryBoardDecisionId);
 
-		if (existingDecision is null) return new CommandNotFoundResult();
+		if (existingDecision is null) return new NotFoundCommandResult();
 
 		var result = existingDecision.Update(serviceModel.FromService());
 		

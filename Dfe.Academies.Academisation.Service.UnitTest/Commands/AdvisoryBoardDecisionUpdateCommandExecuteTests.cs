@@ -26,7 +26,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		var result = await target.Execute(new());
 			
 		//Assert
-		Assert.IsType<CommandNotFoundResult>(result);
+		Assert.IsType<NotFoundCommandResult>(result);
 	}
 		
 	[Fact]
@@ -51,7 +51,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
 	
 		//Assert
-		Assert.IsType<CommandNotFoundResult>(result);
+		Assert.IsType<NotFoundCommandResult>(result);
 	}
 
 	[Fact]

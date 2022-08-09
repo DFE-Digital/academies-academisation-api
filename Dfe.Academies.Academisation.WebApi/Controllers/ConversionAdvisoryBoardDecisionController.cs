@@ -63,7 +63,7 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
         return result switch
         {
             CommandSuccessResult => new OkResult(),
-            CommandNotFoundResult => new BadRequestResult(),
+            NotFoundCommandResult => new BadRequestResult(),
             CommandValidationErrorResult validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
             _ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
         };
