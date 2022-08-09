@@ -71,7 +71,13 @@ public class Application : IApplication
 				school.Key,
 				new SchoolDetails(
 					school.Value.Urn,
-					school.Value.ProposedNewSchoolName)));
+					school.Value.ProposedNewSchoolName,
+					school.Value.ProjectedPupilNumbersYear1,
+					school.Value.ProjectedPupilNumbersYear2,
+					school.Value.ProjectedPupilNumbersYear3,
+					school.Value.SchoolCapacityAssumptions,
+					school.Value.SchoolCapacityPublishedAdmissionsNumber					
+					)));
 		}
 
 		return new CommandSuccessResult();

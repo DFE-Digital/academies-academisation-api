@@ -110,8 +110,9 @@ public class ApplicationUpdateTests
 		Assert.Equal(expectedPropertyName, error.PropertyName);
 	}
 
-	[Fact]
-	public void ExistingInProgress_SchoolChanged___SuccessReturned_Mutated()
+	[Theory]
+	[MemberData(nameof(SchoolUpdateDetails))]
+	public void ExistingInProgress_SchoolChanged___SuccessReturned_Mutated(SchoolDetails schoolUpdateDetails)
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
@@ -122,9 +123,14 @@ public class ApplicationUpdateTests
 
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
 		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
-		schoolsUpdated[randomSchoolKey] = new SchoolDetails(
-			schoolsUpdated[randomSchoolKey].Urn,
-			proposedNewSchoolName);
+		schoolsUpdated[randomSchoolKey] = schoolsUpdated[randomSchoolKey] with { 
+			ProposedNewSchoolName = schoolUpdateDetails.ProposedNewSchoolName ?? schoolsUpdated[randomSchoolKey].ProposedNewSchoolName,
+			ProjectedPupilNumbersYear1 =	schoolUpdateDetails.ProjectedPupilNumbersYear1 ?? schoolsUpdated[randomSchoolKey].ProjectedPupilNumbersYear1,
+			ProjectedPupilNumbersYear2 = schoolUpdateDetails.ProjectedPupilNumbersYear2 ?? schoolsUpdated[randomSchoolKey].ProjectedPupilNumbersYear2,
+			ProjectedPupilNumbersYear3 = schoolUpdateDetails.ProjectedPupilNumbersYear3 ?? schoolsUpdated[randomSchoolKey].ProjectedPupilNumbersYear3,
+			SchoolCapacityAssumptions = schoolUpdateDetails.SchoolCapacityAssumptions ?? schoolsUpdated[randomSchoolKey].SchoolCapacityAssumptions,
+			SchoolCapacityPublishedAdmissionsNumber = schoolUpdateDetails.SchoolCapacityPublishedAdmissionsNumber ?? schoolsUpdated[randomSchoolKey].SchoolCapacityPublishedAdmissionsNumber
+		};
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -195,6 +201,12 @@ public class ApplicationUpdateTests
 		var updated = PickRandomElement(otherTypes);
 
 		yield return new object[] { updated, existing };
+	}
+
+	public static IEnumerable<object[]> SchoolUpdateDetails()
+	{
+		var update = new Fixture().Build<SchoolDetails>().Without(s => s.Urn).Create();
+		yield return new object[] { update };
 	}
 
 	private static T PickRandomElement<T>(IEnumerable<T> list)
