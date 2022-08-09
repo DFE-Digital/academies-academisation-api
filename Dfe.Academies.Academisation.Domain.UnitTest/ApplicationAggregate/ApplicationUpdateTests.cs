@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -11,10 +12,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate;
 
 public class ApplicationUpdateTests
 {
+	private readonly Faker _faker = new();
 	private readonly Fixture _fixture = new();
 
 	[Fact]
-	public void ApplicationSubmitted___ValidationErrorReturned()
+	public void ExistingIsSubmitted___ValidationErrorReturned()
 	{
 		// arrange
 		var subject = BuildApplication(ApplicationStatus.Submitted);
@@ -35,7 +37,7 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
-	public void ApplicationStatusChanged___ValidationErrorReturnid()
+	public void StatusChanged___ValidationErrorReturned()
 	{
 		// arrange
 		var subject = BuildApplication(ApplicationStatus.InProgress);
@@ -57,7 +59,7 @@ public class ApplicationUpdateTests
 
 	[Theory]
 	[MemberData(nameof(BuildRandomDifferentTypes))]
-	public void ApplicationTypeChanged___ValidationErrorReturned(ApplicationType updated, ApplicationType existing)
+	public void TypeChanged___ValidationErrorReturned(ApplicationType updated, ApplicationType existing)
 	{
 		// arrange
 		var subject = BuildApplication(ApplicationStatus.InProgress, existing);
@@ -74,6 +76,37 @@ public class ApplicationUpdateTests
 
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
 		var expectedPropertyName = nameof(Application.ApplicationType);
+		Assert.Equal(expectedPropertyName, error.PropertyName);
+	}
+
+	[Fact]
+	public void ContributorEmailChanged___ValidationErrorReturned()
+	{
+		// arrange
+		var subject = BuildApplication(ApplicationStatus.InProgress);
+
+		var contributors = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
+		int randomContributorKey = PickRandomElement(contributors.Keys);
+		contributors[randomContributorKey] = new ContributorDetails(
+			contributors[randomContributorKey].FirstName,
+			contributors[randomContributorKey].LastName,
+			_faker.Internet.Email(),
+			contributors[randomContributorKey].Role,
+			contributors[randomContributorKey].OtherRoleName);
+
+		int index = contributors.Keys.ToList().IndexOf(randomContributorKey);
+
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			contributors,
+			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+
+		// assert
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		var expectedPropertyName = $"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}";
 		Assert.Equal(expectedPropertyName, error.PropertyName);
 	}
 
@@ -110,11 +143,16 @@ public class ApplicationUpdateTests
 	{
 		var existing = new Fixture().Create<ApplicationType>();
 
-		var types = Enum.GetValues(typeof(ApplicationType)).Cast<ApplicationType>().Where(t => t != existing);
-		Random random = new();
-		var updated = types.ElementAt(random.Next(1, types.Count()));
+		var otherTypes = Enum.GetValues(typeof(ApplicationType)).Cast<ApplicationType>().Where(t => t != existing);
+		var updated = PickRandomElement(otherTypes);
 
 		yield return new object[] { updated, existing };
+	}
+
+	private static T PickRandomElement<T>(IEnumerable<T> list)
+	{
+		Random random = new();
+		return list.ElementAt(random.Next(1, list.Count()));
 	}
 }
 

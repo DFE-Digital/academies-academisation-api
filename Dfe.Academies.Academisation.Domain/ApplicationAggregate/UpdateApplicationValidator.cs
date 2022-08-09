@@ -29,5 +29,13 @@ internal class UpdateApplicationValidator
 			.When(x => x.type != x.existing.ApplicationType)
 			.WithMessage("Cannot change the type using this operation of an existing Application. Please start a new one.")
 			.OverridePropertyName(nameof(Application.ApplicationType));
+
+		RuleForEach(x => x.contributors.Join(
+			x.existing.Contributors,
+			updated => updated.Key,
+			existing => existing.Id,
+			(updated, existing) => new ContributorPair(updated.Value, existing.Details)))
+			.SetValidator(new UpdateContributorValidator())
+			.OverridePropertyName(nameof(Contributor));
 	}
 }
