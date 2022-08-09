@@ -19,6 +19,11 @@ namespace Dfe.Academies.Academisation.Service.Commands
 		{
 			var application = await _dataQuery.Execute(applicationId);
 
+			if (application is null)
+			{
+				return new NotFoundCommandResult();
+			}
+
 			var domainResult = application.Submit();
 
 			switch (domainResult)
