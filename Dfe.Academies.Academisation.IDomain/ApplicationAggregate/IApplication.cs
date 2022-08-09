@@ -14,5 +14,12 @@ public interface IApplication
 	IReadOnlyCollection<ISchool> Schools { get; }
 
 	void SetIdsOnCreate(int applicationId, int conversionId);
+
+	CommandResult Update(
+		ApplicationType applicationType,
+		ApplicationStatus applicationStatus,
+		Dictionary<int, ContributorDetails> contributors,
+		Dictionary<int, SchoolDetails> schools);
+
 	CommandResult Submit();
 }
