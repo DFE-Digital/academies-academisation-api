@@ -43,6 +43,26 @@ public class ConversionAdvisoryBoardDecisionControllerPutTests
 		//Assert
 		Assert.IsType<OkResult>(result);
 	}
+	
+	[Fact]
+	public async Task CommandReturnsBadRequestCommandResult___ReturnsBadRequestResult()
+	{
+		//Arrange
+		_mockUpdateCommand
+			.Setup(c => c.Execute(It.IsAny<ConversionAdvisoryBoardDecisionServiceModel>()))
+			.ReturnsAsync(new BadRequestCommandResult());
+
+		var subject = new ConversionAdvisoryBoardDecisionController(
+			_mockCreateCommand.Object, 
+			_mockGetQuery.Object,
+			_mockUpdateCommand.Object);
+			
+		//Act
+		var result = await subject.Put(It.IsAny<ConversionAdvisoryBoardDecisionServiceModel>());
+
+		//Assert
+		Assert.IsType<BadRequestResult>(result);
+	}
 		
 	[Fact]
 	public async Task CommandReturnsCommandValidationErrorResult___ReturnsBadRequestResult()

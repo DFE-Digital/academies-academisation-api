@@ -26,7 +26,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		var result = await target.Execute(new());
 			
 		//Assert
-		Assert.IsType<NotFoundCommandResult>(result);
+		Assert.IsType<BadRequestCommandResult>(result);
 	}
 		
 	[Fact]
