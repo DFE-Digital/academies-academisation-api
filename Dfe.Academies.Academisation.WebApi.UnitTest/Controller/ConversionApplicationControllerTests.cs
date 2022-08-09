@@ -80,6 +80,22 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
+		public async Task Submit___ServiceReturnsNotFound___NotFoundReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+
+			_submitCommandMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(new NotFoundCommandResult());
+
+			// act
+			var result = await _subject.Submit(applicationId);
+
+			// assert
+			var badRequestResult = Assert.IsType<NotFoundResult>(result);
+		}
+
+
+		[Fact]
 		public async Task Submit___ServiceReturnsValidationError___BadRequestReturned()
 		{
 			// arrange
