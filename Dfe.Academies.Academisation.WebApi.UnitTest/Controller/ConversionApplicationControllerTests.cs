@@ -19,11 +19,12 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
 		private readonly Mock<IApplicationGetQuery> _getQueryMock = new();
 		private readonly Mock<IApplicationSubmitCommand> _submitCommandMock = new();
+		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly ApplicationController _subject;
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _submitCommandMock.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object);
 		}
 
 		[Fact]
@@ -141,6 +142,23 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// assert
 			var getResult = Assert.IsType<OkObjectResult>(result.Result);
 			Assert.Equal(applicationServiceModel, getResult.Value);
+		}
+
+		[Fact]
+		public async Task Update___ServiceReturnsSuccess___SuccessResponseReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+			var applicationServiceModel = fixture.Create<ApplicationServiceModel>();
+
+			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			// act
+			var result = await _subject.Update(applicationId, applicationServiceModel);
+
+			// assert
+			var updateResult = Assert.IsType<OkResult>(result.Result);
 		}
 	}
 }
