@@ -54,9 +54,9 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
             Decision,
             ApprovedConditionsSet,
             ApprovedConditionsDetails,
-            DeclinedReasons!.Select(reason => reason.Reason).ToList(),
+            DeclinedReasons?.Select(reason => reason.Reason).ToList(),
             DeclinedOtherReason,
-            DeferredReasons!.Select(reason => reason.Reason).ToList(),
+            DeferredReasons?.Select(reason => reason.Reason).ToList(),
             DeferredOtherReason,
             AdvisoryBoardDecisionDate,
             DecisionMadeBy
