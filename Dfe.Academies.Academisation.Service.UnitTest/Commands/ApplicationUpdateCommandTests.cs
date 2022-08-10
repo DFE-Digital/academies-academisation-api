@@ -6,11 +6,6 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
@@ -21,17 +16,21 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 		private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
 		private readonly Mock<IApplicationUpdateDataCommand> _updateApplicationCommandMock = new();
-		private readonly Mock<IApplication> _applicationMock = new();
+		private ApplicationUpdateCommand _subject;
+
+		public ApplicationUpdateCommandTests()
+		{
+			_subject = new ApplicationUpdateCommand(_getDataQueryMock.Object, _updateApplicationCommandMock.Object);
+		}
 
 		[Fact]
 		public async Task IdsDoNotMatch___ValidationErrorResultReturned()
 		{
 			// Arrange
 			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
-			var subject = new ApplicationUpdateCommand(_getDataQueryMock.Object, _updateApplicationCommandMock.Object);
 
 			// Act
-			var result = await subject.Execute(applicationServiceModel.ApplicationId+1, applicationServiceModel);
+			var result = await _subject.Execute(applicationServiceModel.ApplicationId+1, applicationServiceModel);
 
 			// Assert
 			Assert.IsType<CommandValidationErrorResult>(result);
@@ -44,10 +43,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
 			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId)).ReturnsAsync((IApplication?) null);
 
-			var subject = new ApplicationUpdateCommand(_getDataQueryMock.Object, _updateApplicationCommandMock.Object);
-
 			// Act
-			var result = await subject.Execute(applicationServiceModel.ApplicationId, applicationServiceModel);
+			var result = await _subject.Execute(applicationServiceModel.ApplicationId, applicationServiceModel);
 
 			// Assert
 			Assert.IsType<NotFoundCommandResult>(result);
@@ -68,10 +65,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId))
 				.ReturnsAsync(applicationMock.Object);
 
-			var subject = new ApplicationUpdateCommand(_getDataQueryMock.Object, _updateApplicationCommandMock.Object);
-
 			// Act
-			var result = await subject.Execute(applicationServiceModel.ApplicationId, applicationServiceModel);
+			var result = await _subject.Execute(applicationServiceModel.ApplicationId, applicationServiceModel);
 
 			// Assert
 			Assert.IsType<CommandSuccessResult>(result);
