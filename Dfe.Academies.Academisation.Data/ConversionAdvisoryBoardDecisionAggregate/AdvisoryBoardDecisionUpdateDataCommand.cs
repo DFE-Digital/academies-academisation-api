@@ -16,8 +16,8 @@ public class AdvisoryBoardDecisionUpdateDataCommand : IAdvisoryBoardDecisionUpda
 	{
 		var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
 		
-		_context.Update(decisionState);
-		
+		_context.ReplaceTracked(decisionState);
+
 		await _context.SaveChangesAsync();
 	}
 }
