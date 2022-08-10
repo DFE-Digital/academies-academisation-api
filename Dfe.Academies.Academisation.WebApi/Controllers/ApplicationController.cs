@@ -13,12 +13,18 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	{
 		private readonly IApplicationCreateCommand _applicationCreateCommand;
 		private readonly IApplicationGetQuery _applicationGetQuery;
+		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 
-		public ApplicationController(IApplicationCreateCommand applicationCreateCommand, IApplicationGetQuery applicationGetQuery, IApplicationSubmitCommand applicationSubmitCommand)
+		public ApplicationController(IApplicationCreateCommand applicationCreateCommand, 
+			IApplicationGetQuery applicationGetQuery,
+			IApplicationUpdateCommand applicationUpdateCommand,
+			IApplicationSubmitCommand applicationSubmitCommand
+			)
 		{
 			_applicationCreateCommand = applicationCreateCommand;
 			_applicationGetQuery = applicationGetQuery;
+			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
 		}
 
@@ -42,6 +48,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			var result = await _applicationGetQuery.Execute(id);
 			return result is null ? NotFound() : Ok(result);
+		}
+
+		[HttpPut("{id}", Name = "Update")]
+		public async Task<ActionResult<ApplicationServiceModel>> Update(int id, [FromBody] ApplicationServiceModel serviceModel)
+		{
+			var result = await _applicationUpdateCommand.Execute(id, serviceModel);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult => BadRequest(),
+				_ => throw new NotImplementedException()
+			};
 		}
 
 		[HttpPost("submit/{id}", Name = "Submit")]

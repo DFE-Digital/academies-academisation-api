@@ -44,6 +44,7 @@ builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataC
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IApplicationSubmitCommand, ApplicationSubmitCommand>();
 builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
+builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();

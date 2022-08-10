@@ -18,6 +18,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 			var applicationState = await _context.Applications
 				.AsNoTracking()
 				.Include(a => a.Contributors)
+				.Include(a => a.Schools)
 				.SingleOrDefaultAsync(a => a.Id == id);
 
 			return applicationState?.MapToDomain();
