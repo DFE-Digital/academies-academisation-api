@@ -20,7 +20,7 @@ public class AcademisationContext : DbContext
 		return base.SaveChanges();
 	}
 	
-	public EntityEntry ReplaceTracked<T>(T baseEntity) where T: BaseEntity
+	public EntityEntry<T> ReplaceTracked<T>(T baseEntity) where T: BaseEntity
 	{
 		var entity = ChangeTracker
 			.Entries<T>()
