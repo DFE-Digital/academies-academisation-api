@@ -135,7 +135,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 	{
 		RuleFor(details => details.DeclinedReasons)
 			.NotNull()
-			.NotEmpty()
+			.NotEmpty()			
 			.When(details => details.Decision is AdvisoryBoardDecision.Declined)
 			.WithMessage(details =>
 				NotEmptyMessage(
@@ -145,7 +145,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 					nameof(AdvisoryBoardDecision.Declined)));
 
 		RuleFor(details => details.DeclinedReasons)
-			.Null()
+			.Empty()
 			.When(details => details.Decision is not AdvisoryBoardDecision.Declined)
 			.WithMessage(details =>
 				EmptyMessage(
@@ -201,7 +201,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 					nameof(AdvisoryBoardDecision.Deferred)));
 
 		RuleFor(details => details.DeferredReasons)
-			.Null()
+			.Empty()
 			.When(details => details.Decision is not AdvisoryBoardDecision.Deferred)
 			.WithMessage(details =>
 				NullMessage(

@@ -250,7 +250,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	}
 	
 	[Fact]
-	private void DecisionIsApproved_DeclinedReasonsIsNotNull___ReturnsInvalidResult()
+	private void DecisionIsApproved_DeclinedReasonsIsNotNullOrEmpty___ReturnsInvalidResult()
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
@@ -258,7 +258,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
-			new(),
+			new() { AdvisoryBoardDeclinedReason.Finance },
 			null,
 			null,
 			null,
@@ -279,7 +279,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	}
 	
 	[Fact]
-	private void DecisionIsApproved_AndDeferredReasonsIsNotNull___ReturnsInvalidResult()
+	private void DecisionIsApproved_AndDeferredReasonsIsNotNullOrEmpty___ReturnsInvalidResult()
 	{
 		//Arrange	
 		AdvisoryBoardDecisionDetails details = new(
@@ -289,7 +289,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			null,
 			null,
-			new(),
+			new() { AdvisoryBoardDeferredReason.PerformanceConcerns },
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -457,7 +457,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	}
 	
 	[Fact]
-	private void DecisionIsDeclined_DeferredReasonsIsNotNull___ReturnsInvalidResult()
+	private void DecisionIsDeclined_DeferredReasonsIsNotNullOrEmpty___ReturnsInvalidResult()
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
@@ -467,7 +467,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			null,
 			null,
-			new(),
+			new() { AdvisoryBoardDeferredReason.PerformanceConcerns },
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
