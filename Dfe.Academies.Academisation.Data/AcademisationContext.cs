@@ -26,7 +26,10 @@ public class AcademisationContext : DbContext
 			.Entries<T>()
 			.SingleOrDefault(s => s.Entity.Id == baseEntity.Id);
 
-		if (entity is null) throw new ApplicationException("An entity matching this Id is not being tracked");
+		if (entity is null)
+		{
+			throw new ApplicationException($"An entity matching Id: {baseEntity.Id} is not being tracked");
+		}
 
 		var childCollections = entity.Collections
 			.Select(collection => collection.CurrentValue)
