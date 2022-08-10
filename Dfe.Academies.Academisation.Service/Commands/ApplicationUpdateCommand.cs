@@ -39,18 +39,15 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 			applicationServiceModel.Schools.ToDictionary(s => s.Id, s => s.ToDomain())
 			);
 
-		if (result is CommandSuccessResult)
-		{
-			await _applicationUpdateDataCommand.Execute(existingApplication);
-			return result;
-		}
 		if (result is CommandValidationErrorResult)
 		{
 			return result;
 		}
-		else
+		if (result is not CommandSuccessResult)
 		{
 			throw new NotImplementedException();
 		}
+		await _applicationUpdateDataCommand.Execute(existingApplication);
+		return result;
 	}
 }

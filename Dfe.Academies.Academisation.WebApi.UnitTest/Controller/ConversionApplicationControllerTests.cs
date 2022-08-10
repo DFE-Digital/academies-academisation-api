@@ -158,7 +158,41 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _subject.Update(applicationId, applicationServiceModel);
 
 			// assert
-			var updateResult = Assert.IsType<OkResult>(result.Result);
+			Assert.IsType<OkResult>(result.Result);
+		}
+
+		[Fact]
+		public async Task Update___ServiceReturnsNotFound___NotFoundReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+			var applicationServiceModel = fixture.Create<ApplicationServiceModel>();
+
+			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
+				.ReturnsAsync(new NotFoundCommandResult());
+
+			// act
+			var result = await _subject.Update(applicationId, applicationServiceModel);
+
+			// assert
+			Assert.IsType<NotFoundResult>(result.Result);
+		}
+
+		[Fact]
+		public async Task Update___ServiceReturnsValidationError___ValidationErrorReturned()
+		{
+			// arrange
+			int applicationId = fixture.Create<int>();
+			var applicationServiceModel = fixture.Create<ApplicationServiceModel>();
+
+			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
+				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>()));
+
+			// act
+			var result = await _subject.Update(applicationId, applicationServiceModel);
+
+			// assert
+			Assert.IsType<BadRequestResult>(result.Result);
 		}
 	}
 }

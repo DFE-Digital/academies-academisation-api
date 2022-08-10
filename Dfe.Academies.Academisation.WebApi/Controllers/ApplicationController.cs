@@ -58,6 +58,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result switch
 			{
 				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult => BadRequest(),
 				_ => throw new NotImplementedException()
 			};
 		}
