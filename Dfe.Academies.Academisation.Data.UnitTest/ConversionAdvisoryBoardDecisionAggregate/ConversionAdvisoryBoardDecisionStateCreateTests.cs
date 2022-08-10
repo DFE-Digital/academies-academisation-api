@@ -23,7 +23,6 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
-			default,
 			_faker.Random.Int(1, 1000),
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -53,7 +52,6 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 	{
 		//Arrange
 		AdvisoryBoardDecisionDetails expectedDetails = new(
-			default,
 			_faker.Random.Int(1, 1000),
 			AdvisoryBoardDecision.Declined,
 			null,

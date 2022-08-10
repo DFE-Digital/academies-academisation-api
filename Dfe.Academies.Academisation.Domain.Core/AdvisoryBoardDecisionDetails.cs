@@ -1,7 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Domain.Core;
 
 public record AdvisoryBoardDecisionDetails(
-	int AdvisoryBoardDecisionId,
 	int ConversionProjectId,
 	AdvisoryBoardDecision Decision,
 	bool? ApprovedConditionsSet,

@@ -50,7 +50,6 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
     public IConversionAdvisoryBoardDecision MapToDomain()
     {
         var details = new AdvisoryBoardDecisionDetails(
-            Id,
             ConversionProjectId,
             Decision,
             ApprovedConditionsSet,

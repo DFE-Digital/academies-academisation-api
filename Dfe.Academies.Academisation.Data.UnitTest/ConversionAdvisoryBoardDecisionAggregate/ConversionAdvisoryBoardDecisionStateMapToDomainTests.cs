@@ -40,7 +40,6 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 			.Create();
 		
 		AdvisoryBoardDecisionDetails details = new(
-			state.Id,
 			state.ConversionProjectId,
 			state.Decision,
 			state.ApprovedConditionsSet,
@@ -52,13 +51,16 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 			state.AdvisoryBoardDecisionDate,
 			state.DecisionMadeBy
 		);
-
-		ConversionAdvisoryBoardDecision expected = new(state.Id, details, state.CreatedOn, state.LastModifiedOn);
-	
+		
 		//Act
 		var result = state.MapToDomain();
 		
 		//Assert
-		Assert.Equivalent(expected, result);
+		Assert.Multiple(
+			() => Assert.Equivalent(details, result.AdvisoryBoardDecisionDetails),
+			() => Assert.Equal(timestamp, result.CreatedOn),
+			() => Assert.Equal(timestamp, result.LastModifiedOn),
+			() => Assert.NotEqual(default, result.Id)
+		);
 	}
 }
