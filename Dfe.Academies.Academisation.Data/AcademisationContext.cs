@@ -32,9 +32,8 @@ public class AcademisationContext : DbContext
 		}
 
 		var childCollections = entity.Collections
-			.Select(collection => collection.CurrentValue)
-			.Select(childCollection => childCollection);
-		
+			.Select(collection => collection.CurrentValue);
+
 		foreach (var children in childCollections)
 		{
 			if (children is null) continue;
