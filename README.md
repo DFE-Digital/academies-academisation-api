@@ -5,12 +5,14 @@ This is the API for persisted data related to academisation:
 * Conversion Projects
 * Advisory Board Decisions on Conversions
 
-## Architecture
+## Context
+
 This API is intended to own the business logic and 
-store data within the Academisation Domain, which fits within the responsibilities owned by the Regional Services Division:
+store data related to Preparing for Academisation: the process by which a Maintained School becomes an Academy. This fits within the responsibilities owned by the Regional Services Division:
 
 ![Domain Contexts](./domain-contexts.png)
 
+## Architecture
 The architecture of this solution is based on:
 * Domain Driven Design
 * Hexagon Architecture
@@ -20,6 +22,15 @@ The key aspiration of this architecture is to remove any references to technical
 The following diagram shows the relationship between the projects in the solution:
 
 ![Domain/Hexagon Architecture](./domain-hexagon.png)
+
+Each of the layers in this architecture has a distinct set of responsibilities:
+
+| Layer   | Responsibility |
+|---------|----------------|
+| Web     | Mapping to HTTP |
+| Service | Co-ordination of a complete operation |
+| Domain  | Validation and Mutation |
+| Data    | Persistence |
 
 ## Development Setup
 
