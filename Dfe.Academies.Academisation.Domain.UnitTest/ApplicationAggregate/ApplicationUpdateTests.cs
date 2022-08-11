@@ -117,20 +117,12 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
-		var proposedNewSchoolName = $"{_faker.Company.CompanyName()} School";
-
 		var contributorsUpdated = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
 
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
+
 		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
-		schoolsUpdated[randomSchoolKey] = schoolsUpdated[randomSchoolKey] with { 
-			ProposedNewSchoolName = schoolUpdateDetails.ProposedNewSchoolName ?? schoolsUpdated[randomSchoolKey].ProposedNewSchoolName,
-			ProjectedPupilNumbersYear1 =	schoolUpdateDetails.ProjectedPupilNumbersYear1 ?? schoolsUpdated[randomSchoolKey].ProjectedPupilNumbersYear1,
-			ProjectedPupilNumbersYear2 = schoolUpdateDetails.ProjectedPupilNumbersYear2 ?? schoolsUpdated[randomSchoolKey].ProjectedPupilNumbersYear2,
-			ProjectedPupilNumbersYear3 = schoolUpdateDetails.ProjectedPupilNumbersYear3 ?? schoolsUpdated[randomSchoolKey].ProjectedPupilNumbersYear3,
-			SchoolCapacityAssumptions = schoolUpdateDetails.SchoolCapacityAssumptions ?? schoolsUpdated[randomSchoolKey].SchoolCapacityAssumptions,
-			SchoolCapacityPublishedAdmissionsNumber = schoolUpdateDetails.SchoolCapacityPublishedAdmissionsNumber ?? schoolsUpdated[randomSchoolKey].SchoolCapacityPublishedAdmissionsNumber
-		};
+		BuildSchoolUpdate(schoolsUpdated[randomSchoolKey], schoolUpdateDetails);
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -192,6 +184,34 @@ public class ApplicationUpdateTests
 
 		return application;
 	}
+	private static SchoolDetails BuildSchoolUpdate(SchoolDetails details, SchoolDetails schoolUpdateDetails)
+	{
+		return details with
+		{
+			ApproverContactEmail = schoolUpdateDetails.ApproverContactEmail ?? details.ApproverContactEmail,
+			ApproverContactName = schoolUpdateDetails.ApproverContactName ?? details.ApproverContactName,
+			ContactChairEmail = schoolUpdateDetails.ContactChairEmail ?? details.ApproverContactEmail,
+			ContactChairName = schoolUpdateDetails.ContactChairName ?? details.ContactChairName,
+			ContactChairTel = schoolUpdateDetails.ContactChairTel ?? details.ContactChairTel,
+			ContactHeadEmail = schoolUpdateDetails.ContactHeadEmail ?? details.ContactHeadEmail,
+			ContactHeadName = schoolUpdateDetails.ContactHeadName ?? details.ContactHeadName,
+			ContactHeadTel = schoolUpdateDetails.ContactHeadTel ?? details.ContactHeadTel,
+			ContactRole = schoolUpdateDetails.ContactRole ?? details.ContactRole,
+			MainContactOtherEmail = schoolUpdateDetails.MainContactOtherEmail ?? details.MainContactOtherEmail,
+			MainContactOtherName = schoolUpdateDetails.MainContactOtherName ?? details.MainContactOtherName,
+			MainContactOtherTelephone = schoolUpdateDetails.MainContactOtherTelephone ?? details.MainContactOtherTelephone,
+			MainContactOtherRole = schoolUpdateDetails.MainContactOtherRole ?? details.MainContactOtherRole,
+			ConversionTargetDate = schoolUpdateDetails.ConversionTargetDate ?? details.ConversionTargetDate,
+			ConversionTargetDateExplained = schoolUpdateDetails.ConversionTargetDateExplained ?? details.ConversionTargetDateExplained,
+			ProposedNewSchoolName = schoolUpdateDetails.ProposedNewSchoolName ?? details.ProposedNewSchoolName,
+			ProjectedPupilNumbersYear1 = schoolUpdateDetails.ProjectedPupilNumbersYear1 ?? details.ProjectedPupilNumbersYear1,
+			ProjectedPupilNumbersYear2 = schoolUpdateDetails.ProjectedPupilNumbersYear2 ?? details.ProjectedPupilNumbersYear2,
+			ProjectedPupilNumbersYear3 = schoolUpdateDetails.ProjectedPupilNumbersYear3 ?? details.ProjectedPupilNumbersYear3,
+			CapacityAssumptions = schoolUpdateDetails.CapacityAssumptions ?? details.CapacityAssumptions,
+			CapacityPublishedAdmissionsNumber = schoolUpdateDetails.CapacityPublishedAdmissionsNumber ?? details.CapacityPublishedAdmissionsNumber,
+			ApplicationJoinTrustReason = schoolUpdateDetails.ApplicationJoinTrustReason ?? details.ApplicationJoinTrustReason
+		};
+	}
 
 	public static IEnumerable<object[]> BuildRandomDifferentTypes()
 	{
@@ -205,7 +225,8 @@ public class ApplicationUpdateTests
 
 	public static IEnumerable<object[]> SchoolUpdateDetails()
 	{
-		var update = new Fixture().Build<SchoolDetails>().Without(s => s.Urn).Create();
+		var update = new Fixture().Build<SchoolDetails>()
+			.Create();
 		yield return new object[] { update };
 	}
 

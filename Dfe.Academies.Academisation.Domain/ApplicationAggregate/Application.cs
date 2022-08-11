@@ -69,15 +69,17 @@ public class Application : IApplication
 			}
 			_schools.Add(new School(
 				school.Key,
-				new SchoolDetails(
-					school.Value.Urn,
-					school.Value.ProposedNewSchoolName,
-					school.Value.ProjectedPupilNumbersYear1,
-					school.Value.ProjectedPupilNumbersYear2,
-					school.Value.ProjectedPupilNumbersYear3,
-					school.Value.SchoolCapacityAssumptions,
-					school.Value.SchoolCapacityPublishedAdmissionsNumber					
-					)));
+				school.Value
+				//new SchoolDetails(school.Value.Urn, school.Value.SchoolName)
+				//{
+				//	ProposedNewSchoolName = school.Value.ProposedNewSchoolName,
+				//	ProjectedPupilNumbersYear1 = school.Value.ProjectedPupilNumbersYear1,
+				//	ProjectedPupilNumbersYear2 = school.Value.ProjectedPupilNumbersYear2,
+				//	ProjectedPupilNumbersYear3 = school.Value.ProjectedPupilNumbersYear3,
+				//	SchoolCapacityAssumptions = school.Value.SchoolCapacityAssumptions,
+				//	SchoolCapacityPublishedAdmissionsNumber = school.Value.SchoolCapacityPublishedAdmissionsNumber
+				//	}
+				));
 		}
 
 		return new CommandSuccessResult();
