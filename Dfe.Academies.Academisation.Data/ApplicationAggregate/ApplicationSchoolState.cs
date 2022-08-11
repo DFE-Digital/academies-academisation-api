@@ -8,6 +8,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate;
 public class ApplicationSchoolState : BaseEntity
 {
 	public int Urn { get; set; }
+	public string  SchoolName { get; set; }
 	public string? ProposedNewSchoolName { get; set; }
 	// future pupil numbers
 	public int? ProjectedPupilNumbersYear1 { get; set; }
@@ -33,7 +34,7 @@ public class ApplicationSchoolState : BaseEntity
 
 	public SchoolDetails MapToDomain()
 	{
-		return new SchoolDetails(Urn)
+		return new SchoolDetails(Urn, SchoolName)
 		{
 			ProposedNewSchoolName = ProposedNewSchoolName,
 			ProjectedPupilNumbersYear1 = ProjectedPupilNumbersYear1,

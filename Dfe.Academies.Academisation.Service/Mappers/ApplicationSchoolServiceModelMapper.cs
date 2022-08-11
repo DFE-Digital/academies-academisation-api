@@ -10,7 +10,8 @@ internal static class ApplicationSchoolServiceModelMapper
 	{
 		return new(
 			school.Id,
-			school.Details.Urn
+			school.Details.Urn,
+			school.Details.SchoolName
 		)
 		{ 
 			ProposedNewSchoolName = school.Details.ProposedNewSchoolName,
@@ -24,14 +25,30 @@ internal static class ApplicationSchoolServiceModelMapper
 
 	internal static SchoolDetails ToDomain(this ApplicationSchoolServiceModel serviceModel)
 	{
-		return new(
-			serviceModel.Urn,
-			serviceModel.ProposedNewSchoolName,
-			serviceModel.ProjectedPupilNumbersYear1,
-			serviceModel.ProjectedPupilNumbersYear2,
-			serviceModel.ProjectedPupilNumbersYear3,
-			serviceModel.SchoolCapacityAssumptions,
-			serviceModel.SchoolCapacityPublishedAdmissionsNumber
-		);
+		return new(serviceModel.Urn, serviceModel.SchoolName)
+		{
+			SchoolConversionApproverContactEmail = serviceModel.SchoolConversionApproverContactEmail,
+			SchoolConversionApproverContactName = serviceModel.SchoolConversionApproverContactName,
+			SchoolConversionMainContactOtherTelephone = serviceModel.SchoolConversionMainContactOtherTelephone,
+			SchoolConversionMainContactOtherRole = serviceModel.SchoolConversionMainContactOtherRole,
+			SchoolConversionMainContactOtherName = serviceModel.SchoolConversionMainContactOtherName,
+			SchoolConversionMainContactOtherEmail = serviceModel.SchoolConversionMainContactOtherEmail,
+			SchoolConversionContactHeadTel = serviceModel.SchoolConversionContactHeadTel,
+			SchoolConversionContactHeadName = serviceModel.SchoolConversionContactHeadName,
+			SchoolConversionContactHeadEmail = serviceModel.SchoolConversionContactHeadEmail,
+			SchoolConversionContactChairEmail = serviceModel.SchoolConversionContactChairEmail,
+			SchoolConversionContactChairName = serviceModel.SchoolConversionContactChairName,
+			SchoolConversionContactChairTel = serviceModel.SchoolConversionContactChairTel,
+			SchoolConversionContactRole = serviceModel.SchoolConversionContactRole,
+			ApplicationJoinTrustReason = serviceModel.ApplicationJoinTrustReason,
+			SchoolConversionTargetDate =	serviceModel.SchoolConversionTargetDate,
+			SchoolConversionTargetDateExplained = serviceModel.SchoolConversionTargetDateExplained,
+			ProposedNewSchoolName = serviceModel.ProposedNewSchoolName,
+			ProjectedPupilNumbersYear1 = serviceModel.ProjectedPupilNumbersYear1,
+			ProjectedPupilNumbersYear2 = serviceModel.ProjectedPupilNumbersYear2,
+			ProjectedPupilNumbersYear3 = serviceModel.ProjectedPupilNumbersYear3,
+			SchoolCapacityAssumptions = serviceModel.SchoolCapacityAssumptions,
+			SchoolCapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber
+		};
 	}
 }
