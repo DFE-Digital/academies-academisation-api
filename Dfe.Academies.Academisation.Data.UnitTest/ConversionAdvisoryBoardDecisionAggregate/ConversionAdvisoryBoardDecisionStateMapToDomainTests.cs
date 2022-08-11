@@ -44,10 +44,12 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 			state.Decision,
 			state.ApprovedConditionsSet,
 			state.ApprovedConditionsDetails,
-			state.DeclinedReasons!.Select(reason => reason.Reason).ToList(),
-			state.DeclinedOtherReason,
-			state.DeferredReasons!.Select(reason => reason.Reason).ToList(),
-			state.DeferredOtherReason,
+			state.DeclinedReasons!
+				.Select(reason => new AdvisoryBoardDeclinedReasonDetails(reason.Reason, reason.Details))
+				.ToList(),
+			state.DeferredReasons!
+				.Select(reason => new AdvisoryBoardDeferredReasonDetails(reason.Reason, reason.Details))
+				.ToList(),
 			state.AdvisoryBoardDecisionDate,
 			state.DecisionMadeBy
 		);

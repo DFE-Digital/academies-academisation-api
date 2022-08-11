@@ -17,9 +17,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 	private const int ConversionProjectId = 1;
 	
 	private readonly ConversionAdvisoryBoardDecisionFactory _target = new();
-
-	private string GetRandomString => _faker.Random.String(1, 20, '\u0020', '\u007f');
-
+	
 	[Fact]
 	public void DecisionIsInvalid___ReturnsValidationErrorResult()
 	{
@@ -41,9 +39,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			true,
-			GetRandomString,
-			null,
-			null,
+			_faker.Lorem.Sentence(),
 			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),
