@@ -8,4 +8,5 @@ public class ConversionAdvisoryBoardDecisionDeclinedReasonState : BaseEntity
 {
 	public int AdvisoryBoardDecisionId { get; set; }
 	public AdvisoryBoardDeclinedReason Reason { get; init; }
+	public string Details { get; init; } = null!;
 }

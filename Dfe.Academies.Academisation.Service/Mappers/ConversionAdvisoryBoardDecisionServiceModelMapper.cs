@@ -16,9 +16,7 @@ internal static class ConversionAdvisoryBoardDecisionServiceModelMapper
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
 			DeclinedReasons = decision.AdvisoryBoardDecisionDetails.DeclinedReasons,
-			DeclinedOtherReason = decision.AdvisoryBoardDecisionDetails.DeclinedOtherReason,
 			DeferredReasons = decision.AdvisoryBoardDecisionDetails.DeferredReasons,
-			DeferredOtherReason = decision.AdvisoryBoardDecisionDetails.DeferredOtherReason,
 			AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy
 		};

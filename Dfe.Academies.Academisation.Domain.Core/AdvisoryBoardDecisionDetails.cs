@@ -5,10 +5,8 @@ public record AdvisoryBoardDecisionDetails(
 	AdvisoryBoardDecision Decision,
 	bool? ApprovedConditionsSet,
 	string? ApprovedConditionsDetails,
-	List<AdvisoryBoardDeclinedReason>? DeclinedReasons,
-	string? DeclinedOtherReason,
-	List<AdvisoryBoardDeferredReason>? DeferredReasons,
-	string? DeferredOtherReason,
+	List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons,
+	List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons,
 	DateTime AdvisoryBoardDecisionDate,
 	DecisionMadeBy DecisionMadeBy
 );
