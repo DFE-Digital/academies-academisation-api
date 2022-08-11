@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
@@ -35,7 +36,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		 	.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
 		
 		//Act & Assert
-		await Assert.ThrowsAsync<DbUpdateConcurrencyException>(() => query.Execute(_mockDecision.Object));
+		await Assert.ThrowsAsync<ApplicationException>(() => query.Execute(_mockDecision.Object));
 	}
 
 	[Fact]
@@ -68,6 +69,8 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 					.With(d => d.ApprovedConditionsSet, !existingDecision.ApprovedConditionsSet)
 					.Create());
 
+		await _context.ConversionAdvisoryBoardDecisions.LoadAsync();
+		
 		//Act
 		await query.Execute(_mockDecision.Object);
 		
