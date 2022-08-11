@@ -18,8 +18,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			ProjectedPupilNumbersYear1 = school.Details.ProjectedPupilNumbersYear1,
 			ProjectedPupilNumbersYear2 = school.Details.ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = school.Details.ProjectedPupilNumbersYear3,
-			SchoolCapacityAssumptions = school.Details.SchoolCapacityAssumptions,
-			SchoolCapacityPublishedAdmissionsNumber = school.Details.SchoolCapacityPublishedAdmissionsNumber
+			SchoolCapacityAssumptions = school.Details.CapacityAssumptions,
+			SchoolCapacityPublishedAdmissionsNumber = school.Details.CapacityPublishedAdmissionsNumber
 		};
 	}
 
@@ -27,28 +27,28 @@ internal static class ApplicationSchoolServiceModelMapper
 	{
 		return new(serviceModel.Urn, serviceModel.SchoolName)
 		{
-			SchoolConversionApproverContactEmail = serviceModel.SchoolConversionApproverContactEmail,
-			SchoolConversionApproverContactName = serviceModel.SchoolConversionApproverContactName,
-			SchoolConversionMainContactOtherTelephone = serviceModel.SchoolConversionMainContactOtherTelephone,
-			SchoolConversionMainContactOtherRole = serviceModel.SchoolConversionMainContactOtherRole,
-			SchoolConversionMainContactOtherName = serviceModel.SchoolConversionMainContactOtherName,
-			SchoolConversionMainContactOtherEmail = serviceModel.SchoolConversionMainContactOtherEmail,
-			SchoolConversionContactHeadTel = serviceModel.SchoolConversionContactHeadTel,
-			SchoolConversionContactHeadName = serviceModel.SchoolConversionContactHeadName,
-			SchoolConversionContactHeadEmail = serviceModel.SchoolConversionContactHeadEmail,
-			SchoolConversionContactChairEmail = serviceModel.SchoolConversionContactChairEmail,
-			SchoolConversionContactChairName = serviceModel.SchoolConversionContactChairName,
-			SchoolConversionContactChairTel = serviceModel.SchoolConversionContactChairTel,
-			SchoolConversionContactRole = serviceModel.SchoolConversionContactRole,
+			ApproverContactEmail = serviceModel.SchoolConversionApproverContactEmail,
+			ApproverContactName = serviceModel.SchoolConversionApproverContactName,
+			MainContactOtherTelephone = serviceModel.SchoolConversionMainContactOtherTelephone,
+			MainContactOtherRole = serviceModel.SchoolConversionMainContactOtherRole,
+			MainContactOtherName = serviceModel.SchoolConversionMainContactOtherName,
+			MainContactOtherEmail = serviceModel.SchoolConversionMainContactOtherEmail,
+			ContactHeadTel = serviceModel.SchoolConversionContactHeadTel,
+			ContactHeadName = serviceModel.SchoolConversionContactHeadName,
+			ContactHeadEmail = serviceModel.SchoolConversionContactHeadEmail,
+			ContactChairEmail = serviceModel.SchoolConversionContactChairEmail,
+			ContactChairName = serviceModel.SchoolConversionContactChairName,
+			ContactChairTel = serviceModel.SchoolConversionContactChairTel,
+			ContactRole = serviceModel.SchoolConversionContactRole,
 			ApplicationJoinTrustReason = serviceModel.ApplicationJoinTrustReason,
-			SchoolConversionTargetDate =	serviceModel.SchoolConversionTargetDate,
-			SchoolConversionTargetDateExplained = serviceModel.SchoolConversionTargetDateExplained,
+			ConversionTargetDate =	serviceModel.SchoolConversionTargetDate,
+			ConversionTargetDateExplained = serviceModel.SchoolConversionTargetDateExplained,
 			ProposedNewSchoolName = serviceModel.ProposedNewSchoolName,
 			ProjectedPupilNumbersYear1 = serviceModel.ProjectedPupilNumbersYear1,
 			ProjectedPupilNumbersYear2 = serviceModel.ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = serviceModel.ProjectedPupilNumbersYear3,
-			SchoolCapacityAssumptions = serviceModel.SchoolCapacityAssumptions,
-			SchoolCapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber
+			CapacityAssumptions = serviceModel.SchoolCapacityAssumptions,
+			CapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber
 		};
 	}
 }

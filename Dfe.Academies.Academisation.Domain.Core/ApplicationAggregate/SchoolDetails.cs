@@ -4,28 +4,28 @@ public record SchoolDetails(
 	int Urn,
 	string SchoolName,
 	// contact details
-	string? SchoolConversionContactHeadName = null,
-	string? SchoolConversionContactHeadEmail = null,
-	string? SchoolConversionContactHeadTel = null,
-	string? SchoolConversionContactChairName = null,
-	string? SchoolConversionContactChairEmail = null,
-	string? SchoolConversionContactChairTel = null,
-	string? SchoolConversionContactRole = null, // "headteacher", "chair of governing body", "someone else"
-	string? SchoolConversionMainContactOtherName = null,
-	string? SchoolConversionMainContactOtherEmail = null,
-	string? SchoolConversionMainContactOtherTelephone = null,
-	string? SchoolConversionMainContactOtherRole = null,
-	string? SchoolConversionApproverContactName = null,
-	string? SchoolConversionApproverContactEmail = null,
+	string? ContactHeadName = null,
+	string? ContactHeadEmail = null,
+	string? ContactHeadTel = null,
+	string? ContactChairName = null,
+	string? ContactChairEmail = null,
+	string? ContactChairTel = null,
+	string? ContactRole = null, // "headteacher", "chair of governing body", "someone else"
+	string? MainContactOtherName = null,
+	string? MainContactOtherEmail = null,
+	string? MainContactOtherTelephone = null,
+	string? MainContactOtherRole = null,
+	string? ApproverContactName = null,
+	string? ApproverContactEmail = null,
 	// conversion details
-	DateTime? SchoolConversionTargetDate = null,
-	string? SchoolConversionTargetDateExplained = null,
+	DateTime? ConversionTargetDate = null,
+	string? ConversionTargetDateExplained = null,
 	string? ProposedNewSchoolName = null,
 	string? ApplicationJoinTrustReason = null,
 	// future pupil numbers
 	int? ProjectedPupilNumbersYear1 = null,
 	int? ProjectedPupilNumbersYear2 = null,
 	int? ProjectedPupilNumbersYear3 = null,
-	string? SchoolCapacityAssumptions = null,
-	int? SchoolCapacityPublishedAdmissionsNumber = null
+	string? CapacityAssumptions = null,
+	int? CapacityPublishedAdmissionsNumber = null
 );
