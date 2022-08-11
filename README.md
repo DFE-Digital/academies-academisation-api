@@ -6,6 +6,11 @@ This is the API for persisted data related to academisation:
 * Advisory Board Decisions on Conversions
 
 ## Architecture
+This API is intended to own the business logic and 
+store data within the Academisation Domain, which fits within the responsibilities owned by the Regional Services Division:
+
+![Domain Contexts](./domain-contexts.png)
+
 The architecture of this solution is based on:
 * Domain Driven Design
 * Hexagon Architecture
@@ -14,7 +19,7 @@ The key aspiration of this architecture is to remove any references to technical
 
 The following diagram shows the relationship between the projects in the solution:
 
-![Layer Architecture](./domain-hexagon.png)
+![Domain/Hexagon Architecture](./domain-hexagon.png)
 
 ## Development Setup
 
