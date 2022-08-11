@@ -1,5 +1,36 @@
 # academisation api
- Api for  academisation
+This is the API for persisted data related to academisation:
+
+* Applications to Become an Academy
+* Conversion Projects
+* Advisory Board Decisions on Conversions
+
+## Context
+
+This API is intended to own the business logic and 
+store data related to Preparing for Academisation: the process by which a Maintained School becomes an Academy. This fits within the responsibilities owned by the Regional Services Division:
+
+![Domain Contexts](./domain-contexts.png)
+
+## Architecture
+The architecture of this solution is based on:
+* Domain Driven Design
+* Hexagon Architecture
+
+The key aspiration of this architecture is to remove any references to technical frameworks (database implementations, web interfaces) from the Domain Layer, so that this layer can focus on the pure logic.  
+
+The following diagram shows the relationship between the projects in the solution:
+
+![Domain/Hexagon Architecture](./domain-hexagon.png)
+
+Each of the layers in this architecture has a distinct set of responsibilities:
+
+| Layer   | Responsibility |
+|---------|----------------|
+| Web     | Mapping to HTTP |
+| Service | Co-ordination of a complete operation |
+| Domain  | Validation and Mutation |
+| Data    | Persistence |
 
 ## Development Setup
 
