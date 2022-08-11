@@ -18,7 +18,6 @@ public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisi
 		var state = await _context.ConversionAdvisoryBoardDecisions
 			.Include(s => s.DeclinedReasons)
 			.Include(s => s.DeferredReasons)
-			.AsNoTracking()
 			.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
 			
 		return state?.MapToDomain();
