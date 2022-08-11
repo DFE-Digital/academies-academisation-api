@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bogus;
+using Bogus.DataSets;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -11,10 +12,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionAdvisoryBoardDec
 public class ConversionAdvisoryBoardDecisionValidatorTests
 {
 	private readonly Faker _faker = new();
+
 	private const int ConversionProjectId = 1;
 	
 	private readonly ConversionAdvisoryBoardDecisionValidator _validator = new();
-	private string GetRandomString => _faker.Random.String(1, 20, '\u0020', '\u007f');
 
 	[Theory]
 	[InlineData(true)]
@@ -26,9 +27,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			approvedConditionsSet,
-			approvedConditionsSet ? GetRandomString : null,
-			null,
-			null,
+			approvedConditionsSet ? _faker.Lorem.Sentence() : null,
 			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),
@@ -42,24 +41,22 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 
 	}
 	
-	[Theory]
-	[InlineData(true)]
-	[InlineData(false)]
-	private void DecisionIsDeclined_AndDetailsAreValid___ReturnsValidResult(bool declinedOtherSet)
+	[Fact]
+	private void DecisionIsDeclined_AndDetailsAreValid___ReturnsValidResult()
 	{
 		// Arrange
-		List<AdvisoryBoardDeclinedReason> declinedReasons = declinedOtherSet
-			? new() {AdvisoryBoardDeclinedReason.Other}
-			: new() {AdvisoryBoardDeclinedReason.Performance};
-	
+		List<AdvisoryBoardDeclinedReasonDetails> declinedReasons = new()
+		{
+			new(AdvisoryBoardDeclinedReason.Other, _faker.Lorem.Sentence()),
+			new(AdvisoryBoardDeclinedReason.Finance, _faker.Lorem.Sentence())
+		};
+			
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			declinedReasons,
-			declinedOtherSet ? GetRandomString : null,
-			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -71,25 +68,23 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		Assert.True(result.IsValid);
 	}
 	
-	[Theory]
-	[InlineData(true)]
-	[InlineData(false)]
-	private void DecisionIsDeferred_AndDetailsAreValid___ReturnsValidResult(bool deferredOtherSet)
+	[Fact]
+	private void DecisionIsDeferred_AndDetailsAreValid___ReturnsValidResult()
 	{
 		// Arrange
-		List<AdvisoryBoardDeferredReason> deferredReasons = deferredOtherSet
-			? new() {AdvisoryBoardDeferredReason.Other}
-			: new() {AdvisoryBoardDeferredReason.PerformanceConcerns};
-	
+		List<AdvisoryBoardDeferredReasonDetails> deferredReasons = new()
+		{
+			new(AdvisoryBoardDeferredReason.Other, _faker.Lorem.Sentence()),
+			new(AdvisoryBoardDeferredReason.PerformanceConcerns, _faker.Lorem.Sentence())
+		};
+
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
 			null,
-			null,
 			deferredReasons,
-			deferredOtherSet ? GetRandomString : null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	
@@ -108,8 +103,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			false,
-			null,
-			null,
 			null,
 			null,
 			null,
@@ -140,8 +133,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			null,
 			null,
-			null,
-			null,
 			DateTime.UtcNow.AddDays(1),
 			_faker.PickRandom<DecisionMadeBy>());
 		
@@ -165,8 +156,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
-			null,
-			null,
 			null,
 			null,
 			null,
@@ -202,8 +191,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			value,
 			null,
 			null,
-			null,
-			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	
@@ -228,9 +215,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			ConversionProjectId,
 			AdvisoryBoardDecision.Approved,
 			false,
-			GetRandomString,
-			null,
-			null,
+			_faker.Lorem.Sentence(),
 			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),
@@ -258,9 +243,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
-			new() { AdvisoryBoardDeclinedReason.Finance },
-			null,
-			null,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) },
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -288,9 +271,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			false,
 			null,
 			null,
-			null,
-			new() { AdvisoryBoardDeferredReason.PerformanceConcerns },
-			null,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	
@@ -314,8 +295,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
-			null,
-			null,
 			null,
 			null,
 			null,
@@ -347,8 +326,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			new(),
 			null,
-			null,
-			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	
@@ -369,8 +346,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	[InlineData(null)]
 	[InlineData("")]
 	[InlineData("  ")]
-	private void DecisionIsDeclined_DeclinedReasonsContainsOther_DeclinedOtherReasonIsEmpty___ReturnsInvalidResult(
-		string declinedOtherReason)
+	private void DecisionIsDeclined_DeclinedReasonsContainsDetails_WithEmptyDetailsString___ReturnsInvalidResult(
+		string declinedReasonDetails)
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
@@ -378,9 +355,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
-			new() {AdvisoryBoardDeclinedReason.Other},
-			declinedOtherReason,
-			null,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeclinedReason>(), declinedReasonDetails) },
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -394,39 +369,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason))
+				     == $"{nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)}[0]."
+				     +  $"{nameof(AdvisoryBoardDeclinedReasonDetails.Details)}")
 		);
 	}
-	
-	[Fact]
-	private void DecisionIsDeclined_DeclinedReasonsDoesNotContainOther_DeclinedOtherReasonIsNotEmpty___ReturnsInvalidResult()
-	{
-		//Arrange
-		AdvisoryBoardDecisionDetails details = new(
-			ConversionProjectId,
-			AdvisoryBoardDecision.Declined,
-			null,
-			null,
-			new() {AdvisoryBoardDeclinedReason.Performance},
-			GetRandomString,
-			null,
-			null,
-			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>());
-	
-		// Act
-		var result = _validator.Validate(details);
 
-		//Assert
-		Assert.Multiple(
-			() => Assert.False(result.IsValid),
-			() => Assert.NotEmpty(result.Errors),
-			() => Assert.Contains(result.Errors,
-				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedOtherReason))
-		);
-	}
-	
 	[Fact]
 	private void DecisionIsDeclined_ApprovedConditionsSetIsNotNull___ReturnsInvalidResult()
 	{
@@ -436,9 +383,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			AdvisoryBoardDecision.Declined,
 			false,
 			null,
-			new() {AdvisoryBoardDeclinedReason.Performance},
-			null,
-			null,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) },
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
@@ -466,9 +411,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			null,
 			null,
-			null,
-			new() { AdvisoryBoardDeferredReason.PerformanceConcerns },
-			null,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	
@@ -485,7 +428,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		);
 	}
 	
-	
 	[Fact]
 	private void DecisionIsDeferred_DeferredReasonsIsNull___ReturnsInvalidResult()
 	{
@@ -493,8 +435,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Deferred,
-			null,
-			null,
 			null,
 			null,
 			null,
@@ -524,8 +464,6 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
-			null,
-			null,
 			new(),
 			null,
 			DateTime.UtcNow.AddDays(-1),
@@ -548,19 +486,17 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	[InlineData(null)]
 	[InlineData("")]
 	[InlineData("  ")]
-	private void DecisionIsDeferred_DeferredReasonsContainsOther_DeferredOtherReasonIsEmpty___ReturnsInvalidResult(
-		string declinedOtherReason)
+	private void DecisionIsDeferred_DeferredReasonsContainsDetails_WithEmptyDetailsString___ReturnsInvalidResult(
+		string deferredReasonDetails)
 	{
 		// Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecision.Deferred,
+			AdvisoryBoardDecision.Declined,
 			null,
 			null,
 			null,
-			null,
-			new() {AdvisoryBoardDeferredReason.Other},
-			declinedOtherReason,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), deferredReasonDetails) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	
@@ -573,36 +509,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason))
-		);
-	}
-	
-	[Fact]
-	private void DecisionIsDeferred_DeferredReasonsDoesNotContainOther_DeferredOtherReasonIsNotEmpty___ReturnsInvalidResult()
-	{
-		//Arrange
-		AdvisoryBoardDecisionDetails details = new(
-			ConversionProjectId,
-			AdvisoryBoardDecision.Deferred,
-			null,
-			null,
-			null,
-			null,
-			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
-			GetRandomString,
-			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>());
-	
-		// Act
-		var result = _validator.Validate(details);
-
-		//Assert
-		Assert.Multiple(
-			() => Assert.False(result.IsValid),
-			() => Assert.NotEmpty(result.Errors),
-			() => Assert.Contains(result.Errors,
-				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredOtherReason))
+				     == $"{nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)}[0]."
+				     +  $"{nameof(AdvisoryBoardDeferredReasonDetails.Details)}")
 		);
 	}
 	
@@ -616,9 +524,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			false,
 			null,
 			null,
-			null,
-			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
-			null,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	
@@ -641,13 +547,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
-			AdvisoryBoardDecision.Declined,
+			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
-			new(),
-			null,
-			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
-			null,
+			new() { new(_faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) },
+			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 	

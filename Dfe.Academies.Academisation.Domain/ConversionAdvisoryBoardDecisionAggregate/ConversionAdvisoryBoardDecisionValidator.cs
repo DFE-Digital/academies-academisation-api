@@ -53,19 +53,9 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 		return $" or {conditional} is {value}";
 	}
 
-	private static string AndContainsSuffix(string target, string value)
+	private static string InNestedPropertySuffix(string collection, string index)
 	{
-		return $" and {target} contains {value}";
-	}
-
-	private static string AndNotContainsSuffix(string target, string value)
-	{
-		return $" and {target} does not contain {value}";
-	}
-
-	private static string OrNotContainsSuffix(string target, string value)
-	{
-		return $" or {target} does not contain {value}";
+		return $" for element {index} in {collection}";
 	}
 
 	private static string NotSetDateMessage(string target)
@@ -134,7 +124,6 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 	private void ValidateDeclinedDecision()
 	{
 		RuleFor(details => details.DeclinedReasons)
-			.NotNull()
 			.NotEmpty()			
 			.When(details => details.Decision is AdvisoryBoardDecision.Declined)
 			.WithMessage(details =>
@@ -154,37 +143,16 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 					nameof(details.Decision),
 					nameof(AdvisoryBoardDecision.Declined)));
 
-		RuleFor(details => details.DeclinedOtherReason)
-			.NotEmpty()
-			.When(details =>
-				details.Decision is AdvisoryBoardDecision.Declined &&
-				details.DeclinedReasons is not null &&
-				details.DeclinedReasons.Contains(AdvisoryBoardDeclinedReason.Other))
-			.WithMessage(details =>
-				NotEmptyMessage(
-					nameof(details.DeclinedOtherReason)) +
-				WhenIsSuffix(
-					nameof(details.Decision),
-					nameof(AdvisoryBoardDecision.Declined)) +
-				AndContainsSuffix(
-					nameof(details.DeclinedReasons),
-					nameof(AdvisoryBoardDeclinedReason.Other)));
-
-		RuleFor(details => details.DeclinedOtherReason)
-			.Null()
-			.When(details =>
-				details.Decision is not AdvisoryBoardDecision.Declined ||
-				(details.DeclinedReasons is not null &&
-				 !details.DeclinedReasons.Contains(AdvisoryBoardDeclinedReason.Other)))
-			.WithMessage(details =>
-				NullMessage(
-					nameof(details.DeclinedOtherReason)) +
-				WhenIsNotSuffix(
-					nameof(details.Decision),
-					nameof(AdvisoryBoardDecision.Declined)) +
-				OrNotContainsSuffix(
-					nameof(details.DeclinedReasons),
-					nameof(AdvisoryBoardDeclinedReason.Other)));
+		RuleForEach(details => details.DeclinedReasons)
+			.ChildRules(reason => reason
+				.RuleFor(r => r.Details)
+				.NotEmpty()
+				.WithMessage(r =>
+					NotEmptyMessage(
+						nameof(r.Details)) +
+					InNestedPropertySuffix(
+						nameof(AdvisoryBoardDecisionDetails.DeferredReasons),
+						"{CollectionIndex}")));
 	}
 
 	private void ValidateDeferredDecision()
@@ -208,39 +176,18 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 					nameof(details.DeferredReasons)) +
 				WhenIsNotSuffix(
 					nameof(details.Decision),
-					nameof(AdvisoryBoardDecision.Deferred)));
+					nameof(AdvisoryBoardDecision.Declined)));
 
-		RuleFor(details => details.DeferredOtherReason)
-			.NotEmpty()
-			.When(details =>
-				details.Decision is AdvisoryBoardDecision.Deferred &&
-				details.DeferredReasons is not null &&
-				details.DeferredReasons!.Contains(AdvisoryBoardDeferredReason.Other))
-			.WithMessage(details =>
-				NotEmptyMessage(
-					nameof(details.DeferredOtherReason)) +
-				WhenIsSuffix(
-					nameof(details.Decision),
-					nameof(AdvisoryBoardDecision.Deferred)) +
-				AndContainsSuffix(
-					nameof(details.DeferredReasons),
-					nameof(AdvisoryBoardDeferredReason.Other)));
-
-		RuleFor(details => details.DeferredOtherReason)
-			.Null()
-			.When(details =>
-				details.Decision is not AdvisoryBoardDecision.Deferred ||
-				(details.DeferredReasons is not null &&
-				 !details.DeferredReasons.Contains(AdvisoryBoardDeferredReason.Other)))
-			.WithMessage(details =>
-				NullMessage(
-					nameof(details.DeferredOtherReason)) +
-				WhenIsNotSuffix(
-					nameof(details.Decision),
-					nameof(AdvisoryBoardDecision.Deferred)) +
-				AndNotContainsSuffix(
-					nameof(details.DeferredReasons),
-					nameof(AdvisoryBoardDeferredReason.Other)));
+		RuleForEach(details => details.DeferredReasons)
+			.ChildRules(reason => reason
+				.RuleFor(r => r.Details)
+				.NotEmpty()
+				.WithMessage(r =>
+					NotEmptyMessage(
+						nameof(r.Details)) +
+					InNestedPropertySuffix(
+						nameof(AdvisoryBoardDecisionDetails.DeferredReasons),
+						"{CollectionIndex}")));
 	}
 
 	private void ValidateDecisionDate()
