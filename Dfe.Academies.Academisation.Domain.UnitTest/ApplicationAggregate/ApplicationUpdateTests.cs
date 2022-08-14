@@ -15,6 +15,17 @@ public class ApplicationUpdateTests
 	private readonly Faker _faker = new();
 	private readonly Fixture _fixture = new();
 
+	public ApplicationUpdateTests()
+	{
+		// default settings to construct valid SchoolDetails
+		_fixture.Customize<SchoolDetails>(sd =>
+			sd.With(s => s.ApproverContactEmail, _faker.Internet.Email())
+			.With(s => s.ContactChairEmail, _faker.Internet.Email())
+			.With(s => s.ContactHeadEmail, _faker.Internet.Email())
+			.With(s => s.MainContactOtherEmail, _faker.Internet.Email())
+	);
+
+	}
 	[Fact]
 	public void ExistingIsSubmitted___ValidationErrorReturned()
 	{
@@ -110,9 +121,8 @@ public class ApplicationUpdateTests
 		Assert.Equal(expectedPropertyName, error.PropertyName);
 	}
 
-	[Theory]
-	[MemberData(nameof(SchoolUpdateDetails))]
-	public void ExistingInProgress_SchoolChanged___SuccessReturned_Mutated(SchoolDetails schoolUpdateDetails)
+	[Fact]
+	public void SchoolChanged___SuccessReturned_Mutated()
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
@@ -122,7 +132,7 @@ public class ApplicationUpdateTests
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
 
 		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
-		BuildSchoolUpdate(schoolsUpdated[randomSchoolKey], schoolUpdateDetails);
+		BuildSchoolUpdate(schoolsUpdated[randomSchoolKey], _fixture.Create<SchoolDetails>());
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -144,16 +154,15 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
-	public void ExistingInProgress_SchoolAdded___SuccessReturned_Mutated()
+	public void ExistingInProgress_UpdateExistingSchoolInvalidEmail___ValidationError()
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
-		var newSchool = _fixture.Create<SchoolDetails>();
-
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
-		schoolsUpdated.Add(_fixture.Create<int>() , newSchool);
-		
+		var randomKey = PickRandomElement(schoolsUpdated.Keys);
+		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with { ContactHeadEmail  = "ghjk" };
+
 		Application expected = new(
 			subject.ApplicationId,
 			subject.ApplicationType,
@@ -169,8 +178,10 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		Assert.IsAssignableFrom<CommandSuccessResult>(result);
-		Assert.Equivalent(expected, subject);
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(nameof(SchoolDetails.ContactHeadEmail), error.PropertyName);
 	}
 
 	private Application BuildApplication(ApplicationStatus applicationStatus, ApplicationType? type = null)
@@ -184,32 +195,32 @@ public class ApplicationUpdateTests
 
 		return application;
 	}
-	private static SchoolDetails BuildSchoolUpdate(SchoolDetails details, SchoolDetails schoolUpdateDetails)
+	private static SchoolDetails BuildSchoolUpdate(SchoolDetails existingDetails, SchoolDetails schoolUpdateDetails)
 	{
-		return details with
+		return existingDetails with
 		{
-			ApproverContactEmail = schoolUpdateDetails.ApproverContactEmail ?? details.ApproverContactEmail,
-			ApproverContactName = schoolUpdateDetails.ApproverContactName ?? details.ApproverContactName,
-			ContactChairEmail = schoolUpdateDetails.ContactChairEmail ?? details.ApproverContactEmail,
-			ContactChairName = schoolUpdateDetails.ContactChairName ?? details.ContactChairName,
-			ContactChairTel = schoolUpdateDetails.ContactChairTel ?? details.ContactChairTel,
-			ContactHeadEmail = schoolUpdateDetails.ContactHeadEmail ?? details.ContactHeadEmail,
-			ContactHeadName = schoolUpdateDetails.ContactHeadName ?? details.ContactHeadName,
-			ContactHeadTel = schoolUpdateDetails.ContactHeadTel ?? details.ContactHeadTel,
-			ContactRole = schoolUpdateDetails.ContactRole ?? details.ContactRole,
-			MainContactOtherEmail = schoolUpdateDetails.MainContactOtherEmail ?? details.MainContactOtherEmail,
-			MainContactOtherName = schoolUpdateDetails.MainContactOtherName ?? details.MainContactOtherName,
-			MainContactOtherTelephone = schoolUpdateDetails.MainContactOtherTelephone ?? details.MainContactOtherTelephone,
-			MainContactOtherRole = schoolUpdateDetails.MainContactOtherRole ?? details.MainContactOtherRole,
-			ConversionTargetDate = schoolUpdateDetails.ConversionTargetDate ?? details.ConversionTargetDate,
-			ConversionTargetDateExplained = schoolUpdateDetails.ConversionTargetDateExplained ?? details.ConversionTargetDateExplained,
-			ProposedNewSchoolName = schoolUpdateDetails.ProposedNewSchoolName ?? details.ProposedNewSchoolName,
-			ProjectedPupilNumbersYear1 = schoolUpdateDetails.ProjectedPupilNumbersYear1 ?? details.ProjectedPupilNumbersYear1,
-			ProjectedPupilNumbersYear2 = schoolUpdateDetails.ProjectedPupilNumbersYear2 ?? details.ProjectedPupilNumbersYear2,
-			ProjectedPupilNumbersYear3 = schoolUpdateDetails.ProjectedPupilNumbersYear3 ?? details.ProjectedPupilNumbersYear3,
-			CapacityAssumptions = schoolUpdateDetails.CapacityAssumptions ?? details.CapacityAssumptions,
-			CapacityPublishedAdmissionsNumber = schoolUpdateDetails.CapacityPublishedAdmissionsNumber ?? details.CapacityPublishedAdmissionsNumber,
-			ApplicationJoinTrustReason = schoolUpdateDetails.ApplicationJoinTrustReason ?? details.ApplicationJoinTrustReason
+			ApproverContactEmail = schoolUpdateDetails.ApproverContactEmail ?? existingDetails.ApproverContactEmail,
+			ApproverContactName = schoolUpdateDetails.ApproverContactName ?? existingDetails.ApproverContactName,
+			ContactChairEmail = schoolUpdateDetails.ContactChairEmail ?? existingDetails.ApproverContactEmail,
+			ContactChairName = schoolUpdateDetails.ContactChairName ?? existingDetails.ContactChairName,
+			ContactChairTel = schoolUpdateDetails.ContactChairTel ?? existingDetails.ContactChairTel,
+			ContactHeadEmail = schoolUpdateDetails.ContactHeadEmail ?? existingDetails.ContactHeadEmail,
+			ContactHeadName = schoolUpdateDetails.ContactHeadName ?? existingDetails.ContactHeadName,
+			ContactHeadTel = schoolUpdateDetails.ContactHeadTel ?? existingDetails.ContactHeadTel,
+			ContactRole = schoolUpdateDetails.ContactRole ?? existingDetails.ContactRole,
+			MainContactOtherEmail = schoolUpdateDetails.MainContactOtherEmail ?? existingDetails.MainContactOtherEmail,
+			MainContactOtherName = schoolUpdateDetails.MainContactOtherName ?? existingDetails.MainContactOtherName,
+			MainContactOtherTelephone = schoolUpdateDetails.MainContactOtherTelephone ?? existingDetails.MainContactOtherTelephone,
+			MainContactOtherRole = schoolUpdateDetails.MainContactOtherRole ?? existingDetails.MainContactOtherRole,
+			ConversionTargetDate = schoolUpdateDetails.ConversionTargetDate ?? existingDetails.ConversionTargetDate,
+			ConversionTargetDateExplained = schoolUpdateDetails.ConversionTargetDateExplained ?? existingDetails.ConversionTargetDateExplained,
+			ProposedNewSchoolName = schoolUpdateDetails.ProposedNewSchoolName ?? existingDetails.ProposedNewSchoolName,
+			ProjectedPupilNumbersYear1 = schoolUpdateDetails.ProjectedPupilNumbersYear1 ?? existingDetails.ProjectedPupilNumbersYear1,
+			ProjectedPupilNumbersYear2 = schoolUpdateDetails.ProjectedPupilNumbersYear2 ?? existingDetails.ProjectedPupilNumbersYear2,
+			ProjectedPupilNumbersYear3 = schoolUpdateDetails.ProjectedPupilNumbersYear3 ?? existingDetails.ProjectedPupilNumbersYear3,
+			CapacityAssumptions = schoolUpdateDetails.CapacityAssumptions ?? existingDetails.CapacityAssumptions,
+			CapacityPublishedAdmissionsNumber = schoolUpdateDetails.CapacityPublishedAdmissionsNumber ?? existingDetails.CapacityPublishedAdmissionsNumber,
+			ApplicationJoinTrustReason = schoolUpdateDetails.ApplicationJoinTrustReason ?? existingDetails.ApplicationJoinTrustReason
 		};
 	}
 
@@ -221,13 +232,6 @@ public class ApplicationUpdateTests
 		var updated = PickRandomElement(otherTypes);
 
 		yield return new object[] { updated, existing };
-	}
-
-	public static IEnumerable<object[]> SchoolUpdateDetails()
-	{
-		var update = new Fixture().Build<SchoolDetails>()
-			.Create();
-		yield return new object[] { update };
 	}
 
 	private static T PickRandomElement<T>(IEnumerable<T> list)

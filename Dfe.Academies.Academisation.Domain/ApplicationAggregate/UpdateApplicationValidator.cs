@@ -37,5 +37,13 @@ internal class UpdateApplicationValidator
 			(updated, existing) => new ContributorPair(updated.Value, existing.Details)))
 			.SetValidator(new UpdateContributorValidator())
 			.OverridePropertyName(nameof(Contributor));
+
+		RuleForEach(x => x.schools.Join(
+			x.existing.Schools,
+			updated => updated.Key,
+			existing => existing.Id,
+			(updated, existing) => new SchoolDetailsPair(updated.Value, existing.Details)))
+			.SetValidator(new UpdateSchoolValidator())
+			.OverridePropertyName(nameof(School));
 	}
 }
