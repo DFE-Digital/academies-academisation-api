@@ -9,6 +9,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
 	[Route("application")]
 	[ApiController]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class ApplicationController : ControllerBase
 	{
 		private readonly IApplicationCreateCommand _applicationCreateCommand;

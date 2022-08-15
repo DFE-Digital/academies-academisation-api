@@ -9,6 +9,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers;
 
 [Route("/conversion-project/advisory-board-decision")]
 [ApiController]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class ConversionAdvisoryBoardDecisionController : ControllerBase
 {
     private readonly IAdvisoryBoardDecisionCreateCommand _decisionCreateCommand;
