@@ -37,8 +37,9 @@ builder.Services.AddSwaggerGen(config =>
 });
 	
 builder.Services.AddHealthChecks();
+
 builder.Services.AddOptions<AuthenticationConfig>();
-var apiKeysConfiguration = builder.Configuration.GetRequiredSection("AuthenticationConfig");
+var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfig");
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
