@@ -27,10 +27,11 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
-			new(),
 			null,
-			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
-			null,
+			new()
+			{
+				new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence())
+			},
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -56,10 +57,11 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
-			new(),
 			null,
-			new() {AdvisoryBoardDeferredReason.PerformanceConcerns},
-			null,
+			new()
+			{
+				new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence())
+			},
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -75,20 +77,14 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			Decision = expectedDetails.Decision,
 			ApprovedConditionsSet = expectedDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = expectedDetails.ApprovedConditionsDetails,
-			DeclinedReasons = new(
-				expectedDetails.DeclinedReasons!
-					.Select(reason => new ConversionAdvisoryBoardDecisionDeclinedReasonState
-					{
-						Reason = reason
-					})),
-			DeclinedOtherReason = expectedDetails.DeclinedOtherReason,
+			DeclinedReasons = null,
 			DeferredReasons = new(
 				expectedDetails.DeferredReasons!
 					.Select(reason => new ConversionAdvisoryBoardDecisionDeferredReasonState
 					{
-						Reason = reason
+						Reason = reason.Reason,
+						Details = reason.Details,
 					})),
-			DeferredOtherReason = expectedDetails.DeferredOtherReason,
 			AdvisoryBoardDecisionDate = expectedDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = expectedDetails.DecisionMadeBy
 		};

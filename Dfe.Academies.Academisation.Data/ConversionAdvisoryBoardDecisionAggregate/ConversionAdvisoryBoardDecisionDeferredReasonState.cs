@@ -8,4 +8,5 @@ public class ConversionAdvisoryBoardDecisionDeferredReasonState : BaseEntity
 {
 	public int AdvisoryBoardDecisionId { get; set; }
 	public AdvisoryBoardDeferredReason Reason { get; init; }
+	public string Details { get; init; } = null!;
 }

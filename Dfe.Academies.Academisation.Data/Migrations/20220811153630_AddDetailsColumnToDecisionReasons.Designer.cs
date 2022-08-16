@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20220811153630_AddDetailsColumnToDecisionReasons")]
+    partial class AddDetailsColumnToDecisionReasons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,65 +33,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApproverContactEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApproverContactName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CapacityAssumptions")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CapacityPublishedAdmissionsNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContactChairEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactChairName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactChairTel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactHeadEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactHeadName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactHeadTel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactRole")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("ConversionApplicationId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ConversionTargetDateExplained")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("JoinTrustReason")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("MainContactOtherEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainContactOtherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainContactOtherRole")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainContactOtherTelephone")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProjectedPupilNumbersYear1")
                         .HasColumnType("int");
@@ -103,9 +54,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("ProposedNewSchoolName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SchoolName")
-                        .IsRequired()
+                    b.Property<string>("SchoolCapacityAssumptions")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SchoolCapacityPublishedAdmissionsNumber")
+                        .HasColumnType("int");
 
                     b.Property<int>("Urn")
                         .HasColumnType("int");

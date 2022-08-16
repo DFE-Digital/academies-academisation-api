@@ -21,8 +21,6 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			null,
 			null,
 			null,
-			null,
-			null,
 			timestamp.AddDays(-1),
 			DecisionMadeBy.DirectorGeneral);
 
@@ -50,9 +48,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
     		AdvisoryBoardDecisionDetails details = new(
 	            1,
     			AdvisoryBoardDecision.Approved,
-    			true,
-    			null,
-    			null,
+	            null,
     			null,
     			null,
     			null,

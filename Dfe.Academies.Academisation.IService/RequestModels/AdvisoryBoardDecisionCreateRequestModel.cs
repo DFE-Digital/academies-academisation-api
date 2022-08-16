@@ -8,10 +8,8 @@ public class AdvisoryBoardDecisionCreateRequestModel
 	public AdvisoryBoardDecision Decision { get; init; }
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
-	public List<AdvisoryBoardDeclinedReason>? DeclinedReasons { get; init; }
-	public string? DeclinedOtherReason { get; init; }
-	public List<AdvisoryBoardDeferredReason>? DeferredReasons { get; init; }
-	public string? DeferredOtherReason { get; set; }
+	public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; }
+	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
 	public DateTime AdvisoryBoardDecisionDate { get; set; }
 	public DecisionMadeBy DecisionMadeBy { get; set; }
 }
