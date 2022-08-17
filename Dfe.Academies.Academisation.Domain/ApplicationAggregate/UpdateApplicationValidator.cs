@@ -38,6 +38,10 @@ internal class UpdateApplicationValidator
 			.SetValidator(new UpdateContributorValidator())
 			.OverridePropertyName(nameof(Contributor));
 
+		RuleForEach(x => x.schools.Select(s => s.Value))
+			.SetValidator(new SchoolValidator())
+			.OverridePropertyName(nameof(SchoolDetails));
+
 		RuleForEach(x => x.schools.Join(
 			x.existing.Schools,
 			updated => updated.Key,

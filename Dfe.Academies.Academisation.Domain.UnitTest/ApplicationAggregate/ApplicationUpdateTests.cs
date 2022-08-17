@@ -122,12 +122,10 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
-	public void SchoolChanged___SuccessReturned_Mutated()
+	public void UpdateExistingSchool___SuccessReturned_Mutated()
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
-
-		var contributorsUpdated = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
 
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
 
@@ -138,7 +136,7 @@ public class ApplicationUpdateTests
 			subject.ApplicationId,
 			subject.ApplicationType,
 			subject.ApplicationStatus,
-			contributorsUpdated,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			schoolsUpdated);
 
 		// act
@@ -154,7 +152,68 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
-	public void ExistingInProgress_UpdateExistingSchoolInvalidEmail___ValidationError()
+	public void AddNewSchool___SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+
+		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
+		var newKey = schoolsUpdated.Keys.Max() + 1;
+		schoolsUpdated.Add(newKey, _fixture.Create<SchoolDetails>());
+
+		Application expected = new(
+			subject.ApplicationId,
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated
+			);
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c=> c.Details),
+			schoolsUpdated);
+
+		// assert
+		Assert.IsAssignableFrom<CommandSuccessResult>(result);
+		Assert.Equivalent(expected, subject);
+	}
+
+	[Fact]
+	public void AddNewSchoolInvalidEmail___SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+
+		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
+		schoolsUpdated.Add(0, _fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail"});
+
+		Application expected = new(
+			subject.ApplicationId,
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated
+			);
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(nameof(SchoolDetails.ApproverContactEmail), error.PropertyName);
+	}
+
+	[Fact]
+	public void UpdateExistingSchoolInvalidEmail___ValidationError()
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
