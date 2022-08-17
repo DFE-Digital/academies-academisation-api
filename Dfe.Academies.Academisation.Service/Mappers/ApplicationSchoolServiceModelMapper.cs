@@ -13,7 +13,23 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.Urn,
 			school.Details.SchoolName
 		)
-		{ 
+		{
+			SchoolConversionApproverContactEmail = school.Details.ApproverContactEmail,
+			SchoolConversionApproverContactName = school.Details.ApproverContactName,
+			SchoolConversionMainContactOtherEmail = school.Details.MainContactOtherEmail,
+			SchoolConversionMainContactOtherName = school.Details.MainContactOtherName,
+			SchoolConversionMainContactOtherTelephone = school.Details.MainContactOtherTelephone,
+			SchoolConversionMainContactOtherRole = school.Details.MainContactOtherRole,
+			SchoolConversionContactHeadTel = school.Details.ContactHeadTel,
+			SchoolConversionContactHeadName = school.Details.ContactHeadName,
+			SchoolConversionContactHeadEmail = school.Details.ContactHeadEmail,
+			SchoolConversionContactChairEmail = school.Details.ContactChairEmail,
+			SchoolConversionContactChairName = school.Details.ContactChairName,
+			SchoolConversionContactChairTel = school.Details.ContactChairTel,
+			SchoolConversionContactRole = school.Details.ContactRole,
+			ApplicationJoinTrustReason = school.Details.ApplicationJoinTrustReason,
+			SchoolConversionTargetDate = school.Details.ConversionTargetDate,
+			SchoolConversionTargetDateExplained = school.Details.ConversionTargetDateExplained,
 			ProposedNewSchoolName = school.Details.ProposedNewSchoolName,
 			ProjectedPupilNumbersYear1 = school.Details.ProjectedPupilNumbersYear1,
 			ProjectedPupilNumbersYear2 = school.Details.ProjectedPupilNumbersYear2,
