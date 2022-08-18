@@ -34,6 +34,17 @@ Each of the layers in this architecture has a distinct set of responsibilities:
 
 ## Development Setup
 
+### Authentication
+
+When running locally the webapp does not require authentication.  Once deployed the
+authentication keys should be provided as a configuration setting.  For best practice
+this key should be provided as a UUID:
+
+```
+"AuthenticationConfig__ApiKeys__0" -> "<Key>"
+"AuthenticationConfig__ApiKeys__1" -> "<Key>"
+```
+
 ### EntityFramework and Migrations
 
 Set your database connection string in user secrets:

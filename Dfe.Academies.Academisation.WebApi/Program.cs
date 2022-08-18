@@ -15,6 +15,8 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
+using Dfe.Academies.Academisation.WebApi.Middleware;
+using Dfe.Academies.Academisation.WebApi.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +38,9 @@ builder.Services.AddSwaggerGen(config =>
 	
 builder.Services.AddHealthChecks();
 
-builder.Services.Configure<HelloWorldOptions>(builder.Configuration.GetSection(HelloWorldOptions.Name));
+builder.Services.AddOptions<AuthenticationConfig>();
+var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfig");
+builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
@@ -63,12 +67,20 @@ builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],
 		optionsBuilder => { optionsBuilder.MigrationsHistoryTable("__EFMigrationsHistory", "academisation"); }));
 
+builder.Services.AddSwaggerGen();
+builder.Services.ConfigureOptions<SwaggerOptions>();
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthorization();
+
+if (!app.Environment.IsDevelopment())
+{
+	app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
+}
 
 app.MapHealthChecks("/healthcheck");
 app.MapControllers();
