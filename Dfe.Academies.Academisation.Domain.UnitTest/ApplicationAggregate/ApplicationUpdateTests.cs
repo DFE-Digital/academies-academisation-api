@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate;
 
@@ -15,11 +16,23 @@ public class ApplicationUpdateTests
 	private readonly Faker _faker = new();
 	private readonly Fixture _fixture = new();
 
+	public ApplicationUpdateTests()
+	{
+		// default settings to construct valid SchoolDetails
+		_fixture.Customize<SchoolDetails>(sd =>
+			sd.With(s => s.ApproverContactEmail, _faker.Internet.Email())
+			.With(s => s.ContactChairEmail, _faker.Internet.Email())
+			.With(s => s.ContactHeadEmail, _faker.Internet.Email())
+			.With(s => s.MainContactOtherEmail, _faker.Internet.Email())
+	);
+
+	}
 	[Fact]
-	public void ExistingIsSubmitted___ValidationErrorReturned()
+	public void ExistingIsSubmitted___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		var subject = BuildApplication(ApplicationStatus.Submitted);
+		Application subject = BuildApplication(ApplicationStatus.Submitted);
+		Application expected = Clone(subject);
 
 		// act
 		var result = subject.Update(
@@ -30,17 +43,18 @@ public class ApplicationUpdateTests
 
 		// assert
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		var expectedPropertyName = nameof(Application.ApplicationStatus);
-		Assert.Equal(expectedPropertyName, error.PropertyName);
+		Assert.Equal(nameof(Application.ApplicationStatus), error.PropertyName);
+		
+		Assert.Equivalent(expected, subject);
 	}
 
 	[Fact]
-	public void StatusChanged___ValidationErrorReturned()
+	public void StatusChanged___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		var subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application expected = Clone(subject);
 
 		// act
 		var result = subject.Update(
@@ -51,18 +65,19 @@ public class ApplicationUpdateTests
 
 		// assert
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		var expectedPropertyName = nameof(Application.ApplicationStatus);
-		Assert.Equal(expectedPropertyName, error.PropertyName);
+		Assert.Equal(nameof(Application.ApplicationStatus), error.PropertyName);
+		
+		Assert.Equivalent(expected, subject);
 	}
 
 	[Theory]
 	[MemberData(nameof(BuildRandomDifferentTypes))]
-	public void TypeChanged___ValidationErrorReturned(ApplicationType updated, ApplicationType existing)
+	public void TypeChanged___ValidationErrorReturned_NotMutated(ApplicationType updated, ApplicationType existing)
 	{
 		// arrange
-		var subject = BuildApplication(ApplicationStatus.InProgress, existing);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, existing);
+		Application expected = Clone(subject);
 
 		// act
 		var result = subject.Update(
@@ -73,27 +88,26 @@ public class ApplicationUpdateTests
 
 		// assert
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		var expectedPropertyName = nameof(Application.ApplicationType);
-		Assert.Equal(expectedPropertyName, error.PropertyName);
+		Assert.Equal(nameof(Application.ApplicationType), error.PropertyName);
+		
+		Assert.Equivalent(expected, subject);
 	}
 
 	[Fact]
-	public void ContributorEmailChanged___ValidationErrorReturned()
+	public void ContributorEmailChanged___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		var subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application expected = Clone(subject);
 
 		var contributors = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
 		int randomContributorKey = PickRandomElement(contributors.Keys);
-		contributors[randomContributorKey] = new ContributorDetails(
-			contributors[randomContributorKey].FirstName,
-			contributors[randomContributorKey].LastName,
-			_faker.Internet.Email(),
-			contributors[randomContributorKey].Role,
-			contributors[randomContributorKey].OtherRoleName);
-
+		contributors[randomContributorKey] = contributors[randomContributorKey] with
+		{
+			EmailAddress = _faker.Internet.Email()
+		};
+		
 		int index = contributors.Keys.ToList().IndexOf(randomContributorKey);
 
 		var result = subject.Update(
@@ -104,56 +118,78 @@ public class ApplicationUpdateTests
 
 		// assert
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		var expectedPropertyName = $"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}";
-		Assert.Equal(expectedPropertyName, error.PropertyName);
-	}
-
-	[Theory]
-	[MemberData(nameof(SchoolUpdateDetails))]
-	public void ExistingInProgress_SchoolChanged___SuccessReturned_Mutated(SchoolDetails schoolUpdateDetails)
-	{
-		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
-
-		var contributorsUpdated = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
-
-		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
-
-		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
-		BuildSchoolUpdate(schoolsUpdated[randomSchoolKey], schoolUpdateDetails);
-
-		Application expected = new(
-			subject.ApplicationId,
-			subject.ApplicationType,
-			subject.ApplicationStatus,
-			contributorsUpdated,
-			schoolsUpdated);
-
-		// act
-		var result = subject.Update(
-			subject.ApplicationType,
-			subject.ApplicationStatus,
-			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			schoolsUpdated);
-
-		// assert
-		Assert.IsAssignableFrom<CommandSuccessResult>(result);
+		Assert.Equal(
+			$"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}",
+			error.PropertyName);
+		
 		Assert.Equivalent(expected, subject);
 	}
 
 	[Fact]
-	public void ExistingInProgress_SchoolAdded___SuccessReturned_Mutated()
+	public void AddNewSchoolInvalidEmail___ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application expected = Clone(subject);
+
+		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
+		schoolsUpdated.Add(0, _fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail"});
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(nameof(SchoolDetails.ApproverContactEmail), error.PropertyName);
+		
+		Assert.Equivalent(expected, subject);
+	}
+
+	[Fact]
+	public void UpdateExistingSchoolInvalidEmail___ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application expected = Clone(subject);
+
+		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
+		var randomKey = PickRandomElement(schoolsUpdated.Keys);
+		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with { ContactHeadEmail  = "ghjk" };
+		
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(nameof(SchoolDetails.ContactHeadEmail), error.PropertyName);
+		
+		Assert.Equivalent(expected, subject);
+	}
+	
+	[Fact]
+	public void UpdateExistingSchool___SuccessReturned_Mutated()
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
-		var newSchool = _fixture.Create<SchoolDetails>();
-
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
-		schoolsUpdated.Add(_fixture.Create<int>() , newSchool);
+
+		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
+		SchoolDetails updatedSchool = _fixture.Create<SchoolDetails>() with { Urn = schoolsUpdated[randomSchoolKey].Urn };
 		
+		schoolsUpdated[randomSchoolKey] = updatedSchool;
+
 		Application expected = new(
 			subject.ApplicationId,
 			subject.ApplicationType,
@@ -169,10 +205,47 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		Assert.IsAssignableFrom<CommandSuccessResult>(result);
+		AssertCommandSuccess(result);
+		
 		Assert.Equivalent(expected, subject);
+		var schoolMutated = Assert.Single(subject.Schools, s => s.Id == randomSchoolKey);
+		Assert.Equivalent(updatedSchool, schoolMutated.Details);
 	}
 
+	[Fact]
+	public void AddNewSchool___SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+
+		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
+		var newKey = schoolsUpdated.Keys.Max() + 1;
+		var schoolDetailsToAdd = _fixture.Create<SchoolDetails>();
+		schoolsUpdated.Add(newKey, schoolDetailsToAdd);
+
+		Application expected = new(
+			subject.ApplicationId,
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated
+			);
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c=> c.Details),
+			schoolsUpdated);
+
+		// assert
+		AssertCommandSuccess(result);
+		
+		Assert.Equivalent(expected, subject);
+		var addedSchool = Assert.Single(subject.Schools, s => s.Id == newKey);
+		Assert.Equivalent(schoolDetailsToAdd, addedSchool.Details);
+	}
+	
 	private Application BuildApplication(ApplicationStatus applicationStatus, ApplicationType? type = null)
 	{
 		Application application = new(
@@ -184,35 +257,7 @@ public class ApplicationUpdateTests
 
 		return application;
 	}
-	private static SchoolDetails BuildSchoolUpdate(SchoolDetails details, SchoolDetails schoolUpdateDetails)
-	{
-		return details with
-		{
-			ApproverContactEmail = schoolUpdateDetails.ApproverContactEmail ?? details.ApproverContactEmail,
-			ApproverContactName = schoolUpdateDetails.ApproverContactName ?? details.ApproverContactName,
-			ContactChairEmail = schoolUpdateDetails.ContactChairEmail ?? details.ApproverContactEmail,
-			ContactChairName = schoolUpdateDetails.ContactChairName ?? details.ContactChairName,
-			ContactChairTel = schoolUpdateDetails.ContactChairTel ?? details.ContactChairTel,
-			ContactHeadEmail = schoolUpdateDetails.ContactHeadEmail ?? details.ContactHeadEmail,
-			ContactHeadName = schoolUpdateDetails.ContactHeadName ?? details.ContactHeadName,
-			ContactHeadTel = schoolUpdateDetails.ContactHeadTel ?? details.ContactHeadTel,
-			ContactRole = schoolUpdateDetails.ContactRole ?? details.ContactRole,
-			MainContactOtherEmail = schoolUpdateDetails.MainContactOtherEmail ?? details.MainContactOtherEmail,
-			MainContactOtherName = schoolUpdateDetails.MainContactOtherName ?? details.MainContactOtherName,
-			MainContactOtherTelephone = schoolUpdateDetails.MainContactOtherTelephone ?? details.MainContactOtherTelephone,
-			MainContactOtherRole = schoolUpdateDetails.MainContactOtherRole ?? details.MainContactOtherRole,
-			ConversionTargetDate = schoolUpdateDetails.ConversionTargetDate ?? details.ConversionTargetDate,
-			ConversionTargetDateExplained = schoolUpdateDetails.ConversionTargetDateExplained ?? details.ConversionTargetDateExplained,
-			ProposedNewSchoolName = schoolUpdateDetails.ProposedNewSchoolName ?? details.ProposedNewSchoolName,
-			ProjectedPupilNumbersYear1 = schoolUpdateDetails.ProjectedPupilNumbersYear1 ?? details.ProjectedPupilNumbersYear1,
-			ProjectedPupilNumbersYear2 = schoolUpdateDetails.ProjectedPupilNumbersYear2 ?? details.ProjectedPupilNumbersYear2,
-			ProjectedPupilNumbersYear3 = schoolUpdateDetails.ProjectedPupilNumbersYear3 ?? details.ProjectedPupilNumbersYear3,
-			CapacityAssumptions = schoolUpdateDetails.CapacityAssumptions ?? details.CapacityAssumptions,
-			CapacityPublishedAdmissionsNumber = schoolUpdateDetails.CapacityPublishedAdmissionsNumber ?? details.CapacityPublishedAdmissionsNumber,
-			ApplicationJoinTrustReason = schoolUpdateDetails.ApplicationJoinTrustReason ?? details.ApplicationJoinTrustReason
-		};
-	}
-
+	
 	public static IEnumerable<object[]> BuildRandomDifferentTypes()
 	{
 		var existing = new Fixture().Create<ApplicationType>();
@@ -223,17 +268,32 @@ public class ApplicationUpdateTests
 		yield return new object[] { updated, existing };
 	}
 
-	public static IEnumerable<object[]> SchoolUpdateDetails()
-	{
-		var update = new Fixture().Build<SchoolDetails>()
-			.Create();
-		yield return new object[] { update };
-	}
-
-	private static T PickRandomElement<T>(IEnumerable<T> list)
+	private static T PickRandomElement<T>(IEnumerable<T> enumerable)
 	{
 		Random random = new();
-		return list.ElementAt(random.Next(1, list.Count()));
+		var list = enumerable.ToList();
+		return list.ElementAt(random.Next(1, list.Count));
+	}
+
+	private static void AssertCommandSuccess(CommandResult commandResult)
+	{
+		if (commandResult is CommandValidationErrorResult validationErrorResult)
+		{
+			throw new FailException("Validation Error:" + string.Join(";", validationErrorResult.ValidationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+		}
+
+		Assert.IsAssignableFrom<CommandSuccessResult>(commandResult);
+	}
+
+	private static Application Clone(Application application)
+	{
+		return new(
+			application.ApplicationId,
+			application.ApplicationType,
+			application.ApplicationStatus,
+			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			application.Schools.ToDictionary(s => s.Id, s => s.Details)
+		);
 	}
 }
 
