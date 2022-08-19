@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
 
 			// Act
-			var result = await _subject.Execute(applicationServiceModel.ApplicationId+1, applicationServiceModel);
+			var result = await _subject.Execute(applicationServiceModel.ApplicationId + 1, applicationServiceModel);
 
 			// Assert
 			Assert.IsType<CommandValidationErrorResult>(result);
@@ -41,7 +41,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		{
 			// Arrange
 			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
-			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId)).ReturnsAsync((IApplication?) null);
+			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId)).ReturnsAsync((IApplication?)null);
 
 			// Act
 			var result = await _subject.Execute(applicationServiceModel.ApplicationId, applicationServiceModel);
@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		public async Task UpdateValid___SuccessResultReturned()
 		{
 			// Arrange
-			Mock<IApplication> applicationMock = new ();
+			Mock<IApplication> applicationMock = new();
 			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
 			applicationMock.Setup(x => x.Update(
 				It.IsAny<ApplicationType>(),

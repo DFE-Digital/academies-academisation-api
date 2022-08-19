@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 {
 	public class ApplicationGetQueryTests
 	{
-		private readonly Mock<IApplicationGetDataQuery> _mockDataQuery = new ();
+		private readonly Mock<IApplicationGetDataQuery> _mockDataQuery = new();
 
 		[Fact]
 		public async Task WhenDataQueryReturnIsNull___ReturnsNull()

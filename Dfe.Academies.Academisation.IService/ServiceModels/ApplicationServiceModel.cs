@@ -2,7 +2,7 @@
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels;
 
-public record ApplicationServiceModel (
+public record ApplicationServiceModel(
 	int ApplicationId,
 	ApplicationType ApplicationType,
 	ApplicationStatus ApplicationStatus,

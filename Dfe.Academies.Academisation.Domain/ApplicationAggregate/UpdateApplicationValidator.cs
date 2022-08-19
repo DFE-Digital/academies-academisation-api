@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-internal class UpdateApplicationValidator 
+internal class UpdateApplicationValidator
 	: AbstractValidator<(
 		ApplicationType type,
 		ApplicationStatus status,

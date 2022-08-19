@@ -48,7 +48,7 @@ public class ApplicationStateTests
 				}
 			}
 		};
-		
+
 		//Act
 		var result = ApplicationState.MapFromDomain(mockApplication.Object);
 

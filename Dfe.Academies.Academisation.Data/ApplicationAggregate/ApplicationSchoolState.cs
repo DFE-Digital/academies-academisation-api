@@ -1,6 +1,6 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dfe.Academies.Academisation.Data.ApplicationAggregate;
 
@@ -73,7 +73,7 @@ public class ApplicationSchoolState : BaseEntity
 	public SchoolDetails MapToDomain()
 	{
 		return new SchoolDetails(Urn, SchoolName)
-		{			
+		{
 			ContactRole = ContactRole,
 			ApproverContactEmail = ApproverContactEmail,
 			ApproverContactName = ApproverContactName,

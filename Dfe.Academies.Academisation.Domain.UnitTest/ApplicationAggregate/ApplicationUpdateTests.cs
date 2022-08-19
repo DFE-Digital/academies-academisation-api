@@ -45,7 +45,7 @@ public class ApplicationUpdateTests
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
 		Assert.Equal(nameof(Application.ApplicationStatus), error.PropertyName);
-		
+
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -67,7 +67,7 @@ public class ApplicationUpdateTests
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
 		Assert.Equal(nameof(Application.ApplicationStatus), error.PropertyName);
-		
+
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -90,7 +90,7 @@ public class ApplicationUpdateTests
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
 		Assert.Equal(nameof(Application.ApplicationType), error.PropertyName);
-		
+
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -107,7 +107,7 @@ public class ApplicationUpdateTests
 		{
 			EmailAddress = _faker.Internet.Email()
 		};
-		
+
 		int index = contributors.Keys.ToList().IndexOf(randomContributorKey);
 
 		var result = subject.Update(
@@ -122,7 +122,7 @@ public class ApplicationUpdateTests
 		Assert.Equal(
 			$"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}",
 			error.PropertyName);
-		
+
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -134,7 +134,7 @@ public class ApplicationUpdateTests
 		Application expected = Clone(subject);
 
 		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
-		schoolsUpdated.Add(0, _fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail"});
+		schoolsUpdated.Add(0, _fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" });
 
 		// act
 		var result = subject.Update(
@@ -147,7 +147,7 @@ public class ApplicationUpdateTests
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
 		Assert.Contains(nameof(SchoolDetails.ApproverContactEmail), error.PropertyName);
-		
+
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -160,8 +160,8 @@ public class ApplicationUpdateTests
 
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
 		var randomKey = PickRandomElement(schoolsUpdated.Keys);
-		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with { ContactHeadEmail  = "ghjk" };
-		
+		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with { ContactHeadEmail = "ghjk" };
+
 		// act
 		var result = subject.Update(
 			subject.ApplicationType,
@@ -173,10 +173,10 @@ public class ApplicationUpdateTests
 		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
 		var error = Assert.Single(validationErrorResult.ValidationErrors);
 		Assert.Contains(nameof(SchoolDetails.ContactHeadEmail), error.PropertyName);
-		
+
 		Assert.Equivalent(expected, subject);
 	}
-	
+
 	[Fact]
 	public void UpdateExistingSchool___SuccessReturned_Mutated()
 	{
@@ -187,7 +187,7 @@ public class ApplicationUpdateTests
 
 		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
 		SchoolDetails updatedSchool = _fixture.Create<SchoolDetails>() with { Urn = schoolsUpdated[randomSchoolKey].Urn };
-		
+
 		schoolsUpdated[randomSchoolKey] = updatedSchool;
 
 		Application expected = new(
@@ -206,7 +206,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		AssertCommandSuccess(result);
-		
+
 		Assert.Equivalent(expected, subject);
 		var schoolMutated = Assert.Single(subject.Schools, s => s.Id == randomSchoolKey);
 		Assert.Equivalent(updatedSchool, schoolMutated.Details);
@@ -235,17 +235,17 @@ public class ApplicationUpdateTests
 		var result = subject.Update(
 			subject.ApplicationType,
 			subject.ApplicationStatus,
-			subject.Contributors.ToDictionary(c => c.Id, c=> c.Details),
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			schoolsUpdated);
 
 		// assert
 		AssertCommandSuccess(result);
-		
+
 		Assert.Equivalent(expected, subject);
 		var addedSchool = Assert.Single(subject.Schools, s => s.Id == newKey);
 		Assert.Equivalent(schoolDetailsToAdd, addedSchool.Details);
 	}
-	
+
 	private Application BuildApplication(ApplicationStatus applicationStatus, ApplicationType? type = null)
 	{
 		Application application = new(
@@ -257,7 +257,7 @@ public class ApplicationUpdateTests
 
 		return application;
 	}
-	
+
 	public static IEnumerable<object[]> BuildRandomDifferentTypes()
 	{
 		var existing = new Fixture().Create<ApplicationType>();
