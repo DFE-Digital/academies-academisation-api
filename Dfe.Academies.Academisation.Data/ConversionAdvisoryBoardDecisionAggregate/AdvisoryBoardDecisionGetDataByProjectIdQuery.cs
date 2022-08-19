@@ -19,7 +19,7 @@ public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisi
 			.Include(s => s.DeclinedReasons)
 			.Include(s => s.DeferredReasons)
 			.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
-			
+
 		return state?.MapToDomain();
 	}
 }

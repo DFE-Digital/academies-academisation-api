@@ -14,7 +14,7 @@ public abstract class TestAcademisationContext : IDisposable
 	{
 		_connection = new("Filename=:memory:");
 		_connection.Open();
-		
+
 		_contextOptions = new DbContextOptionsBuilder<AcademisationContext>()
 			.UseSqlite(_connection)
 			.Options;

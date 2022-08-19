@@ -10,36 +10,36 @@ namespace Dfe.Academies.Academisation.Service.Commands;
 
 public class AdvisoryBoardDecisionCreateCommand : IAdvisoryBoardDecisionCreateCommand
 {
-    private readonly IAdvisoryBoardDecisionCreateDataCommand _createDataCommand;
-    private readonly IConversionAdvisoryBoardDecisionFactory _factory;
+	private readonly IAdvisoryBoardDecisionCreateDataCommand _createDataCommand;
+	private readonly IConversionAdvisoryBoardDecisionFactory _factory;
 
-    public AdvisoryBoardDecisionCreateCommand(IConversionAdvisoryBoardDecisionFactory factory,
-        IAdvisoryBoardDecisionCreateDataCommand createDataCommand)
-    {
-        _createDataCommand = createDataCommand;
-        _factory = factory;
-    }
+	public AdvisoryBoardDecisionCreateCommand(IConversionAdvisoryBoardDecisionFactory factory,
+		IAdvisoryBoardDecisionCreateDataCommand createDataCommand)
+	{
+		_createDataCommand = createDataCommand;
+		_factory = factory;
+	}
 
-    public async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> Execute(
-        AdvisoryBoardDecisionCreateRequestModel requestModel)
-    {
-        var result = _factory.Create(requestModel.AsDomain());
+	public async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> Execute(
+		AdvisoryBoardDecisionCreateRequestModel requestModel)
+	{
+		var result = _factory.Create(requestModel.AsDomain());
 
-        return result switch
-        {
-            CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
-                await ExecuteDataCommand(successResult),
-            CreateValidationErrorResult<IConversionAdvisoryBoardDecision> errorResult =>
-                errorResult.MapToPayloadType<ConversionAdvisoryBoardDecisionServiceModel>(), 
-            _ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
-        };
-    }
+		return result switch
+		{
+			CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
+				await ExecuteDataCommand(successResult),
+			CreateValidationErrorResult<IConversionAdvisoryBoardDecision> errorResult =>
+				errorResult.MapToPayloadType<ConversionAdvisoryBoardDecisionServiceModel>(),
+			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
+		};
+	}
 
-    private async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> ExecuteDataCommand(
-        CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult)
-    {
-        await _createDataCommand.Execute(successResult.Payload);
-        
-        return successResult.MapToPayloadType(ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain);
-    }
+	private async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> ExecuteDataCommand(
+		CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult)
+	{
+		await _createDataCommand.Execute(successResult.Payload);
+
+		return successResult.MapToPayloadType(ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain);
+	}
 }

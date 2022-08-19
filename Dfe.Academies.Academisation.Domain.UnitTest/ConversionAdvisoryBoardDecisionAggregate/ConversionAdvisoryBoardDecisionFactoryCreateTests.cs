@@ -13,11 +13,11 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 {
 	private readonly Faker _faker = new();
 	private readonly Fixture _fixture = new();
-	
+
 	private const int ConversionProjectId = 1;
-	
+
 	private readonly ConversionAdvisoryBoardDecisionFactory _target = new();
-	
+
 	[Fact]
 	public void DecisionIsInvalid___ReturnsValidationErrorResult()
 	{
@@ -30,7 +30,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 		//Assert
 		Assert.IsType<CreateValidationErrorResult<IConversionAdvisoryBoardDecision>>(result);
 	}
-	
+
 	[Fact]
 	public void DecisionIsValid___ReturnsCreateSuccessResult()
 	{

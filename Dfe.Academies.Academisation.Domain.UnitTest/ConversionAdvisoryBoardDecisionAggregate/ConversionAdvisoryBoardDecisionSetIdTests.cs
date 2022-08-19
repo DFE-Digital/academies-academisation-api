@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionAdvisoryBoardDec
 public class ConversionAdvisoryBoardDecisionSetIdTests
 {
 	private readonly Fixture _fixture = new();
-	
+
 	[Fact]
 	public void IdHasAlreadyBeenSet___ThrowsException()
 	{
@@ -26,14 +26,14 @@ public class ConversionAdvisoryBoardDecisionSetIdTests
 	{
 		//Arrange
 		const int expectedId = 4;
-		
+
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
 		ConversionAdvisoryBoardDecision expected = new(expectedId, details, default, default);
 		ConversionAdvisoryBoardDecision target = new(default, details, default, default);
-		
+
 		//Act
 		target.SetId(expectedId);
-		
+
 		//Assert
 		Assert.Equivalent(expected, target);
 	}

@@ -16,13 +16,13 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 	{
 		public UnhandledCreateResult() : base(default) { }
 	}
-		
+
 	private readonly Fixture _fixture = new();
 
 	private readonly Mock<IAdvisoryBoardDecisionCreateDataCommand> _mockDataCommand = new();
 	private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory = new();
 	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
-		
+
 	[Fact]
 	public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
 	{
@@ -34,22 +34,22 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		_mockDecision
 			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
-			
+
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
-			
+
 		//Act
 		_ = await target.Execute(new());
 
 		//Assert
 		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
 	}
-		
+
 	[Fact]
 	public async Task RequestModelIsValid___ReturnsExpectedConversionAdvisoryBoardDecisionServiceModel()
 	{
 		//Arrange
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-			
+
 		var expected = new ConversionAdvisoryBoardDecisionServiceModel
 		{
 			ConversionProjectId = details.ConversionProjectId,
@@ -61,7 +61,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = details.DecisionMadeBy
 		};
-			
+
 		//Arrange
 		_mockDecisionFactory
 			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
@@ -70,16 +70,16 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		_mockDecision
 			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(details);
-			
+
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
-			
+
 		//Act
-		var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>) await target.Execute(new());
+		var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>)await target.Execute(new());
 
 		//Assert
 		Assert.Equivalent(expected, result.Payload);
 	}
-		
+
 	[Fact]
 	public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
 	{
@@ -89,22 +89,22 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			.Returns(new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(Enumerable.Empty<ValidationError>()));
 
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
-			
+
 		//Act
 		_ = await target.Execute(new());
-			
+
 		//Assert
 		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
 	}
-		
-	[Fact] 
+
+	[Fact]
 	public async Task FactoryReturnsUnhandledCreateResult___ThrowsException()
 	{
 		//Arrange
 		_mockDecisionFactory
 			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
 			.Returns(new UnhandledCreateResult());
-			
+
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 
 		//Act && Assert

@@ -19,7 +19,7 @@ public class AdvisoryBoardDecisionGetDataByDecisionIdQuery : IAdvisoryBoardDecis
 			.Include(s => s.DeclinedReasons)
 			.Include(s => s.DeferredReasons)
 			.SingleOrDefaultAsync(s => s.Id == decisionId);
-			
+
 		return state?.MapToDomain();
 	}
 }

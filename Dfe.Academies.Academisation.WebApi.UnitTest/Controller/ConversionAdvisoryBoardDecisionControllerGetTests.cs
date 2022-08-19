@@ -1,11 +1,11 @@
-﻿using AutoFixture;
+﻿using System.Threading.Tasks;
+using AutoFixture;
+using Dfe.Academies.Academisation.IService.Commands;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Threading.Tasks;
-using Dfe.Academies.Academisation.IService.Commands;
-using Dfe.Academies.Academisation.IService.Query;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller;
@@ -27,13 +27,13 @@ public class ConversionAdvisoryBoardDecisionControllerGetTests
 			.ReturnsAsync(data);
 
 		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object, 
+			_mockCreateCommand.Object,
 			_mockGetQuery.Object,
 			_mockUpdateCommand.Object);
 
 		//Act
 		var result = await subject.GetByProjectId(It.IsAny<int>());
-			
+
 		//Assert
 		var foundResult = Assert.IsType<OkObjectResult>(result.Result);
 		var foundValue = Assert.IsType<ConversionAdvisoryBoardDecisionServiceModel>(foundResult.Value);
@@ -48,13 +48,13 @@ public class ConversionAdvisoryBoardDecisionControllerGetTests
 			.ReturnsAsync(It.IsAny<ConversionAdvisoryBoardDecisionServiceModel>());
 
 		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object, 
+			_mockCreateCommand.Object,
 			_mockGetQuery.Object,
 			_mockUpdateCommand.Object);
-			
+
 		//Act
 		var result = await subject.GetByProjectId(It.IsAny<int>());
-			
+
 		//Assert
 		Assert.IsType<NotFoundResult>(result.Result);
 	}

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bogus;
-using Bogus.DataSets;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -14,7 +13,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 	private readonly Faker _faker = new();
 
 	private const int ConversionProjectId = 1;
-	
+
 	private readonly ConversionAdvisoryBoardDecisionValidator _validator = new();
 
 	[Theory]
@@ -35,12 +34,12 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 
 		// Act
 		var result = _validator.Validate(details);
-		
+
 		//Assert
 		Assert.True(result.IsValid);
 
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeclined_AndDetailsAreValid___ReturnsValidResult()
 	{
@@ -50,7 +49,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			new(AdvisoryBoardDeclinedReason.Other, _faker.Lorem.Sentence()),
 			new(AdvisoryBoardDeclinedReason.Finance, _faker.Lorem.Sentence())
 		};
-			
+
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			AdvisoryBoardDecision.Declined,
@@ -63,11 +62,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 
 		// Act
 		var result = _validator.Validate(details);
-		
+
 		//Assert
 		Assert.True(result.IsValid);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeferred_AndDetailsAreValid___ReturnsValidResult()
 	{
@@ -87,14 +86,14 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			deferredReasons,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
-		
+
 		//Assert
 		Assert.True(result.IsValid);
 	}
-	
+
 	[Fact]
 	private void AdvisoryBoardDecisionDateIsDefault___ReturnsInvalidResult()
 	{
@@ -108,7 +107,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			default,
 			_faker.PickRandom<DecisionMadeBy>());
-		
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -117,11 +116,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.False(result.IsValid),
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
-				e => e.PropertyName 
+				e => e.PropertyName
 				   == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate))
 			);
 	}
-	
+
 	[Fact]
 	private void AdvisoryBoardDecisionDateIsFutureDate___ReturnsInvalidResult()
 	{
@@ -135,7 +134,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(1),
 			_faker.PickRandom<DecisionMadeBy>());
-		
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -144,11 +143,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.False(result.IsValid),
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
-				e => e.PropertyName 
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate))
+				e => e.PropertyName
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsApproved_WhenApprovedConditionsSetIsNull___ReturnsInvalidResult()
 	{
@@ -162,7 +161,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -171,11 +170,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.False(result.IsValid),
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
-				e => e.PropertyName 
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
+				e => e.PropertyName
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
 		);
 	}
-	
+
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
@@ -193,7 +192,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -202,11 +201,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.False(result.IsValid),
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
-				e => e.PropertyName 
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails))
+				e => e.PropertyName
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsApproved_ApprovedConditionsSetIsFalse_ApprovedConditionsDetailsIsNotEmpty___ReturnsInvalidResult()
 	{
@@ -220,7 +219,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -229,11 +228,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.False(result.IsValid),
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
-				e => e.PropertyName 
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails))
+				e => e.PropertyName
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsApproved_DeclinedReasonsIsNotNullOrEmpty___ReturnsInvalidResult()
 	{
@@ -247,7 +246,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -256,11 +255,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.False(result.IsValid),
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
-				e => e.PropertyName 
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
+				e => e.PropertyName
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsApproved_AndDeferredReasonsIsNotNullOrEmpty___ReturnsInvalidResult()
 	{
@@ -274,7 +273,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -284,10 +283,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeclined_DeclinedReasonsIsNull___ReturnsInvalidResult()
 	{
@@ -301,7 +300,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -311,10 +310,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeclined_DeclinedReasonsIsEmpty___ReturnsInvalidResult()
 	{
@@ -328,7 +327,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -338,10 +337,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
 		);
 	}
-	
+
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
@@ -359,7 +358,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -369,8 +368,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == $"{nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)}[0]."
-				     +  $"{nameof(AdvisoryBoardDeclinedReasonDetails.Details)}")
+					 == $"{nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons)}[0]."
+					 + $"{nameof(AdvisoryBoardDeclinedReasonDetails.Details)}")
 		);
 	}
 
@@ -387,7 +386,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -397,10 +396,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeclined_DeferredReasonsIsNotNullOrEmpty___ReturnsInvalidResult()
 	{
@@ -414,7 +413,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -424,10 +423,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeferred_DeferredReasonsIsNull___ReturnsInvalidResult()
 	{
@@ -441,7 +440,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -451,10 +450,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeferred_DeferredReasonsIsEmpty___ReturnsInvalidResult()
 	{
@@ -468,7 +467,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -478,10 +477,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons))
 		);
 	}
-	
+
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]
@@ -499,7 +498,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), deferredReasonDetails) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -509,11 +508,11 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == $"{nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)}[0]."
-				     +  $"{nameof(AdvisoryBoardDeferredReasonDetails.Details)}")
+					 == $"{nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeferredReasons)}[0]."
+					 + $"{nameof(AdvisoryBoardDeferredReasonDetails.Details)}")
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeferred_ApprovedConditionsSetIsNotNull___ReturnsInvalidResult()
 	{
@@ -527,7 +526,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -537,10 +536,10 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
 		);
 	}
-	
+
 	[Fact]
 	private void DecisionIsDeferred_DeclinedReasonsIsNotNull___ReturnsInvalidResult()
 	{
@@ -554,7 +553,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			new() { new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) },
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
-	
+
 		// Act
 		var result = _validator.Validate(details);
 
@@ -564,7 +563,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				     == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
+					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.DeclinedReasons))
 		);
 	}
 }

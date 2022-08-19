@@ -13,7 +13,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 	{
 		//Arrange 
 		var timestamp = DateTime.UtcNow;
-		
+
 		AdvisoryBoardDecisionDetails details = new(
 			1,
 			AdvisoryBoardDecision.Approved,
@@ -24,11 +24,11 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			timestamp.AddDays(-1),
 			DecisionMadeBy.DirectorGeneral);
 
-		var updatedDetails = details with {DecisionMadeBy = DecisionMadeBy.Minister};
+		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
 
 		ConversionAdvisoryBoardDecision expected = new(1, updatedDetails, timestamp, timestamp);
 		ConversionAdvisoryBoardDecision target = new(1, details, timestamp, timestamp);
-		
+
 		//Act
 		var result = target.Update(updatedDetails);
 
@@ -38,35 +38,35 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			() => Assert.Equivalent(expected, target)
 		);
 	}
-	
+
 	[Fact]
-    	public void ValidatorReturnsValidationErrorResult___ReturnsCommandValidationErrorResult_DecisionNotMutated()
-    	{
-    		//Arrange 
-    		var timestamp = DateTime.UtcNow;
-            
-    		AdvisoryBoardDecisionDetails details = new(
-	            1,
-    			AdvisoryBoardDecision.Approved,
-	            null,
-    			null,
-    			null,
-    			null,
-    			timestamp.AddDays(-1),
-    			DecisionMadeBy.DirectorGeneral);
-    
-    		var updatedDetails = details with {DecisionMadeBy = DecisionMadeBy.Minister};
-    
-    		ConversionAdvisoryBoardDecision expected = new(1, details, timestamp, timestamp);
-    		ConversionAdvisoryBoardDecision target = new(1, details, timestamp, timestamp);
-    		
-    		//Act
-    		var result = target.Update(updatedDetails);
-    
-    		//Assert
-    		Assert.Multiple(
-    			() => Assert.IsType<CommandValidationErrorResult>(result),
-    			() => Assert.Equivalent(expected, target)
-    		);
-    	}
+	public void ValidatorReturnsValidationErrorResult___ReturnsCommandValidationErrorResult_DecisionNotMutated()
+	{
+		//Arrange 
+		var timestamp = DateTime.UtcNow;
+
+		AdvisoryBoardDecisionDetails details = new(
+			1,
+			AdvisoryBoardDecision.Approved,
+			null,
+			null,
+			null,
+			null,
+			timestamp.AddDays(-1),
+			DecisionMadeBy.DirectorGeneral);
+
+		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
+
+		ConversionAdvisoryBoardDecision expected = new(1, details, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision target = new(1, details, timestamp, timestamp);
+
+		//Act
+		var result = target.Update(updatedDetails);
+
+		//Assert
+		Assert.Multiple(
+			() => Assert.IsType<CommandValidationErrorResult>(result),
+			() => Assert.Equivalent(expected, target)
+		);
+	}
 }

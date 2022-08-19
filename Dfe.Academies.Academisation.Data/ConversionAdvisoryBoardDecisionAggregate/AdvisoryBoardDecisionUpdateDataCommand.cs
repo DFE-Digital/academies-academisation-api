@@ -11,11 +11,11 @@ public class AdvisoryBoardDecisionUpdateDataCommand : IAdvisoryBoardDecisionUpda
 	{
 		_context = context;
 	}
-	
+
 	public async Task Execute(IConversionAdvisoryBoardDecision decision)
 	{
 		var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
-		
+
 		_context.ReplaceTracked(decisionState);
 
 		await _context.SaveChangesAsync();

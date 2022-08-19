@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Data;
 
 public class AcademisationContext : DbContext
 {
-	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }	
+	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }
 	public DbSet<ApplicationState> Applications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
@@ -19,8 +19,8 @@ public class AcademisationContext : DbContext
 		SetModifiedAndCreatedDates();
 		return base.SaveChanges();
 	}
-	
-	public EntityEntry<T> ReplaceTracked<T>(T baseEntity) where T: BaseEntity
+
+	public EntityEntry<T> ReplaceTracked<T>(T baseEntity) where T : BaseEntity
 	{
 		var entity = ChangeTracker
 			.Entries<T>()
@@ -90,7 +90,7 @@ public class AcademisationContext : DbContext
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>()
 			.Property(e => e.DecisionMadeBy)
 			.HasConversion<string>();
-		
+
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>()
 			.Property(e => e.Reason)
 			.HasConversion<string>();

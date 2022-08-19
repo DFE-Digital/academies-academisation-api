@@ -1,4 +1,6 @@
-﻿using AutoFixture;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Commands;
@@ -7,8 +9,6 @@ using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller

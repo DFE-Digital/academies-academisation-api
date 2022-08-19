@@ -124,7 +124,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 	private void ValidateDeclinedDecision()
 	{
 		RuleFor(details => details.DeclinedReasons)
-			.NotEmpty()			
+			.NotEmpty()
 			.When(details => details.Decision is AdvisoryBoardDecision.Declined)
 			.WithMessage(details =>
 				NotEmptyMessage(
