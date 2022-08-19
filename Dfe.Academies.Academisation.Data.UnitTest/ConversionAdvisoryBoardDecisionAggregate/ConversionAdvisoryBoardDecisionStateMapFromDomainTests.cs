@@ -35,14 +35,14 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 		mockDecision
 			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(details);
-		
+
 		//Act
 		var result = ConversionAdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
 
 		//Assert
 		Assert.IsType<ConversionAdvisoryBoardDecisionState>(result);
 	}
-	
+
 	[Fact]
 	public void ShouldReturnExpectedConversionAdvisoryBoardDecisionState()
 	{
@@ -79,14 +79,14 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 						Reason = reason.Reason,
 						Details = reason.Details
 					})),
-			DeferredReasons = null, 
+			DeferredReasons = null,
 			AdvisoryBoardDecisionDate = expectedDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = expectedDetails.DecisionMadeBy
 		};
 
 		//Act
 		var result = ConversionAdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
-		
+
 		//assert
 		Assert.Equivalent(expected, result);
 	}

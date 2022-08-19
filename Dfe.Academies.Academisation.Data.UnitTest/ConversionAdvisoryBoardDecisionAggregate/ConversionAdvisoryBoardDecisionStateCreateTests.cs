@@ -40,14 +40,14 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 		mockDecision
 			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(details);
-		
+
 		//Act
 		var result = ConversionAdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
 
 		//Assert
 		Assert.IsType<ConversionAdvisoryBoardDecisionState>(result);
 	}
-	
+
 	[Fact]
 	public void ShouldReturnExpectedConversionAdvisoryBoardDecisionState()
 	{
@@ -91,7 +91,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 
 		//Act
 		var result = ConversionAdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
-		
+
 		//assert
 		Assert.Equivalent(expected, result);
 	}

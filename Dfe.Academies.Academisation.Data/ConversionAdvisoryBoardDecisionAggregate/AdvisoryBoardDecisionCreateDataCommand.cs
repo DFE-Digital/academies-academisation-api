@@ -5,20 +5,20 @@ namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggreg
 
 public class AdvisoryBoardDecisionCreateDataCommand : IAdvisoryBoardDecisionCreateDataCommand
 {
-    private readonly AcademisationContext _context;
+	private readonly AcademisationContext _context;
 
-    public AdvisoryBoardDecisionCreateDataCommand(AcademisationContext context)
-    {
-        _context = context;
-    }
+	public AdvisoryBoardDecisionCreateDataCommand(AcademisationContext context)
+	{
+		_context = context;
+	}
 
-    public async Task Execute(IConversionAdvisoryBoardDecision decision)
-    {
-        var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
+	public async Task Execute(IConversionAdvisoryBoardDecision decision)
+	{
+		var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
 
-        await _context.ConversionAdvisoryBoardDecisions.AddAsync(decisionState);
-        await _context.SaveChangesAsync();
+		await _context.ConversionAdvisoryBoardDecisions.AddAsync(decisionState);
+		await _context.SaveChangesAsync();
 
-        decision.SetId(decisionState.Id);
-    }
+		decision.SetId(decisionState.Id);
+	}
 }

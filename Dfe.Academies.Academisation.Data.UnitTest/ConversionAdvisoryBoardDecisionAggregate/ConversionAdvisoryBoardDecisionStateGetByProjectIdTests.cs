@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecis
 public class ConversionAdvisoryBoardDecisionStateGetByProjectIdTests
 {
 	private readonly AdvisoryBoardDecisionGetDataByProjectIdQuery _target;
-	
+
 	public ConversionAdvisoryBoardDecisionStateGetByProjectIdTests()
 	{
 		var mockContext = new TestAdvisoryBoardDecisionContext().CreateContext();
@@ -21,7 +21,7 @@ public class ConversionAdvisoryBoardDecisionStateGetByProjectIdTests
 	{
 		//Arrange
 		const int expectedProjectId = 2;
-		
+
 		//Act
 		var result = await _target.Execute(expectedProjectId);
 

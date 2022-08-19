@@ -10,7 +10,7 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 	{
 		AdvisoryBoardDecisionDetails = details;
 	}
-	
+
 	public ConversionAdvisoryBoardDecision(
 		int id,
 		AdvisoryBoardDecisionDetails details,
@@ -23,12 +23,12 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 	}
 
 	private static readonly ConversionAdvisoryBoardDecisionValidator Validator = new();
-	
+
 	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; private set; }
-	public int Id { get; private set;  }
+	public int Id { get; private set; }
 	public DateTime CreatedOn { get; }
 	public DateTime LastModifiedOn { get; }
-	
+
 	internal static CreateResult<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
 	{
 		var validationResult = Validator.Validate(details);
@@ -51,12 +51,12 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 
 			return new CommandValidationErrorResult(validationError);
 		}
-		
+
 		AdvisoryBoardDecisionDetails = details;
 		return new CommandSuccessResult();
 	}
-	
-	public void SetId(int id) => Id = Id == default 
-		? id 
+
+	public void SetId(int id) => Id = Id == default
+		? id
 		: throw new InvalidOperationException("Cannot assign an id when the id has already been set");
 }

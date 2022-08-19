@@ -6,5 +6,5 @@ namespace Dfe.Academies.Academisation.IService.Commands;
 
 public interface IAdvisoryBoardDecisionCreateCommand
 {
-    Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> Execute(AdvisoryBoardDecisionCreateRequestModel requestModel);
+	Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> Execute(AdvisoryBoardDecisionCreateRequestModel requestModel);
 }

@@ -22,15 +22,15 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
 		ConversionAdvisoryBoardDecision data = new(expectedId, details, default, default);
-		
+
 		_mockDataQuery.Setup(q => q.Execute(expectedId))
 			.ReturnsAsync(data);
-		
+
 		ConversionAdvisoryBoardDecisionGetQuery query = new(_mockDataQuery.Object);
-		
+
 		//Act
 		var result = await query.Execute(expectedId);
-		
+
 		//Assert
 		Assert.Multiple(
 			() => Assert.NotNull(result),
@@ -44,12 +44,12 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 	{
 		//Arrange
 		const int requestedId = 4;
-	
+
 		ConversionAdvisoryBoardDecisionGetQuery query = new(_mockDataQuery.Object);
 
 		//Act
 		var result = await query.Execute(requestedId);
-		
+
 		//Assert
 		Assert.Null(result);
 	}

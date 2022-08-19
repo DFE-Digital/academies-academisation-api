@@ -24,19 +24,19 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 
 		//Act
 		var result = await target.Execute(new());
-			
+
 		//Assert
 		Assert.IsType<BadRequestCommandResult>(result);
 	}
-	
+
 	[Fact]
 	public async Task DataQueryReturnsNull__ReturnsCommandNotFoundResult()
 	{
 		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
-			
+
 		//Act
-		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
-	
+		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+
 		//Assert
 		Assert.IsType<NotFoundCommandResult>(result);
 	}
@@ -48,17 +48,17 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		_mockDecision
 			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>()))
 			.Returns(new UnhandledCommandResult());
-			
+
 		_mockDataQuery
 			.Setup(d => d.Execute(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
-			
+
 		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
-			
+
 		//Act & Assert
-		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new() { AdvisoryBoardDecisionId = 1}));
+		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new() { AdvisoryBoardDecisionId = 1 }));
 	}
-		
+
 	[Fact]
 	public async Task DomainReturnsValidatorError_DoesNotCallExecuteOnDataCommand()
 	{
@@ -69,16 +69,16 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		_mockDataQuery
 			.Setup(q => q.Execute(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
-			
+
 		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
-			
+
 		//Act
-		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
-	
+		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+
 		//Assert
 		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
 	}
-		
+
 	[Fact]
 	public async Task DomainReturnsSuccess___CallsExecuteOnDataCommand()
 	{
@@ -91,10 +91,10 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 			.ReturnsAsync(_mockDecision.Object);
 
 		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
-			
+
 		//Act
-		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
-	
+		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+
 		//Assert
 		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
 	}
@@ -110,12 +110,12 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		_mockDataQuery
 			.Setup(q => q.Execute(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
-			
+
 		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
 
 		//Act
-		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1});
-	
+		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+
 		//Assert
 		Assert.IsType<CommandSuccessResult>(result);
 	}

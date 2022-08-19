@@ -1,17 +1,17 @@
 ﻿using System;
-using AutoFixture;
-using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IService.RequestModels;
-using Dfe.Academies.Academisation.IService.ServiceModels;
-using Dfe.Academies.Academisation.WebApi.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoFixture;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.RequestModels;
+using Dfe.Academies.Academisation.IService.ServiceModels;
+using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller;
@@ -22,7 +22,7 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 	{
 		public UnhandledCreateResult() : base(default) { }
 	}
-		
+
 	private readonly Fixture _fixture = new();
 	private readonly Mock<IAdvisoryBoardDecisionCreateCommand> _mockCreateCommand = new();
 	private readonly Mock<IConversionAdvisoryBoardDecisionGetQuery> _mockGetQuery = new();
@@ -39,10 +39,10 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 			.ReturnsAsync(new CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>(decisionServiceModel));
 
 		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object, 
+			_mockCreateCommand.Object,
 			_mockGetQuery.Object,
 			_mockUpdateCommand.Object);
-			
+
 		//Act
 		var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>());
 
@@ -53,12 +53,12 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 		Assert.Equal(HttpMethods.Get, createdResult.RouteName);
 		Assert.Equal(decisionServiceModel.AdvisoryBoardDecisionId, createdResult.RouteValues!["id"]);
 	}
-		
+
 	[Fact]
 	public async Task CommandReturnsCreateValidationErrorResult___ReturnsBadRequestResult()
 	{
 		var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
-			
+
 		//Arrange
 		_mockCreateCommand
 			.Setup(c => c.Execute(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()))
@@ -66,19 +66,19 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 				new CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel>(expectedValidationErrors));
 
 		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object, 
+			_mockCreateCommand.Object,
 			_mockGetQuery.Object,
 			_mockUpdateCommand.Object);
-			
+
 		//Act
 		var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>());
 
 		//Assert
 		var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-		var validationErrors = Assert.IsAssignableFrom<IEnumerable<ValidationError>>(badRequestResult.Value);			
+		var validationErrors = Assert.IsAssignableFrom<IEnumerable<ValidationError>>(badRequestResult.Value);
 		Assert.Equal(expectedValidationErrors, validationErrors);
 	}
-		
+
 	[Fact]
 	public async Task CommandReturnsCreateUnhandledCreateResult___ThrowsException()
 	{
@@ -88,10 +88,10 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 			.ReturnsAsync(new UnhandledCreateResult());
 
 		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object, 
+			_mockCreateCommand.Object,
 			_mockGetQuery.Object,
 			_mockUpdateCommand.Object);
-			
+
 		//Act
 		await Assert.ThrowsAsync<NotImplementedException>(() => subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()));
 	}

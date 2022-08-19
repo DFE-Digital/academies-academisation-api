@@ -28,7 +28,7 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 			() => Assert.IsType<ConversionAdvisoryBoardDecision>(result)
 		);
 	}
-	
+
 	[Fact]
 	public void ShouldReturnExpectedConversionAdvisoryBoardDecisionState()
 	{
@@ -38,7 +38,7 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 			.With(s => s.CreatedOn, timestamp)
 			.With(s => s.LastModifiedOn, timestamp)
 			.Create();
-		
+
 		AdvisoryBoardDecisionDetails details = new(
 			state.ConversionProjectId,
 			state.Decision,
@@ -53,10 +53,10 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 			state.AdvisoryBoardDecisionDate,
 			state.DecisionMadeBy
 		);
-		
+
 		//Act
 		var result = state.MapToDomain();
-		
+
 		//Assert
 		Assert.Multiple(
 			() => Assert.Equivalent(details, result.AdvisoryBoardDecisionDetails),

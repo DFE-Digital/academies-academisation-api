@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecis
 public class ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests
 {
 	private readonly AdvisoryBoardDecisionGetDataByDecisionIdQuery _target;
-	
+
 	public ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests()
 	{
 		var mockContext = new TestAdvisoryBoardDecisionContext().CreateContext();
@@ -20,7 +20,7 @@ public class ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests
 	public async Task WhenRecordExists___ShouldReturnExpectedConversionAdvisoryBoardDecision()
 	{
 		const int expectedDecisionId = 2;
-		
+
 		//Act
 		var result = await _target.Execute(expectedDecisionId);
 

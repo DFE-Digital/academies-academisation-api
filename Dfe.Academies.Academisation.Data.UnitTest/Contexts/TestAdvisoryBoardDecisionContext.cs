@@ -13,14 +13,14 @@ public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 	{
 		Seed();
 	}
-	
+
 	protected override void SeedData()
 	{
 		using var context = CreateContext();
 		context.Database.EnsureCreated();
 
 		var timestamp = DateTime.UtcNow;
-		
+
 		var seed = new List<ConversionAdvisoryBoardDecisionState>
 		{
 			_fixture.Build<ConversionAdvisoryBoardDecisionState>()
@@ -42,7 +42,7 @@ public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 				.With(d => d.LastModifiedOn, timestamp)
 				.Create()
 		};
-		
+
 		context.AddRange(seed);
 		context.SaveChanges();
 	}
