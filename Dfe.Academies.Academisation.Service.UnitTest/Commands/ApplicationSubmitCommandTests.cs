@@ -31,7 +31,7 @@ public class ApplicationSubmitCommandTests
 		// arrange
 		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
 		_applicationMock.Setup(x => x.Submit()).Returns(new CommandSuccessResult());
-		
+
 		// act
 		var result = await _subject.Execute(_applicationId);
 

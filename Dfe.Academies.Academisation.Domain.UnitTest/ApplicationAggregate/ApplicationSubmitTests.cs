@@ -1,7 +1,7 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Collections.Generic;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate

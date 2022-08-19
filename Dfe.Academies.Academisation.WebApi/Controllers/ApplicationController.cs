@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 
-		public ApplicationController(IApplicationCreateCommand applicationCreateCommand, 
+		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationSubmitCommand applicationSubmitCommand
