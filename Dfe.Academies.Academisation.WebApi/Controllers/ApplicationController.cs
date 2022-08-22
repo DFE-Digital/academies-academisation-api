@@ -39,7 +39,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result switch
 			{
 				CreateSuccessResult<ApplicationServiceModel> successResult => CreatedAtRoute("Get", new { id = successResult.Payload.ApplicationId }, successResult.Payload),
-				CreateValidationErrorResult<ApplicationServiceModel> validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
+				CreateValidationErrorResult<ApplicationServiceModel> validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
 		}
@@ -74,7 +74,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			{
 				CommandSuccessResult => Ok(),
 				NotFoundCommandResult => NotFound(),
-				CommandValidationErrorResult validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
 		}

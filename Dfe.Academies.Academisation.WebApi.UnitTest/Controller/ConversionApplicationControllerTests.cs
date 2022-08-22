@@ -48,7 +48,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
-		public async Task Post___ServiceReturnsValidationErrorResult___BadRequestResponseReturned()
+		public async Task Post___ServiceReturnsValidationError___BadRequestResponseReturned()
 		{
 			// arrange
 			var requestModel = _fixture.Create<ApplicationCreateRequestModel>();
@@ -95,7 +95,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var badRequestResult = Assert.IsType<NotFoundResult>(result);
 		}
 
-
 		[Fact]
 		public async Task Submit___ServiceReturnsValidationError___BadRequestReturned()
 		{
@@ -115,7 +114,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
-		public async Task Get___QueryReturnsNull___NotFoundReturned()
+		public async Task Get___ServiceReturnsNull___NotFoundReturned()
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
@@ -128,7 +127,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
-		public async Task Get____ServiceReturnsApplication___SuccessResponseReturned()
+		public async Task Get___ServiceReturnsApplication___SuccessResponseReturned()
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
@@ -185,14 +184,17 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 			var applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
 
+			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
 			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>()));
+				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationError));
 
 			// act
 			var result = await _subject.Update(applicationId, applicationServiceModel);
 
 			// assert
-			Assert.IsType<BadRequestResult>(result.Result);
+			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
+			Assert.Equal(expectedValidationError, validationErrors);
 		}
 	}
 }
