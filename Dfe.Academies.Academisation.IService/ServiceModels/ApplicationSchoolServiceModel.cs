@@ -4,6 +4,7 @@ public record ApplicationSchoolServiceModel(
 	int Id,
 	int Urn,
 	string SchoolName,
+	LandAndBuildingsServiceModel LandAndBuildings,
 	// contact details
 	string? SchoolConversionContactHeadName = null,
 	string? SchoolConversionContactHeadEmail = null,
@@ -28,7 +29,5 @@ public record ApplicationSchoolServiceModel(
 	int? ProjectedPupilNumbersYear2 = null,
 	int? ProjectedPupilNumbersYear3 = null,
 	string? SchoolCapacityAssumptions = null,
-	int? SchoolCapacityPublishedAdmissionsNumber = null,
-	// land and buildings
-	LandAndBuildingsServiceModel? LandAndBuildings = null
+	int? SchoolCapacityPublishedAdmissionsNumber = null
 );

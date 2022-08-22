@@ -3,6 +3,7 @@
 public record SchoolDetails(
 	int Urn,
 	string SchoolName,
+	LandAndBuildings LandAndBuildings,
 	// contact details
 	string? ContactHeadName = null,
 	string? ContactHeadEmail = null,
@@ -27,7 +28,5 @@ public record SchoolDetails(
 	int? ProjectedPupilNumbersYear2 = null,
 	int? ProjectedPupilNumbersYear3 = null,
 	string? CapacityAssumptions = null,
-	int? CapacityPublishedAdmissionsNumber = null,
-	// land and buildings
-	LandAndBuildings? LandAndBuildings = null
+	int? CapacityPublishedAdmissionsNumber = null
 );

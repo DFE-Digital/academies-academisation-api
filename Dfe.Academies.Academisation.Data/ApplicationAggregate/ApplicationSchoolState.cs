@@ -38,6 +38,21 @@ public class ApplicationSchoolState : BaseEntity
 	public string? CapacityAssumptions { get; set; }
 	public int? CapacityPublishedAdmissionsNumber { get; set; }
 
+	// land and buildings
+	public string? OwnerExplained { get; set; }
+	public bool? WorksPlanned { get; set; }
+	public DateTime? WorksPlannedDate { get; set; }
+	public string? WorksPlannedExplained { get; set; }
+	public bool? FacilitiesShared { get; set; }
+	public string? FacilitiesSharedExplained { get; set; }
+	public bool? Grants { get; set; }
+	public string? GrantsAwardingBodies { get; set; }
+	public bool? PartOfPfiScheme { get; set; }
+	public string? PartOfPfiSchemeType { get; set; }
+	public bool? PartOfPrioritySchoolsBuildingProgramme { get; set; }
+	public bool? PartOfBuildingSchoolsForFutureProgramme { get; set; }
+
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
@@ -66,13 +81,42 @@ public class ApplicationSchoolState : BaseEntity
 			ProjectedPupilNumbersYear2 = applyingSchool.Details.ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = applyingSchool.Details.ProjectedPupilNumbersYear3,
 			CapacityAssumptions = applyingSchool.Details.CapacityAssumptions,
-			CapacityPublishedAdmissionsNumber = applyingSchool.Details.CapacityPublishedAdmissionsNumber
+			CapacityPublishedAdmissionsNumber = applyingSchool.Details.CapacityPublishedAdmissionsNumber,
+			OwnerExplained = applyingSchool.Details.LandAndBuildings.OwnerExplained,
+			WorksPlanned = applyingSchool.Details.LandAndBuildings.WorksPlanned,
+			WorksPlannedDate = applyingSchool.Details.LandAndBuildings.WorksPlannedDate,
+			WorksPlannedExplained = applyingSchool.Details.LandAndBuildings.WorksPlannedExplained,
+			FacilitiesShared = applyingSchool.Details.LandAndBuildings.FacilitiesShared,
+			FacilitiesSharedExplained = applyingSchool.Details.LandAndBuildings.FacilitiesSharedExplained,
+			Grants = applyingSchool.Details.LandAndBuildings.Grants,
+			GrantsAwardingBodies = applyingSchool.Details.LandAndBuildings.GrantsAwardingBodies,
+			PartOfPfiScheme = applyingSchool.Details.LandAndBuildings.PartOfPfiScheme,
+			PartOfPfiSchemeType = applyingSchool.Details.LandAndBuildings.PartOfPfiSchemeType,
+			PartOfPrioritySchoolsBuildingProgramme = applyingSchool.Details.LandAndBuildings.PartOfPrioritySchoolsBuildingProgramme,
+			PartOfBuildingSchoolsForFutureProgramme = applyingSchool.Details.LandAndBuildings.PartOfBuildingSchoolsForFutureProgramme
 		};
 	}
 
 	public SchoolDetails MapToDomain()
 	{
-		return new SchoolDetails(Urn, SchoolName)
+		return new SchoolDetails(
+			Urn,
+			SchoolName,
+			new LandAndBuildings
+			{
+				OwnerExplained = OwnerExplained,
+				WorksPlanned = WorksPlanned,
+				WorksPlannedDate = WorksPlannedDate,
+				WorksPlannedExplained = WorksPlannedExplained,
+				FacilitiesShared = FacilitiesShared,
+				FacilitiesSharedExplained = FacilitiesSharedExplained,
+				Grants = Grants,
+				GrantsAwardingBodies = GrantsAwardingBodies,
+				PartOfPfiScheme = PartOfPfiScheme,
+				PartOfPfiSchemeType = PartOfPfiSchemeType,
+				PartOfPrioritySchoolsBuildingProgramme = PartOfPrioritySchoolsBuildingProgramme,
+				PartOfBuildingSchoolsForFutureProgramme = PartOfBuildingSchoolsForFutureProgramme
+			})
 		{
 			ContactRole = ContactRole,
 			ApproverContactEmail = ApproverContactEmail,
