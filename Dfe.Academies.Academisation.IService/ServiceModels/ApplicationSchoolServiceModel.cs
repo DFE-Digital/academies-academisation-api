@@ -30,16 +30,5 @@ public record ApplicationSchoolServiceModel(
 	string? SchoolCapacityAssumptions = null,
 	int? SchoolCapacityPublishedAdmissionsNumber = null,
 	// land and buildings
-	string? PartOfPfiSchemeType = null,
-	int? PartOfPfiScheme = null,
-	int? PartOfBuildingSchoolsForFutureProgramme = null,
-	int? PartOfPrioritySchoolsBuildingProgramme = null,
-	string? WhichBodyAwardedGrants = null,
-	int? LbGrants = null,
-	DateTime? LbWorksPlannedDate = null,
-	string? LbWorksPlannedExplained = null,
-	int? LbWorksPlanned = null,
-	string? LbFacilitiesSharedExplained = null,
-	int? LbFacilitiesShared = null,
-	string? LbBuildLandOwnerExplained = null
+	LandAndBuildingsServiceModel? LandAndBuildings = null
 );
