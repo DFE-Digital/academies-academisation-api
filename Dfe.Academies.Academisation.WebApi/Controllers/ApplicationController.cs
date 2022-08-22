@@ -60,7 +60,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			{
 				CommandSuccessResult => Ok(),
 				NotFoundCommandResult => NotFound(),
-				CommandValidationErrorResult => BadRequest(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
 		}
