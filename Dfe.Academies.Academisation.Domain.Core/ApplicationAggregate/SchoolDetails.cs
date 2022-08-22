@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using System.Text.Json.Serialization;
+
+namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 public record SchoolDetails(
 	int Urn,
@@ -27,5 +29,18 @@ public record SchoolDetails(
 	int? ProjectedPupilNumbersYear2 = null,
 	int? ProjectedPupilNumbersYear3 = null,
 	string? CapacityAssumptions = null,
-	int? CapacityPublishedAdmissionsNumber = null
+	int? CapacityPublishedAdmissionsNumber = null,
+	// land and buildings
+	string? PartOfPfiSchemeType  = null,
+	int? PartOfPfiScheme  = null,
+	int? PartOfBuildingSchoolsForFutureProgramme  = null,
+	int? PartOfPrioritySchoolsBuildingProgramme  = null,
+	string? WhichBodyAwardedGrants  = null,
+	int? LbGrants  = null,
+	DateTime? LbWorksPlannedDate  = null,
+	string? LbWorksPlannedExplained  = null,
+	int? LbWorksPlanned  = null,
+	string? LbFacilitiesSharedExplained  = null,
+	int? LbFacilitiesShared  = null,
+	string? LbBuildLandOwnerExplained  = null
 );

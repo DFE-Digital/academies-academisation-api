@@ -35,7 +35,19 @@ internal static class ApplicationSchoolServiceModelMapper
 			ProjectedPupilNumbersYear2 = school.Details.ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = school.Details.ProjectedPupilNumbersYear3,
 			SchoolCapacityAssumptions = school.Details.CapacityAssumptions,
-			SchoolCapacityPublishedAdmissionsNumber = school.Details.CapacityPublishedAdmissionsNumber
+			SchoolCapacityPublishedAdmissionsNumber = school.Details.CapacityPublishedAdmissionsNumber,
+			PartOfPfiSchemeType = school.Details.PartOfPfiSchemeType,
+			PartOfPfiScheme = school.Details.PartOfPfiScheme,
+			PartOfBuildingSchoolsForFutureProgramme = school.Details.PartOfBuildingSchoolsForFutureProgramme,
+			PartOfPrioritySchoolsBuildingProgramme = school.Details.PartOfPrioritySchoolsBuildingProgramme,
+			WhichBodyAwardedGrants = school.Details.WhichBodyAwardedGrants,
+			LbGrants = school.Details.LbGrants,
+			LbWorksPlannedDate = school.Details.LbWorksPlannedDate,
+			LbWorksPlannedExplained = school.Details.LbWorksPlannedExplained,
+			LbWorksPlanned = school.Details.LbWorksPlanned,
+			LbFacilitiesSharedExplained = school.Details.LbFacilitiesSharedExplained,
+			LbFacilitiesShared = school.Details.LbFacilitiesShared,
+			LbBuildLandOwnerExplained = school.Details.LbBuildLandOwnerExplained
 		};
 	}
 
@@ -64,7 +76,19 @@ internal static class ApplicationSchoolServiceModelMapper
 			ProjectedPupilNumbersYear2 = serviceModel.ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = serviceModel.ProjectedPupilNumbersYear3,
 			CapacityAssumptions = serviceModel.SchoolCapacityAssumptions,
-			CapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber
+			CapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber,
+			PartOfPfiSchemeType = serviceModel.PartOfPfiSchemeType,
+			PartOfPfiScheme = serviceModel.PartOfPfiScheme,
+			PartOfBuildingSchoolsForFutureProgramme = serviceModel.PartOfBuildingSchoolsForFutureProgramme,
+			PartOfPrioritySchoolsBuildingProgramme = serviceModel.PartOfPrioritySchoolsBuildingProgramme,
+			WhichBodyAwardedGrants = serviceModel.WhichBodyAwardedGrants,
+			LbGrants = serviceModel.LbGrants,
+			LbWorksPlannedDate = serviceModel.LbWorksPlannedDate,
+			LbWorksPlannedExplained = serviceModel.LbWorksPlannedExplained,
+			LbWorksPlanned = serviceModel.LbWorksPlanned,
+			LbFacilitiesSharedExplained = serviceModel.LbFacilitiesSharedExplained,
+			LbFacilitiesShared = serviceModel.LbFacilitiesShared,
+			LbBuildLandOwnerExplained = serviceModel.LbBuildLandOwnerExplained
 		};
 	}
 }
