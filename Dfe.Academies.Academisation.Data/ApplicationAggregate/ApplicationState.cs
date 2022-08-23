@@ -20,6 +20,8 @@ public class ApplicationState : BaseEntity
 		return new()
 		{
 			Id = application.ApplicationId,
+			CreatedOn = application.CreatedOn,
+			LastModifiedOn = application.LastModifiedOn,
 			ApplicationStatus = application.ApplicationStatus,
 			ApplicationType = application.ApplicationType,
 			Contributors = application.Contributors
@@ -41,6 +43,6 @@ public class ApplicationState : BaseEntity
 			s => s.Id,
 			s => s.MapToDomain());
 
-		return new Application(Id, ApplicationType, ApplicationStatus, contributorsDictionary, schoolsDictionary);
+		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus, contributorsDictionary, schoolsDictionary);
 	}
 }

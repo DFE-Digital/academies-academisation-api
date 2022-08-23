@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -14,6 +15,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 			// arrange
 			Application subject = new(
 				1,
+				DateTime.UtcNow,
+				DateTime.UtcNow,
 				ApplicationType.FormAMat,
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
@@ -32,6 +35,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 			// arrange
 			Application subject = new(
 				1,
+				DateTime.UtcNow,
+				DateTime.UtcNow,
 				ApplicationType.FormAMat,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),

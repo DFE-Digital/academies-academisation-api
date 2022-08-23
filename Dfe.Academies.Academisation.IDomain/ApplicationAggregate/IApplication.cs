@@ -6,6 +6,9 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 public interface IApplication
 {
 	int ApplicationId { get; }
+	DateTime CreatedOn { get; }
+	DateTime LastModifiedOn { get; }
+
 	ApplicationType ApplicationType { get; }
 	ApplicationStatus ApplicationStatus { get; }
 

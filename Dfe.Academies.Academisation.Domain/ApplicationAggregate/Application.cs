@@ -18,11 +18,18 @@ public class Application : IApplication
 		_contributors.Add(new(initialContributor));
 	}
 
-	public Application(int applicationId, ApplicationType applicationType, ApplicationStatus applicationStatus,
+	public Application(
+		int applicationId,
+		DateTime createdOn,
+		DateTime lastModifiedOn,
+		ApplicationType applicationType,
+		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
 		Dictionary<int, SchoolDetails> schools)
 	{
 		ApplicationId = applicationId;
+		CreatedOn = createdOn;
+		LastModifiedOn = lastModifiedOn;
 		ApplicationType = applicationType;
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
@@ -30,6 +37,8 @@ public class Application : IApplication
 	}
 
 	public int ApplicationId { get; private set; }
+	public DateTime CreatedOn { get; }
+	public DateTime LastModifiedOn { get; }
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
 

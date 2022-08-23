@@ -192,6 +192,8 @@ public class ApplicationUpdateTests
 
 		Application expected = new(
 			subject.ApplicationId,
+			subject.CreatedOn,
+			subject.LastModifiedOn,
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
@@ -225,6 +227,8 @@ public class ApplicationUpdateTests
 
 		Application expected = new(
 			subject.ApplicationId,
+			subject.CreatedOn,
+			subject.LastModifiedOn,
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
@@ -250,6 +254,8 @@ public class ApplicationUpdateTests
 	{
 		Application application = new(
 			_fixture.Create<int>(),
+			DateTime.UtcNow,
+			DateTime.UtcNow,
 			type ?? _fixture.Create<ApplicationType>(),
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
@@ -289,6 +295,8 @@ public class ApplicationUpdateTests
 	{
 		return new(
 			application.ApplicationId,
+			application.CreatedOn,
+			application.LastModifiedOn,
 			application.ApplicationType,
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
