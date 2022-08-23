@@ -11,7 +11,8 @@ internal static class ApplicationSchoolServiceModelMapper
 		return new(
 			school.Id,
 			school.Details.Urn,
-			school.Details.SchoolName
+			school.Details.SchoolName,
+			school.Details.LandAndBuildings.ToServiceModel()
 		)
 		{
 			SchoolConversionApproverContactEmail = school.Details.ApproverContactEmail,
@@ -35,13 +36,13 @@ internal static class ApplicationSchoolServiceModelMapper
 			ProjectedPupilNumbersYear2 = school.Details.ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = school.Details.ProjectedPupilNumbersYear3,
 			SchoolCapacityAssumptions = school.Details.CapacityAssumptions,
-			SchoolCapacityPublishedAdmissionsNumber = school.Details.CapacityPublishedAdmissionsNumber
+			SchoolCapacityPublishedAdmissionsNumber = school.Details.CapacityPublishedAdmissionsNumber,
 		};
 	}
 
 	internal static SchoolDetails ToDomain(this ApplicationSchoolServiceModel serviceModel)
 	{
-		return new(serviceModel.Urn, serviceModel.SchoolName)
+		return new(serviceModel.Urn, serviceModel.SchoolName, serviceModel.LandAndBuildings.ToDomain())
 		{
 			ApproverContactEmail = serviceModel.SchoolConversionApproverContactEmail,
 			ApproverContactName = serviceModel.SchoolConversionApproverContactName,

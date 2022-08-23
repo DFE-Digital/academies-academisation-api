@@ -3,6 +3,7 @@
 public record SchoolDetails(
 	int Urn,
 	string SchoolName,
+	LandAndBuildings LandAndBuildings,
 	// contact details
 	string? ContactHeadName = null,
 	string? ContactHeadEmail = null,
