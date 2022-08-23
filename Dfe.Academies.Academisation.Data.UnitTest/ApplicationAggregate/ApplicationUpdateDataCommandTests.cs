@@ -7,7 +7,6 @@ using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
