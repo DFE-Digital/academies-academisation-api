@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
-public record LandAndBuildings (
+public record LandAndBuildings(
 	string? OwnerExplained = null,
 	bool? WorksPlanned = null,
 	DateTime? WorksPlannedDate = null,

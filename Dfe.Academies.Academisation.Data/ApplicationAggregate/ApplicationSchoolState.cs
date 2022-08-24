@@ -26,7 +26,7 @@ public class ApplicationSchoolState : BaseEntity
 	public string? ApproverContactEmail { get; set; }
 
 	// conversion details
-	DateTime? ConversionTargetDate { get; set; }
+	public DateTime? ConversionTargetDate { get; set; }
 	public string? ConversionTargetDateExplained { get; set; }
 	public string? ProposedNewSchoolName { get; set; }
 	public string? JoinTrustReason { get; set; }
