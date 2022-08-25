@@ -4,6 +4,7 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Commands;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.WebApi.Controllers;
@@ -18,13 +19,14 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private readonly Fixture _fixture = new();
 		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
 		private readonly Mock<IApplicationGetQuery> _getQueryMock = new();
+		private readonly Mock<IApplicationListByUserQuery> _listByUserMock = new();
 		private readonly Mock<IApplicationSubmitCommand> _submitCommandMock = new();
 		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly ApplicationController _subject;
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object, _listByUserMock.Object);
 		}
 
 		[Fact]
