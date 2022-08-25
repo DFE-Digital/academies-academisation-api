@@ -198,5 +198,44 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
 			Assert.Equal(expectedValidationError, validationErrors);
 		}
+
+		[Fact]
+		public async Task ListByUser___ServiceReturnsEmptyList___SuccessResponseReturned()
+		{
+			// arrange
+			string userEmail = _fixture.Create<string>();
+
+			_listByUserMock.Setup(x => x.Execute(userEmail))
+				.ReturnsAsync(new List<ApplicationServiceModel>());
+
+			// act
+			var result = await _subject.ListByUser(userEmail);
+
+			// assert
+			var listResult = Assert.IsType<OkObjectResult>(result.Result);
+			Assert.Equal(new List<ApplicationServiceModel>(), listResult.Value);
+		}
+		
+		[Fact]
+		public async Task ListByUser___ServiceReturnsPopulatedList___SuccessResponseReturned()
+		{
+			// arrange
+			string userEmail = _fixture.Create<string>();
+			var applications = new List<ApplicationServiceModel>
+			{
+				_fixture.Create<ApplicationServiceModel>(),
+				_fixture.Create<ApplicationServiceModel>()
+			};
+
+			_listByUserMock.Setup(x => x.Execute(userEmail))
+				.ReturnsAsync(applications);
+
+			// act
+			var result = await _subject.ListByUser(userEmail);
+
+			// assert
+			var listResult = Assert.IsType<OkObjectResult>(result.Result);
+			Assert.Equal(applications, listResult.Value);
+		}
 	}
 }
