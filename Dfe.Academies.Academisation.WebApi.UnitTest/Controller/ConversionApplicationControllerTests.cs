@@ -4,6 +4,7 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Commands;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.WebApi.Controllers;
@@ -18,13 +19,14 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private readonly Fixture _fixture = new();
 		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
 		private readonly Mock<IApplicationGetQuery> _getQueryMock = new();
+		private readonly Mock<IApplicationListByUserQuery> _listByUserMock = new();
 		private readonly Mock<IApplicationSubmitCommand> _submitCommandMock = new();
 		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly ApplicationController _subject;
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object, _listByUserMock.Object);
 		}
 
 		[Fact]
@@ -195,6 +197,45 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result.Result);
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
 			Assert.Equal(expectedValidationError, validationErrors);
+		}
+
+		[Fact]
+		public async Task ListByUser___ServiceReturnsEmptyList___SuccessResponseReturned()
+		{
+			// arrange
+			string userEmail = _fixture.Create<string>();
+
+			_listByUserMock.Setup(x => x.Execute(userEmail))
+				.ReturnsAsync(new List<ApplicationServiceModel>());
+
+			// act
+			var result = await _subject.ListByUser(userEmail);
+
+			// assert
+			var listResult = Assert.IsType<OkObjectResult>(result.Result);
+			Assert.Equal(new List<ApplicationServiceModel>(), listResult.Value);
+		}
+		
+		[Fact]
+		public async Task ListByUser___ServiceReturnsPopulatedList___SuccessResponseReturned()
+		{
+			// arrange
+			string userEmail = _fixture.Create<string>();
+			var applications = new List<ApplicationServiceModel>
+			{
+				_fixture.Create<ApplicationServiceModel>(),
+				_fixture.Create<ApplicationServiceModel>()
+			};
+
+			_listByUserMock.Setup(x => x.Execute(userEmail))
+				.ReturnsAsync(applications);
+
+			// act
+			var result = await _subject.ListByUser(userEmail);
+
+			// assert
+			var listResult = Assert.IsType<OkObjectResult>(result.Result);
+			Assert.Equal(applications, listResult.Value);
 		}
 	}
 }

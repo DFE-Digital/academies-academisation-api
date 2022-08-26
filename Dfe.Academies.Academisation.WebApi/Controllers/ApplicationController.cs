@@ -1,6 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService;
 using Dfe.Academies.Academisation.IService.Commands;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +17,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
+		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 
 		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
-			IApplicationSubmitCommand applicationSubmitCommand
+			IApplicationSubmitCommand applicationSubmitCommand,
+			IApplicationListByUserQuery applicationsListByUserQuery
 			)
 		{
 			_applicationCreateCommand = applicationCreateCommand;
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
+			_applicationsListByUserQuery = applicationsListByUserQuery;
 		}
 
 		[ProducesResponseType(StatusCodes.Status201Created)]
@@ -49,6 +53,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			var result = await _applicationGetQuery.Execute(id);
 			return result is null ? NotFound() : Ok(result);
+		}
+		
+		[HttpGet("contributor/{email}", Name = "List")]
+		public async Task<ActionResult<IList<ApplicationServiceModel>>> ListByUser(string email)
+		{
+			var result = await _applicationsListByUserQuery.Execute(email);
+			return Ok(result);
 		}
 
 		[HttpPut("{id}", Name = "Update")]
