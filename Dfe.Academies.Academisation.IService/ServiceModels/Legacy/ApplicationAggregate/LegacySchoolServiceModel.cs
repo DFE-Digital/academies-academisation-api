@@ -4,6 +4,7 @@ public record LegacySchoolServiceModel(
 	ICollection<LegacyLoanServiceModel> SchoolLoans,
 	ICollection<LegacyLeaseServiceModel> SchoolLeases,
 	string? SchoolName = null,
+
 	// contact details
 	string? SchoolConversionContactHeadName = null,
 	string? SchoolConversionContactHeadEmail = null,
@@ -18,15 +19,19 @@ public record LegacySchoolServiceModel(
 	string? SchoolConversionMainContactOtherRole = null,
 	string? SchoolConversionApproverContactName = null,
 	string? SchoolConversionApproverContactEmail = null,
+
 	// conversion dates
 	bool? SchoolConversionTargetDateSpecified = null,
 	DateTime? SchoolConversionTargetDate = null,
 	string? SchoolConversionTargetDateExplained = null,
+
 	// reasons for joining
 	string? SchoolConversionReasonsForJoining = null,
+
 	// name changes
 	bool? SchoolConversionChangeNamePlanned = null,
 	string? SchoolConversionProposedNewSchoolName = null,
+
 	// additional information
 	string? SchoolAdSchoolContributionToTrust = null,
 	bool? SchoolOngoingSafeguardingInvestigations = null,
@@ -52,6 +57,7 @@ public record LegacySchoolServiceModel(
 	string? SchoolAdInspectedButReportNotPublishedExplain = null,
 	bool? SchoolAdditionalInformationAdded = null,
 	string? SchoolAdditionalInformation = null,
+
 	// Finances
 	LegacyFinancialYearServiceModel? PreviousFinancialYear = null,
 	LegacyFinancialYearServiceModel? CurrentFinancialYear = null,
@@ -59,12 +65,14 @@ public record LegacySchoolServiceModel(
 	bool? FinanceOngoingInvestigations = null,
 	string? SchoolFinancialInvestigationsExplain = null,
 	bool? SchoolFinancialInvestigationsTrustAware = null,
+
 	// future pupil numbers
 	int? ProjectedPupilNumbersYear1 = null,
 	int? ProjectedPupilNumbersYear2 = null,
 	int? ProjectedPupilNumbersYear3 = null,
 	string? SchoolCapacityAssumptions = null,
 	int? SchoolCapacityPublishedAdmissionsNumber = null,
+
 	// land and buildings
 	string? SchoolBuildLandOwnerExplained = null,
 	bool? SchoolBuildLandWorksPlanned = null,
@@ -78,16 +86,19 @@ public record LegacySchoolServiceModel(
 	string? SchoolBuildLandPFISchemeType = null,
 	bool? SchoolBuildLandPriorityBuildingProgramme = null,
 	bool? SchoolBuildLandFutureProgramme = null,
+
 	// pre-opening support grant
 	string? SchoolSupportGrantFundsPaidTo = null, // either "To the school" or "To the trust the school is joining"
-															  // consultation details
+
+	// consultation details
 	bool? SchoolHasConsultedStakeholders = null,
 	string? SchoolPlanToConsultStakeholders = null,
+
 	// declaration
 	// two questions from the application form would be easy to mix up here
 	// 1. I agree with all of these statements, and belive that the facts stated in this application are true (summary page)
 	// 2. The information in this application is true to the best of my kowledge (actual question)
 	bool? DeclarationBodyAgree = null,
 	bool? DeclarationIAmTheChairOrHeadteacher = null,
-	string? DeclarationSignedByName= null
+	string? DeclarationSignedByName = null
 );

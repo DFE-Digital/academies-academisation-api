@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			_applicationListByUserDataQuery = applicationListByUserDataQuery;
 		}
-		
+
 		public async Task<IList<ApplicationServiceModel>> Execute(string userEmail)
 		{
 			var applications = await _applicationListByUserDataQuery.Execute(userEmail);
