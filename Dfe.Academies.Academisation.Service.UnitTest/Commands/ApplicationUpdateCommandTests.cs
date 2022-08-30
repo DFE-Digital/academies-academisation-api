@@ -16,7 +16,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 		private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
 		private readonly Mock<IApplicationUpdateDataCommand> _updateApplicationCommandMock = new();
-		private ApplicationUpdateCommand _subject;
+		private readonly ApplicationUpdateCommand _subject;
 
 		public ApplicationUpdateCommandTests()
 		{

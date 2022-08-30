@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 		private ApplicationType _applicationType = ApplicationType.JoinAMat;
 		private ContributorRequestModel _contributorRequestModel = new ContributorRequestModelBuilder().Build();
 
-		private static Faker _faker = new();
+		private static readonly Faker _faker = new();
 
 
 		public ApplicationCreateRequestModel Build()
@@ -32,11 +32,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 
 	internal class ContributorRequestModelBuilder
 	{
-		private static readonly Faker _faker = new Faker();
+		private static readonly Faker _faker = new();
 
-		private string _firstName = _faker.Name.FirstName();
-		private string _lastName = _faker.Name.LastName();
-		private string _email = _faker.Internet.Email();
+		private readonly string _firstName = _faker.Name.FirstName();
+		private readonly string _lastName = _faker.Name.LastName();
+		private readonly string _email = _faker.Internet.Email();
 		private ContributorRole _contributorRole = ContributorRole.ChairOfGovernors;
 		private string? _role = null;
 

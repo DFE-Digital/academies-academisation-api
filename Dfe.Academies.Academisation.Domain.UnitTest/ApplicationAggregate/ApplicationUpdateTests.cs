@@ -159,7 +159,7 @@ public class ApplicationUpdateTests
 		Application expected = Clone(subject);
 
 		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
-		var randomKey = PickRandomElement(schoolsUpdated.Keys);
+		int randomKey = PickRandomElement(schoolsUpdated.Keys);
 		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with { ContactHeadEmail = "ghjk" };
 
 		// act
@@ -221,7 +221,7 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
 		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
-		var newKey = schoolsUpdated.Keys.Max() + 1;
+		int newKey = schoolsUpdated.Keys.Max() + 1;
 		var schoolDetailsToAdd = _fixture.Create<SchoolDetails>();
 		schoolsUpdated.Add(newKey, schoolDetailsToAdd);
 

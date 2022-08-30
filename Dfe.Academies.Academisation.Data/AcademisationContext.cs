@@ -36,8 +36,15 @@ public class AcademisationContext : DbContext
 
 		foreach (var children in childCollections)
 		{
-			if (children is null) continue;
-			foreach (var child in children) Remove(child);
+			if (children is null)
+			{
+				continue;
+			}
+
+			foreach (object? child in children)
+			{
+				Remove(child);
+			}
 		}
 
 		entity.State = EntityState.Detached;

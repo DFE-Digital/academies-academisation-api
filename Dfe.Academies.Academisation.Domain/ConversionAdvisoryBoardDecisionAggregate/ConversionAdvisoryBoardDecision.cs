@@ -56,7 +56,10 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 		return new CommandSuccessResult();
 	}
 
-	public void SetId(int id) => Id = Id == default
+	public void SetId(int id)
+	{
+		Id = Id == default
 		? id
 		: throw new InvalidOperationException("Cannot assign an id when the id has already been set");
+	}
 }

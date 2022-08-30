@@ -15,7 +15,7 @@ public class ApplicationUpdateDataCommand : IApplicationUpdateDataCommand
 
 	public async Task Execute(IApplication application)
 	{
-		ApplicationState state = ApplicationState.MapFromDomain(application);
+		var state = ApplicationState.MapFromDomain(application);
 
 		await _context.Applications
 			.Include(a => a.Contributors)
