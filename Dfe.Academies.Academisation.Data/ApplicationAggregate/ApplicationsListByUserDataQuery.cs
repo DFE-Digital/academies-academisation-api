@@ -7,12 +7,12 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 	public class ApplicationsListByUserDataQuery : IApplicationsListByUserDataQuery
 	{
 		private readonly AcademisationContext _context;
-		
+
 		public ApplicationsListByUserDataQuery(AcademisationContext context)
 		{
 			_context = context;
 		}
-		
+
 		public async Task<IList<IApplication>> Execute(string userEmail)
 		{
 			List<ApplicationState> applicationStates = await _context.Applications

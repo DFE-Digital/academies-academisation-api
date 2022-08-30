@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var result = await _applicationGetQuery.Execute(id);
 			return result is null ? NotFound() : Ok(result);
 		}
-		
+
 		[HttpGet("contributor/{email}", Name = "List")]
 		public async Task<ActionResult<IList<ApplicationServiceModel>>> ListByUser(string email)
 		{

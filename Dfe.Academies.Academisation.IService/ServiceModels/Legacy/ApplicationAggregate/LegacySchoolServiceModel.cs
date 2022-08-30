@@ -80,7 +80,7 @@ public record LegacySchoolServiceModel(
 	bool? SchoolBuildLandFutureProgramme = null,
 	// pre-opening support grant
 	string? SchoolSupportGrantFundsPaidTo = null, // either "To the school" or "To the trust the school is joining"
-															  // consultation details
+												  // consultation details
 	bool? SchoolHasConsultedStakeholders = null,
 	string? SchoolPlanToConsultStakeholders = null,
 	// declaration
@@ -89,5 +89,5 @@ public record LegacySchoolServiceModel(
 	// 2. The information in this application is true to the best of my kowledge (actual question)
 	bool? DeclarationBodyAgree = null,
 	bool? DeclarationIAmTheChairOrHeadteacher = null,
-	string? DeclarationSignedByName= null
+	string? DeclarationSignedByName = null
 );

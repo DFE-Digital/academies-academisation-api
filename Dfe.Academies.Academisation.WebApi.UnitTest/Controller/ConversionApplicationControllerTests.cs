@@ -215,7 +215,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var listResult = Assert.IsType<OkObjectResult>(result.Result);
 			Assert.Equal(new List<ApplicationServiceModel>(), listResult.Value);
 		}
-		
+
 		[Fact]
 		public async Task ListByUser___ServiceReturnsPopulatedList___SuccessResponseReturned()
 		{
