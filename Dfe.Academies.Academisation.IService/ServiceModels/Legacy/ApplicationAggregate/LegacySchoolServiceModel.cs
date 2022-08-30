@@ -80,7 +80,7 @@ public record LegacySchoolServiceModel(
 	bool? SchoolBuildLandFutureProgramme = null,
 	// pre-opening support grant
 	string? SchoolSupportGrantFundsPaidTo = null, // either "To the school" or "To the trust the school is joining"
-												  // consultation details
+	// consultation details
 	bool? SchoolHasConsultedStakeholders = null,
 	string? SchoolPlanToConsultStakeholders = null,
 	// declaration
