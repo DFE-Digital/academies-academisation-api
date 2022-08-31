@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.17.0" />
+    <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -21,11 +23,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Data.UnitTest\Dfe.Academies.Academisation.Data.UnitTest.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Domain.Core\Dfe.Academies.Academisation.Domain.Core.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IData\Dfe.Academies.Academisation.IData.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Service\Dfe.Academies.Academisation.Service.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.WebApi\Dfe.Academies.Academisation.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
