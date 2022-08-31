@@ -6,6 +6,7 @@ using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Test;
 using Xunit;
 using Xunit.Sdk;
 
@@ -207,7 +208,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		AssertCommandSuccess(result);
+		DfeAssertions.AssertCommandSuccess(result);
 
 		Assert.Equivalent(expected, subject);
 		var schoolMutated = Assert.Single(subject.Schools, s => s.Id == randomSchoolKey);
@@ -243,7 +244,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		AssertCommandSuccess(result);
+		DfeAssertions.AssertCommandSuccess(result);
 
 		Assert.Equivalent(expected, subject);
 		var addedSchool = Assert.Single(subject.Schools, s => s.Id == newKey);
@@ -279,16 +280,6 @@ public class ApplicationUpdateTests
 		Random random = new();
 		var list = enumerable.ToList();
 		return list.ElementAt(random.Next(1, list.Count));
-	}
-
-	private static void AssertCommandSuccess(CommandResult commandResult)
-	{
-		if (commandResult is CommandValidationErrorResult validationErrorResult)
-		{
-			throw new FailException("Validation Error:" + string.Join(";", validationErrorResult.ValidationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
-		}
-
-		Assert.IsAssignableFrom<CommandSuccessResult>(commandResult);
 	}
 
 	private static Application Clone(Application application)
