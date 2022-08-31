@@ -28,7 +28,10 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 		}
 
 		var existingApplication = await _applicationGetDataQuery.Execute(applicationId);
-		if (existingApplication is null) return new NotFoundCommandResult();
+		if (existingApplication is null)
+		{
+			return new NotFoundCommandResult();
+		}
 
 		var result = existingApplication.Update(
 			applicationServiceModel.ApplicationType,

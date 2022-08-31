@@ -20,9 +20,15 @@ public abstract class TestAcademisationContext : IDisposable
 			.Options;
 	}
 
-	public AcademisationContext CreateContext() => new(_contextOptions);
+	public AcademisationContext CreateContext()
+	{
+		return new(_contextOptions);
+	}
 
-	protected void Seed() => SeedData();
+	protected void Seed()
+	{
+		SeedData();
+	}
 
 	protected abstract void SeedData();
 

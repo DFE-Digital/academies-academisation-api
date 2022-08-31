@@ -2,7 +2,7 @@
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 
-namespace Dfe.Academies.Academisation.IService;
+namespace Dfe.Academies.Academisation.IService.Commands;
 
 public interface IApplicationCreateCommand
 {
