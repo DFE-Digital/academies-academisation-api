@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Core.Test\Dfe.Academies.Academisation.Core.Test.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Data.UnitTest\Dfe.Academies.Academisation.Data.UnitTest.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Domain.Core\Dfe.Academies.Academisation.Domain.Core.csproj" />

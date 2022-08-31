@@ -1,11 +1,14 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
-using Dfe.Academies.Academisation.Core;
+using Bogus;
+using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
@@ -24,6 +27,7 @@ namespace Dfe.Academies.Academisation.IntegrationTest.ApplicationAggregate;
 public class ApplicationCreateTests
 {
 	private readonly Fixture _fixture = new();
+	private readonly Faker _faker = new();
 
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
@@ -49,6 +53,9 @@ public class ApplicationCreateTests
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
+
+		_fixture.Customize<ContributorRequestModel>(composer =>
+			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
 	}
 
 	[Fact]
@@ -62,15 +69,37 @@ public class ApplicationCreateTests
 			_applicationSubmitCommand,
 			_applicationsListByUserQuery);
 
-		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture.Create<ApplicationCreateRequestModel>();
+		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
+			.Create<ApplicationCreateRequestModel>();
 
 		// act
 		var result = await applicationController.Post(applicationCreateRequestModel);
 
 		// assert
-		var createdResult = Assert.IsType<CreatedAtRouteResult>(result.Result);
-		Assert.IsType<ApplicationServiceModel>(createdResult.Value);
-		//Assert.Equal("Get", createdResult.RouteName);
-		//Assert.Equal(applicationServiceModel.ApplicationId, createdResult.RouteValues!["id"]);
+		CreatedAtRouteResult createdAtRouteResult = DfeAssertions.AssertCreatedAtRoute(result, "Get");
+
+		object? idValue = createdAtRouteResult.RouteValues!["id"];
+		int id = Assert.IsType<int>(idValue);
+
+		var getResult = await applicationController.Get(id);
+
+		var getOkayResult = Assert.IsAssignableFrom<OkObjectResult>(getResult.Result);
+		var actualApplication = Assert.IsAssignableFrom<ApplicationServiceModel>(getOkayResult.Value);
+		var actualContributor = Assert.Single(actualApplication.Contributors);
+
+		ApplicationServiceModel expectedApplication = new(
+			id,
+			applicationCreateRequestModel.ApplicationType,
+			ApplicationStatus.InProgress,
+			new List<ApplicationContributorServiceModel> { new ApplicationContributorServiceModel(
+				actualContributor.ContributorId,
+				applicationCreateRequestModel.Contributor.FirstName,
+				applicationCreateRequestModel.Contributor.LastName,
+				applicationCreateRequestModel.Contributor.EmailAddress,
+				applicationCreateRequestModel.Contributor.Role,
+				applicationCreateRequestModel.Contributor.OtherRoleName) },
+			new List<ApplicationSchoolServiceModel>());
+
+		Assert.Equivalent(expectedApplication, actualApplication);
 	}
 }
