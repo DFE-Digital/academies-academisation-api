@@ -88,3 +88,5 @@ app.MapHealthChecks("/healthcheck");
 app.MapControllers();
 
 app.Run();
+
+public partial class Program {}
