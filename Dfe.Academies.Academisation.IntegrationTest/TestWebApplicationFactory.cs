@@ -10,6 +10,7 @@ using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
 	private readonly string _authKey;
 	private AcademisationContext _dbContext = null!;
+	private SqliteConnection? _connection;
 
 	public TestWebApplicationFactory()
 	{
@@ -36,24 +38,25 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 	protected override void ConfigureWebHost(IWebHostBuilder builder)
 	{
 		builder.UseEnvironment("production");
-
-		var config = new ConfigurationBuilder()
-			.AddUserSecrets<Program>()
-			.AddEnvironmentVariables()
-			.AddJsonFile("appsettings.json")
-			.Build();
-		
-		var academiesDbConnectionString = config.GetValue<string>("AcademiesDatabaseConnectionString");
-		
-		var regex = new Regex("(?<=Initial Catalog=)(.*?)(?=;)");
-		var testDbConnectionString = regex.Replace(academiesDbConnectionString, $"testDb_{Guid.NewGuid()}");
+		var connectionString = GetConnectionString();
 		
 		builder.ConfigureTestServices(services =>
 		{
 			var context = services.Single(d => d.ServiceType == typeof(DbContextOptions<AcademisationContext>));
 			services.Remove(context);
-			services.AddDbContext<AcademisationContext>(options => options.UseSqlServer(testDbConnectionString));
+			
+			if(connectionString is null)
+			{
+				_connection = new("Filename=:memory:");
+				_connection.Open();
 
+				services.AddDbContext<AcademisationContext>(options => options.UseSqlite(_connection));
+			}
+			else
+			{
+				services.AddDbContext<AcademisationContext>(options => options.UseSqlServer(connectionString));
+			}
+			
 			var optionsConfig = Options.Create<AuthenticationConfig>(new() {ApiKeys = new List<string> {_authKey}});
 			services.AddScoped<IOptions<AuthenticationConfig>>(_ => optionsConfig);
 		
@@ -65,6 +68,22 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
 			SeedDecisionData();
 		});
+	}
+
+	private static string? GetConnectionString()
+	{
+		var config = new ConfigurationBuilder()
+			.AddUserSecrets<Program>()
+			.AddEnvironmentVariables()
+			.AddJsonFile("appsettings.json")
+			.Build();
+		
+		var academiesDbConnectionString = config.GetValue<string>("AcademiesDatabaseConnectionString");
+
+		if (string.IsNullOrWhiteSpace(academiesDbConnectionString)) return null;
+		
+		var regex =  new Regex("(?<=Initial Catalog=)(.*?)(?=;)");
+		return regex.Replace(academiesDbConnectionString, $"testDb_{Guid.NewGuid()}");
 	}
 
 	private void SeedDecisionData()
@@ -83,10 +102,15 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 		
 		_dbContext.SaveChanges();
 	}
-	
+
 	protected override void Dispose(bool disposing)
 	{
+		if (!disposing) return;
+		
 		_dbContext.Database.EnsureDeleted();
+		
+		if(_dbContext.Database.IsSqlite()) _connection?.Dispose();
+		
 		base.Dispose(disposing);
 	}
 }
