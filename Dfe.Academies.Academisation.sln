@@ -45,7 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation.WebApi.UnitTest", "Dfe.Academies.Academisation.WebApi.UnitTest\Dfe.Academies.Academisation.WebApi.UnitTest.csproj", "{B1683844-2C91-4678-8D62-C13F974DC222}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Academisation.Core.Test", "Dfe.Academies.Academisation.Core.Test\Dfe.Academies.Academisation.Core.Test.csproj", "{5288CE8C-AA8F-4B32-B617-049D16B13471}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.Academies.Academisation.Core.Test", "Dfe.Academies.Academisation.Core.Test\Dfe.Academies.Academisation.Core.Test.csproj", "{5288CE8C-AA8F-4B32-B617-049D16B13471}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.Academies.Academisation.SubcutaneousTest", "Dfe.Academies.Academisation.SubcutaneousTest\Dfe.Academies.Academisation.SubcutaneousTest.csproj", "{DFF6043C-B40F-4DC7-AFB0-8796CEC70D4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,10 @@ Global
 		{5288CE8C-AA8F-4B32-B617-049D16B13471}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5288CE8C-AA8F-4B32-B617-049D16B13471}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5288CE8C-AA8F-4B32-B617-049D16B13471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFF6043C-B40F-4DC7-AFB0-8796CEC70D4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFF6043C-B40F-4DC7-AFB0-8796CEC70D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFF6043C-B40F-4DC7-AFB0-8796CEC70D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFF6043C-B40F-4DC7-AFB0-8796CEC70D4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
