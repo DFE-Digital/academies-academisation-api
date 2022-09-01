@@ -26,5 +26,9 @@
     <ProjectReference Include="..\Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Service\Dfe.Academies.Academisation.Service.csproj" />
   </ItemGroup>
+	
+	<ItemGroup>
+		<InternalsVisibleTo Include="Dfe.Academies.Academisation.IntegrationTest" />
+	</ItemGroup>
 
 </Project>
