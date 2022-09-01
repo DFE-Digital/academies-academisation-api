@@ -18,7 +18,7 @@ using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace Dfe.Academies.Academisation.IntegrationTest.ApplicationAggregate;
+namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
 
 public class ApplicationCreateTests
 {
@@ -97,5 +97,30 @@ public class ApplicationCreateTests
 			new List<ApplicationSchoolServiceModel>());
 
 		Assert.Equivalent(expectedApplication, actualApplication);
+	}
+
+	[Fact]
+	public async Task ParametersInvalid___ApplicationNotCreated()
+	{
+		// arrange
+		var applicationController = new ApplicationController(
+			_applicationCreateCommand,
+			_applicationGetQuery,
+			_applicationUpdateCommand,
+			_applicationSubmitCommand,
+			_applicationsListByUserQuery);
+
+		_fixture.Customize<ContributorRequestModel>(composer =>
+			composer.With(c => c.EmailAddress, _faker.Name.FullName()));
+
+		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
+			.Create<ApplicationCreateRequestModel>();
+
+		// act
+		var result = await applicationController.Post(applicationCreateRequestModel);
+
+		// assert
+		Assert.IsType<BadRequestObjectResult>(result.Result);
+		Assert.Equal(3, _context.Applications.Count());
 	}
 }
