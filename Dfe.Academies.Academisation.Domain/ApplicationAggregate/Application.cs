@@ -55,8 +55,8 @@ public class Application : IApplication
 	public CommandResult Update(
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
-		Dictionary<int, ContributorDetails> contributors,
-		Dictionary<int, SchoolDetails> schools)
+		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
+		IEnumerable<KeyValuePair<int, SchoolDetails>> schools)
 	{
 		var validationResult = updateValidator.Validate((applicationType, applicationStatus, contributors, schools, this));
 
@@ -66,28 +66,23 @@ public class Application : IApplication
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		// ToDo: mutate contributors
+		_contributors.RemoveAll(c => true);
+
+		foreach (var contributor in contributors)
+		{
+			_contributors.Add(new Contributor(
+				contributor.Key,
+				contributor.Value
+				));
+		}
+
+		_schools.RemoveAll(s => true);
 
 		foreach (var school in schools)
 		{
-			var existingSchool = _schools.SingleOrDefault(s => s.Id == school.Key);
-
-			if (existingSchool != null)
-			{
-				_schools.Remove(existingSchool);
-			}
 			_schools.Add(new School(
 				school.Key,
 				school.Value
-				//new SchoolDetails(school.Value.Urn, school.Value.SchoolName)
-				//{
-				//	ProposedNewSchoolName = school.Value.ProposedNewSchoolName,
-				//	ProjectedPupilNumbersYear1 = school.Value.ProjectedPupilNumbersYear1,
-				//	ProjectedPupilNumbersYear2 = school.Value.ProjectedPupilNumbersYear2,
-				//	ProjectedPupilNumbersYear3 = school.Value.ProjectedPupilNumbersYear3,
-				//	SchoolCapacityAssumptions = school.Value.SchoolCapacityAssumptions,
-				//	SchoolCapacityPublishedAdmissionsNumber = school.Value.SchoolCapacityPublishedAdmissionsNumber
-				//	}
 				));
 		}
 

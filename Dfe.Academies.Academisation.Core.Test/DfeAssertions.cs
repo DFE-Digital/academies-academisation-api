@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Xunit.Sdk;
 
 namespace Dfe.Academies.Academisation.Core.Test;

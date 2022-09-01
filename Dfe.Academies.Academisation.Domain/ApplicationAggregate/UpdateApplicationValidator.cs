@@ -7,8 +7,8 @@ internal class UpdateApplicationValidator
 	: AbstractValidator<(
 		ApplicationType type,
 		ApplicationStatus status,
-		Dictionary<int, ContributorDetails> contributors,
-		Dictionary<int, SchoolDetails> schools,
+		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
+		IEnumerable<KeyValuePair<int, SchoolDetails>> schools,
 		Application existing)>
 {
 	public UpdateApplicationValidator()

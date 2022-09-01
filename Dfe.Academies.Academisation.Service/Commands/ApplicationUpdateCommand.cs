@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
 using Dfe.Academies.Academisation.IService.ServiceModels;
@@ -36,8 +37,8 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 		var result = existingApplication.Update(
 			applicationServiceModel.ApplicationType,
 			applicationServiceModel.ApplicationStatus,
-			applicationServiceModel.Contributors.ToDictionary(c => c.ContributorId, c => c.ToDomain()),
-			applicationServiceModel.Schools.ToDictionary(s => s.Id, s => s.ToDomain())
+			applicationServiceModel.Contributors.Select(c => new KeyValuePair<int, ContributorDetails>(c.ContributorId, c.ToDomain())),
+			applicationServiceModel.Schools.Select(s => new KeyValuePair<int, SchoolDetails>(s.Id, s.ToDomain()))
 			);
 
 		if (result is CommandValidationErrorResult)

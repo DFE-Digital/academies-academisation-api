@@ -6,7 +6,6 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
@@ -16,7 +15,6 @@ using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -39,6 +37,8 @@ public class ApplicationUpdateTests
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 
+	private readonly ApplicationController _applicationController;
+
 	public ApplicationUpdateTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
@@ -52,11 +52,26 @@ public class ApplicationUpdateTests
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 
+		_applicationController = new(
+			_applicationCreateCommand,
+			_applicationGetQuery,
+			_applicationUpdateCommand,
+			_applicationSubmitCommand,
+			_applicationsListByUserQuery);
+
+		_fixture.Customize<ApplicationContributorServiceModel>(composer =>
+			composer
+				.With(c => c.ContributorId, 0)
+				.With(c => c.EmailAddress, () => _faker.Internet.Email())
+				);
+
 		_fixture.Customize<ContributorRequestModel>(composer =>
-			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
+			composer.With(c => c.EmailAddress, () => _faker.Internet.Email())
+			);
 
 		_fixture.Customize<ApplicationSchoolServiceModel>(composer =>
 			composer
+				.With(s => s.Id, 0)
 				.With(s => s.SchoolConversionContactHeadEmail, _faker.Internet.Email())
 				.With(s => s.SchoolConversionContactChairEmail, _faker.Internet.Email())
 				.With(s => s.SchoolConversionMainContactOtherEmail, _faker.Internet.Email())
@@ -68,45 +83,85 @@ public class ApplicationUpdateTests
 	public async Task ParametersValid___ApplicationUpdated()
 	{
 		// arrange
-		ApplicationController applicationController = new(
-			_applicationCreateCommand,
-			_applicationGetQuery,
-			_applicationUpdateCommand,
-			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
-
-		var existingApplication = await CreateApplication();
+		var existingApplication = await CreateExistingApplication();
 		Assert.NotNull(existingApplication);
+		Assert.Equal(3, existingApplication.Contributors.Count);
+		Assert.Equal(3, existingApplication.Schools.Count);
 
 		var applicationContributorServiceModel = _fixture.Create<ApplicationContributorServiceModel>();
 		var applicationSchoolServiceModel = _fixture.Create<ApplicationSchoolServiceModel>();
 
-		ApplicationServiceModel applicationServiceModel = new(
+		var schoolsList = existingApplication.Schools.ToList();
+		schoolsList.Add(applicationSchoolServiceModel);
+
+		ApplicationServiceModel applicationToUpdate = new(
 			existingApplication.ApplicationId,
 			existingApplication.ApplicationType,
 			existingApplication.ApplicationStatus,
-			existingApplication.Contributors,
-		////existingApplication.Schools.Take(2).ToList());
-		////new List<ApplicationContributorServiceModel>() { applicationContributorServiceModel },
-		new List<ApplicationSchoolServiceModel>() { applicationSchoolServiceModel });
+			new List<ApplicationContributorServiceModel>()
+			{
+				existingApplication.Contributors.ToArray()[0],
+				existingApplication.Contributors.ToArray()[1],
+				applicationContributorServiceModel
+			},
+			new List<ApplicationSchoolServiceModel>()
+			{
+				existingApplication.Schools.ToArray()[0],
+				applicationSchoolServiceModel,
+				existingApplication.Schools.ToArray()[2]
+			}
+			);
 
 		// act
-		var updateResult = await applicationController.Update(existingApplication.ApplicationId, applicationServiceModel);
+		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
 
 		// assert
 		DfeAssertions.OkResult(updateResult);
+		var gotApplication = await _applicationGetQuery.Execute(existingApplication.ApplicationId);
+		Assert.NotNull(gotApplication);
+
+		var expectedApplication = applicationToUpdate with
+		{
+			Contributors = new List<ApplicationContributorServiceModel>()
+			{
+				existingApplication.Contributors.ToArray()[0],
+				existingApplication.Contributors.ToArray()[1],
+				applicationContributorServiceModel with
+				{
+					ContributorId = gotApplication.Contributors.Single(c => c.EmailAddress == applicationContributorServiceModel.EmailAddress).ContributorId
+				}
+			},
+			Schools = new List<ApplicationSchoolServiceModel>()
+			{
+				existingApplication.Schools.ToArray()[0],
+				applicationSchoolServiceModel with
+				{
+					Id = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Id
+				},
+				existingApplication.Schools.ToArray()[2],
+			}
+		};
+
+		Assert.Equivalent(expectedApplication, gotApplication);
 
 	}
 
-	private async Task<ApplicationServiceModel> CreateApplication()
+	private async Task<ApplicationServiceModel> CreateExistingApplication()
 	{
 		ApplicationCreateRequestModel applicationForCreate = _fixture.Create<ApplicationCreateRequestModel>();
 
 		var createResult = await _applicationCreateCommand.Execute(applicationForCreate);
-
 		var createSuccessResult = Assert.IsType<CreateSuccessResult<ApplicationServiceModel>>(createResult);
-
 		int id = createSuccessResult.Payload.ApplicationId;
+
+		var applicationToUpdate = _fixture.Create<ApplicationServiceModel>() with
+		{
+			ApplicationId = createSuccessResult.Payload.ApplicationId,
+			ApplicationType = createSuccessResult.Payload.ApplicationType,
+			ApplicationStatus = createSuccessResult.Payload.ApplicationStatus
+		};
+
+		await _applicationController.Update(createSuccessResult.Payload.ApplicationId, applicationToUpdate);
 
 		return await _applicationGetQuery.Execute(id);
 	}
