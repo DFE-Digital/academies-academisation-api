@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Xml;
+using Microsoft.AspNetCore.Mvc;
 using Xunit.Sdk;
 
 namespace Dfe.Academies.Academisation.Core.Test;
@@ -30,4 +31,19 @@ public class DfeAssertions
 
 		return createdAtRouteResult;
 	}
+
+	public static OkResult OkResult(ActionResult result)
+	{
+		if (result is BadRequestObjectResult badRequestObjectResult)
+		{
+			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
+
+			throw new FailException("BadObjectRequestResult: " + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+		}
+
+		var okResult = Assert.IsAssignableFrom<OkResult>(result);
+
+		return okResult;
+	}
+
 }
