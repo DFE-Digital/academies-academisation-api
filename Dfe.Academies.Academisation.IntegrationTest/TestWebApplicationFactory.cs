@@ -80,7 +80,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 		
 		_dbContext.Database.EnsureDeleted();
 		
-		if(_dbContext.Database.IsSqlite()) _connection?.Dispose();
+		if(_dbContext.Database.IsSqlite()) _connection.Dispose();
 		
 		base.Dispose(disposing);
 	}
