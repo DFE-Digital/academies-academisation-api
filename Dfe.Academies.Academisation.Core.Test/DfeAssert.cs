@@ -3,9 +3,9 @@ using Xunit.Sdk;
 
 namespace Dfe.Academies.Academisation.Core.Test;
 
-public class DfeAssertions
+public class DfeAssert
 {
-	public static void AssertCommandSuccess(CommandResult commandResult)
+	public static void CommandSuccess(CommandResult commandResult)
 	{
 		if (commandResult is CommandValidationErrorResult validationErrorResult)
 		{
@@ -15,7 +15,14 @@ public class DfeAssertions
 		Assert.IsAssignableFrom<CommandSuccessResult>(commandResult);
 	}
 
-	public static CreatedAtRouteResult AssertCreatedAtRoute<T>(ActionResult<T> result, string routeName)
+	public static void CommandValidationError(CommandResult commandResult, string propertyName)
+	{
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(commandResult);
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(propertyName, error.PropertyName);
+	}
+
+	public static CreatedAtRouteResult CreatedAtRoute<T>(ActionResult<T> result, string routeName)
 	{
 		if (result.Result is BadRequestObjectResult badRequestObjectResult)
 		{
