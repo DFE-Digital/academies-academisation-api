@@ -15,6 +15,13 @@ public class DfeAssertions
 		Assert.IsAssignableFrom<CommandSuccessResult>(commandResult);
 	}
 
+	public static void AssertCommandValidationError(CommandResult commandResult, string propertyName)
+	{
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(commandResult);
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(propertyName, error.PropertyName);
+	}
+
 	public static CreatedAtRouteResult AssertCreatedAtRoute<T>(ActionResult<T> result, string routeName)
 	{
 		if (result.Result is BadRequestObjectResult badRequestObjectResult)

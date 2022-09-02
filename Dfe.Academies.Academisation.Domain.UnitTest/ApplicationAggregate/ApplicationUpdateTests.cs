@@ -42,10 +42,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Equal(nameof(Application.ApplicationStatus), error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, nameof(Application.ApplicationStatus));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -64,10 +61,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Equal(nameof(Application.ApplicationStatus), error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, nameof(Application.ApplicationStatus));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -87,10 +81,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Equal(nameof(Application.ApplicationType), error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, nameof(Application.ApplicationType));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -117,12 +108,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Equal(
-			$"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}",
-			error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, $"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}");
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -144,10 +130,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Contains(nameof(Application.Contributors), error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, nameof(Application.Contributors));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -169,10 +152,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Contains(nameof(SchoolDetails.ApproverContactEmail), error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, nameof(SchoolDetails.ApproverContactEmail));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -194,10 +174,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Contains(nameof(Application.Schools), error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, nameof(Application.Schools));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -220,10 +197,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
-		var error = Assert.Single(validationErrorResult.ValidationErrors);
-		Assert.Contains(nameof(SchoolDetails.ContactHeadEmail), error.PropertyName);
-
+		DfeAssertions.AssertCommandValidationError(result, nameof(SchoolDetails.ContactHeadEmail));
 		Assert.Equivalent(expected, subject);
 	}
 
