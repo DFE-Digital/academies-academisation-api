@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands;
@@ -15,6 +16,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -144,6 +146,22 @@ public class ApplicationUpdateTests
 
 		Assert.Equivalent(expectedApplication, gotApplication);
 
+	}
+
+	[Fact]
+	public async Task StatusChangedToSubmittid___BadRequest_ApplicationNotUpdated()
+	{
+		// arrange
+		var existingApplication = await CreateExistingApplication();
+		Assert.NotNull(existingApplication);
+
+		ApplicationServiceModel applicationToUpdate = existingApplication with { ApplicationStatus = ApplicationStatus.Submitted };
+
+		// act
+		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
+
+		// assert
+		DfeAssertions.BadRequestObjectResult(updateResult, "ApplicationStatus");
 	}
 
 	private async Task<ApplicationServiceModel> CreateExistingApplication()

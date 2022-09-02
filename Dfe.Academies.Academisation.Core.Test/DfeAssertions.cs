@@ -45,4 +45,14 @@ public class DfeAssertions
 		return okResult;
 	}
 
+	public static BadRequestObjectResult BadRequestObjectResult(ActionResult result, string propertyName)
+	{
+		var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
+		var errors = Assert.IsAssignableFrom<IEnumerable<ValidationError>>(badRequestObjectResult.Value);
+		var error = Assert.Single(errors);
+		Assert.NotNull(error);
+		Assert.Equal(propertyName, error.PropertyName);
+
+		return	badRequestObjectResult;
+	}
 }
