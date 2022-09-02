@@ -59,8 +59,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			applicationMock.Setup(x => x.Update(
 				It.IsAny<ApplicationType>(),
 				It.IsAny<ApplicationStatus>(),
-				It.IsAny<Dictionary<int, ContributorDetails>>(),
-				It.IsAny<Dictionary<int, SchoolDetails>>()
+				It.IsAny<IEnumerable<KeyValuePair<int, ContributorDetails>>>(),
+				It.IsAny<IEnumerable<KeyValuePair<int, SchoolDetails>>>()
 				)).Returns(new CommandSuccessResult());
 			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId))
 				.ReturnsAsync(applicationMock.Object);

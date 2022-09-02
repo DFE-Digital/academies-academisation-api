@@ -21,8 +21,8 @@ public interface IApplication
 	CommandResult Update(
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
-		Dictionary<int, ContributorDetails> contributors,
-		Dictionary<int, SchoolDetails> schools);
+		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
+		IEnumerable<KeyValuePair<int, SchoolDetails>> schools);
 
 	CommandResult Submit();
 }

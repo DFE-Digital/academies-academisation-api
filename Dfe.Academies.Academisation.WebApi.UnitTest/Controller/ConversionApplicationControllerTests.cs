@@ -158,7 +158,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _subject.Update(applicationId, applicationServiceModel);
 
 			// assert
-			Assert.IsType<OkResult>(result.Result);
+			Assert.IsType<OkResult>(result);
 		}
 
 		[Fact]
@@ -175,7 +175,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _subject.Update(applicationId, applicationServiceModel);
 
 			// assert
-			Assert.IsType<NotFoundResult>(result.Result);
+			Assert.IsType<NotFoundResult>(result);
 		}
 
 		[Fact]
@@ -193,7 +193,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _subject.Update(applicationId, applicationServiceModel);
 
 			// assert
-			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
 			Assert.Equal(expectedValidationError, validationErrors);
 		}

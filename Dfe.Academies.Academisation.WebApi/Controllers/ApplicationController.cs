@@ -62,7 +62,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut("{id}", Name = "Update")]
-		public async Task<ActionResult<ApplicationServiceModel>> Update(int id, [FromBody] ApplicationServiceModel serviceModel)
+		public async Task<ActionResult> Update(int id, [FromBody] ApplicationServiceModel serviceModel)
 		{
 			var result = await _applicationUpdateCommand.Execute(id, serviceModel);
 

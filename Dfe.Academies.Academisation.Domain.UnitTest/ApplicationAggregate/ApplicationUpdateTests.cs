@@ -8,7 +8,6 @@ using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Xunit;
-using Xunit.Sdk;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate;
 
