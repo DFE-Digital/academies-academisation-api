@@ -30,6 +30,16 @@ internal class UpdateApplicationValidator
 			.WithMessage("Cannot change the type using this operation of an existing Application. Please start a new one.")
 			.OverridePropertyName(nameof(Application.ApplicationType));
 
+		RuleFor(x => x.contributors)
+			.Must(x => false)
+			.When(x => x.contributors
+				.Select(s => s.Key)
+				.Where(id => id != 0)
+				.Except(x.existing.Contributors.Select(s => s.Id))
+				.Any())
+			.WithMessage("Added Contributors must have an Id of zero.")
+			.OverridePropertyName(nameof(Application.Contributors));
+
 		RuleForEach(x => x.contributors.Join(
 			x.existing.Contributors,
 			updated => updated.Key,

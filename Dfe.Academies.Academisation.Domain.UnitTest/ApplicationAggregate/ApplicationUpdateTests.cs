@@ -127,6 +127,31 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
+	public void AddNewContributorNonZeroId___ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application expected = Clone(subject);
+
+		var contributorsUpdated = subject.Contributors.ToDictionary(s => s.Id, s => s.Details);
+		contributorsUpdated.Add(_fixture.Create<int>(), _fixture.Create<ContributorDetails>());
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			contributorsUpdated,
+			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+
+		// assert
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(nameof(Application.Contributors), error.PropertyName);
+
+		Assert.Equivalent(expected, subject);
+	}
+
+	[Fact]
 	public void AddNewSchoolInvalidEmail___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
