@@ -152,6 +152,31 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
+	public void AddNewSchoolNonZeroId___ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application expected = Clone(subject);
+
+		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
+		schoolsUpdated.Add(_fixture.Create<int>(), _fixture.Create<SchoolDetails>());
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(result);
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(nameof(Application.Schools), error.PropertyName);
+
+		Assert.Equivalent(expected, subject);
+	}
+
+	[Fact]
 	public void UpdateExistingSchoolInvalidEmail___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
@@ -221,9 +246,8 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
 		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
-		int newKey = schoolsUpdated.Keys.Max() + 1;
 		var schoolDetailsToAdd = _fixture.Create<SchoolDetails>();
-		schoolsUpdated.Add(newKey, schoolDetailsToAdd);
+		schoolsUpdated.Add(0, schoolDetailsToAdd);
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -246,7 +270,7 @@ public class ApplicationUpdateTests
 		DfeAssertions.AssertCommandSuccess(result);
 
 		Assert.Equivalent(expected, subject);
-		var addedSchool = Assert.Single(subject.Schools, s => s.Id == newKey);
+		var addedSchool = Assert.Single(subject.Schools, s => s.Details.Urn == schoolDetailsToAdd.Urn);
 		Assert.Equivalent(schoolDetailsToAdd, addedSchool.Details);
 	}
 

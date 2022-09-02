@@ -38,6 +38,16 @@ internal class UpdateApplicationValidator
 			.SetValidator(new UpdateContributorValidator())
 			.OverridePropertyName(nameof(Contributor));
 
+		RuleFor(x => x.schools)
+			.Must(x => false)
+			.When(x => x.schools
+				.Select(s => s.Key)
+				.Where(id => id != 0)
+				.Except(x.existing.Schools.Select(s => s.Id))
+				.Any())
+			.WithMessage("Added Schools must have an Id of zero.")
+			.OverridePropertyName(nameof(Application.Schools));
+
 		RuleForEach(x => x.schools.Select(s => s.Value))
 			.SetValidator(new SchoolValidator())
 			.OverridePropertyName(nameof(SchoolDetails));
