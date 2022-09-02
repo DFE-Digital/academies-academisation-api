@@ -118,7 +118,7 @@ public class ApplicationUpdateTests
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
 
 		// assert
-		DfeAssertions.OkResult(updateResult);
+		DfeAssert.OkResult(updateResult);
 		var gotApplication = await _applicationGetQuery.Execute(existingApplication.ApplicationId);
 		Assert.NotNull(gotApplication);
 
@@ -161,7 +161,7 @@ public class ApplicationUpdateTests
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
 
 		// assert
-		DfeAssertions.BadRequestObjectResult(updateResult, "ApplicationStatus");
+		DfeAssert.BadRequestObjectResult(updateResult, "ApplicationStatus");
 	}
 
 	private async Task<ApplicationServiceModel> CreateExistingApplication()

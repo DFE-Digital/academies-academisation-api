@@ -42,7 +42,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, nameof(Application.ApplicationStatus));
+		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationStatus));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -61,7 +61,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, nameof(Application.ApplicationStatus));
+		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationStatus));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -81,7 +81,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, nameof(Application.ApplicationType));
+		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationType));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -108,7 +108,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, $"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}");
+		DfeAssert.CommandValidationError(result, $"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}");
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -130,7 +130,7 @@ public class ApplicationUpdateTests
 			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, nameof(Application.Contributors));
+		DfeAssert.CommandValidationError(result, nameof(Application.Contributors));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -152,7 +152,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, nameof(SchoolDetails.ApproverContactEmail));
+		DfeAssert.CommandValidationError(result, nameof(SchoolDetails.ApproverContactEmail));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -174,7 +174,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, nameof(Application.Schools));
+		DfeAssert.CommandValidationError(result, nameof(Application.Schools));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -197,7 +197,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		DfeAssertions.AssertCommandValidationError(result, nameof(SchoolDetails.ContactHeadEmail));
+		DfeAssert.CommandValidationError(result, nameof(SchoolDetails.ContactHeadEmail));
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -231,7 +231,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		DfeAssertions.AssertCommandSuccess(result);
+		DfeAssert.CommandSuccess(result);
 
 		Assert.Equivalent(expected, subject);
 		var schoolMutated = Assert.Single(subject.Schools, s => s.Id == randomSchoolKey);
@@ -266,7 +266,7 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		DfeAssertions.AssertCommandSuccess(result);
+		DfeAssert.CommandSuccess(result);
 
 		Assert.Equivalent(expected, subject);
 		var addedSchool = Assert.Single(subject.Schools, s => s.Details.Urn == schoolDetailsToAdd.Urn);
