@@ -50,8 +50,8 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 		var createdResult = Assert.IsType<CreatedAtRouteResult>(result.Result);
 
 		Assert.Equal(decisionServiceModel, createdResult.Value);
-		Assert.Equal(HttpMethods.Get, createdResult.RouteName);
-		Assert.Equal(decisionServiceModel.AdvisoryBoardDecisionId, createdResult.RouteValues!["id"]);
+		Assert.Equal("GetProject", createdResult.RouteName);
+		Assert.Equal(decisionServiceModel.AdvisoryBoardDecisionId, createdResult.RouteValues!["projectId"]);
 	}
 
 	[Fact]

@@ -12,6 +12,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers;
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class ConversionAdvisoryBoardDecisionController : ControllerBase
 {
+	private const string GetRouteName = "GetProject";
 	private readonly IAdvisoryBoardDecisionCreateCommand _decisionCreateCommand;
 	private readonly IAdvisoryBoardDecisionUpdateCommand _decisionUpdateCommand;
 	private readonly IConversionAdvisoryBoardDecisionGetQuery _decisionGetQuery;
@@ -33,8 +34,8 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
 		return result switch
 		{
 			CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel> successResult => CreatedAtRoute(
-					HttpMethods.Get,
-					new { Id = successResult.Payload.AdvisoryBoardDecisionId },
+					GetRouteName,
+					new { projectId = successResult.Payload.AdvisoryBoardDecisionId },
 					successResult.Payload),
 			CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel> validationErrorResult =>
 				new BadRequestObjectResult(validationErrorResult.ValidationErrors),
@@ -42,7 +43,7 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
 		};
 	}
 
-	[HttpGet("{projectId:int}")]
+	[HttpGet("{projectId:int}", Name = GetRouteName)]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByProjectId(int projectId)
