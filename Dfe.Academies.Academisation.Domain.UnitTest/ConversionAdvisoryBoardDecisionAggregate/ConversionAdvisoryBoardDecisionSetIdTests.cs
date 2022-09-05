@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoFixture;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ConversionAdvisoryBoardDecisionAggregate;
