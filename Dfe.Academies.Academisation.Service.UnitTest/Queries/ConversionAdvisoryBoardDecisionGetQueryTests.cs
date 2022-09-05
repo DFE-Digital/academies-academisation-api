@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels;
+using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Queries;
 using Moq;
 using Xunit;

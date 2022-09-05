@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Net;
 using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IntegrationTest.Extensions;
 using Dfe.Academies.Academisation.IService.RequestModels;
-using Dfe.Academies.Academisation.IService.ServiceModels;
+using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.IntegrationTest.ConversionAdvisoryBoardDecision;

@@ -2,7 +2,7 @@
 using System.Linq;
 using Bogus;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Moq;
 using Xunit;

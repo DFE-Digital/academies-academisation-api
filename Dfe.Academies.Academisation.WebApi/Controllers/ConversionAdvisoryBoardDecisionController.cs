@@ -1,8 +1,8 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IService.Commands;
+using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
-using Dfe.Academies.Academisation.IService.ServiceModels;
+using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers;

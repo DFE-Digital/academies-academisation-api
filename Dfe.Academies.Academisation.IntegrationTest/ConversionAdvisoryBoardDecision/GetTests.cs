@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Dfe.Academies.Academisation.IntegrationTest.Extensions;
-using Dfe.Academies.Academisation.IService.ServiceModels;
+using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.IntegrationTest.ConversionAdvisoryBoardDecision;

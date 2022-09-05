@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
+﻿using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;

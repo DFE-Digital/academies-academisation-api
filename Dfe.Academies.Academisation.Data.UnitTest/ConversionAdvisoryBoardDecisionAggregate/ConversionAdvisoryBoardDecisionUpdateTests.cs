@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
-using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
 using Moq;

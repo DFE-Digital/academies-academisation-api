@@ -2,8 +2,8 @@
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels;
-using Dfe.Academies.Academisation.Service.Commands;
+using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.UnitTest.Helpers;
 using Moq;
 using Xunit;

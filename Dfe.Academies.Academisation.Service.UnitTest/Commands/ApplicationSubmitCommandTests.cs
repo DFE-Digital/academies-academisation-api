@@ -2,7 +2,7 @@
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Service.Commands;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 using Moq;
 using Xunit;
 
