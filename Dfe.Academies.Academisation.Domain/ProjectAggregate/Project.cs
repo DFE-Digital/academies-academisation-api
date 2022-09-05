@@ -1,12 +1,13 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
-public class Project
+public class Project : IProject
 {
 	private Project(ProjectDetails projectDetails)
 	{
-		ProjectDetails = projectDetails;
+		Details = projectDetails;
 	}
 
 	/// <summary>
@@ -15,10 +16,10 @@ public class Project
 	public Project(int id, ProjectDetails projectDetails)
 	{
 		Id = id;
-		ProjectDetails = projectDetails;
+		Details = projectDetails;
 	}
 
 	public int Id { get; }
 
-	public ProjectDetails ProjectDetails { get; }
+	public ProjectDetails Details { get; }
 }

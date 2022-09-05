@@ -6,5 +6,5 @@ public interface IProject
 {
 	public int Id { get; }
 
-	public ProjectDetails ProjectDetails { get; }
+	public ProjectDetails Details { get; }
 }
