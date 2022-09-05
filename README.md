@@ -78,6 +78,13 @@ To apply a set of migrations to the database, change to the WebApi directory and
 dotnet ef database update --project ..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj --startup-project Dfe.Academies.Academisation.WebApi.csproj --context Dfe.Academies.Academisation.Data.AcademisationContext
 ```
 
+OR
+```
+dotnet ef database update --project Dfe.Academies.Academisation.Data --startup-project Dfe.Academies.Academisation.WebApi --context Dfe.Academies.Academisation.Data.AcademisationContext
+```
+
+
+
 ## Getting Started
 ### Prerequisites
 You must have the trams API docker container downloaded and running as this API uses the same database. Instructions to do this are here:-
@@ -92,8 +99,14 @@ docker login https://ghcr.io --username 'github username'
 
 Above will prompt for password, this is the PAT token
 
-4) download docker image like so:-
+4) download & run docker image like so:-
 docker run -d -p 1433:1433 ghcr.io/dfe-digital/trams-development-database:latest
+
+You may run into port issues if you have something else running on port 1433 i.e. a local install of SQL server. 
+If this is the case, try the following command instead:-
+docker run -d -p 2401:1433 ghcr.io/dfe-digital/trams-development-database:latest
+
+If you do this, remember to amend the DefaultConnection within the trams API codebase within BOTH appsettings.json files !!!
 
 5) run trams API EF migrations first to create default database:-
 trams API has 2 DB contexts (why?)
@@ -101,7 +114,7 @@ So, firstly, you need to run the following migration:-
 dotnet ef database update --connection DefaultConnection --project TramsDataApi --context TramsDataApi.DatabaseModels.LegacyTramsDbContext
 
 then:-
-dotnet ef database update --connection DefaultConnection --project TramsDataApi --context TramsDataApi.DatabaseModels.TramsDbContext
+dotnet ef database update --connection "Server=localhost,1433;Database=sip;User=sa;Password=StrongPassword905" --project TramsDataApi --context TramsDataApi.DatabaseModels.TramsDbContext
 
 6) run academisation EF migration to apply database changes specific to this API onto docker image database:-
 
