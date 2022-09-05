@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;

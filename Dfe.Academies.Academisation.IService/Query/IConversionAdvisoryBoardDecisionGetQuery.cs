@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.IService.ServiceModels;
+﻿using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 
 namespace Dfe.Academies.Academisation.IService.Query;
 
