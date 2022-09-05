@@ -13,6 +13,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class ApplicationController : ControllerBase
 	{
+		private const string GetRouteName = "GetApplication";
 		private readonly IApplicationCreateCommand _applicationCreateCommand;
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
@@ -42,13 +43,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result switch
 			{
-				CreateSuccessResult<ApplicationServiceModel> successResult => CreatedAtRoute("Get", new { id = successResult.Payload.ApplicationId }, successResult.Payload),
+				CreateSuccessResult<ApplicationServiceModel> successResult => CreatedAtRoute(GetRouteName, new { id = successResult.Payload.ApplicationId }, successResult.Payload),
 				CreateValidationErrorResult<ApplicationServiceModel> validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
 		}
 
-		[HttpGet("{id}", Name = "Get")]
+		[HttpGet("{id}", Name = GetRouteName)]
 		public async Task<ActionResult<ApplicationServiceModel>> Get(int id)
 		{
 			var result = await _applicationGetQuery.Execute(id);
