@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using Bogus;
-using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
