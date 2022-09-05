@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
-public record AcademyConversionProjectResponse(
+public record LegacyProjectServiceModel(
 	int Id,
 	int Urn,
 	int Laestab,
