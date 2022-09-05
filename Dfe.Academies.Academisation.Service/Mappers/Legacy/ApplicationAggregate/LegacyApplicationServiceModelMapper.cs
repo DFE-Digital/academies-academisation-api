@@ -19,14 +19,15 @@ internal class LegacyApplicationServiceModelMapper
 			ApplicationType = MapType(application),
 			ApplicationSubmitted = application.ApplicationStatus == ApplicationStatus.Submitted,
 
-			// These don't seem to be set in the Azure Data Factory pipeline
+			// This doesn;t seem to be set in the Azure Data Factory pipeline, so leaving it null
 			ApplicationStatusId = null,
 
-			// ToDo: ApplicationReference
+			// ToDo: ApplicationReference - we need to generate an application reference somehow
 			////Name = application.ApplicationReference,
 		};
 
 		// How do we determine the Lead Author, we have a list of contributors?
+		// Is it just the person that created the Application?
 		IContributor? leadAuthor = application.Contributors.FirstOrDefault();
 
 		if (leadAuthor is not null)
@@ -60,7 +61,8 @@ internal class LegacyApplicationServiceModelMapper
 		else
 		{
 			// For FormAMat and FormASat it would be necessary to set these fields
-			// (but it's probably not worth implementing them in this legacy service model)
+			// (but it's probably not worth implementing them in this legacy service model).
+			// If we do, then these fields will likely come from application.NewTrust
 			serviceModel = serviceModel with
 			{
 				FormTrustProposedNameOfTrust = null,
@@ -80,7 +82,7 @@ internal class LegacyApplicationServiceModelMapper
 				FormTrustImprovementApprovedSponsor = null,
 			};
 
-			throw new NotImplementedException();
+			throw new NotImplementedException("Only JoinAMat has been implemented");
 		}
 
 		return serviceModel;
@@ -88,16 +90,12 @@ internal class LegacyApplicationServiceModelMapper
 
 	private static string MapType(IApplication application)
 	{
-		switch (application.ApplicationType)
+		return application.ApplicationType switch
 		{
-			case ApplicationType.JoinAMat:
-				return "JoinMat";
-			case ApplicationType.FormAMat:
-				return "FormMat";
-			case ApplicationType.FormASat:
-				return "FormSat";
-			default:
-				throw new NotImplementedException();
-		}
+			ApplicationType.JoinAMat => "JoinMat",
+			ApplicationType.FormAMat => "FormMat",
+			ApplicationType.FormASat => "FormSat",
+			_ => throw new NotImplementedException("Unrecognised ApplicationType, has a new ApplicationType been added recently?"),
+		};
 	}
 }
