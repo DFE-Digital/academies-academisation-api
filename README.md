@@ -78,7 +78,7 @@ To apply a set of migrations to the database, change to the WebApi directory and
 dotnet ef database update --project ..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj --startup-project Dfe.Academies.Academisation.WebApi.csproj --context Dfe.Academies.Academisation.Data.AcademisationContext
 ```
 
-OR
+OR the following within Visual Studio package manager console with the the 'WebApi' project selected as a startup:-
 ```
 dotnet ef database update --project Dfe.Academies.Academisation.Data --startup-project Dfe.Academies.Academisation.WebApi --context Dfe.Academies.Academisation.Data.AcademisationContext
 ```
