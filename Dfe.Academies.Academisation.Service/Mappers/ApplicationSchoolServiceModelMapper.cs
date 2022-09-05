@@ -29,6 +29,7 @@ internal static class ApplicationSchoolServiceModelMapper
 			SchoolConversionContactChairTel = school.Details.ContactChairTel,
 			SchoolConversionContactRole = school.Details.ContactRole,
 			ApplicationJoinTrustReason = school.Details.ApplicationJoinTrustReason,
+			WantConversionToHappenOnSelectedDate = school.Details.WantConversionToHappenOnSelectedDate,
 			SchoolConversionTargetDate = school.Details.ConversionTargetDate,
 			SchoolConversionTargetDateExplained = school.Details.ConversionTargetDateExplained,
 			ProposedNewSchoolName = school.Details.ProposedNewSchoolName,
