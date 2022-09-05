@@ -71,3 +71,8 @@ To apply a set of migrations to the database, change to the WebApi directory and
 ```
 dotnet ef database update --project ..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj --startup-project Dfe.Academies.Academisation.WebApi.csproj --context Dfe.Academies.Academisation.Data.AcademisationContext
 ```
+
+## Getting Started
+### Code commit comment rules
+Nothing formal, but been using the following pattern:
+AB#105435 - conversion target date - store whether target date has been chosen - 'description of this commit'
