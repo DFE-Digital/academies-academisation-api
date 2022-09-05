@@ -16,7 +16,6 @@ using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Commands;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
