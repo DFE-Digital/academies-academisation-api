@@ -39,7 +39,6 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolConversionApproverContactEmail = school.ApproverContactEmail,
 
 			// conversion dates
-			WantConversionToHappenOnSelectedDate = school.WantConversionToHappenOnSelectedDate,
 			SchoolConversionTargetDateSpecified = school.ConversionTargetDate.HasValue,
 			SchoolConversionTargetDate = school.ConversionTargetDate,
 			SchoolConversionTargetDateExplained = school.ConversionTargetDateExplained,
@@ -108,7 +107,6 @@ internal static class LegacySchoolServiceModelMapper
 
 			// ToDo: pre-opening support grant
 			////SchoolSupportGrantFundsPaidTo = null, // either "To the school" or "To the trust the school is joining"
-			//// bool ConfirmSchoolPay
 
 			// ToDo: consultation details
 			////SchoolHasConsultedStakeholders = null,
@@ -116,8 +114,8 @@ internal static class LegacySchoolServiceModelMapper
 
 			// ToDo: declaration
 			// two questions from the application form would be easy to mix up here
-			// 1. I agree with all of these statements, and believe that the facts stated in this application are true (summary page)
-			// 2. The information in this application is true to the best of my knowledge (actual question)
+			// 1. I agree with all of these statements, and belive that the facts stated in this application are true (summary page)
+			// 2. The information in this application is true to the best of my kowledge (actual question)
 			////DeclarationBodyAgree = null,
 			////DeclarationIAmTheChairOrHeadteacher = null,
 			////DeclarationSignedByName = null
