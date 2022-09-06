@@ -39,7 +39,7 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolConversionApproverContactEmail = school.ApproverContactEmail,
 
 			// conversion dates
-			SchoolConversionTargetDateSpecified = school.ConversionTargetDate.HasValue,
+			SchoolConversionTargetDateSpecified = school.SchoolConversionTargetDateSpecified.Value,
 			SchoolConversionTargetDate = school.ConversionTargetDate,
 			SchoolConversionTargetDateExplained = school.ConversionTargetDateExplained,
 
