@@ -4,5 +4,5 @@ namespace Dfe.Academies.Academisation.IService.Query;
 
 public interface ILegacyProjectGetQuery
 {
-	Task<LegacyProjectServiceModel> Execute(int id);
+	Task<LegacyProjectServiceModel?> Execute(int id);
 }
