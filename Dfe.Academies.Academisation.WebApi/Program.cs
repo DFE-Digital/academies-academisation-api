@@ -1,18 +1,22 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Data.LegalRequirement;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IData.LegalRequirementAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
+using Dfe.Academies.Academisation.IService.Commands.LegalRequirement;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
+using Dfe.Academies.Academisation.Service.Commands.LegalRequirements;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
@@ -58,6 +62,9 @@ builder.Services.AddScoped<IAdvisoryBoardDecisionCreateDataCommand, AdvisoryBoar
 builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateCommand, AdvisoryBoardDecisionUpdateCommand>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateDataCommand, AdvisoryBoardDecisionUpdateDataCommand>();
 
+builder.Services.AddScoped<ILegalRequirementCreateCommand, LegalRequirementCreateCommand>();
+builder.Services.AddScoped<ILegalRequirementUpdateCommand, LegalRequirementUpdateCommand>();
+
 // Queries
 builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
 builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
@@ -66,6 +73,8 @@ builder.Services.AddScoped<IApplicationListByUserQuery, ApplicationListByUserQue
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();
+builder.Services.AddScoped<ILegalRequirementGetQuery, LegalRequirementGetQuery>();
+builder.Services.AddScoped<ILegalRequirementGetDataQuery, LegalRequirementGetDataQuery>();
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],

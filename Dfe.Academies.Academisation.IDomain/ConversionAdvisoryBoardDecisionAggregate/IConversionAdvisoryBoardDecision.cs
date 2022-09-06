@@ -11,6 +11,4 @@ public interface IConversionAdvisoryBoardDecision
 	AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; }
 	void SetId(int id);
 	CommandResult Update(AdvisoryBoardDecisionDetails details);
-
-
 }

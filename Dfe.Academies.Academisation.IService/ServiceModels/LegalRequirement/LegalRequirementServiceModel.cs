@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core;
+﻿using Dfe.Academies.Academisation.Domain.Core.LegalRequirements;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.LegalRequirement
 {
