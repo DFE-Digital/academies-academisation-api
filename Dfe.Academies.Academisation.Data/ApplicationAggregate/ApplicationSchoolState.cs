@@ -26,7 +26,7 @@ public class ApplicationSchoolState : BaseEntity
 	public string? ApproverContactEmail { get; set; }
 
 	// conversion details
-	public bool? WantConversionToHappenOnSelectedDate { get; set; }
+	public bool? SchoolConversionTargetDateSpecified { get; set; }
 
 	public DateTime? ConversionTargetDate { get; set; }
 	public string? ConversionTargetDateExplained { get; set; }
@@ -76,7 +76,7 @@ public class ApplicationSchoolState : BaseEntity
 			MainContactOtherRole = applyingSchool.Details.MainContactOtherRole,
 			MainContactOtherTelephone = applyingSchool.Details.MainContactOtherTelephone,
 			JoinTrustReason = applyingSchool.Details.ApplicationJoinTrustReason,
-			WantConversionToHappenOnSelectedDate = applyingSchool.Details.WantConversionToHappenOnSelectedDate,
+			SchoolConversionTargetDateSpecified = applyingSchool.Details.SchoolConversionTargetDateSpecified,
 			ConversionTargetDate = applyingSchool.Details.ConversionTargetDate,
 			ConversionTargetDateExplained = applyingSchool.Details.ConversionTargetDateExplained,
 			ProposedNewSchoolName = applyingSchool.Details.ProposedNewSchoolName,
@@ -135,7 +135,7 @@ public class ApplicationSchoolState : BaseEntity
 			MainContactOtherRole = MainContactOtherRole,
 			MainContactOtherTelephone = MainContactOtherTelephone,
 			ApplicationJoinTrustReason = JoinTrustReason,
-			WantConversionToHappenOnSelectedDate = WantConversionToHappenOnSelectedDate,
+			SchoolConversionTargetDateSpecified = SchoolConversionTargetDateSpecified,
 			ConversionTargetDate = ConversionTargetDate,
 			ConversionTargetDateExplained = ConversionTargetDateExplained,
 			ProposedNewSchoolName = ProposedNewSchoolName,

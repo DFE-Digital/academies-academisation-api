@@ -19,7 +19,7 @@ public record SchoolDetails(
 	string? ApproverContactName = null,
 	string? ApproverContactEmail = null,
 	// conversion details
-	bool? WantConversionToHappenOnSelectedDate = null,
+	bool? SchoolConversionTargetDateSpecified = null,
 	DateTime? ConversionTargetDate = null,
 	string? ConversionTargetDateExplained = null,
 	string? ProposedNewSchoolName = null,
