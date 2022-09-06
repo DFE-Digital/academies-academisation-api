@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Data.ConversionLegalRequirement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -8,10 +9,11 @@ namespace Dfe.Academies.Academisation.Data;
 public class AcademisationContext : DbContext
 {
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }
+
+	public DbSet<LegalRequirementState> LegalRequirements { get; set; } = null!;
 	public DbSet<ApplicationState> Applications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
-
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public override int SaveChanges()
