@@ -21,6 +21,7 @@ public record LegacySchoolServiceModel(
 	string? SchoolConversionApproverContactEmail = null,
 
 	// conversion dates
+	bool? WantConversionToHappenOnSelectedDate = null,
 	bool? SchoolConversionTargetDateSpecified = null,
 	DateTime? SchoolConversionTargetDate = null,
 	string? SchoolConversionTargetDateExplained = null,
