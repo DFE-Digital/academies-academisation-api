@@ -73,7 +73,7 @@ public class ApplicationCreateTests
 		var result = await applicationController.Post(applicationCreateRequestModel);
 
 		// assert
-		CreatedAtRouteResult createdAtRouteResult = DfeAssert.CreatedAtRoute(result, "Get");
+		CreatedAtRouteResult createdAtRouteResult = DfeAssert.CreatedAtRoute(result, "GetApplication");
 
 		object? idValue = createdAtRouteResult.RouteValues!["id"];
 		int id = Assert.IsType<int>(idValue);
