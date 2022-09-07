@@ -20,6 +20,7 @@ public record ApplicationSchoolServiceModel(
 	string? SchoolConversionApproverContactName = null,
 	string? SchoolConversionApproverContactEmail = null,
 	// conversion details
+	bool? SchoolConversionTargetDateSpecified = null,
 	DateTime? SchoolConversionTargetDate = null,
 	string? SchoolConversionTargetDateExplained = null,
 	string? ProposedNewSchoolName = null,
