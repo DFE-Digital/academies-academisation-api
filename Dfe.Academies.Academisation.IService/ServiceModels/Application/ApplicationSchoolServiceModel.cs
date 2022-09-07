@@ -23,6 +23,7 @@ public record ApplicationSchoolServiceModel(
 	bool? SchoolConversionTargetDateSpecified = null,
 	DateTime? SchoolConversionTargetDate = null,
 	string? SchoolConversionTargetDateExplained = null,
+	bool? ConversionChangeNamePlanned = null,
 	string? ProposedNewSchoolName = null,
 	string? ApplicationJoinTrustReason = null,
 	// future pupil numbers
