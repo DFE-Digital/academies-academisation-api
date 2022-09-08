@@ -104,6 +104,7 @@ public class ApplicationSubmitCommandTests
 		var errors = Assert.IsType<CommandValidationErrorResult>(result).ValidationErrors;
 		Assert.Equal(createValidationErrorResult.ValidationErrors, errors);
 		_applicationMock.Verify(x => x.Submit(), Times.Once());
+		_projectCreateDataCommand.Verify(x => x.Execute(It.IsAny<IProject>()), Times.Never);
 		_updateDataCommandMock.Verify(x => x.Execute(_applicationMock.Object), Times.Never);
 	}
 }
