@@ -1,6 +1,8 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core.Test;
+using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Queries;
@@ -16,10 +18,14 @@ public class ProjectGetTests
 	private readonly IProjectGetDataQuery _projectGetDataQuery;
 	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
 	private readonly LegacyProjectController _legacyProjectController;
+	private readonly AcademisationContext _context;
+
 
 	public ProjectGetTests()
 	{
-		_projectGetDataQuery = new ProjectGetDataQuery();
+		_context = new TestProjectContext().CreateContext();
+
+		_projectGetDataQuery = new ProjectGetDataQuery(_context);
 		_legacyProjectGetQuery = new LegacyProjectGetQuery(_projectGetDataQuery);
 
 		_legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery);
@@ -28,7 +34,7 @@ public class ProjectGetTests
 	[Fact]
 	public async Task NoPreconditions___ProjectReturned()
 	{
-		int id = _fixture.Create<int>();
+		int id = 1;
 
 		// act
 		var result = await _legacyProjectController.Get(id);

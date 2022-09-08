@@ -56,6 +56,8 @@ builder.Services.AddScoped<IApplicationSubmitCommand, ApplicationSubmitCommand>(
 builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 
+builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
+
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionCreateDataCommand, AdvisoryBoardDecisionCreateDataCommand>();
@@ -67,6 +69,7 @@ builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
 builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
 builder.Services.AddScoped<IApplicationsListByUserDataQuery, ApplicationsListByUserDataQuery>();
 builder.Services.AddScoped<IApplicationListByUserQuery, ApplicationListByUserQuery>();
+builder.Services.AddScoped<IProjectGetDataQuery, ProjectGetDataQuery>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();

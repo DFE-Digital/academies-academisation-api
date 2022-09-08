@@ -1,13 +1,13 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate;
 
-public class ProjectState
+[Table(name: "Project")]
+public class ProjectState : BaseEntity
 {
-	public int Id { get; set; }
 	public int Urn { get; set; }
 	public int Laestab { get; set; }
 	public string? SchoolName { get; set; }
