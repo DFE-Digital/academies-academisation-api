@@ -30,5 +30,8 @@ public record SchoolDetails(
 	int? ProjectedPupilNumbersYear2 = null,
 	int? ProjectedPupilNumbersYear3 = null,
 	string? CapacityAssumptions = null,
-	int? CapacityPublishedAdmissionsNumber = null
+	int? CapacityPublishedAdmissionsNumber = null,
+	// application pre-support grant
+	string? SchoolSupportGrantFundsPaidTo = null,
+	bool? ConfirmPaySupportGrantToSchool = null
 );
