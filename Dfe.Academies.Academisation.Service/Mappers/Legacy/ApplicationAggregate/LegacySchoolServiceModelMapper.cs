@@ -105,8 +105,8 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolBuildLandPriorityBuildingProgramme = school.LandAndBuildings.PartOfPrioritySchoolsBuildingProgramme,
 			SchoolBuildLandFutureProgramme = school.LandAndBuildings.PartOfBuildingSchoolsForFutureProgramme,
 
-			// ToDo: pre-opening support grant
-			////SchoolSupportGrantFundsPaidTo = null, // either "To the school" or "To the trust the school is joining"
+			// pre-opening support grant
+			SchoolSupportGrantFundsPaidTo = school.SchoolSupportGrantFundsPaidTo , // either "To the school" or "To the trust the school is joining"
 
 			// ToDo: consultation details
 			////SchoolHasConsultedStakeholders = null,
