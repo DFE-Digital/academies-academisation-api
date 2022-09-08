@@ -39,6 +39,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			ProjectedPupilNumbersYear3 = school.Details.ProjectedPupilNumbersYear3,
 			SchoolCapacityAssumptions = school.Details.CapacityAssumptions,
 			SchoolCapacityPublishedAdmissionsNumber = school.Details.CapacityPublishedAdmissionsNumber,
+			SchoolSupportGrantFundsPaidTo = school.Details.SchoolSupportGrantFundsPaidTo,
+			ConfirmPaySupportGrantToSchool = school.Details.ConfirmPaySupportGrantToSchool,
 		};
 	}
 
@@ -69,7 +71,9 @@ internal static class ApplicationSchoolServiceModelMapper
 			ProjectedPupilNumbersYear2 = serviceModel.ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = serviceModel.ProjectedPupilNumbersYear3,
 			CapacityAssumptions = serviceModel.SchoolCapacityAssumptions,
-			CapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber
+			CapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber,
+			SchoolSupportGrantFundsPaidTo = serviceModel.SchoolSupportGrantFundsPaidTo,
+			ConfirmPaySupportGrantToSchool = serviceModel.ConfirmPaySupportGrantToSchool,
 		};
 	}
 }

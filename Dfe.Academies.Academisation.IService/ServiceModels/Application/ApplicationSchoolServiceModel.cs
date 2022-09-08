@@ -31,7 +31,8 @@ public record ApplicationSchoolServiceModel(
 	int? ProjectedPupilNumbersYear2 = null,
 	int? ProjectedPupilNumbersYear3 = null,
 	string? SchoolCapacityAssumptions = null,
-	int? SchoolCapacityPublishedAdmissionsNumber = null
+	int? SchoolCapacityPublishedAdmissionsNumber = null,
 	// application pre-support grant
-	// TODO MR:-
+	string? SchoolSupportGrantFundsPaidTo = null,
+	bool? ConfirmPaySupportGrantToSchool = null
 );
