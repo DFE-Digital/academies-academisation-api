@@ -22,7 +22,7 @@ public class DfeAssert
 		Assert.Contains(propertyName, error.PropertyName);
 	}
 
-	public static CreatedAtRouteResult CreatedAtRoute<T>(ActionResult<T> result, string routeName)
+	public static Tuple<CreatedAtRouteResult, T> CreatedAtRoute<T>(ActionResult<T> result, string routeName)
 	{
 		if (result.Result is BadRequestObjectResult badRequestObjectResult)
 		{
@@ -32,10 +32,10 @@ public class DfeAssert
 		}
 
 		var createdAtRouteResult = Assert.IsAssignableFrom<CreatedAtRouteResult>(result.Result);
-		Assert.IsAssignableFrom<T>(createdAtRouteResult.Value);
+		var payload = Assert.IsAssignableFrom<T>(createdAtRouteResult.Value);
 		Assert.Equal(routeName, createdAtRouteResult.RouteName);
 
-		return createdAtRouteResult;
+		return Tuple.Create(createdAtRouteResult, payload);
 	}
 
 	public static OkResult OkResult(ActionResult result)
@@ -50,6 +50,21 @@ public class DfeAssert
 		var okResult = Assert.IsAssignableFrom<OkResult>(result);
 
 		return okResult;
+	}
+
+	public static Tuple<OkObjectResult, T>  OkObjectResult<T>(ActionResult result)
+	{
+		if (result is BadRequestObjectResult badRequestObjectResult)
+		{
+			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
+
+			throw new FailException("BadObjectRequestResult: " + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+		}
+		
+		var okResult = Assert.IsAssignableFrom<OkObjectResult>(result);
+		var payload = Assert.IsAssignableFrom<T>(okResult.Value);
+
+		return Tuple.Create(okResult, payload);
 	}
 
 	public static BadRequestObjectResult BadRequestObjectResult(ActionResult result, string propertyName)
