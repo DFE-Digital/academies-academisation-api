@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20220908092640_ApplicationPreSupportGrant")]
+    partial class ApplicationPreSupportGrant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,235 +377,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LegalRequirement", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AcademyOrderRequired")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AcademyTypeAndRoute")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ApplicationReceivedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ApplicationReferenceNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("AssignedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("BaselineDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("CapitalCarryForwardAtEndMarchCurrentYear")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("CapitalCarryForwardAtEndMarchNextYear")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ClearedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("ConversionSupportGrantAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ConversionSupportGrantChangeReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CurrentYearCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CurrentYearPupilNumbers")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("DistanceFromSchoolToTrustHeadquarters")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("DistanceFromSchoolToTrustHeadquartersAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EqualitiesImpactAssessmentConsidered")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FinancialDeficit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("GeneralInformationSectionComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("HeadTeacherBoardDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("KeyStage2PerformanceAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KeyStage4PerformanceAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KeyStage5PerformanceAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Laestab")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocalAuthority")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocalAuthorityInformationTemplateComments")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocalAuthorityInformationTemplateLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LocalAuthorityInformationTemplateReturnedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("LocalAuthorityInformationTemplateSectionComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LocalAuthorityInformationTemplateSentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MemberOfParliamentName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemberOfParliamentParty")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameOfTrust")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NewAcademyUrn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("OpeningDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PartOfPfiScheme")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("PreviousHeadTeacherBoardDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PreviousHeadTeacherBoardDateQuestion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreviousHeadTeacherBoardLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("ProjectedRevenueBalanceAtEndMarchNextYear")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("ProposedAcademyOpeningDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PublishedAdmissionNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RationaleForProject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RationaleForTrust")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("RationaleSectionComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("RecommendationForProject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("RevenueCarryForwardAtEndMarchCurrentYear")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("RisksAndIssues")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("RisksAndIssuesSectionComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("SchoolAndTrustInformationSectionComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SchoolBudgetInformationAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("SchoolBudgetInformationSectionComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SchoolName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SchoolPerformanceAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SchoolPupilForecastsAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SponsorName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SponsorReferenceNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TrustReferenceNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UkPrn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Upin")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Urn")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Version")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ViabilityIssues")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("YearOneProjectedCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("YearOneProjectedPupilNumbers")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("YearThreeProjectedCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("YearThreeProjectedPupilNumbers")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("YearTwoProjectedCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("YearTwoProjectedPupilNumbers")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Project", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", b =>
