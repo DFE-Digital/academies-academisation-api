@@ -23,6 +23,7 @@ public record ApplicationSchoolServiceModel(
 	bool? SchoolConversionTargetDateSpecified = null,
 	DateTime? SchoolConversionTargetDate = null,
 	string? SchoolConversionTargetDateExplained = null,
+	bool? ConversionChangeNamePlanned = null,
 	string? ProposedNewSchoolName = null,
 	string? ApplicationJoinTrustReason = null,
 	// future pupil numbers
@@ -31,4 +32,6 @@ public record ApplicationSchoolServiceModel(
 	int? ProjectedPupilNumbersYear3 = null,
 	string? SchoolCapacityAssumptions = null,
 	int? SchoolCapacityPublishedAdmissionsNumber = null
+	// application pre-support grant
+	// TODO MR:-
 );

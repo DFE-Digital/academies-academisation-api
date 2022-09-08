@@ -29,6 +29,7 @@ public class ApplicationSchoolState : BaseEntity
 	public bool? ConversionTargetDateSpecified { get; set; }
 	public DateTime? ConversionTargetDate { get; set; }
 	public string? ConversionTargetDateExplained { get; set; }
+	public bool? ConversionChangeNamePlanned { get; set; }
 	public string? ProposedNewSchoolName { get; set; }
 	public string? JoinTrustReason { get; set; }
 
@@ -78,6 +79,7 @@ public class ApplicationSchoolState : BaseEntity
 			ConversionTargetDateSpecified = applyingSchool.Details.ConversionTargetDateSpecified,
 			ConversionTargetDate = applyingSchool.Details.ConversionTargetDate,
 			ConversionTargetDateExplained = applyingSchool.Details.ConversionTargetDateExplained,
+			ConversionChangeNamePlanned = applyingSchool.Details.ConversionChangeNamePlanned,
 			ProposedNewSchoolName = applyingSchool.Details.ProposedNewSchoolName,
 			ProjectedPupilNumbersYear1 = applyingSchool.Details.ProjectedPupilNumbersYear1,
 			ProjectedPupilNumbersYear2 = applyingSchool.Details.ProjectedPupilNumbersYear2,
@@ -138,6 +140,7 @@ public class ApplicationSchoolState : BaseEntity
 			ConversionTargetDate = ConversionTargetDate,
 			ConversionTargetDateExplained = ConversionTargetDateExplained,
 			ProposedNewSchoolName = ProposedNewSchoolName,
+			ConversionChangeNamePlanned = ConversionChangeNamePlanned,
 			ProjectedPupilNumbersYear1 = ProjectedPupilNumbersYear1,
 			ProjectedPupilNumbersYear2 = ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = ProjectedPupilNumbersYear3,

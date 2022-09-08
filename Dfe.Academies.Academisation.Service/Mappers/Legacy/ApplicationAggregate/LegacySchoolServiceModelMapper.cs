@@ -47,7 +47,7 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolConversionReasonsForJoining = school.ApplicationJoinTrustReason,
 
 			// name changes
-			SchoolConversionChangeNamePlanned = school.ProposedNewSchoolName is not null,
+			SchoolConversionChangeNamePlanned = school.ConversionChangeNamePlanned,
 			SchoolConversionProposedNewSchoolName = school.ProposedNewSchoolName,
 
 			// ToDo: additional information

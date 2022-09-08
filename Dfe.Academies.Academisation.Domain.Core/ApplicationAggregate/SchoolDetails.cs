@@ -22,6 +22,7 @@ public record SchoolDetails(
 	bool? ConversionTargetDateSpecified = null,
 	DateTime? ConversionTargetDate = null,
 	string? ConversionTargetDateExplained = null,
+	bool? ConversionChangeNamePlanned = null,
 	string? ProposedNewSchoolName = null,
 	string? ApplicationJoinTrustReason = null,
 	// future pupil numbers
