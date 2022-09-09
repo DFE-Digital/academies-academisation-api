@@ -1,6 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.OutsideData;
-
-namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+﻿namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 
 public record ProjectDetails(
 	int Urn,
