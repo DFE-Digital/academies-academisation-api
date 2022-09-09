@@ -106,7 +106,7 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolBuildLandFutureProgramme = school.LandAndBuildings.PartOfBuildingSchoolsForFutureProgramme,
 
 			// pre-opening support grant
-			SchoolSupportGrantFundsPaidTo = school.SchoolSupportGrantFundsPaidTo , // either "To the school" or "To the trust the school is joining"
+			SchoolSupportGrantFundsPaidTo = MapType(school), // either "To the school" or "To the trust the school is joining"
 
 			// ToDo: consultation details
 			////SchoolHasConsultedStakeholders = null,
@@ -122,5 +122,15 @@ internal static class LegacySchoolServiceModelMapper
 		};
 
 		return serviceModel;
+	}
+
+	private static string MapType(SchoolDetails school)
+	{
+		return school.SchoolSupportGrantFundsPaidTo switch
+		{
+			PayFundsTo.School => "To the school",
+			PayFundsTo.Trust => "To the trust the school is joining",
+			_ => throw new NotImplementedException("Unrecognised PayFundsTo, has a new PayFundsTo been added recently?"),
+		};
 	}
 }
