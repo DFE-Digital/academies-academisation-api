@@ -7,7 +7,7 @@ public record ProjectDetails(
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
 	string? UkPrn = null,
-	string? ProjectStatus = null,
+	string? ProjectStatus = null, // could be enum
 	DateTime? ApplicationReceivedDate = null,
 	DateTime? AssignedDate = null,
 	DateTime? HeadTeacherBoardDate = null,
@@ -41,10 +41,10 @@ public record ProjectDetails(
 	string? ConversionSupportGrantChangeReason = null,
 
 	// general info
-	string? PublishedAdmissionNumber = null,
-	string? PartOfPfiScheme = null,
+	string? PublishedAdmissionNumber = null, // could be number
+	string? PartOfPfiScheme = null, // could be enum
 	string? ViabilityIssues = null,
-	string? FinancialDeficit = null,
+	string? FinancialDeficit = null, // could be number
 	decimal? DistanceFromSchoolToTrustHeadquarters = null,
 	string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation = null,
 	string? MemberOfParliamentParty = null,
