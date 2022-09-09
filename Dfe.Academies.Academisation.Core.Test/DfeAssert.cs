@@ -52,16 +52,18 @@ public class DfeAssert
 		return okResult;
 	}
 
-	public static Tuple<OkObjectResult, T>  OkObjectResult<T>(ActionResult result)
+	public static Tuple<OkObjectResult, T> OkObjectResult<T>(ActionResult<T> result)
 	{
-		if (result is BadRequestObjectResult badRequestObjectResult)
+		Assert.NotNull(result.Result);
+
+		if (result.Result is BadRequestObjectResult badRequestObjectResult)
 		{
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
 
 			throw new FailException("BadObjectRequestResult: " + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
 		}
-		
-		var okResult = Assert.IsAssignableFrom<OkObjectResult>(result);
+
+		var okResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 		var payload = Assert.IsAssignableFrom<T>(okResult.Value);
 
 		return Tuple.Create(okResult, payload);
@@ -75,6 +77,6 @@ public class DfeAssert
 		Assert.NotNull(error);
 		Assert.Equal(propertyName, error.PropertyName);
 
-		return	badRequestObjectResult;
+		return badRequestObjectResult;
 	}
 }

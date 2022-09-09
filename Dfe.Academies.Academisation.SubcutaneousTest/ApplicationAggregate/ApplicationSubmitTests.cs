@@ -35,9 +35,7 @@ public class ApplicationSubmitTests
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
-
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
-
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
@@ -49,19 +47,24 @@ public class ApplicationSubmitTests
 
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context);
-
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context);
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
-
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
-		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
-		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, 
+		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
+		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand,
 			new ProjectFactory(), _projectCreateDataCommand);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
+
+		_fixture.Customize<ApplicationSchoolServiceModel>(sd =>
+			sd.With(s => s.SchoolConversionApproverContactEmail, _faker.Internet.Email())
+			.With(s => s.Id, 0)
+			.With(s => s.SchoolConversionContactChairEmail, _faker.Internet.Email())
+			.With(s => s.SchoolConversionContactHeadEmail, _faker.Internet.Email())
+			.With(s => s.SchoolConversionMainContactOtherEmail, _faker.Internet.Email()));
 	}
 
 
@@ -78,19 +81,28 @@ public class ApplicationSubmitTests
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
 			.Create<ApplicationCreateRequestModel>();
-		
+
 		var createResult = await applicationController.Post(applicationCreateRequestModel);
 
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
+
+		var updateRequest = createdPayload with
+			{
+				Schools = new List<ApplicationSchoolServiceModel> { _fixture.Create<ApplicationSchoolServiceModel>()
+			}
+		};
+
+		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
+		DfeAssert.OkResult(updateResult);
 
 		// Act		
 		var submissionResult = await applicationController.Submit(createdPayload.ApplicationId);
 
 		// Assert
 		DfeAssert.OkResult(submissionResult);
-		var applicationGetResult = await applicationController.Get(1);
 
-		(_, var getPayload) = DfeAssert.OkObjectResult<ApplicationServiceModel>(applicationGetResult!.Result);
+		var applicationGetResult = await applicationController.Get(createdPayload.ApplicationId);
+		(_, var getPayload) = DfeAssert.OkObjectResult(applicationGetResult);
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 	}
