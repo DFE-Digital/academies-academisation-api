@@ -4,7 +4,7 @@ namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 
 public record ProjectDetails(
 	int Urn,
-	int Laestab,	
+	int Laestab,
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
