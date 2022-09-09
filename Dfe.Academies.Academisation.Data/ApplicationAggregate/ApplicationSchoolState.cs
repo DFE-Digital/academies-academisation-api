@@ -54,10 +54,6 @@ public class ApplicationSchoolState : BaseEntity
 	public bool? PartOfPrioritySchoolsBuildingProgramme { get; set; }
 	public bool? PartOfBuildingSchoolsForFutureProgramme { get; set; }
 	// application pre-support grant
-
-	/// <summary>
-	/// either "To the school" or "To the trust the school is joining"
-	/// </summary>
 	public string? SupportGrantFundsPaidTo { get; set; }
 	public bool? ConfirmPaySupportGrantToSchool { get; set; }
 
