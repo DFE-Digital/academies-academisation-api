@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.OutsideData;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -40,7 +41,8 @@ public class ApplicationSubmitCommandTests
 		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
 		_applicationMock.Setup(x => x.Submit()).Returns(new CommandSuccessResult());
 		_projectCreateDataCommand.Setup(m => m.Execute(_projectMock.Object)).ReturnsAsync(_projectMock.Object);
-		_projectFactoryMock.Setup(m => m.Create(_applicationMock.Object)).Returns(new CreateSuccessResult<IProject>(_projectMock.Object));
+		_projectFactoryMock.Setup(m => m.Create(_applicationMock.Object, It.IsAny<EstablishmentDetails>(), It.IsAny<MisEstablishmentDetails>()))
+			.Returns(new CreateSuccessResult<IProject>(_projectMock.Object));
 
 		// act
 		var result = await _subject.Execute(_applicationId);
@@ -95,7 +97,8 @@ public class ApplicationSubmitCommandTests
 		CreateValidationErrorResult<IProject> createValidationErrorResult = new(new List<ValidationError>());
 		_applicationMock.Setup(x => x.Submit()).Returns(new CommandSuccessResult());
 
-		_projectFactoryMock.Setup(m => m.Create(_applicationMock.Object)).Returns(createValidationErrorResult);
+		_projectFactoryMock.Setup(m => m.Create(_applicationMock.Object, It.IsAny<EstablishmentDetails>(), It.IsAny<MisEstablishmentDetails>()))
+			.Returns(createValidationErrorResult);
 
 		// act
 		var result = await _subject.Execute(_applicationId);

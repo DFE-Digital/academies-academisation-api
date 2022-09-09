@@ -1,8 +1,10 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.OutsideData;
+
+namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 
 public record ProjectDetails(
 	int Urn,
-	int Laestab,
+	int Laestab,	
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
