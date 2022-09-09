@@ -32,7 +32,7 @@ public record LegacySchoolServiceModel(
 	bool? SchoolConversionChangeNamePlanned = null,
 	string? SchoolConversionProposedNewSchoolName = null,
 
-	// additional information
+	// additional details - data from current further information page below
 	string? SchoolAdSchoolContributionToTrust = null,
 	bool? SchoolOngoingSafeguardingInvestigations = null,
 	string? SchoolOngoingSafeguardingDetails = null,
