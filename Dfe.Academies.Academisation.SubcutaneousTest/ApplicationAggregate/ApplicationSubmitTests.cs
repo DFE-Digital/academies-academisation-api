@@ -3,10 +3,13 @@ using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
@@ -16,49 +19,59 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
+
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
 
-public class ApplicationCreateTests
+public class ApplicationSubmitTests
 {
 	private readonly Fixture _fixture = new();
 	private readonly Faker _faker = new();
+	private readonly AcademisationContext _context;
 
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
-
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
-
-	private readonly AcademisationContext _context;
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
+	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 
-	public ApplicationCreateTests()
+	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
+
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context);
-
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
+		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context);
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
-
-		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
-		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
+		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
+		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
+		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand,
+			new ProjectFactory(), _projectCreateDataCommand);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
+
+		_fixture.Customize<ApplicationSchoolServiceModel>(sd =>
+			sd.With(s => s.SchoolConversionApproverContactEmail, _faker.Internet.Email())
+			.With(s => s.Id, 0)
+			.With(s => s.SchoolConversionContactChairEmail, _faker.Internet.Email())
+			.With(s => s.SchoolConversionContactHeadEmail, _faker.Internet.Email())
+			.With(s => s.SchoolConversionMainContactOtherEmail, _faker.Internet.Email()));
 	}
 
+
 	[Fact]
-	public async Task ParametersValid___ApplicationCreated()
+	public async Task JoinAMatApplicationExists___ApplicationIsSubmitted_And_ProjectIsCreated()
 	{
-		// arrange
+		// Arrange
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
 			_applicationGetQuery,
@@ -69,59 +82,28 @@ public class ApplicationCreateTests
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
 			.Create<ApplicationCreateRequestModel>();
 
-		// act
-		var result = await applicationController.Post(applicationCreateRequestModel);
+		var createResult = await applicationController.Post(applicationCreateRequestModel);
 
-		// assert
-		(CreatedAtRouteResult createdAtRouteResult, _) = DfeAssert.CreatedAtRoute(result, "GetApplication");
+		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
-		object? idValue = createdAtRouteResult.RouteValues!["id"];
-		int id = Assert.IsType<int>(idValue);
+		var updateRequest = createdPayload with
+			{
+				Schools = new List<ApplicationSchoolServiceModel> { _fixture.Create<ApplicationSchoolServiceModel>()
+			}
+		};
 
-		var getResult = await applicationController.Get(id);
+		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
+		DfeAssert.OkResult(updateResult);
 
-		var getOkayResult = Assert.IsAssignableFrom<OkObjectResult>(getResult.Result);
-		var actualApplication = Assert.IsAssignableFrom<ApplicationServiceModel>(getOkayResult.Value);
-		var actualContributor = Assert.Single(actualApplication.Contributors);
+		// Act		
+		var submissionResult = await applicationController.Submit(createdPayload.ApplicationId);
 
-		ApplicationServiceModel expectedApplication = new(
-			id,
-			applicationCreateRequestModel.ApplicationType,
-			ApplicationStatus.InProgress,
-			new List<ApplicationContributorServiceModel> { new ApplicationContributorServiceModel(
-				actualContributor.ContributorId,
-				applicationCreateRequestModel.Contributor.FirstName,
-				applicationCreateRequestModel.Contributor.LastName,
-				applicationCreateRequestModel.Contributor.EmailAddress,
-				applicationCreateRequestModel.Contributor.Role,
-				applicationCreateRequestModel.Contributor.OtherRoleName) },
-			new List<ApplicationSchoolServiceModel>());
+		// Assert
+		DfeAssert.OkResult(submissionResult);
 
-		Assert.Equivalent(expectedApplication, actualApplication);
-	}
+		var applicationGetResult = await applicationController.Get(createdPayload.ApplicationId);
+		(_, var getPayload) = DfeAssert.OkObjectResult(applicationGetResult);
 
-	[Fact]
-	public async Task ParametersInvalid___ApplicationNotCreated()
-	{
-		// arrange
-		var applicationController = new ApplicationController(
-			_applicationCreateCommand,
-			_applicationGetQuery,
-			_applicationUpdateCommand,
-			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
-
-		_fixture.Customize<ContributorRequestModel>(composer =>
-			composer.With(c => c.EmailAddress, _faker.Name.FullName()));
-
-		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
-			.Create<ApplicationCreateRequestModel>();
-
-		// act
-		var result = await applicationController.Post(applicationCreateRequestModel);
-
-		// assert
-		Assert.IsType<BadRequestObjectResult>(result.Result);
-		Assert.Equal(3, _context.Applications.Count());
+		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 	}
 }

@@ -1,21 +1,22 @@
-﻿using AutoFixture;
-using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate;
 
 public class ProjectGetDataQuery : IProjectGetDataQuery
 {
-	private readonly Fixture _fixture = new();
+	private readonly AcademisationContext _context;
+
+	public ProjectGetDataQuery(AcademisationContext context)
+	{
+		_context = context;
+	}
 
 	public async Task<IProject?> Execute(int id)
 	{
-		ProjectDetails projectDetails = _fixture.Create<ProjectDetails>();
+		ProjectState createdProjectState = await _context.Projects.SingleAsync(a => a.Id == id);
 
-		await Task.CompletedTask;
-
-		return new Project(id, projectDetails);
+		return createdProjectState.MapToDomain();
 	}
 }

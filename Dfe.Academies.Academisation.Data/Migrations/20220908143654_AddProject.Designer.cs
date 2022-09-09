@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20220908143654_AddProject")]
+    partial class AddProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,17 +69,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<int?>("ConversionApplicationId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("ConversionChangeNamePlanned")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("ConversionTargetDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ConversionTargetDateExplained")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("ConversionTargetDateSpecified")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
