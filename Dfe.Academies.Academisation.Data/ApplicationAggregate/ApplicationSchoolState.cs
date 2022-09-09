@@ -53,7 +53,9 @@ public class ApplicationSchoolState : BaseEntity
 	public string? PartOfPfiSchemeType { get; set; }
 	public bool? PartOfPrioritySchoolsBuildingProgramme { get; set; }
 	public bool? PartOfBuildingSchoolsForFutureProgramme { get; set; }
-
+	// application pre-support grant
+	public PayFundsTo? SupportGrantFundsPaidTo { get; set; }
+	public bool? ConfirmPaySupportGrantToSchool { get; set; }
 
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
@@ -97,7 +99,9 @@ public class ApplicationSchoolState : BaseEntity
 			PartOfPfiScheme = applyingSchool.Details.LandAndBuildings.PartOfPfiScheme,
 			PartOfPfiSchemeType = applyingSchool.Details.LandAndBuildings.PartOfPfiSchemeType,
 			PartOfPrioritySchoolsBuildingProgramme = applyingSchool.Details.LandAndBuildings.PartOfPrioritySchoolsBuildingProgramme,
-			PartOfBuildingSchoolsForFutureProgramme = applyingSchool.Details.LandAndBuildings.PartOfBuildingSchoolsForFutureProgramme
+			PartOfBuildingSchoolsForFutureProgramme = applyingSchool.Details.LandAndBuildings.PartOfBuildingSchoolsForFutureProgramme,
+			SupportGrantFundsPaidTo = applyingSchool.Details.SchoolSupportGrantFundsPaidTo,
+			ConfirmPaySupportGrantToSchool = applyingSchool.Details.ConfirmPaySupportGrantToSchool
 		};
 	}
 
@@ -145,7 +149,9 @@ public class ApplicationSchoolState : BaseEntity
 			ProjectedPupilNumbersYear2 = ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = ProjectedPupilNumbersYear3,
 			CapacityAssumptions = CapacityAssumptions,
-			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber
+			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
+			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
+			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
 		};
 	}
 }
