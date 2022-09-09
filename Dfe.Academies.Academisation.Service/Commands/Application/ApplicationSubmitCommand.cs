@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 
 			if (application.ApplicationType == Domain.Core.ApplicationAggregate.ApplicationType.JoinAMat)
 			{
-				var projectResult = _projectFactory.Create(application, new EstablishmentDetails("not implemented"), new MisEstablishmentDetails(0));
+				var projectResult = _projectFactory.Create(application, new EstablishmentDetails("not implemented"), new MisEstablishmentDetails(-1));
 
 				switch (projectResult)
 				{
