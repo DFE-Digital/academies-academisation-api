@@ -37,4 +37,9 @@ public record ApplicationSchoolServiceModel(
 	// application pre-support grant
 	PayFundsTo? SchoolSupportGrantFundsPaidTo = null,
 	bool? ConfirmPaySupportGrantToSchool = null
+	// additional information
+	// TODO MR:- add in 3 new seperate objects
+	//PartnershipsAndAffliations
+	//Performance
+	//ReligiousEducation
 );

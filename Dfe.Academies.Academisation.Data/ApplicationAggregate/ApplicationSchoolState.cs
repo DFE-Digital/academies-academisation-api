@@ -57,6 +57,33 @@ public class ApplicationSchoolState : BaseEntity
 	public PayFundsTo? SupportGrantFundsPaidTo { get; set; }
 	public bool? ConfirmPaySupportGrantToSchool { get; set; }
 
+	// additional information - for data storage - store them flat !
+	// TODO MR:- all below:-
+	//string? SchoolAdSchoolContributionToTrust = null,
+	//bool? SchoolOngoingSafeguardingInvestigations = null,
+	//string? SchoolOngoingSafeguardingDetails = null,
+	//bool? SchoolPartOfLaReorganizationPlan = null,
+	//string? SchoolLaReorganizationDetails = null,
+	//bool? SchoolPartOfLaClosurePlan = null,
+	//string? SchoolLaClosurePlanDetails = null,
+	//bool? SchoolFaithSchool = null,
+	//string? SchoolFaithSchoolDioceseName = null,
+	//string? DiocesePermissionEvidenceDocumentLink = null,
+	//bool? SchoolIsPartOfFederation = null,
+	//bool? SchoolIsSupportedByFoundation = null,
+	//string? SchoolSupportedFoundationBodyName = null,
+	//string? FoundationEvidenceDocumentLink = null,
+	//bool? SchoolHasSACREException = null,
+	//	DateTime? SchoolSACREExemptionEndDate = null,
+	//string? SchoolAdFeederSchools = null,
+	//string? GoverningBodyConsentEvidenceDocumentLink = null,
+	//bool? SchoolAdEqualitiesImpactAssessmentCompleted = null,
+	//string? SchoolAdEqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
+	//bool? SchoolAdInspectedButReportNotPublished = null,
+	//string? SchoolAdInspectedButReportNotPublishedExplain = null,
+	//bool? SchoolAdditionalInformationAdded = null,
+	//string? SchoolAdditionalInformation = null,
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
@@ -101,7 +128,9 @@ public class ApplicationSchoolState : BaseEntity
 			PartOfPrioritySchoolsBuildingProgramme = applyingSchool.Details.LandAndBuildings.PartOfPrioritySchoolsBuildingProgramme,
 			PartOfBuildingSchoolsForFutureProgramme = applyingSchool.Details.LandAndBuildings.PartOfBuildingSchoolsForFutureProgramme,
 			SupportGrantFundsPaidTo = applyingSchool.Details.SchoolSupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = applyingSchool.Details.ConfirmPaySupportGrantToSchool
+			ConfirmPaySupportGrantToSchool = applyingSchool.Details.ConfirmPaySupportGrantToSchool,
+			// additional information
+			// TODO MR:-
 		};
 	}
 
@@ -151,7 +180,9 @@ public class ApplicationSchoolState : BaseEntity
 			CapacityAssumptions = CapacityAssumptions,
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
+			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
+			// additional information
+			// TODO MR:-
 		};
 	}
 }
