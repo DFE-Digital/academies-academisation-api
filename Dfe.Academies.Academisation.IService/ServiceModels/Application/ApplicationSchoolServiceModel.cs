@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Application;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+
+namespace Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
 public record ApplicationSchoolServiceModel(
 	int Id,
@@ -33,6 +35,6 @@ public record ApplicationSchoolServiceModel(
 	string? SchoolCapacityAssumptions = null,
 	int? SchoolCapacityPublishedAdmissionsNumber = null,
 	// application pre-support grant
-	string? SchoolSupportGrantFundsPaidTo = null,
+	PayFundsTo? SchoolSupportGrantFundsPaidTo = null,
 	bool? ConfirmPaySupportGrantToSchool = null
 );

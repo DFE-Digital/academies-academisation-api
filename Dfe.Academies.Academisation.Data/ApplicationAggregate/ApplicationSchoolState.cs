@@ -54,7 +54,7 @@ public class ApplicationSchoolState : BaseEntity
 	public bool? PartOfPrioritySchoolsBuildingProgramme { get; set; }
 	public bool? PartOfBuildingSchoolsForFutureProgramme { get; set; }
 	// application pre-support grant
-	public string? SupportGrantFundsPaidTo { get; set; }
+	public PayFundsTo? SupportGrantFundsPaidTo { get; set; }
 	public bool? ConfirmPaySupportGrantToSchool { get; set; }
 
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
