@@ -5,6 +5,7 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.OutsideData;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Xunit;
@@ -29,7 +30,7 @@ public class ProjectCreateTests
 			_fixture.Create<Dictionary<int, SchoolDetails>>());
 
 		// Act
-		var project = new ProjectFactory().Create(application);
+		var project = new ProjectFactory().Create(application, _fixture.Create<EstablishmentDetails>(), _fixture.Create<MisEstablishmentDetails>());
 
 		CreateValidationErrorResult<IProject>? result = null;
 
@@ -52,15 +53,19 @@ public class ProjectCreateTests
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
 			new Dictionary<int, SchoolDetails> { { 1, _fixture.Create<SchoolDetails>() } });
 
-		// Act
-		var project = new ProjectFactory().Create(application);
+		var establishmentDetails = _fixture.Create<EstablishmentDetails>();
+		var misEstablishmentDetails = _fixture.Create<MisEstablishmentDetails>();
 
-		CreateSuccessResult<IProject>? result = null;
+		// Act
+		var createResult = new ProjectFactory().Create(application, establishmentDetails, misEstablishmentDetails);
 
 		// Assert
-		Assert.Multiple(
-			() => result = Assert.IsType<CreateSuccessResult<IProject>>(project),
-			() => Assert.Equal(application.Schools.Single().Details.Urn, result!.Payload.Details.Urn)
+		IProject project = Assert.IsType<CreateSuccessResult<IProject>>(createResult).Payload;
+
+		Assert.Multiple(			
+			() => Assert.Equal(application.Schools.Single().Details.Urn, project.Details.Urn),
+			() => Assert.Equal(establishmentDetails.Ukprn, project.Details.UkPrn),
+			() => Assert.Equal(misEstablishmentDetails.Laestab, project.Details.Laestab)
 		);
 	}
 }

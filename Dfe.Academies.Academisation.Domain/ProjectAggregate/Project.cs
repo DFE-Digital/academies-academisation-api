@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.OutsideData;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -25,7 +26,7 @@ public class Project : IProject
 
 	public ProjectDetails Details { get; }
 
-	public static CreateResult<IProject> Create(IApplication application)
+	public static CreateResult<IProject> Create(IApplication application, EstablishmentDetails establishmentDetails, MisEstablishmentDetails misEstablishmentDetails)
 	{
 		if (application.ApplicationType != Core.ApplicationAggregate.ApplicationType.JoinAMat)
 		{
@@ -36,10 +37,14 @@ public class Project : IProject
 				});
 		}
 
+		var school = application.Schools.Single().Details;
+
 		var projectDetails = new ProjectDetails(
-			application.Schools.Single().Details.Urn,
-			// TODO: speak to Martin about what this maps from
-			0);
+			school.Urn,
+			misEstablishmentDetails.Laestab,
+			school.SchoolName
+		)
+		{ UkPrn = establishmentDetails.Ukprn };
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
