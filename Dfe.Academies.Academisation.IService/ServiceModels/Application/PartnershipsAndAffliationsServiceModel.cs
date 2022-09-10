@@ -1,6 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Application
 {
-	public record PartnershipsAndAffliations(
+	public record PartnershipsAndAffliationsServiceModel(
 		bool? IsPartOfFederation = null,
 		bool? IsSupportedByFoundation = null,
 		string? SupportedFoundationBodyName = null,
