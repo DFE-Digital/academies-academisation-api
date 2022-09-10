@@ -7,6 +7,14 @@ public record ApplicationSchoolServiceModel(
 	int Urn,
 	string SchoolName,
 	LandAndBuildingsServiceModel LandAndBuildings,
+	// additional information - split up
+	PartnershipsAndAffliationsServiceModel PartnershipsAndAffliations,
+	PerformanceServiceModel Performance,
+	ReligiousEducationServiceModel ReligiousEducation,
+	// TODO MR:- UI uses an enum A2CEqualityImpact
+	bool? EqualitiesImpactAssessmentCompleted = null,
+	string? EqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
+	// TODO MR:- Local auth questions in UI
 	// contact details
 	string? SchoolConversionContactHeadName = null,
 	string? SchoolConversionContactHeadEmail = null,
@@ -37,9 +45,4 @@ public record ApplicationSchoolServiceModel(
 	// application pre-support grant
 	PayFundsTo? SchoolSupportGrantFundsPaidTo = null,
 	bool? ConfirmPaySupportGrantToSchool = null
-	// additional information
-	// TODO MR:- add in 3 new seperate objects
-	//PartnershipsAndAffliations
-	//Performance
-	//ReligiousEducation
 );
