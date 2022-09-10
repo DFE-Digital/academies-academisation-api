@@ -15,6 +15,7 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.LandAndBuildings.ToServiceModel()
 		)
 		{
+			// TODO MR:- additional information other:-
 			SchoolConversionApproverContactEmail = school.Details.ApproverContactEmail,
 			SchoolConversionApproverContactName = school.Details.ApproverContactName,
 			SchoolConversionMainContactOtherEmail = school.Details.MainContactOtherEmail,
@@ -48,6 +49,7 @@ internal static class ApplicationSchoolServiceModelMapper
 	{
 		return new(serviceModel.Urn, serviceModel.SchoolName, serviceModel.LandAndBuildings.ToDomain())
 		{
+			// TODO MR:- additional information other:-
 			ApproverContactEmail = serviceModel.SchoolConversionApproverContactEmail,
 			ApproverContactName = serviceModel.SchoolConversionApproverContactName,
 			MainContactOtherTelephone = serviceModel.SchoolConversionMainContactOtherTelephone,
