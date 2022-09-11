@@ -58,31 +58,36 @@ public class ApplicationSchoolState : BaseEntity
 	public bool? ConfirmPaySupportGrantToSchool { get; set; }
 
 	// additional information - for data storage - store them flat !
-	// TODO MR:- all below:-
-	//string? SchoolAdSchoolContributionToTrust = null,
-	//bool? SchoolOngoingSafeguardingInvestigations = null,
-	//string? SchoolOngoingSafeguardingDetails = null,
-	//bool? SchoolPartOfLaReorganizationPlan = null,
-	//string? SchoolLaReorganizationDetails = null,
-	//bool? SchoolPartOfLaClosurePlan = null,
-	//string? SchoolLaClosurePlanDetails = null,
-	//bool? SchoolFaithSchool = null,
-	//string? SchoolFaithSchoolDioceseName = null,
-	//string? DiocesePermissionEvidenceDocumentLink = null,
-	//bool? SchoolIsPartOfFederation = null,
-	//bool? SchoolIsSupportedByFoundation = null,
-	//string? SchoolSupportedFoundationBodyName = null,
-	//string? FoundationEvidenceDocumentLink = null,
-	//bool? SchoolHasSACREException = null,
-	//	DateTime? SchoolSACREExemptionEndDate = null,
-	//string? SchoolAdFeederSchools = null,
-	//string? GoverningBodyConsentEvidenceDocumentLink = null,
-	//bool? SchoolAdEqualitiesImpactAssessmentCompleted = null,
-	//string? SchoolAdEqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
-	//bool? SchoolAdInspectedButReportNotPublished = null,
-	//string? SchoolAdInspectedButReportNotPublishedExplain = null,
-	//bool? SchoolAdditionalInformationAdded = null,
-	//string? SchoolAdditionalInformation = null,
+	// Performance
+	public bool? InspectedButReportNotPublished { get; set; }
+	public string? InspectedButReportNotPublishedExplain { get; set; }
+	public bool? OngoingSafeguardingInvestigations { get; set; }
+	public string? OngoingSafeguardingDetails { get; set; }
+	// LocalAuthority
+	public bool? PartOfLaReorganizationPlan { get; set; }
+	public string? LaReorganizationDetails { get; set; }
+	public bool? PartOfLaClosurePlan { get; set; }
+	public string? LaClosurePlanDetails { get; set; }
+	// PartnershipsAndAffliations
+	public bool? IsPartOfFederation { get; set; }
+	public bool? IsSupportedByFoundation { get; set; }
+	public string? SupportedFoundationName { get; set; }
+	public string? SupportedFoundationEvidenceDocumentLink { get; set; }
+	public string? FeederSchools { get; set; }
+	// religion
+	public bool? FaithSchool { get; set; }
+	public string? FaithSchoolDioceseName { get; set; }
+	public string? DiocesePermissionEvidenceDocumentLink { get; set; }
+	public bool? HasSACREException { get; set; }
+	public DateTime? SACREExemptionEndDate { get; set; }
+	// other additional information
+	public string? SchoolContributionToTrust { get; set; }
+	public string? GoverningBodyConsentEvidenceDocumentLink { get; set; }
+	public bool? AdditionalInformationAdded { get; set; }
+	public string? AdditionalInformation { get; set; }
+	// TODO MR:- UI uses an enum A2CEqualityImpact
+	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public string? EqualitiesImpactAssessmentDetails { get; set; }
 
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
