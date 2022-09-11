@@ -7,16 +7,25 @@ internal static class ReligiousEducationModelMapper
 {
 	internal static ReligiousEducationServiceModel ToServiceModel(this ReligiousEducation religiousEducation)
 	{
-		//TODO MR:-
-		//		bool? SchoolFaithSchool = null, // linked to a diocese yes/no?
-		//string? SchoolFaithSchoolDioceseName = null,
-		//string? DiocesePermissionEvidenceDocumentLink = null,
-		//bool? SchoolHasSACREException = null,
-		//	DateTime? SchoolSACREExemptionEndDate = null	
+		return new ReligiousEducationServiceModel
+		{
+			FaithSchool = religiousEducation.FaithSchool,
+			FaithSchoolDioceseName = religiousEducation.FaithSchoolDioceseName,
+			DiocesePermissionEvidenceDocumentLink = religiousEducation.DiocesePermissionEvidenceDocumentLink,
+			HasSACREException = religiousEducation.HasSACREException,
+			SACREExemptionEndDate = religiousEducation.SACREExemptionEndDate
+		};
 	}
 
 	internal static ReligiousEducation ToDomain(this ReligiousEducationServiceModel serviceModel)
 	{
-		//TODO MR:-
+		return new ReligiousEducation
+		{
+			FaithSchool = serviceModel.FaithSchool,
+			FaithSchoolDioceseName = serviceModel.FaithSchoolDioceseName,
+			DiocesePermissionEvidenceDocumentLink = serviceModel.DiocesePermissionEvidenceDocumentLink,
+			HasSACREException = serviceModel.HasSACREException,
+			SACREExemptionEndDate = serviceModel.SACREExemptionEndDate
+		};
 	}
 }

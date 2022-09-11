@@ -7,20 +7,24 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 	{
 		internal static LocalAuthorityServiceModel ToServiceModel(this LocalAuthority localAuthority)
 		{
-			// TODO MR:-
-			//bool? PartOfLaReorganizationPlan = null,
-			//string? LaReorganizationDetails = null,
-			//bool? PartOfLaClosurePlan = null,
-			//string? LaClosurePlanDetails = null
+			return new LocalAuthorityServiceModel
+			{
+				PartOfLaReorganizationPlan = localAuthority.PartOfLaReorganizationPlan,
+				LaReorganizationDetails = localAuthority.LaReorganizationDetails,
+				PartOfLaClosurePlan = localAuthority.PartOfLaClosurePlan,
+				LaClosurePlanDetails = localAuthority.LaClosurePlanDetails
+			};
 		}
 
 		internal static LocalAuthority ToDomain(this LocalAuthorityServiceModel serviceModel)
 		{
-			// TODO MR:-
-			//bool? PartOfLaReorganizationPlan = null,
-			//string? LaReorganizationDetails = null,
-			//bool? PartOfLaClosurePlan = null,
-			//string? LaClosurePlanDetails = null
+			return new LocalAuthority
+			{
+				PartOfLaReorganizationPlan = serviceModel.PartOfLaReorganizationPlan,
+				LaReorganizationDetails = serviceModel.LaReorganizationDetails,
+				PartOfLaClosurePlan = serviceModel.PartOfLaClosurePlan,
+				LaClosurePlanDetails = serviceModel.LaClosurePlanDetails
+			};
 		}
 	}
 }

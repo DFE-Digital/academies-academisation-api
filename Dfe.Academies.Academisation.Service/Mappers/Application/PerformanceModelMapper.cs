@@ -7,16 +7,24 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 	{
 		internal static PerformanceServiceModel ToServiceModel(this Performance performance)
 		{
-			//TODO MR:-
-			//bool? InspectedButReportNotPublished = null,
-			//string? InspectedButReportNotPublishedExplain = null, // provide inspection date && short summary in UI (1.5)
-			//bool? OngoingSafeguardingInvestigations = null,
-			//string? OngoingSafeguardingDetails = null
+			return new PerformanceServiceModel
+			{
+				InspectedButReportNotPublished = performance.InspectedButReportNotPublished,
+				InspectedButReportNotPublishedExplain = performance.InspectedButReportNotPublishedExplain,
+				OngoingSafeguardingInvestigations = performance.OngoingSafeguardingInvestigations,
+				OngoingSafeguardingDetails = performance.OngoingSafeguardingDetails
+			};
 		}
 
 		internal static Performance ToDomain(this PerformanceServiceModel serviceModel)
 		{
-			//TODO MR:-
+			return new Performance
+			{
+				InspectedButReportNotPublished = serviceModel.InspectedButReportNotPublished,
+				InspectedButReportNotPublishedExplain = serviceModel.InspectedButReportNotPublishedExplain,
+				OngoingSafeguardingInvestigations = serviceModel.OngoingSafeguardingInvestigations,
+				OngoingSafeguardingDetails = serviceModel.OngoingSafeguardingDetails
+			};
 		}
 	}
 }

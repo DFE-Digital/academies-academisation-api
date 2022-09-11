@@ -7,17 +7,26 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 	{
 		internal static PartnershipsAndAffliationsServiceModel ToServiceModel(this PartnershipsAndAffliations partnershipsAndAffliationsModel)
 		{
-			//TODO MR:-
-			//bool? IsPartOfFederation = null,
-			//bool? IsSupportedByFoundation = null,
-			//string? SupportedFoundationBodyName = null,
-			//string? SupportedFoundationEvidenceDocumentLink = null,
-			//string? FeederSchools = null // just detail the top 5 - free text - don't select school Urn via UI
+			return new PartnershipsAndAffliationsServiceModel
+			{
+				IsPartOfFederation = partnershipsAndAffliationsModel.IsPartOfFederation,
+				IsSupportedByFoundation = partnershipsAndAffliationsModel.IsSupportedByFoundation,
+				SupportedFoundationName = partnershipsAndAffliationsModel.SupportedFoundationName,
+				SupportedFoundationEvidenceDocumentLink = partnershipsAndAffliationsModel.SupportedFoundationEvidenceDocumentLink,
+				FeederSchools = partnershipsAndAffliationsModel.FeederSchools
+			};
 		}
 
 		internal static PartnershipsAndAffliations ToDomain(this PartnershipsAndAffliationsServiceModel serviceModel)
 		{
-			//TODO MR:-
+			return new PartnershipsAndAffliations
+			{
+				IsPartOfFederation = serviceModel.IsPartOfFederation,
+				IsSupportedByFoundation = serviceModel.IsSupportedByFoundation,
+				SupportedFoundationName = serviceModel.SupportedFoundationName,
+				SupportedFoundationEvidenceDocumentLink = serviceModel.SupportedFoundationEvidenceDocumentLink,
+				FeederSchools = serviceModel.FeederSchools
+			};
 		}
 	}
 }
