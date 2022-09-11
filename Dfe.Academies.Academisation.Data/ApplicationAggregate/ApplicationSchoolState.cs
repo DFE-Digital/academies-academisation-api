@@ -188,17 +188,43 @@ public class ApplicationSchoolState : BaseEntity
 				PartOfPrioritySchoolsBuildingProgramme = PartOfPrioritySchoolsBuildingProgramme,
 				PartOfBuildingSchoolsForFutureProgramme = PartOfBuildingSchoolsForFutureProgramme
 			},
-			new Performance{},
-			new LocalAuthority{},
-			new PartnershipsAndAffliations{},
-			new ReligiousEducation{},
+			new Performance
+			{
+				InspectedButReportNotPublished = InspectedButReportNotPublished,
+				InspectedButReportNotPublishedExplain = InspectedButReportNotPublishedExplain,
+				OngoingSafeguardingDetails = OngoingSafeguardingDetails,
+				OngoingSafeguardingInvestigations = OngoingSafeguardingInvestigations
+			},
+			new LocalAuthority
+			{
+				PartOfLaReorganizationPlan = PartOfLaReorganizationPlan,
+				LaClosurePlanDetails = LaClosurePlanDetails,
+				PartOfLaClosurePlan = PartOfLaClosurePlan,
+				LaReorganizationDetails = LaReorganizationDetails
+			},
+			new PartnershipsAndAffliations
+			{
+				IsPartOfFederation = IsPartOfFederation,
+				IsSupportedByFoundation = IsSupportedByFoundation,
+				SupportedFoundationName = SupportedFoundationName,
+				SupportedFoundationEvidenceDocumentLink = SupportedFoundationEvidenceDocumentLink,
+				FeederSchools = FeederSchools
+			},
+			new ReligiousEducation
+			{
+				FaithSchool = FaithSchool,
+				FaithSchoolDioceseName = FaithSchoolDioceseName,
+				DiocesePermissionEvidenceDocumentLink = DiocesePermissionEvidenceDocumentLink,
+				HasSACREException = HasSACREException,
+				SACREExemptionEndDate = SACREExemptionEndDate
+			})
+		{
 			SchoolContributionToTrust = SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = GoverningBodyConsentEvidenceDocumentLink,
 			AdditionalInformationAdded = AdditionalInformationAdded,
 			AdditionalInformation = AdditionalInformation,
 			EqualitiesImpactAssessmentCompleted = EqualitiesImpactAssessmentCompleted,
-			EqualitiesImpactAssessmentDetails = EqualitiesImpactAssessmentDetails)
-		{
+			EqualitiesImpactAssessmentDetails = EqualitiesImpactAssessmentDetails,
 			ContactRole = ContactRole,
 			ApproverContactEmail = ApproverContactEmail,
 			ApproverContactName = ApproverContactName,
