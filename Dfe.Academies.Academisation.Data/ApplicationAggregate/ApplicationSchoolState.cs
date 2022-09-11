@@ -135,7 +135,36 @@ public class ApplicationSchoolState : BaseEntity
 			SupportGrantFundsPaidTo = applyingSchool.Details.SchoolSupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = applyingSchool.Details.ConfirmPaySupportGrantToSchool,
 			// additional information
-			// TODO MR:-
+			// Performance
+			InspectedButReportNotPublished = applyingSchool.Details.Performance.InspectedButReportNotPublished,
+			InspectedButReportNotPublishedExplain = applyingSchool.Details.Performance.InspectedButReportNotPublishedExplain,
+			OngoingSafeguardingInvestigations = applyingSchool.Details.Performance.OngoingSafeguardingInvestigations,
+			OngoingSafeguardingDetails = applyingSchool.Details.Performance.OngoingSafeguardingDetails,
+
+			// LocalAuthority
+			PartOfLaReorganizationPlan = applyingSchool.Details.LocalAuthority.PartOfLaReorganizationPlan,
+			LaReorganizationDetails = applyingSchool.Details.LocalAuthority.LaReorganizationDetails,
+			PartOfLaClosurePlan = applyingSchool.Details.LocalAuthority.PartOfLaClosurePlan,
+			LaClosurePlanDetails = applyingSchool.Details.LocalAuthority.LaClosurePlanDetails,
+			// PartnershipsAndAffliations
+			IsPartOfFederation = applyingSchool.Details.PartnershipsAndAffliations.IsPartOfFederation,
+			IsSupportedByFoundation = applyingSchool.Details.PartnershipsAndAffliations.IsSupportedByFoundation,
+			SupportedFoundationName = applyingSchool.Details.PartnershipsAndAffliations.SupportedFoundationName,
+			SupportedFoundationEvidenceDocumentLink = applyingSchool.Details.PartnershipsAndAffliations.SupportedFoundationEvidenceDocumentLink,
+			FeederSchools = applyingSchool.Details.PartnershipsAndAffliations.FeederSchools,
+			// religion
+			FaithSchool = applyingSchool.Details.ReligiousEducation.FaithSchool,
+			FaithSchoolDioceseName = applyingSchool.Details.ReligiousEducation.FaithSchoolDioceseName,
+			DiocesePermissionEvidenceDocumentLink = applyingSchool.Details.ReligiousEducation.DiocesePermissionEvidenceDocumentLink,
+			HasSACREException = applyingSchool.Details.ReligiousEducation.HasSACREException,
+			SACREExemptionEndDate = applyingSchool.Details.ReligiousEducation.SACREExemptionEndDate,
+			// other additional information
+			SchoolContributionToTrust = applyingSchool.Details.SchoolContributionToTrust,
+			GoverningBodyConsentEvidenceDocumentLink = applyingSchool.Details.GoverningBodyConsentEvidenceDocumentLink,
+			AdditionalInformationAdded = applyingSchool.Details.AdditionalInformationAdded,
+			AdditionalInformation = applyingSchool.Details.AdditionalInformation,
+			EqualitiesImpactAssessmentCompleted = applyingSchool.Details.EqualitiesImpactAssessmentCompleted, 
+			EqualitiesImpactAssessmentDetails = applyingSchool.Details.EqualitiesImpactAssessmentDetails,
 		};
 	}
 
@@ -158,7 +187,17 @@ public class ApplicationSchoolState : BaseEntity
 				PartOfPfiSchemeType = PartOfPfiSchemeType,
 				PartOfPrioritySchoolsBuildingProgramme = PartOfPrioritySchoolsBuildingProgramme,
 				PartOfBuildingSchoolsForFutureProgramme = PartOfBuildingSchoolsForFutureProgramme
-			})
+			},
+			new Performance{},
+			new LocalAuthority{},
+			new PartnershipsAndAffliations{},
+			new ReligiousEducation{},
+			SchoolContributionToTrust = SchoolContributionToTrust,
+			GoverningBodyConsentEvidenceDocumentLink = GoverningBodyConsentEvidenceDocumentLink,
+			AdditionalInformationAdded = AdditionalInformationAdded,
+			AdditionalInformation = AdditionalInformation,
+			EqualitiesImpactAssessmentCompleted = EqualitiesImpactAssessmentCompleted,
+			EqualitiesImpactAssessmentDetails = EqualitiesImpactAssessmentDetails)
 		{
 			ContactRole = ContactRole,
 			ApproverContactEmail = ApproverContactEmail,
@@ -185,9 +224,7 @@ public class ApplicationSchoolState : BaseEntity
 			CapacityAssumptions = CapacityAssumptions,
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
-			// additional information
-			// TODO MR:-
+			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
 		};
 	}
 }
