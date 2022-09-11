@@ -9,7 +9,7 @@ public record ApplicationSchoolServiceModel(
 	LandAndBuildingsServiceModel LandAndBuildings,
 	// additional information - split up
 	PerformanceServiceModel Performance,
-	LocalAuthority LocalAuthority,
+	LocalAuthorityServiceModel LocalAuthority,
 	PartnershipsAndAffliationsServiceModel PartnershipsAndAffliations,
 	ReligiousEducationServiceModel ReligiousEducation,
 	string? SchoolContributionToTrust = null,
