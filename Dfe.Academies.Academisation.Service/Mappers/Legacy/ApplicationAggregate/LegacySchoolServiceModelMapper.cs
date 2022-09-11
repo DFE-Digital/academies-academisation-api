@@ -50,31 +50,36 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolConversionChangeNamePlanned = school.ConversionChangeNamePlanned,
 			SchoolConversionProposedNewSchoolName = school.ProposedNewSchoolName,
 
-			// ToDo: additional information
-			////SchoolAdSchoolContributionToTrust = null,
-			////SchoolOngoingSafeguardingInvestigations = null,
-			////SchoolOngoingSafeguardingDetails = null,
-			////SchoolPartOfLaReorganizationPlan = null,
-			////SchoolLaReorganizationDetails = null,
-			////SchoolPartOfLaClosurePlan = null,
-			////SchoolLaClosurePlanDetails = null,
-			////SchoolFaithSchool = null,
-			////SchoolFaithSchoolDioceseName = null,
-			////DiocesePermissionEvidenceDocumentLink = null,
-			////SchoolIsPartOfFederation = null,
-			////SchoolIsSupportedByFoundation = null,
-			////SchoolSupportedFoundationBodyName = null,
-			////FoundationEvidenceDocumentLink = null,
-			////SchoolHasSACREException = null,
-			////SchoolSACREExemptionEndDate = null,
-			////SchoolAdFeederSchools = null,
-			////GoverningBodyConsentEvidenceDocumentLink = null,
-			////SchoolAdEqualitiesImpactAssessmentCompleted = null,
-			////SchoolAdEqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
-			////SchoolAdInspectedButReportNotPublished = null,
-			////SchoolAdInspectedButReportNotPublishedExplain = null,
-			////SchoolAdditionalInformationAdded = null,
-			////SchoolAdditionalInformation = null,
+			// additional information
+			// Performance
+			SchoolAdInspectedButReportNotPublished = school.Performance.InspectedButReportNotPublished,
+			SchoolAdInspectedButReportNotPublishedExplain = school.Performance.InspectedButReportNotPublishedExplain,
+			SchoolOngoingSafeguardingInvestigations = school.Performance.OngoingSafeguardingInvestigations,
+			SchoolOngoingSafeguardingDetails = school.Performance.OngoingSafeguardingDetails,
+			// LocalAuthority
+			SchoolPartOfLaReorganizationPlan = school.LocalAuthority.PartOfLaReorganizationPlan,
+			SchoolLaReorganizationDetails = school.LocalAuthority.LaReorganizationDetails,
+			SchoolPartOfLaClosurePlan = school.LocalAuthority.PartOfLaClosurePlan,
+			SchoolLaClosurePlanDetails = school.LocalAuthority.LaClosurePlanDetails,
+			//PartnershipsAndAffliations
+			SchoolIsPartOfFederation = school.PartnershipsAndAffliations.IsPartOfFederation,
+			SchoolIsSupportedByFoundation = school.PartnershipsAndAffliations.IsSupportedByFoundation,
+			SchoolSupportedFoundationBodyName = school.PartnershipsAndAffliations.SupportedFoundationName,
+			FoundationEvidenceDocumentLink = school.PartnershipsAndAffliations.SupportedFoundationEvidenceDocumentLink,
+			SchoolAdFeederSchools = school.PartnershipsAndAffliations.FeederSchools,
+			// ReligiousEducation
+			SchoolFaithSchool = school.ReligiousEducation.FaithSchool,
+			SchoolFaithSchoolDioceseName = school.ReligiousEducation.FaithSchoolDioceseName,
+			DiocesePermissionEvidenceDocumentLink = school.ReligiousEducation.DiocesePermissionEvidenceDocumentLink,
+			SchoolHasSACREException = school.ReligiousEducation.HasSACREException,
+			SchoolSACREExemptionEndDate = school.ReligiousEducation.SACREExemptionEndDate,
+			// other additional information
+			SchoolAdSchoolContributionToTrust = school.SchoolContributionToTrust,
+			GoverningBodyConsentEvidenceDocumentLink = school.GoverningBodyConsentEvidenceDocumentLink,
+			SchoolAdditionalInformationAdded = school.AdditionalInformationAdded,
+			SchoolAdditionalInformation = school.AdditionalInformation,
+			SchoolAdEqualitiesImpactAssessmentCompleted = school.EqualitiesImpactAssessmentCompleted,
+			SchoolAdEqualitiesImpactAssessmentDetails = school.EqualitiesImpactAssessmentDetails, 
 
 			// ToDo: Finances
 			////PreviousFinancialYear = null,
