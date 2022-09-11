@@ -5,10 +5,18 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application;
 
 internal static class ReligiousEducationModelMapper
 {
-	//TODO MR:-
-	//		bool? SchoolFaithSchool = null, // linked to a diocese yes/no?
-	//string? SchoolFaithSchoolDioceseName = null,
-	//string? DiocesePermissionEvidenceDocumentLink = null,
-	//bool? SchoolHasSACREException = null,
-	//	DateTime? SchoolSACREExemptionEndDate = null	
+	internal static ReligiousEducationServiceModel ToServiceModel(this ReligiousEducation religiousEducation)
+	{
+		//TODO MR:-
+		//		bool? SchoolFaithSchool = null, // linked to a diocese yes/no?
+		//string? SchoolFaithSchoolDioceseName = null,
+		//string? DiocesePermissionEvidenceDocumentLink = null,
+		//bool? SchoolHasSACREException = null,
+		//	DateTime? SchoolSACREExemptionEndDate = null	
+	}
+
+	internal static ReligiousEducation ToDomain(this ReligiousEducationServiceModel serviceModel)
+	{
+		//TODO MR:-
+	}
 }
