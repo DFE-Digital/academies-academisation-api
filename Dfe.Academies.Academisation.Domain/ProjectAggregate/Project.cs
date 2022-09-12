@@ -59,7 +59,7 @@ public class Project : IProject
 			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings.PartOfPfiScheme),
 			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
 			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
-			//EqualitiesImpactAssessmentConsidered = ToYesNoString(school.SchoolAdEqualitiesImpactAssessment),
+			EqualitiesImpactAssessmentConsidered = ToYesNoString(school.EqualitiesImpactAssessmentCompleted != Core.ApplicationAggregate.EqualityImpact.NotConsidered),
 			//SponsorName = application.SponsorName,
 			//SponsorReferenceNumber = application.SponsorReferenceNumber,
 			//RevenueCarryForwardAtEndMarchCurrentYear = school.SchoolCFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolCFYRevenueIsDeficit),
@@ -74,9 +74,9 @@ public class Project : IProject
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
 
-	private static string ToYesNoString(bool? value)
+	private static string? ToYesNoString(bool? value)
 	{
-		if (!value.HasValue) return string.Empty;
+		if (!value.HasValue) return null;
 		return value == true ? "Yes" : "No";
 	}
 }
