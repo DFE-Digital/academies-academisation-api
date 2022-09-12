@@ -41,11 +41,42 @@ public class Project : IProject
 
 		var projectDetails = new ProjectDetails(
 			school.Urn,
-			misEstablishmentDetails.Laestab,
-			school.SchoolName
+			misEstablishmentDetails.Laestab
 		)
-		{ UkPrn = establishmentDetails.Ukprn };
+		{ 
+			UkPrn = establishmentDetails.Ukprn,
+			//LocalAuthority = school.LocalAuthority.LocalAuthorityName,
+			//ApplicationReferenceNumber = application.ApplicationId
+			ProjectStatus = "Converter Pre-AO (C)",
+			//ApplicationReceivedDate = application.ApplicationSubmittedOn
+			OpeningDate = DateTime.Today.AddMonths(6),
+			//TrustReferenceNumber = application.ExistingTrust.ReferenceNumber
+			//NameOfTrust = application.ExistingTrust.TrustName
+			AcademyTypeAndRoute = "Converter",
+			ProposedAcademyOpeningDate = school.ConversionTargetDate,
+			ConversionSupportGrantAmount = 25000,
+			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
+			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings.PartOfPfiScheme),
+			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
+			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
+			//EqualitiesImpactAssessmentConsidered = ToYesNoString(school.SchoolAdEqualitiesImpactAssessment),
+			//SponsorName = application.SponsorName,
+			//SponsorReferenceNumber = application.SponsorReferenceNumber,
+			//RevenueCarryForwardAtEndMarchCurrentYear = school.SchoolCFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolCFYRevenueIsDeficit),
+			//ProjectedRevenueBalanceAtEndMarchNextYear = school.SchoolNFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolNFYRevenueIsDeficit),
+			//CapitalCarryForwardAtEndMarchCurrentYear = school.SchoolCFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolCFYCapitalIsDeficit),
+			//CapitalCarryForwardAtEndMarchNextYear = school.SchoolNFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolNFYCapitalIsDeficit),
+			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
+			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
+			YearThreeProjectedPupilNumbers	= school.ProjectedPupilNumbersYear3
+		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
+	private static string ToYesNoString(bool? value)
+	{
+		if (!value.HasValue) return string.Empty;
+		return value == true ? "Yes" : "No";
 	}
 }
