@@ -1,7 +1,12 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
+﻿using System.ComponentModel;
+
+namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
 {
-	public class RevenueType
+	public enum RevenueType
 	{
-		// TODO:- copy from sip
+		[Description("Surplus")]
+		Surplus = 1,
+		[Description("Deficit")]
+		Deficit = 2
 	}
 }
