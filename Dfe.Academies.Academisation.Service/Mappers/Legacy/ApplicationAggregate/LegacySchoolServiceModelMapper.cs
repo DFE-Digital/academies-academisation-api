@@ -82,9 +82,17 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolAdEqualitiesImpactAssessmentDetails = school.EqualitiesImpactAssessmentDetails,
 
 			// ToDo: Finances
-			////PreviousFinancialYear = null,
-			////CurrentFinancialYear = null,
-			////NextFinancialYear = null,
+			////PreviousFinancialYear = school.PreviousFinancialYear,
+			CurrentFinancialYear = new LegacyFinancialYearServiceModel
+			{
+				FYEndDate = school.CurrentFinancialYear.FinancialYearEndDate,
+				RevenueCarryForward = school.CurrentFinancialYear.Revenue,
+				RevenueStatusExplained = school.CurrentFinancialYear.RevenueStatusExplained,
+				CapitalCarryForward = school.CurrentFinancialYear.CapitalCarryForward,
+				CapitalIsDeficit = school.CurrentFinancialYear.CapitalCarryForwardStatus == RevenueType.Deficit,
+				CapitalStatusExplained = school.CurrentFinancialYear.CapitalCarryForwardExplained
+			},
+			////NextFinancialYear = school.NextFinancialYear,
 			// ToDo: Finances - MK2
 			////FinanceOngoingInvestigations = null,
 			////SchoolFinancialInvestigationsExplain = null,
