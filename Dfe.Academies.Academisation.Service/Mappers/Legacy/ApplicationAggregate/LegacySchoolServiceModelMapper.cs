@@ -92,7 +92,15 @@ internal static class LegacySchoolServiceModelMapper
 				CapitalIsDeficit = school.CurrentFinancialYear.CapitalCarryForwardStatus == RevenueType.Deficit,
 				CapitalStatusExplained = school.CurrentFinancialYear.CapitalCarryForwardExplained
 			},
-			////NextFinancialYear = school.NextFinancialYear,
+			NextFinancialYear = new LegacyFinancialYearServiceModel
+			{
+				FYEndDate = school.NextFinancialYear.FinancialYearEndDate,
+				RevenueCarryForward = school.NextFinancialYear.Revenue,
+				RevenueStatusExplained = school.NextFinancialYear.RevenueStatusExplained,
+				CapitalCarryForward = school.NextFinancialYear.CapitalCarryForward,
+				CapitalIsDeficit = school.NextFinancialYear.CapitalCarryForwardStatus == RevenueType.Deficit,
+				CapitalStatusExplained = school.NextFinancialYear.CapitalCarryForwardExplained
+			},
 			// ToDo: Finances - MK2
 			////FinanceOngoingInvestigations = null,
 			////SchoolFinancialInvestigationsExplain = null,
