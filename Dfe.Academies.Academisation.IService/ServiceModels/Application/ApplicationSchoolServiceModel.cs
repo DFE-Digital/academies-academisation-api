@@ -7,6 +7,17 @@ public record ApplicationSchoolServiceModel(
 	int Urn,
 	string SchoolName,
 	LandAndBuildingsServiceModel LandAndBuildings,
+	// additional information - split up
+	PerformanceServiceModel Performance,
+	LocalAuthorityServiceModel LocalAuthority,
+	PartnershipsAndAffliationsServiceModel PartnershipsAndAffliations,
+	ReligiousEducationServiceModel ReligiousEducation,
+	string? SchoolContributionToTrust = null,
+	string? GoverningBodyConsentEvidenceDocumentLink = null,
+	bool? AdditionalInformationAdded = null,
+	string? AdditionalInformation = null,
+	EqualityImpact? EqualitiesImpactAssessmentCompleted = null,
+	string? EqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
 	// contact details
 	string? SchoolConversionContactHeadName = null,
 	string? SchoolConversionContactHeadEmail = null,

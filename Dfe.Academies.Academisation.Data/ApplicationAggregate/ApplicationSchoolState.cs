@@ -57,6 +57,37 @@ public class ApplicationSchoolState : BaseEntity
 	public PayFundsTo? SupportGrantFundsPaidTo { get; set; }
 	public bool? ConfirmPaySupportGrantToSchool { get; set; }
 
+	// additional information - for data storage - store them flat !
+	// Performance
+	public bool? InspectedButReportNotPublished { get; set; }
+	public string? InspectedButReportNotPublishedExplain { get; set; }
+	public bool? OngoingSafeguardingInvestigations { get; set; }
+	public string? OngoingSafeguardingDetails { get; set; }
+	// LocalAuthority
+	public bool? PartOfLaReorganizationPlan { get; set; }
+	public string? LaReorganizationDetails { get; set; }
+	public bool? PartOfLaClosurePlan { get; set; }
+	public string? LaClosurePlanDetails { get; set; }
+	// PartnershipsAndAffliations
+	public bool? IsPartOfFederation { get; set; }
+	public bool? IsSupportedByFoundation { get; set; }
+	public string? SupportedFoundationName { get; set; }
+	public string? SupportedFoundationEvidenceDocumentLink { get; set; }
+	public string? FeederSchools { get; set; }
+	// religion
+	public bool? FaithSchool { get; set; }
+	public string? FaithSchoolDioceseName { get; set; }
+	public string? DiocesePermissionEvidenceDocumentLink { get; set; }
+	public bool? HasSACREException { get; set; }
+	public DateTime? SACREExemptionEndDate { get; set; }
+	// other additional information
+	public string? SchoolContributionToTrust { get; set; }
+	public string? GoverningBodyConsentEvidenceDocumentLink { get; set; }
+	public bool? AdditionalInformationAdded { get; set; }
+	public string? AdditionalInformation { get; set; }
+	public EqualityImpact? EqualitiesImpactAssessmentCompleted { get; set; }
+	public string? EqualitiesImpactAssessmentDetails { get; set; }
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
@@ -101,7 +132,38 @@ public class ApplicationSchoolState : BaseEntity
 			PartOfPrioritySchoolsBuildingProgramme = applyingSchool.Details.LandAndBuildings.PartOfPrioritySchoolsBuildingProgramme,
 			PartOfBuildingSchoolsForFutureProgramme = applyingSchool.Details.LandAndBuildings.PartOfBuildingSchoolsForFutureProgramme,
 			SupportGrantFundsPaidTo = applyingSchool.Details.SchoolSupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = applyingSchool.Details.ConfirmPaySupportGrantToSchool
+			ConfirmPaySupportGrantToSchool = applyingSchool.Details.ConfirmPaySupportGrantToSchool,
+			// additional information
+			// Performance
+			InspectedButReportNotPublished = applyingSchool.Details.Performance.InspectedButReportNotPublished,
+			InspectedButReportNotPublishedExplain = applyingSchool.Details.Performance.InspectedButReportNotPublishedExplain,
+			OngoingSafeguardingInvestigations = applyingSchool.Details.Performance.OngoingSafeguardingInvestigations,
+			OngoingSafeguardingDetails = applyingSchool.Details.Performance.OngoingSafeguardingDetails,
+
+			// LocalAuthority
+			PartOfLaReorganizationPlan = applyingSchool.Details.LocalAuthority.PartOfLaReorganizationPlan,
+			LaReorganizationDetails = applyingSchool.Details.LocalAuthority.LaReorganizationDetails,
+			PartOfLaClosurePlan = applyingSchool.Details.LocalAuthority.PartOfLaClosurePlan,
+			LaClosurePlanDetails = applyingSchool.Details.LocalAuthority.LaClosurePlanDetails,
+			// PartnershipsAndAffliations
+			IsPartOfFederation = applyingSchool.Details.PartnershipsAndAffliations.IsPartOfFederation,
+			IsSupportedByFoundation = applyingSchool.Details.PartnershipsAndAffliations.IsSupportedByFoundation,
+			SupportedFoundationName = applyingSchool.Details.PartnershipsAndAffliations.SupportedFoundationName,
+			SupportedFoundationEvidenceDocumentLink = applyingSchool.Details.PartnershipsAndAffliations.SupportedFoundationEvidenceDocumentLink,
+			FeederSchools = applyingSchool.Details.PartnershipsAndAffliations.FeederSchools,
+			// religion
+			FaithSchool = applyingSchool.Details.ReligiousEducation.FaithSchool,
+			FaithSchoolDioceseName = applyingSchool.Details.ReligiousEducation.FaithSchoolDioceseName,
+			DiocesePermissionEvidenceDocumentLink = applyingSchool.Details.ReligiousEducation.DiocesePermissionEvidenceDocumentLink,
+			HasSACREException = applyingSchool.Details.ReligiousEducation.HasSACREException,
+			SACREExemptionEndDate = applyingSchool.Details.ReligiousEducation.SACREExemptionEndDate,
+			// other additional information
+			SchoolContributionToTrust = applyingSchool.Details.SchoolContributionToTrust,
+			GoverningBodyConsentEvidenceDocumentLink = applyingSchool.Details.GoverningBodyConsentEvidenceDocumentLink,
+			AdditionalInformationAdded = applyingSchool.Details.AdditionalInformationAdded,
+			AdditionalInformation = applyingSchool.Details.AdditionalInformation,
+			EqualitiesImpactAssessmentCompleted = applyingSchool.Details.EqualitiesImpactAssessmentCompleted, 
+			EqualitiesImpactAssessmentDetails = applyingSchool.Details.EqualitiesImpactAssessmentDetails,
 		};
 	}
 
@@ -124,8 +186,44 @@ public class ApplicationSchoolState : BaseEntity
 				PartOfPfiSchemeType = PartOfPfiSchemeType,
 				PartOfPrioritySchoolsBuildingProgramme = PartOfPrioritySchoolsBuildingProgramme,
 				PartOfBuildingSchoolsForFutureProgramme = PartOfBuildingSchoolsForFutureProgramme
+			},
+			new Performance
+			{
+				InspectedButReportNotPublished = InspectedButReportNotPublished,
+				InspectedButReportNotPublishedExplain = InspectedButReportNotPublishedExplain,
+				OngoingSafeguardingDetails = OngoingSafeguardingDetails,
+				OngoingSafeguardingInvestigations = OngoingSafeguardingInvestigations
+			},
+			new LocalAuthority
+			{
+				PartOfLaReorganizationPlan = PartOfLaReorganizationPlan,
+				LaClosurePlanDetails = LaClosurePlanDetails,
+				PartOfLaClosurePlan = PartOfLaClosurePlan,
+				LaReorganizationDetails = LaReorganizationDetails
+			},
+			new PartnershipsAndAffliations
+			{
+				IsPartOfFederation = IsPartOfFederation,
+				IsSupportedByFoundation = IsSupportedByFoundation,
+				SupportedFoundationName = SupportedFoundationName,
+				SupportedFoundationEvidenceDocumentLink = SupportedFoundationEvidenceDocumentLink,
+				FeederSchools = FeederSchools
+			},
+			new ReligiousEducation
+			{
+				FaithSchool = FaithSchool,
+				FaithSchoolDioceseName = FaithSchoolDioceseName,
+				DiocesePermissionEvidenceDocumentLink = DiocesePermissionEvidenceDocumentLink,
+				HasSACREException = HasSACREException,
+				SACREExemptionEndDate = SACREExemptionEndDate
 			})
 		{
+			SchoolContributionToTrust = SchoolContributionToTrust,
+			GoverningBodyConsentEvidenceDocumentLink = GoverningBodyConsentEvidenceDocumentLink,
+			AdditionalInformationAdded = AdditionalInformationAdded,
+			AdditionalInformation = AdditionalInformation,
+			EqualitiesImpactAssessmentCompleted = EqualitiesImpactAssessmentCompleted,
+			EqualitiesImpactAssessmentDetails = EqualitiesImpactAssessmentDetails,
 			ContactRole = ContactRole,
 			ApproverContactEmail = ApproverContactEmail,
 			ApproverContactName = ApproverContactName,

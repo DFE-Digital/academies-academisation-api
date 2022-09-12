@@ -12,9 +12,19 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Id,
 			school.Details.Urn,
 			school.Details.SchoolName,
-			school.Details.LandAndBuildings.ToServiceModel()
+			school.Details.LandAndBuildings.ToServiceModel(),
+			school.Details.Performance.ToServiceModel(),
+			school.Details.LocalAuthority.ToServiceModel(),
+			school.Details.PartnershipsAndAffliations.ToServiceModel(),
+			school.Details.ReligiousEducation.ToServiceModel()
 		)
 		{
+			SchoolContributionToTrust = school.Details.SchoolContributionToTrust,
+			GoverningBodyConsentEvidenceDocumentLink = school.Details.GoverningBodyConsentEvidenceDocumentLink,
+			AdditionalInformationAdded = school.Details.AdditionalInformationAdded,
+			AdditionalInformation = school.Details.AdditionalInformation,
+			EqualitiesImpactAssessmentCompleted = school.Details.EqualitiesImpactAssessmentCompleted,
+			EqualitiesImpactAssessmentDetails = school.Details.EqualitiesImpactAssessmentDetails,
 			SchoolConversionApproverContactEmail = school.Details.ApproverContactEmail,
 			SchoolConversionApproverContactName = school.Details.ApproverContactName,
 			SchoolConversionMainContactOtherEmail = school.Details.MainContactOtherEmail,
@@ -46,8 +56,22 @@ internal static class ApplicationSchoolServiceModelMapper
 
 	internal static SchoolDetails ToDomain(this ApplicationSchoolServiceModel serviceModel)
 	{
-		return new(serviceModel.Urn, serviceModel.SchoolName, serviceModel.LandAndBuildings.ToDomain())
+		return new(serviceModel.Urn, 
+			serviceModel.SchoolName, 
+			serviceModel.LandAndBuildings.ToDomain(),
+			serviceModel.Performance.ToDomain(),
+			serviceModel.LocalAuthority.ToDomain(),
+			serviceModel.PartnershipsAndAffliations.ToDomain(),
+			serviceModel.ReligiousEducation.ToDomain()
+			)
 		{
+			
+			SchoolContributionToTrust = serviceModel.SchoolContributionToTrust,
+			GoverningBodyConsentEvidenceDocumentLink = serviceModel.GoverningBodyConsentEvidenceDocumentLink,
+			AdditionalInformationAdded = serviceModel.AdditionalInformationAdded,
+			AdditionalInformation = serviceModel.AdditionalInformation,
+			EqualitiesImpactAssessmentCompleted = serviceModel.EqualitiesImpactAssessmentCompleted,
+			EqualitiesImpactAssessmentDetails = serviceModel.EqualitiesImpactAssessmentDetails,
 			ApproverContactEmail = serviceModel.SchoolConversionApproverContactEmail,
 			ApproverContactName = serviceModel.SchoolConversionApproverContactName,
 			MainContactOtherTelephone = serviceModel.SchoolConversionMainContactOtherTelephone,
