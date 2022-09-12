@@ -87,10 +87,17 @@ public class ApplicationSchoolState : BaseEntity
 	public string? AdditionalInformation { get; set; }
 	public EqualityImpact? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactAssessmentDetails { get; set; }
-
 	// TODO:- previous financial year
 
-	// TODO:- current financial year
+	public DateTime? CurrentFinancialYearEndDate { get; set; }
+	public decimal? CurrentFinancialYearRevenue { get; set; }
+	public RevenueType? CurrentFinancialYearRevenueStatus { get; set; }
+	public string? CurrentFinancialYearRevenueStatusExplained { get; set; }
+	public string? CurrentFinancialYearRevenueStatusFileLink { get; set; }
+	public decimal? CurrentFinancialYearCapitalCarryForward { get; set; }
+	public RevenueType? CurrentFinancialYearCapitalCarryForwardStatus { get; set; }
+	public string? CurrentFinancialYearCapitalCarryForwardExplained { get; set; }
+	public string? CurrentFinancialYearCapitalCarryForwardFileLink { get; set; }
 
 	// TODO:- next financial year
 
@@ -170,6 +177,19 @@ public class ApplicationSchoolState : BaseEntity
 			AdditionalInformation = applyingSchool.Details.AdditionalInformation,
 			EqualitiesImpactAssessmentCompleted = applyingSchool.Details.EqualitiesImpactAssessmentCompleted, 
 			EqualitiesImpactAssessmentDetails = applyingSchool.Details.EqualitiesImpactAssessmentDetails,
+			// previous financial yr - TODO
+
+			// current financial yr
+			CurrentFinancialYearEndDate = applyingSchool.Details.CurrentFinancialYear.FinancialYearEndDate,
+			CurrentFinancialYearRevenue = applyingSchool.Details.CurrentFinancialYear.Revenue,
+			CurrentFinancialYearRevenueStatus = applyingSchool.Details.CurrentFinancialYear.RevenueStatus,
+			CurrentFinancialYearRevenueStatusExplained = applyingSchool.Details.CurrentFinancialYear.RevenueStatusExplained,
+			CurrentFinancialYearRevenueStatusFileLink = applyingSchool.Details.CurrentFinancialYear.RevenueStatusFileLink,
+			CurrentFinancialYearCapitalCarryForward = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForward,
+			CurrentFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForwardStatus,
+			CurrentFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForwardExplained,
+			CurrentFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForwardFileLink
+			// next financial year - TODO
 		};
 	}
 
@@ -222,7 +242,22 @@ public class ApplicationSchoolState : BaseEntity
 				DiocesePermissionEvidenceDocumentLink = DiocesePermissionEvidenceDocumentLink,
 				HasSACREException = HasSACREException,
 				SACREExemptionEndDate = SACREExemptionEndDate
-			})
+			},
+			// previous financial yr - TODO
+			new FinancialYear
+			{
+				FinancialYearEndDate = CurrentFinancialYearEndDate,
+				Revenue = CurrentFinancialYearRevenue,
+				RevenueStatus = CurrentFinancialYearRevenueStatus,
+				RevenueStatusExplained = CurrentFinancialYearRevenueStatusExplained,
+				RevenueStatusFileLink = CurrentFinancialYearRevenueStatusFileLink,
+				CapitalCarryForward = CurrentFinancialYearCapitalCarryForward,
+				CapitalCarryForwardStatus = CurrentFinancialYearCapitalCarryForwardStatus,
+				CapitalCarryForwardExplained = CurrentFinancialYearCapitalCarryForwardExplained,
+				CapitalCarryForwardFileLink = CurrentFinancialYearCapitalCarryForwardFileLink
+			}
+			// next financial year - TODO
+			)
 		{
 			SchoolContributionToTrust = SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = GoverningBodyConsentEvidenceDocumentLink,
