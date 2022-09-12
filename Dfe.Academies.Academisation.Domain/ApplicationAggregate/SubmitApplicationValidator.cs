@@ -11,9 +11,16 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
 				.Equal(ApplicationStatus.InProgress)
 				.WithMessage("Application must be In Progress to submit");
 
+			RuleFor(application => application.Schools)
+				.Must(schools => schools.Any())
+				.WithMessage("Application must have at least one School to submit");
+
+
 			RuleFor(application => application)
 				.SetValidator(new SubmitJoinAMatApplicationValidator())
-				.When(application => application.ApplicationType == ApplicationType.JoinAMat);
+				.When(application => 
+					application.ApplicationType == ApplicationType.JoinAMat
+					|| application.ApplicationType == ApplicationType.FormASat);
 		}
 	}
 }

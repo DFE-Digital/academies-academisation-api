@@ -33,36 +33,41 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 			Assert.IsType<CommandValidationErrorResult>(result);
 		}
 
-		[Fact]
-		public void ApplicationStatusIsInProgress___Success()
+		[Theory]
+		[InlineData(ApplicationType.FormASat)]
+		[InlineData(ApplicationType.FormAMat)]
+		[InlineData(ApplicationType.JoinAMat)]
+		public void NoSchools___ValidationError(ApplicationType applicationType)
 		{
 			// arrange
 			Application subject = new(
 				1,
 				DateTime.UtcNow,
 				DateTime.UtcNow,
-				ApplicationType.FormAMat,
+				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, SchoolDetails>());
+				new Dictionary<int, SchoolDetails>()
+				);
 
 			// act
 			var result = subject.Submit();
 
 			// assert
-			Assert.IsType<CommandSuccessResult>(result);
-			Assert.Equal(ApplicationStatus.Submitted, subject.ApplicationStatus);
+			DfeAssert.CommandValidationError(result, nameof(Application.Schools));
 		}
 
-		[Fact]
-		public void ApplicationTypeIsJoinAMat_MoreThanOneSchool___ValidationError()
+		[Theory]
+		[InlineData(ApplicationType.FormASat)]
+		[InlineData(ApplicationType.JoinAMat)]
+		public void ApplicationTypeIsJoinAMatOrFormASat_MoreThanOneSchool___ValidationError(ApplicationType applicationType)
 		{
 			// arrange
 			Application subject = new(
 				1,
 				DateTime.UtcNow,
 				DateTime.UtcNow,
-				ApplicationType.JoinAMat,
+				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
 				new Dictionary<int, SchoolDetails>
@@ -78,16 +83,17 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 			DfeAssert.CommandValidationError(result, nameof(Application.Schools));
 		}
 
-
-		[Fact]
-		public void ApplicationTypeIsJoinAMat_OneSchool___Success()
+		[Theory]
+		[InlineData(ApplicationType.FormASat)]
+		[InlineData(ApplicationType.JoinAMat)]
+		public void ApplicationTypeIsJoinAMatOrFormASat_OneSchool___Success(ApplicationType applicationType)
 		{
 			// arrange
 			Application subject = new(
 				1,
 				DateTime.UtcNow,
 				DateTime.UtcNow,
-				ApplicationType.JoinAMat,
+				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
 				new Dictionary<int, SchoolDetails>
@@ -103,5 +109,30 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 			Assert.Equal(ApplicationStatus.Submitted, subject.ApplicationStatus);
 		}
 
+		[Theory]
+		[InlineData(ApplicationType.FormAMat)]
+		public void ApplicationTypeIsFormAMat_TwoSchools___Success(ApplicationType applicationType)
+		{
+			// arrange
+			Application subject = new(
+				1,
+				DateTime.UtcNow,
+				DateTime.UtcNow,
+				applicationType,
+				ApplicationStatus.InProgress,
+				new Dictionary<int, ContributorDetails>(),
+				new Dictionary<int, SchoolDetails>
+				{
+					{ 1, _fixture.Create<SchoolDetails>() },
+					{ 2, _fixture.Create<SchoolDetails>() }
+				});
+
+			// act
+			var result = subject.Submit();
+
+			// assert
+			Assert.IsType<CommandSuccessResult>(result);
+			Assert.Equal(ApplicationStatus.Submitted, subject.ApplicationStatus);
+		}
 	}
 }
