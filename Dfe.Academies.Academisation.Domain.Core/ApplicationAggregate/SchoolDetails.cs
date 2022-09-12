@@ -9,6 +9,8 @@ public record SchoolDetails(
 	LocalAuthority LocalAuthority,
 	PartnershipsAndAffliations PartnershipsAndAffliations,
 	ReligiousEducation ReligiousEducation,
+	// finances
+	FinancialYear CurrentFinancialYear,
 	string? SchoolContributionToTrust = null,
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,

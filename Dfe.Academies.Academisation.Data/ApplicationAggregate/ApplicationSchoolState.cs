@@ -88,6 +88,12 @@ public class ApplicationSchoolState : BaseEntity
 	public EqualityImpact? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactAssessmentDetails { get; set; }
 
+	// TODO:- previous financial year
+
+	// TODO:- current financial year
+
+	// TODO:- next financial year
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
