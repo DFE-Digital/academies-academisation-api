@@ -98,8 +98,16 @@ public class ApplicationSchoolState : BaseEntity
 	public RevenueType? CurrentFinancialYearCapitalCarryForwardStatus { get; set; }
 	public string? CurrentFinancialYearCapitalCarryForwardExplained { get; set; }
 	public string? CurrentFinancialYearCapitalCarryForwardFileLink { get; set; }
-
-	// TODO:- next financial year
+	// next financial year
+	public DateTime? NextFinancialYearEndDate { get; set; }
+	public decimal? NextFinancialYearRevenue { get; set; }
+	public RevenueType? NextFinancialYearRevenueStatus { get; set; }
+	public string? NextFinancialYearRevenueStatusExplained { get; set; }
+	public string? NextFinancialYearRevenueStatusFileLink { get; set; }
+	public decimal? NextFinancialYearCapitalCarryForward { get; set; }
+	public RevenueType? NextFinancialYearCapitalCarryForwardStatus { get; set; }
+	public string? NextFinancialYearCapitalCarryForwardExplained { get; set; }
+	public string? NextFinancialYearCapitalCarryForwardFileLink { get; set; }
 
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
@@ -188,8 +196,17 @@ public class ApplicationSchoolState : BaseEntity
 			CurrentFinancialYearCapitalCarryForward = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForward,
 			CurrentFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForwardStatus,
 			CurrentFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForwardExplained,
-			CurrentFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForwardFileLink
-			// next financial year - TODO
+			CurrentFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.CurrentFinancialYear.CapitalCarryForwardFileLink,
+			// next financial year
+			NextFinancialYearEndDate = applyingSchool.Details.NextFinancialYear.FinancialYearEndDate,
+			NextFinancialYearRevenue = applyingSchool.Details.NextFinancialYear.Revenue,
+			NextFinancialYearRevenueStatus = applyingSchool.Details.NextFinancialYear.RevenueStatus,
+			NextFinancialYearRevenueStatusExplained = applyingSchool.Details.NextFinancialYear.RevenueStatusExplained,
+			NextFinancialYearRevenueStatusFileLink = applyingSchool.Details.NextFinancialYear.RevenueStatusFileLink,
+			NextFinancialYearCapitalCarryForward = applyingSchool.Details.NextFinancialYear.CapitalCarryForward,
+			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardStatus,
+			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardExplained,
+			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink
 		};
 	}
 
@@ -244,6 +261,7 @@ public class ApplicationSchoolState : BaseEntity
 				SACREExemptionEndDate = SACREExemptionEndDate
 			},
 			// previous financial yr - TODO
+			// current financial year
 			new FinancialYear
 			{
 				FinancialYearEndDate = CurrentFinancialYearEndDate,
@@ -255,9 +273,21 @@ public class ApplicationSchoolState : BaseEntity
 				CapitalCarryForwardStatus = CurrentFinancialYearCapitalCarryForwardStatus,
 				CapitalCarryForwardExplained = CurrentFinancialYearCapitalCarryForwardExplained,
 				CapitalCarryForwardFileLink = CurrentFinancialYearCapitalCarryForwardFileLink
+			},
+			// next financial year 
+			new FinancialYear
+			{
+				FinancialYearEndDate = NextFinancialYearEndDate,
+				Revenue = NextFinancialYearRevenue,
+				RevenueStatus = NextFinancialYearRevenueStatus,
+				RevenueStatusExplained = NextFinancialYearRevenueStatusExplained,
+				RevenueStatusFileLink = NextFinancialYearRevenueStatusFileLink,
+				CapitalCarryForward = NextFinancialYearCapitalCarryForward,
+				CapitalCarryForwardStatus = NextFinancialYearCapitalCarryForwardStatus,
+				CapitalCarryForwardExplained = NextFinancialYearCapitalCarryForwardExplained,
+				CapitalCarryForwardFileLink = NextFinancialYearCapitalCarryForwardFileLink
 			}
-			// next financial year - TODO
-			)
+		)
 		{
 			SchoolContributionToTrust = SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = GoverningBodyConsentEvidenceDocumentLink,
