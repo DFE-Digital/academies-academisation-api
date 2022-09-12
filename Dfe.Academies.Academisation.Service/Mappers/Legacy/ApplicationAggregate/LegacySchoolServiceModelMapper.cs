@@ -78,7 +78,7 @@ internal static class LegacySchoolServiceModelMapper
 			GoverningBodyConsentEvidenceDocumentLink = school.GoverningBodyConsentEvidenceDocumentLink,
 			SchoolAdditionalInformationAdded = school.AdditionalInformationAdded,
 			SchoolAdditionalInformation = school.AdditionalInformation,
-			SchoolAdEqualitiesImpactAssessmentCompleted = school.EqualitiesImpactAssessmentCompleted,
+			SchoolAdEqualitiesImpactAssessmentCompleted = !string.IsNullOrWhiteSpace(school.EqualitiesImpactAssessmentDetails),
 			SchoolAdEqualitiesImpactAssessmentDetails = school.EqualitiesImpactAssessmentDetails, 
 
 			// ToDo: Finances

@@ -13,9 +13,8 @@ public record SchoolDetails(
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,
 	string? AdditionalInformation = null,
-	// TODO MR:- UI uses an enum A2CEqualityImpact
-	bool? EqualitiesImpactAssessmentCompleted = null,
-	string? EqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
+	EqualityImpact? EqualitiesImpactAssessmentCompleted = null,
+	string? EqualitiesImpactAssessmentDetails = null, // there is no text input within the UI, just a radio with the enum values
 	// contact details
 	string? ContactHeadName = null,
 	string? ContactHeadEmail = null,

@@ -85,8 +85,7 @@ public class ApplicationSchoolState : BaseEntity
 	public string? GoverningBodyConsentEvidenceDocumentLink { get; set; }
 	public bool? AdditionalInformationAdded { get; set; }
 	public string? AdditionalInformation { get; set; }
-	// TODO MR:- UI uses an enum A2CEqualityImpact
-	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public EqualityImpact? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactAssessmentDetails { get; set; }
 
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)

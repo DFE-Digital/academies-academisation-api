@@ -16,8 +16,7 @@ public record ApplicationSchoolServiceModel(
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,
 	string? AdditionalInformation = null,
-	// TODO MR:- UI uses an enum A2CEqualityImpact
-	bool? EqualitiesImpactAssessmentCompleted = null,
+	EqualityImpact? EqualitiesImpactAssessmentCompleted = null,
 	string? EqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
 	// contact details
 	string? SchoolConversionContactHeadName = null,
