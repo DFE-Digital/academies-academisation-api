@@ -11,6 +11,7 @@ public record SchoolDetails(
 	ReligiousEducation ReligiousEducation,
 	// finances
 	FinancialYear CurrentFinancialYear,
+	FinancialYear NextFinancialYear,
 	string? SchoolContributionToTrust = null,
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,
