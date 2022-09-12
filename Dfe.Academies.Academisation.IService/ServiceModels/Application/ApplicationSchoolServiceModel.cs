@@ -14,6 +14,7 @@ public record ApplicationSchoolServiceModel(
 	ReligiousEducationServiceModel ReligiousEducation,
 	// finances
 	FinancialYearServiceModel CurrentFinancialYear,
+	FinancialYearServiceModel NextFinancialYear,
 	string? SchoolContributionToTrust = null,
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,
