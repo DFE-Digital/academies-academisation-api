@@ -86,10 +86,10 @@ public class ApplicationSubmitTests
 
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
+		var school = _fixture.Create<ApplicationSchoolServiceModel>();
 		var updateRequest = createdPayload with
-			{
-				Schools = new List<ApplicationSchoolServiceModel> { _fixture.Create<ApplicationSchoolServiceModel>()
-			}
+		{
+			Schools = new List<ApplicationSchoolServiceModel> { school }
 		};
 
 		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
@@ -105,5 +105,30 @@ public class ApplicationSubmitTests
 		(_, var getPayload) = DfeAssert.OkObjectResult(applicationGetResult);
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
+
+		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)));
+		var projectResult = await projectController.Get(1);
+
+		(_, var project) = DfeAssert.OkObjectResult(projectResult);
+
+		Assert.Multiple(
+			() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
+			() => Assert.Equal(DateTime.Today.AddMonths(6), project.OpeningDate),
+			() => Assert.Equal("Converter", project.AcademyTypeAndRoute),
+			() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
+			() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
+			() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
+			() => Assert.Equal(ToYesNoString(school.LandAndBuildings.PartOfPfiScheme), project.PartOfPfiScheme),
+			() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),
+			() => Assert.Equal(school.ProjectedPupilNumbersYear2, project.YearTwoProjectedPupilNumbers),
+			() => Assert.Equal(school.ProjectedPupilNumbersYear3, project.YearThreeProjectedPupilNumbers)
+		);
 	}
+
+	private static string ToYesNoString(bool? value)
+	{
+		if (!value.HasValue) return string.Empty;
+		return value == true ? "Yes" : "No";
+	}
+
 }
