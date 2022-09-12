@@ -80,9 +80,12 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolAdditionalInformation = school.AdditionalInformation,
 			SchoolAdEqualitiesImpactAssessmentCompleted = !string.IsNullOrWhiteSpace(school.EqualitiesImpactAssessmentDetails),
 			SchoolAdEqualitiesImpactAssessmentDetails = school.EqualitiesImpactAssessmentDetails,
-
-			// ToDo: Finances
-			////PreviousFinancialYear = school.PreviousFinancialYear,
+			// Finances
+			PreviousFinancialYear = new LegacyFinancialYearServiceModel
+			{
+				// TODO :-
+				//school.PreviousFinancialYear,
+			}, 
 			CurrentFinancialYear = new LegacyFinancialYearServiceModel
 			{
 				FYEndDate = school.CurrentFinancialYear.FinancialYearEndDate,
