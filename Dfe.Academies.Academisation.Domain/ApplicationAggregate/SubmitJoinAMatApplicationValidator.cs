@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
 		public SubmitJoinAMatApplicationValidator()
 		{
 			RuleFor(application => application.Schools)
-				.Must(schools => schools.Count == 1)
+				.Must(schools => schools.Count < 2)
 				.WithMessage("Join a MAT Applications must have one and only one School");
 		}
 	}
