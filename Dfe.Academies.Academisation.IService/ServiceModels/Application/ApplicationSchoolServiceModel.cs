@@ -12,6 +12,8 @@ public record ApplicationSchoolServiceModel(
 	LocalAuthorityServiceModel LocalAuthority,
 	PartnershipsAndAffliationsServiceModel PartnershipsAndAffliations,
 	ReligiousEducationServiceModel ReligiousEducation,
+	// finances
+	FinancialYearServiceModel CurrentFinancialYear,
 	string? SchoolContributionToTrust = null,
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,
