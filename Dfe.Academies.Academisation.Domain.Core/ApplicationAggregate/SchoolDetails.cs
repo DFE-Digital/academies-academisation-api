@@ -10,6 +10,7 @@ public record SchoolDetails(
 	PartnershipsAndAffliations PartnershipsAndAffliations,
 	ReligiousEducation ReligiousEducation,
 	// finances
+	FinancialYear PreviousFinancialYear,
 	FinancialYear CurrentFinancialYear,
 	FinancialYear NextFinancialYear,
 	string? SchoolContributionToTrust = null,

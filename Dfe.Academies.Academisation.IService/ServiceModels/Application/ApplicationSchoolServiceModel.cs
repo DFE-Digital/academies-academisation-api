@@ -13,6 +13,7 @@ public record ApplicationSchoolServiceModel(
 	PartnershipsAndAffliationsServiceModel PartnershipsAndAffliations,
 	ReligiousEducationServiceModel ReligiousEducation,
 	// finances
+	FinancialYearServiceModel PreviousFinancialYear,
 	FinancialYearServiceModel CurrentFinancialYear,
 	FinancialYearServiceModel NextFinancialYear,
 	string? SchoolContributionToTrust = null,

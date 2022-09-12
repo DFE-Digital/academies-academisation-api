@@ -87,8 +87,17 @@ public class ApplicationSchoolState : BaseEntity
 	public string? AdditionalInformation { get; set; }
 	public EqualityImpact? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactAssessmentDetails { get; set; }
-	// TODO:- previous financial year
-
+	// previous financial year
+	public DateTime? PreviousFinancialYearEndDate { get; set; }
+	public decimal? PreviousFinancialYearRevenue { get; set; }
+	public RevenueType? PreviousFinancialYearRevenueStatus { get; set; }
+	public string? PreviousFinancialYearRevenueStatusExplained { get; set; }
+	public string? PreviousFinancialYearRevenueStatusFileLink { get; set; }
+	public decimal? PreviousFinancialYearCapitalCarryForward { get; set; }
+	public RevenueType? PreviousFinancialYearCapitalCarryForwardStatus { get; set; }
+	public string? PreviousFinancialYearCapitalCarryForwardExplained { get; set; }
+	public string? PreviousFinancialYearCapitalCarryForwardFileLink { get; set; }
+	// current fin yr
 	public DateTime? CurrentFinancialYearEndDate { get; set; }
 	public decimal? CurrentFinancialYearRevenue { get; set; }
 	public RevenueType? CurrentFinancialYearRevenueStatus { get; set; }
@@ -185,8 +194,16 @@ public class ApplicationSchoolState : BaseEntity
 			AdditionalInformation = applyingSchool.Details.AdditionalInformation,
 			EqualitiesImpactAssessmentCompleted = applyingSchool.Details.EqualitiesImpactAssessmentCompleted, 
 			EqualitiesImpactAssessmentDetails = applyingSchool.Details.EqualitiesImpactAssessmentDetails,
-			// previous financial yr - TODO
-
+			// previous financial yr
+			PreviousFinancialYearEndDate = applyingSchool.Details.PreviousFinancialYear.FinancialYearEndDate,
+			PreviousFinancialYearRevenue = applyingSchool.Details.PreviousFinancialYear.Revenue,
+			PreviousFinancialYearRevenueStatus = applyingSchool.Details.PreviousFinancialYear.RevenueStatus,
+			PreviousFinancialYearRevenueStatusExplained = applyingSchool.Details.PreviousFinancialYear.RevenueStatusExplained,
+			PreviousFinancialYearRevenueStatusFileLink = applyingSchool.Details.PreviousFinancialYear.RevenueStatusFileLink,
+			PreviousFinancialYearCapitalCarryForward = applyingSchool.Details.PreviousFinancialYear.CapitalCarryForward,
+			PreviousFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.PreviousFinancialYear.CapitalCarryForwardStatus,
+			PreviousFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.PreviousFinancialYear.CapitalCarryForwardExplained,
+			PreviousFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.PreviousFinancialYear.CapitalCarryForwardFileLink,
 			// current financial yr
 			CurrentFinancialYearEndDate = applyingSchool.Details.CurrentFinancialYear.FinancialYearEndDate,
 			CurrentFinancialYearRevenue = applyingSchool.Details.CurrentFinancialYear.Revenue,
@@ -260,7 +277,19 @@ public class ApplicationSchoolState : BaseEntity
 				HasSACREException = HasSACREException,
 				SACREExemptionEndDate = SACREExemptionEndDate
 			},
-			// previous financial yr - TODO
+			// previous financial yr
+			new FinancialYear
+			{
+				FinancialYearEndDate = PreviousFinancialYearEndDate,
+				Revenue = PreviousFinancialYearRevenue,
+				RevenueStatus = PreviousFinancialYearRevenueStatus,
+				RevenueStatusExplained = PreviousFinancialYearRevenueStatusExplained,
+				RevenueStatusFileLink = PreviousFinancialYearRevenueStatusFileLink,
+				CapitalCarryForward = PreviousFinancialYearCapitalCarryForward,
+				CapitalCarryForwardStatus = PreviousFinancialYearCapitalCarryForwardStatus,
+				CapitalCarryForwardExplained = PreviousFinancialYearCapitalCarryForwardExplained,
+				CapitalCarryForwardFileLink = PreviousFinancialYearCapitalCarryForwardFileLink
+			},
 			// current financial year
 			new FinancialYear
 			{

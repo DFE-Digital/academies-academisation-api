@@ -18,7 +18,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.PartnershipsAndAffliations.ToServiceModel(),
 			school.Details.ReligiousEducation.ToServiceModel(),
 			school.Details.CurrentFinancialYear.ToServiceModel(),
-			school.Details.NextFinancialYear.ToServiceModel()
+			school.Details.NextFinancialYear.ToServiceModel(),
+			school.Details.PreviousFinancialYear.ToServiceModel()
 		)
 		{
 			SchoolContributionToTrust = school.Details.SchoolContributionToTrust,
@@ -66,7 +67,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			serviceModel.PartnershipsAndAffliations.ToDomain(),
 			serviceModel.ReligiousEducation.ToDomain(),
 			serviceModel.CurrentFinancialYear.ToDomain(),
-			serviceModel.NextFinancialYear.ToDomain()
+			serviceModel.NextFinancialYear.ToDomain(),
+			serviceModel.PreviousFinancialYear.ToDomain()
 			)
 		{
 			SchoolContributionToTrust = serviceModel.SchoolContributionToTrust,
