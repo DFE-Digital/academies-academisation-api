@@ -83,8 +83,12 @@ internal static class LegacySchoolServiceModelMapper
 			// Finances
 			PreviousFinancialYear = new LegacyFinancialYearServiceModel
 			{
-				// TODO :-
-				//school.PreviousFinancialYear,
+				FYEndDate = school.PreviousFinancialYear.FinancialYearEndDate,
+				RevenueCarryForward = school.PreviousFinancialYear.Revenue,
+				RevenueStatusExplained = school.PreviousFinancialYear.RevenueStatusExplained,
+				CapitalCarryForward = school.PreviousFinancialYear.CapitalCarryForward,
+				CapitalIsDeficit = school.PreviousFinancialYear.CapitalCarryForwardStatus == RevenueType.Deficit,
+				CapitalStatusExplained = school.PreviousFinancialYear.CapitalCarryForwardExplained
 			}, 
 			CurrentFinancialYear = new LegacyFinancialYearServiceModel
 			{
