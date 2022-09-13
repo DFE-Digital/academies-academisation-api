@@ -17,6 +17,7 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.LocalAuthority.ToServiceModel(),
 			school.Details.PartnershipsAndAffliations.ToServiceModel(),
 			school.Details.ReligiousEducation.ToServiceModel(),
+			school.Details.PreviousFinancialYear.ToServiceModel(),
 			school.Details.CurrentFinancialYear.ToServiceModel(),
 			school.Details.NextFinancialYear.ToServiceModel()
 		)
@@ -65,9 +66,10 @@ internal static class ApplicationSchoolServiceModelMapper
 			serviceModel.LocalAuthority.ToDomain(),
 			serviceModel.PartnershipsAndAffliations.ToDomain(),
 			serviceModel.ReligiousEducation.ToDomain(),
+			serviceModel.PreviousFinancialYear.ToDomain(),
 			serviceModel.CurrentFinancialYear.ToDomain(),
 			serviceModel.NextFinancialYear.ToDomain()
-			)
+		)
 		{
 			SchoolContributionToTrust = serviceModel.SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = serviceModel.GoverningBodyConsentEvidenceDocumentLink,
