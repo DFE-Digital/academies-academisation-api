@@ -16,9 +16,9 @@ internal static class LegacySchoolServiceModelMapper
 	private static LegacySchoolServiceModel MapToServiceModel(this SchoolDetails school)
 	{
 		LegacySchoolServiceModel serviceModel = new(
-			// ToDo: Loans
+			// ToDo: Loans - set from School.Loans
 			new List<LegacyLoanServiceModel>(),
-			// ToDo: Leases
+			// ToDo: Leases - set from School.Leases
 			new List<LegacyLeaseServiceModel>())
 		{
 			SchoolName = school.SchoolName,
