@@ -227,7 +227,10 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForward = applyingSchool.Details.NextFinancialYear.CapitalCarryForward,
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardExplained,
-			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink
+			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink,
+			Loans = applyingSchool.Details.Loans
+				.Select(s => s.MapFromDomain())
+				.ToHashSet(),
 		};
 	}
 
@@ -319,7 +322,11 @@ public class ApplicationSchoolState : BaseEntity
 				CapitalCarryForwardStatus = NextFinancialYearCapitalCarryForwardStatus,
 				CapitalCarryForwardExplained = NextFinancialYearCapitalCarryForwardExplained,
 				CapitalCarryForwardFileLink = NextFinancialYearCapitalCarryForwardFileLink
-			}
+			},
+			// leases & loans
+			Loans: Loans.ToDictionary(
+				c => c.Id,
+				c => new LoanDetails(c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule, c.EndDate, c.TermMonths))
 		)
 		{
 			SchoolContributionToTrust = SchoolContributionToTrust,
