@@ -91,12 +91,8 @@ public class Project : IProject
 			RationaleForProject = detailsToUpdate.RationaleForProject ?? Details.RationaleForProject,
 			RationaleForTrust = detailsToUpdate.RationaleForTrust ?? Details.RationaleForTrust,
 			RisksAndIssues = detailsToUpdate.RisksAndIssues ?? Details.RisksAndIssues,
-			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear == default(decimal)
-				? null
-				: detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear ?? Details.RevenueCarryForwardAtEndMarchCurrentYear,
-			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear == default(decimal)
-				? null
-				: detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear ?? Details.ProjectedRevenueBalanceAtEndMarchNextYear,
+			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear ?? Details.RevenueCarryForwardAtEndMarchCurrentYear,
+			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear ?? Details.ProjectedRevenueBalanceAtEndMarchNextYear,
 			RationaleSectionComplete = detailsToUpdate.RationaleSectionComplete ?? Details.RationaleSectionComplete,
 			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate == default(DateTime)
 				? null
@@ -110,21 +106,15 @@ public class Project : IProject
 			RecommendationForProject = detailsToUpdate.RecommendationForProject ?? Details.RecommendationForProject,
 			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired ?? Details.AcademyOrderRequired,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? Details.SchoolAndTrustInformationSectionComplete,
-			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters == default(decimal)
-				? null
-				: detailsToUpdate.DistanceFromSchoolToTrustHeadquarters ?? Details.DistanceFromSchoolToTrustHeadquarters,
+			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters ?? Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation ?? Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentName = detailsToUpdate.MemberOfParliamentName ?? Details.MemberOfParliamentName,
 			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty ?? Details.MemberOfParliamentParty,
 			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete ?? Details.GeneralInformationSectionComplete,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete ?? Details.RisksAndIssuesSectionComplete,
 			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation ?? Details.SchoolPerformanceAdditionalInformation,
-			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear == default(decimal)
-				? null
-				: detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear ?? Details.CapitalCarryForwardAtEndMarchCurrentYear,
-			CapitalCarryForwardAtEndMarchNextYear = detailsToUpdate.CapitalCarryForwardAtEndMarchNextYear == default(decimal)
-				? null
-				: detailsToUpdate.CapitalCarryForwardAtEndMarchNextYear ?? Details.CapitalCarryForwardAtEndMarchNextYear,
+			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear ?? Details.CapitalCarryForwardAtEndMarchCurrentYear,
+			CapitalCarryForwardAtEndMarchNextYear = detailsToUpdate.CapitalCarryForwardAtEndMarchNextYear ?? Details.CapitalCarryForwardAtEndMarchNextYear,
 			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation ?? Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete ?? Details.SchoolBudgetInformationSectionComplete,
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation ?? Details.SchoolPupilForecastsAdditionalInformation,
