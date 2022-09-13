@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -228,9 +229,21 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardExplained,
 			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink,
-			Loans = applyingSchool.Details.Loans
-				.Select(s => s.MapFromDomain())
-				.ToHashSet(),
+			// leases & loans
+			Loans = new HashSet<LoanState>(applyingSchool.Details.Loans
+				.Select(e => new LoanState
+				{
+					Id = e.Key,
+					Amount = e.Value.Amount,
+					Purpose = e.Value.Purpose,
+					Provider = e.Value.Provider,
+					InterestRate = e.Value.InterestRate,
+					Schedule = e.Value.Schedule,
+					EndDate = e.Value.EndDate,
+					TermMonths = e.Value.TermMonths
+				})
+				.ToList()),
+			// TODO:- leases
 		};
 	}
 
@@ -326,7 +339,8 @@ public class ApplicationSchoolState : BaseEntity
 			// leases & loans
 			Loans: Loans.ToDictionary(
 				c => c.Id,
-				c => new LoanDetails(c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule, c.EndDate, c.TermMonths))
+				c => new LoanDetails(c.Id, c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule, c.EndDate, c.TermMonths))
+			// TODO:- leases
 		)
 		{
 			SchoolContributionToTrust = SchoolContributionToTrust,

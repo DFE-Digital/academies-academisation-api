@@ -1,6 +1,7 @@
 ﻿namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
 {
 	public record LoanDetails(
+		int LoanId,
 		//// MR:- below props from A2C-SIP - SchoolLoan object
 		decimal? Amount,
 		string Purpose,
