@@ -27,15 +27,7 @@ public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
 		}
 
 		var result = existingProject.UpdatePatch(legacyProjectServiceModel.ToDomain());
-
-		if (result is CommandValidationErrorResult)
-		{
-			return result;
-		}
-		if (result is not CommandSuccessResult)
-		{
-			throw new NotImplementedException();
-		}
+				
 		await _projectUpdateDataCommand.Execute(existingProject);
 
 		return result;
