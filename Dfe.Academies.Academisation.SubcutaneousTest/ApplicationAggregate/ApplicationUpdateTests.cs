@@ -164,7 +164,7 @@ public class ApplicationUpdateTests
 		DfeAssert.BadRequestObjectResult(updateResult, "ApplicationStatus");
 	}
 
-	private async Task<ApplicationServiceModel> CreateExistingApplication()
+	private async Task<ApplicationServiceModel?> CreateExistingApplication()
 	{
 		ApplicationCreateRequestModel applicationForCreate = _fixture.Create<ApplicationCreateRequestModel>();
 
