@@ -118,6 +118,10 @@ public class ApplicationSchoolState : BaseEntity
 	public string? NextFinancialYearCapitalCarryForwardExplained { get; set; }
 	public string? NextFinancialYearCapitalCarryForwardFileLink { get; set; }
 
+	// leases & loans
+	[ForeignKey("Urn")]
+	public HashSet<LoanState> Loans { get; set; } = new();
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()

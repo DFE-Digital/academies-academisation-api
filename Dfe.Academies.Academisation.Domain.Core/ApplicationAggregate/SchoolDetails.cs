@@ -13,6 +13,8 @@ public record SchoolDetails(
 	FinancialYear PreviousFinancialYear,
 	FinancialYear CurrentFinancialYear,
 	FinancialYear NextFinancialYear,
+	// leases & loans
+	Dictionary<int, LoanDetails> Loans,
 	string? SchoolContributionToTrust = null,
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,
