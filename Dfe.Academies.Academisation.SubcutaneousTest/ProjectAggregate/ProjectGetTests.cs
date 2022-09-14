@@ -14,8 +14,6 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
 public class ProjectGetTests
 {
-	private readonly Fixture _fixture = new();
-
 	private readonly IProjectGetDataQuery _projectGetDataQuery;
 	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
 	private readonly LegacyProjectController _legacyProjectController;

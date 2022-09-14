@@ -35,7 +35,8 @@ public class LegacyProjectController : ControllerBase
 
 		return result switch
 		{
-			CommandSuccessResult => Ok(),
+			// TODO: change CommandSuccessResult to allow returning object and return it here.
+			CommandSuccessResult => Ok(projectUpdate),
 			NotFoundCommandResult => NotFound(),
 			CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 			_ => throw new NotImplementedException()
