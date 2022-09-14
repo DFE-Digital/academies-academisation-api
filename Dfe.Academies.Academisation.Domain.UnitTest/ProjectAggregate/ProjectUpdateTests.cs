@@ -1,4 +1,6 @@
-﻿using AutoFixture;
+﻿using System.Linq;
+using AutoFixture;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Xunit;
@@ -18,9 +20,10 @@ public class ProjectUpdateTests
 		var updatedProject = _fixture.Create<ProjectDetails>();
 
 		// Act
-		sut.UpdatePatch(updatedProject);
+		var result = sut.UpdatePatch(updatedProject);
 
 		// Assert
+		Assert.IsType<CommandSuccessResult>(result);
 		AssertProjectModelIsEqual(updatedProject, sut);
 	}
 
@@ -28,15 +31,34 @@ public class ProjectUpdateTests
 	public void Update_WithEmptyProject__ReturnsUpdateSuccessResult_AndDoesNotUpdateProjectDetails()
 	{
 		// Arrange
-		var initialProject = _fixture.Create<ProjectDetails>();
-		var sut = new Project(1, initialProject);
+		var existingProject = _fixture.Create<ProjectDetails>();
+		var sut = new Project(1, existingProject);
 		var updatedProject = new ProjectDetails(1, 1);
 
 		// Act
-		sut.UpdatePatch(updatedProject);
+		var result = sut.UpdatePatch(updatedProject);
 
 		// Assert
-		AssertProjectModelIsEqual(initialProject, sut);
+		Assert.IsType<CommandSuccessResult>(result);
+		AssertProjectModelIsEqual(existingProject, sut);
+	}
+
+	[Fact]
+	public void Update_WithDifferentUrn__ReturnsCommandValidationErrorResult_AndDoesNotUpdateProjectDetails()
+	{
+		// Arrange
+		var existingProject = _fixture.Create<ProjectDetails>();
+		var sut = new Project(1, existingProject);
+		var updatedProject = new ProjectDetails(1, 1);
+
+		// Act
+		var result = sut.UpdatePatch(updatedProject);
+
+		// Assert
+		var validationErrors = Assert.IsType<CommandValidationErrorResult>(result).ValidationErrors;
+		Assert.Equal("Urn", validationErrors.First().PropertyName);
+		Assert.Equal("Urn in update model must match existing record", validationErrors.First().ErrorMessage);
+		AssertProjectModelIsEqual(existingProject, sut);
 	}
 
 	private static void AssertProjectModelIsEqual(ProjectDetails expectedProject, Project sut)

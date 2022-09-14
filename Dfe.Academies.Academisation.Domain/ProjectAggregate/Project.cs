@@ -77,7 +77,15 @@ public class Project : IProject
 
 	public CommandResult UpdatePatch(ProjectDetails detailsToUpdate)
 	{
-		Details = new ProjectDetails(1, 1)
+		if (Details.Urn != detailsToUpdate.Urn)
+		{
+			return new CommandValidationErrorResult(new List<ValidationError> 
+			{ 
+				new ValidationError("Urn", "Urn in update model must match existing record") 
+			});
+		}
+
+		Details = new ProjectDetails(detailsToUpdate.Urn, 1)
 		{
 			HeadTeacherBoardDate = Details.HeadTeacherBoardDate == default(DateTime)
 			   ? null
@@ -135,7 +143,7 @@ public class Project : IProject
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? Details.ConversionSupportGrantChangeReason,
 			ProjectStatus = detailsToUpdate.ProjectStatus ?? Details.ProjectStatus
-		};		
+		};
 
 		return new CommandSuccessResult();
 	}
