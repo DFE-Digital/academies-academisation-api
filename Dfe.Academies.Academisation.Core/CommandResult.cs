@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Core;
 
-public abstract class CommandResult
+public abstract class CommandResult : OperationResult
 {
 	protected CommandResult()
 	{
