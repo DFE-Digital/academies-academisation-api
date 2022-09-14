@@ -7,7 +7,7 @@ internal static class LegacyProjectDetailsMapper
 {
 	internal static ProjectDetails ToDomain(this LegacyProjectServiceModel serviceModel)
 	{
-		return new(1, 1)
+		return new(serviceModel.Urn, 1)
 		{
 			HeadTeacherBoardDate = serviceModel.HeadTeacherBoardDate,
 			Author = serviceModel.Author,
