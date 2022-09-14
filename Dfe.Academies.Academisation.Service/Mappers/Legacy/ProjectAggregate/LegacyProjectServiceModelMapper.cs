@@ -9,14 +9,12 @@ internal static class LegacyProjectServiceModelMapper
 	{
 		LegacyProjectServiceModel serviceModel = new(
 			project.Id,
-			project.Details.Urn,
-			project.Details.Laestab
+			project.Details.Urn
 			)
 		{
 			SchoolName = project.Details.SchoolName,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
-			UkPrn = project.Details.UkPrn,
 			ProjectStatus = project.Details.ProjectStatus,
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
 			AssignedDate = project.Details.AssignedDate,

@@ -100,14 +100,11 @@ public class ProjectState : BaseEntity
 
 	internal Project MapToDomain()
 	{
-		ProjectDetails projectDetails = new(
-			Urn,
-			Laestab)
+		ProjectDetails projectDetails = new(Urn)
 		{
 			SchoolName = SchoolName,
 			LocalAuthority = LocalAuthority,
 			ApplicationReferenceNumber = ApplicationReferenceNumber,
-			UkPrn = UkPrn,
 			ProjectStatus = ProjectStatus,
 			ApplicationReceivedDate = ApplicationReceivedDate,
 			AssignedDate = AssignedDate,
@@ -202,11 +199,9 @@ public class ProjectState : BaseEntity
 		{
 			Id = project.Id,
 			Urn = project.Details.Urn,
-			Laestab = project.Details.Laestab,
 			SchoolName = project.Details.SchoolName,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
-			UkPrn = project.Details.UkPrn,
 			ProjectStatus = project.Details.ProjectStatus,
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
 			AssignedDate = project.Details.AssignedDate,

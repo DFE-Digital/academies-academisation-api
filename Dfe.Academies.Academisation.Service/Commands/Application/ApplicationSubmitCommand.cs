@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.OutsideData;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -46,8 +45,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 
 			if (application.ApplicationType == Domain.Core.ApplicationAggregate.ApplicationType.JoinAMat)
 			{
-				// TODO: map establishment and misestablishment details
-				var projectResult = _projectFactory.Create(application, new EstablishmentDetails("not implemented"), new MisEstablishmentDetails(-1));
+				var projectResult = _projectFactory.Create(application);
 
 				switch (projectResult)
 				{

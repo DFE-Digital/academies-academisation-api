@@ -8,7 +8,7 @@ internal static class LegacyProjectDetailsMapper
 {
 	internal static ProjectDetails MapNonEmptyFields(this LegacyProjectServiceModel detailsToUpdate, IProject existingProject)
 	{
-		return new(detailsToUpdate.Urn ?? existingProject.Details.Urn, 1)
+		return new(detailsToUpdate.Urn ?? existingProject.Details.Urn)
 		{
 			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate == default(DateTime)
 			   ? null
