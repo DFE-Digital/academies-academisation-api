@@ -14,9 +14,11 @@ using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggrega
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
+using Dfe.Academies.Academisation.IService.Commands.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
+using Dfe.Academies.Academisation.Service.Commands.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
@@ -27,6 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
 	.AddControllers()
+	.AddNewtonsoftJson()
 	.AddJsonOptions(options =>
 	{
 		options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -57,6 +60,8 @@ builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataC
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 
 builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
+builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
+builder.Services.AddScoped<ILegacyProjectUpdateCommand, LegacyProjectUpdateCommand>();
 
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();
@@ -74,7 +79,6 @@ builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionA
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();
 builder.Services.AddScoped<ILegacyProjectGetQuery, LegacyProjectGetQuery>();
-builder.Services.AddScoped<IProjectGetDataQuery, ProjectGetDataQuery>();
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
@@ -103,4 +107,4 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program {}
+public partial class Program { }

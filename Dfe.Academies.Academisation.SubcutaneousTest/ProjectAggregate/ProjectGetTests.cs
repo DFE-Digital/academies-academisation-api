@@ -1,13 +1,14 @@
 ﻿using AutoFixture;
-using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.Commands.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
@@ -28,7 +29,7 @@ public class ProjectGetTests
 		_projectGetDataQuery = new ProjectGetDataQuery(_context);
 		_legacyProjectGetQuery = new LegacyProjectGetQuery(_projectGetDataQuery);
 
-		_legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery);
+		_legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectUpdateCommand>());
 	}
 
 	[Fact]

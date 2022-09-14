@@ -24,7 +24,7 @@ public class Project : IProject
 
 	public int Id { get; }
 
-	public ProjectDetails Details { get; }
+	public ProjectDetails Details { get; private set; }
 
 	public static CreateResult<IProject> Create(IApplication application, EstablishmentDetails establishmentDetails, MisEstablishmentDetails misEstablishmentDetails)
 	{
@@ -43,8 +43,9 @@ public class Project : IProject
 			school.Urn,
 			misEstablishmentDetails.Laestab
 		)
-		{ 
+		{
 			UkPrn = establishmentDetails.Ukprn,
+			// TODO: map additional fields as they become available
 			//LocalAuthority = school.LocalAuthority.LocalAuthorityName,
 			//ApplicationReferenceNumber = application.ApplicationId
 			ProjectStatus = "Converter Pre-AO (C)",
@@ -68,10 +69,116 @@ public class Project : IProject
 			//CapitalCarryForwardAtEndMarchNextYear = school.SchoolNFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolNFYCapitalIsDeficit),
 			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
-			YearThreeProjectedPupilNumbers	= school.ProjectedPupilNumbersYear3
+			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
+	public CommandResult Update(ProjectDetails detailsToUpdate)
+	{
+		if (Details.Urn != detailsToUpdate.Urn)
+		{
+			return new CommandValidationErrorResult(new List<ValidationError> 
+			{ 
+				new ValidationError("Urn", "Urn in update model must match existing record") 
+			});
+		}
+
+		Details = new ProjectDetails(1, detailsToUpdate.Urn)
+		{
+			Urn = detailsToUpdate.Urn,
+			Laestab = detailsToUpdate.Laestab,
+			SchoolName = detailsToUpdate.SchoolName,
+			LocalAuthority = detailsToUpdate.LocalAuthority,
+			ApplicationReferenceNumber = detailsToUpdate.ApplicationReferenceNumber,
+			UkPrn = detailsToUpdate.UkPrn,
+			ProjectStatus = detailsToUpdate.ProjectStatus,
+			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
+			AssignedDate = detailsToUpdate.AssignedDate,
+			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,
+			OpeningDate = detailsToUpdate.OpeningDate,
+			BaselineDate = detailsToUpdate.BaselineDate,
+
+			// la summary page
+			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate,
+			LocalAuthorityInformationTemplateReturnedDate = detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate,
+			LocalAuthorityInformationTemplateComments = detailsToUpdate.LocalAuthorityInformationTemplateComments,
+			LocalAuthorityInformationTemplateLink = detailsToUpdate.LocalAuthorityInformationTemplateLink,
+			LocalAuthorityInformationTemplateSectionComplete = detailsToUpdate.LocalAuthorityInformationTemplateSectionComplete,
+
+			// school/trust info
+			RecommendationForProject = detailsToUpdate.RecommendationForProject,
+			Author = detailsToUpdate.Author,
+			Version = detailsToUpdate.Version,
+			ClearedBy = detailsToUpdate.ClearedBy,
+			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired,
+			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion,
+			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate,
+			PreviousHeadTeacherBoardLink = detailsToUpdate.PreviousHeadTeacherBoardLink,
+			TrustReferenceNumber = detailsToUpdate.TrustReferenceNumber,
+			NameOfTrust = detailsToUpdate.NameOfTrust,
+			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber,
+			SponsorName = detailsToUpdate.SponsorName,
+			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute,
+			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
+			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
+			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,
+			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
+
+			// general info
+			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber,
+			PartOfPfiScheme = detailsToUpdate.PartOfPfiScheme,
+			ViabilityIssues = detailsToUpdate.ViabilityIssues,
+			FinancialDeficit = detailsToUpdate.FinancialDeficit,
+			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
+			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
+			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty,
+			MemberOfParliamentName = detailsToUpdate.MemberOfParliamentName,
+
+			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete,
+
+			// school performance ofsted information
+			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation,
+
+			// rationale
+			RationaleForProject = detailsToUpdate.RationaleForProject,
+			RationaleForTrust = detailsToUpdate.RationaleForTrust,
+			RationaleSectionComplete = detailsToUpdate.RationaleSectionComplete,
+
+			// risk and issues
+			RisksAndIssues = detailsToUpdate.RisksAndIssues,
+			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered,
+			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete,
+
+			// school budget info
+			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear,
+			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear,
+			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear,
+			CapitalCarryForwardAtEndMarchNextYear = detailsToUpdate.CapitalCarryForwardAtEndMarchNextYear,
+			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation,
+			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete,
+
+			// pupil schools forecast
+			CurrentYearCapacity = detailsToUpdate.CurrentYearCapacity,
+			CurrentYearPupilNumbers = detailsToUpdate.CurrentYearPupilNumbers,
+			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity,
+			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers,
+			YearTwoProjectedCapacity = detailsToUpdate.YearTwoProjectedCapacity,
+			YearTwoProjectedPupilNumbers = detailsToUpdate.YearTwoProjectedPupilNumbers,
+			YearThreeProjectedCapacity = detailsToUpdate.YearThreeProjectedCapacity,
+			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers,
+			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
+
+			// key stage performance tables
+			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation,
+			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation,
+			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
+			Upin = detailsToUpdate.Upin,
+			NewAcademyUrn = detailsToUpdate.NewAcademyUrn		
+		};
+
+		return new CommandSuccessResult();
 	}
 
 	private static string? ToYesNoString(bool? value)
