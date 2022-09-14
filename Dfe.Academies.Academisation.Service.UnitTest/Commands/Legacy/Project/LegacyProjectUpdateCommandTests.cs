@@ -13,14 +13,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project;
 public class LegacyProjectUpdateCommandTests
 {
 	private readonly Fixture _fixture = new();
+	private class UnhandledCommandResult : CommandResult { }
 
 	private readonly Mock<IProjectGetDataQuery> _getDataQueryMock = new();
-	private readonly Mock<IProjectUpdateDataCommand> _updateApplicationCommandMock = new();
+	private readonly Mock<IProjectUpdateDataCommand> _updateProjectCommandMock = new();
 	private readonly LegacyProjectUpdateCommand _subject;
 
 	public LegacyProjectUpdateCommandTests()
 	{
-		_subject = new LegacyProjectUpdateCommand(_getDataQueryMock.Object, _updateApplicationCommandMock.Object);
+		_subject = new LegacyProjectUpdateCommand(_getDataQueryMock.Object, _updateProjectCommandMock.Object);
 	}
 
 	[Fact]
@@ -35,6 +36,42 @@ public class LegacyProjectUpdateCommandTests
 
 		// Assert
 		Assert.IsType<NotFoundCommandResult>(result);
+	}
+
+	[Fact]
+	public async Task CommandValidationErrorResult___CommandValidationErrorResultReturned()
+	{
+		// Arrange
+		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
+		var validationErrorResult = _fixture.Create<CommandValidationErrorResult>();
+		var project = new Mock<IProject>();
+		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
+		project.Setup(m => m.UpdatePatch(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
+
+		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);		
+
+		// Act
+		var result = await _subject.Execute(projectServiceModel);
+
+		// Assert
+		Assert.Equal(validationErrorResult, result);
+	}
+
+
+	[Fact]
+	public async Task UnsupportedCommandResult___ThrowsNotImplementedException()
+	{
+		// Arrange
+		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
+		var validationErrorResult = _fixture.Create<UnhandledCommandResult>();
+		var project = new Mock<IProject>();
+		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
+		project.Setup(m => m.UpdatePatch(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
+
+		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);
+
+		// Act & Assert
+		var result = await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Execute(projectServiceModel));		
 	}
 
 	[Fact]
@@ -53,7 +90,7 @@ public class LegacyProjectUpdateCommandTests
 		// Assert
 		Assert.Multiple(
 			() => Assert.IsType<CommandSuccessResult>(result),
-			() => _updateApplicationCommandMock.Verify(m => m.Execute(projectMock.Object), Times.Once)
+			() => _updateProjectCommandMock.Verify(m => m.Execute(projectMock.Object), Times.Once)
 		);
 	}
 }
