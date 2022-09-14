@@ -19,6 +19,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 				.AsNoTracking()
 				.Include(a => a.Contributors)
 				.Include(a => a.Schools)
+					.ThenInclude(a => a.Loans)
 				.SingleOrDefaultAsync(a => a.Id == id);
 
 			return applicationState?.MapToDomain();
