@@ -3,7 +3,6 @@ using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
-using Dfe.Academies.Academisation.Service.Mappers;
 using Dfe.Academies.Academisation.Service.Mappers.Application;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application;
