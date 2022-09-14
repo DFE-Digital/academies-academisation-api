@@ -70,11 +70,11 @@ internal static class ApplicationSchoolServiceModelMapper
 			serviceModel.ReligiousEducation.ToDomain(),
 			serviceModel.PreviousFinancialYear.ToDomain(),
 			serviceModel.CurrentFinancialYear.ToDomain(),
-			serviceModel.NextFinancialYear.ToDomain()
+			serviceModel.NextFinancialYear.ToDomain(),
 			// TODO MR:- what to do with SchoolDetails obj & loans
-			//Loans: serviceModel.Loans.ToDictionary(
-			//		c => c.LoanId,
-			//	c => c.ToDomain())
+			Loans: serviceModel.Loans.ToDictionary(
+					c => c.LoanId,
+				c => c.ToDomain())
 			)
 		{
 			SchoolContributionToTrust = serviceModel.SchoolContributionToTrust,

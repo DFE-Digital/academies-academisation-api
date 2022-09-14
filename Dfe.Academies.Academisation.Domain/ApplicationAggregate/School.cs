@@ -16,7 +16,7 @@ public class School : ISchool
 	{
 		Id = id;
 		// TODO MR:- what to do with SchoolDetails obj & loans
-		//_loans = details.Loans;
+		_loans = details.Loans;
 	}
 
 	public int Id { get; internal set; }

@@ -331,12 +331,12 @@ public class ApplicationSchoolState : BaseEntity
 				CapitalCarryForwardStatus = NextFinancialYearCapitalCarryForwardStatus,
 				CapitalCarryForwardExplained = NextFinancialYearCapitalCarryForwardExplained,
 				CapitalCarryForwardFileLink = NextFinancialYearCapitalCarryForwardFileLink
-			}
+			},
 		// TODO MR:- what to do with SchoolDetails obj & loans
 		// leases & loans
-		//Loans: Loans.ToDictionary(
-		//	c => c.Id,
-		//	c => new LoanDetails(c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule))
+		Loans: Loans.ToDictionary(
+			c => c.Id,
+			c => new LoanDetails(c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule))
 		)
 		{
 			SchoolContributionToTrust = SchoolContributionToTrust,
