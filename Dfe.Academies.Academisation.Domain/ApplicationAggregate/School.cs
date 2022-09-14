@@ -16,7 +16,7 @@ public class School : ISchool
 	{
 		Id = id;
 		// TODO MR:- what to do with SchoolDetails obj & loans
-		_loans = details.Loans;
+		_loans = details.Loans.Select(c => new Loan(c.Key, c.Value)).ToList();
 	}
 
 	public int Id { get; internal set; }
@@ -24,7 +24,7 @@ public class School : ISchool
 	public SchoolDetails Details { get; set; }
 
 	// leases & loans
-	public IReadOnlyCollection<ILoan> Loans => _loans;
+	public IReadOnlyCollection<ILoan> Loans => _loans.AsReadOnly();
 
 	// TODO MR:- leases
 }
