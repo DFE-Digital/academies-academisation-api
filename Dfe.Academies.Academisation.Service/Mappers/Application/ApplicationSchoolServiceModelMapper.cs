@@ -21,7 +21,7 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.PreviousFinancialYear.ToServiceModel(),
 			school.Details.CurrentFinancialYear.ToServiceModel(),
 			school.Details.NextFinancialYear.ToServiceModel(),
-			Loans: school.Details.Loans.Select(c=> c.Value.ToServiceModel()).ToList()
+			Loans: school.Loans.Select(c=> c.ToServiceModel()).ToList()
 		)
 		{
 			SchoolContributionToTrust = school.Details.SchoolContributionToTrust,
@@ -70,10 +70,12 @@ internal static class ApplicationSchoolServiceModelMapper
 			serviceModel.ReligiousEducation.ToDomain(),
 			serviceModel.PreviousFinancialYear.ToDomain(),
 			serviceModel.CurrentFinancialYear.ToDomain(),
-			serviceModel.NextFinancialYear.ToDomain(),
-			Loans: serviceModel.Loans.ToDictionary(
-					c => c.LoanId,
-				c => c.ToDomain()))
+			serviceModel.NextFinancialYear.ToDomain()
+			// TODO MR:-
+			//Loans: serviceModel.Loans.ToDictionary(
+			//		c => c.LoanId,
+			//	c => c.ToDomain())
+			)
 			{
 			SchoolContributionToTrust = serviceModel.SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = serviceModel.GoverningBodyConsentEvidenceDocumentLink,

@@ -229,19 +229,17 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardExplained,
 			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink,
-			// leases & loans
-			Loans = new HashSet<LoanState>(applyingSchool.Details.Loans
+			Loans = new HashSet<LoanState>(applyingSchool.Loans
 				.Select(e => new LoanState
 				{
-					Id = e.Key,
-					Amount = e.Value.Amount,
-					Purpose = e.Value.Purpose,
-					Provider = e.Value.Provider,
-					InterestRate = e.Value.InterestRate,
-					Schedule = e.Value.Schedule
+					Id = e.Id,
+					Amount = e.Details.Amount,
+					Purpose = e.Details.Purpose,
+					Provider = e.Details.Provider,
+					InterestRate = e.Details.InterestRate,
+					Schedule = e.Details.Schedule
 				})
-				.ToList()),
-			// TODO:- leases
+				.ToList())
 		};
 	}
 
@@ -333,12 +331,12 @@ public class ApplicationSchoolState : BaseEntity
 				CapitalCarryForwardStatus = NextFinancialYearCapitalCarryForwardStatus,
 				CapitalCarryForwardExplained = NextFinancialYearCapitalCarryForwardExplained,
 				CapitalCarryForwardFileLink = NextFinancialYearCapitalCarryForwardFileLink
-			},
+			}
+			// TODO MR:-
 			// leases & loans
-			Loans: Loans.ToDictionary(
-				c => c.Id,
-				c => new LoanDetails(c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule))
-			// TODO:- leases
+			//Loans: Loans.ToDictionary(
+			//	c => c.Id,
+			//	c => new LoanDetails(c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule))
 		)
 		{
 			SchoolContributionToTrust = SchoolContributionToTrust,
