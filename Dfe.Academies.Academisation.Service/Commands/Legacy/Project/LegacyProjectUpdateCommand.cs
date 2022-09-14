@@ -26,7 +26,7 @@ public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
 			return new NotFoundCommandResult();
 		}
 
-		var result = existingProject.UpdatePatch(legacyProjectServiceModel.ToDomain());
+		var result = existingProject.Update(LegacyProjectDetailsMapper.MapNonEmptyFields(legacyProjectServiceModel, existingProject));
 
 		if (result is CommandValidationErrorResult)
 		{

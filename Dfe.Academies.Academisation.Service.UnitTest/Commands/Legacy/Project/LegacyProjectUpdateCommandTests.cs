@@ -46,7 +46,7 @@ public class LegacyProjectUpdateCommandTests
 		var validationErrorResult = _fixture.Create<CommandValidationErrorResult>();
 		var project = new Mock<IProject>();
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
-		project.Setup(m => m.UpdatePatch(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
+		project.Setup(m => m.Update(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
 
 		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);		
 
@@ -66,7 +66,7 @@ public class LegacyProjectUpdateCommandTests
 		var validationErrorResult = _fixture.Create<UnhandledCommandResult>();
 		var project = new Mock<IProject>();
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
-		project.Setup(m => m.UpdatePatch(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
+		project.Setup(m => m.Update(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
 
 		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);
 
@@ -80,7 +80,7 @@ public class LegacyProjectUpdateCommandTests
 		// Arrange
 		Mock<IProject> projectMock = new();
 		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
-		projectMock.Setup(x => x.UpdatePatch(It.IsAny<ProjectDetails>())).Returns(new CommandSuccessResult());
+		projectMock.Setup(x => x.Update(It.IsAny<ProjectDetails>())).Returns(new CommandSuccessResult());
 		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id))
 			.ReturnsAsync(projectMock.Object);
 

@@ -9,5 +9,5 @@ public interface IProject
 
 	public ProjectDetails Details { get; }
 
-	public CommandResult UpdatePatch(ProjectDetails detailsToUpdate);
+	public CommandResult Update(ProjectDetails detailsToUpdate);
 }

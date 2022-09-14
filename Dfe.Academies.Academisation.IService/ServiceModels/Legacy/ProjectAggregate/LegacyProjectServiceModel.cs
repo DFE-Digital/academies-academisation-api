@@ -2,7 +2,7 @@
 
 public record LegacyProjectServiceModel(
 	int Id,
-	int Urn,
+	int? Urn,
 	int Laestab,
 	string? SchoolName = null,
 	string? LocalAuthority = null,

@@ -75,7 +75,7 @@ public class Project : IProject
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
 
-	public CommandResult UpdatePatch(ProjectDetails detailsToUpdate)
+	public CommandResult Update(ProjectDetails detailsToUpdate)
 	{
 		if (Details.Urn != detailsToUpdate.Urn)
 		{
@@ -85,64 +85,97 @@ public class Project : IProject
 			});
 		}
 
-		Details = new ProjectDetails(detailsToUpdate.Urn, 1)
+		Details = new ProjectDetails(1, detailsToUpdate.Urn)
 		{
-			HeadTeacherBoardDate = Details.HeadTeacherBoardDate == default(DateTime)
-			   ? null
-			   : detailsToUpdate.HeadTeacherBoardDate ?? Details.HeadTeacherBoardDate,
-			Author = detailsToUpdate.Author ?? Details.Author,
-			ClearedBy = detailsToUpdate.ClearedBy ?? Details.ClearedBy,
-			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate ?? Details.ProposedAcademyOpeningDate,
-			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber ?? Details.PublishedAdmissionNumber,
-			ViabilityIssues = detailsToUpdate.ViabilityIssues ?? Details.ViabilityIssues,
-			FinancialDeficit = detailsToUpdate.FinancialDeficit ?? Details.FinancialDeficit,
-			RationaleForProject = detailsToUpdate.RationaleForProject ?? Details.RationaleForProject,
-			RationaleForTrust = detailsToUpdate.RationaleForTrust ?? Details.RationaleForTrust,
-			RisksAndIssues = detailsToUpdate.RisksAndIssues ?? Details.RisksAndIssues,
-			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear ?? Details.RevenueCarryForwardAtEndMarchCurrentYear,
-			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear ?? Details.ProjectedRevenueBalanceAtEndMarchNextYear,
-			RationaleSectionComplete = detailsToUpdate.RationaleSectionComplete ?? Details.RationaleSectionComplete,
-			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate == default(DateTime)
-				? null
-				: detailsToUpdate.LocalAuthorityInformationTemplateSentDate ?? Details.LocalAuthorityInformationTemplateSentDate,
-			LocalAuthorityInformationTemplateReturnedDate = detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate == default(DateTime)
-				? null
-				: detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate ?? Details.LocalAuthorityInformationTemplateReturnedDate,
-			LocalAuthorityInformationTemplateComments = detailsToUpdate.LocalAuthorityInformationTemplateComments ?? Details.LocalAuthorityInformationTemplateComments,
-			LocalAuthorityInformationTemplateLink = detailsToUpdate.LocalAuthorityInformationTemplateLink ?? Details.LocalAuthorityInformationTemplateLink,
-			LocalAuthorityInformationTemplateSectionComplete = detailsToUpdate.LocalAuthorityInformationTemplateSectionComplete ?? Details.LocalAuthorityInformationTemplateSectionComplete,
-			RecommendationForProject = detailsToUpdate.RecommendationForProject ?? Details.RecommendationForProject,
-			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired ?? Details.AcademyOrderRequired,
-			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? Details.SchoolAndTrustInformationSectionComplete,
-			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters ?? Details.DistanceFromSchoolToTrustHeadquarters,
-			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation ?? Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-			MemberOfParliamentName = detailsToUpdate.MemberOfParliamentName ?? Details.MemberOfParliamentName,
-			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty ?? Details.MemberOfParliamentParty,
-			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete ?? Details.GeneralInformationSectionComplete,
-			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete ?? Details.RisksAndIssuesSectionComplete,
-			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation ?? Details.SchoolPerformanceAdditionalInformation,
-			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear ?? Details.CapitalCarryForwardAtEndMarchCurrentYear,
-			CapitalCarryForwardAtEndMarchNextYear = detailsToUpdate.CapitalCarryForwardAtEndMarchNextYear ?? Details.CapitalCarryForwardAtEndMarchNextYear,
-			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation ?? Details.SchoolBudgetInformationAdditionalInformation,
-			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete ?? Details.SchoolBudgetInformationSectionComplete,
-			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation ?? Details.SchoolPupilForecastsAdditionalInformation,
-			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity ?? Details.YearOneProjectedCapacity,
-			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers ?? Details.YearOneProjectedPupilNumbers,
-			YearTwoProjectedCapacity = detailsToUpdate.YearTwoProjectedCapacity ?? Details.YearTwoProjectedCapacity,
-			YearTwoProjectedPupilNumbers = detailsToUpdate.YearTwoProjectedPupilNumbers ?? Details.YearTwoProjectedPupilNumbers,
-			YearThreeProjectedCapacity = detailsToUpdate.YearThreeProjectedCapacity ?? Details.YearThreeProjectedCapacity,
-			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers ?? Details.YearThreeProjectedPupilNumbers,
-			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation ??
-			Details.KeyStage2PerformanceAdditionalInformation,
-			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation ?? Details.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation ?? Details.KeyStage5PerformanceAdditionalInformation,
-			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion ?? Details.PreviousHeadTeacherBoardDateQuestion,
-			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate == default(DateTime)
-				? null
-				: detailsToUpdate.PreviousHeadTeacherBoardDate ?? Details.PreviousHeadTeacherBoardDate,
-			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? Details.ConversionSupportGrantAmount,
-			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? Details.ConversionSupportGrantChangeReason,
-			ProjectStatus = detailsToUpdate.ProjectStatus ?? Details.ProjectStatus
+			Urn = detailsToUpdate.Urn,
+			Laestab = detailsToUpdate.Laestab,
+			SchoolName = detailsToUpdate.SchoolName,
+			LocalAuthority = detailsToUpdate.LocalAuthority,
+			ApplicationReferenceNumber = detailsToUpdate.ApplicationReferenceNumber,
+			UkPrn = detailsToUpdate.UkPrn,
+			ProjectStatus = detailsToUpdate.ProjectStatus,
+			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
+			AssignedDate = detailsToUpdate.AssignedDate,
+			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,
+			OpeningDate = detailsToUpdate.OpeningDate,
+			BaselineDate = detailsToUpdate.BaselineDate,
+
+			// la summary page
+			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate,
+			LocalAuthorityInformationTemplateReturnedDate = detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate,
+			LocalAuthorityInformationTemplateComments = detailsToUpdate.LocalAuthorityInformationTemplateComments,
+			LocalAuthorityInformationTemplateLink = detailsToUpdate.LocalAuthorityInformationTemplateLink,
+			LocalAuthorityInformationTemplateSectionComplete = detailsToUpdate.LocalAuthorityInformationTemplateSectionComplete,
+
+			// school/trust info
+			RecommendationForProject = detailsToUpdate.RecommendationForProject,
+			Author = detailsToUpdate.Author,
+			Version = detailsToUpdate.Version,
+			ClearedBy = detailsToUpdate.ClearedBy,
+			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired,
+			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion,
+			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate,
+			PreviousHeadTeacherBoardLink = detailsToUpdate.PreviousHeadTeacherBoardLink,
+			TrustReferenceNumber = detailsToUpdate.TrustReferenceNumber,
+			NameOfTrust = detailsToUpdate.NameOfTrust,
+			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber,
+			SponsorName = detailsToUpdate.SponsorName,
+			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute,
+			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
+			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
+			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,
+			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
+
+			// general info
+			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber,
+			PartOfPfiScheme = detailsToUpdate.PartOfPfiScheme,
+			ViabilityIssues = detailsToUpdate.ViabilityIssues,
+			FinancialDeficit = detailsToUpdate.FinancialDeficit,
+			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
+			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
+			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty,
+			MemberOfParliamentName = detailsToUpdate.MemberOfParliamentName,
+
+			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete,
+
+			// school performance ofsted information
+			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation,
+
+			// rationale
+			RationaleForProject = detailsToUpdate.RationaleForProject,
+			RationaleForTrust = detailsToUpdate.RationaleForTrust,
+			RationaleSectionComplete = detailsToUpdate.RationaleSectionComplete,
+
+			// risk and issues
+			RisksAndIssues = detailsToUpdate.RisksAndIssues,
+			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered,
+			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete,
+
+			// school budget info
+			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear,
+			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear,
+			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear,
+			CapitalCarryForwardAtEndMarchNextYear = detailsToUpdate.CapitalCarryForwardAtEndMarchNextYear,
+			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation,
+			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete,
+
+			// pupil schools forecast
+			CurrentYearCapacity = detailsToUpdate.CurrentYearCapacity,
+			CurrentYearPupilNumbers = detailsToUpdate.CurrentYearPupilNumbers,
+			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity,
+			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers,
+			YearTwoProjectedCapacity = detailsToUpdate.YearTwoProjectedCapacity,
+			YearTwoProjectedPupilNumbers = detailsToUpdate.YearTwoProjectedPupilNumbers,
+			YearThreeProjectedCapacity = detailsToUpdate.YearThreeProjectedCapacity,
+			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers,
+			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
+
+			// key stage performance tables
+			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation,
+			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation,
+			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
+			Upin = detailsToUpdate.Upin,
+			NewAcademyUrn = detailsToUpdate.NewAcademyUrn		
 		};
 
 		return new CommandSuccessResult();

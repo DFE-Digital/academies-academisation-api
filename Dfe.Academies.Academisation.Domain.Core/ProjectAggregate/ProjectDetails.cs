@@ -2,7 +2,7 @@
 
 public record ProjectDetails(
 	int Urn,
-	int Laestab,
+	int Laestab,	
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,

@@ -17,30 +17,14 @@ public class ProjectUpdateTests
 		// Arrange
 		var initialProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, initialProject);
-		var updatedProject = _fixture.Create<ProjectDetails>();
+		var updatedProject = _fixture.Build<ProjectDetails>().With(p => p.Urn, initialProject.Urn).Create();
 
 		// Act
-		var result = sut.UpdatePatch(updatedProject);
+		var result = sut.Update(updatedProject);
 
 		// Assert
 		Assert.IsType<CommandSuccessResult>(result);
 		AssertProjectModelIsEqual(updatedProject, sut);
-	}
-
-	[Fact]
-	public void Update_WithEmptyProject__ReturnsUpdateSuccessResult_AndDoesNotUpdateProjectDetails()
-	{
-		// Arrange
-		var existingProject = _fixture.Create<ProjectDetails>();
-		var sut = new Project(1, existingProject);
-		var updatedProject = new ProjectDetails(1, 1);
-
-		// Act
-		var result = sut.UpdatePatch(updatedProject);
-
-		// Assert
-		Assert.IsType<CommandSuccessResult>(result);
-		AssertProjectModelIsEqual(existingProject, sut);
 	}
 
 	[Fact]
@@ -52,7 +36,7 @@ public class ProjectUpdateTests
 		var updatedProject = new ProjectDetails(1, 1);
 
 		// Act
-		var result = sut.UpdatePatch(updatedProject);
+		var result = sut.Update(updatedProject);
 
 		// Assert
 		var validationErrors = Assert.IsType<CommandValidationErrorResult>(result).ValidationErrors;
