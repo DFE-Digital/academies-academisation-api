@@ -71,12 +71,12 @@ internal static class ApplicationSchoolServiceModelMapper
 			serviceModel.PreviousFinancialYear.ToDomain(),
 			serviceModel.CurrentFinancialYear.ToDomain(),
 			serviceModel.NextFinancialYear.ToDomain()
-			// TODO MR:-
+			// TODO MR:- what to do with SchoolDetails obj & loans
 			//Loans: serviceModel.Loans.ToDictionary(
 			//		c => c.LoanId,
 			//	c => c.ToDomain())
 			)
-			{
+		{
 			SchoolContributionToTrust = serviceModel.SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = serviceModel.GoverningBodyConsentEvidenceDocumentLink,
 			AdditionalInformationAdded = serviceModel.AdditionalInformationAdded,
