@@ -7,9 +7,6 @@
 		string Purpose,
 		string Provider,
 		decimal? InterestRate,
-		string? Schedule,
-		// MR:- below are 2 I have thought we perhaps should have?
-		DateTime? EndDate,
-		short TermMonths
-		);
+		string? Schedule
+	);
 }
