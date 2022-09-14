@@ -8,28 +8,22 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 		internal static LoanServiceModel ToServiceModel(this LoanDetails loan)
 		{
 			return new(
-				loan.LoanId,
 				loan.Amount,
 				loan.Purpose,
 				loan.Provider,
 				loan.InterestRate,
-				loan.Schedule,
-				loan.EndDate,
-				loan.TermMonths
+				loan.Schedule
 			);
 		}
 
 		internal static LoanDetails ToDomain(this LoanServiceModel loan)
 		{
 			return new(
-				loan.LoanId,
 				loan.Amount,
 				loan.Purpose,
 				loan.Provider,
 				loan.InterestRate,
-				loan.Schedule,
-				loan.EndDate,
-				loan.TermMonths
+				loan.Schedule
 			);
 		}
 	}

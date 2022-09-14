@@ -238,9 +238,7 @@ public class ApplicationSchoolState : BaseEntity
 					Purpose = e.Value.Purpose,
 					Provider = e.Value.Provider,
 					InterestRate = e.Value.InterestRate,
-					Schedule = e.Value.Schedule,
-					EndDate = e.Value.EndDate,
-					TermMonths = e.Value.TermMonths
+					Schedule = e.Value.Schedule
 				})
 				.ToList()),
 			// TODO:- leases
@@ -339,7 +337,7 @@ public class ApplicationSchoolState : BaseEntity
 			// leases & loans
 			Loans: Loans.ToDictionary(
 				c => c.Id,
-				c => new LoanDetails(c.Id, c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule, c.EndDate, c.TermMonths))
+				c => new LoanDetails(c.Amount, c.Purpose, c.Provider, c.InterestRate, c.Schedule))
 			// TODO:- leases
 		)
 		{
