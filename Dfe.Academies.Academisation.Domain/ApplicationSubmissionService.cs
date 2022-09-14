@@ -1,5 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 
 namespace Dfe.Academies.Academisation.Domain;
@@ -10,8 +12,29 @@ namespace Dfe.Academies.Academisation.Domain;
 /// </summary>
 public class ApplicationSubmissionService : IApplicationSubmissionService
 {
+	private readonly IProjectFactory _projectFactory;
+
+	public ApplicationSubmissionService(IProjectFactory projectFactory)
+	{
+		_projectFactory = projectFactory;
+	}
+
 	public OperationResult SubmitApplication(IApplication application)
 	{
-		throw new NotImplementedException();
+		var submitResult = application.Submit();
+
+		if (submitResult is not CommandSuccessResult)
+		{
+			return submitResult;
+		}
+
+		if (application.ApplicationType == ApplicationType.FormAMat)
+		{
+			return submitResult;
+		}
+
+		var createResult = _projectFactory.Create(application);
+
+		return createResult;
 	}
 }
