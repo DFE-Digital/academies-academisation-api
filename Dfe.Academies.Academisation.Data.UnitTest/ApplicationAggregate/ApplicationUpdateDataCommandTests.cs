@@ -24,6 +24,10 @@ public class ApplicationUpdateDataCommandTests
 		_context = new TestApplicationContext().CreateContext();
 		_query = new ApplicationGetDataQuery(_context);
 		_subject = new ApplicationUpdateDataCommand(_context);
+
+		_fixture.Customize<LoanState>(composer =>
+			composer
+				.With(s => s.Id, 0));
 	}
 
 	[Fact]
