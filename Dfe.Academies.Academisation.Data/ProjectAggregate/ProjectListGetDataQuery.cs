@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 {
-	public class ProjectsListGetDataQuery : IProjectsListGetDataQuery
+	public class ProjectListGetDataQuery : IProjectListGetDataQuery
 	{
 		private readonly AcademisationContext _context;
 
-		public ProjectsListGetDataQuery(AcademisationContext context)
+		public ProjectListGetDataQuery(AcademisationContext context)
 		{
 			_context = context;
 		}

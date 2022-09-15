@@ -12,24 +12,25 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers;
 public class LegacyProjectController : ControllerBase
 {
 	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
+	private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
 	private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
 
-	public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery, ILegacyProjectUpdateCommand legacyProjectUpdateCommand)
+	public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery, ILegacyProjectListGetQuery legacyProjectListGetQuery, 
+		ILegacyProjectUpdateCommand legacyProjectUpdateCommand)
 	{
 		_legacyProjectGetQuery = legacyProjectGetQuery;
+		_legacyProjectListGetQuery = legacyProjectListGetQuery;
 		_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 	}
 
 	[HttpGet(Name = "GetLegacyProjects")]
-	public async Task<ActionResult<LegacyProjectServiceModel>> GetProjects([FromQuery] string projectStatus,
+	public async Task<ActionResult<LegacyProjectServiceModel>> GetProjects([FromQuery] string? states,
 		[FromQuery] int page = 1,
 		[FromQuery] int count = 50,
 		[FromQuery] int? urn = null)
 	{
-		// var result = await _legacyProjectGetQuery.Execute(id);
-		// return result is null ? NotFound() : Ok(result);
-		await Task.CompletedTask;
-		return Ok();
+		var result = await _legacyProjectListGetQuery.GetProjects(states ?? "", page, count, urn);
+		return result is null ? NotFound() : Ok(result);
 	}
 	
 	[HttpGet("{id}", Name = "GetLegacyProject")]

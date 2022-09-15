@@ -15,13 +15,13 @@ public class ProjectsListGetDataQueryTests
 {
 	private readonly Fixture _fixture = new();
 
-	private readonly ProjectsListGetDataQuery _subject;
+	private readonly ProjectListGetDataQuery _subject;
 	private readonly AcademisationContext _context;
 
 	public ProjectsListGetDataQueryTests()
 	{
 		_context = new TestProjectContext().CreateContext();
-		_subject = new ProjectsListGetDataQuery(_context);
+		_subject = new ProjectListGetDataQuery(_context);
 	}
 
 	[Fact]

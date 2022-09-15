@@ -79,6 +79,8 @@ builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionA
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();
 builder.Services.AddScoped<ILegacyProjectGetQuery, LegacyProjectGetQuery>();
+builder.Services.AddScoped<ILegacyProjectListGetQuery, LegacyProjectListGetQuery>();
+builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
