@@ -98,26 +98,20 @@ public class ApplicationUpdateTests
 		var applicationContributorServiceModel = _fixture.Create<ApplicationContributorServiceModel>();
 		var applicationSchoolServiceModel = _fixture.Create<ApplicationSchoolServiceModel>();
 
-		var schoolsList = existingApplication.Schools.ToList();
-		schoolsList.Add(applicationSchoolServiceModel);
+		//var schoolsList = existingApplication.Schools.ToList();
+		//schoolsList.Add(applicationSchoolServiceModel);
 
-		ApplicationServiceModel applicationToUpdate = new(
-			existingApplication.ApplicationId,
-			existingApplication.ApplicationType,
-			existingApplication.ApplicationStatus,
-			new List<ApplicationContributorServiceModel>()
-			{
-				existingApplication.Contributors.ToArray()[0],
-				existingApplication.Contributors.ToArray()[1],
-				applicationContributorServiceModel
-			},
-			new List<ApplicationSchoolServiceModel>()
-			{
-				existingApplication.Schools.ToArray()[0],
-				applicationSchoolServiceModel,
-				existingApplication.Schools.ToArray()[2]
-			}
-			);
+		ApplicationServiceModel applicationToUpdate = existingApplication with { Contributors = new List<ApplicationContributorServiceModel>()
+		{
+			existingApplication.Contributors.ToArray()[0],
+			existingApplication.Contributors.ToArray()[1],
+			applicationContributorServiceModel
+		}, Schools = new List<ApplicationSchoolServiceModel>()
+		{
+			existingApplication.Schools.ToArray()[0],
+			applicationSchoolServiceModel,
+			existingApplication.Schools.ToArray()[2]
+		} };
 
 		// act
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
@@ -129,7 +123,7 @@ public class ApplicationUpdateTests
 
 		var expectedApplication = applicationToUpdate with
 		{
-			Contributors = new List<ApplicationContributorServiceModel>()
+			Contributors = new List<ApplicationContributorServiceModel>
 			{
 				existingApplication.Contributors.ToArray()[0],
 				existingApplication.Contributors.ToArray()[1],
@@ -138,19 +132,18 @@ public class ApplicationUpdateTests
 					ContributorId = gotApplication.Contributors.Single(c => c.EmailAddress == applicationContributorServiceModel.EmailAddress).ContributorId
 				}
 			},
-			Schools = new List<ApplicationSchoolServiceModel>()
+			Schools = new List<ApplicationSchoolServiceModel>
 			{
 				existingApplication.Schools.ToArray()[0],
 				applicationSchoolServiceModel with
 				{
 					Id = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Id
 				},
-				existingApplication.Schools.ToArray()[2],
+				existingApplication.Schools.ToArray()[2]
 			}
 		};
 
 		Assert.Equivalent(expectedApplication, gotApplication);
-
 	}
 
 	[Fact]
