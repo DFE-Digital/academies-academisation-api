@@ -28,7 +28,7 @@ public class ApplicationSubmissionService : IApplicationSubmissionService
 			return submitResult;
 		}
 
-		if (application.ApplicationType == ApplicationType.FormAMat)
+		if (application.ApplicationType != ApplicationType.JoinAMat)
 		{
 			return submitResult;
 		}

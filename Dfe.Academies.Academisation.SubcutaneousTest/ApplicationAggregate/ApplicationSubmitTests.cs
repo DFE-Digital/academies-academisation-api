@@ -5,21 +5,26 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Commands.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 
@@ -31,6 +36,8 @@ public class ApplicationSubmitTests
 	private readonly Faker _faker = new();
 	private readonly AcademisationContext _context;
 
+	private readonly IProjectFactory _projectFactory = new ProjectFactory();
+	private readonly IApplicationSubmissionService _applicationSubmissionService;
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
@@ -46,6 +53,7 @@ public class ApplicationSubmitTests
 	{
 		_context = new TestApplicationContext().CreateContext();
 
+		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory);
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
@@ -53,8 +61,7 @@ public class ApplicationSubmitTests
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
-		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand,
-			new ProjectFactory(), _projectCreateDataCommand);
+		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
@@ -71,8 +78,7 @@ public class ApplicationSubmitTests
 			composer
 				.With(s => s.LoanId, 0));
 	}
-
-
+	
 	[Fact]
 	public async Task JoinAMatApplicationExists___ApplicationIsSubmitted_And_ProjectIsCreated()
 	{
@@ -104,10 +110,10 @@ public class ApplicationSubmitTests
 		var submissionResult = await applicationController.Submit(createdPayload.ApplicationId);
 
 		// Assert
-		DfeAssert.OkResult(submissionResult);
+		Assert.IsType<CreatedAtRouteResult>(submissionResult);
 
 		var applicationGetResult = await applicationController.Get(createdPayload.ApplicationId);
-		(_, var getPayload) = DfeAssert.OkObjectResult(applicationGetResult);
+		(_, ApplicationServiceModel getPayload) = DfeAssert.OkObjectResult(applicationGetResult);
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
@@ -115,7 +121,7 @@ public class ApplicationSubmitTests
 			Mock.Of<ILegacyProjectUpdateCommand>());
 		var projectResult = await projectController.Get(1);
 
-		(_, var project) = DfeAssert.OkObjectResult(projectResult);
+		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
 
 		Assert.Multiple(
 			() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
@@ -136,5 +142,4 @@ public class ApplicationSubmitTests
 		if (!value.HasValue) return string.Empty;
 		return value == true ? "Yes" : "No";
 	}
-
 }

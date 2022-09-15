@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -68,21 +69,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
-		public async Task Submit___ServiceReturnsSuccess___SuccessResponseReturned()
-		{
-			// arrange
-			int applicationId = _fixture.Create<int>();
-
-			_submitCommandMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(new CommandSuccessResult());
-
-			// act
-			var result = await _subject.Submit(applicationId);
-
-			// assert
-			var createdResult = Assert.IsType<OkResult>(result);
-		}
-
-		[Fact]
 		public async Task Submit___ServiceReturnsNotFound___NotFoundReturned()
 		{
 			// arrange
@@ -98,13 +84,14 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
-		public async Task Submit___ServiceReturnsValidationError___BadRequestReturned()
+		public async Task Submit___ServiceReturnsCommandValidationError___BadRequestReturned()
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
-			_submitCommandMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(new CommandValidationErrorResult(expectedValidationError));
+			List<ValidationError> expectedValidationError = new();
+			_submitCommandMock.Setup(x => x.Execute(applicationId))
+				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationError));
 
 			// act
 			var result = await _subject.Submit(applicationId);
@@ -113,6 +100,59 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestResult.Value);
 			Assert.Equal(expectedValidationError, validationErrors);
+		}
+
+		[Fact]
+		public async Task Submit___ServiceReturnsCommandSuccess___SuccessResponseReturned()
+		{
+			// arrange
+			int applicationId = _fixture.Create<int>();
+
+			_submitCommandMock.Setup(x => x.Execute(applicationId))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			// act
+			var result = await _subject.Submit(applicationId);
+
+			// assert
+			Assert.IsType<OkResult>(result);
+		}
+		
+		[Fact]
+		public async Task Submit___ServiceReturnsCreateValidationError___BadRequestReturned()
+		{
+			// arrange
+			int applicationId = _fixture.Create<int>();
+
+			List<ValidationError> expectedValidationError = new();
+			_submitCommandMock.Setup(x => x.Execute(applicationId))
+				.ReturnsAsync(new CreateValidationErrorResult<LegacyProjectServiceModel>(expectedValidationError));
+
+			// act
+			var result = await _subject.Submit(applicationId);
+
+			// assert
+			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestResult.Value);
+			Assert.Equal(expectedValidationError, validationErrors);
+		}
+
+		[Fact]
+		public async Task Submit___ServiceReturnsCreateSuccess___BadRequestReturned()
+		{
+			// arrange
+			int applicationId = _fixture.Create<int>();
+
+			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1);
+			_submitCommandMock.Setup(x => x.Execute(applicationId))
+				.ReturnsAsync(new CreateSuccessResult<LegacyProjectServiceModel>(projectServiceModel));
+
+			// act
+			var result = await _subject.Submit(applicationId);
+
+			// assert
+			var createdAtRouteResult = Assert.IsType<CreatedAtRouteResult>(result);
+			Assert.Equal(projectServiceModel, createdAtRouteResult.Value);
 		}
 
 		[Fact]
