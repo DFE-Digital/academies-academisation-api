@@ -18,23 +18,15 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 
 		public string? Schedule { get; set; }
 
-		public static LoanState MapFromDomain(ILoan loan)
+		public static Loan MapFromDomain(ILoan loan)
 		{
-			return new()
-			{
-				Id = loan.Id,
-				Amount = loan.Details.Amount,
-				Purpose = loan.Details.Purpose,
-				Provider = loan.Details.Provider,
-				InterestRate = loan.Details.InterestRate,
-				Schedule = loan.Details.Schedule
-			};
+			return new Loan(loan.Id, loan.Details);
 		}
 
 		public Loan MapToDomain()
 		{
 			return new(
-				Id = Id,
+				Id,
 				new LoanDetails(Amount, Purpose, Provider, InterestRate, Schedule)
 			);
 		}

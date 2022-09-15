@@ -41,7 +41,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.Select(s=> new UpdateSchoolParameter(s.Id, s.Details,
+			subject.Schools.Select(s=> new UpdateSchoolParameter(
+				s.Id, 
+				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, l.Details)).ToList())
 				));
 
@@ -62,7 +64,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			ApplicationStatus.Submitted,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			subject.Schools.Select(s => new UpdateSchoolParameter(
+				s.Id, 
+				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 			));
 
@@ -84,7 +88,9 @@ public class ApplicationUpdateTests
 			updated,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			subject.Schools.Select(s => new UpdateSchoolParameter(
+				s.Id, 
+				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 			));
 
@@ -113,7 +119,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			contributors,
-			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			subject.Schools.Select(s => new UpdateSchoolParameter(
+				s.Id, 
+				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 			));
 
@@ -137,7 +145,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			contributorsUpdated,
-			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			subject.Schools.Select(s => new UpdateSchoolParameter(
+				s.Id, 
+				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 			));
 
@@ -153,9 +163,12 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 		Application expected = Clone(subject);
 
-		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
+			s.Id, 
+			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
+
 		schoolsUpdated.Add(new UpdateSchoolParameter(0, 
 			_fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" },
 			new List<KeyValuePair<int, LoanDetails>>()
@@ -180,9 +193,12 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 		Application expected = Clone(subject);
 
-		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
+			s.Id, 
+			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
+
 		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>());
 
 		// act
@@ -204,7 +220,9 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 		Application expected = Clone(subject);
 
-		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
+			s.Id, 
+			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
 
@@ -234,23 +252,30 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
-		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
+			s.Id, 
+			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
 
-		IEnumerable<int> allIndices = schoolsUpdated.Select((s, i) => new { Str = s, Index = i })
+		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
+			new School(s.Id, 
+						s.Details,
+						s.Loans.Select(l => new Loan(l.Id, l.Details))));
+
+		IEnumerable<int> allIndices = updateSchoolParameters.Select((s, i) => new { Str = s, Index = i })
 			.Select(x => x.Index);
 
 		int randomSchoolKey = PickRandomElement(allIndices);
-		schoolsUpdated[randomSchoolKey] = schoolsUpdated[randomSchoolKey] with
+		updateSchoolParameters[randomSchoolKey] = updateSchoolParameters[randomSchoolKey] with
 		{
-			SchoolDetails = schoolsUpdated[randomSchoolKey].SchoolDetails
+			SchoolDetails = updateSchoolParameters[randomSchoolKey].SchoolDetails
 				with
-			{ Urn = schoolsUpdated[randomSchoolKey].SchoolDetails.Urn }
+			{ Urn = updateSchoolParameters[randomSchoolKey].SchoolDetails.Urn }
 		};
 
-		SchoolDetails updatedSchool = schoolsUpdated[randomSchoolKey].SchoolDetails;
-		int randomSchoolId = schoolsUpdated[randomSchoolKey].Id;
+		SchoolDetails updatedSchool = updateSchoolParameters[randomSchoolKey].SchoolDetails;
+		int randomSchoolId = updateSchoolParameters[randomSchoolKey].Id;
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -259,15 +284,14 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			schoolsUpdated.ToDictionary(s=> s.Id,
-										s=> s.SchoolDetails));
+			updateSchools);
 
 		// act
 		var result = subject.Update(
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			schoolsUpdated);
+			updateSchoolParameters);
 
 		// assert
 		DfeAssert.CommandSuccess(result);
@@ -283,12 +307,19 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
-		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
+			s.Id, 
+			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
 
 		var schoolDetailsToAdd = _fixture.Create<UpdateSchoolParameter>();
-		schoolsUpdated.Add(schoolDetailsToAdd);
+		updateSchoolParameters.Add(schoolDetailsToAdd);
+
+		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
+			new School(s.Id, 
+				s.Details,
+				s.Loans.Select(l => new Loan(l.Id, l.Details))));
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -297,16 +328,14 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			schoolsUpdated.ToDictionary(s => s.Id,
-				s => s.SchoolDetails)
-			);
+			updateSchools);
 
 		// act
 		var result = subject.Update(
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			schoolsUpdated);
+			updateSchoolParameters);
 
 		// assert
 		DfeAssert.CommandSuccess(result);
@@ -325,7 +354,7 @@ public class ApplicationUpdateTests
 			type ?? _fixture.Create<ApplicationType>(),
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
-			_fixture.Create<Dictionary<int, SchoolDetails>>());
+			_fixture.Create<List<School>>());
 
 		return application;
 	}
@@ -356,7 +385,9 @@ public class ApplicationUpdateTests
 			application.ApplicationType,
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			application.Schools.ToDictionary(s => s.Id, s => s.Details)
+			application.Schools.Select(s => new School(s.Id,
+																s.Details,
+																s.Loans.Select(l => new Loan(l.Id, l.Details))))
 		);
 	}
 }
