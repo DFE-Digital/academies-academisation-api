@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
 public class ProjectUpdateTests
 {
-	private readonly Fixture _fixture = new();	
+	private readonly Fixture _fixture = new();
 	private readonly AcademisationContext _context;
 
 	// data
@@ -67,7 +67,7 @@ public class ProjectUpdateTests
 		var updatedProject = _fixture.Build<LegacyProjectServiceModel>()
 			.With(p => p.Id, existingProject.Id)
 			.With(p => p.Urn, existingProject.Urn)
-			.Create();		
+			.Create();
 
 		// Act		
 		var updateResult = await legacyProjectController.Patch(updatedProject);
@@ -77,10 +77,7 @@ public class ProjectUpdateTests
 
 		var getResult = await legacyProjectController.Get(updatedProject.Id);
 
-		( _, var getProject ) = DfeAssert.OkObjectResult(getResult);
-
-		// TODO: cannot use Assert.Equivalent because we are not mapping all fields. This is the same as the TRAMS API.
-		//Assert.Equivalent(updatedProject, getProject);
+		(_, var getProject) = DfeAssert.OkObjectResult(getResult);
 
 		Assert.Multiple(
 					() => Assert.Equal(updatedProject.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),
@@ -147,7 +144,7 @@ public class ProjectUpdateTests
 			ProjectStatus = "TestStatus",
 			LocalAuthority = "LocalAuthority",
 			EqualitiesImpactAssessmentConsidered = "Yes sir"
-		};			
+		};
 
 		// Act		
 		var updateResult = await legacyProjectController.Patch(updatedProject);
@@ -158,13 +155,10 @@ public class ProjectUpdateTests
 		var getResult = await legacyProjectController.Get(updatedProject.Id);
 
 		(_, var getProject) = DfeAssert.OkObjectResult(getResult);
-		
+
 		existingProject.ProjectStatus = updatedProject.ProjectStatus;
 		existingProject.LocalAuthority = updatedProject.LocalAuthority;
 		existingProject.EqualitiesImpactAssessmentConsidered = updatedProject.EqualitiesImpactAssessmentConsidered;
-
-		// TODO: cannot use Assert.Equivalent because we are not mapping all fields. This is the same as the TRAMS API.
-		//Assert.Equivalent(updatedProject, getProject);
 
 		Assert.Multiple(
 					() => Assert.Equal(existingProject.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),
@@ -214,5 +208,5 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.ConversionSupportGrantChangeReason, getProject.ConversionSupportGrantChangeReason),
 					() => Assert.Equal(existingProject.ProjectStatus, getProject.ProjectStatus)
 		);
-	}	
+	}
 }

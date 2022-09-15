@@ -31,12 +31,11 @@ public class LegacyProjectController : ControllerBase
 	[HttpPatch(Name = "PatchLegacyProject")]
 	public async Task<ActionResult<LegacyProjectServiceModel>> Patch(LegacyProjectServiceModel projectUpdate)
 	{
-		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate);		
+		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate);				
 
 		return result switch
 		{
-			// TODO: change CommandSuccessResult to allow returning object and return it here.
-			CommandSuccessResult => Ok(projectUpdate),
+			CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(projectUpdate.Id)),
 			NotFoundCommandResult => NotFound(),
 			CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 			_ => throw new NotImplementedException()
