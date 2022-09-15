@@ -20,6 +20,18 @@ public class LegacyProjectController : ControllerBase
 		_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 	}
 
+	[HttpGet(Name = "GetLegacyProjects")]
+	public async Task<ActionResult<LegacyProjectServiceModel>> GetProjects([FromQuery] string projectStatus,
+		[FromQuery] int page = 1,
+		[FromQuery] int count = 50,
+		[FromQuery] int? urn = null)
+	{
+		// var result = await _legacyProjectGetQuery.Execute(id);
+		// return result is null ? NotFound() : Ok(result);
+		await Task.CompletedTask;
+		return Ok();
+	}
+	
 	[HttpGet("{id}", Name = "GetLegacyProject")]
 	public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
 	{
