@@ -229,23 +229,24 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardExplained,
 			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink,
-			// TODO MR:- fix after refactor of Domain object - where loans sit !!
-			//Loans = new HashSet<LoanState>(applyingSchool.Loans
-			//	.Select(e => new LoanState
-			//	{
-			//		Id = e.Id,
-			//		Amount = e.Details.Amount,
-			//		Purpose = e.Details.Purpose,
-			//		Provider = e.Details.Provider,
-			//		InterestRate = e.Details.InterestRate,
-			//		Schedule = e.Details.Schedule
-			//	})
-			//	.ToList())
+			// TODO MR:- loans
+			Loans = new HashSet<LoanState>(applyingSchool.Loans
+				.Select(e => new LoanState
+				{
+					Id = e.Id,
+					Amount = e.Details.Amount,
+					Purpose = e.Details.Purpose,
+					Provider = e.Details.Provider,
+					InterestRate = e.Details.InterestRate,
+					Schedule = e.Details.Schedule
+				})
+				.ToList())
 		};
 	}
 
 	public SchoolDetails MapToDomain()
 	{
+		// TODO MR:- loans - change return type to return loans??
 		return new SchoolDetails(
 			Urn,
 			SchoolName,
@@ -365,8 +366,8 @@ public class ApplicationSchoolState : BaseEntity
 			CapacityAssumptions = CapacityAssumptions,
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
-			// TODO MR:- fix after refactor of Domain object - where loans sit !!
+			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
+			// TODO MR:- loans
 		};
 	}
 }

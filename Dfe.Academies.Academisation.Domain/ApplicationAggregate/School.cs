@@ -7,7 +7,7 @@ public class School : ISchool
 {
 	private readonly List<Loan> _loans = new();
 
-	public School(SchoolDetails details)
+	private School(SchoolDetails details)
 	{
 		Details = details;
 	}
@@ -15,7 +15,8 @@ public class School : ISchool
 	public School(int id, SchoolDetails details) : this(details)
 	{
 		Id = id;
-
+		// TODO MR:- loans set list<> / object seperately
+		//_loans = ;
 	}
 
 	public int Id { get; internal set; }

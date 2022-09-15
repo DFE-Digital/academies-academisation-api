@@ -42,7 +42,7 @@ public class ApplicationState : BaseEntity
 		var schoolsDictionary = Schools.ToDictionary(
 			s => s.Id,
 			s => s.MapToDomain());
-
+		
 		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus, contributorsDictionary, schoolsDictionary);
 	}
 }
