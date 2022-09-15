@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -244,10 +245,9 @@ public class ApplicationSchoolState : BaseEntity
 		};
 	}
 
-	public SchoolDetails MapToDomain()
+	public School MapToDomain()
 	{
-		// TODO MR:- loans - change return type to return loans??
-		return new SchoolDetails(
+		var schoolDetails = new SchoolDetails(
 			Urn,
 			SchoolName,
 			new LandAndBuildings
@@ -367,7 +367,8 @@ public class ApplicationSchoolState : BaseEntity
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
-			// TODO MR:- loans
 		};
+
+		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));
 	}
 }

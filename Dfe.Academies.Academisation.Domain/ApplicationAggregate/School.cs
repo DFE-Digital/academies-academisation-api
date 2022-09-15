@@ -12,11 +12,10 @@ public class School : ISchool
 		Details = details;
 	}
 
-	public School(int id, SchoolDetails details) : this(details)
+	public School(int id, SchoolDetails details, IEnumerable<Loan> loans) : this(details)
 	{
 		Id = id;
-		// TODO MR:- loans set list<> / object seperately
-		//_loans = ;
+		_loans = loans.ToList();
 	}
 
 	public int Id { get; internal set; }

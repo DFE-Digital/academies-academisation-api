@@ -5,11 +5,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
 {
 	public class Loan : ILoan
 	{
-		internal Loan(LoanDetails details)
-		{
-			Details = details;
-		}
-		internal Loan(int id, LoanDetails details)
+		public Loan(int id, LoanDetails details)
 		{
 			Id = id;
 			Details = details;

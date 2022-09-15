@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
@@ -27,6 +29,14 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 				InterestRate = loan.Details.InterestRate,
 				Schedule = loan.Details.Schedule
 			};
+		}
+
+		public Loan MapToDomain()
+		{
+			return new(
+				Id = Id,
+				new LoanDetails(Amount, Purpose, Provider, InterestRate, Schedule)
+			);
 		}
 	}
 }

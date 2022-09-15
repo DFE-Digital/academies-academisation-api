@@ -2,8 +2,8 @@
 {
 	public record LoanDetails(
 		decimal? Amount,
-		string Purpose,
-		string Provider,
+		string? Purpose,
+		string? Provider,
 		decimal? InterestRate,
 		string? Schedule
 	);
