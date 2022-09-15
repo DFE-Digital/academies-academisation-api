@@ -8,18 +8,32 @@ internal static class LegacySchoolServiceModelMapper
 {
 	internal static ICollection<LegacySchoolServiceModel> MapToServiceModels(this IApplication application)
 	{
-		ICollection<LegacySchoolServiceModel> schools = application.Schools.Select(s => MapToServiceModel(s.Details)).ToList();
+		ICollection<LegacySchoolServiceModel> schools = 
+			application.Schools.Select(s => MapToServiceModel(s.Details, 
+				s.Loans.Select(l => new LoanDetails(
+					l.Details.Amount,
+					l.Details.Purpose,
+					l.Details.Provider,
+					l.Details.InterestRate,
+					l.Details.Schedule)
+				))).ToList();
 
 		return schools;
 	}
 
-	private static LegacySchoolServiceModel MapToServiceModel(this SchoolDetails school)
+	private static LegacySchoolServiceModel MapToServiceModel(this SchoolDetails school, IEnumerable<LoanDetails> loans)
 	{
-		// TODO MR:- loans - how do they enter here?
+		var legacyLoans = 
+			loans.Select(l => new LegacyLoanServiceModel(
+				l.Amount, 
+				l.Purpose, 
+				l.Provider, 
+				l.InterestRate.ToString(), 
+				l.Purpose
+				)).ToList();
 
 		LegacySchoolServiceModel serviceModel = new(
-			// TODO MR:- loans
-			new List<LegacyLoanServiceModel>(),
+			legacyLoans,
 			// ToDo: Leases
 			new List<LegacyLeaseServiceModel>())
 		{
