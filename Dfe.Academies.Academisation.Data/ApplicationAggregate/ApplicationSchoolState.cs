@@ -232,7 +232,7 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink,
 			// TODO MR:- loans
 			Loans = new HashSet<LoanState>(applyingSchool.Loans
-				.Select(e => new LoanState
+				?.Select(e => new LoanState
 				{
 					Id = e.Id,
 					Amount = e.Details.Amount,
@@ -241,7 +241,7 @@ public class ApplicationSchoolState : BaseEntity
 					InterestRate = e.Details.InterestRate,
 					Schedule = e.Details.Schedule
 				})
-				.ToList())
+				.ToList() ?? new List<LoanState>())
 		};
 	}
 
