@@ -24,9 +24,9 @@ public class ApplicationUpdateTests
 				.With(s => s.ContactHeadEmail, _faker.Internet.Email())
 				.With(s => s.MainContactOtherEmail, _faker.Internet.Email()));
 
-		//_fixture.Customize<Loan>(composer =>
-		//		composer
-		//			.With(s => s.Id, 0));
+		_fixture.Customize<UpdateSchoolParameter>(composer =>
+				composer
+					.With(s => s.Id, 0));
 	}
 
 	[Fact]
@@ -313,7 +313,7 @@ public class ApplicationUpdateTests
 
 		Assert.Equivalent(expected, subject);
 		var addedSchool = Assert.Single(subject.Schools, s => s.Details.Urn == schoolDetailsToAdd.SchoolDetails.Urn);
-		Assert.Equivalent(schoolDetailsToAdd, addedSchool.Details);
+		Assert.Equivalent(schoolDetailsToAdd.SchoolDetails, addedSchool.Details);
 	}
 
 	private Application BuildApplication(ApplicationStatus applicationStatus, ApplicationType? type = null)
