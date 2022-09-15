@@ -20,12 +20,15 @@ public class ApplicationUpdateTests
 		// default settings to construct valid SchoolDetails
 		_fixture.Customize<SchoolDetails>(sd =>
 			sd.With(s => s.ApproverContactEmail, _faker.Internet.Email())
-			.With(s => s.ContactChairEmail, _faker.Internet.Email())
-			.With(s => s.ContactHeadEmail, _faker.Internet.Email())
-			.With(s => s.MainContactOtherEmail, _faker.Internet.Email())
-	);
+				.With(s => s.ContactChairEmail, _faker.Internet.Email())
+				.With(s => s.ContactHeadEmail, _faker.Internet.Email())
+				.With(s => s.MainContactOtherEmail, _faker.Internet.Email()));
 
+		//_fixture.Customize<Loan>(composer =>
+		//		composer
+		//			.With(s => s.Id, 0));
 	}
+
 	[Fact]
 	public void ExistingIsSubmitted___ValidationErrorReturned_NotMutated()
 	{
@@ -205,7 +208,10 @@ public class ApplicationUpdateTests
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
 
-		int randomKey = PickRandomElement(schoolsUpdated.Select(s=> s.Id));
+		IEnumerable<int> allIndices = schoolsUpdated.Select((s, i) => new { Str = s, Index = i })
+			.Select(x => x.Index);
+
+		int randomKey = PickRandomElement(allIndices);
 		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with 
 									{ SchoolDetails = schoolsUpdated[randomKey].SchoolDetails 
 										with { ContactHeadEmail = "ghjk" } };
@@ -232,7 +238,10 @@ public class ApplicationUpdateTests
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
 
-		int randomSchoolKey = PickRandomElement(schoolsUpdated.Select(s => s.Id));
+		IEnumerable<int> allIndices = schoolsUpdated.Select((s, i) => new { Str = s, Index = i })
+			.Select(x => x.Index);
+
+		int randomSchoolKey = PickRandomElement(allIndices);
 		schoolsUpdated[randomSchoolKey] = schoolsUpdated[randomSchoolKey] with
 		{
 			SchoolDetails = schoolsUpdated[randomSchoolKey].SchoolDetails

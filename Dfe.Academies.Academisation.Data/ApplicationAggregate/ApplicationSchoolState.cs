@@ -229,17 +229,18 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardExplained,
 			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink,
-			Loans = new HashSet<LoanState>(applyingSchool.Loans
-				.Select(e => new LoanState
-				{
-					Id = e.Id,
-					Amount = e.Details.Amount,
-					Purpose = e.Details.Purpose,
-					Provider = e.Details.Provider,
-					InterestRate = e.Details.InterestRate,
-					Schedule = e.Details.Schedule
-				})
-				.ToList())
+			// TODO MR:- fix after refactor of Domain object - where loans sit !!
+			//Loans = new HashSet<LoanState>(applyingSchool.Loans
+			//	.Select(e => new LoanState
+			//	{
+			//		Id = e.Id,
+			//		Amount = e.Details.Amount,
+			//		Purpose = e.Details.Purpose,
+			//		Provider = e.Details.Provider,
+			//		InterestRate = e.Details.InterestRate,
+			//		Schedule = e.Details.Schedule
+			//	})
+			//	.ToList())
 		};
 	}
 
@@ -364,7 +365,8 @@ public class ApplicationSchoolState : BaseEntity
 			CapacityAssumptions = CapacityAssumptions,
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
+			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
+			// TODO MR:- fix after refactor of Domain object - where loans sit !!
 		};
 	}
 }
