@@ -250,6 +250,7 @@ public class ApplicationUpdateTests
 		};
 
 		SchoolDetails updatedSchool = schoolsUpdated[randomSchoolKey].SchoolDetails;
+		int randomSchoolId = schoolsUpdated[randomSchoolKey].Id;
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -272,7 +273,7 @@ public class ApplicationUpdateTests
 		DfeAssert.CommandSuccess(result);
 
 		Assert.Equivalent(expected, subject);
-		var schoolMutated = Assert.Single(subject.Schools, s => s.Id == randomSchoolKey);
+		var schoolMutated = Assert.Single(subject.Schools, s => s.Id == randomSchoolId);
 		Assert.Equivalent(updatedSchool, schoolMutated.Details);
 	}
 
