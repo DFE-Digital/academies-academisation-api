@@ -25,12 +25,12 @@ public class ProjectsListGetDataQueryTests
 	}
 
 	[Fact]
-	public async Task ProjectsExists_SearchProjectsByState__ReturnsProjects()
+	public async Task ProjectsExists_SearchProjectsByStatus__ReturnsProjects()
 	{
 		// arrange
-		var (projectDetails1, projectState1) = CreateTestProject();
-		var (_, projectState2) = CreateTestProject();
-		var (_, projectState3) = CreateTestProject();
+		(ProjectDetails projectDetails1, ProjectState projectState1) = CreateTestProject(DateTime.Now);
+		(ProjectDetails projectDetails2, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
+		(_, ProjectState projectState3) = CreateTestProject();
 
 		_context.Projects.Add(projectState1);
 		_context.Projects.Add(projectState2);
@@ -39,21 +39,110 @@ public class ProjectsListGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var searchStatus = new List<string> { projectState1!.ProjectStatus.ToLower() };
-		var result = await _subject.SearchProjects(searchStatus, 1, 1, null);
+		var searchStatus =
+			new List<string> { projectState1.ProjectStatus!.ToLower(), projectState2.ProjectStatus!.ToLower() };
+		var projects = (await _subject.SearchProjects(searchStatus, 1, 10, null)).ToList();
 
 		// assert
-		var firstProject = result.ToList().FirstOrDefault();
+		var firstProject = projects.FirstOrDefault();
+		var secondProject = projects.LastOrDefault();
+
 		Assert.Multiple(
 			() => Assert.NotNull(firstProject),
 			() => Assert.Equal(firstProject!.Details, projectDetails1),
-			() => Assert.Equal(projectState1.Id, firstProject!.Id)
+			() => Assert.Equal(projectState1.Id, firstProject!.Id),
+			() => Assert.NotNull(secondProject),
+			() => Assert.Equal(secondProject!.Details, projectDetails2),
+			() => Assert.Equal(projectState2.Id, secondProject!.Id)
 		);
 	}
 
-	private Tuple<ProjectDetails, ProjectState> CreateTestProject()
+	[Fact]
+	public async Task ProjectsExists_SearchProjectsByUrn__ReturnsProjects()
 	{
-		var projectDetails = _fixture.Create<ProjectDetails>();
+		// arrange
+		(_, ProjectState projectState1) = CreateTestProject(DateTime.Now);
+		(ProjectDetails projectDetails2, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
+		(_, ProjectState projectState3) = CreateTestProject();
+
+		_context.Projects.Add(projectState1);
+		_context.Projects.Add(projectState2);
+		_context.Projects.Add(projectState3);
+
+		await _context.SaveChangesAsync();
+
+		// act
+		int searchUrn = projectState2.Urn;
+		var projects = (await _subject.SearchProjects(null, 1, 10, searchUrn)).ToList();
+
+		// assert
+		var firstProject = projects.FirstOrDefault();
+
+		Assert.Multiple(
+			() => Assert.NotNull(firstProject),
+			() => Assert.Equal(firstProject!.Details, projectDetails2),
+			() => Assert.Equal(projectState2.Id, firstProject!.Id)
+		);
+	}
+
+	[Fact]
+	public async Task ProjectsExists_SearchDoesntMatch__ReturnsEmpty()
+	{
+		// arrange
+		(_, ProjectState projectState1) = CreateTestProject(DateTime.Now);
+		(_, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
+		(_, ProjectState projectState3) = CreateTestProject();
+
+		_context.Projects.Add(projectState1);
+		_context.Projects.Add(projectState2);
+		_context.Projects.Add(projectState3);
+
+		await _context.SaveChangesAsync();
+
+		// act
+		int urnThatDoesNotExist = 12312;
+		var projects = (await _subject.SearchProjects(null, 1, 10, urnThatDoesNotExist)).ToList();
+
+		// assert
+		Assert.Empty(projects);
+	}
+
+	[Fact]
+	public async Task ProjectsExists__GetPagedProjects__ReturnsProjects()
+	{
+		// arrange
+		List<ProjectDetails> createdProjects = new List<ProjectDetails>();
+		for (int i = 0; i < 6; i++)
+		{
+			(ProjectDetails projectDetails, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			createdProjects.Add(projectDetails);
+			_context.Projects.Add(projectState);
+		}
+
+		await _context.SaveChangesAsync();
+
+		// act
+		var firstPage = (await _subject.SearchProjects(new List<string>(), 1, 2, null)).ToList();
+		var secondPage = (await _subject.SearchProjects(new List<string>(), 2, 2, null)).ToList();
+		var thirdPage = (await _subject.SearchProjects(new List<string>(), 3, 2, null)).ToList();
+
+		// assert
+		Assert.Multiple(
+			() => Assert.Equal(createdProjects[0], firstPage.First().Details),
+			() => Assert.Equal(createdProjects[1], firstPage.Last().Details),
+			() => Assert.Equal(createdProjects[2], secondPage.First().Details),
+			() => Assert.Equal(createdProjects[3], secondPage.Last().Details),
+			() => Assert.Equal(createdProjects[4], thirdPage.First().Details),
+			() => Assert.Equal(createdProjects[5], thirdPage.Last().Details)
+		);
+	}
+
+	private Tuple<ProjectDetails, ProjectState> CreateTestProject(DateTime? applicationDate = null)
+	{
+		applicationDate ??= DateTime.Now;
+
+		var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.ApplicationReceivedDate, applicationDate).Create();
 		var newProject = new Project(0, projectDetails);
 		var mappedProject = ProjectState.MapFromDomain(newProject);
 
