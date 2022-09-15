@@ -56,7 +56,7 @@ public class Application : IApplication
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
 		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
-		IEnumerable<KeyValuePair<int, SchoolDetails>> schools)
+		IEnumerable<UpdateSchoolParameter> schools)
 	{
 		var validationResult = updateValidator.Validate((applicationType, applicationStatus, contributors, schools, this));
 
@@ -81,8 +81,8 @@ public class Application : IApplication
 		foreach (var school in schools)
 		{
 			_schools.Add(new School(
-				school.Key,
-				school.Value
+				school.Id, // TODO MR:- loans
+				school.SchoolDetails
 				));
 		}
 

@@ -38,8 +38,10 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 			applicationServiceModel.ApplicationType,
 			applicationServiceModel.ApplicationStatus,
 			applicationServiceModel.Contributors.Select(c => new KeyValuePair<int, ContributorDetails>(c.ContributorId, c.ToDomain())),
-			applicationServiceModel.Schools.Select(s => new KeyValuePair<int, SchoolDetails>(s.Id, s.ToDomain()))
-			);
+			applicationServiceModel.Schools.Select(s => 
+				new UpdateSchoolParameter(s.Id, s.ToDomain(), new List<KeyValuePair<int, LoanDetails>>(
+					s.Loans.Select(s=> new KeyValuePair<int,LoanDetails>(s.LoanId, s.ToDomain())
+			)))));
 
 		if (result is CommandValidationErrorResult)
 		{

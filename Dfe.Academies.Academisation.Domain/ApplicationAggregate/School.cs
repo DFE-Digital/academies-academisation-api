@@ -15,8 +15,7 @@ public class School : ISchool
 	public School(int id, SchoolDetails details) : this(details)
 	{
 		Id = id;
-		// TODO MR:- what to do with SchoolDetails obj & loans
-		_loans = details.Loans.Select(c => new Loan(c.Key, c.Value)).ToList();
+
 	}
 
 	public int Id { get; internal set; }

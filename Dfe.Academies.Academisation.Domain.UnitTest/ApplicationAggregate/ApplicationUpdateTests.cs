@@ -38,7 +38,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+			subject.Schools.Select(s=> new UpdateSchoolParameter(s.Id, s.Details,
+				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, l.Details)).ToList())
+				));
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationStatus));
@@ -57,7 +59,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			ApplicationStatus.Submitted,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			));
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationStatus));
@@ -77,7 +81,9 @@ public class ApplicationUpdateTests
 			updated,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			));
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationType));
@@ -104,7 +110,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			contributors,
-			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			));
 
 		// assert
 		DfeAssert.CommandValidationError(result, $"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}");
@@ -126,7 +134,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			contributorsUpdated,
-			subject.Schools.ToDictionary(s => s.Id, s => s.Details));
+			subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			));
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.Contributors));
@@ -140,8 +150,13 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 		Application expected = Clone(subject);
 
-		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
-		schoolsUpdated.Add(0, _fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" });
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+		).ToList();
+		schoolsUpdated.Add(new UpdateSchoolParameter(0, 
+			_fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" },
+			new List<KeyValuePair<int, LoanDetails>>()
+			));
 
 		// act
 		var result = subject.Update(
@@ -162,8 +177,10 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 		Application expected = Clone(subject);
 
-		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
-		schoolsUpdated.Add(_fixture.Create<int>(), _fixture.Create<SchoolDetails>());
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+		).ToList();
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>());
 
 		// act
 		var result = subject.Update(
@@ -184,9 +201,14 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 		Application expected = Clone(subject);
 
-		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
-		int randomKey = PickRandomElement(schoolsUpdated.Keys);
-		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with { ContactHeadEmail = "ghjk" };
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+		).ToList();
+
+		int randomKey = PickRandomElement(schoolsUpdated.Select(s=> s.Id));
+		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with 
+									{ SchoolDetails = schoolsUpdated[randomKey].SchoolDetails 
+										with { ContactHeadEmail = "ghjk" } };
 
 		// act
 		var result = subject.Update(
@@ -206,12 +228,19 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
-		var schoolsUpdated = subject.Schools.ToDictionary(c => c.Id, c => c.Details);
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+		).ToList();
 
-		int randomSchoolKey = PickRandomElement(schoolsUpdated.Keys);
-		SchoolDetails updatedSchool = _fixture.Create<SchoolDetails>() with { Urn = schoolsUpdated[randomSchoolKey].Urn };
+		int randomSchoolKey = PickRandomElement(schoolsUpdated.Select(s => s.Id));
+		schoolsUpdated[randomSchoolKey] = schoolsUpdated[randomSchoolKey] with
+		{
+			SchoolDetails = schoolsUpdated[randomSchoolKey].SchoolDetails
+				with
+			{ Urn = schoolsUpdated[randomSchoolKey].SchoolDetails.Urn }
+		};
 
-		schoolsUpdated[randomSchoolKey] = updatedSchool;
+		SchoolDetails updatedSchool = schoolsUpdated[randomSchoolKey].SchoolDetails;
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -220,7 +249,8 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			schoolsUpdated);
+			schoolsUpdated.ToDictionary(s=> s.Id,
+										s=> s.SchoolDetails));
 
 		// act
 		var result = subject.Update(
@@ -243,9 +273,12 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress);
 
-		var schoolsUpdated = subject.Schools.ToDictionary(s => s.Id, s => s.Details);
-		var schoolDetailsToAdd = _fixture.Create<SchoolDetails>();
-		schoolsUpdated.Add(0, schoolDetailsToAdd);
+		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(s.Id, s.Details,
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+		).ToList();
+
+		var schoolDetailsToAdd = _fixture.Create<UpdateSchoolParameter>();
+		schoolsUpdated.Add(schoolDetailsToAdd);
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -254,7 +287,8 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			schoolsUpdated
+			schoolsUpdated.ToDictionary(s => s.Id,
+				s => s.SchoolDetails)
 			);
 
 		// act
@@ -268,7 +302,7 @@ public class ApplicationUpdateTests
 		DfeAssert.CommandSuccess(result);
 
 		Assert.Equivalent(expected, subject);
-		var addedSchool = Assert.Single(subject.Schools, s => s.Details.Urn == schoolDetailsToAdd.Urn);
+		var addedSchool = Assert.Single(subject.Schools, s => s.Details.Urn == schoolDetailsToAdd.SchoolDetails.Urn);
 		Assert.Equivalent(schoolDetailsToAdd, addedSchool.Details);
 	}
 
