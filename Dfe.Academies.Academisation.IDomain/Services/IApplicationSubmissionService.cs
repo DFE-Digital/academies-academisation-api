@@ -5,5 +5,5 @@ namespace Dfe.Academies.Academisation.IDomain.Services;
 
 public interface IApplicationSubmissionService
 {
-	OperationResult SubmitApplication(IApplication application);
+	CommandOrCreateResult SubmitApplication(IApplication application);
 }

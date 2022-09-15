@@ -19,7 +19,7 @@ public class ApplicationSubmissionService : IApplicationSubmissionService
 		_projectFactory = projectFactory;
 	}
 
-	public OperationResult SubmitApplication(IApplication application)
+	public CommandOrCreateResult SubmitApplication(IApplication application)
 	{
 		var submitResult = application.Submit();
 
