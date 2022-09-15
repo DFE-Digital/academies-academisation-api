@@ -199,7 +199,7 @@ public class ApplicationUpdateTests
 			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
 		).ToList();
 
-		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>());
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with {Id = 99});
 
 		// act
 		var result = subject.Update(
