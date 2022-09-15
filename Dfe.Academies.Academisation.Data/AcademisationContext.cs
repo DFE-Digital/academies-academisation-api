@@ -43,9 +43,21 @@ public class AcademisationContext : DbContext
 			{
 				continue;
 			}
-
+			
 			foreach (object? child in children)
 			{
+				Type childType = child.GetType();
+
+				if (childType == typeof(ApplicationSchoolState))
+				{
+					var schoolState = (ApplicationSchoolState)child;
+
+					foreach (var loan in schoolState.Loans)
+					{
+						Remove(loan);
+					}
+				}
+
 				Remove(child);
 			}
 		}
