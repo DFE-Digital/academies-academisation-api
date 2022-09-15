@@ -5,7 +5,6 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core.OutsideData;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Xunit;
@@ -30,7 +29,7 @@ public class ProjectCreateTests
 			_fixture.Create<Dictionary<int, SchoolDetails>>());
 
 		// Act
-		var project = new ProjectFactory().Create(application, _fixture.Create<EstablishmentDetails>(), _fixture.Create<MisEstablishmentDetails>());
+		var project = new ProjectFactory().Create(application);
 
 		CreateValidationErrorResult<IProject>? result = null;
 
@@ -52,20 +51,34 @@ public class ProjectCreateTests
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
 			new Dictionary<int, SchoolDetails> { { 1, _fixture.Create<SchoolDetails>() } });
-
-		var establishmentDetails = _fixture.Create<EstablishmentDetails>();
-		var misEstablishmentDetails = _fixture.Create<MisEstablishmentDetails>();
+		
 
 		// Act
-		var createResult = new ProjectFactory().Create(application, establishmentDetails, misEstablishmentDetails);
+		var createResult = new ProjectFactory().Create(application);
 
 		// Assert
 		IProject project = Assert.IsType<CreateSuccessResult<IProject>>(createResult).Payload;
+		var school = application.Schools.Single();		
 
 		Assert.Multiple(			
-			() => Assert.Equal(application.Schools.Single().Details.Urn, project.Details.Urn),
-			() => Assert.Equal(establishmentDetails.Ukprn, project.Details.UkPrn),
-			() => Assert.Equal(misEstablishmentDetails.Laestab, project.Details.Laestab)
+			() => Assert.Equal(school.Details.Urn, project.Details.Urn),
+			() => Assert.Equal("Converter Pre-AO (C)", project.Details.ProjectStatus),
+			() => Assert.Equal(DateTime.Today.AddMonths(6), project.Details.OpeningDate),
+			() => Assert.Equal("Converter", project.Details.AcademyTypeAndRoute),
+			() => Assert.Equal(school.Details.ConversionTargetDate, project.Details.ProposedAcademyOpeningDate),
+			() => Assert.Equal(25000, project.Details.ConversionSupportGrantAmount),
+			() => Assert.Equal(school.Details.CapacityPublishedAdmissionsNumber.ToString(), project.Details.PublishedAdmissionNumber),
+			() => Assert.Equal(ToYesNoString(school.Details.LandAndBuildings.PartOfPfiScheme), project.Details.PartOfPfiScheme),
+			() => Assert.Equal(ToYesNoString(school.Details.EqualitiesImpactAssessmentCompleted != EqualityImpact.NotConsidered), project.Details.EqualitiesImpactAssessmentConsidered),
+			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear1, project.Details.YearOneProjectedPupilNumbers),
+			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear2, project.Details.YearTwoProjectedPupilNumbers),
+			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear3, project.Details.YearThreeProjectedPupilNumbers)			
 		);
+	}
+
+	private static string? ToYesNoString(bool? value)
+	{
+		if (!value.HasValue) return null;
+		return value == true ? "Yes" : "No";
 	}
 }

@@ -2,12 +2,10 @@
 
 public record LegacyProjectServiceModel(
 	int Id,
-	int? Urn,
-	int Laestab,
+	int? Urn = null,
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
-	string? UkPrn = null,
 	string? ProjectStatus = null,
 	DateTime? ApplicationReceivedDate = null,
 	DateTime? AssignedDate = null,

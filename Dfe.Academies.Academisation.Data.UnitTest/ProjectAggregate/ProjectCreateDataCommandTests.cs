@@ -37,6 +37,6 @@ public class ProjectCreateDataCommandTests
 		Assert.Multiple(
 			() => Assert.NotEqual(0, result.Id),
 			() => Assert.Equal(projectDetails, result.Details)
-			);
+		);
 	}
 }

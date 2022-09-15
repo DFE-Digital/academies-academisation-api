@@ -2,11 +2,9 @@
 
 public record ProjectDetails(
 	int Urn,
-	int Laestab,	
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
-	string? UkPrn = null,
 	string? ProjectStatus = null, // could be enum
 	DateTime? ApplicationReceivedDate = null,
 	DateTime? AssignedDate = null,

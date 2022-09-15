@@ -35,7 +35,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var existingProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, existingProject);
-		var updatedProject = new ProjectDetails(1, 1);
+		var updatedProject = new ProjectDetails(1);
 
 		// Act
 		var result = sut.Update(updatedProject);

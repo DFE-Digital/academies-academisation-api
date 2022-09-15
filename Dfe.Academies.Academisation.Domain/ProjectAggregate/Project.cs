@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.OutsideData;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -26,7 +25,7 @@ public class Project : IProject
 
 	public ProjectDetails Details { get; private set; }
 
-	public static CreateResult<IProject> Create(IApplication application, EstablishmentDetails establishmentDetails, MisEstablishmentDetails misEstablishmentDetails)
+	public static CreateResult<IProject> Create(IApplication application)
 	{
 		if (application.ApplicationType != Core.ApplicationAggregate.ApplicationType.JoinAMat)
 		{
@@ -40,11 +39,9 @@ public class Project : IProject
 		var school = application.Schools.Single().Details;
 
 		var projectDetails = new ProjectDetails(
-			school.Urn,
-			misEstablishmentDetails.Laestab
+			school.Urn
 		)
 		{
-			UkPrn = establishmentDetails.Ukprn,
 			// TODO: map additional fields as they become available
 			//LocalAuthority = school.LocalAuthority.LocalAuthorityName,
 			//ApplicationReferenceNumber = application.ApplicationId
@@ -85,14 +82,12 @@ public class Project : IProject
 			});
 		}
 
-		Details = new ProjectDetails(1, detailsToUpdate.Urn)
+		Details = new ProjectDetails(detailsToUpdate.Urn)
 		{
 			Urn = detailsToUpdate.Urn,
-			Laestab = detailsToUpdate.Laestab,
 			SchoolName = detailsToUpdate.SchoolName,
 			LocalAuthority = detailsToUpdate.LocalAuthority,
 			ApplicationReferenceNumber = detailsToUpdate.ApplicationReferenceNumber,
-			UkPrn = detailsToUpdate.UkPrn,
 			ProjectStatus = detailsToUpdate.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
 			AssignedDate = detailsToUpdate.AssignedDate,
