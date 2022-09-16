@@ -24,7 +24,7 @@ public class LegacyProjectController : ControllerBase
 	}
 
 	[HttpGet("projects", Name = "GetLegacyProjects")]
-	public async Task<ActionResult<LegacyProjectServiceModel>> GetProjects([FromQuery] string? states,
+	public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>>GetProjects([FromQuery] string? states,
 		[FromQuery] int page = 1,
 		[FromQuery] int count = 50,
 		[FromQuery] int? urn = null)
