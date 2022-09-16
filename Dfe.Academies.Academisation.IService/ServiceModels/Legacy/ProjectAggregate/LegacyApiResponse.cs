@@ -3,12 +3,12 @@
 	public class LegacyApiResponse<TResponse> where TResponse : class
 	{
 		public IEnumerable<TResponse> Data { get; }
-		public LegacyResponse Legacy { get; }
+		public PagingResponse Paging { get; }
 		
-		public LegacyApiResponse(IEnumerable<TResponse> data, LegacyResponse legacyResponse)
+		public LegacyApiResponse(IEnumerable<TResponse> data, PagingResponse pagingResponse)
 		{
 			Data = data;
-			Legacy = legacyResponse;
+			Paging = pagingResponse;
 		}
 	}
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers;
 
-[Route("legacy/project")]
+[Route("legacy/")]
 [ApiController]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class LegacyProjectController : ControllerBase
@@ -23,17 +23,17 @@ public class LegacyProjectController : ControllerBase
 		_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 	}
 
-	[HttpGet(Name = "GetLegacyProjects")]
+	[HttpGet("projects", Name = "GetLegacyProjects")]
 	public async Task<ActionResult<LegacyProjectServiceModel>> GetProjects([FromQuery] string? states,
 		[FromQuery] int page = 1,
 		[FromQuery] int count = 50,
 		[FromQuery] int? urn = null)
 	{
-		var result = await _legacyProjectListGetQuery.GetProjects(states ?? "", page, count, urn);
+		var result = await _legacyProjectListGetQuery.GetProjects(states, page, count, urn);
 		return result is null ? NotFound() : Ok(result);
 	}
 	
-	[HttpGet("{id}", Name = "GetLegacyProject")]
+	[HttpGet("project/{id}", Name = "GetLegacyProject")]
 	public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
 	{
 		var result = await _legacyProjectGetQuery.Execute(id);
@@ -41,7 +41,7 @@ public class LegacyProjectController : ControllerBase
 	}
 
 
-	[HttpPatch(Name = "PatchLegacyProject")]
+	[HttpPatch("project", Name = "PatchLegacyProject")]
 	public async Task<ActionResult<LegacyProjectServiceModel>> Patch(LegacyProjectServiceModel projectUpdate)
 	{
 		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate);				

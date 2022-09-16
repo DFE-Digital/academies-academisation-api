@@ -20,7 +20,6 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			
 			if (states != null && states!.Any())
 			{
-				// var lowerStatuses = states.Select(status => status.ToLower());
 				queryable = queryable.Where(p => states.Contains(p.ProjectStatus!.ToLower()));
 			}
 
