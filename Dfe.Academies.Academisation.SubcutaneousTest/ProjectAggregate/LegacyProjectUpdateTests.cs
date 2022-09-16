@@ -32,8 +32,6 @@ public class ProjectUpdateTests
 	private readonly AcademisationContext _context;
 
 	// data
-	private readonly IProjectGetDataQuery _projectGetDataQuery;
-	private readonly IProjectUpdateDataCommand _projectUpdateDataCommand;
 
 	// service
 	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
@@ -45,12 +43,12 @@ public class ProjectUpdateTests
 		_context = new TestProjectContext().CreateContext();
 
 		// data
-		_projectGetDataQuery = new ProjectGetDataQuery(_context);
-		_projectUpdateDataCommand = new ProjectUpdateDataCommand(_context);
+		IProjectGetDataQuery projectGetDataQuery = new ProjectGetDataQuery(_context);
+		IProjectUpdateDataCommand projectUpdateDataCommand = new ProjectUpdateDataCommand(_context);
 
 		// service
-		_legacyProjectGetQuery = new LegacyProjectGetQuery(_projectGetDataQuery);
-		_legacyProjectUpdateCommand = new LegacyProjectUpdateCommand(_projectGetDataQuery, _projectUpdateDataCommand);
+		_legacyProjectGetQuery = new LegacyProjectGetQuery(projectGetDataQuery);
+		_legacyProjectUpdateCommand = new LegacyProjectUpdateCommand(projectGetDataQuery, projectUpdateDataCommand);
 	}
 
 
@@ -58,9 +56,9 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, _legacyProjectUpdateCommand);
+		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(), 
+			_legacyProjectUpdateCommand);
 		var existingProject = _fixture.Create<ProjectState>();
-
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
@@ -133,7 +131,8 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, _legacyProjectUpdateCommand);
+		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(), 
+			_legacyProjectUpdateCommand);
 		var existingProject = _fixture.Create<ProjectState>();
 
 		await _context.Projects.AddAsync(existingProject);

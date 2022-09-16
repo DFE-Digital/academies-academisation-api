@@ -27,9 +27,13 @@ public class ProjectUpdateDataCommandTests
 	public async Task ProjectExists___ProjectUpdated()
 	{
 		// arrange
+		var existingProject = _fixture.Build<ProjectState>().Create();
+		await _context.Projects.AddAsync(existingProject);
+		await _context.SaveChangesAsync();
+			
 		ProjectDetails projectDetails = _fixture.Create<ProjectDetails>();		
 
-		IProject project = new Project(1, projectDetails);
+		IProject project = new Project(existingProject.Id, projectDetails);
 		await _context.Projects.LoadAsync();
 
 		// act

@@ -14,29 +14,30 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
 public class ProjectGetTests
 {
-	private readonly IProjectGetDataQuery _projectGetDataQuery;
-	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
 	private readonly LegacyProjectController _legacyProjectController;
 	private readonly AcademisationContext _context;
-
+	private readonly Fixture _fixture = new();
 
 	public ProjectGetTests()
 	{
 		_context = new TestProjectContext().CreateContext();
 
-		_projectGetDataQuery = new ProjectGetDataQuery(_context);
-		_legacyProjectGetQuery = new LegacyProjectGetQuery(_projectGetDataQuery);
+		IProjectGetDataQuery projectGetDataQuery = new ProjectGetDataQuery(_context);
+		ILegacyProjectGetQuery legacyProjectGetQuery = new LegacyProjectGetQuery(projectGetDataQuery);
 
-		_legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectUpdateCommand>());
+		_legacyProjectController = new LegacyProjectController(legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
+			Mock.Of<ILegacyProjectUpdateCommand>());
 	}
 
 	[Fact]
-	public async Task NoPreconditions___ProjectReturned()
+	public async Task ProjectExists___ProjectReturned()
 	{
-		int id = 1;
+		var existingProject = _fixture.Create<ProjectState>();
+		await _context.Projects.AddAsync(existingProject);
+		await _context.SaveChangesAsync();
 
 		// act
-		var result = await _legacyProjectController.Get(id);
+		var result = await _legacyProjectController.Get(existingProject.Id);
 
 		// assert
 		Assert.IsType<OkObjectResult>(result.Result);
