@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20220916132737_SchoolLoans")]
+    partial class SchoolLoans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -530,6 +532,43 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionLegalRequirement.LegalRequirementState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("HadConsultation")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HasDioceseConsented")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HasFoundationConsented")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HaveProvidedResolution")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsSectionComplete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LegalRequirement", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", b =>
