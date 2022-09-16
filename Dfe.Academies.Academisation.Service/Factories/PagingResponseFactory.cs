@@ -2,7 +2,7 @@
 
 namespace Dfe.Academies.Academisation.Service.Factories;
 
-internal class PagingResponseFactory
+internal static class PagingResponseFactory
 {
 	internal static PagingResponse Create(string path, int page, int count, int recordCount, 
 		Dictionary<string, object?> routeValues)
