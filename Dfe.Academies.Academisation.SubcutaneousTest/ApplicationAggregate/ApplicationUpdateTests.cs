@@ -17,6 +17,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using FluentAssertions;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -78,12 +79,11 @@ public class ApplicationUpdateTests
 				.With(s => s.SchoolConversionContactChairEmail, _faker.Internet.Email())
 				.With(s => s.SchoolConversionMainContactOtherEmail, _faker.Internet.Email())
 				.With(s => s.SchoolConversionApproverContactEmail, _faker.Internet.Email())
-				);
+		);
 
 		_fixture.Customize<LoanServiceModel>(composer =>
 			composer
-				.With(s => s.LoanId, 0)
-		);
+				.With(s => s.LoanId, 0));
 	}
 
 	[Fact]
@@ -97,10 +97,7 @@ public class ApplicationUpdateTests
 
 		var applicationContributorServiceModel = _fixture.Create<ApplicationContributorServiceModel>();
 		var applicationSchoolServiceModel = _fixture.Create<ApplicationSchoolServiceModel>();
-
-		//var schoolsList = existingApplication.Schools.ToList();
-		//schoolsList.Add(applicationSchoolServiceModel);
-
+		
 		ApplicationServiceModel applicationToUpdate = existingApplication with { Contributors = new List<ApplicationContributorServiceModel>()
 		{
 			existingApplication.Contributors.ToArray()[0],
@@ -143,7 +140,8 @@ public class ApplicationUpdateTests
 			}
 		};
 
-		Assert.Equivalent(expectedApplication, gotApplication);
+		//Assert.Equivalent(expectedApplication, gotApplication);
+		expectedApplication.Should().BeEquivalentTo(gotApplication);
 	}
 
 	[Fact]
