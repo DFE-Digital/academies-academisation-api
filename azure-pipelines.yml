@@ -27,7 +27,7 @@ steps:
   inputs:
     command: custom
     custom: 'tool'
-    arguments: install dotnet-ef --version 6.0.5
+    arguments: install dotnet-ef
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore all project dependencies'
