@@ -39,10 +39,9 @@ public class ApplicationState : BaseEntity
 			c => c.Id,
 			c => new ContributorDetails(c.FirstName, c.LastName, c.EmailAddress, c.Role, c.OtherRoleName));
 
-		var schoolsDictionary = Schools.ToDictionary(
-			s => s.Id,
-			s => s.MapToDomain());
-
-		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus, contributorsDictionary, schoolsDictionary);
+		var schoolsList = Schools.Select(n => n.MapToDomain());
+		
+		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus, 
+								contributorsDictionary, schoolsList);
 	}
 }

@@ -13,6 +13,7 @@ public class AcademisationContext : DbContext
 	public DbSet<ApplicationState> Applications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
+	public DbSet<LoanState> SchoolLoans { get; set; } = null!;
 	public DbSet<ProjectState> Projects { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
@@ -42,9 +43,21 @@ public class AcademisationContext : DbContext
 			{
 				continue;
 			}
-
+			
 			foreach (object? child in children)
 			{
+				Type childType = child.GetType();
+
+				if (childType == typeof(ApplicationSchoolState))
+				{
+					var schoolState = (ApplicationSchoolState)child;
+
+					foreach (var loan in schoolState.Loans)
+					{
+						Remove(loan);
+					}
+				}
+
 				Remove(child);
 			}
 		}

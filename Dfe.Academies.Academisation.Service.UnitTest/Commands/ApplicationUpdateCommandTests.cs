@@ -60,7 +60,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				It.IsAny<ApplicationType>(),
 				It.IsAny<ApplicationStatus>(),
 				It.IsAny<IEnumerable<KeyValuePair<int, ContributorDetails>>>(),
-				It.IsAny<IEnumerable<KeyValuePair<int, SchoolDetails>>>()
+				It.IsAny<IEnumerable<UpdateSchoolParameter>>()
 				)).Returns(new CommandSuccessResult());
 			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId))
 				.ReturnsAsync(applicationMock.Object);

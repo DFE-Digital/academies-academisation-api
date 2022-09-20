@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using System.Linq;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
@@ -19,7 +20,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.ReligiousEducation.ToServiceModel(),
 			school.Details.PreviousFinancialYear.ToServiceModel(),
 			school.Details.CurrentFinancialYear.ToServiceModel(),
-			school.Details.NextFinancialYear.ToServiceModel()
+			school.Details.NextFinancialYear.ToServiceModel(),
+			Loans: school.Loans.Select(c=> c.ToServiceModel()).ToList()
 		)
 		{
 			SchoolContributionToTrust = school.Details.SchoolContributionToTrust,
@@ -69,7 +71,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			serviceModel.PreviousFinancialYear.ToDomain(),
 			serviceModel.CurrentFinancialYear.ToDomain(),
 			serviceModel.NextFinancialYear.ToDomain()
-		)
+			
+			)
 		{
 			SchoolContributionToTrust = serviceModel.SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = serviceModel.GoverningBodyConsentEvidenceDocumentLink,

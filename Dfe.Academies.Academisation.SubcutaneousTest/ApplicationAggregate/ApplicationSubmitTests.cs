@@ -66,6 +66,10 @@ public class ApplicationSubmitTests
 			.With(s => s.SchoolConversionContactChairEmail, _faker.Internet.Email())
 			.With(s => s.SchoolConversionContactHeadEmail, _faker.Internet.Email())
 			.With(s => s.SchoolConversionMainContactOtherEmail, _faker.Internet.Email()));
+
+		_fixture.Customize<LoanServiceModel>(composer =>
+			composer
+				.With(s => s.LoanId, 0));
 	}
 
 

@@ -26,7 +26,8 @@ public class ProjectCreateTests
 		var application = new Application(1, now, now, applicationType,
 			_fixture.Create<ApplicationStatus>(),
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
-			_fixture.Create<Dictionary<int, SchoolDetails>>());
+			_fixture.Create<List<School>>()
+			);
 
 		// Act
 		var project = new ProjectFactory().Create(application);
@@ -50,8 +51,8 @@ public class ProjectCreateTests
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new Dictionary<int, SchoolDetails> { { 1, _fixture.Create<SchoolDetails>() } });
-		
+			new List<School> {_fixture.Create<School>()}
+			);
 
 		// Act
 		var createResult = new ProjectFactory().Create(application);

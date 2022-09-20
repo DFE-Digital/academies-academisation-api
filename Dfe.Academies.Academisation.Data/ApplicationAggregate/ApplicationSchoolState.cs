@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -118,6 +120,10 @@ public class ApplicationSchoolState : BaseEntity
 	public string? NextFinancialYearCapitalCarryForwardExplained { get; set; }
 	public string? NextFinancialYearCapitalCarryForwardFileLink { get; set; }
 
+	// leases & loans
+	[ForeignKey("ApplicationSchoolId")]
+	public HashSet<LoanState> Loans { get; set; } = new();
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
@@ -223,13 +229,25 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForward = applyingSchool.Details.NextFinancialYear.CapitalCarryForward,
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardExplained,
-			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink
+			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear.CapitalCarryForwardFileLink,
+			// TODO MR:- loans
+			Loans = new HashSet<LoanState>(applyingSchool.Loans
+				?.Select(e => new LoanState
+				{
+					Id = e.Id,
+					Amount = e.Details.Amount,
+					Purpose = e.Details.Purpose,
+					Provider = e.Details.Provider,
+					InterestRate = e.Details.InterestRate,
+					Schedule = e.Details.Schedule
+				})
+				.ToList() ?? new List<LoanState>())
 		};
 	}
 
-	public SchoolDetails MapToDomain()
+	public School MapToDomain()
 	{
-		return new SchoolDetails(
+		var schoolDetails = new SchoolDetails(
 			Urn,
 			SchoolName,
 			new LandAndBuildings
@@ -315,9 +333,8 @@ public class ApplicationSchoolState : BaseEntity
 				CapitalCarryForwardStatus = NextFinancialYearCapitalCarryForwardStatus,
 				CapitalCarryForwardExplained = NextFinancialYearCapitalCarryForwardExplained,
 				CapitalCarryForwardFileLink = NextFinancialYearCapitalCarryForwardFileLink
-			}
-		)
-		{
+			})
+			{
 			SchoolContributionToTrust = SchoolContributionToTrust,
 			GoverningBodyConsentEvidenceDocumentLink = GoverningBodyConsentEvidenceDocumentLink,
 			AdditionalInformationAdded = AdditionalInformationAdded,
@@ -351,5 +368,7 @@ public class ApplicationSchoolState : BaseEntity
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
 		};
+
+		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));
 	}
 }

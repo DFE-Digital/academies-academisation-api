@@ -25,7 +25,7 @@ public class Application : IApplication
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
-		Dictionary<int, SchoolDetails> schools)
+		IEnumerable<School> schools)
 	{
 		ApplicationId = applicationId;
 		CreatedOn = createdOn;
@@ -33,7 +33,7 @@ public class Application : IApplication
 		ApplicationType = applicationType;
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
-		_schools = schools.Select(s => new School(s.Key, s.Value)).ToList();
+		_schools = schools.ToList();
 	}
 
 	public int ApplicationId { get; private set; }
@@ -56,7 +56,7 @@ public class Application : IApplication
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
 		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
-		IEnumerable<KeyValuePair<int, SchoolDetails>> schools)
+		IEnumerable<UpdateSchoolParameter> schools)
 	{
 		var validationResult = updateValidator.Validate((applicationType, applicationStatus, contributors, schools, this));
 
@@ -81,9 +81,10 @@ public class Application : IApplication
 		foreach (var school in schools)
 		{
 			_schools.Add(new School(
-				school.Key,
-				school.Value
-				));
+				school.Id, 
+				school.SchoolDetails,
+				school.Loans.Select(l => new Loan(l.Key, l.Value))
+			));
 		}
 
 		return new CommandSuccessResult();

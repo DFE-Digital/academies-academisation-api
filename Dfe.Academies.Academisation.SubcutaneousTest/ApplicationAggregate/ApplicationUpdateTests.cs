@@ -17,6 +17,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using FluentAssertions;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -78,7 +79,11 @@ public class ApplicationUpdateTests
 				.With(s => s.SchoolConversionContactChairEmail, _faker.Internet.Email())
 				.With(s => s.SchoolConversionMainContactOtherEmail, _faker.Internet.Email())
 				.With(s => s.SchoolConversionApproverContactEmail, _faker.Internet.Email())
-				);
+		);
+
+		_fixture.Customize<LoanServiceModel>(composer =>
+			composer
+				.With(s => s.LoanId, 0));
 	}
 
 	[Fact]
@@ -92,27 +97,18 @@ public class ApplicationUpdateTests
 
 		var applicationContributorServiceModel = _fixture.Create<ApplicationContributorServiceModel>();
 		var applicationSchoolServiceModel = _fixture.Create<ApplicationSchoolServiceModel>();
-
-		var schoolsList = existingApplication.Schools.ToList();
-		schoolsList.Add(applicationSchoolServiceModel);
-
-		ApplicationServiceModel applicationToUpdate = new(
-			existingApplication.ApplicationId,
-			existingApplication.ApplicationType,
-			existingApplication.ApplicationStatus,
-			new List<ApplicationContributorServiceModel>()
-			{
-				existingApplication.Contributors.ToArray()[0],
-				existingApplication.Contributors.ToArray()[1],
-				applicationContributorServiceModel
-			},
-			new List<ApplicationSchoolServiceModel>()
-			{
-				existingApplication.Schools.ToArray()[0],
-				applicationSchoolServiceModel,
-				existingApplication.Schools.ToArray()[2]
-			}
-			);
+		
+		ApplicationServiceModel applicationToUpdate = existingApplication with { Contributors = new List<ApplicationContributorServiceModel>()
+		{
+			existingApplication.Contributors.ToArray()[0],
+			existingApplication.Contributors.ToArray()[1],
+			applicationContributorServiceModel
+		}, Schools = new List<ApplicationSchoolServiceModel>()
+		{
+			existingApplication.Schools.ToArray()[0],
+			applicationSchoolServiceModel,
+			existingApplication.Schools.ToArray()[2]
+		} };
 
 		// act
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
@@ -124,7 +120,7 @@ public class ApplicationUpdateTests
 
 		var expectedApplication = applicationToUpdate with
 		{
-			Contributors = new List<ApplicationContributorServiceModel>()
+			Contributors = new List<ApplicationContributorServiceModel>
 			{
 				existingApplication.Contributors.ToArray()[0],
 				existingApplication.Contributors.ToArray()[1],
@@ -133,19 +129,24 @@ public class ApplicationUpdateTests
 					ContributorId = gotApplication.Contributors.Single(c => c.EmailAddress == applicationContributorServiceModel.EmailAddress).ContributorId
 				}
 			},
-			Schools = new List<ApplicationSchoolServiceModel>()
+			Schools = new List<ApplicationSchoolServiceModel>
 			{
 				existingApplication.Schools.ToArray()[0],
 				applicationSchoolServiceModel with
 				{
-					Id = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Id
+					Id = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Id,
+					Loans = new List<LoanServiceModel>()
+					{
+						applicationSchoolServiceModel.Loans.ToArray()[0] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[0].LoanId},
+						applicationSchoolServiceModel.Loans.ToArray()[1] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[1].LoanId},
+						applicationSchoolServiceModel.Loans.ToArray()[2] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[2].LoanId}
+					}
 				},
-				existingApplication.Schools.ToArray()[2],
+				existingApplication.Schools.ToArray()[2]
 			}
 		};
 
 		Assert.Equivalent(expectedApplication, gotApplication);
-
 	}
 
 	[Fact]

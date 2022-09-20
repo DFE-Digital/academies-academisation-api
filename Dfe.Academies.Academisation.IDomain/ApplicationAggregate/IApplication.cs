@@ -22,7 +22,8 @@ public interface IApplication
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
 		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
-		IEnumerable<KeyValuePair<int, SchoolDetails>> schools);
+		IEnumerable<UpdateSchoolParameter> schools
+		);
 
 	CommandResult Submit();
 }

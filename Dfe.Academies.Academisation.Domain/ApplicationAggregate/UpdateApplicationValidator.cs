@@ -8,7 +8,7 @@ internal class UpdateApplicationValidator
 		ApplicationType type,
 		ApplicationStatus status,
 		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
-		IEnumerable<KeyValuePair<int, SchoolDetails>> schools,
+		IEnumerable<UpdateSchoolParameter> schools,
 		Application existing)>
 {
 	public UpdateApplicationValidator()
@@ -51,22 +51,22 @@ internal class UpdateApplicationValidator
 		RuleFor(x => x.schools)
 			.Must(x => false)
 			.When(x => x.schools
-				.Select(s => s.Key)
+				.Select(s => s.Id)
 				.Where(id => id != 0)
 				.Except(x.existing.Schools.Select(s => s.Id))
 				.Any())
 			.WithMessage("Added Schools must have an Id of zero.")
 			.OverridePropertyName(nameof(Application.Schools));
 
-		RuleForEach(x => x.schools.Select(s => s.Value))
+		RuleForEach(x => x.schools.Select(s => s.SchoolDetails))
 			.SetValidator(new SchoolValidator())
 			.OverridePropertyName(nameof(SchoolDetails));
 
 		RuleForEach(x => x.schools.Join(
 			x.existing.Schools,
-			updated => updated.Key,
+			updated => updated.Id,
 			existing => existing.Id,
-			(updated, existing) => new SchoolDetailsPair(updated.Value, existing.Details)))
+			(updated, existing) => new SchoolDetailsPair(updated.SchoolDetails, existing.Details)))
 			.SetValidator(new UpdateSchoolValidator())
 			.OverridePropertyName(nameof(School));
 	}

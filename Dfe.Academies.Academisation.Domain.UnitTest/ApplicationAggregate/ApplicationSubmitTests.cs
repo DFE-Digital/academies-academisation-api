@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationType.FormAMat,
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, SchoolDetails>());
+				new List<School>());
 
 			// act
 			var result = subject.Submit();
@@ -47,7 +47,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, SchoolDetails>()
+				new List<School>()
 				);
 
 			// act
@@ -70,10 +70,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, SchoolDetails>
+				new List<School>
 				{
-					{ 1, _fixture.Create<SchoolDetails>() },
-					{ 2, _fixture.Create<SchoolDetails>() }
+					_fixture.Create<School>(),
+					_fixture.Create<School>()
 				});
 
 			// act
@@ -96,9 +96,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, SchoolDetails>
+				new List<School>
 				{
-					{ 1, _fixture.Create<SchoolDetails>() },
+					 _fixture.Create<School>()
 				});
 
 			// act
@@ -121,10 +121,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new Dictionary<int, SchoolDetails>
+				new List<School>
 				{
-					{ 1, _fixture.Create<SchoolDetails>() },
-					{ 2, _fixture.Create<SchoolDetails>() }
+					_fixture.Create<School>(),
+					_fixture.Create<School>() 
 				});
 
 			// act
