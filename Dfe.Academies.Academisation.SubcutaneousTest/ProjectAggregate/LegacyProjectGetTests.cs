@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Data;
+﻿using AutoFixture;
+using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
