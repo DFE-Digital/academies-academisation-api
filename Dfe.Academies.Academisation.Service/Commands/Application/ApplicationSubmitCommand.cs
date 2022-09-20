@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Application;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application
@@ -59,9 +60,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				case CommandResult:
 					return domainServiceResult;
-				case CreateValidationErrorResult<IProject>:
-					// ToDo map this type
-					return domainServiceResult;
+				case CreateValidationErrorResult<IProject> createValidationErrorResult:
+					return createValidationErrorResult.MapToPayloadType<LegacyProjectServiceModel>();
 				case CreateSuccessResult<IProject> createSuccessResult:
 					return createSuccessResult.MapToPayloadType(p => p.MapToServiceModel());
 				default:
