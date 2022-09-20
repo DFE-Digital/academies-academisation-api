@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -77,16 +78,18 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPost("submit/{id}", Name = "Submit")]
+		[HttpPost("submit/{id:int}", Name = "Submit")]
 		public async Task<ActionResult> Submit(int id)
 		{
 			var result = await _applicationSubmitCommand.Execute(id);
 
 			return result switch
 			{
-				CommandSuccessResult => Ok(),
 				NotFoundCommandResult => NotFound(),
 				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				CommandSuccessResult => Ok(),
+				CreateValidationErrorResult<LegacyProjectServiceModel> createValidationErrorResult => BadRequest(createValidationErrorResult.ValidationErrors),
+				CreateSuccessResult<LegacyProjectServiceModel> createSuccessResult => CreatedAtRoute("GetLegacyProject", new { id = createSuccessResult.Payload.Id }, createSuccessResult.Payload),
 				_ => throw new NotImplementedException()
 			};
 		}

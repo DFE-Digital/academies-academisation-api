@@ -4,6 +4,6 @@ namespace Dfe.Academies.Academisation.IService.Commands.Application
 {
 	public interface IApplicationSubmitCommand
 	{
-		Task<CommandResult> Execute(int applicationId);
+		Task<CommandOrCreateResult> Execute(int applicationId);
 	}
 }

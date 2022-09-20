@@ -25,5 +25,9 @@ public interface IApplication
 		IEnumerable<UpdateSchoolParameter> schools
 		);
 
+	/// <summary>
+	/// Be careful of using this method outside the Domain Layer - this only submits the Application but doesn't create the Project.
+	/// Use the IApplicationSubmissionService to submit the Application and (conditionally) create a Project. 
+	/// </summary>
 	CommandResult Submit();
 }
