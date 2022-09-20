@@ -134,14 +134,19 @@ public class ApplicationUpdateTests
 				existingApplication.Schools.ToArray()[0],
 				applicationSchoolServiceModel with
 				{
-					Id = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Id
+					Id = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Id,
+					Loans = new List<LoanServiceModel>()
+					{
+						applicationSchoolServiceModel.Loans.ToArray()[0] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[0].LoanId},
+						applicationSchoolServiceModel.Loans.ToArray()[1] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[1].LoanId},
+						applicationSchoolServiceModel.Loans.ToArray()[2] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[2].LoanId}
+					}
 				},
 				existingApplication.Schools.ToArray()[2]
 			}
 		};
 
-		//Assert.Equivalent(expectedApplication, gotApplication);
-		expectedApplication.Should().BeEquivalentTo(gotApplication);
+		Assert.Equivalent(expectedApplication, gotApplication);
 	}
 
 	[Fact]
