@@ -62,25 +62,25 @@ public class AcademisationContext : DbContext
 
 	private void SetModifiedAndCreatedDates()
 	{
-		var timestamp = DateTime.UtcNow;
+		//var timestamp = DateTime.UtcNow;
 
-		var entities = ChangeTracker.Entries<BaseEntity>().ToList();
+		//var entities = ChangeTracker.Entries<BaseEntity>().ToList();
 
-		foreach (var entity in entities.Where(e => e.State == EntityState.Added))
-		{
-			entity.Entity.CreatedOn = timestamp;
-			entity.Entity.LastModifiedOn = timestamp;
-		}
+		//foreach (var entity in entities.Where(e => e.State == EntityState.Added))
+		//{
+		//	entity.Entity.CreatedOn = timestamp;
+		//	entity.Entity.LastModifiedOn = timestamp;
+		//}
 
-		foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
-		{
-			entity.Entity.LastModifiedOn = timestamp;
-		}
+		//foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
+		//{
+		//	entity.Entity.LastModifiedOn = timestamp;
+		//}
 	}
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.HasDefaultSchema("academisation");
+		modelBuilder.HasDefaultSchema("sdd");
 		modelBuilder.Entity<ApplicationState>()
 			.Property(e => e.ApplicationType)
 			.HasConversion<string>();

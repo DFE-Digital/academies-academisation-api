@@ -82,8 +82,8 @@ internal static class LegacyProjectServiceModelMapper
 			SchoolBudgetInformationSectionComplete = project.Details.SchoolBudgetInformationSectionComplete,
 
 			// pupil schools forecast
-			CurrentYearCapacity = project.Details.CurrentYearCapacity,
-			CurrentYearPupilNumbers = project.Details.CurrentYearPupilNumbers,
+			//CurrentYearCapacity = project.Details.CurrentYearCapacity,
+			//CurrentYearPupilNumbers = project.Details.CurrentYearPupilNumbers,
 			YearOneProjectedCapacity = project.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = project.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = project.Details.YearTwoProjectedCapacity,

@@ -73,8 +73,8 @@ public record LegacyProjectServiceModel(
 	bool? SchoolBudgetInformationSectionComplete = null,
 
 	// pupil schools forecast
-	int? CurrentYearCapacity = null,
-	int? CurrentYearPupilNumbers = null,
+	//int? CurrentYearCapacity = null,
+	//int? CurrentYearPupilNumbers = null,
 	int? YearOneProjectedCapacity = null,
 	int? YearOneProjectedPupilNumbers = null,
 	int? YearTwoProjectedCapacity = null,

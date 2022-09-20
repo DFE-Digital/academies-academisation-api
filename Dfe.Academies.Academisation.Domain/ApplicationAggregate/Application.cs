@@ -20,16 +20,16 @@ public class Application : IApplication
 
 	public Application(
 		int applicationId,
-		DateTime createdOn,
-		DateTime lastModifiedOn,
+		//DateTime createdOn,
+		//DateTime lastModifiedOn,
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
 		Dictionary<int, SchoolDetails> schools)
 	{
 		ApplicationId = applicationId;
-		CreatedOn = createdOn;
-		LastModifiedOn = lastModifiedOn;
+		//CreatedOn = createdOn;
+		//LastModifiedOn = lastModifiedOn;
 		ApplicationType = applicationType;
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();

@@ -13,13 +13,15 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 
 	public ConversionAdvisoryBoardDecision(
 		int id,
-		AdvisoryBoardDecisionDetails details,
-		DateTime createdOn,
-		DateTime lastModifiedOn) : this(details)
+		AdvisoryBoardDecisionDetails details
+		//DateTime createdOn,
+		//DateTime lastModifiedOn
+		) 
+		: this(details)
 	{
 		Id = id;
-		CreatedOn = createdOn;
-		LastModifiedOn = lastModifiedOn;
+		//CreatedOn = createdOn;
+		//LastModifiedOn = lastModifiedOn;
 	}
 
 	private static readonly ConversionAdvisoryBoardDecisionValidator Validator = new();

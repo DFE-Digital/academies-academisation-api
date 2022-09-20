@@ -41,14 +41,14 @@ public class LegacyProjectController : ControllerBase
 	}
 
 
-	[HttpPatch("project", Name = "PatchLegacyProject")]
-	public async Task<ActionResult<LegacyProjectServiceModel>> Patch(LegacyProjectServiceModel projectUpdate)
-	{
-		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate);				
+	[HttpPatch("project/{id}", Name = "PatchLegacyProject")]
+	public async Task<ActionResult<LegacyProjectServiceModel>> Patch(int id, LegacyProjectServiceModel projectUpdate)
+	{		
+		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate with { Id = id });				
 
 		return result switch
 		{
-			CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(projectUpdate.Id)),
+			CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(id)),
 			NotFoundCommandResult => NotFound(),
 			CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 			_ => throw new NotImplementedException()

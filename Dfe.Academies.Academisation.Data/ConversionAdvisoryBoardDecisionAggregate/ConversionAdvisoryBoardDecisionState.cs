@@ -49,8 +49,8 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
 				.ToHashSet(),
 			AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,
-			CreatedOn = decision.CreatedOn,
-			LastModifiedOn = decision.LastModifiedOn
+			//CreatedOn = decision.CreatedOn,
+			//LastModifiedOn = decision.LastModifiedOn
 		};
 	}
 
@@ -71,6 +71,6 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
 			DecisionMadeBy
 		);
 
-		return new ConversionAdvisoryBoardDecision(Id, details, CreatedOn, LastModifiedOn);
+		return new ConversionAdvisoryBoardDecision(Id, details);
 	}
 }
