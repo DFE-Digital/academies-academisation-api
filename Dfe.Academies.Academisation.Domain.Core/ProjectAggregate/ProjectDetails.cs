@@ -2,6 +2,7 @@
 
 public record ProjectDetails(
 	int Urn,
+	int? IfdPipelineId = null,
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
@@ -39,10 +40,18 @@ public record ProjectDetails(
 	string? ConversionSupportGrantChangeReason = null,
 
 	// general info
-	string? PublishedAdmissionNumber = null, // could be number
-	string? PartOfPfiScheme = null, // could be enum
+	string? SchoolPhase = null,
+	string? AgeRange = null,
+	string? SchoolType = null,
+	int? ActualPupilNumbers = null,
+	int? Capacity = null,
+	string? PublishedAdmissionNumber = null,
+	decimal? PercentageFreeSchoolMeals = null,
+	string? PartOfPfiScheme = null, 
 	string? ViabilityIssues = null,
-	string? FinancialDeficit = null, // could be number
+	string? FinancialDeficit = null,
+	string? DiocesanTrust = null,
+	decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = null,
 	decimal? DistanceFromSchoolToTrustHeadquarters = null,
 	string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation = null,
 	string? MemberOfParliamentParty = null,
@@ -71,9 +80,7 @@ public record ProjectDetails(
 	string? SchoolBudgetInformationAdditionalInformation = null,
 	bool? SchoolBudgetInformationSectionComplete = null,
 
-	// pupil schools forecast
-	int? CurrentYearCapacity = null,
-	int? CurrentYearPupilNumbers = null,
+	// pupil schools forecast	
 	int? YearOneProjectedCapacity = null,
 	int? YearOneProjectedPupilNumbers = null,
 	int? YearTwoProjectedCapacity = null,
@@ -85,7 +92,5 @@ public record ProjectDetails(
 	// key stage performance tables
 	string? KeyStage2PerformanceAdditionalInformation = null,
 	string? KeyStage4PerformanceAdditionalInformation = null,
-	string? KeyStage5PerformanceAdditionalInformation = null,
-	string? Upin = null,
-	string? NewAcademyUrn = null
+	string? KeyStage5PerformanceAdditionalInformation = null	
 );

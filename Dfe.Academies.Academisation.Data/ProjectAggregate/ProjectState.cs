@@ -9,11 +9,10 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate;
 public class ProjectState : BaseEntity
 {
 	public int Urn { get; set; }
-	public int Laestab { get; set; }
+	public int? IfdPipelineId { get; set; }
 	public string? SchoolName { get; set; }
 	public string? LocalAuthority { get; set; }
 	public string? ApplicationReferenceNumber { get; set; }
-	public string? UkPrn { get; set; }
 	public string? ProjectStatus { get; set; }
 	public DateTime? ApplicationReceivedDate { get; set; }
 	public DateTime? AssignedDate { get; set; }
@@ -48,10 +47,18 @@ public class ProjectState : BaseEntity
 	public string? ConversionSupportGrantChangeReason { get; set; }
 
 	//general info
+	public string? SchoolPhase { get; set; }
+	public string? AgeRange { get; set; }
+	public string? SchoolType { get; set; }
+	public int? ActualPupilNumbers { get; set; }
+	public int? Capacity { get; set; }
 	public string? PublishedAdmissionNumber { get; set; }
+	public decimal? PercentageFreeSchoolMeals { get; set; }
 	public string? PartOfPfiScheme { get; set; }
 	public string? ViabilityIssues { get; set; }
 	public string? FinancialDeficit { get; set; }
+	public string? DiocesanTrust { get; set; }	
+	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; set; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }
 	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; set; }
 	public string? MemberOfParliamentParty { get; set; }
@@ -81,8 +88,6 @@ public class ProjectState : BaseEntity
 	public bool? SchoolBudgetInformationSectionComplete { get; set; }
 
 	// pupil schools forecast
-	public int? CurrentYearCapacity { get; set; }
-	public int? CurrentYearPupilNumbers { get; set; }
 	public int? YearOneProjectedCapacity { get; set; }
 	public int? YearOneProjectedPupilNumbers { get; set; }
 	public int? YearTwoProjectedCapacity { get; set; }
@@ -94,14 +99,13 @@ public class ProjectState : BaseEntity
 	// key stage performance tables
 	public string? KeyStage2PerformanceAdditionalInformation { get; set; }
 	public string? KeyStage4PerformanceAdditionalInformation { get; set; }
-	public string? KeyStage5PerformanceAdditionalInformation { get; set; }
-	public string? Upin { get; set; }
-	public string? NewAcademyUrn { get; set; }
+	public string? KeyStage5PerformanceAdditionalInformation { get; set; }	
 
 	internal Project MapToDomain()
 	{
 		ProjectDetails projectDetails = new(Urn)
-		{
+		{		
+			IfdPipelineId = IfdPipelineId,
 			SchoolName = SchoolName,
 			LocalAuthority = LocalAuthority,
 			ApplicationReferenceNumber = ApplicationReferenceNumber,
@@ -139,10 +143,18 @@ public class ProjectState : BaseEntity
 			ConversionSupportGrantChangeReason = ConversionSupportGrantChangeReason,
 
 			// general info
+			SchoolPhase = SchoolPhase,
+			AgeRange = AgeRange,
+			SchoolType = SchoolType,
+			ActualPupilNumbers = ActualPupilNumbers,
+			Capacity = Capacity,
 			PublishedAdmissionNumber = PublishedAdmissionNumber,
+			PercentageFreeSchoolMeals = PercentageFreeSchoolMeals,
 			PartOfPfiScheme = PartOfPfiScheme,
 			ViabilityIssues = ViabilityIssues,
 			FinancialDeficit = FinancialDeficit,
+			DiocesanTrust = DiocesanTrust,
+			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentParty = MemberOfParliamentParty,
@@ -171,9 +183,7 @@ public class ProjectState : BaseEntity
 			SchoolBudgetInformationAdditionalInformation = SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast
-			CurrentYearCapacity = CurrentYearCapacity,
-			CurrentYearPupilNumbers = CurrentYearPupilNumbers,
+			// pupil schools forecast			
 			YearOneProjectedCapacity = YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = YearTwoProjectedCapacity,
@@ -185,9 +195,7 @@ public class ProjectState : BaseEntity
 			// key stage performance tables
 			KeyStage2PerformanceAdditionalInformation = KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = KeyStage5PerformanceAdditionalInformation,
-			Upin = Upin,
-			NewAcademyUrn = NewAcademyUrn
+			KeyStage5PerformanceAdditionalInformation = KeyStage5PerformanceAdditionalInformation,			
 		};
 
 		return new Project(Id, projectDetails);
@@ -199,6 +207,7 @@ public class ProjectState : BaseEntity
 		{
 			Id = project.Id,
 			Urn = project.Details.Urn,
+			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
@@ -236,10 +245,18 @@ public class ProjectState : BaseEntity
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
 
 			// general info
+			SchoolPhase = project.Details.SchoolPhase,
+			AgeRange = project.Details.AgeRange,
+			SchoolType = project.Details.SchoolType,
+			ActualPupilNumbers = project.Details.ActualPupilNumbers,
+			Capacity = project.Details.Capacity,
 			PublishedAdmissionNumber = project.Details.PublishedAdmissionNumber,
+			PercentageFreeSchoolMeals = project.Details.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = project.Details.PartOfPfiScheme,
 			ViabilityIssues = project.Details.ViabilityIssues,
 			FinancialDeficit = project.Details.FinancialDeficit,
+			DiocesanTrust = project.Details.DiocesanTrust,
+			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = project.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = project.Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = project.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentParty = project.Details.MemberOfParliamentParty,
@@ -268,9 +285,7 @@ public class ProjectState : BaseEntity
 			SchoolBudgetInformationAdditionalInformation = project.Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = project.Details.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast
-			CurrentYearCapacity = project.Details.CurrentYearCapacity,
-			CurrentYearPupilNumbers = project.Details.CurrentYearPupilNumbers,
+			// pupil schools forecast			
 			YearOneProjectedCapacity = project.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = project.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = project.Details.YearTwoProjectedCapacity,
@@ -282,9 +297,7 @@ public class ProjectState : BaseEntity
 			// key stage performance tables
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
-			Upin = project.Details.Upin,
-			NewAcademyUrn = project.Details.NewAcademyUrn
+			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation			
 		};
 	}
 }

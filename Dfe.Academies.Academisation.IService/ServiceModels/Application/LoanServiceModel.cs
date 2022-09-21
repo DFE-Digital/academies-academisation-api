@@ -4,8 +4,8 @@
 		int LoanId,
 		//// MR:- below props from A2C-SIP - SchoolLoan object
 		decimal? Amount,
-		string Purpose,
-		string Provider,
+		string? Purpose,
+		string? Provider,
 		decimal? InterestRate,
 		string? Schedule
 	);
