@@ -68,7 +68,7 @@ public class ProjectUpdateTests
 			.Create();
 
 		// Act		
-		var updateResult = await legacyProjectController.Patch(updatedProject);
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 
 		// Assert
 		DfeAssert.OkObjectResult(updateResult);
@@ -146,7 +146,7 @@ public class ProjectUpdateTests
 		};
 
 		// Act		
-		var updateResult = await legacyProjectController.Patch(updatedProject);
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 
 		// Assert
 		DfeAssert.OkObjectResult(updateResult);

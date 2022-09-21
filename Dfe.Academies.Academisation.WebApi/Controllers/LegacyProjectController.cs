@@ -15,7 +15,7 @@ public class LegacyProjectController : ControllerBase
 	private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
 	private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
 
-	public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery, ILegacyProjectListGetQuery legacyProjectListGetQuery, 
+	public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery, ILegacyProjectListGetQuery legacyProjectListGetQuery,
 		ILegacyProjectUpdateCommand legacyProjectUpdateCommand)
 	{
 		_legacyProjectGetQuery = legacyProjectGetQuery;
@@ -24,7 +24,10 @@ public class LegacyProjectController : ControllerBase
 	}
 
 	[HttpGet("projects", Name = "GetLegacyProjects")]
-	public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>>GetProjects([FromQuery] string? states,
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>> GetProjects([FromQuery] string? states,
 		[FromQuery] int page = 1,
 		[FromQuery] int count = 50,
 		[FromQuery] int? urn = null)
@@ -32,8 +35,11 @@ public class LegacyProjectController : ControllerBase
 		var result = await _legacyProjectListGetQuery.GetProjects(states, page, count, urn);
 		return result is null ? NotFound() : Ok(result);
 	}
-	
+
 	[HttpGet("project/{id}", Name = "GetLegacyProject")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
 	{
 		var result = await _legacyProjectGetQuery.Execute(id);
@@ -41,17 +47,20 @@ public class LegacyProjectController : ControllerBase
 	}
 
 
-	[HttpPatch("project", Name = "PatchLegacyProject")]
-	public async Task<ActionResult<LegacyProjectServiceModel>> Patch(LegacyProjectServiceModel projectUpdate)
+	[HttpPatch("project/{id}", Name = "PatchLegacyProject")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<ActionResult<LegacyProjectServiceModel>> Patch(int id, LegacyProjectServiceModel projectUpdate)
 	{
-		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate);				
+		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate with { Id = id });
 
 		return result switch
 		{
-			CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(projectUpdate.Id)),
+			CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(id)),
 			NotFoundCommandResult => NotFound(),
 			CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 			_ => throw new NotImplementedException()
-		};		
+		};
 	}
 }
