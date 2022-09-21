@@ -12,6 +12,7 @@ internal static class LegacyProjectServiceModelMapper
 			project.Details.Urn
 			)
 		{
+			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
@@ -49,10 +50,18 @@ internal static class LegacyProjectServiceModelMapper
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
 
 			// general info
+			SchoolPhase = project.Details.SchoolPhase,
+			AgeRange = project.Details.AgeRange,
+			SchoolType = project.Details.SchoolType,
+			ActualPupilNumbers = project.Details.ActualPupilNumbers,
+			Capacity = project.Details.Capacity,
 			PublishedAdmissionNumber = project.Details.PublishedAdmissionNumber,
+			PercentageFreeSchoolMeals = project.Details.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = project.Details.PartOfPfiScheme,
 			ViabilityIssues = project.Details.ViabilityIssues,
 			FinancialDeficit = project.Details.FinancialDeficit,
+			DiocesanTrust = project.Details.DiocesanTrust,
+			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = project.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = project.Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = project.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentParty = project.Details.MemberOfParliamentParty,
@@ -81,9 +90,7 @@ internal static class LegacyProjectServiceModelMapper
 			SchoolBudgetInformationAdditionalInformation = project.Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = project.Details.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast
-			CurrentYearCapacity = project.Details.CurrentYearCapacity,
-			CurrentYearPupilNumbers = project.Details.CurrentYearPupilNumbers,
+			// pupil schools forecast			
 			YearOneProjectedCapacity = project.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = project.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = project.Details.YearTwoProjectedCapacity,
@@ -95,9 +102,7 @@ internal static class LegacyProjectServiceModelMapper
 			// key stage performance tables
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
-			Upin = project.Details.Upin,
-			NewAcademyUrn = project.Details.NewAcademyUrn
+			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,			
 		};
 
 		return serviceModel;

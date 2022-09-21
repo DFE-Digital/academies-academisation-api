@@ -85,6 +85,7 @@ public class Project : IProject
 		Details = new ProjectDetails(detailsToUpdate.Urn)
 		{
 			Urn = detailsToUpdate.Urn,
+			IfdPipelineId = detailsToUpdate.IfdPipelineId,
 			SchoolName = detailsToUpdate.SchoolName,
 			LocalAuthority = detailsToUpdate.LocalAuthority,
 			ApplicationReferenceNumber = detailsToUpdate.ApplicationReferenceNumber,
@@ -122,10 +123,18 @@ public class Project : IProject
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
 
 			// general info
+			SchoolPhase = detailsToUpdate.SchoolPhase,
+			AgeRange = detailsToUpdate.AgeRange,
+			SchoolType = detailsToUpdate.SchoolType,
+			ActualPupilNumbers = detailsToUpdate.ActualPupilNumbers,
+			Capacity = detailsToUpdate.Capacity,
 			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber,
+			PercentageFreeSchoolMeals = detailsToUpdate.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = detailsToUpdate.PartOfPfiScheme,
 			ViabilityIssues = detailsToUpdate.ViabilityIssues,
 			FinancialDeficit = detailsToUpdate.FinancialDeficit,
+			DiocesanTrust = detailsToUpdate.DiocesanTrust,
+			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = detailsToUpdate.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty,
@@ -154,9 +163,7 @@ public class Project : IProject
 			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast
-			CurrentYearCapacity = detailsToUpdate.CurrentYearCapacity,
-			CurrentYearPupilNumbers = detailsToUpdate.CurrentYearPupilNumbers,
+			// pupil schools forecast			
 			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = detailsToUpdate.YearTwoProjectedCapacity,
@@ -168,9 +175,7 @@ public class Project : IProject
 			// key stage performance tables
 			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
-			Upin = detailsToUpdate.Upin,
-			NewAcademyUrn = detailsToUpdate.NewAcademyUrn		
+			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,				
 		};
 
 		return new CommandSuccessResult();
