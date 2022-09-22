@@ -2,7 +2,6 @@
 
 public record LegacyProjectServiceModel(
 	int Id,
-	int? IfdPipelineId = null,
 	int? Urn = null,
 	string? SchoolName = null,
 	string? LocalAuthority = null,
@@ -40,19 +39,11 @@ public record LegacyProjectServiceModel(
 	decimal? ConversionSupportGrantAmount = null,  // had to make this nullable or move it to the top
 	string? ConversionSupportGrantChangeReason = null,
 
-	// general info
-	string? SchoolPhase = null,
-	string? AgeRange = null,
-	string? SchoolType = null,
-	int? ActualPupilNumbers = null,
-	int? Capacity = null,
-	string? PublishedAdmissionNumber = null,
-	decimal? PercentageFreeSchoolMeals = null,
+	// general info	
+	string? PublishedAdmissionNumber = null,	
 	string? PartOfPfiScheme = null,
 	string? ViabilityIssues = null,
-	string? FinancialDeficit = null,
-	string? DiocesanTrust = null,
-	decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = null,
+	string? FinancialDeficit = null,	
 	decimal? DistanceFromSchoolToTrustHeadquarters = null,
 	string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation = null,
 	string? MemberOfParliamentParty = null,

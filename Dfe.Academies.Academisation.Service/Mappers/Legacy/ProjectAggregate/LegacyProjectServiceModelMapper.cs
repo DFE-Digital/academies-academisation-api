@@ -12,7 +12,6 @@ internal static class LegacyProjectServiceModelMapper
 			project.Details.Urn
 			)
 		{
-			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
@@ -49,19 +48,11 @@ internal static class LegacyProjectServiceModelMapper
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,  // had to make this nullable or move it to the top
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
 
-			// general info
-			SchoolPhase = project.Details.SchoolPhase,
-			AgeRange = project.Details.AgeRange,
-			SchoolType = project.Details.SchoolType,
-			ActualPupilNumbers = project.Details.ActualPupilNumbers,
-			Capacity = project.Details.Capacity,
-			PublishedAdmissionNumber = project.Details.PublishedAdmissionNumber,
-			PercentageFreeSchoolMeals = project.Details.PercentageFreeSchoolMeals,
+			// general info			
+			PublishedAdmissionNumber = project.Details.PublishedAdmissionNumber,			
 			PartOfPfiScheme = project.Details.PartOfPfiScheme,
 			ViabilityIssues = project.Details.ViabilityIssues,
-			FinancialDeficit = project.Details.FinancialDeficit,
-			DiocesanTrust = project.Details.DiocesanTrust,
-			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = project.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
+			FinancialDeficit = project.Details.FinancialDeficit,			
 			DistanceFromSchoolToTrustHeadquarters = project.Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = project.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentParty = project.Details.MemberOfParliamentParty,
