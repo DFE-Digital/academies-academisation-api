@@ -1,11 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 public record LegacyProjectServiceModel(
 	int Id,
 	int? Urn = null,
-	int? IfdPipelineId = null,
+	[property: JsonIgnore] int? IfdPipelineId = null,
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
@@ -43,18 +43,18 @@ public record LegacyProjectServiceModel(
 	string? ConversionSupportGrantChangeReason = null,
 
 	// general info		
-	string? SchoolPhase = null,
-	string? AgeRange = null,
-	string? SchoolType = null,
-	int? ActualPupilNumbers = null,
-	int? Capacity = null,
+	[property: JsonIgnore] string? SchoolPhase = null,
+	[property: JsonIgnore] string? AgeRange = null,
+	[property: JsonIgnore] string? SchoolType = null,
+	[property: JsonIgnore] int? ActualPupilNumbers = null,
+	[property: JsonIgnore] int? Capacity = null,
 	string? PublishedAdmissionNumber = null,
-	decimal? PercentageFreeSchoolMeals = null,
+	[property: JsonIgnore] decimal? PercentageFreeSchoolMeals = null,
 	string? PartOfPfiScheme = null,
 	string? ViabilityIssues = null,
 	string? FinancialDeficit = null,
-	string? DiocesanTrust = null,
-	decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = null,
+	[property: JsonIgnore] string? DiocesanTrust = null,
+	[property: JsonIgnore] decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = null,
 	decimal? DistanceFromSchoolToTrustHeadquarters = null,
 	string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation = null,
 	string? MemberOfParliamentParty = null,

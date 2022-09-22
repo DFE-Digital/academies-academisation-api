@@ -64,6 +64,34 @@ public class ProjectUpdateTests
 		Assert.Equivalent(updatedProject, project);
 	}
 
+
+	[Fact]
+	public async Task ProjectExists_FullProjectIsReturnedOnGet()
+	{
+		// Arrange
+		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
+			_legacyProjectUpdateCommand);
+		var existingProject = _fixture.Create<ProjectState>();
+		await _context.Projects.AddAsync(existingProject);
+		await _context.SaveChangesAsync();
+
+		var updatedProject = _fixture.Build<LegacyProjectServiceModel>()
+			.With(p => p.Id, existingProject.Id)
+			.With(p => p.Urn, existingProject.Urn)
+			.Create();
+
+		// Act		
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
+		DfeAssert.OkObjectResult(updateResult);
+
+		var getResult = await legacyProjectController.Get(updatedProject.Id);
+
+		// Assert
+		(_, var project) = DfeAssert.OkObjectResult(getResult);
+
+		Assert.Equivalent(updatedProject, project);
+	}
+
 	[Fact]
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
