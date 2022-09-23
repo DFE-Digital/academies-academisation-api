@@ -1,8 +1,11 @@
-﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+﻿using Newtonsoft.Json;
+
+namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 public record LegacyProjectServiceModel(
 	int Id,
 	int? Urn = null,
+	[property: JsonIgnore] int? IfdPipelineId = null,
 	string? SchoolName = null,
 	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
@@ -39,11 +42,19 @@ public record LegacyProjectServiceModel(
 	decimal? ConversionSupportGrantAmount = null,  // had to make this nullable or move it to the top
 	string? ConversionSupportGrantChangeReason = null,
 
-	// general info	
-	string? PublishedAdmissionNumber = null,	
+	// general info		
+	[property: JsonIgnore] string? SchoolPhase = null,
+	[property: JsonIgnore] string? AgeRange = null,
+	[property: JsonIgnore] string? SchoolType = null,
+	[property: JsonIgnore] int? ActualPupilNumbers = null,
+	[property: JsonIgnore] int? Capacity = null,
+	string? PublishedAdmissionNumber = null,
+	[property: JsonIgnore] decimal? PercentageFreeSchoolMeals = null,
 	string? PartOfPfiScheme = null,
 	string? ViabilityIssues = null,
-	string? FinancialDeficit = null,	
+	string? FinancialDeficit = null,
+	[property: JsonIgnore] string? DiocesanTrust = null,
+	[property: JsonIgnore] decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = null,
 	decimal? DistanceFromSchoolToTrustHeadquarters = null,
 	string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation = null,
 	string? MemberOfParliamentParty = null,
@@ -72,9 +83,7 @@ public record LegacyProjectServiceModel(
 	string? SchoolBudgetInformationAdditionalInformation = null,
 	bool? SchoolBudgetInformationSectionComplete = null,
 
-	// pupil schools forecast
-	int? CurrentYearCapacity = null,
-	int? CurrentYearPupilNumbers = null,
+	// pupil schools forecast	
 	int? YearOneProjectedCapacity = null,
 	int? YearOneProjectedPupilNumbers = null,
 	int? YearTwoProjectedCapacity = null,
@@ -86,7 +95,5 @@ public record LegacyProjectServiceModel(
 	// key stage performance tables
 	string? KeyStage2PerformanceAdditionalInformation = null,
 	string? KeyStage4PerformanceAdditionalInformation = null,
-	string? KeyStage5PerformanceAdditionalInformation = null,
-	string? Upin = null,
-	string? NewAcademyUrn = null
+	string? KeyStage5PerformanceAdditionalInformation = null
 );
