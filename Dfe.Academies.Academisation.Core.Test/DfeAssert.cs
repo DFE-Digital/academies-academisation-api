@@ -22,6 +22,14 @@ public class DfeAssert
 		Assert.Contains(propertyName, error.PropertyName);
 	}
 
+	public static void CommandValidationError(CommandResult commandResult, string propertyName, string errorMessage)
+	{
+		var validationErrorResult = Assert.IsAssignableFrom<CommandValidationErrorResult>(commandResult);
+		var error = Assert.Single(validationErrorResult.ValidationErrors);
+		Assert.Contains(propertyName, error.PropertyName);
+		Assert.Contains(errorMessage, error.ErrorMessage);
+	}
+
 	public static Tuple<CreatedAtRouteResult, T> CreatedAtRoute<T>(ActionResult<T> result, string routeName)
 	{
 		if (result.Result is BadRequestObjectResult badRequestObjectResult)
