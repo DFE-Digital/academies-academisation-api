@@ -215,6 +215,28 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
+	public void AddNewSchoolZeroUrn___ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
+		Application expected = Clone(subject);
+
+		var schoolsUpdated = new List<UpdateSchoolParameter>();
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with { SchoolDetails = _fixture.Create<SchoolDetails>() with { Urn = 0 } });
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		DfeAssert.CommandValidationError(result, nameof(SchoolDetails.Urn));
+		Assert.Equivalent(expected, subject);
+	}
+
+	[Fact]
 	public void UpdateExistingSchoolInvalidEmail___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
