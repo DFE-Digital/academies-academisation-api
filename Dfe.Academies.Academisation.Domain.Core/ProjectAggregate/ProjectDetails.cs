@@ -72,6 +72,13 @@ public record ProjectDetails(
 	string? EqualitiesImpactAssessmentConsidered = null,
 	bool? RisksAndIssuesSectionComplete = null,
 
+	// legal requirements
+	YesNoNotApplicable? GoverningBodyResolution = null,
+	YesNoNotApplicable? Consultation = null,
+	YesNoNotApplicable? DiocesanConsent = null,
+	YesNoNotApplicable? FoundationConsent = null,
+	bool? LegalRequirementsSectionComplete = null,
+	
 	// school budget info
 	decimal? RevenueCarryForwardAtEndMarchCurrentYear = null,
 	decimal? ProjectedRevenueBalanceAtEndMarchNextYear = null,

@@ -81,6 +81,13 @@ internal static class LegacyProjectServiceModelMapper
 			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
 
+			// legal requirements
+			Consultation = project.Details.Consultation,
+			GoverningBodyResolution = project.Details.GoverningBodyResolution,
+			DiocesanConsent = project.Details.DiocesanConsent,
+			FoundationConsent = project.Details.FoundationConsent,
+			LegalRequirementsSectionComplete = project.Details.LegalRequirementsSectionComplete,
+			
 			// school budget info
 			RevenueCarryForwardAtEndMarchCurrentYear = project.Details.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = project.Details.ProjectedRevenueBalanceAtEndMarchNextYear,

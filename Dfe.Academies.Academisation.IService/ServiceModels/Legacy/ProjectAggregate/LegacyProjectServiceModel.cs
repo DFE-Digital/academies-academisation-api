@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Newtonsoft.Json;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
@@ -75,6 +76,13 @@ public record LegacyProjectServiceModel(
 	string? EqualitiesImpactAssessmentConsidered = null,
 	bool? RisksAndIssuesSectionComplete = null,
 
+	// legal requirements
+	YesNoNotApplicable? GoverningBodyResolution = null,
+	YesNoNotApplicable? Consultation = null,
+	YesNoNotApplicable? DiocesanConsent = null,
+	YesNoNotApplicable? FoundationConsent = null,
+	bool? LegalRequirementsSectionComplete = null,
+	
 	// school budget info
 	decimal? RevenueCarryForwardAtEndMarchCurrentYear = null,
 	decimal? ProjectedRevenueBalanceAtEndMarchNextYear = null,
