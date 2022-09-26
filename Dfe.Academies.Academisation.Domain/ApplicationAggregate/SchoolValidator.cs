@@ -17,6 +17,9 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
 				.EmailAddress();
 			RuleFor(x => x.SchoolName)
 				.NotEmpty();
+			RuleFor(x => x.Urn)
+				.GreaterThan(0);
+
 		}
 	}
 }
