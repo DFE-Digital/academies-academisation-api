@@ -17,7 +17,6 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
-using FluentAssertions;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -167,17 +166,22 @@ public class ApplicationUpdateTests
 
 	private async Task<ApplicationServiceModel?> CreateExistingApplication()
 	{
-		ApplicationCreateRequestModel applicationForCreate = _fixture.Create<ApplicationCreateRequestModel>();
+		ApplicationCreateRequestModel applicationForCreate = new (ApplicationType.FormAMat, _fixture.Create<ContributorRequestModel>()) ;
 
 		var createResult = await _applicationCreateCommand.Execute(applicationForCreate);
 		var createSuccessResult = Assert.IsType<CreateSuccessResult<ApplicationServiceModel>>(createResult);
 		int id = createSuccessResult.Payload.ApplicationId;
+		var schools = new List<ApplicationSchoolServiceModel>();
+		schools.Add(_fixture.Create<ApplicationSchoolServiceModel>());
+		schools.Add(_fixture.Create<ApplicationSchoolServiceModel>());
+		schools.Add(_fixture.Create<ApplicationSchoolServiceModel>());
 
 		var applicationToUpdate = _fixture.Create<ApplicationServiceModel>() with
 		{
 			ApplicationId = createSuccessResult.Payload.ApplicationId,
 			ApplicationType = createSuccessResult.Payload.ApplicationType,
-			ApplicationStatus = createSuccessResult.Payload.ApplicationStatus
+			ApplicationStatus = createSuccessResult.Payload.ApplicationStatus,
+			Schools = schools
 		};
 
 		await _applicationController.Update(createSuccessResult.Payload.ApplicationId, applicationToUpdate);

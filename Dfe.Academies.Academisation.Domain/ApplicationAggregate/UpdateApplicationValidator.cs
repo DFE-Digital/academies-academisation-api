@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-internal class UpdateApplicationValidator
+public class UpdateApplicationValidator
 	: AbstractValidator<(
 		ApplicationType type,
 		ApplicationStatus status,
@@ -17,6 +17,18 @@ internal class UpdateApplicationValidator
 			.Equal(ApplicationStatus.InProgress)
 			.WithMessage("Application must be InProgress to use Update")
 			.OverridePropertyName(nameof(Application.ApplicationStatus));
+
+		RuleFor(x => x.existing.ApplicationType)
+			.Must(x => false)
+			.When(x => x.type == ApplicationType.FormASat && x.schools.Count() > 1)
+			.WithMessage("Cannot add more than one school when forming a single academy trust.")
+			.OverridePropertyName(nameof(Application.ApplicationType));
+
+		RuleFor(x => x.existing.ApplicationType)
+			.Must(x => false)
+			.When(x => x.type == ApplicationType.JoinAMat && x.schools.Count() > 1)
+			.WithMessage("Cannot add more than one school when joining a multi academy trust.")
+			.OverridePropertyName(nameof(Application.ApplicationType));
 
 		RuleFor(x => x.status)
 			.Must(x => false)

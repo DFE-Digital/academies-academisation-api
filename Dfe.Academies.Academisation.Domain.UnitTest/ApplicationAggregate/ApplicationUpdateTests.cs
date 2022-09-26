@@ -6,6 +6,7 @@ using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate;
@@ -33,7 +34,7 @@ public class ApplicationUpdateTests
 	public void ExistingIsSubmitted___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.Submitted);
+		Application subject = BuildApplication(ApplicationStatus.Submitted, 1);
 		Application expected = Clone(subject);
 
 		// act
@@ -56,7 +57,7 @@ public class ApplicationUpdateTests
 	public void StatusChanged___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1);
 		Application expected = Clone(subject);
 
 		// act
@@ -80,7 +81,7 @@ public class ApplicationUpdateTests
 	public void TypeChanged___ValidationErrorReturned_NotMutated(ApplicationType updated, ApplicationType existing)
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress, existing);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, existing);
 		Application expected = Clone(subject);
 
 		// act
@@ -103,7 +104,7 @@ public class ApplicationUpdateTests
 	public void ContributorEmailChanged___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1);
 		Application expected = Clone(subject);
 
 		var contributors = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
@@ -134,7 +135,7 @@ public class ApplicationUpdateTests
 	public void AddNewContributorNonZeroId___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1);
 		Application expected = Clone(subject);
 
 		var contributorsUpdated = subject.Contributors.ToDictionary(s => s.Id, s => s.Details);
@@ -160,7 +161,7 @@ public class ApplicationUpdateTests
 	public void AddNewSchoolInvalidEmail___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
 		Application expected = Clone(subject);
 
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
@@ -190,7 +191,7 @@ public class ApplicationUpdateTests
 	public void AddNewSchoolNonZeroId___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
 		Application expected = Clone(subject);
 
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
@@ -217,7 +218,7 @@ public class ApplicationUpdateTests
 	public void UpdateExistingSchoolInvalidEmail___ValidationErrorReturned_NotMutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 3, ApplicationType.FormAMat);
 		Application expected = Clone(subject);
 
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
@@ -247,10 +248,58 @@ public class ApplicationUpdateTests
 	}
 
 	[Fact]
+	public void AddMoreThanOneSchoolToSAP__ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.FormASat);
+		Application expected = Clone(subject);
+
+		var schoolsUpdated = new List<UpdateSchoolParameter>();
+
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>());
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>());
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		DfeAssert.CommandValidationError(result, nameof(ApplicationType), "Cannot add more than one school when forming a single academy trust.");
+		Assert.Equivalent(expected, subject);
+	}
+
+	[Fact]
+	public void AddMoreThanOneSchoolToJoinMAT__ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.JoinAMat);
+		Application expected = Clone(subject);
+
+		var schoolsUpdated = new List<UpdateSchoolParameter>();
+
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>());
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>());
+
+		// act
+		var result = subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			schoolsUpdated);
+
+		// assert
+		DfeAssert.CommandValidationError(result, nameof(ApplicationType), "Cannot add more than one school when joining a multi academy trust.");
+		Assert.Equivalent(expected, subject);
+	}
+
+	[Fact]
 	public void UpdateExistingSchool___SuccessReturned_Mutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 3, ApplicationType.FormAMat);
 
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
@@ -305,7 +354,7 @@ public class ApplicationUpdateTests
 	public void AddNewSchool___SuccessReturned_Mutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
 
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
@@ -345,8 +394,15 @@ public class ApplicationUpdateTests
 		Assert.Equivalent(schoolDetailsToAdd.SchoolDetails, addedSchool.Details);
 	}
 
-	private Application BuildApplication(ApplicationStatus applicationStatus, ApplicationType? type = null)
+	private Application BuildApplication(ApplicationStatus applicationStatus, int numberOfSchools, ApplicationType? type = null)
 	{
+		var schools = new List<School>();
+
+		for (int i = 0; i < numberOfSchools; i++)
+		{
+			schools.Add(_fixture.Create<School>());
+		}
+
 		Application application = new(
 			_fixture.Create<int>(),
 			DateTime.UtcNow,
@@ -354,7 +410,7 @@ public class ApplicationUpdateTests
 			type ?? _fixture.Create<ApplicationType>(),
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
-			_fixture.Create<List<School>>());
+			schools);
 
 		return application;
 	}
