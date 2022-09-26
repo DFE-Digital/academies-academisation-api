@@ -2,13 +2,13 @@
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
 {
-	internal class SubmitJoinAMatApplicationValidator : AbstractValidator<Application>
+	internal class SubmitJoinAMatFormASatApplicationValidator : AbstractValidator<Application>
 	{
-		public SubmitJoinAMatApplicationValidator()
+		public SubmitJoinAMatFormASatApplicationValidator()
 		{
 			RuleFor(application => application.Schools)
 				.Must(schools => schools.Count < 2)
-				.WithMessage("Join a MAT Applications must have one and only one School");
+				.WithMessage("Join a MAT and form a SAT Applications must have one and only one School");
 		}
 	}
 }

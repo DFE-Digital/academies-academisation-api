@@ -15,9 +15,8 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
 				.Must(schools => schools.Any())
 				.WithMessage("Application must have at least one School to submit");
 
-
 			RuleFor(application => application)
-				.SetValidator(new SubmitJoinAMatApplicationValidator())
+				.SetValidator(new SubmitJoinAMatFormASatApplicationValidator())
 				.When(application => 
 					application.ApplicationType == ApplicationType.JoinAMat
 					|| application.ApplicationType == ApplicationType.FormASat);
