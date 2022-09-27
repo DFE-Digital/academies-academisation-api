@@ -26,15 +26,15 @@ using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Academisation.WebApi.Swagger;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
 	.AddControllers()
-	.AddNewtonsoftJson()
-	.AddJsonOptions(options =>
+	.AddNewtonsoftJson(options =>
 	{
-		options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+		options.SerializerSettings.Converters.Add(new StringEnumConverter());
 	});
 
 builder.Services.AddEndpointsApiExplorer();

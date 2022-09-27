@@ -1,6 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -104,7 +105,21 @@ public class AcademisationContext : DbContext
 
 		OnAdvisoryBoardDecisionCreating(modelBuilder);
 
+		OnProjectCreating(modelBuilder);
+		
 		base.OnModelCreating(modelBuilder);
+	}
+
+	private static void OnProjectCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.GoverningBodyResolution).HasConversion<string>();
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.Consultation).HasConversion<string>();
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.DiocesanConsent).HasConversion<string>();
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.FoundationConsent).HasConversion<string>();
 	}
 
 	private static void OnAdvisoryBoardDecisionCreating(ModelBuilder modelBuilder)

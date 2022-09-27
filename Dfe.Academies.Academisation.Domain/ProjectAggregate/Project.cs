@@ -54,7 +54,7 @@ public class Project : IProject
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
-			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings.PartOfPfiScheme),
+			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme),
 			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
 			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
 			EqualitiesImpactAssessmentConsidered = ToYesNoString(school.EqualitiesImpactAssessmentCompleted != Core.ApplicationAggregate.EqualityImpact.NotConsidered),
@@ -155,6 +155,13 @@ public class Project : IProject
 			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete,
 
+			// legal requirements
+			GoverningBodyResolution = detailsToUpdate.GoverningBodyResolution,
+			Consultation = detailsToUpdate.Consultation,
+			DiocesanConsent = detailsToUpdate.DiocesanConsent,
+			FoundationConsent = detailsToUpdate.FoundationConsent,
+			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete,
+			
 			// school budget info
 			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear,
