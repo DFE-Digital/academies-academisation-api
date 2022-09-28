@@ -79,6 +79,13 @@ public class ProjectState : BaseEntity
 	public string? EqualitiesImpactAssessmentConsidered { get; set; }
 	public bool? RisksAndIssuesSectionComplete { get; set; }
 
+	// legal requirements
+	public YesNoNotApplicable? GoverningBodyResolution { get; set; }
+	public YesNoNotApplicable? Consultation { get; set; }
+	public YesNoNotApplicable? DiocesanConsent { get; set; }
+	public YesNoNotApplicable? FoundationConsent { get; set; }
+	public bool? LegalRequirementsSectionComplete { get; set; }
+	
 	// school budget info
 	public decimal? RevenueCarryForwardAtEndMarchCurrentYear { get; set; }
 	public decimal? ProjectedRevenueBalanceAtEndMarchNextYear { get; set; }
@@ -175,6 +182,13 @@ public class ProjectState : BaseEntity
 			EqualitiesImpactAssessmentConsidered = EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = RisksAndIssuesSectionComplete,
 
+			// legal requirements
+			GoverningBodyResolution = GoverningBodyResolution,
+			Consultation = Consultation,
+			DiocesanConsent = DiocesanConsent,
+			FoundationConsent = FoundationConsent,
+			LegalRequirementsSectionComplete = LegalRequirementsSectionComplete,
+			
 			// school budget info
 			RevenueCarryForwardAtEndMarchCurrentYear = RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = ProjectedRevenueBalanceAtEndMarchNextYear,
@@ -276,6 +290,13 @@ public class ProjectState : BaseEntity
 			RisksAndIssues = project.Details.RisksAndIssues,
 			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
+			
+			// legal requirements
+			GoverningBodyResolution = project.Details.GoverningBodyResolution,
+			Consultation = project.Details.Consultation,
+			DiocesanConsent = project.Details.DiocesanConsent,
+			FoundationConsent = project.Details.FoundationConsent,
+			LegalRequirementsSectionComplete = project.Details.LegalRequirementsSectionComplete,
 
 			// school budget info
 			RevenueCarryForwardAtEndMarchCurrentYear = project.Details.RevenueCarryForwardAtEndMarchCurrentYear,

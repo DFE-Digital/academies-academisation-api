@@ -134,7 +134,7 @@ public class ApplicationSubmitTests
 			() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
 			() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
 			() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
-			() => Assert.Equal(ToYesNoString(school.LandAndBuildings.PartOfPfiScheme), project.PartOfPfiScheme),
+			() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
 			() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),
 			() => Assert.Equal(school.ProjectedPupilNumbersYear2, project.YearTwoProjectedPupilNumbers),
 			() => Assert.Equal(school.ProjectedPupilNumbersYear3, project.YearThreeProjectedPupilNumbers)

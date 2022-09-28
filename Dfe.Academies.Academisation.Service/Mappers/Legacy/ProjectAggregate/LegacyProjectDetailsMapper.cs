@@ -81,6 +81,13 @@ internal static class LegacyProjectDetailsMapper
 			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered ?? existingProject.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete ?? existingProject.Details.RisksAndIssuesSectionComplete,
 
+			// legal requirements
+			Consultation = detailsToUpdate.Consultation ?? existingProject.Details.Consultation,
+			GoverningBodyResolution = detailsToUpdate.GoverningBodyResolution ?? existingProject.Details.GoverningBodyResolution,
+			DiocesanConsent = detailsToUpdate.DiocesanConsent ?? existingProject.Details.DiocesanConsent,
+			FoundationConsent = detailsToUpdate.FoundationConsent ?? existingProject.Details.FoundationConsent,
+			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete ?? existingProject.Details.LegalRequirementsSectionComplete,
+			
 			// school budget info
 			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear ?? existingProject.Details.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear ?? existingProject.Details.ProjectedRevenueBalanceAtEndMarchNextYear,
