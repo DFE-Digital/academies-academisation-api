@@ -33,8 +33,6 @@ using Newtonsoft.Json.Converters;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-	.AddControllers()
-	.AddNewtonsoftJson(options =>
 	.AddControllers(x => {
 		x.Filters.Add(typeof(HttpGlobalExceptionFilter));
 	})
