@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
@@ -22,6 +23,7 @@ using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Project;
 using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Academisation.WebApi.Filters;
 using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Academisation.WebApi.Swagger;
@@ -31,11 +33,40 @@ using Newtonsoft.Json.Converters;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-	.AddControllers()
+	.AddControllers(x => {
+		x.Filters.Add(typeof(HttpGlobalExceptionFilter));
+	})
 	.AddNewtonsoftJson(options =>
 	{
 		options.SerializerSettings.Converters.Add(new StringEnumConverter());
 	});
+
+// logging
+builder.Host.ConfigureLogging((context, logging) =>
+{
+	logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+
+	logging.ClearProviders();
+
+	//logging.AddSimpleConsole(options =>
+	//{
+	//	options.IncludeScopes = true;
+	//	options.SingleLine = true;
+	//	options.TimestampFormat = "hh:mm:ss ";
+	//});
+
+	logging.AddJsonConsole(options =>
+	{
+		options.IncludeScopes = true;
+		options.TimestampFormat = "hh:mm:ss ";
+		options.JsonWriterOptions = new JsonWriterOptions
+		{
+			Indented = true,
+		};
+	});
+
+	logging.AddSentry();
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(config =>
@@ -106,10 +137,22 @@ if (!app.Environment.IsDevelopment())
 {
 	app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
 }
+app.UseMiddleware<AddCorrelationIdMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.MapHealthChecks("/healthcheck");
 app.MapControllers();
 
 app.Run();
 
-public partial class Program { }
+public partial class Program {
+	public static string AppName = GetAppName();
+
+	public static string GetAppName()
+	{
+		//var theNamespace = typeof(Program).Namespace;
+		//return theNamespace[(theNamespace.LastIndexOf('.', theNamespace.LastIndexOf('.') - 1) + 1)..];
+
+		return "Dfe.Academies.Academisation.WebApi";
+	}
+}

@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Bogus;
+using Castle.Core.Logging;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
@@ -17,6 +18,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -31,6 +33,7 @@ public class ApplicationCreateTests
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+	private readonly ILogger<ApplicationController> _applicationLogger;
 
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
@@ -50,6 +53,7 @@ public class ApplicationCreateTests
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
+		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -64,7 +68,8 @@ public class ApplicationCreateTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
+			_applicationsListByUserQuery,
+			_applicationLogger);
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
 			.Create<ApplicationCreateRequestModel>();
@@ -109,7 +114,8 @@ public class ApplicationCreateTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
+			_applicationsListByUserQuery,
+			_applicationLogger);
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Name.FullName()));

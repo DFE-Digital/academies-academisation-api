@@ -17,6 +17,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -31,6 +32,7 @@ public class ApplicationUpdateTests
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+	private readonly ILogger<ApplicationController> _applicationLogger;
 
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
@@ -53,13 +55,15 @@ public class ApplicationUpdateTests
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
+		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 
 		_applicationController = new(
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
+			_applicationsListByUserQuery,
+			_applicationLogger);
 
 		_fixture.Customize<ApplicationContributorServiceModel>(composer =>
 			composer
@@ -166,7 +170,7 @@ public class ApplicationUpdateTests
 
 	private async Task<ApplicationServiceModel?> CreateExistingApplication()
 	{
-		ApplicationCreateRequestModel applicationForCreate = new (ApplicationType.FormAMat, _fixture.Create<ContributorRequestModel>()) ;
+		ApplicationCreateRequestModel applicationForCreate = new(ApplicationType.FormAMat, _fixture.Create<ContributorRequestModel>());// with { ApplicationType = ApplicationType.FormAMat } ;
 
 		var createResult = await _applicationCreateCommand.Execute(applicationForCreate);
 		var createSuccessResult = Assert.IsType<CreateSuccessResult<ApplicationServiceModel>>(createResult);
