@@ -25,6 +25,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 
@@ -43,6 +44,7 @@ public class ApplicationSubmitTests
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
@@ -63,6 +65,7 @@ public class ApplicationSubmitTests
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
+		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -88,7 +91,8 @@ public class ApplicationSubmitTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
+			_applicationsListByUserQuery,
+			_applicationLogger);
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
 			.Create<ApplicationCreateRequestModel>();

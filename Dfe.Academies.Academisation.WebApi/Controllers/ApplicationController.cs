@@ -1,4 +1,6 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Reflection;
+using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
@@ -20,19 +22,23 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+		private readonly ILogger<ApplicationController> _logger;
 
 		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationSubmitCommand applicationSubmitCommand,
-			IApplicationListByUserQuery applicationsListByUserQuery
+			IApplicationListByUserQuery applicationsListByUserQuery,
+			ILogger<ApplicationController> logger
 			)
 		{
+			// need guard clauses on these check for null
 			_applicationCreateCommand = applicationCreateCommand;
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
+			_logger = logger;
 		}
 
 		[ProducesResponseType(StatusCodes.Status201Created)]
@@ -53,6 +59,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("{id}", Name = GetRouteName)]
 		public async Task<ActionResult<ApplicationServiceModel>> Get(int id)
 		{
+			// basic log line to check logger is working
+			_logger.LogInformation($"Getting application, id: {id}");
+
 			var result = await _applicationGetQuery.Execute(id);
 			return result is null ? NotFound() : Ok(result);
 		}
@@ -77,6 +86,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		//[HttpPut("{id}/schools/{schoolId}/financial-year", Name = "UpdateFinancialYear")]
+		//public async Task<ActionResult> UpdateFinancialYear(int id, [FromBody] dynamic serviceModel)
+		//{
+		//	//var result = await _applicationFinancialYearUpdateCommand.Execute(id, serviceModel);
+
+		//	//return result switch
+		//	//{
+		//	//	CommandSuccessResult => Ok(),
+		//	//	NotFoundCommandResult => NotFound(),
+		//	//	CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+		//	//	_ => throw new NotImplementedException()
+		//	//};
+
+		//	return null;
+		//}
 
 		[HttpPost("submit/{id:int}", Name = "Submit")]
 		public async Task<ActionResult> Submit(int id)
