@@ -5,6 +5,7 @@ using AutoFixture;
 using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Xunit;
@@ -355,7 +356,8 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			updateSchools);
+			updateSchools,
+			subject.Trust);
 
 		// act
 		var result = subject.Update(
@@ -399,7 +401,8 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			updateSchools);
+			updateSchools,
+			subject.Trust);
 
 		// act
 		var result = subject.Update(
@@ -432,7 +435,8 @@ public class ApplicationUpdateTests
 			type ?? _fixture.Create<ApplicationType>(),
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
-			schools);
+			schools,
+			_fixture.Create<ExistingTrust>());
 
 		return application;
 	}
@@ -463,9 +467,8 @@ public class ApplicationUpdateTests
 			application.ApplicationType,
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			application.Schools.Select(s => new School(s.Id,
-																s.Details,
-																s.Loans.Select(l => new Loan(l.Id, l.Details))))
+			application.Schools.Select(s => 
+				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Details)))), application.Trust
 		);
 	}
 }

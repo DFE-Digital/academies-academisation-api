@@ -15,6 +15,8 @@ public class ApplicationState : BaseEntity
 	[ForeignKey("ConversionApplicationId")]
 	public HashSet<ApplicationSchoolState> Schools { get; set; } = new();
 
+	public TrustState? Trust { get; set; } = new();
+
 	public static ApplicationState MapFromDomain(IApplication application)
 	{
 		return new()
@@ -29,7 +31,9 @@ public class ApplicationState : BaseEntity
 				.ToHashSet(),
 			Schools = application.Schools
 				.Select(ApplicationSchoolState.MapFromDomain)
-				.ToHashSet()
+				.ToHashSet(),
+			Trust = TrustState.MapFromDomain(application.Trust)
+		
 		};
 	}
 
@@ -42,6 +46,6 @@ public class ApplicationState : BaseEntity
 		var schoolsList = Schools.Select(n => n.MapToDomain());
 		
 		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus, 
-								contributorsDictionary, schoolsList);
+								contributorsDictionary, schoolsList, TrustState.MapToDomain(ApplicationType, Trust));
 	}
 }

@@ -4,6 +4,7 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Xunit;
 
@@ -24,7 +25,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationType.FormAMat,
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
-				new List<School>());
+				new List<School>(),
+				_fixture.Create<ExistingTrust>());
 
 			// act
 			var result = subject.Submit();
@@ -47,8 +49,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new List<School>()
-				);
+				new List<School>(),
+				_fixture.Create<ExistingTrust>());
 
 			// act
 			var result = subject.Submit();
@@ -74,7 +76,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					_fixture.Create<School>(),
 					_fixture.Create<School>()
-				});
+				},
+				_fixture.Create<ExistingTrust>());
 
 			// act
 			var result = subject.Submit();
@@ -99,7 +102,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new List<School>
 				{
 					 _fixture.Create<School>()
-				});
+				},
+				_fixture.Create<ExistingTrust>());
 
 			// act
 			var result = subject.Submit();
@@ -125,7 +129,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					_fixture.Create<School>(),
 					_fixture.Create<School>() 
-				});
+				},
+				_fixture.Create<ExistingTrust>());
 
 			// act
 			var result = subject.Submit();

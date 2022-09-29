@@ -40,6 +40,7 @@ public class ApplicationUpdateTests
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
+	private readonly ISetTrustCommandHandler _setTrustCommandHandler;
 
 	private readonly ApplicationController _applicationController;
 
@@ -56,12 +57,14 @@ public class ApplicationUpdateTests
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
+		_setTrustCommandHandler = new Mock<ISetTrustCommandHandler>().Object;
 
 		_applicationController = new(
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
+			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
 			_applicationLogger);
 

@@ -25,11 +25,12 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private readonly Mock<IApplicationSubmitCommand> _submitCommandMock = new();
 		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly Mock<ILogger<ApplicationController>> _applicationLogger = new ();
+		private readonly Mock<ISetTrustCommandHandler> _setTrustCommandHandler = new();
 		private readonly ApplicationController _subject;
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object, _listByUserMock.Object, _applicationLogger.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object, _setTrustCommandHandler.Object, _listByUserMock.Object, _applicationLogger.Object);
 		}
 
 		[Fact]

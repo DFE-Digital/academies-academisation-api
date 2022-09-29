@@ -50,6 +50,7 @@ public class ApplicationSubmitTests
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
+	private readonly ISetTrustCommandHandler _setTrustCommandHandler;
 
 	public ApplicationSubmitTests()
 	{
@@ -66,6 +67,8 @@ public class ApplicationSubmitTests
 		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
+		_setTrustCommandHandler = new Mock<ISetTrustCommandHandler>().Object;
+
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -91,6 +94,7 @@ public class ApplicationSubmitTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
+			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
 			_applicationLogger);
 

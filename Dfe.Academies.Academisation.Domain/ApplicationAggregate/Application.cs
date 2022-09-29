@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -25,7 +26,8 @@ public class Application : IApplication
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
-		IEnumerable<School> schools)
+		IEnumerable<School> schools,
+		ITrust trust)
 	{
 		ApplicationId = applicationId;
 		CreatedOn = createdOn;
@@ -34,6 +36,7 @@ public class Application : IApplication
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
 		_schools = schools.ToList();
+		Trust = trust;
 	}
 
 	public int ApplicationId { get; private set; }
@@ -41,6 +44,8 @@ public class Application : IApplication
 	public DateTime LastModifiedOn { get; }
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
+
+	public ITrust? Trust { get; private set; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
@@ -117,6 +122,22 @@ public class Application : IApplication
 		}
 
 		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
+	}
+
+	public CommandResult SetTrust(int ukPrn, string trustName)
+	{
+		// need to add in validation for setting the trust
+		//var validationResult = submitValidator.Validate(this);
+
+		//if (!validationResult.IsValid)
+		//{
+		//	return new CommandValidationErrorResult(
+		//		validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		//}
+
+		Trust = ExistingTrust.Create(ukPrn, trustName);
+
+		return new CommandSuccessResult();
 	}
 }
 

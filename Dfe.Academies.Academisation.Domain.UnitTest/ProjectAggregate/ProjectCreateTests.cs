@@ -4,6 +4,7 @@ using System.Linq;
 using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -26,8 +27,8 @@ public class ProjectCreateTests
 		var application = new Application(1, now, now, applicationType,
 			_fixture.Create<ApplicationStatus>(),
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
-			_fixture.Create<List<School>>()
-			);
+			_fixture.Create<List<School>>(),
+			_fixture.Create<ExistingTrust>());
 
 		// Act
 		var project = new ProjectFactory().Create(application);
@@ -51,7 +52,7 @@ public class ProjectCreateTests
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new List<School> {_fixture.Create<School>()}
+			new List<School> {_fixture.Create<School>()}, _fixture.Create<ExistingTrust>()
 			);
 
 		// Act
