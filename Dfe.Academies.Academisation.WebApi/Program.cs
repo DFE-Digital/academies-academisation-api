@@ -39,6 +39,7 @@ builder.Services
 	.AddNewtonsoftJson(options =>
 	{
 		options.SerializerSettings.Converters.Add(new StringEnumConverter());
+		options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 	});
 
 // logging

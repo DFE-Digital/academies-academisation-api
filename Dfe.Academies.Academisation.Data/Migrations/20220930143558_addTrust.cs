@@ -10,7 +10,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "TrustId",
+                name: "ExistingTrustId",
+                schema: "academisation",
+                table: "ConversionApplication",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "NewTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
                 type: "int",
@@ -35,16 +42,31 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConversionApplication_TrustId",
+                name: "IX_ConversionApplication_ExistingTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
-                column: "TrustId");
+                column: "ExistingTrustId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ConversionApplication_NewTrustId",
+                schema: "academisation",
+                table: "ConversionApplication",
+                column: "NewTrustId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ConversionApplication_ApplicationTrust_TrustId",
+                name: "FK_ConversionApplication_ApplicationTrust_ExistingTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
-                column: "TrustId",
+                column: "ExistingTrustId",
+                principalSchema: "academisation",
+                principalTable: "ApplicationTrust",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ConversionApplication_ApplicationTrust_NewTrustId",
+                schema: "academisation",
+                table: "ConversionApplication",
+                column: "NewTrustId",
                 principalSchema: "academisation",
                 principalTable: "ApplicationTrust",
                 principalColumn: "Id");
@@ -53,7 +75,12 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ConversionApplication_ApplicationTrust_TrustId",
+                name: "FK_ConversionApplication_ApplicationTrust_ExistingTrustId",
+                schema: "academisation",
+                table: "ConversionApplication");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_ConversionApplication_ApplicationTrust_NewTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
 
@@ -62,12 +89,22 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 schema: "academisation");
 
             migrationBuilder.DropIndex(
-                name: "IX_ConversionApplication_TrustId",
+                name: "IX_ConversionApplication_ExistingTrustId",
+                schema: "academisation",
+                table: "ConversionApplication");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ConversionApplication_NewTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
 
             migrationBuilder.DropColumn(
-                name: "TrustId",
+                name: "ExistingTrustId",
+                schema: "academisation",
+                table: "ConversionApplication");
+
+            migrationBuilder.DropColumn(
+                name: "NewTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
         }

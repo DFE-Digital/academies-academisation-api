@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				return new NotFoundCommandResult();
 			}
 
-			var result = existingApplication.SetTrust(command.UkPrn, command.trustName);
+			var result = existingApplication.SetExistingTrust(command.UkPrn, command.trustName);
 
 			if (result is CommandValidationErrorResult)
 			{

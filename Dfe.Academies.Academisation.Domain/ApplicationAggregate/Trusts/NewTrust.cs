@@ -8,7 +8,7 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class NewTrust : Trust, ITrust
+	public class NewTrust : Trust, INewTrust
 	{
 		public NewTrust(int id, int ukPrn, string trustName, TrustDetails trustDetails)
 		{
@@ -18,9 +18,9 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 			this.TrustDetails = trustDetails;
 		}
 
-		public TrustDetails? TrustDetails { get; protected set; }
+		public TrustDetails TrustDetails { get; protected set; }
 
-		public static Trust Create(int ukPrn, string trustName, TrustDetails trustDetails) {
+		public static INewTrust Create(int ukPrn, string trustName, TrustDetails trustDetails) {
 
 			return new NewTrust(0, ukPrn, trustName, trustDetails);
 		}

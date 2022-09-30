@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20220929180356_addTrust")]
+    [Migration("20220930143558_addTrust")]
     partial class addTrust
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -342,15 +342,20 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ExistingTrustId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TrustId")
+                    b.Property<int?>("NewTrustId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TrustId");
+                    b.HasIndex("ExistingTrustId");
+
+                    b.HasIndex("NewTrustId");
 
                     b.ToTable("ConversionApplication", "academisation");
                 });
@@ -830,11 +835,17 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustState", "Trust")
+                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustState", "ExistingTrust")
                         .WithMany()
-                        .HasForeignKey("TrustId");
+                        .HasForeignKey("ExistingTrustId");
 
-                    b.Navigation("Trust");
+                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustState", "NewTrust")
+                        .WithMany()
+                        .HasForeignKey("NewTrustId");
+
+                    b.Navigation("ExistingTrust");
+
+                    b.Navigation("NewTrust");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ContributorState", b =>

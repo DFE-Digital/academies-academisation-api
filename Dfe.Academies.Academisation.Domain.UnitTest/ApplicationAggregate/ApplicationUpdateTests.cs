@@ -357,7 +357,8 @@ public class ApplicationUpdateTests
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			updateSchools,
-			subject.Trust);
+			subject.ExistingTrust,
+			subject.NewTrust);
 
 		// act
 		var result = subject.Update(
@@ -402,7 +403,8 @@ public class ApplicationUpdateTests
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			updateSchools,
-			subject.Trust);
+			subject.ExistingTrust,
+			subject.NewTrust);
 
 		// act
 		var result = subject.Update(
@@ -436,7 +438,8 @@ public class ApplicationUpdateTests
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			schools,
-			_fixture.Create<ExistingTrust>());
+			_fixture.Create<ExistingTrust>(),
+			null);
 
 		return application;
 	}
@@ -468,7 +471,7 @@ public class ApplicationUpdateTests
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			application.Schools.Select(s => 
-				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Details)))), application.Trust
+				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Details)))), application.ExistingTrust, application.NewTrust
 		);
 	}
 }

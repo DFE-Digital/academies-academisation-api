@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoFixture;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -18,8 +19,10 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 
 		public string? TrustApproverName { get; set; } = null!;
 
-		public static TrustState MapFromDomain(ITrust trust)
+		public static TrustState? MapFromDomain(ITrust trust)
 		{
+			if (trust == null) return null;
+
 			if (typeof(ExistingTrust) == trust.GetType())
 			{
 				var existingTrust = trust as ExistingTrust;
@@ -54,15 +57,19 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 
 		}
 
-		public static ITrust MapToDomain(ApplicationType applicationType, TrustState trust)
+		public static INewTrust MapNewTrustToDomain(TrustState trust)
 		{
-			if (applicationType == ApplicationType.JoinAMat)
-			{
-				// if it is join a Mat then must be existing trust
-				return new ExistingTrust(trust.Id, trust.UKPrn, trust.TrustName);
-			}
+			if (trust == null) { return null!; };
 
 			return new NewTrust(trust.Id, trust.UKPrn, trust.TrustName, new TrustDetails(trust.TrustApproverName));
+		}
+
+		public static IExistingTrust MapExistingTrustToDomain(TrustState trust)
+		{
+			if (trust == null) { return null!; };
+
+		    return new ExistingTrust(trust.Id, trust.UKPrn, trust.TrustName);
+
 		}
 	}
 }
