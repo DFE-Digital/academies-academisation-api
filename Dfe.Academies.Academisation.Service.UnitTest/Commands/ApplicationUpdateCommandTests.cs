@@ -27,7 +27,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		public async Task IdsDoNotMatch___ValidationErrorResultReturned()
 		{
 			// Arrange
-			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
+			ApplicationUpdateRequestModel applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
 
 			// Act
 			var result = await _subject.Execute(applicationServiceModel.ApplicationId + 1, applicationServiceModel);
@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		public async Task NotFound___NotFoundResultReturned()
 		{
 			// Arrange
-			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
+			ApplicationUpdateRequestModel applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
 			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId)).ReturnsAsync((IApplication?)null);
 
 			// Act
@@ -55,7 +55,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		{
 			// Arrange
 			Mock<IApplication> applicationMock = new();
-			ApplicationServiceModel applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
+			ApplicationUpdateRequestModel applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
 			applicationMock.Setup(x => x.Update(
 				It.IsAny<ApplicationType>(),
 				It.IsAny<ApplicationStatus>(),

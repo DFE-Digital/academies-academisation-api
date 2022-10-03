@@ -29,6 +29,7 @@ using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Academisation.WebApi.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,7 @@ builder.Services
 	})
 	.AddNewtonsoftJson(options =>
 	{
-		options.SerializerSettings.Converters.Add(new StringEnumConverter());
+		options.SerializerSettings.Converters.Add(new StringEnumConverter(typeof(CamelCaseNamingStrategy)));
 		options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 	});
 
@@ -86,7 +87,7 @@ var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfi
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
-builder.Services.AddScoped<ISetTrustCommandHandler, SetTrustCommandHandler>();
+builder.Services.AddScoped<ISetJoinTrustDetailsCommandHandler, JoinTrustCommandHandler>();
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();

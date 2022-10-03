@@ -50,7 +50,7 @@ public class ApplicationSubmitTests
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-	private readonly ISetTrustCommandHandler _setTrustCommandHandler;
+	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
 
 	public ApplicationSubmitTests()
 	{
@@ -67,7 +67,7 @@ public class ApplicationSubmitTests
 		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_setTrustCommandHandler = new Mock<ISetTrustCommandHandler>().Object;
+		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
 
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
@@ -106,10 +106,8 @@ public class ApplicationSubmitTests
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
 		var school = _fixture.Create<ApplicationSchoolServiceModel>();
-		var updateRequest = createdPayload with
-		{
-			Schools = new List<ApplicationSchoolServiceModel> { school }
-		};
+
+		var updateRequest = new ApplicationUpdateRequestModel(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors, new List<ApplicationSchoolServiceModel> { school });
 
 		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
 		DfeAssert.OkResult(updateResult);

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 {
-	public interface INewTrust : ITrust
+	public interface IJoinTrust
 	{
-		public TrustDetails TrustDetails { get; }
+		public int Id { get; }
+		public string TrustName { get; }
+		public int UkPRN { get; }
 	}
 }

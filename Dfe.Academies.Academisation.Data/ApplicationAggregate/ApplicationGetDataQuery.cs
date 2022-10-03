@@ -20,8 +20,8 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 				.Include(a => a.Contributors)
 				.Include(a => a.Schools)
 					.ThenInclude(a => a.Loans)
-				.Include(a => a.ExistingTrust)
-				.Include(a => a.NewTrust)
+				.Include(a => a.JoinTrust)
+				.Include(a => a.FormTrust)
 				.SingleOrDefaultAsync(a => a.Id == id);
 
 			return applicationState?.MapToDomain();

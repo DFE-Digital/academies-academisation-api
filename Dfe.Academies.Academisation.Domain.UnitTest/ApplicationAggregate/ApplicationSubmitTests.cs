@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>(),
-				_fixture.Create<ExistingTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act
@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>(),
-				_fixture.Create<ExistingTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act
@@ -79,7 +79,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					_fixture.Create<School>(),
 					_fixture.Create<School>()
 				},
-				_fixture.Create<ExistingTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act
@@ -106,7 +106,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					 _fixture.Create<School>()
 				},
-				_fixture.Create<ExistingTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act
@@ -134,7 +134,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					_fixture.Create<School>(),
 					_fixture.Create<School>() 
 				},
-				_fixture.Create<ExistingTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act

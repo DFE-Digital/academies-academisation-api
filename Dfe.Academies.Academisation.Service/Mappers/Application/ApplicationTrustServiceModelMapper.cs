@@ -11,20 +11,21 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 {
 	internal static class ApplicationTrustServiceModelMapper
 	{
-		internal static ApplicationTrustServiceModel? FromDomain<T>(T trust)
+		internal static ApplicationJoinTustServiceModel? FromDomain(IJoinTrust joinTrust)
 		{
-			var existingTrust = trust as IExistingTrust;
-
-			if (existingTrust != null)
+			if (joinTrust != null)
 			{
-				return new(existingTrust.Id, existingTrust.UkPRN, existingTrust.TrustName, null);
+				return new(joinTrust.Id, joinTrust.TrustName, joinTrust.UkPRN);
 			}
 
-			var newTrust = trust as INewTrust;
+			return default;
+		}
 
-			if (newTrust != null)
+		internal static ApplicationFormTrustServiceModel? FromDomain(IFormTrust formTrust)
+		{
+			if (formTrust != null)
 			{
-				return new(newTrust.Id, newTrust.UkPRN, newTrust.TrustName, newTrust.TrustDetails.TrustApproverName);
+				return new(formTrust.Id, formTrust.ProposedTrustName, formTrust.TrustDetails?.TrustApproverName!);
 			}
 
 			return default;

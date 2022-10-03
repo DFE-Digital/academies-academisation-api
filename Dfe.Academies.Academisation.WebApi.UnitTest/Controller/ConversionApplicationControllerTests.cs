@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private readonly Mock<IApplicationSubmitCommand> _submitCommandMock = new();
 		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly Mock<ILogger<ApplicationController>> _applicationLogger = new ();
-		private readonly Mock<ISetTrustCommandHandler> _setTrustCommandHandler = new();
+		private readonly Mock<ISetJoinTrustDetailsCommandHandler> _setTrustCommandHandler = new();
 		private readonly ApplicationController _subject;
 
 		public ApplicationControllerTests()
@@ -193,7 +193,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
-			var applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
+			var applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
 
 			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
 				.ReturnsAsync(new CommandSuccessResult());
@@ -210,7 +210,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
-			var applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
+			var applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
 
 			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
 				.ReturnsAsync(new NotFoundCommandResult());
@@ -227,7 +227,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
-			var applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
+			var applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
 
 			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
 			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))

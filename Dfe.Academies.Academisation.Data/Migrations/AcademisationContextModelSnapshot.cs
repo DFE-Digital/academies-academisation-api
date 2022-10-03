@@ -340,20 +340,20 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ExistingTrustId")
+                    b.Property<int?>("FormTrustId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JoinTrustId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("NewTrustId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ExistingTrustId");
+                    b.HasIndex("FormTrustId");
 
-                    b.HasIndex("NewTrustId");
+                    b.HasIndex("JoinTrustId");
 
                     b.ToTable("ConversionApplication", "academisation");
                 });
@@ -400,6 +400,58 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionApplicationContributor", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProposedTrustName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrustApproverName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationFormTrust", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.JoinTrustState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrustName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UKPrn")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationJoinTrust", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LoanState", b =>
                 {
                     b.Property<int>("Id")
@@ -437,35 +489,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.HasIndex("ApplicationSchoolId");
 
                     b.ToTable("ApplicationSchoolLoan", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TrustApproverName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TrustName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UKPrn")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ApplicationTrust", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
@@ -833,17 +856,17 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustState", "ExistingTrust")
+                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", "FormTrust")
                         .WithMany()
-                        .HasForeignKey("ExistingTrustId");
+                        .HasForeignKey("FormTrustId");
 
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustState", "NewTrust")
+                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.JoinTrustState", "JoinTrust")
                         .WithMany()
-                        .HasForeignKey("NewTrustId");
+                        .HasForeignKey("JoinTrustId");
 
-                    b.Navigation("ExistingTrust");
+                    b.Navigation("FormTrust");
 
-                    b.Navigation("NewTrust");
+                    b.Navigation("JoinTrust");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ContributorState", b =>

@@ -18,7 +18,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 		_applicationUpdateDataCommand = applicationUpdateDataCommand;
 	}
 
-	public async Task<CommandResult> Execute(int applicationId, ApplicationServiceModel applicationServiceModel)
+	public async Task<CommandResult> Execute(int applicationId, ApplicationUpdateRequestModel applicationServiceModel)
 	{
 		if (applicationId != applicationServiceModel.ApplicationId)
 		{

@@ -16,7 +16,8 @@ public class AcademisationContext : DbContext
 	public DbSet<LoanState> SchoolLoans { get; set; } = null!;
 	public DbSet<ProjectState> Projects { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
-	public DbSet<TrustState> Trusts { get; set; } = null!;
+	public DbSet<JoinTrustState> JoinTrusts { get; set; } = null!;
+	public DbSet<FormTrustState> FormTrusts { get; set; } = null!;
 
 	public override int SaveChanges()
 	{

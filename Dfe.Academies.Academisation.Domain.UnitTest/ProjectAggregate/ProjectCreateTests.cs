@@ -28,7 +28,7 @@ public class ProjectCreateTests
 			_fixture.Create<ApplicationStatus>(),
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			_fixture.Create<List<School>>(),
-			_fixture.Create<ExistingTrust>(),
+			_fixture.Create<JoinTrust>(),
 			null);
 
 		// Act
@@ -53,7 +53,7 @@ public class ProjectCreateTests
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new List<School> {_fixture.Create<School>()}, _fixture.Create<ExistingTrust>(),
+			new List<School> {_fixture.Create<School>()}, _fixture.Create<JoinTrust>(),
 			null);
 
 		// Act

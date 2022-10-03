@@ -5,26 +5,43 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
-    public partial class addTrust : Migration
+    public partial class addJoinTrust : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "ExistingTrustId",
+                name: "FormTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
                 type: "int",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "NewTrustId",
+                name: "JoinTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
                 type: "int",
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "ApplicationTrust",
+                name: "ApplicationFormTrust",
+                schema: "academisation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProposedTrustName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TrustApproverName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationFormTrust", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationJoinTrust",
                 schema: "academisation",
                 columns: table => new
                 {
@@ -32,79 +49,82 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UKPrn = table.Column<int>(type: "int", nullable: false),
                     TrustName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrustApproverName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationTrust", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationJoinTrust", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConversionApplication_ExistingTrustId",
+                name: "IX_ConversionApplication_FormTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
-                column: "ExistingTrustId");
+                column: "FormTrustId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConversionApplication_NewTrustId",
+                name: "IX_ConversionApplication_JoinTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
-                column: "NewTrustId");
+                column: "JoinTrustId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ConversionApplication_ApplicationTrust_ExistingTrustId",
+                name: "FK_ConversionApplication_ApplicationFormTrust_FormTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
-                column: "ExistingTrustId",
+                column: "FormTrustId",
                 principalSchema: "academisation",
-                principalTable: "ApplicationTrust",
+                principalTable: "ApplicationFormTrust",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ConversionApplication_ApplicationTrust_NewTrustId",
+                name: "FK_ConversionApplication_ApplicationJoinTrust_JoinTrustId",
                 schema: "academisation",
                 table: "ConversionApplication",
-                column: "NewTrustId",
+                column: "JoinTrustId",
                 principalSchema: "academisation",
-                principalTable: "ApplicationTrust",
+                principalTable: "ApplicationJoinTrust",
                 principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ConversionApplication_ApplicationTrust_ExistingTrustId",
+                name: "FK_ConversionApplication_ApplicationFormTrust_FormTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ConversionApplication_ApplicationTrust_NewTrustId",
+                name: "FK_ConversionApplication_ApplicationJoinTrust_JoinTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
 
             migrationBuilder.DropTable(
-                name: "ApplicationTrust",
+                name: "ApplicationFormTrust",
+                schema: "academisation");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationJoinTrust",
                 schema: "academisation");
 
             migrationBuilder.DropIndex(
-                name: "IX_ConversionApplication_ExistingTrustId",
+                name: "IX_ConversionApplication_FormTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
 
             migrationBuilder.DropIndex(
-                name: "IX_ConversionApplication_NewTrustId",
+                name: "IX_ConversionApplication_JoinTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
 
             migrationBuilder.DropColumn(
-                name: "ExistingTrustId",
+                name: "FormTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
 
             migrationBuilder.DropColumn(
-                name: "NewTrustId",
+                name: "JoinTrustId",
                 schema: "academisation",
                 table: "ConversionApplication");
         }

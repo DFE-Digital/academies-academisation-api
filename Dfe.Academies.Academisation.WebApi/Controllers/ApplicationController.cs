@@ -21,7 +21,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
-		private readonly ISetTrustCommandHandler _setTrustCommandHandler;
+		private readonly ISetJoinTrustDetailsCommandHandler _setJoinTrustDetailsCommandHandler;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 		private readonly ILogger<ApplicationController> _logger;
 
@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationSubmitCommand applicationSubmitCommand,
-			ISetTrustCommandHandler setTrustCommandHandler,
+			ISetJoinTrustDetailsCommandHandler setTrustCommandHandler,
 			IApplicationListByUserQuery applicationsListByUserQuery,
 			ILogger<ApplicationController> logger
 			)
@@ -39,7 +39,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
-			_setTrustCommandHandler = setTrustCommandHandler;
+			_setJoinTrustDetailsCommandHandler = setTrustCommandHandler;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
 			_logger = logger;
 		}
@@ -77,7 +77,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut("{id}", Name = "Update")]
-		public async Task<ActionResult> Update(int id, [FromBody] ApplicationServiceModel serviceModel)
+		public async Task<ActionResult> Update(int id, [FromBody] ApplicationUpdateRequestModel serviceModel)
 		{
 			var result = await _applicationUpdateCommand.Execute(id, serviceModel);
 
@@ -90,10 +90,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("{applicationId}/trust/existing", Name = "SetExistingTrust")]
-		public async Task<ActionResult> SetTrust(int applicationId, [FromBody] SetTrustCommand command)
+		[HttpPut("{applicationId}/trust/join", Name = "SetJoinTrustDetails")]
+		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command)
 		{
-			var result = await _setTrustCommandHandler.Handle(applicationId, command);
+			var result = await _setJoinTrustDetailsCommandHandler.Handle(applicationId, command);
 
 			return result switch
 			{

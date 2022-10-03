@@ -7,12 +7,12 @@ using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 {
-	public interface ITrust
+	public interface IFormTrust
 	{
 		public int Id { get; }
 
-		public int  UkPRN { get; }
+		public string ProposedTrustName { get; }
 
-		public string TrustName { get; }
+		public FormTrustDetails TrustDetails { get; }
 	}
 }

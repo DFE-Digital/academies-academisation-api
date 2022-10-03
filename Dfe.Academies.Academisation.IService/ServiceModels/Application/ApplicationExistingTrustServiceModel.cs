@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application
 {
-	public record ApplicationTrustServiceModel(int id, int UkPrn, string trustName, string? TrustApproverName);
+	public record ApplicationJoinTustServiceModel(int id,  string trustName, int UkPrn);
 }

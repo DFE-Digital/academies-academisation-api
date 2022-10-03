@@ -27,8 +27,8 @@ public class Application : IApplication
 		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
 		IEnumerable<School> schools,
-		IExistingTrust? existingTrust,
-		INewTrust? newTrust)
+		IJoinTrust? joinTrust,
+		IFormTrust? formTrust)
 	{
 		ApplicationId = applicationId;
 		CreatedOn = createdOn;
@@ -37,8 +37,8 @@ public class Application : IApplication
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
 		_schools = schools.ToList();
-		ExistingTrust = existingTrust;
-		NewTrust = newTrust;
+		JoinTrust = joinTrust;
+		FormTrust = formTrust;
 	}
 
 	public int ApplicationId { get; private set; }
@@ -47,8 +47,8 @@ public class Application : IApplication
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
 
-	public INewTrust? NewTrust { get; private set; }
-	public IExistingTrust? ExistingTrust { get; private set; }
+	public IFormTrust? FormTrust { get; private set; }
+	public IJoinTrust? JoinTrust { get; private set; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
@@ -127,7 +127,7 @@ public class Application : IApplication
 		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
 	}
 
-	public CommandResult SetExistingTrust(int ukPrn, string trustName)
+	public CommandResult SetJoinTrustDetails(int ukPrn, string trustName)
 	{
 		// need to add in validation for setting the trust
 		//var validationResult = submitValidator.Validate(this);
@@ -138,7 +138,7 @@ public class Application : IApplication
 		//		validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		//}
 
-		ExistingTrust = Trusts.ExistingTrust.Create(ukPrn, trustName);
+		JoinTrust = Trusts.JoinTrust.Create(ukPrn, trustName);
 
 		return new CommandSuccessResult();
 	}

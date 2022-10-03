@@ -8,19 +8,22 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class ExistingTrust : Trust, IExistingTrust
+	public class JoinTrust : IJoinTrust
 	{
-		public ExistingTrust(int id, int ukPrn, string trustName)
+		public JoinTrust(int id, int ukPrn, string trustName)
 		{
 			this.Id = id;
 			this.UkPRN = ukPrn;
 			this.TrustName = trustName;
 		}
 
-		public static IExistingTrust Create(int ukPrn, string trustName)
-		{
+		public int Id { get; }
+		public int UkPRN { get; protected set; }
+		public string TrustName { get; }
 
-			return new ExistingTrust(0, ukPrn, trustName);
+		public static IJoinTrust Create(int ukPrn, string trustName)
+		{
+			return new JoinTrust(0, ukPrn, trustName);
 		}
 	}
 }

@@ -15,8 +15,8 @@ public interface IApplication
 	IReadOnlyCollection<IContributor> Contributors { get; }
 
 	IReadOnlyCollection<ISchool> Schools { get; }
-	INewTrust? NewTrust { get;  }
-	IExistingTrust? ExistingTrust { get; }
+	IFormTrust? FormTrust { get;  }
+	IJoinTrust? JoinTrust { get; }
 
 	void SetIdsOnCreate(int applicationId, int conversionId);
 
@@ -32,5 +32,5 @@ public interface IApplication
 	/// Use the IApplicationSubmissionService to submit the Application and (conditionally) create a Project. 
 	/// </summary>
 	CommandResult Submit();
-	CommandResult SetExistingTrust(int ukPrn, string trustName);
+	CommandResult SetJoinTrustDetails(int ukPrn, string trustName);
 }
