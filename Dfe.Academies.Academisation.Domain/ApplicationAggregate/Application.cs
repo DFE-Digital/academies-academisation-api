@@ -11,6 +11,7 @@ public class Application : IApplication
 	private readonly List<School> _schools = new();
 	private readonly SubmitApplicationValidator submitValidator = new();
 	private readonly UpdateApplicationValidator updateValidator = new();
+	private readonly SetJoinTrustDetailsValidator setJoinTrustDetailsValidator = new();
 
 	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
@@ -129,16 +130,24 @@ public class Application : IApplication
 
 	public CommandResult SetJoinTrustDetails(int ukPrn, string trustName)
 	{
-		// need to add in validation for setting the trust
-		//var validationResult = submitValidator.Validate(this);
+		// check the application type allows join trust details to be set
+		var validationResult = setJoinTrustDetailsValidator.Validate(this);
 
-		//if (!validationResult.IsValid)
-		//{
-		//	return new CommandValidationErrorResult(
-		//		validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
-		//}
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
 
-		JoinTrust = Trusts.JoinTrust.Create(ukPrn, trustName);
+		// if the tust is already set update the fields
+		if (JoinTrust != null)
+		{
+			JoinTrust.Update(ukPrn, trustName);
+
+		}
+		else { 
+			JoinTrust = Trusts.JoinTrust.Create(ukPrn, trustName); 
+		}
 
 		return new CommandSuccessResult();
 	}

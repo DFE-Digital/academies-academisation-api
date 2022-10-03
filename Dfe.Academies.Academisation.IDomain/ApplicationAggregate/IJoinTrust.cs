@@ -10,6 +10,7 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 	{
 		public int Id { get; }
 		public string TrustName { get; }
-		public int UkPRN { get; }
+		public int UkPRN { get;  }
+		public void Update(int ukPrn, string trustName);
 	}
 }

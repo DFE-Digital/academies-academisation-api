@@ -18,12 +18,18 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 		}
 
 		public int Id { get; }
-		public int UkPRN { get; protected set; }
-		public string TrustName { get; }
+		public int UkPRN { get; private set; }
+		public string TrustName { get; private set; }
 
 		public static IJoinTrust Create(int ukPrn, string trustName)
 		{
 			return new JoinTrust(0, ukPrn, trustName);
+		}
+
+		public void Update(int ukPrn, string trustName)
+		{
+			this.UkPRN = ukPrn;
+			this.TrustName = trustName;
 		}
 	}
 }

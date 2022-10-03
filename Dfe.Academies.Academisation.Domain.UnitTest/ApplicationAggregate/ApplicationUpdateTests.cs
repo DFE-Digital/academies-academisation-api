@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate;
@@ -29,6 +31,7 @@ public class ApplicationUpdateTests
 		_fixture.Customize<UpdateSchoolParameter>(composer =>
 				composer
 					.With(s => s.Id, 0));
+		_fixture.Customize(new AutoMoqCustomization());
 	}
 
 	[Fact]
@@ -419,6 +422,53 @@ public class ApplicationUpdateTests
 		Assert.Equivalent(expected, subject);
 		var addedSchool = Assert.Single(subject.Schools, s => s.Details.Urn == schoolDetailsToAdd.SchoolDetails.Urn);
 		Assert.Equivalent(schoolDetailsToAdd.SchoolDetails, addedSchool.Details);
+	}
+
+	[Fact]
+	public void SetJoinMatDetails___SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
+
+		var updateJoinTrust = _fixture.Create<JoinTrust>();
+
+		Application expected = new(
+			subject.ApplicationId,
+			subject.CreatedOn,
+			subject.LastModifiedOn,
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			subject.Schools.Cast<School>().ToList(),
+			updateJoinTrust,
+			subject.FormTrust);
+
+		// act
+		var result = subject.SetJoinTrustDetails(updateJoinTrust.UkPRN, updateJoinTrust.TrustName);
+
+		// assert
+		DfeAssert.CommandSuccess(result);
+
+		Assert.Equal(updateJoinTrust.TrustName, subject.JoinTrust?.TrustName);
+		Assert.Equal(updateJoinTrust.UkPRN, subject.JoinTrust?.UkPRN);
+	}
+
+	[Fact]
+	public void SetJoinMatDetailsWrongApplicationType__ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.FormAMat);
+		Application expected = Clone(subject);
+
+		var updateJoinTrust = _fixture.Create<JoinTrust>();
+
+		// act
+		// act
+		var result = subject.SetJoinTrustDetails(updateJoinTrust.UkPRN, updateJoinTrust.TrustName);
+
+		// assert
+		DfeAssert.CommandValidationError(result, nameof(ApplicationType));
+		Assert.Equivalent(expected, subject);
 	}
 
 	private Application BuildApplication(ApplicationStatus applicationStatus, int numberOfSchools, ApplicationType? type = null)
