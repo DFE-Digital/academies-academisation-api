@@ -15,6 +15,9 @@ public class ApplicationState : BaseEntity
 	[ForeignKey("ConversionApplicationId")]
 	public HashSet<ApplicationSchoolState> Schools { get; set; } = new();
 
+	public JoinTrustState? JoinTrust { get; set; }
+	public FormTrustState? FormTrust { get; set; }
+
 	public static ApplicationState MapFromDomain(IApplication application)
 	{
 		return new()
@@ -29,7 +32,9 @@ public class ApplicationState : BaseEntity
 				.ToHashSet(),
 			Schools = application.Schools
 				.Select(ApplicationSchoolState.MapFromDomain)
-				.ToHashSet()
+				.ToHashSet(),
+			FormTrust = FormTrustState.MapFromDomain(application.FormTrust!),
+			JoinTrust = JoinTrustState.MapFromDomain(application.JoinTrust!)
 		};
 	}
 
@@ -42,6 +47,6 @@ public class ApplicationState : BaseEntity
 		var schoolsList = Schools.Select(n => n.MapToDomain());
 		
 		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus, 
-								contributorsDictionary, schoolsList);
+								contributorsDictionary, schoolsList, JoinTrustState.MapToDomain(JoinTrust!), FormTrustState.MapToDomain(FormTrust!));
 	}
 }

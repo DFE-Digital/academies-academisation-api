@@ -3,7 +3,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
 namespace Dfe.Academies.Academisation.IService.Commands.Application;
 
-public interface IApplicationUpdateCommand
+public interface ISetJoinTrustDetailsCommandHandler
 {
-	Task<CommandResult> Execute(int applicationId, ApplicationUpdateRequestModel applicationServiceModel);
+	Task<CommandResult> Handle(int applicationId, SetJoinTrustDetailsCommand command);
 }

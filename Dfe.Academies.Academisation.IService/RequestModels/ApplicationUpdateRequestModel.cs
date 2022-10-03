@@ -2,11 +2,9 @@
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
-public record ApplicationServiceModel(
+public record ApplicationUpdateRequestModel(
 	int ApplicationId,
 	ApplicationType ApplicationType,
 	ApplicationStatus ApplicationStatus,
 	IReadOnlyCollection<ApplicationContributorServiceModel> Contributors,
-	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools, 
-	ApplicationJoinTustServiceModel? joinTrustDetails,
-	ApplicationFormTrustServiceModel? formTrustDetails);
+	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools);

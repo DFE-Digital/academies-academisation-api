@@ -40,6 +40,7 @@ public class ApplicationCreateTests
 	private readonly AcademisationContext _context;
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
 
 	public ApplicationCreateTests()
 	{
@@ -54,6 +55,7 @@ public class ApplicationCreateTests
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
+		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -67,7 +69,8 @@ public class ApplicationCreateTests
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
-			_applicationSubmitCommand,
+			_applicationSubmitCommand, 
+			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
 			_applicationLogger);
 
@@ -100,7 +103,8 @@ public class ApplicationCreateTests
 				applicationCreateRequestModel.Contributor.EmailAddress,
 				applicationCreateRequestModel.Contributor.Role,
 				applicationCreateRequestModel.Contributor.OtherRoleName) },
-			new List<ApplicationSchoolServiceModel>());
+			new List<ApplicationSchoolServiceModel>(),
+			null, null);
 
 		Assert.Equivalent(expectedApplication, actualApplication);
 	}
@@ -114,6 +118,7 @@ public class ApplicationCreateTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
+			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
 			_applicationLogger);
 

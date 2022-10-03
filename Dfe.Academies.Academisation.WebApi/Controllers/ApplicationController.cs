@@ -21,6 +21,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
+		private readonly ISetJoinTrustDetailsCommandHandler _setJoinTrustDetailsCommandHandler;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 		private readonly ILogger<ApplicationController> _logger;
 
@@ -28,6 +29,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationSubmitCommand applicationSubmitCommand,
+			ISetJoinTrustDetailsCommandHandler setTrustCommandHandler,
 			IApplicationListByUserQuery applicationsListByUserQuery,
 			ILogger<ApplicationController> logger
 			)
@@ -37,6 +39,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
+			_setJoinTrustDetailsCommandHandler = setTrustCommandHandler;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
 			_logger = logger;
 		}
@@ -74,7 +77,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut("{id}", Name = "Update")]
-		public async Task<ActionResult> Update(int id, [FromBody] ApplicationServiceModel serviceModel)
+		public async Task<ActionResult> Update(int id, [FromBody] ApplicationUpdateRequestModel serviceModel)
 		{
 			var result = await _applicationUpdateCommand.Execute(id, serviceModel);
 
@@ -87,21 +90,19 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		//[HttpPut("{id}/schools/{schoolId}/financial-year", Name = "UpdateFinancialYear")]
-		//public async Task<ActionResult> UpdateFinancialYear(int id, [FromBody] dynamic serviceModel)
-		//{
-		//	//var result = await _applicationFinancialYearUpdateCommand.Execute(id, serviceModel);
+		[HttpPut("{applicationId}/trust/join", Name = "SetJoinTrustDetails")]
+		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command)
+		{
+			var result = await _setJoinTrustDetailsCommandHandler.Handle(applicationId, command);
 
-		//	//return result switch
-		//	//{
-		//	//	CommandSuccessResult => Ok(),
-		//	//	NotFoundCommandResult => NotFound(),
-		//	//	CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
-		//	//	_ => throw new NotImplementedException()
-		//	//};
-
-		//	return null;
-		//}
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 
 		[HttpPost("submit/{id:int}", Name = "Submit")]
 		public async Task<ActionResult> Submit(int id)

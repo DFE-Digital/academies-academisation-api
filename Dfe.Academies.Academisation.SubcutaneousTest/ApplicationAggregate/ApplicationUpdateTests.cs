@@ -17,6 +17,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -40,6 +41,7 @@ public class ApplicationUpdateTests
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
+	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
 
 	private readonly ApplicationController _applicationController;
 
@@ -56,12 +58,14 @@ public class ApplicationUpdateTests
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
+		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
 
 		_applicationController = new(
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
+			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
 			_applicationLogger);
 
@@ -100,18 +104,21 @@ public class ApplicationUpdateTests
 
 		var applicationContributorServiceModel = _fixture.Create<ApplicationContributorServiceModel>();
 		var applicationSchoolServiceModel = _fixture.Create<ApplicationSchoolServiceModel>();
-		
-		ApplicationServiceModel applicationToUpdate = existingApplication with { Contributors = new List<ApplicationContributorServiceModel>()
+
+		var applicationToUpdate = new ApplicationUpdateRequestModel(
+			existingApplication.ApplicationId,
+			existingApplication.ApplicationType,
+			existingApplication.ApplicationStatus,
+			new List<ApplicationContributorServiceModel>()
 		{
 			existingApplication.Contributors.ToArray()[0],
 			existingApplication.Contributors.ToArray()[1],
 			applicationContributorServiceModel
-		}, Schools = new List<ApplicationSchoolServiceModel>()
-		{
-			existingApplication.Schools.ToArray()[0],
-			applicationSchoolServiceModel,
-			existingApplication.Schools.ToArray()[2]
-		} };
+		}, 
+			new List<ApplicationSchoolServiceModel> {          
+				existingApplication.Schools.ToArray()[0],
+				applicationSchoolServiceModel,
+				existingApplication.Schools.ToArray()[2] });
 
 		// act
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
@@ -121,7 +128,7 @@ public class ApplicationUpdateTests
 		var gotApplication = await _applicationGetQuery.Execute(existingApplication.ApplicationId);
 		Assert.NotNull(gotApplication);
 
-		var expectedApplication = applicationToUpdate with
+		var expectedApplication = existingApplication with
 		{
 			Contributors = new List<ApplicationContributorServiceModel>
 			{
@@ -159,7 +166,12 @@ public class ApplicationUpdateTests
 		var existingApplication = await CreateExistingApplication();
 		Assert.NotNull(existingApplication);
 
-		ApplicationServiceModel applicationToUpdate = existingApplication with { ApplicationStatus = ApplicationStatus.Submitted };
+		var applicationToUpdate = new ApplicationUpdateRequestModel(
+			existingApplication.ApplicationId,
+			existingApplication.ApplicationType,
+			ApplicationStatus.Submitted,
+			existingApplication.Contributors,
+			existingApplication.Schools);
 
 		// act
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
@@ -180,7 +192,7 @@ public class ApplicationUpdateTests
 		schools.Add(_fixture.Create<ApplicationSchoolServiceModel>());
 		schools.Add(_fixture.Create<ApplicationSchoolServiceModel>());
 
-		var applicationToUpdate = _fixture.Create<ApplicationServiceModel>() with
+		var applicationToUpdate = _fixture.Create<ApplicationUpdateRequestModel>() with
 		{
 			ApplicationId = createSuccessResult.Payload.ApplicationId,
 			ApplicationType = createSuccessResult.Payload.ApplicationType,
