@@ -48,5 +48,7 @@ public record SchoolDetails(
 	int? CapacityPublishedAdmissionsNumber = null,
 	// application pre-support grant
 	PayFundsTo? SchoolSupportGrantFundsPaidTo = null,
-	bool? ConfirmPaySupportGrantToSchool = null
+	bool? ConfirmPaySupportGrantToSchool = null,
+	bool? SchoolHasConsultedStakeholders = null,
+	string? SchoolPlanToConsultStakeholders = null
 );

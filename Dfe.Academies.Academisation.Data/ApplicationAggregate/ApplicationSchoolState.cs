@@ -124,6 +124,16 @@ public class ApplicationSchoolState : BaseEntity
 	[ForeignKey("ApplicationSchoolId")]
 	public HashSet<LoanState> Loans { get; set; } = new();
 
+	// Finances Investigations
+	// TODO:-
+
+	// consultation details
+	public bool? SchoolHasConsultedStakeholders { get; set; }
+	public string? SchoolPlanToConsultStakeholders { get; set; }
+
+	// declaration
+	// TODO:-
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
