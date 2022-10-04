@@ -364,3 +364,11 @@ FodyWeavers.xsd
 
 # Rider-specific configuration
 .idea/
+
+# Environment variables
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.development.local.example
+!.env.database.example

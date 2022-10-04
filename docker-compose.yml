@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  webapi:
+    build:
+      context: .
+    command: /bin/bash -c "./docker-entrypoint.sh dotnet Dfe.Academies.Academisation.WebApi.dll"
+    ports:
+      - 80:80/tcp
+    depends_on:
+      - db
+      - sqlcmd
+    env_file:
+       - .env.development.local
+    networks:
+      - dev
+
+  db:
+    container_name: academies-academisation-api-sql-server
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    env_file: .env.database
+    ports:
+      - 1433:1433
+    networks:
+      - dev
+
+  sqlcmd:
+    image: mcr.microsoft.com/mssql-tools:latest
+    env_file: .env.database
+    command: /etc/docker-entrypoint.sh
+    depends_on:
+      - db
+    stdin_open: true
+    volumes:
+      - ./script/sqlcmd-docker-entrypoint.sh:/etc/docker-entrypoint.sh
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  sql-server-data:
