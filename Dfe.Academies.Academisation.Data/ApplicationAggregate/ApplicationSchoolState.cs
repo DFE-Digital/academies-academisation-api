@@ -240,7 +240,6 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear?.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear?.CapitalCarryForwardExplained,
 			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear?.CapitalCarryForwardFileLink,
-			// TODO MR:- loans
 			Loans = new HashSet<LoanState>(applyingSchool.Loans
 				?.Select(e => new LoanState
 				{
@@ -251,7 +250,15 @@ public class ApplicationSchoolState : BaseEntity
 					InterestRate = e.Details.InterestRate,
 					Schedule = e.Details.Schedule
 				})
-				.ToList() ?? new List<LoanState>())
+				.ToList() ?? new List<LoanState>()),
+			// TODO:- leases
+			// Finances Investigations
+			// TODO:-
+			// consultation details
+			SchoolHasConsultedStakeholders = applyingSchool.Details.SchoolHasConsultedStakeholders,
+			SchoolPlanToConsultStakeholders = applyingSchool.Details.SchoolPlanToConsultStakeholders,
+			// declaration
+			// TODO:-
 		};
 	}
 
@@ -376,7 +383,9 @@ public class ApplicationSchoolState : BaseEntity
 			CapacityAssumptions = CapacityAssumptions,
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
+			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
+			SchoolHasConsultedStakeholders = SchoolHasConsultedStakeholders,
+			SchoolPlanToConsultStakeholders = SchoolPlanToConsultStakeholders
 		};
 
 		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));
