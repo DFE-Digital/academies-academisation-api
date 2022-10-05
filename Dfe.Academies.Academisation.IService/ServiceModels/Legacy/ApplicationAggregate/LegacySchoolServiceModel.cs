@@ -96,8 +96,8 @@ public record LegacySchoolServiceModel(
 
 	// declaration
 	// two questions from the application form would be easy to mix up here
-	// 1. I agree with all of these statements, and belive that the facts stated in this application are true (summary page)
-	// 2. The information in this application is true to the best of my kowledge (actual question)
+	// 1. I agree with all of these statements, and believe that the facts stated in this application are true (summary page)
+	// 2. The information in this application is true to the best of my knowledge (actual question)
 	bool? DeclarationBodyAgree = null,
 	bool? DeclarationIAmTheChairOrHeadteacher = null,
 	string? DeclarationSignedByName = null
