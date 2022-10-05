@@ -262,7 +262,10 @@ public class ApplicationSchoolState : BaseEntity
 			// consultation details
 			SchoolHasConsultedStakeholders = applyingSchool.Details.SchoolHasConsultedStakeholders,
 			SchoolPlanToConsultStakeholders = applyingSchool.Details.SchoolPlanToConsultStakeholders,
-			// TODO:- declaration
+			// declaration
+			DeclarationBodyAgree = applyingSchool.Details.DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = applyingSchool.Details.DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = applyingSchool.Details.DeclarationSignedByName
 		};
 	}
 
@@ -393,8 +396,13 @@ public class ApplicationSchoolState : BaseEntity
 			FinanceOngoingInvestigations = FinanceOngoingInvestigations,
 			FinancialInvestigationsExplain = FinancialInvestigationsExplain,
 			FinancialInvestigationsTrustAware = FinancialInvestigationsTrustAware,
+			// declaration - final section / part of application
+			DeclarationBodyAgree = DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = DeclarationSignedByName
 		};
 
+		// TODO:- leases
 		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));
 	}
 }
