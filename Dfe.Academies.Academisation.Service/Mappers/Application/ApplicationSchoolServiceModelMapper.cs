@@ -56,6 +56,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			SchoolCapacityPublishedAdmissionsNumber = school.Details.CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = school.Details.SchoolSupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = school.Details.ConfirmPaySupportGrantToSchool,
+			SchoolHasConsultedStakeholders = school.Details.SchoolHasConsultedStakeholders,
+			SchoolPlanToConsultStakeholders = school.Details.SchoolPlanToConsultStakeholders,
 		};
 	}
 
@@ -106,6 +108,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			CapacityPublishedAdmissionsNumber = serviceModel.SchoolCapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = serviceModel.SchoolSupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = serviceModel.ConfirmPaySupportGrantToSchool,
+			SchoolHasConsultedStakeholders = serviceModel.SchoolHasConsultedStakeholders,
+			SchoolPlanToConsultStakeholders = serviceModel.SchoolPlanToConsultStakeholders
 		};
 	}
 }
