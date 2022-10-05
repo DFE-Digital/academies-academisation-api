@@ -8,5 +8,5 @@ public interface ISchool
 	public SchoolDetails Details { get; }
 	public IReadOnlyCollection<ILoan> Loans { get; }
 
-	// TODO MR:- leases
+	// TODO:- Leases
 }

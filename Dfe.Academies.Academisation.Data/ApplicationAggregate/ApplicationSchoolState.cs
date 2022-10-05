@@ -254,7 +254,7 @@ public class ApplicationSchoolState : BaseEntity
 					Schedule = e.Details.Schedule
 				})
 				.ToList() ?? new List<LoanState>()),
-			// TODO:- leases
+			// TODO:- Leases
 			// Finances Investigations
 			FinanceOngoingInvestigations = applyingSchool.Details.FinanceOngoingInvestigations,
 			FinancialInvestigationsExplain = applyingSchool.Details.FinancialInvestigationsExplain,
@@ -402,7 +402,7 @@ public class ApplicationSchoolState : BaseEntity
 			DeclarationSignedByName = DeclarationSignedByName
 		};
 
-		// TODO:- leases
+		// TODO:- Leases
 		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));
 	}
 }

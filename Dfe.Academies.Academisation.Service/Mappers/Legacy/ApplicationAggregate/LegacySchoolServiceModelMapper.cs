@@ -34,7 +34,7 @@ internal static class LegacySchoolServiceModelMapper
 
 		LegacySchoolServiceModel serviceModel = new(
 			legacyLoans,
-			// ToDo: Leases
+			// TODO:- Leases
 			new List<LegacyLeaseServiceModel>())
 		{
 			SchoolName = school.SchoolName,
@@ -157,13 +157,13 @@ internal static class LegacySchoolServiceModelMapper
 			SchoolHasConsultedStakeholders = school.SchoolHasConsultedStakeholders,
 			SchoolPlanToConsultStakeholders = school.SchoolPlanToConsultStakeholders,
 
-			// TODO:- declaration
+			// Declaration
 			// two questions from the application form would be easy to mix up here
 			// 1. I agree with all of these statements, and belive that the facts stated in this application are true (summary page)
 			// 2. The information in this application is true to the best of my kowledge (actual question)
-			////DeclarationBodyAgree = school.,
-			////DeclarationIAmTheChairOrHeadteacher = school.,
-			////DeclarationSignedByName = school.
+			DeclarationBodyAgree = school.DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = school.DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = school.DeclarationSignedByName
 		};
 
 		return serviceModel;
