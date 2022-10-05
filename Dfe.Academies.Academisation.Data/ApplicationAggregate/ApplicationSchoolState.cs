@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -124,15 +123,13 @@ public class ApplicationSchoolState : BaseEntity
 	[ForeignKey("ApplicationSchoolId")]
 	public HashSet<LoanState> Loans { get; set; } = new();
 
-	// Finances Investigations
-	// TODO:-
+	// TODO:- Finances Investigations
 
 	// consultation details
 	public bool? SchoolHasConsultedStakeholders { get; set; }
 	public string? SchoolPlanToConsultStakeholders { get; set; }
 
-	// declaration
-	// TODO:-
+	// TODO:- declaration
 
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
@@ -252,13 +249,11 @@ public class ApplicationSchoolState : BaseEntity
 				})
 				.ToList() ?? new List<LoanState>()),
 			// TODO:- leases
-			// Finances Investigations
-			// TODO:-
+			// TODO:- Finances Investigations
 			// consultation details
 			SchoolHasConsultedStakeholders = applyingSchool.Details.SchoolHasConsultedStakeholders,
 			SchoolPlanToConsultStakeholders = applyingSchool.Details.SchoolPlanToConsultStakeholders,
-			// declaration
-			// TODO:-
+			// TODO:- declaration
 		};
 	}
 
