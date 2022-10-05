@@ -123,7 +123,10 @@ public class ApplicationSchoolState : BaseEntity
 	[ForeignKey("ApplicationSchoolId")]
 	public HashSet<LoanState> Loans { get; set; } = new();
 
-	// TODO:- Finances Investigations
+	// Finances Investigations
+	public bool? FinanceOngoingInvestigations { get; set; }
+	public string? FinancialInvestigationsExplain { get; set; }
+	public bool? FinancialInvestigationsTrustAware { get; set; }
 
 	// consultation details
 	public bool? SchoolHasConsultedStakeholders { get; set; }
@@ -249,7 +252,10 @@ public class ApplicationSchoolState : BaseEntity
 				})
 				.ToList() ?? new List<LoanState>()),
 			// TODO:- leases
-			// TODO:- Finances Investigations
+			// Finances Investigations
+			FinanceOngoingInvestigations = applyingSchool.Details.FinanceOngoingInvestigations,
+			FinancialInvestigationsExplain = applyingSchool.Details.FinancialInvestigationsExplain,
+			FinancialInvestigationsTrustAware = applyingSchool.Details.FinancialInvestigationsTrustAware,
 			// consultation details
 			SchoolHasConsultedStakeholders = applyingSchool.Details.SchoolHasConsultedStakeholders,
 			SchoolPlanToConsultStakeholders = applyingSchool.Details.SchoolPlanToConsultStakeholders,
@@ -380,7 +386,10 @@ public class ApplicationSchoolState : BaseEntity
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
 			SchoolHasConsultedStakeholders = SchoolHasConsultedStakeholders,
-			SchoolPlanToConsultStakeholders = SchoolPlanToConsultStakeholders
+			SchoolPlanToConsultStakeholders = SchoolPlanToConsultStakeholders,
+			FinanceOngoingInvestigations = FinanceOngoingInvestigations,
+			FinancialInvestigationsExplain = FinancialInvestigationsExplain,
+			FinancialInvestigationsTrustAware = FinancialInvestigationsTrustAware,
 		};
 
 		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));

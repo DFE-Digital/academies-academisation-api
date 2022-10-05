@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
@@ -58,6 +57,9 @@ internal static class ApplicationSchoolServiceModelMapper
 			ConfirmPaySupportGrantToSchool = school.Details.ConfirmPaySupportGrantToSchool,
 			SchoolHasConsultedStakeholders = school.Details.SchoolHasConsultedStakeholders,
 			SchoolPlanToConsultStakeholders = school.Details.SchoolPlanToConsultStakeholders,
+			FinanceOngoingInvestigations = school.Details.FinanceOngoingInvestigations,
+			FinancialInvestigationsExplain = school.Details.FinancialInvestigationsExplain,
+			FinancialInvestigationsTrustAware = school.Details.FinancialInvestigationsTrustAware
 		};
 	}
 
@@ -109,7 +111,10 @@ internal static class ApplicationSchoolServiceModelMapper
 			SchoolSupportGrantFundsPaidTo = serviceModel.SchoolSupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = serviceModel.ConfirmPaySupportGrantToSchool,
 			SchoolHasConsultedStakeholders = serviceModel.SchoolHasConsultedStakeholders,
-			SchoolPlanToConsultStakeholders = serviceModel.SchoolPlanToConsultStakeholders
+			SchoolPlanToConsultStakeholders = serviceModel.SchoolPlanToConsultStakeholders,
+			FinanceOngoingInvestigations = serviceModel.FinanceOngoingInvestigations,
+			FinancialInvestigationsExplain = serviceModel.FinancialInvestigationsExplain,
+			FinancialInvestigationsTrustAware = serviceModel.FinancialInvestigationsTrustAware,
 		};
 	}
 }

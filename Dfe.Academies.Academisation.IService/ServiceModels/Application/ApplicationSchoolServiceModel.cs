@@ -56,9 +56,10 @@ public record ApplicationSchoolServiceModel(
 	bool? ConfirmPaySupportGrantToSchool = null,
 	// consultation details
 	bool? SchoolHasConsultedStakeholders = null,
-	string? SchoolPlanToConsultStakeholders = null
-// Finances Investigations
-// TODO:-
-// declaration
-// TODO:-
+	string? SchoolPlanToConsultStakeholders = null,
+	// Finances Investigations
+	bool? FinanceOngoingInvestigations = null,
+	string? FinancialInvestigationsExplain = null,
+	bool? FinancialInvestigationsTrustAware = null
+// TODO:- declaration
 );
