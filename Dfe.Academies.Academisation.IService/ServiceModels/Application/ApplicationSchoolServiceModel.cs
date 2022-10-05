@@ -60,6 +60,9 @@ public record ApplicationSchoolServiceModel(
 	// Finances Investigations
 	bool? FinanceOngoingInvestigations = null,
 	string? FinancialInvestigationsExplain = null,
-	bool? FinancialInvestigationsTrustAware = null
-// TODO:- declaration
+	bool? FinancialInvestigationsTrustAware = null,
+	// Declaration
+	bool? DeclarationBodyAgree = null,
+	bool? DeclarationIAmTheChairOrHeadteacher = null,
+	string? DeclarationSignedByName = null
 );

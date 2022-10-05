@@ -132,7 +132,10 @@ public class ApplicationSchoolState : BaseEntity
 	public bool? SchoolHasConsultedStakeholders { get; set; }
 	public string? SchoolPlanToConsultStakeholders { get; set; }
 
-	// TODO:- declaration
+	// declaration
+	public bool? DeclarationBodyAgree { get; set; }
+	public bool? DeclarationIAmTheChairOrHeadteacher { get; set; }
+	public string? DeclarationSignedByName { get; set; }
 
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
