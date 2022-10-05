@@ -25,5 +25,5 @@ public class School : ISchool
 	// leases & loans
 	public IReadOnlyCollection<ILoan> Loans => _loans.AsReadOnly();
 
-	// TODO:- leases
+	// TODO:- Leases
 }

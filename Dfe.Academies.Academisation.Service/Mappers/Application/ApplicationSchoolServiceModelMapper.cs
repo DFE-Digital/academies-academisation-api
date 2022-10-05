@@ -59,7 +59,10 @@ internal static class ApplicationSchoolServiceModelMapper
 			SchoolPlanToConsultStakeholders = school.Details.SchoolPlanToConsultStakeholders,
 			FinanceOngoingInvestigations = school.Details.FinanceOngoingInvestigations,
 			FinancialInvestigationsExplain = school.Details.FinancialInvestigationsExplain,
-			FinancialInvestigationsTrustAware = school.Details.FinancialInvestigationsTrustAware
+			FinancialInvestigationsTrustAware = school.Details.FinancialInvestigationsTrustAware,
+			DeclarationBodyAgree = school.Details.DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = school.Details.DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = school.Details.DeclarationSignedByName
 		};
 	}
 
@@ -115,6 +118,9 @@ internal static class ApplicationSchoolServiceModelMapper
 			FinanceOngoingInvestigations = serviceModel.FinanceOngoingInvestigations,
 			FinancialInvestigationsExplain = serviceModel.FinancialInvestigationsExplain,
 			FinancialInvestigationsTrustAware = serviceModel.FinancialInvestigationsTrustAware,
+			DeclarationBodyAgree = serviceModel.DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = serviceModel.DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = serviceModel.DeclarationSignedByName
 		};
 	}
 }
