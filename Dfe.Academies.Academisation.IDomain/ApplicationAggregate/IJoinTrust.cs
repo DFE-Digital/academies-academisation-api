@@ -9,8 +9,15 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 	public interface IJoinTrust
 	{
 		public int Id { get; }
+
 		public string TrustName { get; }
-		public int UkPRN { get;  }
-		public void Update(int ukPrn, string trustName);
+
+		public int UKPRN { get; }
+
+		public bool? ChangesToTrust { get; }
+
+		public string? ChangesToTrustExplained { get; }
+
+		public void Update(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained);
 	}
 }

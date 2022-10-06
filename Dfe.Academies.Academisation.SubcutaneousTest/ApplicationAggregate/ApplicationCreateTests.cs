@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using AutoMapper;
 using Bogus;
 using Castle.Core.Logging;
 using Dfe.Academies.Academisation.Core.Test;
@@ -41,15 +42,15 @@ public class ApplicationCreateTests
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
-
+	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	public ApplicationCreateTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context);
+		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
+		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
+		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;

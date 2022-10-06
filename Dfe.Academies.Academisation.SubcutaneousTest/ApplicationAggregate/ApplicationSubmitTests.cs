@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using AutoMapper;
 using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
@@ -51,17 +52,17 @@ public class ApplicationSubmitTests
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
-
+	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory);
-		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
-		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
+		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
+		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
+		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
+		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);

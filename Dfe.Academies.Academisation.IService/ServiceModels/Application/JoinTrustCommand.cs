@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application
 {
-	public record SetJoinTrustDetailsCommand(string trustName, int UkPrn);
+	public record SetJoinTrustDetailsCommand(string trustName, int UKPRN, bool? changesToTrust, string? changesToTrustExplained);
 }

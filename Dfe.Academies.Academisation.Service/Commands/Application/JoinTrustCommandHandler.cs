@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				return new NotFoundCommandResult();
 			}
 
-			var result = existingApplication.SetJoinTrustDetails(command.UkPrn, command.trustName);
+			var result = existingApplication.SetJoinTrustDetails(command.UKPRN, command.trustName, command.changesToTrust, command.changesToTrustExplained);
 
 			if (result is CommandValidationErrorResult)
 			{

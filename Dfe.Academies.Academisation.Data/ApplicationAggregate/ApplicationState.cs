@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -18,7 +20,7 @@ public class ApplicationState : BaseEntity
 	public JoinTrustState? JoinTrust { get; set; }
 	public FormTrustState? FormTrust { get; set; }
 
-	public static ApplicationState MapFromDomain(IApplication application)
+	public static ApplicationState MapFromDomain(IApplication application, IMapper mapper)
 	{
 		return new()
 		{
@@ -33,20 +35,22 @@ public class ApplicationState : BaseEntity
 			Schools = application.Schools
 				.Select(ApplicationSchoolState.MapFromDomain)
 				.ToHashSet(),
-			FormTrust = FormTrustState.MapFromDomain(application.FormTrust!),
-			JoinTrust = JoinTrustState.MapFromDomain(application.JoinTrust!)
+			FormTrust = mapper.Map<FormTrustState>(application.FormTrust), //FormTrustState.MapFromDomain(application.FormTrust!)
+			JoinTrust = mapper.Map<JoinTrustState>(application.JoinTrust)//JoinTrustState.MapFromDomain(application.JoinTrust!)
 		};
 	}
 
-	public IApplication MapToDomain()
+	public IApplication MapToDomain(IMapper mapper)
 	{
 		var contributorsDictionary = Contributors.ToDictionary(
 			c => c.Id,
 			c => new ContributorDetails(c.FirstName, c.LastName, c.EmailAddress, c.Role, c.OtherRoleName));
 
 		var schoolsList = Schools.Select(n => n.MapToDomain());
-		
-		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus, 
-								contributorsDictionary, schoolsList, JoinTrustState.MapToDomain(JoinTrust!), FormTrustState.MapToDomain(FormTrust!));
+
+		return new Application(Id, CreatedOn, LastModifiedOn, ApplicationType, ApplicationStatus,
+		contributorsDictionary, schoolsList,
+								mapper.Map<JoinTrust>(JoinTrust),//JoinTrustState.MapToDomain(JoinTrust!), 
+								mapper.Map<FormTrust>(FormTrust));//FormTrustState.MapToDomain(FormTrust!));
 	}
 }

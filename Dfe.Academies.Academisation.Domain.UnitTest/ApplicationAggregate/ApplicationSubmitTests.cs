@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
@@ -13,6 +15,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 	public class ApplicationSubmitTests
 	{
 		private readonly Fixture _fixture = new();
+
+		public ApplicationSubmitTests()
+		{
+			_fixture.Customize(new AutoMoqCustomization());
+		}
 
 		[Fact]
 		public void ApplicationStatusIsSubmitted___ValidationError()
@@ -26,7 +33,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>(),
-				_fixture.Create<JoinTrust>(),
+				_fixture.Create<IJoinTrust>(),
 				null);
 
 			// act
@@ -51,7 +58,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>(),
-				_fixture.Create<JoinTrust>(),
+				_fixture.Create<IJoinTrust>(),
 				null);
 
 			// act
@@ -79,7 +86,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					_fixture.Create<School>(),
 					_fixture.Create<School>()
 				},
-				_fixture.Create<JoinTrust>(),
+				_fixture.Create<IJoinTrust>(),
 				null);
 
 			// act
@@ -106,7 +113,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					 _fixture.Create<School>()
 				},
-				_fixture.Create<JoinTrust>(),
+				_fixture.Create<IJoinTrust>(),
 				null);
 
 			// act
@@ -134,7 +141,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					_fixture.Create<School>(),
 					_fixture.Create<School>() 
 				},
-				_fixture.Create<JoinTrust>(),
+				_fixture.Create<IJoinTrust>(),
 				null);
 
 			// act

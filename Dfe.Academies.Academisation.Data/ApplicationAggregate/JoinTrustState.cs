@@ -14,27 +14,30 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 	[Table(name: "ApplicationJoinTrust")]
 	public class JoinTrustState : BaseEntity
 	{
-		public int UKPrn { get; set; }
+		public int UKPRN { get; set; }
 		public string TrustName { get; set; } = null!;
 
-		public static JoinTrustState? MapFromDomain(IJoinTrust joinTrust)
-		{
-			if (joinTrust == null) return default;
+		public bool? ChangesToTrust { get; set; }
+		public string? ChangesToTrustExplained { get; set; }
 
-			return new()
-			{
-				Id = joinTrust.Id,
-				TrustName = joinTrust.TrustName,
-				UKPrn = joinTrust.UkPRN
-			};
-		}
+		//public static JoinTrustState? MapFromDomain(IJoinTrust joinTrust)
+		//{
+		//	if (joinTrust == null) return default;
 
-		public static IJoinTrust MapToDomain(JoinTrustState trust)
-		{
-			if (trust == null) { return null!; };
+		//	return new()
+		//	{
+		//		Id = joinTrust.Id,
+		//		TrustName = joinTrust.TrustName,
+		//		UKPrn = joinTrust.UKPrn
+		//	};
+		//}
 
-			return new JoinTrust(trust.Id, trust.UKPrn, trust.TrustName);
+		//public static IJoinTrust MapToDomain(JoinTrustState trust)
+		//{
+		//	if (trust == null) { return null!; };
 
-		}
+		//	return JoinTrust.Create(trust.Id, trust.UKPrn, trust.TrustName, trust.ChangesToTrust, trust.ChangesToTrustExplained);
+
+		//}
 	}
 }
