@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20221005103010_SchoolFinancialInvestigations")]
+    partial class SchoolFinancialInvestigations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,15 +118,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CurrentFinancialYearRevenueStatusFileLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("DeclarationBodyAgree")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("DeclarationIAmTheChairOrHeadteacher")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("DeclarationSignedByName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DiocesePermissionEvidenceDocumentLink")
@@ -457,12 +450,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool?>("ChangesToTrust")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ChangesToTrustExplained")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
