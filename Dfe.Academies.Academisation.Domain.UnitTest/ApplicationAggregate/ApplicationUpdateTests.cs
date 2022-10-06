@@ -428,12 +428,12 @@ public class ApplicationUpdateTests
 	public void SetJoinMatDetails___SuccessReturned_Mutated()
 	{
 		// arrange
-		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0, ApplicationType.JoinAMat);
 
 		var updateJoinTrust = _fixture.Create<IJoinTrust>();
 
 		Mock.Get(updateJoinTrust).Setup(x => x.Id).Returns(10101);
-		Mock.Get(updateJoinTrust).Setup(x => x.UKPrn).Returns(295061);
+		Mock.Get(updateJoinTrust).Setup(x => x.UKPRN).Returns(295061);
 		Mock.Get(updateJoinTrust).Setup(x => x.TrustName).Returns("Test Trust");
 		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrust).Returns(true);
 		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrustExplained).Returns("it has changed");
@@ -450,13 +450,13 @@ public class ApplicationUpdateTests
 			subject.FormTrust);
 
 		// act
-		var result = subject.SetJoinTrustDetails(updateJoinTrust.UKPrn, updateJoinTrust.TrustName, updateJoinTrust.ChangesToTrust, updateJoinTrust.ChangesToTrustExplained);
+		var result = subject.SetJoinTrustDetails(updateJoinTrust.UKPRN, updateJoinTrust.TrustName, updateJoinTrust.ChangesToTrust, updateJoinTrust.ChangesToTrustExplained);
 
 		// assert
 		DfeAssert.CommandSuccess(result);
 
 		Assert.Equal(updateJoinTrust.TrustName, subject.JoinTrust?.TrustName);
-		Assert.Equal(updateJoinTrust.UKPrn, subject.JoinTrust?.UKPrn);
+		Assert.Equal(updateJoinTrust.UKPRN, subject.JoinTrust?.UKPRN);
 	}
 
 	[Fact]
@@ -468,13 +468,13 @@ public class ApplicationUpdateTests
 
 		var updateJoinTrust = _fixture.Create<IJoinTrust>();
 		Mock.Get(updateJoinTrust).Setup(x => x.Id).Returns(10101);
-		Mock.Get(updateJoinTrust).Setup(x => x.UKPrn).Returns(295061);
+		Mock.Get(updateJoinTrust).Setup(x => x.UKPRN).Returns(295061);
 		Mock.Get(updateJoinTrust).Setup(x => x.TrustName).Returns("Test Trust");
 		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrust).Returns(true);
 		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrustExplained).Returns("it has changed");
 
 		// act
-		var result = subject.SetJoinTrustDetails(updateJoinTrust.UKPrn, updateJoinTrust.TrustName, updateJoinTrust.ChangesToTrust, updateJoinTrust.ChangesToTrustExplained);
+		var result = subject.SetJoinTrustDetails(updateJoinTrust.UKPRN, updateJoinTrust.TrustName, updateJoinTrust.ChangesToTrust, updateJoinTrust.ChangesToTrustExplained);
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(ApplicationType));
@@ -498,7 +498,7 @@ public class ApplicationUpdateTests
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			schools,
-			_fixture.Create<IJoinTrust>(),
+			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
 			null);
 
 		return application;

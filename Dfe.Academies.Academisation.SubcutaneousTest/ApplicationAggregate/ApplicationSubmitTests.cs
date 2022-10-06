@@ -60,9 +60,9 @@ public class ApplicationSubmitTests
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory);
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
+		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);

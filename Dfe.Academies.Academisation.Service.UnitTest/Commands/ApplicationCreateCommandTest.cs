@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using AutoMapper;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -14,6 +15,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 	{
 		private readonly Mock<IApplicationFactory> _applicationFactoryMock = new();
 		private readonly Mock<IApplicationCreateDataCommand> _applicationCreateDataCommandMock = new();
+		private readonly Mock<IMapper> _mockMapper = new();
 
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]
@@ -35,7 +37,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
 				.Returns(new CreateSuccessResult<IApplication>(applicationMock.Object));
 
-			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object, _mockMapper.Object);
 
 			// act
 			var result = await subject.Execute(applicationCreateRequestModel);
@@ -62,7 +64,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
 				.Returns(new CreateValidationErrorResult<IApplication>(new List<ValidationError>()));
 
-			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object);
+			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object, _mockMapper.Object);
 
 			// act
 			var result = await subject.Execute(applicationCreateRequestModel);

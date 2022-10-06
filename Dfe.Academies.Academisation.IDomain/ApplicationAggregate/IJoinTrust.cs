@@ -12,12 +12,12 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		public string TrustName { get; }
 
-		public int UKPrn { get; }
+		public int UKPRN { get; }
 
 		public bool? ChangesToTrust { get; }
 
 		public string? ChangesToTrustExplained { get; }
 
-		public void Update(int ukPrn, string trustName, bool? changesToTrust, string? changesToTrustExplained);
+		public void Update(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained);
 	}
 }

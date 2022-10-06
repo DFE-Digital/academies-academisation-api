@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Core;
+﻿using AutoMapper;
+
+namespace Dfe.Academies.Academisation.Core;
 
 public class CreateSuccessResult<TPayload> : CreateResult<TPayload>
 {
@@ -9,8 +11,14 @@ public class CreateSuccessResult<TPayload> : CreateResult<TPayload>
 
 	public TPayload Payload { get; }
 
-	public CreateSuccessResult<TDestinationPayload> MapToPayloadType<TDestinationPayload>(Func<TPayload, TDestinationPayload> mapper)
+	// I don't like this but this overload will go away if everything is mapped using auto mapper, should probably have something that is specifically for applocation but it is bridging code
+	public CreateSuccessResult<TDestinationPayload> MapToPayloadType<TDestinationPayload>(Func<TPayload, IMapper, TDestinationPayload> serviceModelMapper, IMapper mapper)
 	{
-		return new CreateSuccessResult<TDestinationPayload>(mapper.Invoke(Payload));
+		return new CreateSuccessResult<TDestinationPayload>(serviceModelMapper.Invoke(Payload, mapper));
+	}
+
+	public CreateSuccessResult<TDestinationPayload> MapToPayloadType<TDestinationPayload>(Func<TPayload, TDestinationPayload> serviceModelMapper)
+	{
+		return new CreateSuccessResult<TDestinationPayload>(serviceModelMapper.Invoke(Payload));
 	}
 }

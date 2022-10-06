@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 	[Table(name: "ApplicationJoinTrust")]
 	public class JoinTrustState : BaseEntity
 	{
-		public int UKPrn { get; set; }
+		public int UKPRN { get; set; }
 		public string TrustName { get; set; } = null!;
 
 		public bool? ChangesToTrust { get; set; }

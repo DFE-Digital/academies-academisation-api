@@ -33,5 +33,5 @@ public interface IApplication
 	/// </summary>
 	CommandResult Submit();
 
-	CommandResult SetJoinTrustDetails(int ukPrn, string trustName, bool? changesToTrust, string? changesToTrustExplained);
+	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained);
 }
