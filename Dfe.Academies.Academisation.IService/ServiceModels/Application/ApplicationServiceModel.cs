@@ -8,5 +8,5 @@ public record ApplicationServiceModel(
 	ApplicationStatus ApplicationStatus,
 	IReadOnlyCollection<ApplicationContributorServiceModel> Contributors,
 	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools, 
-	ApplicationJoinTustServiceModel? joinTrustDetails,
+	ApplicationJoinTrustServiceModel? joinTrustDetails,
 	ApplicationFormTrustServiceModel? formTrustDetails);

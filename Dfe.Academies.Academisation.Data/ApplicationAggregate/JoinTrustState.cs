@@ -19,25 +19,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 
 		public bool? ChangesToTrust { get; set; }
 		public string? ChangesToTrustExplained { get; set; }
-
-		//public static JoinTrustState? MapFromDomain(IJoinTrust joinTrust)
-		//{
-		//	if (joinTrust == null) return default;
-
-		//	return new()
-		//	{
-		//		Id = joinTrust.Id,
-		//		TrustName = joinTrust.TrustName,
-		//		UKPrn = joinTrust.UKPrn
-		//	};
-		//}
-
-		//public static IJoinTrust MapToDomain(JoinTrustState trust)
-		//{
-		//	if (trust == null) { return null!; };
-
-		//	return JoinTrust.Create(trust.Id, trust.UKPrn, trust.TrustName, trust.ChangesToTrust, trust.ChangesToTrustExplained);
-
-		//}
+		public bool? ChangesToLaGovernance { get; set; }
+		public string? ChangesToLaGovernanceExplained { get; set;  }
 	}
 }

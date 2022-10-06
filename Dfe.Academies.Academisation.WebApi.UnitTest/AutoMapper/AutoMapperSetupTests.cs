@@ -47,7 +47,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			Mock.Get(joinTrustDomainObj).Setup(x => x.UKPRN).Returns(295061);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.TrustName).Returns("Test Trust");
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrust).Returns(true);
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("it has changed");
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained it has changed");
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernance).Returns(true);
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained it has changed");
 
 			// Act
 			var result = mapper.Map<JoinTrustState>(joinTrustDomainObj);
@@ -67,7 +69,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			joinTrustStateObj.UKPRN = 295061;
 			joinTrustStateObj.TrustName = "Test Trust";
 			joinTrustStateObj.ChangesToTrust = true;
-			joinTrustStateObj.ChangesToTrustExplained = "it has changed";
+			joinTrustStateObj.ChangesToTrustExplained = "ChangesToTrustExplained it has changed";
+			joinTrustStateObj.ChangesToLaGovernance = true;
+			joinTrustStateObj.ChangesToLaGovernanceExplained = "ChangesToLaGovernanceExplained it has changed";
 
 			// Act
 			var result = mapper.Map<JoinTrust>(joinTrustStateObj);
@@ -87,10 +91,12 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			Mock.Get(joinTrustDomainObj).Setup(x => x.UKPRN).Returns(295061);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.TrustName).Returns("Test Trust");
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrust).Returns(true);
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("it has changed");
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained it has changed");
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernance).Returns(true);
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained it has changed");
 
 			// Act
-			var result = mapper.Map<ApplicationJoinTustServiceModel>(joinTrustDomainObj);
+			var result = mapper.Map<ApplicationJoinTrustServiceModel>(joinTrustDomainObj);
 
 			// Assert
 			Assert.NotNull(result);

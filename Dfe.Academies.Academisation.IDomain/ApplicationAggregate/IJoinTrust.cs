@@ -18,6 +18,10 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		public string? ChangesToTrustExplained { get; }
 
-		public void Update(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained);
+		public bool? ChangesToLaGovernance { get; }
+
+		public string? ChangesToLaGovernanceExplained { get; }
+
+		public void Update(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
 	}
 }
