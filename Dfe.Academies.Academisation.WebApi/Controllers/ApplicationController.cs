@@ -90,7 +90,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("{applicationId}/trust/join", Name = "SetJoinTrustDetails")]
+		[HttpPut("{applicationId}/join-trust", Name = "SetJoinTrustDetails")]
 		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command)
 		{
 			var result = await _setJoinTrustDetailsCommandHandler.Handle(applicationId, command);

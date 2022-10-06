@@ -15,7 +15,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 		{
 			if (joinTrust != null)
 			{
-				return new(joinTrust.Id, joinTrust.TrustName, joinTrust.UkPRN);
+				return new(joinTrust.Id, joinTrust.TrustName, joinTrust.UKPrn);
 			}
 
 			return default;

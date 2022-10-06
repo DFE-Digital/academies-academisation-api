@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
 using Bogus;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -11,6 +12,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest;
 public class ApplicationStateTests
 {
 	private readonly Faker _faker = new();
+	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
 	[Fact]
 	public void MapFromDomain___ApplicationStateReturned()
@@ -50,7 +52,7 @@ public class ApplicationStateTests
 		};
 
 		//Act
-		var result = ApplicationState.MapFromDomain(mockApplication.Object);
+		var result = ApplicationState.MapFromDomain(mockApplication.Object, _mapper.Object);
 
 		//Assert
 		Assert.Multiple(
