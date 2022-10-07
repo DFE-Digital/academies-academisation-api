@@ -23,7 +23,7 @@ public static class AutoMapperSetup
 			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
 			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore());
 		profile.CreateMap<JoinTrustState, JoinTrust>();
-		profile.CreateMap<IJoinTrust, ApplicationJoinTustServiceModel>();
+		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
 
 	}
 }

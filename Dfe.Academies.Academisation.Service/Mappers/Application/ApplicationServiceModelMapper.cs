@@ -16,7 +16,7 @@ internal static class ApplicationServiceModelMapper
 				.Select(ApplicationContributorServiceModelMapper.FromDomain).ToList(),
 			application.Schools
 				.Select(ApplicationSchoolServiceModelMapper.FromDomain).ToList(),
-			mapper.Map<ApplicationJoinTustServiceModel>(application.JoinTrust),
+			mapper.Map<ApplicationJoinTrustServiceModel>(application.JoinTrust),
 			mapper.Map<ApplicationFormTrustServiceModel>(application.FormTrust));
 	}
 }

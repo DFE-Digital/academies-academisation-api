@@ -128,7 +128,7 @@ public class Application : IApplication
 		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
 	}
 
-	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained)
+	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 	{
 		// check the application type allows join trust details to be set
 		var validationResult = setJoinTrustDetailsValidator.Validate(this);
@@ -139,14 +139,14 @@ public class Application : IApplication
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		// if the tust is already set update the fields
+		// if the trust is already set update the fields
 		if (JoinTrust != null)
 		{
-			JoinTrust.Update(UKPRN, trustName, changesToTrust, changesToTrustExplained);
+			JoinTrust.Update(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 
 		}
 		else { 
-			JoinTrust = Trusts.JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained); 
+			JoinTrust = Trusts.JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
 		}
 
 		return new CommandSuccessResult();
