@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -122,6 +123,9 @@ public class ApplicationSchoolState : BaseEntity
 	// leases & loans
 	[ForeignKey("ApplicationSchoolId")]
 	public HashSet<LoanState> Loans { get; set; } = new();
+	
+	[ForeignKey("ApplicationSchoolId")]
+	public HashSet<LeaseState> Leases { get; set; } = new();
 
 	// Finances Investigations
 	public bool? FinanceOngoingInvestigations { get; set; }
@@ -247,14 +251,26 @@ public class ApplicationSchoolState : BaseEntity
 				?.Select(e => new LoanState
 				{
 					Id = e.Id,
-					Amount = e.Details.Amount,
-					Purpose = e.Details.Purpose,
-					Provider = e.Details.Provider,
-					InterestRate = e.Details.InterestRate,
-					Schedule = e.Details.Schedule
+					Amount = e.Amount,
+					Purpose = e.Purpose,
+					Provider = e.Provider,
+					InterestRate = e.InterestRate,
+					Schedule = e.Schedule
 				})
 				.ToList() ?? new List<LoanState>()),
-			// TODO:- Leases
+			Leases = new HashSet<LeaseState>(applyingSchool.Leases
+				?.Select(e => new LeaseState
+				{
+					Id = e.Id,
+					LeaseTerm = e.LeaseTerm,
+					RepaymentAmount = e.RepaymentAmount,
+					InterestRate = e.InterestRate,
+					PaymentsToDate = e.PaymentsToDate,
+					Purpose = e.Purpose,
+					ValueOfAssets = e.ValueOfAssets,
+					ResponsibleForAssets = e.ResponsibleForAssets
+				}).ToList() ?? new List<LeaseState>()),
+			
 			// Finances Investigations
 			FinanceOngoingInvestigations = applyingSchool.Details.FinanceOngoingInvestigations,
 			FinancialInvestigationsExplain = applyingSchool.Details.FinancialInvestigationsExplain,
@@ -402,7 +418,6 @@ public class ApplicationSchoolState : BaseEntity
 			DeclarationSignedByName = DeclarationSignedByName
 		};
 
-		// TODO:- Leases
-		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));
+		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()), Leases.Select(n => n.MapToDomain()));
 	}
 }

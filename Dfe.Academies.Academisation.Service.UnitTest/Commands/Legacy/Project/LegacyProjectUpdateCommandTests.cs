@@ -4,7 +4,7 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Service.Commands.Project;
+using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Moq;
 using Xunit;
 

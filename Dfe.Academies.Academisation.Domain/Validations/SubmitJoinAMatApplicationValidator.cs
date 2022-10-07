@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate
+namespace Dfe.Academies.Academisation.Domain.Validations
 {
 	internal class SubmitJoinAMatFormASatApplicationValidator : AbstractValidator<Application>
 	{

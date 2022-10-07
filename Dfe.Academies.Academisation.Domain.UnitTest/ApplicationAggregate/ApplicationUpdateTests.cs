@@ -6,6 +6,7 @@ using AutoFixture.AutoMoq;
 using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -336,7 +337,8 @@ public class ApplicationUpdateTests
 		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
 			new School(s.Id, 
 						s.Details,
-						s.Loans.Select(l => new Loan(l.Id, l.Details))));
+						s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+						s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets))));
 
 		IEnumerable<int> allIndices = updateSchoolParameters.Select((s, i) => new { Str = s, Index = i })
 			.Select(x => x.Index);
@@ -396,7 +398,8 @@ public class ApplicationUpdateTests
 		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
 			new School(s.Id, 
 				s.Details,
-				s.Loans.Select(l => new Loan(l.Id, l.Details))));
+				s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets))));
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -540,7 +543,9 @@ public class ApplicationUpdateTests
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			application.Schools.Select(s => 
-				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Details)))), application.JoinTrust, application.FormTrust
+				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+					s.Leases.Select(x =>
+						new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)))), application.JoinTrust, application.FormTrust
 		);
 	}
 }

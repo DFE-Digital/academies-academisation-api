@@ -40,7 +40,7 @@ public class ApplicationState : BaseEntity
 		};
 	}
 
-	public IApplication MapToDomain(IMapper mapper)
+	public Application MapToDomain(IMapper mapper)
 	{
 		var contributorsDictionary = Contributors.ToDictionary(
 			c => c.Id,

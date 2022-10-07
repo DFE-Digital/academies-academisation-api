@@ -7,6 +7,7 @@ public interface ISchool
 	public int Id { get; }
 	public SchoolDetails Details { get; }
 	public IReadOnlyCollection<ILoan> Loans { get; }
+	public IReadOnlyCollection<ILease> Leases { get; }
 
 	// TODO:- Leases
 }

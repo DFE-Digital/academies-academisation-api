@@ -1,12 +1,13 @@
 ﻿using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Dfe.Academies.Academisation.Data;
 
-public class AcademisationContext : DbContext
+public class AcademisationContext : DbContext, IUnitOfWork
 {
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }
 
@@ -73,6 +74,16 @@ public class AcademisationContext : DbContext
 	{
 		SetModifiedAndCreatedDates();
 		return base.SaveChangesAsync(cancellationToken);
+	}
+
+	public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+	{
+		//This will be used to dispatch domain events in mediator before committing changes with SaveChangesAsync
+		/*
+		 * await _mediator.DispatchDomainEventsAsync(this);
+		 */
+		int result = await base.SaveChangesAsync(cancellationToken);
+		return true;
 	}
 
 	private void SetModifiedAndCreatedDates()
