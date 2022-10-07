@@ -1,4 +1,5 @@
 # Stage 1
+ARG ASPNET_IMAGE_TAG=6.0.9-bullseye-slim
 FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 WORKDIR /build
 
@@ -27,7 +28,8 @@ RUN dotnet publish Dfe.Academies.Academisation.WebApi -c Release -o /app
 
 COPY ./script/webapi-docker-entrypoint.sh /app/docker-entrypoint.sh
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0.9-bullseye-slim AS final
+ARG ASPNET_IMAGE_TAG
+FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
 
 RUN apt-get update
 RUN apt-get install unixodbc curl gnupg -y
