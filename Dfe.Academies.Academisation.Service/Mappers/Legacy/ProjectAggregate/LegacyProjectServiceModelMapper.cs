@@ -109,6 +109,10 @@ internal static class LegacyProjectServiceModelMapper
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
+			
+			AssignedUser = project.Details.AssignedUser?.Id == null
+				? null
+				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress)
 		};
 
 		return serviceModel;

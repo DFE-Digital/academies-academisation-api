@@ -182,7 +182,10 @@ public class Project : IProject
 			// key stage performance tables
 			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,				
+			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
+			
+			// assigned users
+			AssignedUser = new User(detailsToUpdate.AssignedUser!.Id, detailsToUpdate.AssignedUser.FullName, detailsToUpdate.AssignedUser.EmailAddress)
 		};
 
 		return new CommandSuccessResult();
