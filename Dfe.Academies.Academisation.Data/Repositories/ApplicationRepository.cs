@@ -26,7 +26,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		
 		public async Task<Application?> GetByIdAsync(object id)
 		{
-			return (await _context.Applications.FindAsync(id))?.MapToDomain(_mapper);
+			return (await _context.Applications
+				.Include(x => x.Schools)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(x => x.Id == (int)id))?.MapToDomain(_mapper);
 		}
 
 		public async Task Insert(Application obj)
@@ -36,7 +39,8 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public void Update(Application obj)
 		{
-			_context.Applications.Update(ApplicationState.MapFromDomain(obj, _mapper));
+			var entity = ApplicationState.MapFromDomain(obj, _mapper);
+			_context.Update(entity);
 		}
 
 		public async Task Delete(object id)

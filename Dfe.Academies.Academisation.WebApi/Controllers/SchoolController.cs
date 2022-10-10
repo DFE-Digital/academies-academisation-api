@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_deleteLeaseCommandHandler = deleteLeaseCommandHandler;
 		}
 
-		[HttpPost("school/{id}/loan/update", Name = "UpdateLoan")]
+		[HttpPost("school/loan/update", Name = "UpdateLoan")]
 		public async Task<IActionResult> UpdateLoan([FromBody] UpdateLoanCommand command)
 		{
 			var result = await _updateLoanCommandHandler.Handle(command);
@@ -94,7 +94,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 		
 		[HttpPut("school/lease/create", Name = "CreateLease")]
-		public async Task<IActionResult> CreateLease(int applicationId, [FromBody] CreateLeaseCommand command)
+		public async Task<IActionResult> CreateLease([FromBody] CreateLeaseCommand command)
 		{
 			var result = await _createLeaseCommandHandler.Handle(command);
 			
