@@ -118,6 +118,22 @@ dotnet ef database update --connection "Server=localhost,1433;Database=sip;User=
 
 6) run academisation EF migration to apply database changes specific to this API onto docker image database:-
 
+### Launching with docker-compose
+
+1. Copy the example `.env` files:
+
+```
+cp .env.development.local.example .env.development.local
+cp .env.database.example .env.database
+```
+
+1. Launch the `webapi` and `db` with docker-compose:
+
+```
+docker-compose -f docker-compose.yml -f up --build
+```
+
+1. By default, it uses a new SQL database, and runs the migrations against it. If you want to use the `trams-development-database` that you have previously launched, change the connection string within `.env.development` and relaunch with docker-compose.
 
 ### Code commit comment rules
 Nothing formal, but been using the following pattern:
