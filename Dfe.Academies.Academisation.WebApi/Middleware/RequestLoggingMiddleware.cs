@@ -1,9 +1,4 @@
-﻿using System.Net.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
-
-namespace Dfe.Academies.Academisation.WebApi.Middleware
+﻿namespace Dfe.Academies.Academisation.WebApi.Middleware
 {
 	public class RequestLoggingMiddleware
 	{
@@ -20,7 +15,7 @@ namespace Dfe.Academies.Academisation.WebApi.Middleware
 		{
 			string? correlationId = null;
 
-			if(context.Request.Headers.TryGetValue(
+			if (context.Request.Headers.TryGetValue(
 			AddCorrelationIdMiddleware.CorrelationIdHeaderKey, out var headerCorrelationId))
 			{
 				correlationId = headerCorrelationId;
