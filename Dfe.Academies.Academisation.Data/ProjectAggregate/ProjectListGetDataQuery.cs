@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_context = context;
 		}
 		
-		public async Task<IEnumerable<IProject>> SearchProjects(List<string>? states, int page, int count, int? urn)
+		public async Task<(IEnumerable<IProject>, int)> SearchProjects(List<string>? states, int page, int count, int? urn)
 		{
 			IQueryable<ProjectState> queryable = _context.Projects
 				.OrderByDescending(acp => acp.ApplicationReceivedDate);
@@ -27,12 +27,13 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			{
 				queryable = queryable.Where(acp => acp.Urn == urn);
 			}
-
+			
+			var totalProjects = queryable.Count();
 			var projects =  await queryable
 				.Skip((page - 1) * count)
 				.Take(count).ToListAsync();
 			
-			return projects.Select(p => p.MapToDomain());
+			return (projects.Select(p => p.MapToDomain()), totalProjects);
 		}
 	}
 }

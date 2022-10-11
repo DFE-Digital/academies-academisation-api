@@ -4,7 +4,7 @@ namespace Dfe.Academies.Academisation.IData.ProjectAggregate
 {
 	public interface IProjectListGetDataQuery
 	{
-		Task<IEnumerable<IProject>> SearchProjects(
+		Task<(IEnumerable<IProject>, int)> SearchProjects(
 			List<string>? states, int page, int count, int? urn);
 	}
 }

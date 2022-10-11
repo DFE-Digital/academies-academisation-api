@@ -41,7 +41,7 @@ public class ProjectsListGetDataQueryTests
 		// act
 		var searchStatus =
 			new List<string> { projectState1.ProjectStatus!.ToLower(), projectState2.ProjectStatus!.ToLower() };
-		var projects = (await _subject.SearchProjects(searchStatus, 1, 10, null)).ToList();
+		var projects = (await _subject.SearchProjects(searchStatus, 1, 10, null)).Item1.ToList();
 
 		// assert
 		var firstProject = projects.FirstOrDefault();
@@ -73,7 +73,7 @@ public class ProjectsListGetDataQueryTests
 
 		// act
 		int searchUrn = projectState2.Urn;
-		var projects = (await _subject.SearchProjects(null, 1, 10, searchUrn)).ToList();
+		var projects = (await _subject.SearchProjects(null, 1, 10, searchUrn)).Item1.ToList();
 
 		// assert
 		var firstProject = projects.FirstOrDefault();
@@ -82,6 +82,32 @@ public class ProjectsListGetDataQueryTests
 			() => Assert.NotNull(firstProject),
 			() => Assert.Equal(firstProject!.Details, projectDetails2),
 			() => Assert.Equal(projectState2.Id, firstProject!.Id)
+		);
+	}
+
+	[Fact]
+	public async Task ProjectsExists__GetPagedProjects__ReturnsTotalCount()
+	{
+		// arrange
+		for (int i = 0; i < 6; i++)
+		{
+			(ProjectDetails projectDetails, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			_context.Projects.Add(projectState);
+		}
+
+		await _context.SaveChangesAsync();
+
+		// act
+		var (firstPageProjects, firstPageCount) = await _subject.SearchProjects(new List<string>(), 1, 2, null);
+		var (secondPageProjects, secondPageCount) = await _subject.SearchProjects(new List<string>(), 2, 2, null);
+
+		// assert
+		Assert.Multiple(
+			() => Assert.Equal(6, firstPageCount),
+			() => Assert.Equal(2, firstPageProjects.Count()),
+			() => Assert.Equal(6, firstPageCount),
+			() => Assert.Equal(2, secondPageProjects.Count()),
+			() => Assert.Equal(6, secondPageCount)
 		);
 	}
 
@@ -101,7 +127,7 @@ public class ProjectsListGetDataQueryTests
 
 		// act
 		int urnThatDoesNotExist = 12312;
-		var projects = (await _subject.SearchProjects(null, 1, 10, urnThatDoesNotExist)).ToList();
+		var projects = (await _subject.SearchProjects(null, 1, 10, urnThatDoesNotExist)).Item1.ToList();
 
 		// assert
 		Assert.Empty(projects);
@@ -122,9 +148,9 @@ public class ProjectsListGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var firstPage = (await _subject.SearchProjects(new List<string>(), 1, 2, null)).ToList();
-		var secondPage = (await _subject.SearchProjects(new List<string>(), 2, 2, null)).ToList();
-		var thirdPage = (await _subject.SearchProjects(new List<string>(), 3, 2, null)).ToList();
+		var firstPage = (await _subject.SearchProjects(new List<string>(), 1, 2, null)).Item1.ToList();
+		var secondPage = (await _subject.SearchProjects(new List<string>(), 2, 2, null)).Item1.ToList();
+		var thirdPage = (await _subject.SearchProjects(new List<string>(), 3, 2, null)).Item1.ToList();
 
 		// assert
 		Assert.Multiple(
@@ -137,7 +163,7 @@ public class ProjectsListGetDataQueryTests
 		);
 	}
 
-	private Tuple<ProjectDetails, ProjectState> CreateTestProject(DateTime? applicationDate = null)
+	private (ProjectDetails, ProjectState) CreateTestProject(DateTime? applicationDate = null)
 	{
 		applicationDate ??= DateTime.Now;
 
@@ -146,6 +172,6 @@ public class ProjectsListGetDataQueryTests
 		var newProject = new Project(0, projectDetails);
 		var mappedProject = ProjectState.MapFromDomain(newProject);
 
-		return Tuple.Create(projectDetails, mappedProject);
+		return (projectDetails, mappedProject);
 	}
 }
