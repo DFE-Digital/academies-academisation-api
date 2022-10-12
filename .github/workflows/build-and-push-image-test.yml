@@ -38,7 +38,7 @@ jobs:
       - name: Prepare tags
         id: prepare-tags
         run: |
-          DOCKER_IMAGE=${{ secrets.TEST_ACR_URL }}/academies-academisation-api
+          DOCKER_IMAGE=${{ secrets.TEST_ACR_URL }}/aca-app
           VERSION=latest
           TAGS="${DOCKER_IMAGE}:${VERSION}"
           if [ "${{ github.event_name }}" = "push" ]; then
