@@ -68,7 +68,7 @@ internal static class LegacyProjectDetailsMapper
 
 			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete ?? existingProject.Details.GeneralInformationSectionComplete,
 
-			// school performance ofsted informatio ?? existingProject.Details.information
+			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation ?? existingProject.Details.SchoolPerformanceAdditionalInformation,
 
 			// rationale
@@ -108,7 +108,17 @@ internal static class LegacyProjectDetailsMapper
 			// key stage performance tables
 			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation ?? existingProject.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation ?? existingProject.Details.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation ?? existingProject.Details.KeyStage5PerformanceAdditionalInformation
+			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation ?? existingProject.Details.KeyStage5PerformanceAdditionalInformation,
+			
+			// assigned user
+			AssignedUser = detailsToUpdate.AssignedUser != null 
+				? MapUser(detailsToUpdate.AssignedUser!.Id, detailsToUpdate.AssignedUser.FullName, detailsToUpdate.AssignedUser.EmailAddress)
+				: MapUser(existingProject.Details.AssignedUser!.Id, existingProject.Details.AssignedUser.FullName, existingProject.Details.AssignedUser.EmailAddress)
 		};
+	}
+
+	private static Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User MapUser(Guid id, string fullName, string emailAddress)
+	{
+		return new Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User(id, fullName, emailAddress);
 	}
 }

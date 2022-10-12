@@ -103,5 +103,8 @@ public record LegacyProjectServiceModel(
 	// key stage performance tables
 	string? KeyStage2PerformanceAdditionalInformation = null,
 	string? KeyStage4PerformanceAdditionalInformation = null,
-	string? KeyStage5PerformanceAdditionalInformation = null
+	string? KeyStage5PerformanceAdditionalInformation = null,
+	
+	// assigned user
+	User? AssignedUser = null
 );
