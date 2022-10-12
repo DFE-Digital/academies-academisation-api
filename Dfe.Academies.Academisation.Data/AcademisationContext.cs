@@ -8,10 +8,7 @@ namespace Dfe.Academies.Academisation.Data;
 
 public class AcademisationContext : DbContext
 {
-	public AcademisationContext(DbContextOptions<AcademisationContext> options)  : base(options) { 
-
-		this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-	}
+	public AcademisationContext(DbContextOptions<AcademisationContext> options)  : base(options) { }
 
 	public DbSet<ApplicationState> Applications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
