@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -124,6 +123,20 @@ public class ApplicationSchoolState : BaseEntity
 	[ForeignKey("ApplicationSchoolId")]
 	public HashSet<LoanState> Loans { get; set; } = new();
 
+	// Finances Investigations
+	public bool? FinanceOngoingInvestigations { get; set; }
+	public string? FinancialInvestigationsExplain { get; set; }
+	public bool? FinancialInvestigationsTrustAware { get; set; }
+
+	// consultation details
+	public bool? SchoolHasConsultedStakeholders { get; set; }
+	public string? SchoolPlanToConsultStakeholders { get; set; }
+
+	// declaration
+	public bool? DeclarationBodyAgree { get; set; }
+	public bool? DeclarationIAmTheChairOrHeadteacher { get; set; }
+	public string? DeclarationSignedByName { get; set; }
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
@@ -230,7 +243,6 @@ public class ApplicationSchoolState : BaseEntity
 			NextFinancialYearCapitalCarryForwardStatus = applyingSchool.Details.NextFinancialYear?.CapitalCarryForwardStatus,
 			NextFinancialYearCapitalCarryForwardExplained = applyingSchool.Details.NextFinancialYear?.CapitalCarryForwardExplained,
 			NextFinancialYearCapitalCarryForwardFileLink = applyingSchool.Details.NextFinancialYear?.CapitalCarryForwardFileLink,
-			// TODO MR:- loans
 			Loans = new HashSet<LoanState>(applyingSchool.Loans
 				?.Select(e => new LoanState
 				{
@@ -241,7 +253,19 @@ public class ApplicationSchoolState : BaseEntity
 					InterestRate = e.Details.InterestRate,
 					Schedule = e.Details.Schedule
 				})
-				.ToList() ?? new List<LoanState>())
+				.ToList() ?? new List<LoanState>()),
+			// TODO:- Leases
+			// Finances Investigations
+			FinanceOngoingInvestigations = applyingSchool.Details.FinanceOngoingInvestigations,
+			FinancialInvestigationsExplain = applyingSchool.Details.FinancialInvestigationsExplain,
+			FinancialInvestigationsTrustAware = applyingSchool.Details.FinancialInvestigationsTrustAware,
+			// consultation details
+			SchoolHasConsultedStakeholders = applyingSchool.Details.SchoolHasConsultedStakeholders,
+			SchoolPlanToConsultStakeholders = applyingSchool.Details.SchoolPlanToConsultStakeholders,
+			// declaration
+			DeclarationBodyAgree = applyingSchool.Details.DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = applyingSchool.Details.DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = applyingSchool.Details.DeclarationSignedByName
 		};
 	}
 
@@ -366,9 +390,19 @@ public class ApplicationSchoolState : BaseEntity
 			CapacityAssumptions = CapacityAssumptions,
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
 			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
-			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool
+			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
+			SchoolHasConsultedStakeholders = SchoolHasConsultedStakeholders,
+			SchoolPlanToConsultStakeholders = SchoolPlanToConsultStakeholders,
+			FinanceOngoingInvestigations = FinanceOngoingInvestigations,
+			FinancialInvestigationsExplain = FinancialInvestigationsExplain,
+			FinancialInvestigationsTrustAware = FinancialInvestigationsTrustAware,
+			// declaration - final section / part of application
+			DeclarationBodyAgree = DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = DeclarationSignedByName
 		};
 
+		// TODO:- Leases
 		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()));
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
@@ -22,20 +23,53 @@ using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Project;
 using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Academisation.WebApi.AutoMapper;
+using Dfe.Academies.Academisation.WebApi.Filters;
 using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Academisation.WebApi.Swagger;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-	.AddControllers()
-	.AddNewtonsoftJson()
-	.AddJsonOptions(options =>
+	.AddControllers(x => {
+		x.Filters.Add(typeof(HttpGlobalExceptionFilter));
+	})
+	.AddNewtonsoftJson(options =>
 	{
-		options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+		options.SerializerSettings.Converters.Add(new StringEnumConverter(typeof(CamelCaseNamingStrategy)));
+		options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 	});
+
+// logging
+builder.Host.ConfigureLogging((context, logging) =>
+{
+	logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+
+	logging.ClearProviders();
+
+	//logging.AddSimpleConsole(options =>
+	//{
+	//	options.IncludeScopes = true;
+	//	options.SingleLine = true;
+	//	options.TimestampFormat = "hh:mm:ss ";
+	//});
+
+	logging.AddJsonConsole(options =>
+	{
+		options.IncludeScopes = true;
+		options.TimestampFormat = "hh:mm:ss ";
+		options.JsonWriterOptions = new JsonWriterOptions
+		{
+			Indented = true,
+		};
+	});
+
+	logging.AddSentry();
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(config =>
@@ -54,6 +88,7 @@ var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfi
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
+builder.Services.AddScoped<ISetJoinTrustDetailsCommandHandler, JoinTrustCommandHandler>();
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
@@ -94,6 +129,7 @@ builder.Services.AddDbContext<AcademisationContext>(options => options
 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
 
@@ -106,10 +142,21 @@ if (!app.Environment.IsDevelopment())
 {
 	app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
 }
+app.UseMiddleware<AddCorrelationIdMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.MapHealthChecks("/healthcheck");
 app.MapControllers();
 
 app.Run();
 
-public partial class Program { }
+public partial class Program {
+	public static string AppName = GetAppName();
+
+	public static string GetAppName()
+	{
+		var appName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name ?? string.Empty;
+
+		return appName;
+	}
+}

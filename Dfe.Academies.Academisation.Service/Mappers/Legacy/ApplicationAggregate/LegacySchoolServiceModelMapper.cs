@@ -34,7 +34,7 @@ internal static class LegacySchoolServiceModelMapper
 
 		LegacySchoolServiceModel serviceModel = new(
 			legacyLoans,
-			// ToDo: Leases
+			// TODO:- Leases
 			new List<LegacyLeaseServiceModel>())
 		{
 			SchoolName = school.SchoolName,
@@ -124,10 +124,10 @@ internal static class LegacySchoolServiceModelMapper
 				CapitalIsDeficit = school.NextFinancialYear.CapitalCarryForwardStatus == RevenueType.Deficit,
 				CapitalStatusExplained = school.NextFinancialYear.CapitalCarryForwardExplained
 			},
-			// ToDo: Finances - MK2
-			////FinanceOngoingInvestigations = null,
-			////SchoolFinancialInvestigationsExplain = null,
-			////SchoolFinancialInvestigationsTrustAware = null,
+			// Finances Investigations
+			FinanceOngoingInvestigations = school.FinanceOngoingInvestigations,
+			SchoolFinancialInvestigationsExplain = school.FinancialInvestigationsExplain,
+			SchoolFinancialInvestigationsTrustAware = school.FinancialInvestigationsTrustAware,
 
 			// future pupil numbers
 			ProjectedPupilNumbersYear1 = school.ProjectedPupilNumbersYear1,
@@ -153,17 +153,17 @@ internal static class LegacySchoolServiceModelMapper
 			// pre-opening support grant
 			SchoolSupportGrantFundsPaidTo = MapType(school), // either "To the school" or "To the trust the school is joining"
 
-			// ToDo: consultation details
-			////SchoolHasConsultedStakeholders = null,
-			////SchoolPlanToConsultStakeholders = null,
+			// consultation details
+			SchoolHasConsultedStakeholders = school.SchoolHasConsultedStakeholders,
+			SchoolPlanToConsultStakeholders = school.SchoolPlanToConsultStakeholders,
 
-			// ToDo: declaration
+			// Declaration
 			// two questions from the application form would be easy to mix up here
 			// 1. I agree with all of these statements, and belive that the facts stated in this application are true (summary page)
 			// 2. The information in this application is true to the best of my kowledge (actual question)
-			////DeclarationBodyAgree = null,
-			////DeclarationIAmTheChairOrHeadteacher = null,
-			////DeclarationSignedByName = null
+			DeclarationBodyAgree = school.DeclarationBodyAgree,
+			DeclarationIAmTheChairOrHeadteacher = school.DeclarationIAmTheChairOrHeadteacher,
+			DeclarationSignedByName = school.DeclarationSignedByName
 		};
 
 		return serviceModel;

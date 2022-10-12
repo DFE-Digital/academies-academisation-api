@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using AutoMapper;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
@@ -12,11 +13,13 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 {
 	private readonly IApplicationFactory _domainFactory;
 	private readonly IApplicationCreateDataCommand _dataCommand;
+	private readonly IMapper _mapper;
 
-	public ApplicationCreateCommand(IApplicationFactory domainFactory, IApplicationCreateDataCommand dataCommand)
+	public ApplicationCreateCommand(IApplicationFactory domainFactory, IApplicationCreateDataCommand dataCommand, IMapper mapper)
 	{
 		_domainFactory = domainFactory;
 		_dataCommand = dataCommand;
+		_mapper = mapper;
 	}
 
 	public async Task<CreateResult<ApplicationServiceModel>> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
@@ -36,6 +39,6 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 
 		await _dataCommand.Execute(domainSuccessResult.Payload);
 
-		return domainSuccessResult.MapToPayloadType(ApplicationServiceModelMapper.MapFromDomain);
+		return domainSuccessResult.MapToPayloadType(ApplicationServiceModelMapper.MapFromDomain, _mapper);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -10,6 +11,7 @@ public class Application : IApplication
 	private readonly List<School> _schools = new();
 	private readonly SubmitApplicationValidator submitValidator = new();
 	private readonly UpdateApplicationValidator updateValidator = new();
+	private readonly SetJoinTrustDetailsValidator setJoinTrustDetailsValidator = new();
 
 	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
@@ -25,7 +27,9 @@ public class Application : IApplication
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
-		IEnumerable<School> schools)
+		IEnumerable<School> schools,
+		IJoinTrust? joinTrust,
+		IFormTrust? formTrust)
 	{
 		ApplicationId = applicationId;
 		CreatedOn = createdOn;
@@ -34,6 +38,8 @@ public class Application : IApplication
 		ApplicationStatus = applicationStatus;
 		_contributors = contributors.Select(c => new Contributor(c.Key, c.Value)).ToList();
 		_schools = schools.ToList();
+		JoinTrust = joinTrust;
+		FormTrust = formTrust;
 	}
 
 	public int ApplicationId { get; private set; }
@@ -41,6 +47,9 @@ public class Application : IApplication
 	public DateTime LastModifiedOn { get; }
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
+
+	public IFormTrust? FormTrust { get; private set; }
+	public IJoinTrust? JoinTrust { get; private set; }
 
 	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
 
@@ -117,6 +126,30 @@ public class Application : IApplication
 		}
 
 		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
+	}
+
+	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+	{
+		// check the application type allows join trust details to be set
+		var validationResult = setJoinTrustDetailsValidator.Validate(this);
+
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
+
+		// if the trust is already set update the fields
+		if (JoinTrust != null)
+		{
+			JoinTrust.Update(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
+
+		}
+		else { 
+			JoinTrust = Trusts.JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
+		}
+
+		return new CommandSuccessResult();
 	}
 }
 

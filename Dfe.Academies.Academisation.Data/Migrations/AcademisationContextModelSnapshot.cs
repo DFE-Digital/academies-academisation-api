@@ -118,6 +118,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("CurrentFinancialYearRevenueStatusFileLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("DeclarationBodyAgree")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("DeclarationIAmTheChairOrHeadteacher")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DeclarationSignedByName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DiocesePermissionEvidenceDocumentLink")
                         .HasColumnType("nvarchar(max)");
 
@@ -141,6 +150,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("FeederSchools")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("FinanceOngoingInvestigations")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FinancialInvestigationsExplain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("FinancialInvestigationsTrustAware")
+                        .HasColumnType("bit");
 
                     b.Property<string>("GoverningBodyConsentEvidenceDocumentLink")
                         .HasColumnType("nvarchar(max)");
@@ -289,8 +307,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("SchoolContributionToTrust")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("SchoolHasConsultedStakeholders")
+                        .HasColumnType("bit");
+
                     b.Property<string>("SchoolName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SchoolPlanToConsultStakeholders")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SupportGrantFundsPaidTo")
@@ -340,10 +364,20 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("FormTrustId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JoinTrustId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FormTrustId");
+
+                    b.HasIndex("JoinTrustId");
 
                     b.ToTable("ConversionApplication", "academisation");
                 });
@@ -388,6 +422,70 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.HasIndex("ConversionApplicationId");
 
                     b.ToTable("ConversionApplicationContributor", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProposedTrustName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrustApproverName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationFormTrust", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.JoinTrustState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool?>("ChangesToLaGovernance")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ChangesToLaGovernanceExplained")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("ChangesToTrust")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ChangesToTrustExplained")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrustName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UKPRN")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationJoinTrust", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LoanState", b =>
@@ -561,6 +659,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime?>("AssignedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("AssignedUserEmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssignedUserFullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("AssignedUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
@@ -579,6 +686,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("ClearedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Consultation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("ConversionSupportGrantAmount")
                         .HasColumnType("decimal(18,2)");
 
@@ -587,6 +697,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("DiocesanConsent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DiocesanTrust")
                         .HasColumnType("nvarchar(max)");
@@ -603,8 +716,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("FinancialDeficit")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FoundationConsent")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("GeneralInformationSectionComplete")
                         .HasColumnType("bit");
+
+                    b.Property<string>("GoverningBodyResolution")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("HeadTeacherBoardDate")
                         .HasColumnType("datetime2");
@@ -623,6 +742,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool?>("LegalRequirementsSectionComplete")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LocalAuthority")
                         .HasColumnType("nvarchar(max)");
@@ -775,6 +897,21 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", null)
                         .WithMany("Schools")
                         .HasForeignKey("ConversionApplicationId");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", "FormTrust")
+                        .WithMany()
+                        .HasForeignKey("FormTrustId");
+
+                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.JoinTrustState", "JoinTrust")
+                        .WithMany()
+                        .HasForeignKey("JoinTrustId");
+
+                    b.Navigation("FormTrust");
+
+                    b.Navigation("JoinTrust");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ContributorState", b =>

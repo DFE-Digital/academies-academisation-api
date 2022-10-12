@@ -72,6 +72,13 @@ public record ProjectDetails(
 	string? EqualitiesImpactAssessmentConsidered = null,
 	bool? RisksAndIssuesSectionComplete = null,
 
+	// legal requirements
+	YesNoNotApplicable? GoverningBodyResolution = null,
+	YesNoNotApplicable? Consultation = null,
+	YesNoNotApplicable? DiocesanConsent = null,
+	YesNoNotApplicable? FoundationConsent = null,
+	bool? LegalRequirementsSectionComplete = null,
+	
 	// school budget info
 	decimal? RevenueCarryForwardAtEndMarchCurrentYear = null,
 	decimal? ProjectedRevenueBalanceAtEndMarchNextYear = null,
@@ -92,5 +99,8 @@ public record ProjectDetails(
 	// key stage performance tables
 	string? KeyStage2PerformanceAdditionalInformation = null,
 	string? KeyStage4PerformanceAdditionalInformation = null,
-	string? KeyStage5PerformanceAdditionalInformation = null	
+	string? KeyStage5PerformanceAdditionalInformation = null,
+	
+	// assigned user
+	User? AssignedUser = null
 );

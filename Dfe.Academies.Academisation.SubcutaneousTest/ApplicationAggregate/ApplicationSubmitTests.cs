@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using AutoMapper;
 using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
@@ -25,6 +26,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 
@@ -43,26 +45,31 @@ public class ApplicationSubmitTests
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-
+	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
+	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory);
-		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
-		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
+		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
+		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
+		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
+		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
+		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
+		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
+
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -88,7 +95,9 @@ public class ApplicationSubmitTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
+			_setTrustCommandHandler,
+			_applicationsListByUserQuery,
+			_applicationLogger);
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
 			.Create<ApplicationCreateRequestModel>();
@@ -98,10 +107,8 @@ public class ApplicationSubmitTests
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
 		var school = _fixture.Create<ApplicationSchoolServiceModel>();
-		var updateRequest = createdPayload with
-		{
-			Schools = new List<ApplicationSchoolServiceModel> { school }
-		};
+
+		var updateRequest = new ApplicationUpdateRequestModel(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors, new List<ApplicationSchoolServiceModel> { school });
 
 		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
 		DfeAssert.OkResult(updateResult);
@@ -130,7 +137,7 @@ public class ApplicationSubmitTests
 			() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
 			() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
 			() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
-			() => Assert.Equal(ToYesNoString(school.LandAndBuildings.PartOfPfiScheme), project.PartOfPfiScheme),
+			() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
 			() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),
 			() => Assert.Equal(school.ProjectedPupilNumbersYear2, project.YearTwoProjectedPupilNumbers),
 			() => Assert.Equal(school.ProjectedPupilNumbersYear3, project.YearThreeProjectedPupilNumbers)

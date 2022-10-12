@@ -5,5 +5,5 @@ namespace Dfe.Academies.Academisation.IService.Commands.Application;
 
 public interface IApplicationUpdateCommand
 {
-	Task<CommandResult> Execute(int applicationId, ApplicationServiceModel applicationServiceModel);
+	Task<CommandResult> Execute(int applicationId, ApplicationUpdateRequestModel applicationServiceModel);
 }

@@ -9,13 +9,15 @@ namespace Dfe.Academies.Academisation.Data;
 public class AcademisationContext : DbContext
 {
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options) { }
-	
+
 	public DbSet<ApplicationState> Applications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
 	public DbSet<LoanState> SchoolLoans { get; set; } = null!;
 	public DbSet<ProjectState> Projects { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
+	public DbSet<JoinTrustState> JoinTrusts { get; set; } = null!;
+	public DbSet<FormTrustState> FormTrusts { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
@@ -43,7 +45,7 @@ public class AcademisationContext : DbContext
 			{
 				continue;
 			}
-			
+
 			foreach (object? child in children)
 			{
 				Type childType = child.GetType();
@@ -104,7 +106,21 @@ public class AcademisationContext : DbContext
 
 		OnAdvisoryBoardDecisionCreating(modelBuilder);
 
+		OnProjectCreating(modelBuilder);
+
 		base.OnModelCreating(modelBuilder);
+	}
+
+	private static void OnProjectCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.GoverningBodyResolution).HasConversion<string>();
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.Consultation).HasConversion<string>();
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.DiocesanConsent).HasConversion<string>();
+		modelBuilder.Entity<ProjectState>()
+			.Property(e => e.FoundationConsent).HasConversion<string>();
 	}
 
 	private static void OnAdvisoryBoardDecisionCreating(ModelBuilder modelBuilder)

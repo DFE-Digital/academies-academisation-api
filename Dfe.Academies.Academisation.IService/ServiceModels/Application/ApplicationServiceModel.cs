@@ -7,4 +7,6 @@ public record ApplicationServiceModel(
 	ApplicationType ApplicationType,
 	ApplicationStatus ApplicationStatus,
 	IReadOnlyCollection<ApplicationContributorServiceModel> Contributors,
-	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools);
+	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools, 
+	ApplicationJoinTrustServiceModel? joinTrustDetails,
+	ApplicationFormTrustServiceModel? formTrustDetails);

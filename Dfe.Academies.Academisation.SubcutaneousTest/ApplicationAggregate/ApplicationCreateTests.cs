@@ -1,5 +1,7 @@
 ﻿using AutoFixture;
+using AutoMapper;
 using Bogus;
+using Castle.Core.Logging;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
@@ -17,6 +19,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ApplicationAggregate;
@@ -31,25 +34,29 @@ public class ApplicationCreateTests
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+	private readonly ILogger<ApplicationController> _applicationLogger;
 
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
-
+	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
+	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	public ApplicationCreateTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context);
+		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
+		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
+		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
+		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
+		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -63,8 +70,10 @@ public class ApplicationCreateTests
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
-			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
+			_applicationSubmitCommand, 
+			_setTrustCommandHandler,
+			_applicationsListByUserQuery,
+			_applicationLogger);
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
 			.Create<ApplicationCreateRequestModel>();
@@ -95,7 +104,8 @@ public class ApplicationCreateTests
 				applicationCreateRequestModel.Contributor.EmailAddress,
 				applicationCreateRequestModel.Contributor.Role,
 				applicationCreateRequestModel.Contributor.OtherRoleName) },
-			new List<ApplicationSchoolServiceModel>());
+			new List<ApplicationSchoolServiceModel>(),
+			null, null);
 
 		Assert.Equivalent(expectedApplication, actualApplication);
 	}
@@ -109,7 +119,9 @@ public class ApplicationCreateTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_applicationsListByUserQuery);
+			_setTrustCommandHandler,
+			_applicationsListByUserQuery,
+			_applicationLogger);
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Name.FullName()));

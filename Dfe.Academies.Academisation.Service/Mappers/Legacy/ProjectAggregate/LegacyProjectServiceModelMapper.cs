@@ -81,6 +81,13 @@ internal static class LegacyProjectServiceModelMapper
 			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
 
+			// legal requirements
+			Consultation = project.Details.Consultation,
+			GoverningBodyResolution = project.Details.GoverningBodyResolution,
+			DiocesanConsent = project.Details.DiocesanConsent,
+			FoundationConsent = project.Details.FoundationConsent,
+			LegalRequirementsSectionComplete = project.Details.LegalRequirementsSectionComplete,
+			
 			// school budget info
 			RevenueCarryForwardAtEndMarchCurrentYear = project.Details.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = project.Details.ProjectedRevenueBalanceAtEndMarchNextYear,
@@ -102,6 +109,10 @@ internal static class LegacyProjectServiceModelMapper
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
+			
+			AssignedUser = project.Details.AssignedUser?.Id == null
+				? null
+				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress)
 		};
 
 		return serviceModel;

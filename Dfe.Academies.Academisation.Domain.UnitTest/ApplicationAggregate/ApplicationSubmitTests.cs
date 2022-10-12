@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
@@ -12,6 +15,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 	public class ApplicationSubmitTests
 	{
 		private readonly Fixture _fixture = new();
+
+		public ApplicationSubmitTests()
+		{
+			_fixture.Customize(new AutoMoqCustomization());
+		}
 
 		[Fact]
 		public void ApplicationStatusIsSubmitted___ValidationError()
@@ -24,7 +32,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationType.FormAMat,
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
-				new List<School>());
+				new List<School>(),
+				_fixture.Create<IJoinTrust>(),
+				null);
 
 			// act
 			var result = subject.Submit();
@@ -47,8 +57,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				applicationType,
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
-				new List<School>()
-				);
+				new List<School>(),
+				_fixture.Create<IJoinTrust>(),
+				null);
 
 			// act
 			var result = subject.Submit();
@@ -74,7 +85,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					_fixture.Create<School>(),
 					_fixture.Create<School>()
-				});
+				},
+				_fixture.Create<IJoinTrust>(),
+				null);
 
 			// act
 			var result = subject.Submit();
@@ -99,7 +112,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new List<School>
 				{
 					 _fixture.Create<School>()
-				});
+				},
+				_fixture.Create<IJoinTrust>(),
+				null);
 
 			// act
 			var result = subject.Submit();
@@ -125,7 +140,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					_fixture.Create<School>(),
 					_fixture.Create<School>() 
-				});
+				},
+				_fixture.Create<IJoinTrust>(),
+				null);
 
 			// act
 			var result = subject.Submit();

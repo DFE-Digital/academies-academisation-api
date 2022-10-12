@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoMapper;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -18,12 +19,13 @@ public class ApplicationUpdateDataCommandTests
 	private readonly Fixture _fixture = new();
 	private readonly ApplicationGetDataQuery _query;
 	private readonly ApplicationUpdateDataCommand _subject;
+	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
 	public ApplicationUpdateDataCommandTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		_query = new ApplicationGetDataQuery(_context);
-		_subject = new ApplicationUpdateDataCommand(_context);
+		_query = new ApplicationGetDataQuery(_context, _mapper.Object);
+		_subject = new ApplicationUpdateDataCommand(_context, _mapper.Object);
 
 		_fixture.Customize<LoanState>(composer =>
 			composer

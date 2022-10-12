@@ -1,4 +1,6 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Reflection;
+using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
@@ -19,20 +21,27 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
+		private readonly ISetJoinTrustDetailsCommandHandler _setJoinTrustDetailsCommandHandler;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+		private readonly ILogger<ApplicationController> _logger;
 
 		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationSubmitCommand applicationSubmitCommand,
-			IApplicationListByUserQuery applicationsListByUserQuery
+			ISetJoinTrustDetailsCommandHandler setTrustCommandHandler,
+			IApplicationListByUserQuery applicationsListByUserQuery,
+			ILogger<ApplicationController> logger
 			)
 		{
+			// need guard clauses on these check for null
 			_applicationCreateCommand = applicationCreateCommand;
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
+			_setJoinTrustDetailsCommandHandler = setTrustCommandHandler;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
+			_logger = logger;
 		}
 
 		[ProducesResponseType(StatusCodes.Status201Created)]
@@ -53,6 +62,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("{id}", Name = GetRouteName)]
 		public async Task<ActionResult<ApplicationServiceModel>> Get(int id)
 		{
+			// basic log line to check logger is working
+			_logger.LogInformation($"Getting application, id: {id}");
+
 			var result = await _applicationGetQuery.Execute(id);
 			return result is null ? NotFound() : Ok(result);
 		}
@@ -65,9 +77,23 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut("{id}", Name = "Update")]
-		public async Task<ActionResult> Update(int id, [FromBody] ApplicationServiceModel serviceModel)
+		public async Task<ActionResult> Update(int id, [FromBody] ApplicationUpdateRequestModel serviceModel)
 		{
 			var result = await _applicationUpdateCommand.Execute(id, serviceModel);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{applicationId}/join-trust", Name = "SetJoinTrustDetails")]
+		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command)
+		{
+			var result = await _setJoinTrustDetailsCommandHandler.Handle(applicationId, command);
 
 			return result switch
 			{

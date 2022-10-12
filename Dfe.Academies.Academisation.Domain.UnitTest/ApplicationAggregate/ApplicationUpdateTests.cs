@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate;
@@ -28,6 +31,7 @@ public class ApplicationUpdateTests
 		_fixture.Customize<UpdateSchoolParameter>(composer =>
 				composer
 					.With(s => s.Id, 0));
+		_fixture.Customize(new AutoMoqCustomization());
 	}
 
 	[Fact]
@@ -355,7 +359,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			updateSchools);
+			updateSchools,
+			subject.JoinTrust,
+			subject.FormTrust);
 
 		// act
 		var result = subject.Update(
@@ -399,7 +405,9 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			updateSchools);
+			updateSchools,
+			subject.JoinTrust,
+			subject.FormTrust);
 
 		// act
 		var result = subject.Update(
@@ -414,6 +422,72 @@ public class ApplicationUpdateTests
 		Assert.Equivalent(expected, subject);
 		var addedSchool = Assert.Single(subject.Schools, s => s.Details.Urn == schoolDetailsToAdd.SchoolDetails.Urn);
 		Assert.Equivalent(schoolDetailsToAdd.SchoolDetails, addedSchool.Details);
+	}
+
+	[Fact]
+	public void SetJoinMatDetails___SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0, ApplicationType.JoinAMat);
+
+		var updateJoinTrust = _fixture.Create<IJoinTrust>();
+
+		Mock.Get(updateJoinTrust).Setup(x => x.Id).Returns(10101);
+		Mock.Get(updateJoinTrust).Setup(x => x.UKPRN).Returns(295061);
+		Mock.Get(updateJoinTrust).Setup(x => x.TrustName).Returns("Test Trust");
+		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrust).Returns(true);
+		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained, it has changed");
+		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToLaGovernance).Returns(true);
+		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained, it has changed");
+
+		Application expected = new(
+			subject.ApplicationId,
+			subject.CreatedOn,
+			subject.LastModifiedOn,
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			subject.Schools.Cast<School>().ToList(),
+			updateJoinTrust,
+			subject.FormTrust);
+
+		// act
+		var result = subject.SetJoinTrustDetails(
+			updateJoinTrust.UKPRN,
+			updateJoinTrust.TrustName,
+			updateJoinTrust.ChangesToTrust,
+			updateJoinTrust.ChangesToTrustExplained,
+			updateJoinTrust.ChangesToLaGovernance,
+			updateJoinTrust.ChangesToLaGovernanceExplained);
+
+		// assert
+		DfeAssert.CommandSuccess(result);
+
+		Assert.Equal(updateJoinTrust.TrustName, subject.JoinTrust?.TrustName);
+		Assert.Equal(updateJoinTrust.UKPRN, subject.JoinTrust?.UKPRN);
+	}
+
+	[Fact]
+	public void SetJoinMatDetailsWrongApplicationType__ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.FormAMat);
+		Application expected = Clone(subject);
+
+		var updateJoinTrust = _fixture.Create<IJoinTrust>();
+
+		// act
+		var result = subject.SetJoinTrustDetails(
+			updateJoinTrust.UKPRN,
+			updateJoinTrust.TrustName,
+			updateJoinTrust.ChangesToTrust,
+			updateJoinTrust.ChangesToTrustExplained,
+			updateJoinTrust.ChangesToLaGovernance,
+			updateJoinTrust.ChangesToLaGovernanceExplained);
+
+		// assert
+		DfeAssert.CommandValidationError(result, nameof(ApplicationType));
+		Assert.Equivalent(expected, subject);
 	}
 
 	private Application BuildApplication(ApplicationStatus applicationStatus, int numberOfSchools, ApplicationType? type = null)
@@ -432,7 +506,9 @@ public class ApplicationUpdateTests
 			type ?? _fixture.Create<ApplicationType>(),
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
-			schools);
+			schools,
+			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
+			null);
 
 		return application;
 	}
@@ -463,9 +539,8 @@ public class ApplicationUpdateTests
 			application.ApplicationType,
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			application.Schools.Select(s => new School(s.Id,
-																s.Details,
-																s.Loans.Select(l => new Loan(l.Id, l.Details))))
+			application.Schools.Select(s => 
+				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Details)))), application.JoinTrust, application.FormTrust
 		);
 	}
 }
