@@ -14,16 +14,16 @@ import {AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPaylo
 describe('Academisation API Testing', () => {
 
     let apiKey = Cypress.env('apiKey');
+    let url = Cypress.env('url');
     let applicationNumber = 24
     let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3})Z?$/
    
-    Cypress.config('baseUrl', 'http://academies-academisation-api-dev.azurewebsites.net/')
 
     it('GET - Verify An Authorised User Can Retrieve A Respective Application - 200 OK EXPECTED', () => {
           cy.request({
                   method: 'GET',
-                  url: '/application/' + applicationNumber,
+                  url: url + '/application/' + applicationNumber,
                   headers: 
                   {
                     'x-api-key' : apiKey
@@ -78,7 +78,7 @@ describe('Academisation API Testing', () => {
       it('GET - Verify An UNAUTHORISED USER CANNOT Retreive An Application - 401 UNAUTHORISED EXPECTED', () => {
         cy.request({
               method: 'GET',
-              url: '/application/' + applicationNumber,
+              url: url + '/application/' + applicationNumber,
               failOnStatusCode: false
               }).then((response) => {
                 expect(response).to.have.property('status', 401)
@@ -88,7 +88,7 @@ describe('Academisation API Testing', () => {
       it('PUT - Verify An Authorised User Can Update An Application Correctly - 200 OK EXPECTED', () => {
         cy.request({
               method: 'PUT',
-              url: '/application/' + applicationNumber,
+              url: url + '/application/' + applicationNumber,
               headers: 
               {
                 'x-api-key' : apiKey
@@ -104,7 +104,7 @@ describe('Academisation API Testing', () => {
   it('PUT - Verify An Authorised User Is Unable To Change Their Contributor\'s Email to ANOTHER EMAIL ADDRESS - 400 BAD REQUEST EXPECTED', () => {
     cy.request({
           method: 'PUT',
-          url: '/application/' + applicationNumber,
+          url: url + '/application/' + applicationNumber,
           failOnStatusCode: false,
           headers: 
           {
@@ -123,7 +123,7 @@ describe('Academisation API Testing', () => {
   it('PUT - Verify An Authorised User Is Unable To Change Their Contributor\'s Email to AN INVALID EMAIL ADDRESS - 400 BAD REQUEST EXPECTED', () => {
     cy.request({
           method: 'PUT',
-          url: '/application/' + applicationNumber,
+          url: url + '/application/' + applicationNumber,
           failOnStatusCode: false,
           headers: 
           {
@@ -142,7 +142,7 @@ describe('Academisation API Testing', () => {
 it('PUT - Verify An Authorised User Is Unable To Change The worksPlannedDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
   cy.request({
         method: 'PUT',
-        url: '/application/' + applicationNumber,
+        url: url + '/application/' + applicationNumber,
         failOnStatusCode: false,
         headers: 
         {
@@ -162,7 +162,7 @@ it('PUT - Verify An Authorised User Is Unable To Change The worksPlannedDate To 
 it('PUT - Verify An Authorised User Is Unable To Change The sacreExemptionDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
   cy.request({
         method: 'PUT',
-        url: '/application/' + applicationNumber,
+        url: url + '/application/' + applicationNumber,
         failOnStatusCode: false,
         headers: 
         {
@@ -181,7 +181,7 @@ it('PUT - Verify An Authorised User Is Unable To Change The sacreExemptionDate T
 it('PUT - Verify An Authorised User Is Unable To Change The previousFinancialYearEndDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
   cy.request({
         method: 'PUT',
-        url: '/application/' + applicationNumber,
+        url: url + '/application/' + applicationNumber,
         failOnStatusCode: false,
         headers: 
         {
@@ -200,7 +200,7 @@ it('PUT - Verify An Authorised User Is Unable To Change The previousFinancialYea
 it('PUT - Verify An Authorised User Is Unable To Change The currentFinancialYearEndDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
   cy.request({
         method: 'PUT',
-        url: '/application/' + applicationNumber,
+        url: url + '/application/' + applicationNumber,
         failOnStatusCode: false,
         headers: 
         {
@@ -219,7 +219,7 @@ it('PUT - Verify An Authorised User Is Unable To Change The currentFinancialYear
 it('PUT - Verify An Authorised User Is Unable To Change The nextFinancialYearEndDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
   cy.request({
         method: 'PUT',
-        url: '/application/' + applicationNumber,
+        url: url + '/application/' + applicationNumber,
         failOnStatusCode: false,
         headers: 
         {
@@ -238,7 +238,7 @@ it('PUT - Verify An Authorised User Is Unable To Change The nextFinancialYearEnd
 it('PUT - Verify An Authorised User Is Unable To Change The schoolConversionTargetDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
   cy.request({
         method: 'PUT',
-        url: '/application/' + applicationNumber,
+        url: url + '/application/' + applicationNumber,
         failOnStatusCode: false,
         headers: 
         {
@@ -255,7 +255,7 @@ it('PUT - Verify An Authorised User Is Unable To Change The schoolConversionTarg
       it('PUT - Verify An UNAUTHORISED USER CANNOT Update An Application - 401 UNAUTHORISED EXPECTED', () => {
         cy.request({
             method: 'PUT', 
-            url: '/application/' + applicationNumber,
+            url: url + '/application/' + applicationNumber,
             failOnStatusCode: false,
             body:
             UnauthorisedUserCannotUpdatePayload
