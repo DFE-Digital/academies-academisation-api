@@ -137,6 +137,9 @@ public class ApplicationSchoolState : BaseEntity
 	public bool? DeclarationIAmTheChairOrHeadteacher { get; set; }
 	public string? DeclarationSignedByName { get; set; }
 
+	// Reason for joning trust
+	public string? SchoolConversionReasonsForJoining { get; set; }
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()
@@ -211,7 +214,7 @@ public class ApplicationSchoolState : BaseEntity
 			GoverningBodyConsentEvidenceDocumentLink = applyingSchool.Details.GoverningBodyConsentEvidenceDocumentLink,
 			AdditionalInformationAdded = applyingSchool.Details.AdditionalInformationAdded,
 			AdditionalInformation = applyingSchool.Details.AdditionalInformation,
-			EqualitiesImpactAssessmentCompleted = applyingSchool.Details.EqualitiesImpactAssessmentCompleted, 
+			EqualitiesImpactAssessmentCompleted = applyingSchool.Details.EqualitiesImpactAssessmentCompleted,
 			EqualitiesImpactAssessmentDetails = applyingSchool.Details.EqualitiesImpactAssessmentDetails,
 			// previous financial yr
 			PreviousFinancialYearEndDate = applyingSchool.Details.PreviousFinancialYear?.FinancialYearEndDate,
@@ -265,7 +268,9 @@ public class ApplicationSchoolState : BaseEntity
 			// declaration
 			DeclarationBodyAgree = applyingSchool.Details.DeclarationBodyAgree,
 			DeclarationIAmTheChairOrHeadteacher = applyingSchool.Details.DeclarationIAmTheChairOrHeadteacher,
-			DeclarationSignedByName = applyingSchool.Details.DeclarationSignedByName
+			DeclarationSignedByName = applyingSchool.Details.DeclarationSignedByName,
+			//Trust reasons
+			SchoolConversionReasonsForJoining = applyingSchool.Details.SchoolConversionReasonsForJoining
 		};
 	}
 
@@ -399,7 +404,8 @@ public class ApplicationSchoolState : BaseEntity
 			// declaration - final section / part of application
 			DeclarationBodyAgree = DeclarationBodyAgree,
 			DeclarationIAmTheChairOrHeadteacher = DeclarationIAmTheChairOrHeadteacher,
-			DeclarationSignedByName = DeclarationSignedByName
+			DeclarationSignedByName = DeclarationSignedByName,
+			SchoolConversionReasonsForJoining = SchoolConversionReasonsForJoining
 		};
 
 		// TODO:- Leases
