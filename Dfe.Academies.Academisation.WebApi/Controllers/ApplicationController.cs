@@ -22,6 +22,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 		private readonly ISetJoinTrustDetailsCommandHandler _setJoinTrustDetailsCommandHandler;
+		private readonly ISetFormTrustDetailsCommandHandler _setFormTrustDetailsCommandHandler;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 		private readonly ILogger<ApplicationController> _logger;
 
@@ -30,6 +31,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationSubmitCommand applicationSubmitCommand,
 			ISetJoinTrustDetailsCommandHandler setTrustCommandHandler,
+			ISetFormTrustDetailsCommandHandler setFormTrustCommandHandler,
 			IApplicationListByUserQuery applicationsListByUserQuery,
 			ILogger<ApplicationController> logger
 			)
@@ -40,6 +42,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
 			_setJoinTrustDetailsCommandHandler = setTrustCommandHandler;
+			_setFormTrustDetailsCommandHandler = setFormTrustCommandHandler;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
 			_logger = logger;
 		}
@@ -94,6 +97,21 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command)
 		{
 			var result = await _setJoinTrustDetailsCommandHandler.Handle(applicationId, command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+
+		[HttpPut("{applicationId}/form-trust", Name = "SetFormTrustDetails")]
+		public async Task<ActionResult> SetFormTrustDetails(int applicationId, [FromBody] SetFormTrustDetailsCommand command)
+		{
+			var result = await _setFormTrustDetailsCommandHandler.Handle(applicationId, command);
 
 			return result switch
 			{

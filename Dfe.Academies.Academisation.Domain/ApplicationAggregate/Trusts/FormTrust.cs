@@ -10,20 +10,23 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
 	public class FormTrust : IFormTrust
 	{
-		public FormTrust(int id, string? proposedTrustName, FormTrustDetails trustDetails)
+		public FormTrust(int id, FormTrustDetails trustDetails)
 		{
 			this.Id = id;
-			this.ProposedTrustName = proposedTrustName;
 			this.TrustDetails = trustDetails;
 		}
 
-		public FormTrustDetails TrustDetails { get; }
+		public FormTrustDetails TrustDetails { get; private set; }
 		public int Id { get; }
-		public string? ProposedTrustName { get; }
 
-		public static IFormTrust Create(string? proposedTrustName, FormTrustDetails trustDetails) {
+		public static IFormTrust Create(FormTrustDetails trustDetails) {
 
-			return new FormTrust(0, proposedTrustName, trustDetails);
+			return new FormTrust(0, trustDetails);
+		}
+
+		public void Update(FormTrustDetails formTrustDetails)
+		{
+			TrustDetails = formTrustDetails;
 		}
 	}
 }

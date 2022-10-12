@@ -151,5 +151,30 @@ public class Application : IApplication
 
 		return new CommandSuccessResult();
 	}
+
+	public CommandResult SetFormTrustDetails(FormTrustDetails formTrustDetails)
+	{
+		// check the application type allows join trust details to be set
+		//var validationResult = setJoinTrustDetailsValidator.Validate(this);
+
+		//if (!validationResult.IsValid)
+		//{
+		//	return new CommandValidationErrorResult(
+		//		validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		//}
+
+		// if the trust is already set update the fields
+		if (FormTrust != null)
+		{
+			FormTrust.Update(formTrustDetails);
+
+		}
+		else
+		{
+			FormTrust = Trusts.FormTrust.Create(formTrustDetails);
+		}
+
+		return new CommandSuccessResult();
+	}
 }
 
