@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Net;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Commands.Application.School;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
@@ -12,7 +13,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class SchoolController : ControllerBase
 	{
-		private readonly ILogger<ApplicationController> _logger;
+		private readonly ILogger<SchoolController> _logger;
 		private readonly ICreateLoanCommandHandler _createLoanCommandHandler;
 		private readonly IUpdateLoanCommandHandler _updateLoanCommandHandler;
 		private readonly IDeleteLoanCommandHandler _deleteLoanCommandHandler;
@@ -20,7 +21,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IUpdateLeaseCommandHandler _updateLeaseCommandHandler;
 		private readonly IDeleteLeaseCommandHandler _deleteLeaseCommandHandler;
 
-		public SchoolController(ILogger<ApplicationController> logger,
+		public SchoolController(ILogger<SchoolController> logger,
 			ICreateLoanCommandHandler createLoanCommandHandler,
 			IUpdateLoanCommandHandler updateLoanCommandHandler,
 			IDeleteLoanCommandHandler deleteLoanCommandHandler, 

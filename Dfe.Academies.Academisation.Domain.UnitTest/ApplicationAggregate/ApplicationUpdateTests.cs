@@ -50,7 +50,7 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s=> new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 				));
 
 		// assert
@@ -73,7 +73,7 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 			));
 
 		// assert
@@ -97,7 +97,7 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 			));
 
 		// assert
@@ -128,7 +128,7 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 			));
 
 		// assert
@@ -154,7 +154,7 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 			));
 
 		// assert
@@ -172,12 +172,12 @@ public class ApplicationUpdateTests
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 		).ToList();
 
 		schoolsUpdated.Add(new UpdateSchoolParameter(0, 
 			_fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" },
-			new List<KeyValuePair<int, LoanDetails>>()
+			new List<LoanDetails>()
 			));
 
 		// act
@@ -202,7 +202,7 @@ public class ApplicationUpdateTests
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 		).ToList();
 
 		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with {Id = 99});
@@ -251,7 +251,7 @@ public class ApplicationUpdateTests
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 		).ToList();
 
 		IEnumerable<int> allIndices = schoolsUpdated.Select((s, i) => new { Str = s, Index = i })
@@ -331,7 +331,7 @@ public class ApplicationUpdateTests
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 		).ToList();
 
 		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
@@ -389,7 +389,7 @@ public class ApplicationUpdateTests
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l=> new LoanDetails(l.Id, l.Purpose, l.Provider, l.InterestRate, l.Schedule)).ToList())
 		).ToList();
 
 		var schoolDetailsToAdd = _fixture.Create<UpdateSchoolParameter>();

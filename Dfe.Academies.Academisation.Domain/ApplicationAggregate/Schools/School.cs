@@ -21,7 +21,7 @@ public class School : ISchool
 		_leases = leases.ToList();
 	}
 
-	public int Id { get; internal set; }
+	public int Id { get;  set; }
 
 	public SchoolDetails Details { get; set; }
 

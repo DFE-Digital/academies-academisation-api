@@ -13,6 +13,5 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 		public void Update(decimal amount, string purpose, string provider, decimal interestRate, string schedule);
 		
 		//TODO: Remove this after refactoring away interfaces
-		LoanDetails Details { get; set; }
 	}
 }

@@ -1,3 +1,22 @@
+using System.Runtime.Serialization;
+using MediatR;
+
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 
-public record CreateLoanCommand(int applicationId, int schoolId, decimal amount, string purpose, string provider, decimal interestRate, string schedule);
+public class CreateLoanCommand : IRequest<bool>
+{
+	[DataMember]
+	public int ApplicationId { get; set; }
+	[DataMember]
+	public int SchoolId { get; set; }
+	[DataMember]
+	public decimal Amount { get;  set; }
+	[DataMember]
+	public string Purpose { get; set; }
+	[DataMember]
+	public string Provider { get; set; }
+	[DataMember]
+	public decimal InterestRate { get; set; }
+	[DataMember]
+	public string Schedule { get; set; }
+}

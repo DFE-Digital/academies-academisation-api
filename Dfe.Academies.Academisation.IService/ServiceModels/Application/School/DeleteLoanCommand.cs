@@ -1,4 +1,14 @@
-namespace Dfe.Academies.Academisation.IService.ServiceModels.Application.School
+using System.Runtime.Serialization;
+using MediatR;
+
+namespace Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
+
+public class DeleteLoanCommand : IRequest<bool>
 {
-	public record DeleteLoanCommand(int applicationId, int schoolId, int loanId);
+	[DataMember]
+	public int ApplicationId { get; set; }
+	[DataMember]
+	public int SchoolId { get; set; }
+	[DataMember]
+	public int LoanId { get; set; }
 }

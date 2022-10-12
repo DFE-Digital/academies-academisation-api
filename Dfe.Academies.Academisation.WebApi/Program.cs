@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Collections;
+using System.Text.Json;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
@@ -26,12 +27,15 @@ using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.Filters;
 using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Academisation.WebApi.Swagger;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -135,6 +139,14 @@ builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
+builder.Services.AddScoped(typeof(IValidatorFactory<>), typeof(ValidatorFactory<>));
+
+//Validators
+builder.Services.AddScoped<AbstractValidator<CreateLeaseCommand>, CreateLeaseCommandValidator>();
+builder.Services.AddScoped<AbstractValidator<UpdateLeaseCommand>, UpdateLeaseCommandValidator>();
+builder.Services.AddScoped<AbstractValidator<CreateLoanCommand>, CreateLoanCommandValidator>();
+builder.Services.AddScoped<AbstractValidator<UpdateLeaseCommand>, UpdateLeaseCommandValidator>();
+
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],

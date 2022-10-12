@@ -168,7 +168,8 @@ public class Application : IApplication, IAggregateRoot
 	public CommandResult DeleteLoan(int schoolId, int loanId)
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
-		if(school == null) return new NotFoundCommandResult();
+		var loan = school?.Loans.FirstOrDefault(x => x.Id == loanId);
+		if(school == null || loan == null) return new NotFoundCommandResult();
 		
 		school.DeleteLoan(loanId);
 		return new CommandSuccessResult();
@@ -198,7 +199,8 @@ public class Application : IApplication, IAggregateRoot
 	public CommandResult DeleteLease(int schoolId, int leaseId)
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
-		if(school == null) return new NotFoundCommandResult();
+		var lease = school?.Leases.FirstOrDefault(x => x.Id == leaseId);
+		if(school == null || lease == null) return new NotFoundCommandResult();
 		
 		school.DeleteLease(leaseId);
 		return new CommandSuccessResult();

@@ -28,6 +28,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			return (await _context.Applications
 				.Include(x => x.Schools)
+				.ThenInclude(x => x.Loans)
+				.Include(x => x.Schools)
+				.ThenInclude(x => x.Leases)
 				.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.Id == (int)id))?.MapToDomain(_mapper);
 		}

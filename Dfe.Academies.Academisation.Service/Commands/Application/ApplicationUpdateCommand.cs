@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
@@ -40,9 +41,8 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 			applicationServiceModel.ApplicationStatus,
 			applicationServiceModel.Contributors.Select(c => new KeyValuePair<int, ContributorDetails>(c.ContributorId, c.ToDomain())),
 			applicationServiceModel.Schools.Select(s => 
-				new UpdateSchoolParameter(s.Id, s.ToDomain(), new List<KeyValuePair<int, LoanDetails>>(
-					s.Loans.Select(l=> new KeyValuePair<int,LoanDetails>(l.LoanId, l.ToDomain())
-			)))));
+				new UpdateSchoolParameter(s.Id, s.ToDomain(), new List<LoanDetails>(
+					s.Loans.Select(l=> new LoanDetails(l.LoanId, l.Purpose, l.Provider, l.InterestRate, l.Schedule))))));
 
 		if (result is CommandValidationErrorResult)
 		{

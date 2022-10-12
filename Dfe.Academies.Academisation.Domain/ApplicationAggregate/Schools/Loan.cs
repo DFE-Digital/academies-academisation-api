@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 		public string Provider { get; private set; }
 		public decimal InterestRate { get; private set; }
 		public string Schedule { get; private set; }
-		public int Id { get; internal set; }
+		public int Id { get; private set; }
 		
 		public static Loan Create(decimal amount, string purpose, string provider, decimal interestRate, string schedule)
 		{
@@ -35,7 +35,5 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 			InterestRate = interestRate;
 			Schedule = schedule;
 		}
-
-		public LoanDetails Details { get; set; }
 	}
 }
