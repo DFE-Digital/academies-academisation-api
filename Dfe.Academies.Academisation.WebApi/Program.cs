@@ -1,4 +1,3 @@
-﻿using System.Collections;
 using System.Text.Json;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
