@@ -18,6 +18,7 @@ public record ApplicationSchoolServiceModel(
 	FinancialYearServiceModel? NextFinancialYear,
 	// leases & loans
 	IReadOnlyCollection<LoanServiceModel> Loans,
+	IReadOnlyCollection<LeaseServiceModel> Leases,
 	string? SchoolContributionToTrust = null,
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,

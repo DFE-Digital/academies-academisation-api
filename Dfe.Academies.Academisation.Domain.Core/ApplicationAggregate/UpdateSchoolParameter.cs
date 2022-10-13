@@ -3,5 +3,6 @@
 	public record UpdateSchoolParameter(
 		int Id,
 		SchoolDetails SchoolDetails,
-		ICollection<LoanDetails> Loans);
+		ICollection<KeyValuePair<int, LoanDetails>> Loans,
+		ICollection<KeyValuePair<int, LeaseDetails>> Leases);
 }

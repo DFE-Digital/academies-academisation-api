@@ -24,6 +24,8 @@ public class ApplicationUpdateDataCommand : IApplicationUpdateDataCommand
 			.Include(a => a.Contributors)
 			.Include(a => a.Schools)
 				.ThenInclude(a => a.Loans)
+			.Include(a => a.Schools)
+			.ThenInclude(a => a.Leases)
 			.SingleOrDefaultAsync(a => a.Id == application.ApplicationId);
 
 		_context.ReplaceTracked(state);

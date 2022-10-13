@@ -62,6 +62,11 @@ public class AcademisationContext : DbContext, IUnitOfWork
 					{
 						Remove(loan);
 					}
+
+					foreach (var lease in schoolState.Leases)
+					{
+						Remove(lease);
+					}
 				}
 
 				Remove(child);

@@ -41,9 +41,11 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 			applicationServiceModel.ApplicationStatus,
 			applicationServiceModel.Contributors.Select(c => new KeyValuePair<int, ContributorDetails>(c.ContributorId, c.ToDomain())),
 			applicationServiceModel.Schools.Select(s => 
-				new UpdateSchoolParameter(s.Id, s.ToDomain(), new List<LoanDetails>(
-					s.Loans.Select(l=> new LoanDetails(l.LoanId, l.Purpose, l.Provider, l.InterestRate, l.Schedule))))));
-
+				new UpdateSchoolParameter(s.Id, s.ToDomain(), new List<KeyValuePair<int, LoanDetails>>(
+					s.Loans.Select(l=> new KeyValuePair<int,LoanDetails>(l.LoanId, l.ToDomain()))),
+					new List<KeyValuePair<int, LeaseDetails>>(
+						s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.leaseId, l.ToDomain()))
+					))));
 		if (result is CommandValidationErrorResult)
 		{
 			return result;
