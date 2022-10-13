@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Threading;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
@@ -7,6 +8,7 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -21,18 +23,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
-		private readonly ISetJoinTrustDetailsCommandHandler _setJoinTrustDetailsCommandHandler;
-		private readonly ISetFormTrustDetailsCommandHandler _setFormTrustDetailsCommandHandler;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+		private readonly IMediator _mediator;
 		private readonly ILogger<ApplicationController> _logger;
 
 		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationSubmitCommand applicationSubmitCommand,
-			ISetJoinTrustDetailsCommandHandler setTrustCommandHandler,
-			ISetFormTrustDetailsCommandHandler setFormTrustCommandHandler,
 			IApplicationListByUserQuery applicationsListByUserQuery,
+			IMediator mediator, 
 			ILogger<ApplicationController> logger
 			)
 		{
@@ -41,9 +41,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationSubmitCommand = applicationSubmitCommand;
-			_setJoinTrustDetailsCommandHandler = setTrustCommandHandler;
-			_setFormTrustDetailsCommandHandler = setFormTrustCommandHandler;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
+			_mediator = mediator;
 			_logger = logger;
 		}
 
@@ -94,9 +93,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut("{applicationId}/join-trust", Name = "SetJoinTrustDetails")]
-		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command)
+		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command, CancellationToken cancellationToken)
 		{
-			var result = await _setJoinTrustDetailsCommandHandler.Handle(applicationId, command);
+			var result = await _mediator.Send(command with { applicationId = applicationId}, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
@@ -109,9 +108,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 
 		[HttpPut("{applicationId}/form-trust", Name = "SetFormTrustDetails")]
-		public async Task<ActionResult> SetFormTrustDetails(int applicationId, [FromBody] SetFormTrustDetailsCommand command)
+		public async Task<ActionResult> SetFormTrustDetails(int applicationId, [FromBody] SetFormTrustDetailsCommand command, CancellationToken cancellationToken)
 		{
-			var result = await _setFormTrustDetailsCommandHandler.Handle(applicationId, command);
+			var result = await _mediator.Send(command with { applicationId = applicationId }, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
