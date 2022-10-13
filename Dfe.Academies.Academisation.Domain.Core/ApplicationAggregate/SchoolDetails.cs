@@ -59,5 +59,7 @@ public record SchoolDetails(
 	// declaration
 	bool? DeclarationBodyAgree = null,
 	bool? DeclarationIAmTheChairOrHeadteacher = null,
-	string? DeclarationSignedByName = null
+	string? DeclarationSignedByName = null,
+	// reasons for joining trust
+	string? SchoolConversionReasonsForJoining = null
 );

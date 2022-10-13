@@ -62,7 +62,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			FinancialInvestigationsTrustAware = school.Details.FinancialInvestigationsTrustAware,
 			DeclarationBodyAgree = school.Details.DeclarationBodyAgree,
 			DeclarationIAmTheChairOrHeadteacher = school.Details.DeclarationIAmTheChairOrHeadteacher,
-			DeclarationSignedByName = school.Details.DeclarationSignedByName
+			DeclarationSignedByName = school.Details.DeclarationSignedByName,
+			SchoolConversionReasonsForJoining = school.Details.SchoolConversionReasonsForJoining
 		};
 	}
 
@@ -120,7 +121,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			FinancialInvestigationsTrustAware = serviceModel.FinancialInvestigationsTrustAware,
 			DeclarationBodyAgree = serviceModel.DeclarationBodyAgree,
 			DeclarationIAmTheChairOrHeadteacher = serviceModel.DeclarationIAmTheChairOrHeadteacher,
-			DeclarationSignedByName = serviceModel.DeclarationSignedByName
+			DeclarationSignedByName = serviceModel.DeclarationSignedByName,
+			SchoolConversionReasonsForJoining = serviceModel.SchoolConversionReasonsForJoining
 		};
 	}
 }
