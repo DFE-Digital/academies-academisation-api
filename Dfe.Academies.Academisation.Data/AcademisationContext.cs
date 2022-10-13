@@ -18,6 +18,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
 	public DbSet<LoanState> SchoolLoans { get; set; } = null!;
+	public DbSet<LeaseState> SchoolLeases { get; set; } = null!;
 	public DbSet<ProjectState> Projects { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 	public DbSet<JoinTrustState> JoinTrusts { get; set; } = null!;

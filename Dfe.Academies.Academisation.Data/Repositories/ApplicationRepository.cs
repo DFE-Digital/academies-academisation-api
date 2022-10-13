@@ -49,9 +49,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task Delete(object id)
 		{
 			var entity = await _context.Applications.FindAsync(id);
-			
 			if(entity != null)
 				_context.Applications.Remove(entity);
+		}
+
+		public async Task DeleteChildObjectById<T>(object id) where T : class
+		{
+			 var entity = await _context.FindAsync<T>(id);
+			 _context.Remove(entity);
 		}
 	}
 }

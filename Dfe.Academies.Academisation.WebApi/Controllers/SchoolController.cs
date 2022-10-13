@@ -38,7 +38,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_deleteLeaseCommandHandler = deleteLeaseCommandHandler;
 		}
 
-		[HttpPost("school/loan/update", Name = "UpdateLoan")]
+		[HttpPost("loan/update", Name = "UpdateLoan")]
 		public async Task<IActionResult> UpdateLoan([FromBody] UpdateLoanCommand command)
 		{
 			var result = await _updateLoanCommandHandler.Handle(command);
@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 		
-		[HttpPut("school/loan/create", Name = "CreateLoan")]
+		[HttpPut("loan/create", Name = "CreateLoan")]
 		public async Task<IActionResult> CreateLoan([FromBody] CreateLoanCommand command)
 		{
 			var result = await _createLoanCommandHandler.Handle(command);
@@ -66,7 +66,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpDelete("school/loan/delete", Name = "DeleteLoan")]
+		[HttpDelete("loan/delete", Name = "DeleteLoan")]
 		public async Task<IActionResult> DeleteLoan([FromBody] DeleteLoanCommand command)
 		{
 			var result = await _deleteLoanCommandHandler.Handle(command);
@@ -80,7 +80,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPost("school/lease/update", Name = "UpdateLease")]
+		[HttpPost("lease/update", Name = "UpdateLease")]
 		public async Task<IActionResult> UpdateLease([FromBody] UpdateLeaseCommand command)
 		{
 			var result = await _updateLeaseCommandHandler.Handle(command);
@@ -94,7 +94,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 		
-		[HttpPut("school/lease/create", Name = "CreateLease")]
+		[HttpPut("lease/create", Name = "CreateLease")]
 		public async Task<IActionResult> CreateLease([FromBody] CreateLeaseCommand command)
 		{
 			var result = await _createLeaseCommandHandler.Handle(command);
@@ -108,7 +108,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpDelete("school/lease/delete", Name = "DeleteLease")]
+		[HttpDelete("lease/delete", Name = "DeleteLease")]
 		public async Task<IActionResult> DeleteLease([FromBody] DeleteLeaseCommand command)
 		{
 			var result = await _deleteLeaseCommandHandler.Handle(command);

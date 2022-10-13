@@ -139,13 +139,18 @@ builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
-builder.Services.AddScoped(typeof(IValidatorFactory<>), typeof(ValidatorFactory<>));
 
 //Validators
+builder.Services.AddScoped<IRequest<bool>, CreateLeaseCommand>();
+builder.Services.AddScoped<IRequest<bool>, UpdateLeaseCommand>();
+builder.Services.AddScoped<IRequest<bool>, CreateLoanCommand>();
+builder.Services.AddScoped<IRequest<bool>, UpdateLoanCommand>();
 builder.Services.AddScoped<AbstractValidator<CreateLeaseCommand>, CreateLeaseCommandValidator>();
 builder.Services.AddScoped<AbstractValidator<UpdateLeaseCommand>, UpdateLeaseCommandValidator>();
 builder.Services.AddScoped<AbstractValidator<CreateLoanCommand>, CreateLoanCommandValidator>();
-builder.Services.AddScoped<AbstractValidator<UpdateLeaseCommand>, UpdateLeaseCommandValidator>();
+builder.Services.AddScoped<AbstractValidator<UpdateLoanCommand>, UpdateLoanCommandValidator>();
+
+builder.Services.AddScoped(typeof(IValidatorFactory<>), typeof(ValidatorFactory<>));
 
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
