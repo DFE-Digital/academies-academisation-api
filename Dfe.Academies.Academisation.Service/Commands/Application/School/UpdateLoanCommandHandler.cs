@@ -36,18 +36,9 @@ public class UpdateLoanCommandHandler : IUpdateLoanCommandHandler
 		var result = existingApplication.UpdateLoan(loanCommand.SchoolId, loanCommand.LoanId, loanCommand.Amount, loanCommand.Purpose, loanCommand.Provider,
 			loanCommand.InterestRate, loanCommand.Schedule);
 			
-		if (result is CommandValidationErrorResult)
-		{
-			return result;
-		}
-
-		if (result is NotFoundCommandResult)
-		{
-			throw new NotFoundException($"Loan not found: {loanCommand.LoanId}", "Loan");
-		}
 		if (result is not CommandSuccessResult)
 		{
-			throw new NotImplementedException();
+			return result;
 		}
 			
 		_applicationRepository.Update(existingApplication);

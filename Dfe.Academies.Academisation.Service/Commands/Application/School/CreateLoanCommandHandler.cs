@@ -35,13 +35,9 @@ public class CreateLoanCommandHandler : ICreateLoanCommandHandler
 		var result = existingApplication.CreateLoan(loanCommand.SchoolId, loanCommand.Amount, loanCommand.Purpose, loanCommand.Provider,
 			loanCommand.InterestRate, loanCommand.Schedule);
 			
-		if (result is CommandValidationErrorResult)
-		{
-			return result;
-		}
 		if (result is not CommandSuccessResult)
 		{
-			throw new NotImplementedException();
+			return result;
 		}
 			
 		_applicationRepository.Update(existingApplication);

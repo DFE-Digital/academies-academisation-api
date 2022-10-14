@@ -22,15 +22,11 @@ public class DeleteLeaseCommandHandler : IDeleteLeaseCommandHandler
 		if (existingApplication == null) return new NotFoundCommandResult();
 
 		var result = existingApplication.DeleteLease(leaseCommand.SchoolId, leaseCommand.LeaseId);
-		if (result is CommandValidationErrorResult)
+		if (result is not CommandSuccessResult)
 		{
 			return result;
 		}
-		if (result is not CommandSuccessResult)
-		{
-			throw new NotImplementedException();
-		}
-			
+		
 		_applicationRepository.Update(existingApplication);
 		
 		//TODO: This can be removed when there is no longer a disconnect between domain and persistence entities

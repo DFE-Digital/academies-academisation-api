@@ -35,17 +35,9 @@ public class UpdateLeaseCommandHandler : IUpdateLeaseCommandHandler
 			
 		var result = existingApplication.UpdateLease(leaseCommand.SchoolId,  leaseCommand.LeaseId, leaseCommand.LeaseTerm, leaseCommand.RepaymentAmount, leaseCommand.InterestRate, leaseCommand.PaymentsToDate, leaseCommand.Purpose, leaseCommand.ValueOfAssets, leaseCommand.ResponsibleForAssets);
 			
-		if (result is CommandValidationErrorResult)
-		{
-			return result;
-		}
-		if (result is NotFoundCommandResult)
-		{
-			throw new NotFoundException($"Lease not found: {leaseCommand.LeaseId}", "Lease");
-		}
 		if (result is not CommandSuccessResult)
 		{
-			throw new NotImplementedException();
+			return result;
 		}
 			
 		_applicationRepository.Update(existingApplication);

@@ -35,13 +35,9 @@ public class CreateLeaseCommandHandler : ICreateLeaseCommandHandler
 			
 		var result = existingApplication.CreateLease(leaseCommand.SchoolId, leaseCommand.LeaseTerm, leaseCommand.RepaymentAmount, leaseCommand.InterestRate, leaseCommand.PaymentsToDate, leaseCommand.Purpose, leaseCommand.ValueOfAssets, leaseCommand.ResponsibleForAssets);
 			
-		if (result is CommandValidationErrorResult)
-		{
-			return result;
-		}
 		if (result is not CommandSuccessResult)
 		{
-			throw new NotImplementedException();
+			return result;
 		}
 			
 		_applicationRepository.Update(existingApplication);
