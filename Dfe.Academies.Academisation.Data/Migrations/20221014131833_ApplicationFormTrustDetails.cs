@@ -14,11 +14,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 schema: "academisation",
                 table: "ApplicationFormTrust");
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<bool>(
                 name: "FormTrustGrowthPlansYesNo",
                 schema: "academisation",
                 table: "ApplicationFormTrust",
-                type: "int",
+                type: "bit",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
@@ -70,11 +70,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 type: "nvarchar(max)",
                 nullable: true);
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<bool>(
                 name: "FormTrustReasonApprovaltoConvertasSAT",
                 schema: "academisation",
                 table: "ApplicationFormTrust",
-                type: "int",
+                type: "bit",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(

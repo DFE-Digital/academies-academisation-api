@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
 {
 	public record FormTrustDetails(
-		DateTime? FormTrustOpeningDate = null,
-		string? FormTrustProposedNameOfTrust = null,
-		string? TrustApproverName = null,
-		string? TrustApproverEmail = null,
-		bool? FormTrustReasonApprovaltoConvertasSAT = null,
-		string? FormTrustReasonApprovedPerson = null,
-		string? FormTrustReasonForming = null,
-		string? FormTrustReasonVision = null,
-		string? FormTrustReasonGeoAreas = null,
-		string? FormTrustReasonFreedom = null,
-		string? FormTrustReasonImproveTeaching = null,
-		string? FormTrustPlanForGrowth = null,
-		string? FormTrustPlansForNoGrowth = null,
-		bool? FormTrustGrowthPlansYesNo = null,
-		string? FormTrustImprovementSupport = null,
-		string? FormTrustImprovementStrategy = null,
+		DateTime? FormTrustOpeningDate,
+		string? FormTrustProposedNameOfTrust,
+		string? TrustApproverName,
+		string? TrustApproverEmail,
+		bool? FormTrustReasonApprovaltoConvertasSAT,
+		string? FormTrustReasonApprovedPerson,
+		string? FormTrustReasonForming,
+		string? FormTrustReasonVision,
+		string? FormTrustReasonGeoAreas,
+		string? FormTrustReasonFreedom,
+		string? FormTrustReasonImproveTeaching,
+		string? FormTrustPlanForGrowth,
+		string? FormTrustPlansForNoGrowth,
+		bool? FormTrustGrowthPlansYesNo,
+		string? FormTrustImprovementSupport,
+		string? FormTrustImprovementStrategy,
 		string? FormTrustImprovementApprovedSponsor = null);
 
 	

@@ -18,6 +18,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -35,14 +36,13 @@ public class ApplicationUpdateTests
 	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
-
+	private readonly IMediator _mediator;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
-	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly ApplicationController _applicationController;
 
@@ -59,15 +59,15 @@ public class ApplicationUpdateTests
 		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
+		_mediator = new Mock<IMediator>().Object;
 
 		_applicationController = new(
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
+			_mediator,
 			_applicationLogger);
 
 		_fixture.Customize<ApplicationContributorServiceModel>(composer =>

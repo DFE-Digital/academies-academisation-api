@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20221013103536_ApplicationFormTrustDetails")]
+    [Migration("20221014131833_ApplicationFormTrustDetails")]
     partial class ApplicationFormTrustDetails
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -440,8 +440,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FormTrustGrowthPlansYesNo")
-                        .HasColumnType("int");
+                    b.Property<bool?>("FormTrustGrowthPlansYesNo")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FormTrustImprovementApprovedSponsor")
                         .HasColumnType("nvarchar(max)");
@@ -464,8 +464,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("FormTrustProposedNameOfTrust")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FormTrustReasonApprovaltoConvertasSAT")
-                        .HasColumnType("int");
+                    b.Property<bool?>("FormTrustReasonApprovaltoConvertasSAT")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FormTrustReasonApprovedPerson")
                         .HasColumnType("nvarchar(max)");

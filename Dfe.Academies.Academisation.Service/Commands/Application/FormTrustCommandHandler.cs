@@ -30,23 +30,23 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			}
 
 			var result = existingApplication.SetFormTrustDetails(new FormTrustDetails(
-				command.FormTrustOpeningDate
-				//command.FormTrustProposedNameOfTrust,
-				//command.TrustApproverName,
-				//command.TrustApproverEmail,
-				//command.FormTrustReasonApprovaltoConvertasSAT,
-				//command.FormTrustReasonApprovedPerson,
-				//command.FormTrustReasonForming,
-				//command.FormTrustReasonVision,
-				//command.FormTrustReasonGeoAreas,
-				//command.FormTrustReasonFreedom,
-				//command.FormTrustReasonImproveTeaching,
-				//command.FormTrustPlanForGrowth,
-				//command.FormTrustPlansForNoGrowth,
-				//command.FormTrustGrowthPlansYesNo,
-				//command.FormTrustImprovementSupport,
-				//command.FormTrustImprovementStrategy,
-				//command.FormTrustImprovementApprovedSponsor
+				command.FormTrustOpeningDate,
+				command.FormTrustProposedNameOfTrust,
+				command.TrustApproverName,
+				command.TrustApproverEmail,
+				command.FormTrustReasonApprovaltoConvertasSAT,
+				command.FormTrustReasonApprovedPerson,
+				command.FormTrustReasonForming,
+				command.FormTrustReasonVision,
+				command.FormTrustReasonGeoAreas,
+				command.FormTrustReasonFreedom,
+				command.FormTrustReasonImproveTeaching,
+				command.FormTrustPlanForGrowth,
+				command.FormTrustPlansForNoGrowth,
+				command.FormTrustGrowthPlansYesNo,
+				command.FormTrustImprovementSupport,
+				command.FormTrustImprovementStrategy,
+				command.FormTrustImprovementApprovedSponsor
 				));
 
 			if (result is CommandValidationErrorResult)

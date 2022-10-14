@@ -438,8 +438,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FormTrustGrowthPlansYesNo")
-                        .HasColumnType("int");
+                    b.Property<bool?>("FormTrustGrowthPlansYesNo")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FormTrustImprovementApprovedSponsor")
                         .HasColumnType("nvarchar(max)");
@@ -462,8 +462,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("FormTrustProposedNameOfTrust")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FormTrustReasonApprovaltoConvertasSAT")
-                        .HasColumnType("int");
+                    b.Property<bool?>("FormTrustReasonApprovaltoConvertasSAT")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FormTrustReasonApprovedPerson")
                         .HasColumnType("nvarchar(max)");

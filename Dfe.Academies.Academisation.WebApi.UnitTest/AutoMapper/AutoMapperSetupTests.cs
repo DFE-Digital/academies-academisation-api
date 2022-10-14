@@ -181,22 +181,40 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 		public void CanMap_FormTrust_MapFromDomainToServiceModel()
 		{
 			// Arrange
-			var joinTrustDomainObj = this.fixture.Create<IJoinTrust>();
+			var formTrustDomainObj = this.fixture.Create<IFormTrust>();
 
-			Mock.Get(joinTrustDomainObj).Setup(x => x.Id).Returns(10101);
-			Mock.Get(joinTrustDomainObj).Setup(x => x.UKPRN).Returns(295061);
-			Mock.Get(joinTrustDomainObj).Setup(x => x.TrustName).Returns("Test Trust");
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrust).Returns(true);
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained it has changed");
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernance).Returns(true);
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained it has changed");
+			// relying on the all details been set here by autofixture
+			var trustDetails = this.fixture.Create<FormTrustDetails>();
+
+			Mock.Get(formTrustDomainObj).Setup(x => x.Id).Returns(10101);
+			Mock.Get(formTrustDomainObj).Setup(x => x.TrustDetails).Returns(trustDetails);
 
 			// Act
-			var result = mapper.Map<ApplicationJoinTrustServiceModel>(joinTrustDomainObj);
+			var result = mapper.Map<ApplicationFormTrustServiceModel>(formTrustDomainObj);
 
 			// Assert
 			Assert.NotNull(result);
-			result.Should().BeEquivalentTo(joinTrustDomainObj);
+			result.FormTrustImprovementSupport.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustImprovementSupport);
+			result.FormTrustImprovementApprovedSponsor.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustImprovementApprovedSponsor);
+			result.FormTrustProposedNameOfTrust.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustProposedNameOfTrust);
+			result.TrustApproverName.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.TrustApproverName);
+			result.FormTrustGrowthPlansYesNo.Should().Be(formTrustDomainObj.TrustDetails.FormTrustGrowthPlansYesNo);
+			result.FormTrustImprovementApprovedSponsor.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustImprovementApprovedSponsor);
+			result.FormTrustImprovementStrategy.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustImprovementStrategy);
+			result.FormTrustOpeningDate.Should().Be(formTrustDomainObj.TrustDetails.FormTrustOpeningDate);
+			result.FormTrustPlanForGrowth.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustPlanForGrowth);
+			result.FormTrustPlansForNoGrowth.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustPlansForNoGrowth);
+			result.FormTrustProposedNameOfTrust.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustProposedNameOfTrust);
+			result.FormTrustReasonApprovaltoConvertasSAT.Should().Be(formTrustDomainObj.TrustDetails.FormTrustReasonApprovaltoConvertasSAT);
+			result.FormTrustReasonApprovedPerson.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustReasonApprovedPerson);
+			result.FormTrustReasonForming.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustReasonForming);
+			result.FormTrustReasonFreedom.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustReasonFreedom);
+			result.FormTrustReasonGeoAreas.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustReasonGeoAreas);
+			result.FormTrustReasonImproveTeaching.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustReasonImproveTeaching);
+			result.FormTrustReasonVision.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustReasonVision);
+			result.TrustApproverEmail.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.TrustApproverEmail);
+			result.TrustApproverName.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.TrustApproverName);
+			result.Id.Should().Be(formTrustDomainObj.Id);
 		}
 	}
 }

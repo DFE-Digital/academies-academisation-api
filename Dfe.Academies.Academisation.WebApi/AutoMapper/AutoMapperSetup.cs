@@ -18,67 +18,70 @@ public static class AutoMapperSetup
 {
 	public static void AddMappings(Profile profile)
 	{
-
 		Guard.Against.NullOrEmpty(nameof(profile));
 
 		// Trust mappings
 		profile.CreateMap<IJoinTrust, JoinTrustState>()
 			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
 			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore());
-
 		profile.CreateMap<JoinTrustState, JoinTrust>();
 		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
 
-		profile.CreateMap<IFormTrust, FormTrustState>()
-			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
-			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore())
-			.ForMember(x => x.FormTrustImprovementSupport, opt => opt.MapFrom(s => s.TrustDetails.FormTrustImprovementSupport))
-			.ForMember(x => x.FormTrustImprovementApprovedSponsor, opt => opt.MapFrom(s => s.TrustDetails.FormTrustImprovementApprovedSponsor))
-			.ForMember(x => x.FormTrustProposedNameOfTrust, opt => opt.MapFrom(s => s.TrustDetails.FormTrustProposedNameOfTrust))
-			.ForMember(x => x.TrustApproverName, opt => opt.MapFrom(s => s.TrustDetails.TrustApproverName))
-			.ForMember(x => x.FormTrustGrowthPlansYesNo, opt => opt.MapFrom(s => s.TrustDetails.FormTrustGrowthPlansYesNo))
-			.ForMember(x => x.FormTrustImprovementApprovedSponsor, opt => opt.MapFrom(s => s.TrustDetails.FormTrustImprovementApprovedSponsor))
-			.ForMember(x => x.FormTrustImprovementStrategy, opt => opt.MapFrom(s => s.TrustDetails.FormTrustImprovementStrategy))
-			.ForMember(x => x.FormTrustOpeningDate, opt => opt.MapFrom(s => s.TrustDetails.FormTrustOpeningDate))
-			.ForMember(x => x.FormTrustPlanForGrowth, opt => opt.MapFrom(s => s.TrustDetails.FormTrustPlanForGrowth))
-			.ForMember(x => x.FormTrustPlansForNoGrowth, opt => opt.MapFrom(s => s.TrustDetails.FormTrustPlansForNoGrowth))
-			.ForMember(x => x.FormTrustProposedNameOfTrust, opt => opt.MapFrom(s => s.TrustDetails.FormTrustProposedNameOfTrust))
-			.ForMember(x => x.FormTrustReasonApprovaltoConvertasSAT, opt => opt.MapFrom(s => s.TrustDetails.FormTrustReasonApprovaltoConvertasSAT))
-			.ForMember(x => x.FormTrustReasonApprovedPerson, opt => opt.MapFrom(s => s.TrustDetails.FormTrustReasonApprovedPerson))
-			.ForMember(x => x.FormTrustReasonForming, opt => opt.MapFrom(s => s.TrustDetails.FormTrustReasonForming))
-			.ForMember(x => x.FormTrustReasonFreedom, opt => opt.MapFrom(s => s.TrustDetails.FormTrustReasonFreedom))
-			.ForMember(x => x.FormTrustReasonGeoAreas, opt => opt.MapFrom(s => s.TrustDetails.FormTrustReasonGeoAreas))
-			.ForMember(x => x.FormTrustReasonImproveTeaching, opt => opt.MapFrom(s => s.TrustDetails.FormTrustReasonImproveTeaching))
-			.ForMember(x => x.FormTrustReasonVision, opt => opt.MapFrom(s => s.TrustDetails.FormTrustReasonVision))
-			.ForMember(x => x.TrustApproverEmail, opt => opt.MapFrom(s => s.TrustDetails.TrustApproverEmail))
-			.ForMember(x => x.TrustApproverName, opt => opt.MapFrom(s => s.TrustDetails.TrustApproverName));
+		// the mapping for this object is awkward because of the use of records, may have to re-think someof this but this is the best for now
+		// also leaving the commented out code at the bottom in for reference
+		profile.CreateMap<FormTrustState, FormTrustDetails>().ReverseMap();
+
+		profile.CreateMap<FormTrustState, IFormTrust>()
+			.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
+			.ReverseMap();
 
 		profile.CreateMap<FormTrustState, FormTrust>()
-			.ForPath(x => x.TrustDetails.FormTrustOpeningDate, opt => opt.MapFrom(src => src.FormTrustOpeningDate))
-			.ForPath(x => x.TrustDetails.FormTrustImprovementSupport, opt => opt.MapFrom(src => src.FormTrustImprovementSupport))
-			.ForPath(x => x.TrustDetails.FormTrustImprovementApprovedSponsor, opt => opt.MapFrom(src => src.FormTrustImprovementApprovedSponsor))
-			.ForPath(x => x.TrustDetails.FormTrustProposedNameOfTrust, opt => opt.MapFrom(src => src.FormTrustProposedNameOfTrust))
-			.ForPath(x => x.TrustDetails.TrustApproverName, opt => opt.MapFrom(src => src.TrustApproverName))
-			.ForPath(x => x.TrustDetails.FormTrustGrowthPlansYesNo, opt => opt.MapFrom(src => src.FormTrustGrowthPlansYesNo))
-			.ForPath(x => x.TrustDetails.FormTrustImprovementApprovedSponsor, opt => opt.MapFrom(src => src.FormTrustImprovementApprovedSponsor))
-			.ForPath(x => x.TrustDetails.FormTrustImprovementStrategy, opt => opt.MapFrom(src => src.FormTrustImprovementStrategy))
-			.ForPath(x => x.TrustDetails.FormTrustOpeningDate, opt => opt.MapFrom(src => src.FormTrustOpeningDate))
-			.ForPath(x => x.TrustDetails.FormTrustPlanForGrowth, opt => opt.MapFrom(src => src.FormTrustPlanForGrowth))
-			.ForPath(x => x.TrustDetails.FormTrustPlansForNoGrowth, opt => opt.MapFrom(src => src.FormTrustPlansForNoGrowth))
-			.ForPath(x => x.TrustDetails.FormTrustProposedNameOfTrust, opt => opt.MapFrom(src => src.FormTrustProposedNameOfTrust))
-			.ForPath(x => x.TrustDetails.FormTrustReasonApprovaltoConvertasSAT, opt => opt.MapFrom(src => src.FormTrustReasonApprovaltoConvertasSAT))
-			.ForPath(x => x.TrustDetails.FormTrustReasonApprovedPerson, opt => opt.MapFrom(src => src.FormTrustReasonApprovedPerson))
-			.ForPath(x => x.TrustDetails.FormTrustReasonForming, opt => opt.MapFrom(src => src.FormTrustReasonForming))
-			.ForPath(x => x.TrustDetails.FormTrustReasonFreedom, opt => opt.MapFrom(src => src.FormTrustReasonFreedom))
-			.ForPath(x => x.TrustDetails.FormTrustReasonGeoAreas, opt => opt.MapFrom(src => src.FormTrustReasonGeoAreas))
-			.ForPath(x => x.TrustDetails.FormTrustReasonImproveTeaching, opt => opt.MapFrom(src => src.FormTrustReasonImproveTeaching))
-			.ForPath(x => x.TrustDetails.FormTrustReasonVision, opt => opt.MapFrom(src => src.FormTrustReasonVision))
-			.ForPath(x => x.TrustDetails.TrustApproverEmail, opt => opt.MapFrom(src => src.TrustApproverEmail))
-			.ForPath(x => x.TrustDetails.TrustApproverName, opt => opt.MapFrom(src => src.TrustApproverName));
+			.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
+			.ForCtorParam(nameof(FormTrust.TrustDetails), opt => opt.MapFrom(src => src))
+			.ReverseMap();
 
-		//profile.CreateMap<FormTrustState, FormTrust>()
-		//	.ForMember(x => x.TrustDetails, opt => opt.Ignore());
-		//profile.CreateMap<IFormTrust, ApplicationFormTrustServiceModel>();
+		profile.CreateMap<IFormTrust, ApplicationFormTrustServiceModel>()
+			.ConvertUsing((wrapper, destination, context) => new ApplicationFormTrustServiceModel(
+				wrapper.Id,
+				wrapper.TrustDetails.FormTrustOpeningDate,
+				wrapper.TrustDetails.FormTrustProposedNameOfTrust,
+				wrapper.TrustDetails.TrustApproverName,
+				wrapper.TrustDetails.TrustApproverEmail,
+				wrapper.TrustDetails.FormTrustReasonApprovaltoConvertasSAT,
+				wrapper.TrustDetails.FormTrustReasonApprovedPerson,
+				wrapper.TrustDetails.FormTrustReasonForming,
+				wrapper.TrustDetails.FormTrustReasonVision,
+				wrapper.TrustDetails.FormTrustReasonGeoAreas,
+				wrapper.TrustDetails.FormTrustReasonFreedom,
+				wrapper.TrustDetails.FormTrustReasonImproveTeaching,
+				wrapper.TrustDetails.FormTrustPlanForGrowth,
+				wrapper.TrustDetails.FormTrustPlansForNoGrowth,
+				wrapper.TrustDetails.FormTrustGrowthPlansYesNo,
+				wrapper.TrustDetails.FormTrustImprovementSupport,
+				wrapper.TrustDetails.FormTrustImprovementStrategy,
+				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor));
+		
+		//.MapRecordMember(x => x.FormTrustOpeningDate, src => src.TrustDetails.FormTrustOpeningDate)
+		//.MapRecordMember(x => x.FormTrustImprovementSupport, src => src.TrustDetails.FormTrustImprovementSupport)
+		//.MapRecordMember(x => x.FormTrustImprovementApprovedSponsor, src => src.TrustDetails.FormTrustImprovementApprovedSponsor)
+		//.MapRecordMember(x => x.FormTrustProposedNameOfTrust, src => src.TrustDetails.FormTrustProposedNameOfTrust)
+		//.MapRecordMember(x => x.TrustApproverName, src => src.TrustDetails.TrustApproverName)
+		//.MapRecordMember(x => x.FormTrustGrowthPlansYesNo, src => src.TrustDetails.FormTrustGrowthPlansYesNo)
+		//.MapRecordMember(x => x.FormTrustImprovementApprovedSponsor, src => src.TrustDetails.FormTrustImprovementApprovedSponsor)
+		//.MapRecordMember(x => x.FormTrustImprovementStrategy, src => src.TrustDetails.FormTrustImprovementStrategy)
+		//.MapRecordMember(x => x.FormTrustOpeningDate, src => src.TrustDetails.FormTrustOpeningDate)
+		//.MapRecordMember(x => x.FormTrustPlanForGrowth, src => src.TrustDetails.FormTrustPlanForGrowth)
+		//.MapRecordMember(x => x.FormTrustPlansForNoGrowth, src => src.TrustDetails.FormTrustPlansForNoGrowth)
+		//.MapRecordMember(x => x.FormTrustProposedNameOfTrust, src => src.TrustDetails.FormTrustProposedNameOfTrust)
+		//.MapRecordMember(x => x.FormTrustReasonApprovaltoConvertasSAT, src => src.TrustDetails.FormTrustReasonApprovaltoConvertasSAT)
+		//.MapRecordMember(x => x.FormTrustReasonApprovedPerson, src => src.TrustDetails.FormTrustReasonApprovedPerson)
+		//.MapRecordMember(x => x.FormTrustReasonForming, src => src.TrustDetails.FormTrustReasonForming)
+		//.MapRecordMember(x => x.FormTrustReasonFreedom, src => src.TrustDetails.FormTrustReasonFreedom)
+		//.MapRecordMember(x => x.FormTrustReasonGeoAreas, src => src.TrustDetails.FormTrustReasonGeoAreas)
+		//.MapRecordMember(x => x.FormTrustReasonImproveTeaching, src => src.TrustDetails.FormTrustReasonImproveTeaching)
+		//.MapRecordMember(x => x.FormTrustReasonVision, src => src.TrustDetails.FormTrustReasonVision)
+		//.MapRecordMember(x => x.TrustApproverEmail, src => src.TrustDetails.TrustApproverEmail)
+		//.MapRecordMember(x => x.TrustApproverName, src => src.TrustDetails.TrustApproverName);
 
 	}
 }
