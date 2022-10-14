@@ -7,7 +7,6 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 	[Table(name: "ApplicationSchoolLease")]
 	public class LeaseState : BaseEntity
 	{
-		public int Id { get; set; }
 		public int LeaseTerm { get; set; }
 		public decimal RepaymentAmount { get; set;}
 		public decimal InterestRate { get; set; }
