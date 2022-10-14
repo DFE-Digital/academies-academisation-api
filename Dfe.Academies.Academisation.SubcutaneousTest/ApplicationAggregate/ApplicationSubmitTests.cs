@@ -84,6 +84,10 @@ public class ApplicationSubmitTests
 		_fixture.Customize<LoanServiceModel>(composer =>
 			composer
 				.With(s => s.LoanId, 0));
+		
+		_fixture.Customize<LeaseServiceModel>(composer =>
+			composer
+				.With(s => s.LeaseId, 0));
 	}
 	
 	[Fact]

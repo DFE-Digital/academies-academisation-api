@@ -23,13 +23,13 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 		internal static LeaseDetails ToDomain(this LeaseServiceModel lease)
 		{
 			return new(
-				lease.leaseTerm,
-				lease.repaymentAmount,
-				lease.interestRate,
-				lease.paymentsToDate,
-				lease.purpose,
-				lease.valueOfAssets,
-				lease.responsibleForAssets
+				lease.LeaseTerm,
+				lease.RepaymentAmount,
+				lease.InterestRate,
+				lease.PaymentsToDate,
+				lease.Purpose,
+				lease.ValueOfAssets,
+				lease.ResponsibleForAssets
 			);
 		}
 	}
