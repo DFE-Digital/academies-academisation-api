@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-
-namespace Dfe.Academies.Academisation.WebApi.Middleware
+﻿namespace Dfe.Academies.Academisation.WebApi.Middleware
 {
 	public class AddCorrelationIdMiddleware
 	{
@@ -18,7 +16,7 @@ namespace Dfe.Academies.Academisation.WebApi.Middleware
 			if (httpContext.Request.Headers.TryGetValue(
 			CorrelationIdHeaderKey, out var correlationId))
 			{
-				_logger.LogInformation($"CorrelationId from Request Header:{ correlationId }");
+				_logger.LogInformation($"CorrelationId from Request Header:{correlationId}");
 
 			}
 			else
@@ -26,7 +24,7 @@ namespace Dfe.Academies.Academisation.WebApi.Middleware
 				correlationId = Guid.NewGuid().ToString();
 				httpContext.Request.Headers.Add(CorrelationIdHeaderKey,
 				correlationId);
-				_logger.LogInformation($"Generated CorrelationId:{ correlationId}");
+				_logger.LogInformation($"Generated CorrelationId:{correlationId}");
 
 			}
 			httpContext.Response.OnStarting(() =>
