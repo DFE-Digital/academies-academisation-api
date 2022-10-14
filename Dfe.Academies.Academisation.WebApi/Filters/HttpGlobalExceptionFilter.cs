@@ -1,7 +1,6 @@
-﻿using Dfe.Academies.Academisation.WebApi.ActionResults;
+﻿using System.Net;
+using Dfe.Academies.Academisation.WebApi.ActionResults;
 using Microsoft.AspNetCore.Mvc.Filters;
-
-using System.Net;
 using IHostingEnvironment = Microsoft.Extensions.Hosting.IHostingEnvironment;
 
 namespace Dfe.Academies.Academisation.WebApi.Filters
@@ -23,18 +22,18 @@ namespace Dfe.Academies.Academisation.WebApi.Filters
 				context.Exception,
 				context.Exception.Message);
 
-				var json = new JsonErrorResponse
-				{
-					Messages = new[] { "An error occurred.Try it again." }
-				};
+			var json = new JsonErrorResponse
+			{
+				Messages = new[] { "An error occurred.Try it again." }
+			};
 
-				if (env.IsDevelopment())
-				{
-					json.DeveloperMessage = context.Exception;
-				}
+			if (env.IsDevelopment())
+			{
+				json.DeveloperMessage = context.Exception;
+			}
 
-				context.Result =  new InternalServerErrorObjectResult(json);
-				context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+			context.Result = new InternalServerErrorObjectResult(json);
+			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
 			context.ExceptionHandled = true;
 		}

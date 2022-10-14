@@ -25,7 +25,7 @@ public class LegacyProjectListGetQueryTests
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<List<string>?>(), It.IsAny<int>(), 
 				It.IsAny<int>(), It.IsAny<int?>()))
-			.ReturnsAsync(expectedProjects);
+			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		
 		// Act
 		var result = await _subject.GetProjects("complete,active", 1, 1, 1234);
@@ -44,7 +44,7 @@ public class LegacyProjectListGetQueryTests
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<List<string>?>(), It.IsAny<int>(), 
 				It.IsAny<int>(), It.IsAny<int?>()))
-			.ReturnsAsync(expectedProjects);
+			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		(string states, int page, int count, int? urn) = ("active,complete", 1, 1, 123);
 		
 		// Act
@@ -63,8 +63,8 @@ public class LegacyProjectListGetQueryTests
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<List<string>?>(), It.IsAny<int>(), 
 				It.IsAny<int>(), It.IsAny<int?>()))
-			.ReturnsAsync(expectedProjects);
-		(string states, int page, int count, int? urn) = ("active,complete", 1, expectedProjects.Count, 123);
+			.ReturnsAsync((expectedProjects, expectedProjects.Count));
+		(string states, int page, int count, int? urn) = ("active,complete", 1, 1, 123);
 		
 		// Act
 		var result = await _subject.GetProjects(states, page, count, urn);

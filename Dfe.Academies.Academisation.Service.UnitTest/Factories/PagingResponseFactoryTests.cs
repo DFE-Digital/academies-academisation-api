@@ -9,7 +9,7 @@ public class PagingResponseFactoryTests
 	public void Create__WhenThereAreMoreRecordToView__ReturnsNextPageLink()
 	{
 		// Arrange
-		(string path, int page, int requestedCount, int recordCount) = ("test-path", 1, 2, 2);
+		(string path, int page, int requestedCount, int recordCount) = ("test-path", 1, 2, 4);
 		Dictionary<string, object?> routeValues = new() { { "states", "active,complete" }, { "urn", 1234 } };
 
 		// Act
@@ -29,7 +29,7 @@ public class PagingResponseFactoryTests
 	public void Create__WhenRouteValuesAreEmpty__RouteValuesAreNotPresentInNextPageLink()
 	{
 		// Arrange
-		(string path, int page, int requestedCount, int recordCount) = ("test-path", 1, 2, 2);
+		(string path, int page, int requestedCount, int recordCount) = ("test-path", 1, 2, 4);
 		Dictionary<string, object?> routeValues = new();
 
 		// Act
@@ -47,7 +47,7 @@ public class PagingResponseFactoryTests
 	public void Create__WhenThereAreNoRecords__ReturnsNoNextPageLink()
 	{
 		// Arrange
-		(string path, int page, int requestedCount, int recordCount) = ("test-path", 1, 2, 3);
+		(string path, int page, int requestedCount, int recordCount) = ("test-path", 1, 2, 2);
 		Dictionary<string, object?> routeValues = new() { { "states", "active,complete" }, { "urn", 1234 } };
 
 		// Act

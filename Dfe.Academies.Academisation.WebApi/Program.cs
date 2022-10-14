@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
@@ -36,7 +35,8 @@ using Newtonsoft.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-	.AddControllers(x => {
+	.AddControllers(x =>
+	{
 		x.Filters.Add(typeof(HttpGlobalExceptionFilter));
 	})
 	.AddNewtonsoftJson(options =>
@@ -152,7 +152,8 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program {
+public partial class Program
+{
 	public static string AppName = GetAppName();
 
 	public static string GetAppName()
