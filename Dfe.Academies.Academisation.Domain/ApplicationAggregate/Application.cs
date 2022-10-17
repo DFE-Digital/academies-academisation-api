@@ -12,6 +12,7 @@ public class Application : IApplication
 	private readonly SubmitApplicationValidator submitValidator = new();
 	private readonly UpdateApplicationValidator updateValidator = new();
 	private readonly SetJoinTrustDetailsValidator setJoinTrustDetailsValidator = new();
+	private readonly SetFormTrustDetailsValidator setformJoinTrustDetailsValidator = new();
 
 	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
@@ -154,14 +155,14 @@ public class Application : IApplication
 
 	public CommandResult SetFormTrustDetails(FormTrustDetails formTrustDetails)
 	{
-		// check the application type allows join trust details to be set
-		//var validationResult = setJoinTrustDetailsValidator.Validate(this);
+		// check the application type allows form trust details to be set
+		var validationResult = setformJoinTrustDetailsValidator.Validate(this);
 
-		//if (!validationResult.IsValid)
-		//{
-		//	return new CommandValidationErrorResult(
-		//		validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
-		//}
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
 
 		// if the trust is already set update the fields
 		if (FormTrust != null)

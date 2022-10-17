@@ -23,7 +23,6 @@ public static class AutoMapperSetup
 		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
 
 		// the mapping for this object is awkward because of the use of records, may have to re-think someof this but this is the best for now
-		// also leaving the commented out code at the bottom in for reference
 		profile.CreateMap<FormTrustState, FormTrustDetails>().ReverseMap();
 
 		profile.CreateMap<FormTrustState, IFormTrust>()
@@ -55,28 +54,5 @@ public static class AutoMapperSetup
 				wrapper.TrustDetails.FormTrustImprovementSupport,
 				wrapper.TrustDetails.FormTrustImprovementStrategy,
 				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor));
-		
-		//.MapRecordMember(x => x.FormTrustOpeningDate, src => src.TrustDetails.FormTrustOpeningDate)
-		//.MapRecordMember(x => x.FormTrustImprovementSupport, src => src.TrustDetails.FormTrustImprovementSupport)
-		//.MapRecordMember(x => x.FormTrustImprovementApprovedSponsor, src => src.TrustDetails.FormTrustImprovementApprovedSponsor)
-		//.MapRecordMember(x => x.FormTrustProposedNameOfTrust, src => src.TrustDetails.FormTrustProposedNameOfTrust)
-		//.MapRecordMember(x => x.TrustApproverName, src => src.TrustDetails.TrustApproverName)
-		//.MapRecordMember(x => x.FormTrustGrowthPlansYesNo, src => src.TrustDetails.FormTrustGrowthPlansYesNo)
-		//.MapRecordMember(x => x.FormTrustImprovementApprovedSponsor, src => src.TrustDetails.FormTrustImprovementApprovedSponsor)
-		//.MapRecordMember(x => x.FormTrustImprovementStrategy, src => src.TrustDetails.FormTrustImprovementStrategy)
-		//.MapRecordMember(x => x.FormTrustOpeningDate, src => src.TrustDetails.FormTrustOpeningDate)
-		//.MapRecordMember(x => x.FormTrustPlanForGrowth, src => src.TrustDetails.FormTrustPlanForGrowth)
-		//.MapRecordMember(x => x.FormTrustPlansForNoGrowth, src => src.TrustDetails.FormTrustPlansForNoGrowth)
-		//.MapRecordMember(x => x.FormTrustProposedNameOfTrust, src => src.TrustDetails.FormTrustProposedNameOfTrust)
-		//.MapRecordMember(x => x.FormTrustReasonApprovaltoConvertasSAT, src => src.TrustDetails.FormTrustReasonApprovaltoConvertasSAT)
-		//.MapRecordMember(x => x.FormTrustReasonApprovedPerson, src => src.TrustDetails.FormTrustReasonApprovedPerson)
-		//.MapRecordMember(x => x.FormTrustReasonForming, src => src.TrustDetails.FormTrustReasonForming)
-		//.MapRecordMember(x => x.FormTrustReasonFreedom, src => src.TrustDetails.FormTrustReasonFreedom)
-		//.MapRecordMember(x => x.FormTrustReasonGeoAreas, src => src.TrustDetails.FormTrustReasonGeoAreas)
-		//.MapRecordMember(x => x.FormTrustReasonImproveTeaching, src => src.TrustDetails.FormTrustReasonImproveTeaching)
-		//.MapRecordMember(x => x.FormTrustReasonVision, src => src.TrustDetails.FormTrustReasonVision)
-		//.MapRecordMember(x => x.TrustApproverEmail, src => src.TrustDetails.TrustApproverEmail)
-		//.MapRecordMember(x => x.TrustApproverName, src => src.TrustDetails.TrustApproverName);
-
 	}
 }
