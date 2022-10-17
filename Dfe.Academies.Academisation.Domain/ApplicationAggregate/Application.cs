@@ -104,7 +104,7 @@ public class Application : IApplication, IAggregateRoot
 		return new CommandSuccessResult();
 	}
 
-	public CommandResult Submit()
+	public CommandResult Submit(DateTime submissionDate)
 	{
 		var validationResult = submitValidator.Validate(this);
 
@@ -115,6 +115,7 @@ public class Application : IApplication, IAggregateRoot
 		}
 
 		ApplicationStatus = ApplicationStatus.Submitted;
+		ApplicationSubmittedOn = submissionDate;
 
 		return new CommandSuccessResult();
 	}

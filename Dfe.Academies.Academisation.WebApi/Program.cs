@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.Json;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
@@ -99,7 +99,6 @@ builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
-builder.Services.AddScoped<IApplicationSubmitCommand, ApplicationSubmitCommand>();
 builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();

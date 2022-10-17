@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Core;
@@ -23,7 +25,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
 		private readonly Mock<IApplicationGetQuery> _getQueryMock = new();
 		private readonly Mock<IApplicationListByUserQuery> _listByUserMock = new();
-		private readonly Mock<IApplicationSubmitCommand> _submitCommandMock = new();
 		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly Mock<ILogger<ApplicationController>> _applicationLogger = new ();
 		private readonly Mock<IMediator> _mockMediator = new();
@@ -31,7 +32,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _submitCommandMock.Object, _listByUserMock.Object, _mockMediator.Object, _applicationLogger.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _listByUserMock.Object, _mockMediator.Object, _applicationLogger.Object);
 		}
 
 		[Fact]
@@ -78,7 +79,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			_submitCommandMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(new NotFoundCommandResult());
+			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new NotFoundCommandResult());
 
 			// act
 			var result = await _subject.Submit(applicationId);
@@ -94,7 +96,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 
 			List<ValidationError> expectedValidationError = new();
-			_submitCommandMock.Setup(x => x.Execute(applicationId))
+
+			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationError));
 
 			// act
@@ -112,7 +115,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			_submitCommandMock.Setup(x => x.Execute(applicationId))
+			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CommandSuccessResult());
 
 			// act
@@ -129,7 +132,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 
 			List<ValidationError> expectedValidationError = new();
-			_submitCommandMock.Setup(x => x.Execute(applicationId))
+			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CreateValidationErrorResult<LegacyProjectServiceModel>(expectedValidationError));
 
 			// act
@@ -148,7 +151,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 
 			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1);
-			_submitCommandMock.Setup(x => x.Execute(applicationId))
+			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CreateSuccessResult<LegacyProjectServiceModel>(projectServiceModel));
 
 			// act

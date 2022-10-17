@@ -21,7 +21,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationCreateCommand _applicationCreateCommand;
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-		private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 		private readonly IMediator _mediator;
 		private readonly ILogger<ApplicationController> _logger;
@@ -29,7 +28,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
-			IApplicationSubmitCommand applicationSubmitCommand,
 			IApplicationListByUserQuery applicationsListByUserQuery,
 			IMediator mediator, 
 			ILogger<ApplicationController> logger
@@ -39,7 +37,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationCreateCommand = applicationCreateCommand;
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
-			_applicationSubmitCommand = applicationSubmitCommand;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
 			_mediator = mediator;
 			_logger = logger;
@@ -123,7 +120,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("submit/{id:int}", Name = "Submit")]
 		public async Task<ActionResult> Submit(int id)
 		{
-			var result = await _applicationSubmitCommand.Execute(id);
+			var result = await _mediator.Send(new SubmitApplicationCommand(id)).ConfigureAwait(false);
 
 			return result switch
 			{

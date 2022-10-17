@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
+using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Moq;
@@ -26,12 +27,12 @@ public class ApplicationSubmitCommandTests
 	private readonly Mock<IProject> _projectMock = new();
 	private readonly int _applicationId;
 
-	private readonly ApplicationSubmitCommand _subject;
+	private readonly ApplicationSubmitCommandHandler _subject;
 
 	public ApplicationSubmitCommandTests()
 	{
 		_applicationId = fixture.Create<int>();
-		_subject = new ApplicationSubmitCommand(
+		_subject = new ApplicationSubmitCommandHandler(
 			_getDataQueryMock.Object,
 			_updateDataCommandMock.Object,
 			_projectCreateDataCommand.Object,
@@ -46,7 +47,7 @@ public class ApplicationSubmitCommandTests
 		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync((IApplication?)null);
 
 		// act
-		var result = await _subject.Execute(_applicationId);
+		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<NotFoundCommandResult>(result);
@@ -63,7 +64,7 @@ public class ApplicationSubmitCommandTests
 		_applicationSubmissionServiceMock.Setup(x => x.SubmitApplication(_applicationMock.Object)).Returns(commandValidationErrorResult);
 
 		// act
-		var result = await _subject.Execute(_applicationId);
+		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CommandValidationErrorResult>(result);
@@ -83,7 +84,7 @@ public class ApplicationSubmitCommandTests
 			.Returns(new CommandSuccessResult());
 
 		// act
-		var result = await _subject.Execute(_applicationId);
+		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CommandSuccessResult>(result);
@@ -104,7 +105,7 @@ public class ApplicationSubmitCommandTests
 			.Returns(new CreateSuccessResult<IProject>(_projectMock.Object));
 
 		// act
-		var result = await _subject.Execute(_applicationId);
+		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CreateSuccessResult<LegacyProjectServiceModel>>(result);
@@ -125,7 +126,7 @@ public class ApplicationSubmitCommandTests
 			.Returns(createValidationErrorResult);
 
 		// act
-		var result = await _subject.Execute(_applicationId);
+		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CreateValidationErrorResult<IProject>>(result);
