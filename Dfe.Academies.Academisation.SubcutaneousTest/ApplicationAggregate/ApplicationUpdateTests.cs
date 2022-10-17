@@ -92,6 +92,9 @@ public class ApplicationUpdateTests
 		_fixture.Customize<LoanServiceModel>(composer =>
 			composer
 				.With(s => s.LoanId, 0));
+		_fixture.Customize<LeaseServiceModel>(composer =>
+			composer
+				.With(s => s.LeaseId, 0));
 	}
 
 	[Fact]
@@ -151,6 +154,12 @@ public class ApplicationUpdateTests
 						applicationSchoolServiceModel.Loans.ToArray()[0] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[0].LoanId},
 						applicationSchoolServiceModel.Loans.ToArray()[1] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[1].LoanId},
 						applicationSchoolServiceModel.Loans.ToArray()[2] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[2].LoanId}
+					},
+					Leases = new List<LeaseServiceModel>()
+					{
+						applicationSchoolServiceModel.Leases.ToArray()[0] with { LeaseId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Leases.ToArray()[0].LeaseId},
+						applicationSchoolServiceModel.Leases.ToArray()[1] with { LeaseId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Leases.ToArray()[1].LeaseId},
+						applicationSchoolServiceModel.Leases.ToArray()[2] with { LeaseId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Leases.ToArray()[2].LeaseId}
 					}
 				},
 				existingApplication.Schools.ToArray()[2]

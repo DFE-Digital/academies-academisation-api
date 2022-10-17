@@ -19,11 +19,13 @@ public class ApplicationUpdateDataCommand : IApplicationUpdateDataCommand
 	public async Task Execute(IApplication application)
 	{
 		var state = ApplicationState.MapFromDomain(application, this.mapper);
-
+		
 		await _context.Applications
 			.Include(a => a.Contributors)
 			.Include(a => a.Schools)
 				.ThenInclude(a => a.Loans)
+			.Include(a => a.Schools)
+			.ThenInclude(a => a.Leases)
 			.SingleOrDefaultAsync(a => a.Id == application.ApplicationId);
 
 		_context.ReplaceTracked(state);

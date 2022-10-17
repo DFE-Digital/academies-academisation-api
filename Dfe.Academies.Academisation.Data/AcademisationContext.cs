@@ -1,19 +1,24 @@
 ﻿using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Dfe.Academies.Academisation.Data;
 
-public class AcademisationContext : DbContext
+public class AcademisationContext : DbContext, IUnitOfWork
 {
-	public AcademisationContext(DbContextOptions<AcademisationContext> options)  : base(options) { }
+	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options)
+	{
+		
+	}
 
 	public DbSet<ApplicationState> Applications { get; set; } = null!;
 	public DbSet<ContributorState> Contributors { get; set; } = null!;
 	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
 	public DbSet<LoanState> SchoolLoans { get; set; } = null!;
+	public DbSet<LeaseState> SchoolLeases { get; set; } = null!;
 	public DbSet<ProjectState> Projects { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 	public DbSet<JoinTrustState> JoinTrusts { get; set; } = null!;
@@ -58,6 +63,11 @@ public class AcademisationContext : DbContext
 					{
 						Remove(loan);
 					}
+
+					foreach (var lease in schoolState.Leases)
+					{
+						Remove(lease);
+					}
 				}
 
 				Remove(child);
@@ -73,6 +83,16 @@ public class AcademisationContext : DbContext
 	{
 		SetModifiedAndCreatedDates();
 		return base.SaveChangesAsync(cancellationToken);
+	}
+
+	public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+	{
+		//This will be used to dispatch domain events in mediator before committing changes with SaveChangesAsync
+		/*
+		 * await _mediator.DispatchDomainEventsAsync(this);
+		 */
+		int result = await base.SaveChangesAsync(cancellationToken);
+		return true;
 	}
 
 	private void SetModifiedAndCreatedDates()

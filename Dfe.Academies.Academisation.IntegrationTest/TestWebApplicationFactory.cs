@@ -16,7 +16,7 @@ using Microsoft.Extensions.Options;
 
 namespace Dfe.Academies.Academisation.IntegrationTest;
 
-public class TestWebApplicationFactory : WebApplicationFactory<Program>
+public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 {
 	private readonly string _authKey;
 	private AcademisationContext _dbContext = null!;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 			this.mapper = mapper;
 		}
 
-		public async Task<IList<IApplication>> Execute(string userEmail)
+		public async Task<IList<Application>> Execute(string userEmail)
 		{
 			List<ApplicationState> applicationStates = await _context.Applications
 				.AsNoTracking()

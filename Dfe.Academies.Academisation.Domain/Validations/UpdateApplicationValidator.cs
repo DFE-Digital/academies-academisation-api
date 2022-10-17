@@ -1,15 +1,12 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.Validations;
 
 public class UpdateApplicationValidator
-	: AbstractValidator<(
-		ApplicationType type,
-		ApplicationStatus status,
-		IEnumerable<KeyValuePair<int, ContributorDetails>> contributors,
-		IEnumerable<UpdateSchoolParameter> schools,
-		Application existing)>
+	: AbstractValidator<(ApplicationType type, ApplicationStatus status, IEnumerable<KeyValuePair<int, ContributorDetails>> contributors, IEnumerable<UpdateSchoolParameter> schools, Application existing)>
 {
 	public UpdateApplicationValidator()
 	{
