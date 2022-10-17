@@ -20,7 +20,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.PreviousFinancialYear.ToServiceModel(),
 			school.Details.CurrentFinancialYear.ToServiceModel(),
 			school.Details.NextFinancialYear.ToServiceModel(),
-			Loans: school.Loans.Select(c=> c.ToServiceModel()).ToList()
+			Loans: school.Loans.Select(c=> c.ToServiceModel()).ToList(),
+			Leases: school.Leases.Select(c => c.ToServiceModel()).ToList()
 		)
 		{
 			SchoolContributionToTrust = school.Details.SchoolContributionToTrust,

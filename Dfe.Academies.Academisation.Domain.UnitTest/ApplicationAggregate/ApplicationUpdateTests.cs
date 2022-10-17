@@ -6,6 +6,7 @@ using AutoFixture.AutoMoq;
 using Bogus;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -49,7 +50,8 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s=> new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 				));
 
 		// assert
@@ -72,7 +74,8 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 			));
 
 		// assert
@@ -96,7 +99,8 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 			));
 
 		// assert
@@ -127,7 +131,8 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 			));
 
 		// assert
@@ -153,7 +158,8 @@ public class ApplicationUpdateTests
 			subject.Schools.Select(s => new UpdateSchoolParameter(
 				s.Id, 
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 			));
 
 		// assert
@@ -171,13 +177,15 @@ public class ApplicationUpdateTests
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 		).ToList();
 
 		schoolsUpdated.Add(new UpdateSchoolParameter(0, 
 			_fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" },
-			new List<KeyValuePair<int, LoanDetails>>()
-			));
+		new List<KeyValuePair<int, LoanDetails>>(),
+		new List<KeyValuePair<int, LeaseDetails>>()
+		));
 
 		// act
 		var result = subject.Update(
@@ -201,7 +209,8 @@ public class ApplicationUpdateTests
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 		).ToList();
 
 		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with {Id = 99});
@@ -250,7 +259,8 @@ public class ApplicationUpdateTests
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 		).ToList();
 
 		IEnumerable<int> allIndices = schoolsUpdated.Select((s, i) => new { Str = s, Index = i })
@@ -330,13 +340,15 @@ public class ApplicationUpdateTests
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 		).ToList();
 
 		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
 			new School(s.Id, 
 						s.Details,
-						s.Loans.Select(l => new Loan(l.Id, l.Details))));
+						s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+						s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets))));
 
 		IEnumerable<int> allIndices = updateSchoolParameters.Select((s, i) => new { Str = s, Index = i })
 			.Select(x => x.Index);
@@ -387,7 +399,8 @@ public class ApplicationUpdateTests
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id, 
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, l.Details)).ToList())
+			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
 		).ToList();
 
 		var schoolDetailsToAdd = _fixture.Create<UpdateSchoolParameter>();
@@ -396,7 +409,8 @@ public class ApplicationUpdateTests
 		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
 			new School(s.Id, 
 				s.Details,
-				s.Loans.Select(l => new Loan(l.Id, l.Details))));
+				s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets))));
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -540,7 +554,9 @@ public class ApplicationUpdateTests
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			application.Schools.Select(s => 
-				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Details)))), application.JoinTrust, application.FormTrust
+				new School(s.Id, s.Details, s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+					s.Leases.Select(x =>
+						new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)))), application.JoinTrust, application.FormTrust
 		);
 	}
 }

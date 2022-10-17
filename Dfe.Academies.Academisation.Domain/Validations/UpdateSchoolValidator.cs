@@ -1,7 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.Validations;
 
 internal class UpdateSchoolValidator : AbstractValidator<SchoolDetailsPair>
 {

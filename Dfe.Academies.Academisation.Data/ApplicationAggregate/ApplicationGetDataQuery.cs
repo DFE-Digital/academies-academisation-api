@@ -23,6 +23,8 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 				.Include(a => a.Contributors)
 				.Include(a => a.Schools)
 					.ThenInclude(a => a.Loans)
+				.Include(a => a.Schools)
+					.ThenInclude(a => a.Leases)
 				.Include(a => a.JoinTrust)
 				.Include(a => a.FormTrust)
 				.SingleOrDefaultAsync(a => a.Id == id);

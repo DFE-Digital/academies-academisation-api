@@ -1,8 +1,8 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.Validations;
 
 public class SetJoinTrustDetailsValidator
 	: AbstractValidator<Application>

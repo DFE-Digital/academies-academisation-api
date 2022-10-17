@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dfe.Academies.Academisation.Core\Dfe.Academies.Academisation.Core.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IData\Dfe.Academies.Academisation.IData.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj" />
@@ -20,6 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
     <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="MediatR" Version="11.0.0" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
-using Dfe.Academies.Academisation.IService.Commands.Project;
+using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
@@ -84,6 +84,10 @@ public class ApplicationSubmitTests
 		_fixture.Customize<LoanServiceModel>(composer =>
 			composer
 				.With(s => s.LoanId, 0));
+		
+		_fixture.Customize<LeaseServiceModel>(composer =>
+			composer
+				.With(s => s.LeaseId, 0));
 	}
 	
 	[Fact]

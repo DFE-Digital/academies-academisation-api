@@ -1,11 +1,14 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.Validations;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-public class Application : IApplication
+public class Application : IApplication, IAggregateRoot
 {
 	private readonly List<Contributor> _contributors = new();
 	private readonly List<School> _schools = new();
@@ -84,7 +87,7 @@ public class Application : IApplication
 				contributor.Value
 				));
 		}
-
+		
 		_schools.RemoveAll(s => true);
 
 		foreach (var school in schools)
@@ -92,10 +95,11 @@ public class Application : IApplication
 			_schools.Add(new School(
 				school.Id, 
 				school.SchoolDetails,
-				school.Loans.Select(l => new Loan(l.Key, l.Value))
+				school.Loans.Select(l => new Loan(l.Key, l.Value.Amount.Value, l.Value.Purpose, l.Value.Provider, l.Value.InterestRate.Value, l.Value.Schedule)),
+				school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets))
 			));
 		}
-
+		
 		return new CommandSuccessResult();
 	}
 
@@ -149,6 +153,68 @@ public class Application : IApplication
 			JoinTrust = Trusts.JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
 		}
 
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult CreateLoan(int schoolId, decimal amount, string purpose, string provider, decimal interestRate,
+		string schedule)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		if(school == null) return new NotFoundCommandResult();
+		
+		school.AddLoan(amount, purpose, provider, interestRate, schedule);
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult UpdateLoan(int schoolId, int loanId, decimal amount, string purpose, string provider, decimal interestRate,
+		string schedule)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		var loan = school?.Loans.FirstOrDefault(x => x.Id == loanId);
+		if(school == null || loan == null) return new NotFoundCommandResult();
+		
+		school.UpdateLoan(loanId, amount, purpose, provider, interestRate, schedule);
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult DeleteLoan(int schoolId, int loanId)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		var loan = school?.Loans.FirstOrDefault(x => x.Id == loanId);
+		if(school == null || loan == null) return new NotFoundCommandResult();
+		
+		school.DeleteLoan(loanId);
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult CreateLease(int schoolId, int leaseTerm, decimal repaymentAmount, decimal interestRate,
+		decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		if(school == null) return new NotFoundCommandResult();
+		
+		school.AddLease(leaseTerm, repaymentAmount, interestRate, paymentsToDate, purpose, valueOfAssets, responsibleForAssets);
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult UpdateLease(int schoolId, int leaseId, int leaseTerm, decimal repaymentAmount, decimal interestRate,
+		decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		var lease = school?.Leases.FirstOrDefault(x => x.Id == leaseId);
+		if(school == null || lease == null) return new NotFoundCommandResult();
+		
+		school.UpdateLease(leaseId, leaseTerm, repaymentAmount, interestRate, paymentsToDate, purpose, valueOfAssets, responsibleForAssets);
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult DeleteLease(int schoolId, int leaseId)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		var lease = school?.Leases.FirstOrDefault(x => x.Id == leaseId);
+		if(school == null || lease == null) return new NotFoundCommandResult();
+		
+		school.DeleteLease(leaseId);
 		return new CommandSuccessResult();
 	}
 }
