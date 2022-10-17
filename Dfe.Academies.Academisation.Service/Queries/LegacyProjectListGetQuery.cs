@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Factories;
@@ -22,9 +23,9 @@ public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
 			? null
 			: states.ToLower().Split(',').ToList();
 
-		var projects = (await _projectListGetDataQuery.SearchProjects(statusList, page, count, urn)).ToList();
-
-		var pageResponse = PagingResponseFactory.Create("legacy/projects", page, count, projects.Count, 
+		(IEnumerable<IProject> projects, int totalCount) = await _projectListGetDataQuery.SearchProjects(statusList, page, count, urn);
+		
+		var pageResponse = PagingResponseFactory.Create("legacy/projects", page, count, totalCount, 
 			new Dictionary<string, object?> {
 				{"states", states},
 				{"urn", urn}
