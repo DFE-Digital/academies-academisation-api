@@ -11,8 +11,8 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 	{
 		public int Id { get; }
 
-		public string ProposedTrustName { get; }
-
 		public FormTrustDetails TrustDetails { get; }
+
+		void Update(FormTrustDetails formTrustDetails);
 	}
 }

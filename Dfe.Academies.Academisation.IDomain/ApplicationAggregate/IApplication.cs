@@ -32,7 +32,6 @@ public interface IApplication
 	/// Use the IApplicationSubmissionService to submit the Application and (conditionally) create a Project. 
 	/// </summary>
 	CommandResult Submit();
-	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
 
 	CommandResult CreateLoan(int schoolId, decimal amount, string purpose, string provider, decimal interestRate,
 		string schedule);
@@ -42,4 +41,6 @@ public interface IApplication
 	CommandResult CreateLease(int schoolId, int leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets);
 	CommandResult UpdateLease(int schoolId, int leaseId, int leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets);
 	CommandResult DeleteLease(int schoolId, int leaseId);
+	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
+	CommandResult SetFormTrustDetails(FormTrustDetails formTrustDetails);
 }

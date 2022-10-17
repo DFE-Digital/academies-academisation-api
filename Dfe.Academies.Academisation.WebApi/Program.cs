@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
@@ -38,7 +39,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
@@ -95,7 +95,7 @@ var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfi
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
-builder.Services.AddScoped<ISetJoinTrustDetailsCommandHandler, JoinTrustCommandHandler>();
+//builder.Services.AddScoped<ISetJoinTrustDetailsCommandHandler, JoinTrustCommandHandler>();
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
@@ -159,6 +159,7 @@ builder.Services.AddDbContext<AcademisationContext>(options => options
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!);
 
 var app = builder.Build();
 

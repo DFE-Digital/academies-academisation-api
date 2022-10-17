@@ -15,6 +15,7 @@ public class Application : IApplication, IAggregateRoot
 	private readonly SubmitApplicationValidator submitValidator = new();
 	private readonly UpdateApplicationValidator updateValidator = new();
 	private readonly SetJoinTrustDetailsValidator setJoinTrustDetailsValidator = new();
+	private readonly SetFormTrustDetailsValidator setformJoinTrustDetailsValidator = new();
 
 	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
@@ -215,6 +216,31 @@ public class Application : IApplication, IAggregateRoot
 		if(school == null || lease == null) return new NotFoundCommandResult();
 		
 		school.DeleteLease(leaseId);
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult SetFormTrustDetails(FormTrustDetails formTrustDetails)
+	{
+		// check the application type allows form trust details to be set
+		var validationResult = setformJoinTrustDetailsValidator.Validate(this);
+
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
+
+		// if the trust is already set update the fields
+		if (FormTrust != null)
+		{
+			FormTrust.Update(formTrustDetails);
+
+		}
+		else
+		{
+			FormTrust = Trusts.FormTrust.Create(formTrustDetails);
+		}
+
 		return new CommandSuccessResult();
 	}
 }

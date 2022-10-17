@@ -504,6 +504,45 @@ public class ApplicationUpdateTests
 		Assert.Equivalent(expected, subject);
 	}
 
+	[Fact]
+	public void SetFormMatDetails___SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.FormAMat);
+
+		var updateJoinTrust = _fixture.Create<IFormTrust>();
+		var formTrustDetails = _fixture.Create<FormTrustDetails>();
+
+		Mock.Get(updateJoinTrust).Setup(x => x.TrustDetails).Returns(formTrustDetails);
+
+		// act
+		var result = subject.SetFormTrustDetails(formTrustDetails);
+
+		// assert
+		DfeAssert.CommandSuccess(result);
+		Assert.Equivalent(subject.FormTrust!.TrustDetails, formTrustDetails);
+	}
+
+	[Fact]
+	public void SetFormMatDetailsWrongApplicationType__ValidationErrorReturned_NotMutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.JoinAMat);
+		Application expected = Clone(subject);
+
+		var updateJoinTrust = _fixture.Create<IFormTrust>();
+		var formTrustDetails = _fixture.Create<FormTrustDetails>();
+
+		Mock.Get(updateJoinTrust).Setup(x => x.TrustDetails).Returns(formTrustDetails);
+
+		// act
+		var result = subject.SetFormTrustDetails(formTrustDetails);
+
+		// assert
+		DfeAssert.CommandValidationError(result, nameof(ApplicationType));
+		Assert.Equivalent(expected, subject);
+	}
+
 	private Application BuildApplication(ApplicationStatus applicationStatus, int numberOfSchools, ApplicationType? type = null)
 	{
 		var schools = new List<School>();

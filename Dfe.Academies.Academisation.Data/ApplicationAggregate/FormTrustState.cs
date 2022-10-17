@@ -14,28 +14,22 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 	[Table(name: "ApplicationFormTrust")]
 	public class FormTrustState : BaseEntity
 	{
-		public string ProposedTrustName { get; set; } = null!;
-
-		public string? TrustApproverName { get; set; } = null!;
-
-		public static FormTrustState? MapFromDomain(IFormTrust formTrust)
-		{
-			if (formTrust == null) return default;
-
-			return new()
-			{
-				Id = formTrust.Id,
-				ProposedTrustName = formTrust.ProposedTrustName,
-				TrustApproverName = formTrust.TrustDetails?.TrustApproverName
-			};
-		}
-
-		public static IFormTrust MapToDomain(FormTrustState trust)
-		{
-			if (trust == null) { return null!; };
-
-			return new FormTrust(trust.Id, trust.ProposedTrustName, new FormTrustDetails(trust.TrustApproverName));
-
-		}
+		public DateTime? FormTrustOpeningDate { get; set; }
+		public string? FormTrustProposedNameOfTrust { get; set; }
+		public string? TrustApproverName { get; set; }
+		public string? TrustApproverEmail { get; set; }
+		public bool? FormTrustReasonApprovaltoConvertasSAT { get; set; }
+		public string? FormTrustReasonApprovedPerson { get; set; }
+		public string? FormTrustReasonForming { get; set; }
+		public string? FormTrustReasonVision { get; set; }
+		public string? FormTrustReasonGeoAreas { get; set; }
+		public string? FormTrustReasonFreedom { get; set; }
+		public string? FormTrustReasonImproveTeaching { get; set; }
+		public string? FormTrustPlanForGrowth { get; set; }
+		public string? FormTrustPlansForNoGrowth { get; set; }
+		public bool? FormTrustGrowthPlansYesNo { get; set; }
+		public string? FormTrustImprovementSupport { get; set; }
+		public string? FormTrustImprovementStrategy { get; set; }
+		public string? FormTrustImprovementApprovedSponsor { get; set; }
 	}
 }

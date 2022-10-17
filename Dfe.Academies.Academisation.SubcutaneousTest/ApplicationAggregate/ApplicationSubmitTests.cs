@@ -25,6 +25,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -51,8 +52,8 @@ public class ApplicationSubmitTests
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
+	private readonly IMediator _mediator;
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
@@ -68,7 +69,7 @@ public class ApplicationSubmitTests
 		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
+		_mediator = new Mock<IMediator>().Object;
 
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
@@ -99,8 +100,8 @@ public class ApplicationSubmitTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationSubmitCommand,
-			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
+			_mediator,
 			_applicationLogger);
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture

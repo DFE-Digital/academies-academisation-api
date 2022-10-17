@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dfe.Academies.Academisation.Core;
+using MediatR;
 
-namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
+namespace Dfe.Academies.Academisation.IService.ServiceModels.Application
 {
-	public record FormTrustDetails(
+	public record SetFormTrustDetailsCommand(
+		int applicationId,
 		DateTime? FormTrustOpeningDate,
 		string? FormTrustProposedNameOfTrust,
 		string? TrustApproverName,
@@ -23,7 +26,5 @@ namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
 		bool? FormTrustGrowthPlansYesNo,
 		string? FormTrustImprovementSupport,
 		string? FormTrustImprovementStrategy,
-		string? FormTrustImprovementApprovedSponsor = null);
-
-	
+		string? FormTrustImprovementApprovedSponsor) : IRequest<CommandResult>;
 }
