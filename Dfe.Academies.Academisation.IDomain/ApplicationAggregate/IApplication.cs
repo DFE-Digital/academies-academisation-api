@@ -18,6 +18,7 @@ public interface IApplication
 	IFormTrust? FormTrust { get;  }
 	IJoinTrust? JoinTrust { get; }
 
+	DateTime? ApplicationSubmittedDate { get;  }
 	void SetIdsOnCreate(int applicationId, int conversionId);
 
 	CommandResult Update(
@@ -31,7 +32,7 @@ public interface IApplication
 	/// Be careful of using this method outside the Domain Layer - this only submits the Application but doesn't create the Project.
 	/// Use the IApplicationSubmissionService to submit the Application and (conditionally) create a Project. 
 	/// </summary>
-	CommandResult Submit();
+	CommandResult Submit(DateTime submissionDate);
 
 	CommandResult CreateLoan(int schoolId, decimal amount, string purpose, string provider, decimal interestRate,
 		string schedule);

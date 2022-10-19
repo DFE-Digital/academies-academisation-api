@@ -1,7 +1,9 @@
 ﻿using AutoFixture;
 using AutoMapper;
 using Bogus;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
+using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -44,7 +46,6 @@ public class ApplicationSubmitTests
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
@@ -53,12 +54,13 @@ public class ApplicationSubmitTests
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
-	private readonly IMediator _mediator;
+	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new Mock<IDateTimeProvider>();
+	private readonly Mock<IMediator> _mediator;
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-
-		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory);
+		
+		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
@@ -66,11 +68,17 @@ public class ApplicationSubmitTests
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
-		_applicationSubmitCommand = new ApplicationSubmitCommand(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_mediator = new Mock<IMediator>().Object;
+		_mediator = new Mock<IMediator>();
 
+		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
+
+		_mediator.Setup(x => x.Send(It.IsAny<SubmitApplicationCommand>(), It.IsAny<CancellationToken>()))
+			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) => {
+				
+				return await submitApplicationHandler.Handle((SubmitApplicationCommand)cmd, ct);
+			});		
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -99,9 +107,8 @@ public class ApplicationSubmitTests
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
-			_applicationSubmitCommand,
 			_applicationsListByUserQuery,
-			_mediator,
+			_mediator.Object,
 			_applicationLogger);
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture

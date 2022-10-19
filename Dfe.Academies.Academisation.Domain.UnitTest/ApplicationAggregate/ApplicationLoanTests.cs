@@ -38,6 +38,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					_fixture.Build<School>().With(x=> x.Id, 2).Create()
 				},
 				null,
+				null,
 				null);
 
 			var result = subject.CreateLoan(1, Decimal.One, "str", "str", Decimal.One, "str");
@@ -59,6 +60,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					_fixture.Build<School>().With(x=> x.Id, 2).Create()
 				},
+				null,
 				null,
 				null);
 
@@ -85,6 +87,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					}, new List<Lease>() )
 				},
 				null,
+				null,
 				null);
 
 			var result = subject.UpdateLoan(1, 2, Decimal.One, "str", "str", Decimal.One, "str");
@@ -109,6 +112,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
 					}, new List<Lease>() )
 				},
+				null,
 				null,
 				null);
 
@@ -135,6 +139,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					}, new List<Lease>() )
 				},
 				null,
+				null,
 				null);
 
 			var result = subject.DeleteLoan(1, 2);
@@ -159,6 +164,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
 					}, new List<Lease>() )
 				},
+				null,
 				null,
 				null);
 

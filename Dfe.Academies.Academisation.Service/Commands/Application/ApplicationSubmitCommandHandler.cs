@@ -6,17 +6,18 @@ using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
+using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
-	public class ApplicationSubmitCommand : IApplicationSubmitCommand
+	public class ApplicationSubmitCommandHandler : IRequestHandler<SubmitApplicationCommand, CommandOrCreateResult>
 	{
 		private readonly IApplicationGetDataQuery _dataQuery;
 		private readonly IApplicationUpdateDataCommand _dataCommand;
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 		private readonly IApplicationSubmissionService _applicationSubmissionService;
 
-		public ApplicationSubmitCommand(
+		public ApplicationSubmitCommandHandler(
 			IApplicationGetDataQuery dataQuery,
 			IApplicationUpdateDataCommand dataCommand,
 			IProjectCreateDataCommand projectCreateDataCommand,
@@ -28,9 +29,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			_applicationSubmissionService = applicationSubmissionService;
 		}
 
-		public async Task<CommandOrCreateResult> Execute(int applicationId)
+		public async Task<CommandOrCreateResult> Handle(SubmitApplicationCommand command, CancellationToken cancellationToken)
 		{
-			var application = await _dataQuery.Execute(applicationId);
+			var application = await _dataQuery.Execute(command.applicationId);
 
 			if (application is null)
 			{

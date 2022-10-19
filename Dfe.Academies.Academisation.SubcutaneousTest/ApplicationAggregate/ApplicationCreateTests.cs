@@ -33,7 +33,6 @@ public class ApplicationCreateTests
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IMediator _mediator;
@@ -53,7 +52,6 @@ public class ApplicationCreateTests
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
-		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>().Object;
@@ -69,8 +67,7 @@ public class ApplicationCreateTests
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
 			_applicationGetQuery,
-			_applicationUpdateCommand,
-			_applicationSubmitCommand, 
+			_applicationUpdateCommand, 
 			_applicationsListByUserQuery,
 			_mediator,
 			_applicationLogger);
@@ -105,7 +102,7 @@ public class ApplicationCreateTests
 				applicationCreateRequestModel.Contributor.Role,
 				applicationCreateRequestModel.Contributor.OtherRoleName) },
 			new List<ApplicationSchoolServiceModel>(),
-			null, null);
+			null, null, null);
 
 		Assert.Equivalent(expectedApplication, actualApplication);
 	}
@@ -118,7 +115,6 @@ public class ApplicationCreateTests
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
-			_applicationSubmitCommand,
 			_applicationsListByUserQuery,
 			_mediator,
 			_applicationLogger);

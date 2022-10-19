@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -13,15 +14,17 @@ namespace Dfe.Academies.Academisation.Domain;
 public class ApplicationSubmissionService : IApplicationSubmissionService
 {
 	private readonly IProjectFactory _projectFactory;
+	private readonly IDateTimeProvider _dateTimeProvider;
 
-	public ApplicationSubmissionService(IProjectFactory projectFactory)
+	public ApplicationSubmissionService(IProjectFactory projectFactory, IDateTimeProvider dateTimeProvider)
 	{
 		_projectFactory = projectFactory;
+		_dateTimeProvider = dateTimeProvider;
 	}
 
 	public CommandOrCreateResult SubmitApplication(IApplication application)
 	{
-		var submitResult = application.Submit();
+		var submitResult = application.Submit(_dateTimeProvider.Now);
 
 		if (submitResult is not CommandSuccessResult)
 		{

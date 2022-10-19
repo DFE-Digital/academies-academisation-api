@@ -33,7 +33,6 @@ public class ApplicationUpdateTests
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IMediator _mediator;
@@ -52,11 +51,9 @@ public class ApplicationUpdateTests
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
-
+		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
-		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
-		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>().Object;
@@ -65,7 +62,6 @@ public class ApplicationUpdateTests
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
-			_applicationSubmitCommand,
 			_applicationsListByUserQuery,
 			_mediator,
 			_applicationLogger);
