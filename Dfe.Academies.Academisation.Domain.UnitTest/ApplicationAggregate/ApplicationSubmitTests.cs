@@ -4,11 +4,13 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
+using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
@@ -38,7 +40,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				null);
 
 			// act
-			var result = subject.Submit();
+			var result = subject.Submit(DateTime.UtcNow);
 
 			// assert
 			Assert.IsType<CommandValidationErrorResult>(result);
@@ -63,7 +65,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				null);
 
 			// act
-			var result = subject.Submit();
+			var result = subject.Submit(DateTime.UtcNow);
 
 			// assert
 			DfeAssert.CommandValidationError(result, nameof(Application.Schools));
@@ -91,7 +93,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				null);
 
 			// act
-			var result = subject.Submit();
+			var result = subject.Submit(DateTime.UtcNow);
 
 			// assert
 			DfeAssert.CommandValidationError(result, nameof(Application.Schools));
@@ -116,13 +118,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				},
 				_fixture.Create<IJoinTrust>(),
 				null);
+			var submittedDate = DateTime.UtcNow;
 
 			// act
-			var result = subject.Submit();
+			var result = subject.Submit(submittedDate);
 
 			// assert
 			Assert.IsType<CommandSuccessResult>(result);
 			Assert.Equal(ApplicationStatus.Submitted, subject.ApplicationStatus);
+			Assert.Equal(submittedDate, subject.ApplicationSubmittedDate);
 		}
 
 		[Theory]
@@ -145,12 +149,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				_fixture.Create<IJoinTrust>(),
 				null);
 
+			var submittedDate = DateTime.UtcNow;
+
 			// act
-			var result = subject.Submit();
+			var result = subject.Submit(submittedDate);
 
 			// assert
 			Assert.IsType<CommandSuccessResult>(result);
 			Assert.Equal(ApplicationStatus.Submitted, subject.ApplicationStatus);
+			Assert.Equal(submittedDate, subject.ApplicationSubmittedDate);
 		}
 	}
 }

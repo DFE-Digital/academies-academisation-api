@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
@@ -95,7 +96,6 @@ var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfi
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
-//builder.Services.AddScoped<ISetJoinTrustDetailsCommandHandler, JoinTrustCommandHandler>();
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
 builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
@@ -135,6 +135,9 @@ builder.Services.AddScoped<ILegacyProjectGetQuery, LegacyProjectGetQuery>();
 builder.Services.AddScoped<ILegacyProjectListGetQuery, LegacyProjectListGetQuery>();
 builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
 
+//utils
+builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 
@@ -149,7 +152,6 @@ builder.Services.AddScoped<AbstractValidator<CreateLoanCommand>, CreateLoanComma
 builder.Services.AddScoped<AbstractValidator<UpdateLoanCommand>, UpdateLoanCommandValidator>();
 
 builder.Services.AddScoped(typeof(IValidatorFactory<>), typeof(ValidatorFactory<>));
-
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],

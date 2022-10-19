@@ -33,7 +33,8 @@ public class Application : IApplication, IAggregateRoot
 		Dictionary<int, ContributorDetails> contributors,
 		IEnumerable<School> schools,
 		IJoinTrust? joinTrust,
-		IFormTrust? formTrust)
+		IFormTrust? formTrust,
+		DateTime? applicationSubmittedOn = null)
 	{
 		ApplicationId = applicationId;
 		CreatedOn = createdOn;
@@ -44,6 +45,7 @@ public class Application : IApplication, IAggregateRoot
 		_schools = schools.ToList();
 		JoinTrust = joinTrust;
 		FormTrust = formTrust;
+		ApplicationSubmittedDate = applicationSubmittedOn;
 	}
 
 	public int ApplicationId { get; private set; }
@@ -51,7 +53,7 @@ public class Application : IApplication, IAggregateRoot
 	public DateTime LastModifiedOn { get; }
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
-
+	public DateTime? ApplicationSubmittedDate { get; private set; }
 	public IFormTrust? FormTrust { get; private set; }
 	public IJoinTrust? JoinTrust { get; private set; }
 
@@ -96,7 +98,7 @@ public class Application : IApplication, IAggregateRoot
 			_schools.Add(new School(
 				school.Id, 
 				school.SchoolDetails,
-				school.Loans.Select(l => new Loan(l.Key, l.Value.Amount.Value, l.Value.Purpose, l.Value.Provider, l.Value.InterestRate.Value, l.Value.Schedule)),
+				school.Loans.Select(l => new Loan(l.Key, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
 				school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets))
 			));
 		}
@@ -115,7 +117,7 @@ public class Application : IApplication, IAggregateRoot
 		}
 
 		ApplicationStatus = ApplicationStatus.Submitted;
-		ApplicationSubmittedOn = submissionDate;
+		ApplicationSubmittedDate = submissionDate;
 
 		return new CommandSuccessResult();
 	}

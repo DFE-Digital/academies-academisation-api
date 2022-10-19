@@ -3,6 +3,7 @@ using AutoMapper;
 using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
+using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -53,12 +54,13 @@ public class ApplicationSubmitTests
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
+	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new Mock<IDateTimeProvider>();
 	private readonly Mock<IMediator> _mediator;
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-
-		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory);
+		
+		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);

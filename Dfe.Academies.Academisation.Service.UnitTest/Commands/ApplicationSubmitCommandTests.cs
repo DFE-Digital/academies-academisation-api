@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
+using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Application;
@@ -99,7 +100,7 @@ public class ApplicationSubmitCommandTests
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
 		_projectMock.SetupGet(p => p.Details).Returns(new ProjectDetails(1));
 		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
-		_applicationMock.Setup(x => x.Submit()).Returns(new CommandSuccessResult());
+		_applicationMock.Setup(x => x.Submit(It.IsAny<DateTime>())).Returns(new CommandSuccessResult());
 		_projectCreateDataCommand.Setup(m => m.Execute(_projectMock.Object)).ReturnsAsync(_projectMock.Object);
 		_applicationSubmissionServiceMock.Setup(m => m.SubmitApplication(_applicationMock.Object))
 			.Returns(new CreateSuccessResult<IProject>(_projectMock.Object));

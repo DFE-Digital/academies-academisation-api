@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -23,7 +24,7 @@ public class ApplicationSubmissionService : IApplicationSubmissionService
 
 	public CommandOrCreateResult SubmitApplication(IApplication application)
 	{
-		var submitResult = application.Submit(_dateTimeProvider.Now());
+		var submitResult = application.Submit(_dateTimeProvider.Now);
 
 		if (submitResult is not CommandSuccessResult)
 		{
