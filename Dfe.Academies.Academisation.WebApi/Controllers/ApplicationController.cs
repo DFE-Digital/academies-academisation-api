@@ -117,10 +117,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPost("submit/{id:int}", Name = "Submit")]
-		public async Task<ActionResult> Submit(int id)
+		[HttpPost("{applicationId:int}/submit", Name = "Submit")]
+		public async Task<ActionResult> Submit(int applicationId)
 		{
-			var result = await _mediator.Send(new SubmitApplicationCommand(id)).ConfigureAwait(false);
+			var result = await _mediator.Send(new SubmitApplicationCommand(applicationId)).ConfigureAwait(false);
 
 			return result switch
 			{

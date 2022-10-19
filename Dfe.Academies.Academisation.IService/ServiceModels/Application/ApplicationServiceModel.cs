@@ -9,4 +9,5 @@ public record ApplicationServiceModel(
 	IReadOnlyCollection<ApplicationContributorServiceModel> Contributors,
 	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools, 
 	ApplicationJoinTrustServiceModel? joinTrustDetails,
-	ApplicationFormTrustServiceModel? formTrustDetails);
+	ApplicationFormTrustServiceModel? formTrustDetails,
+	DateTime? ApplicationSubmittedDate);

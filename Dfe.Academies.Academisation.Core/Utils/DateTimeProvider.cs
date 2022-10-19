@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.Core.Utils
 	{
 		public DateTime Now
 		{
-			get { return DateTime.Now; }
+			get { return DateTime.UtcNow; }
 
 		}
 	}

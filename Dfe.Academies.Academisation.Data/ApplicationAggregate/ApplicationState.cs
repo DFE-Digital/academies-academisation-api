@@ -19,7 +19,7 @@ public class ApplicationState : BaseEntity
 
 	public JoinTrustState? JoinTrust { get; set; }
 	public FormTrustState? FormTrust { get; set; }
-	public DateTime? ApplicationSubmittedOn { get; set; }
+	public DateTime? ApplicationSubmittedDate { get; set; }
 
 	public static ApplicationState MapFromDomain(IApplication application, IMapper mapper)
 	{
@@ -38,7 +38,7 @@ public class ApplicationState : BaseEntity
 				.ToHashSet(),
 			FormTrust = mapper.Map<FormTrustState>(application.FormTrust),
 			JoinTrust = mapper.Map<JoinTrustState>(application.JoinTrust),
-			ApplicationSubmittedOn = application.ApplicationSubmittedDate
+			ApplicationSubmittedDate = application.ApplicationSubmittedDate
 		};
 	}
 
@@ -54,6 +54,6 @@ public class ApplicationState : BaseEntity
 		contributorsDictionary, schoolsList,
 								mapper.Map<JoinTrust>(JoinTrust),
 								mapper.Map<FormTrust>(FormTrust),
-								ApplicationSubmittedOn);
+								ApplicationSubmittedDate);
 	}
 }
