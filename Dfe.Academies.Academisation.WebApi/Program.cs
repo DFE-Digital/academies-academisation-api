@@ -57,14 +57,7 @@ builder.Host.ConfigureLogging((context, logging) =>
 {
 	logging.AddConfiguration(context.Configuration.GetSection("Logging"));
 
-	logging.ClearProviders();
-
-	//logging.AddSimpleConsole(options =>
-	//{
-	//	options.IncludeScopes = true;
-	//	options.SingleLine = true;
-	//	options.TimestampFormat = "hh:mm:ss ";
-	//});
+	logging.ClearProviders();	
 
 	logging.AddJsonConsole(options =>
 	{
@@ -134,6 +127,8 @@ builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, Advis
 builder.Services.AddScoped<ILegacyProjectGetQuery, LegacyProjectGetQuery>();
 builder.Services.AddScoped<ILegacyProjectListGetQuery, LegacyProjectListGetQuery>();
 builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
+builder.Services.AddScoped<IProjectStatusesDataQuery, ProjectStatusesDataQuery>();
+builder.Services.AddScoped<IProjectGetStatusesQuery, ProjectGetStatusesQuery>();
 
 //utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
