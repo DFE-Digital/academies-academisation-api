@@ -15,7 +15,7 @@ describe('Academisation API Testing', () => {
 
     let apiKey = Cypress.env('apiKey');
     let url = Cypress.env('url');
-    let applicationNumber = 24
+    let applicationNumber = 25
     let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3})Z?$/
    
@@ -36,7 +36,7 @@ describe('Academisation API Testing', () => {
               expect(response.body.contributors[0]).to.have.property('lastName')
               expect(response.body.contributors[0]).to.have.property('emailAddress').to.match(emailRegex)
               expect(response.body.contributors[0]).to.have.property('role')
-              expect(response.body.contributors[0]).to.have.property('otherRoleName')
+              //expect(response.body.contributors[0]).to.have.property('otherRoleName')
               
               expect(response.body).to.have.property('schools')
 
