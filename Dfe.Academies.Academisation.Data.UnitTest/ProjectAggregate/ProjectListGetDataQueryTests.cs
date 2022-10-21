@@ -41,7 +41,7 @@ public class ProjectsListGetDataQueryTests
 		// act
 		var searchStatus =
 			new List<string> { projectState1.ProjectStatus!.ToLower(), projectState2.ProjectStatus!.ToLower() };
-		var projects = (await _subject.SearchProjects(searchStatus, 1, 10, null)).Item1.ToList();
+		var projects = (await _subject.SearchProjects(searchStatus, null, 1, 10, null)).Item1.ToList();
 
 		// assert
 		var firstProject = projects.FirstOrDefault();
@@ -56,6 +56,33 @@ public class ProjectsListGetDataQueryTests
 			() => Assert.Equal(projectState2.Id, secondProject!.Id)
 		);
 	}
+
+
+	[Fact]
+	public async Task ProjectsExists_SearchProjectsByTitle__ReturnsProjects()
+	{
+		// arrange
+		string searchTerm = "Bristol";
+		for (int i = 0; i < 6; i++)
+		{
+			(ProjectDetails projectDetails, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			if (i % 2 == 0) projectState.SchoolName = $"{searchTerm} {i}";
+			_context.Projects.Add(projectState);
+		}
+
+		await _context.SaveChangesAsync();
+
+		// act		
+		var projects = (await _subject.SearchProjects(null, searchTerm, 1, 10, null)).Item1.ToList();
+
+		// assert		
+		Assert.Multiple(
+			() => Assert.Equal(3, projects.Count),
+			() => Assert.Equal($"{searchTerm} 0", projects[0].Details.SchoolName),
+			() => Assert.Equal($"{searchTerm} 2", projects[1].Details.SchoolName),
+			() => Assert.Equal($"{searchTerm} 4", projects[2].Details.SchoolName)
+		);
+	}	
 
 	[Fact]
 	public async Task ProjectsExists_SearchProjectsByUrn__ReturnsProjects()
@@ -73,7 +100,7 @@ public class ProjectsListGetDataQueryTests
 
 		// act
 		int searchUrn = projectState2.Urn;
-		var projects = (await _subject.SearchProjects(null, 1, 10, searchUrn)).Item1.ToList();
+		var projects = (await _subject.SearchProjects(null, null, 1, 10, searchUrn)).Item1.ToList();
 
 		// assert
 		var firstProject = projects.FirstOrDefault();
@@ -98,8 +125,8 @@ public class ProjectsListGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var (firstPageProjects, firstPageCount) = await _subject.SearchProjects(new List<string>(), 1, 2, null);
-		var (secondPageProjects, secondPageCount) = await _subject.SearchProjects(new List<string>(), 2, 2, null);
+		var (firstPageProjects, firstPageCount) = await _subject.SearchProjects(new List<string>(), null, 1, 2, null);
+		var (secondPageProjects, secondPageCount) = await _subject.SearchProjects(new List<string>(), null, 2, 2, null);
 
 		// assert
 		Assert.Multiple(
@@ -127,7 +154,7 @@ public class ProjectsListGetDataQueryTests
 
 		// act
 		int urnThatDoesNotExist = 12312;
-		var projects = (await _subject.SearchProjects(null, 1, 10, urnThatDoesNotExist)).Item1.ToList();
+		var projects = (await _subject.SearchProjects(null, null, 1, 10, urnThatDoesNotExist)).Item1.ToList();
 
 		// assert
 		Assert.Empty(projects);
@@ -148,9 +175,9 @@ public class ProjectsListGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var firstPage = (await _subject.SearchProjects(new List<string>(), 1, 2, null)).Item1.ToList();
-		var secondPage = (await _subject.SearchProjects(new List<string>(), 2, 2, null)).Item1.ToList();
-		var thirdPage = (await _subject.SearchProjects(new List<string>(), 3, 2, null)).Item1.ToList();
+		var firstPage = (await _subject.SearchProjects(new List<string>(), null, 1, 2, null)).Item1.ToList();
+		var secondPage = (await _subject.SearchProjects(new List<string>(), null, 2, 2, null)).Item1.ToList();
+		var thirdPage = (await _subject.SearchProjects(new List<string>(), null, 3, 2, null)).Item1.ToList();
 
 		// assert
 		Assert.Multiple(
