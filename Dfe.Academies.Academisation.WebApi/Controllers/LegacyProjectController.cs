@@ -13,13 +13,15 @@ public class LegacyProjectController : ControllerBase
 {
 	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
 	private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
+	private readonly IProjectGetStatusesQuery _projectGetStatusesQuery;
 	private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
 
 	public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery, ILegacyProjectListGetQuery legacyProjectListGetQuery,
-		ILegacyProjectUpdateCommand legacyProjectUpdateCommand)
+		IProjectGetStatusesQuery projectGetStatusesQuery, ILegacyProjectUpdateCommand legacyProjectUpdateCommand)
 	{
 		_legacyProjectGetQuery = legacyProjectGetQuery;
 		_legacyProjectListGetQuery = legacyProjectListGetQuery;
+		_projectGetStatusesQuery = projectGetStatusesQuery;
 		_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 	}
 
@@ -34,6 +36,16 @@ public class LegacyProjectController : ControllerBase
 	{
 		var result = await _legacyProjectListGetQuery.GetProjects(states, page, count, urn);
 		return result is null ? NotFound() : Ok(result);
+	}
+
+	[HttpGet("projects/status")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<ActionResult<List<string>>> GetStatuses()
+	{
+		var result = await _projectGetStatusesQuery.Execute();
+		return Ok(result);
 	}
 
 	[HttpGet("project/{id}", Name = "GetLegacyProject")]
