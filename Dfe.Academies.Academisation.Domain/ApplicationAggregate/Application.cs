@@ -191,7 +191,7 @@ public class Application : IApplication, IAggregateRoot
 		return new CommandSuccessResult();
 	}
 
-	public CommandResult CreateLease(int schoolId, int leaseTerm, decimal repaymentAmount, decimal interestRate,
+	public CommandResult CreateLease(int schoolId, string leaseTerm, decimal repaymentAmount, decimal interestRate,
 		decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
@@ -201,7 +201,7 @@ public class Application : IApplication, IAggregateRoot
 		return new CommandSuccessResult();
 	}
 
-	public CommandResult UpdateLease(int schoolId, int leaseId, int leaseTerm, decimal repaymentAmount, decimal interestRate,
+	public CommandResult UpdateLease(int schoolId, int leaseId, string leaseTerm, decimal repaymentAmount, decimal interestRate,
 		decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);

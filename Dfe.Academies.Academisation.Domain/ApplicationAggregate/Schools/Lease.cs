@@ -5,7 +5,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 	public class Lease : ILease
 	{
 		public int Id { get; private set; }
-		public int LeaseTerm { get; private set; }
+		public string LeaseTerm { get; private set; }
 
 		public decimal RepaymentAmount { get; private set; }
 
@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 
 		public string ResponsibleForAssets { get; private set; }
 
-		public static Lease Create(int leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate,
+		public static Lease Create(string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate,
 			string purpose,
 			string valueOfAssets, string responsibleForAssets)
 		{
@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 				responsibleForAssets);
 		}
 
-		public void Update(int leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose,
+		public void Update(string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose,
 			string valueOfAssets, string responsibleForAsserts)
 		{
 			LeaseTerm = leaseTerm;
@@ -38,7 +38,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 			ResponsibleForAssets = responsibleForAsserts;
 		}
 
-		public Lease(int id, int leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
+		public Lease(int id, string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
 		{
 			Id = id;
 			LeaseTerm = leaseTerm;
