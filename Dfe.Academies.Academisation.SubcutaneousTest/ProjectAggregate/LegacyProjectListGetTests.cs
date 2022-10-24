@@ -42,7 +42,7 @@ public class LegacyProjectListGetTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var result = await _subject.GetProjects(null, null, 1, 3);
+		var result = await _subject.GetProjects(null, null, null, 1, 3);
 
 		// assert
 		var (_, getProjects) = DfeAssert.OkObjectResult(result);

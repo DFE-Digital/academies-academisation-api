@@ -29,13 +29,15 @@ public class LegacyProjectController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>> GetProjects([FromQuery] string? states,
+	public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>> GetProjects(
+		[FromQuery] string? states,
 		[FromQuery] string? title,
+		[FromQuery] string[]? deliveryOfficers,
 		[FromQuery] int page = 1,		
 		[FromQuery] int count = 50,
 		[FromQuery] int? urn = null)
 	{
-		var result = await _legacyProjectListGetQuery.GetProjects(states, title, page, count, urn);
+		var result = await _legacyProjectListGetQuery.GetProjects(states, title, deliveryOfficers, page, count, urn);
 		return result is null ? NotFound() : Ok(result);
 	}
 

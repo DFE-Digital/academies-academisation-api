@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
-using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Factories;
@@ -17,15 +16,16 @@ public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
 	}
 
 	public async Task<LegacyApiResponse<LegacyProjectServiceModel>?> GetProjects(
-		string? states, string? title, int page, int count, int? urn)
+		string? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn)
 	{
 		var statusList = string.IsNullOrEmpty(states)
 			? null
-			: states.ToLower().Split(',').ToList();
+			: states.ToLower().Split(',');
 
-		(IEnumerable<IProject> projects, int totalCount) = await _projectListGetDataQuery.SearchProjects(statusList, title, page, count, urn);
-		
-		var pageResponse = PagingResponseFactory.Create("legacy/projects", page, count, totalCount, 
+		var (projects, totalCount) = await _projectListGetDataQuery.SearchProjects(
+												statusList, title, deliveryOfficers, page, count, urn);
+
+		var pageResponse = PagingResponseFactory.Create("legacy/projects", page, count, totalCount,
 			new Dictionary<string, object?> {
 				{"states", states},
 				{"urn", urn}
