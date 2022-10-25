@@ -40,8 +40,8 @@ public class ProjectsListGetDataQueryTests
 
 		// act
 		var searchStatus =
-			new List<string> { projectState1.ProjectStatus!.ToLower(), projectState2.ProjectStatus!.ToLower() };
-		var projects = (await _subject.SearchProjects(searchStatus, null, 1, 10, null)).Item1.ToList();
+			new string[] { projectState1.ProjectStatus!.ToLower(), projectState2.ProjectStatus!.ToLower() };
+		var projects = (await _subject.SearchProjects(searchStatus, null, null, 1, 10, null)).Item1.ToList();
 
 		// assert
 		var firstProject = projects.FirstOrDefault();
@@ -65,7 +65,7 @@ public class ProjectsListGetDataQueryTests
 		string searchTerm = "Bristol";
 		for (int i = 0; i < 6; i++)
 		{
-			(ProjectDetails projectDetails, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
 			if (i % 2 == 0) projectState.SchoolName = $"{searchTerm} {i}";
 			_context.Projects.Add(projectState);
 		}
@@ -73,7 +73,7 @@ public class ProjectsListGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act		
-		var projects = (await _subject.SearchProjects(null, searchTerm, 1, 10, null)).Item1.ToList();
+		var projects = (await _subject.SearchProjects(null, searchTerm, null, 1, 10, null)).Item1.ToList();
 
 		// assert		
 		Assert.Multiple(
@@ -82,7 +82,121 @@ public class ProjectsListGetDataQueryTests
 			() => Assert.Equal($"{searchTerm} 2", projects[1].Details.SchoolName),
 			() => Assert.Equal($"{searchTerm} 4", projects[2].Details.SchoolName)
 		);
-	}	
+	}
+
+	[Fact]
+	public async Task ProjectsExists_SearchProjectsByDeliveryOfficer__ReturnsProjects()
+	{
+		// arrange
+		string deliveryOfficer = "Dave";
+		for (int i = 0; i < 6; i++)
+		{
+			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			if (i % 2 == 0) projectState.AssignedUserFullName = deliveryOfficer;
+			_context.Projects.Add(projectState);
+		}
+
+		await _context.SaveChangesAsync();
+
+		// act		
+		var projects = (await _subject.SearchProjects(null, null, new[] { deliveryOfficer }, 1, 10, null)).Item1.ToList();
+
+		// assert		
+		Assert.Multiple(
+			() => Assert.Equal(3, projects.Count),
+			() => Assert.Equal(deliveryOfficer, projects[0].Details.AssignedUser!.FullName),
+			() => Assert.Equal(deliveryOfficer, projects[1].Details.AssignedUser!.FullName),
+			() => Assert.Equal(deliveryOfficer, projects[2].Details.AssignedUser!.FullName)
+		);
+	}
+
+	[Fact]
+	public async Task ProjectsExists_SearchProjectsByMultipleDeliveryOfficers__ReturnsProjects()
+	{
+		// arrange
+		string[] deliveryOfficers = new[] { "Dave", "Bob" };
+		for (int i = 0; i < 6; i++)
+		{
+			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			if (i < 2) projectState.AssignedUserFullName = deliveryOfficers[i];
+			_context.Projects.Add(projectState);
+		}
+
+		await _context.SaveChangesAsync();
+
+		// act		
+		var projects = (await _subject.SearchProjects(null, null, deliveryOfficers, 1, 10, null)).Item1.ToList();
+
+		// assert		
+		Assert.Multiple(
+			() => Assert.Equal(2, projects.Count),
+			() => Assert.Equal(deliveryOfficers[0], projects[0].Details.AssignedUser!.FullName),
+			() => Assert.Equal(deliveryOfficers[1], projects[1].Details.AssignedUser!.FullName)			
+		);
+	}
+
+	[Fact]
+	public async Task ProjectsExists_SearchProjectsByAllCriteria__ReturnsProject()
+	{
+		// arrange
+		var ( deliveryOfficer, status, title, urn ) = ( "Dave", "active", "school", 1234 );
+		for (int i = 0; i < 3; i++)
+		{
+			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			if (i == 0)
+			{
+				projectState.AssignedUserFullName = deliveryOfficer;
+				projectState.ProjectStatus = status;
+				projectState.SchoolName = title;
+				projectState.Urn = urn;
+			}
+			_context.Projects.Add(projectState);
+		}
+
+		await _context.SaveChangesAsync();
+
+		// act		
+		var projects = (await _subject.SearchProjects(new[] { status }, title, new[] { deliveryOfficer }, 1, 10, urn))
+			.Item1.ToList();
+
+		// assert		
+		Assert.Multiple(
+			() => Assert.Single(projects),
+			() => Assert.Equal(projects[0].Details.AssignedUser.FullName, deliveryOfficer),
+			() => Assert.Equal(projects[0].Details.ProjectStatus, status),
+			() => Assert.Equal(projects[0].Details.SchoolName, title),
+			() => Assert.Equal(projects[0].Details.Urn, urn)
+		);
+	}
+
+	[Fact]
+	public async Task ProjectsExists_SearchUnassignedProjects__ReturnsProjects()
+	{
+		// arrange
+		string[] deliveryOfficers = new[] { "Dave", "Not assigned" };
+		
+		(_, ProjectState projectState1) = CreateTestProject(DateTime.Now);
+		projectState1.AssignedUserFullName = "Dave";
+		(_, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
+		projectState2.AssignedUserFullName = "";
+		(_, ProjectState projectState3) = CreateTestProject(DateTime.Now.AddDays(-2));
+		projectState3.AssignedUserFullName = null;
+		(_, ProjectState projectState4) = CreateTestProject(DateTime.Now.AddDays(-3));
+		
+		await _context.Projects.AddRangeAsync(projectState1, projectState2, projectState3, projectState4);	
+		await _context.SaveChangesAsync();
+
+		// act		
+		var projects = (await _subject.SearchProjects(null, null, deliveryOfficers, 1, 10, null)).Item1.ToList();
+
+		// assert		
+		Assert.Multiple(
+			() => Assert.Equal(3, projects.Count),
+			() => Assert.Equal(deliveryOfficers[0], projects[0].Details.AssignedUser!.FullName),
+			() => Assert.Equal(string.Empty, projects[1].Details.AssignedUser?.FullName),
+			() => Assert.Equal(string.Empty, projects[2].Details.AssignedUser?.FullName)
+		);
+	}
 
 	[Fact]
 	public async Task ProjectsExists_SearchProjectsByUrn__ReturnsProjects()
@@ -100,7 +214,7 @@ public class ProjectsListGetDataQueryTests
 
 		// act
 		int searchUrn = projectState2.Urn;
-		var projects = (await _subject.SearchProjects(null, null, 1, 10, searchUrn)).Item1.ToList();
+		var projects = (await _subject.SearchProjects(null, null, null, 1, 10, searchUrn)).Item1.ToList();
 
 		// assert
 		var firstProject = projects.FirstOrDefault();
@@ -125,8 +239,8 @@ public class ProjectsListGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var (firstPageProjects, firstPageCount) = await _subject.SearchProjects(new List<string>(), null, 1, 2, null);
-		var (secondPageProjects, secondPageCount) = await _subject.SearchProjects(new List<string>(), null, 2, 2, null);
+		var (firstPageProjects, firstPageCount) = await _subject.SearchProjects(new string[] { }, null, null, 1, 2, null);
+		var (secondPageProjects, secondPageCount) = await _subject.SearchProjects(new string[] { }, null, null, 2, 2, null);
 
 		// assert
 		Assert.Multiple(
@@ -154,7 +268,7 @@ public class ProjectsListGetDataQueryTests
 
 		// act
 		int urnThatDoesNotExist = 12312;
-		var projects = (await _subject.SearchProjects(null, null, 1, 10, urnThatDoesNotExist)).Item1.ToList();
+		var projects = (await _subject.SearchProjects(null, null, null, 1, 10, urnThatDoesNotExist)).Item1.ToList();
 
 		// assert
 		Assert.Empty(projects);
@@ -175,9 +289,9 @@ public class ProjectsListGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var firstPage = (await _subject.SearchProjects(new List<string>(), null, 1, 2, null)).Item1.ToList();
-		var secondPage = (await _subject.SearchProjects(new List<string>(), null, 2, 2, null)).Item1.ToList();
-		var thirdPage = (await _subject.SearchProjects(new List<string>(), null, 3, 2, null)).Item1.ToList();
+		var firstPage = (await _subject.SearchProjects(new string[] { }, null, null, 1, 2, null)).Item1.ToList();
+		var secondPage = (await _subject.SearchProjects(new string[] { }, null, null, 2, 2, null)).Item1.ToList();
+		var thirdPage = (await _subject.SearchProjects(new string[] { }, null, null, 3, 2, null)).Item1.ToList();
 
 		// assert
 		Assert.Multiple(
