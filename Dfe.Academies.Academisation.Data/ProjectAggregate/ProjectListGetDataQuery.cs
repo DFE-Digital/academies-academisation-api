@@ -17,10 +17,10 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 		{
 			IQueryable<ProjectState> queryable = _context.Projects;
 
-			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable, _context);
 			queryable = FilterByStatus(states, queryable);
 			queryable = FilterByUrn(urn, queryable);
-			queryable = FilterBySchool(title, queryable);			
+			queryable = FilterBySchool(title, queryable);
+			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
 
 			var totalProjects = queryable.Count();
 			var projects = await queryable.OrderByDescending(acp => acp.ApplicationReceivedDate)
@@ -42,7 +42,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 
 		private static IQueryable<ProjectState> FilterByUrn(int? urn, IQueryable<ProjectState> queryable)
 		{
-			if (urn.HasValue) queryable = queryable.Where(p => p.Urn == urn);			
+			if (urn.HasValue) queryable = queryable.Where(p => p.Urn == urn);
 
 			return queryable;
 		}
@@ -50,24 +50,28 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 		private static IQueryable<ProjectState> FilterBySchool(string? title, IQueryable<ProjectState> queryable)
 		{
 			if (!string.IsNullOrWhiteSpace(title)) queryable = queryable.Where(p => p.SchoolName!.ToLower().Contains(title!.ToLower()));
-			
+
 			return queryable;
 		}
 
-		private static IQueryable<ProjectState> FilterByDeliveryOfficer(string[]? deliveryOfficers, IQueryable<ProjectState> queryable,
-			AcademisationContext context)
+		private static IQueryable<ProjectState> FilterByDeliveryOfficer(string[]? deliveryOfficers, IQueryable<ProjectState> queryable)
 		{
 			if (deliveryOfficers != null && deliveryOfficers.Any())
 			{
 				var lowerCaseDeliveryOfficers = deliveryOfficers.Select(officer => officer.ToLower());
-				queryable = queryable
-					.Where(p =>
-						!string.IsNullOrEmpty(p.AssignedUserFullName) && lowerCaseDeliveryOfficers.Contains(p.AssignedUserFullName.ToLower()));
 
 				if (lowerCaseDeliveryOfficers.Contains("not assigned"))
 				{
-					var unAssignedProjects = context.Projects.Where(p => string.IsNullOrEmpty(p.AssignedUserFullName));
-					queryable = queryable.Concat(unAssignedProjects);
+					// Query by unassigned or assigned delivery officer
+					queryable = queryable.Where(p => 
+								(!string.IsNullOrEmpty(p.AssignedUserFullName) && lowerCaseDeliveryOfficers.Contains(p.AssignedUserFullName.ToLower()))
+								|| string.IsNullOrEmpty(p.AssignedUserFullName));
+				}
+				else
+				{
+					// Query by assigned delivery officer only
+					queryable = queryable.Where(p =>
+						!string.IsNullOrEmpty(p.AssignedUserFullName) && lowerCaseDeliveryOfficers.Contains(p.AssignedUserFullName.ToLower()));
 				}
 			}
 
