@@ -17,7 +17,7 @@ describe('Academisation API Testing', () => {
     let url = Cypress.env('url');
     let applicationNumber = 27
     let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3})Z?$/
+    let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})Z?$/
    
 
     it('GET - Verify An Authorised User Can Retrieve A Respective Application - 200 OK EXPECTED', () => {
@@ -41,7 +41,7 @@ describe('Academisation API Testing', () => {
               expect(response.body).to.have.property('schools')
 
               // PREVIOUS FINANCIAL YEAR PROPERTIES
-             // expect(response.body.schools[0].previousFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
+              expect(response.body.schools[0].previousFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
               expect(response.body.schools[0].previousFinancialYear).to.have.property('revenue')
               expect(response.body.schools[0].previousFinancialYear).to.have.property('revenueStatus')
               expect(response.body.schools[0].previousFinancialYear).to.have.property('revenueStatusExplained')
@@ -52,7 +52,7 @@ describe('Academisation API Testing', () => {
               expect(response.body.schools[0].previousFinancialYear).to.have.property('capitalCarryForwardFileLink')
 
               // CURRENT FINANCIAL YEAR PROPERTIES
-             // expect(response.body.schools[0].currentFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
+              expect(response.body.schools[0].currentFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
               expect(response.body.schools[0].currentFinancialYear).to.have.property('revenue')
               expect(response.body.schools[0].currentFinancialYear).to.have.property('revenueStatus')
               expect(response.body.schools[0].currentFinancialYear).to.have.property('revenueStatusExplained')
@@ -63,7 +63,7 @@ describe('Academisation API Testing', () => {
               expect(response.body.schools[0].currentFinancialYear).to.have.property('capitalCarryForwardFileLink')
 
               // NEXT FINANCIAL YEAR PROPERTIES
-             // expect(response.body.schools[0].nextFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
+              expect(response.body.schools[0].nextFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
               expect(response.body.schools[0].nextFinancialYear).to.have.property('revenue')
               expect(response.body.schools[0].nextFinancialYear).to.have.property('revenueStatus')
               expect(response.body.schools[0].nextFinancialYear).to.have.property('revenueStatusExplained')
