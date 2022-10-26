@@ -99,7 +99,7 @@ const AuthorisedUserCanUpdatePayload = {
             "projectedPupilNumbersYear1": 1000,
             "projectedPupilNumbersYear2": 1250,
             "projectedPupilNumbersYear3": 1500,
-            "schoolCapacityAssumptions": "<iframe src=\"/default.asp\" width=\"100%\" height=\"300\" style=\"border:none;\"></iframe>",
+            "schoolCapacityAssumptions": "School Capacity Assumptions",
             "schoolCapacityPublishedAdmissionsNumber": 1000,
             "schoolSupportGrantFundsPaidTo": "trust",
             "confirmPaySupportGrantToSchool": false,
