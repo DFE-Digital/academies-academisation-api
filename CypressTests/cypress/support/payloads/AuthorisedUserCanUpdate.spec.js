@@ -37,7 +37,8 @@ const AuthorisedUserCanUpdatePayload = {
                 "revenueStatusExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ip",
                 "capitalCarryForward": 400000.00,
                 "capitalCarryForwardStatus": "deficit",
-                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ip"
+                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ip",
+                "capitalCarryForwardFileLink": "string"
             },
             "currentFinancialYear": {
                 "financialYearEndDate": "2022-05-04T00:00:00",
@@ -46,7 +47,8 @@ const AuthorisedUserCanUpdatePayload = {
                 "revenueStatusExplained": "Andrew Parsons is in the process of selling off some land to build some new science labs for the school.  Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsu",
                 "capitalCarryForward": 45510.50,
                 "capitalCarryForwardStatus": "deficit",
-                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum "
+                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
+                "capitalCarryForwardFileLink": "string"
             },
             "nextFinancialYear": {
                 "financialYearEndDate": "2023-01-12T00:00:00",
@@ -55,7 +57,8 @@ const AuthorisedUserCanUpdatePayload = {
                 "revenueStatusExplained": "rjrjrtjtjrt",
                 "capitalCarryForward": 1.00,
                 "capitalCarryForwardStatus": "deficit",
-                "capitalCarryForwardExplained": "sdfbdsfbdb"
+                "capitalCarryForwardExplained": "sdfbdsfbdb",
+                "capitalCarryForwardFileLink": "string"
             },
             "loans": [
                 {
