@@ -10,3 +10,6 @@ container_command           = ["/bin/bash", "-c", "echo hello && sleep 86400"]
 container_environment_variables = {
   "ASPNETCORE_ENVIRONMENT" = "production"
 }
+key_vault_access_users = [
+  "someone_example.com#EXT#@tenantname.onmicrosoft.com",
+]

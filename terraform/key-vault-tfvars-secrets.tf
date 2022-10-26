@@ -5,23 +5,29 @@ resource "azurerm_key_vault" "tfvars" {
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
   soft_delete_retention_days = 7
+  enable_rbac_authorization  = false
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+  dynamic "access_policy" {
+    for_each = data.azuread_user.key_vault_access
 
-    key_permissions = [
-      "Create",
-      "Get",
-    ]
+    content {
+      tenant_id = data.azurerm_client_config.current.tenant_id
+      object_id = access_policy.value["object_id"]
 
-    secret_permissions = [
-      "Set",
-      "Get",
-      "Delete",
-      "Purge",
-      "Recover"
-    ]
+      key_permissions = [
+        "Create",
+        "Get",
+      ]
+
+      secret_permissions = [
+        "Set",
+        "Get",
+        "Delete",
+        "Purge",
+        "Recover",
+        "List",
+      ]
+    }
   }
 
   # It won't be possible to add/manage a network acl for this

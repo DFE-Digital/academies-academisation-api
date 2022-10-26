@@ -16,15 +16,16 @@ public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
 	}
 
 	public async Task<LegacyApiResponse<LegacyProjectServiceModel>?> GetProjects(
-		string? states, int page, int count, int? urn)
+		string? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn)
 	{
 		var statusList = string.IsNullOrEmpty(states)
 			? null
-			: states.ToLower().Split(',').ToList();
+			: states.ToLower().Split(',');
 
-		var projects = (await _projectListGetDataQuery.SearchProjects(statusList, page, count, urn)).ToList();
+		var (projects, totalCount) = await _projectListGetDataQuery.SearchProjects(
+												statusList, title, deliveryOfficers, page, count, urn);
 
-		var pageResponse = PagingResponseFactory.Create("legacy/projects", page, count, projects.Count, 
+		var pageResponse = PagingResponseFactory.Create("legacy/projects", page, count, totalCount,
 			new Dictionary<string, object?> {
 				{"states", states},
 				{"urn", urn}

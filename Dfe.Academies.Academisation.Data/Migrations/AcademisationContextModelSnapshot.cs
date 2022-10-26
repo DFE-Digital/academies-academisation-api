@@ -307,6 +307,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("SchoolContributionToTrust")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SchoolConversionReasonsForJoining")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("SchoolHasConsultedStakeholders")
                         .HasColumnType("bit");
 
@@ -356,6 +359,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("ApplicationStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ApplicationSubmittedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ApplicationType")
                         .IsRequired()
@@ -435,11 +441,55 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool?>("FormTrustGrowthPlansYesNo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FormTrustImprovementApprovedSponsor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustImprovementStrategy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustImprovementSupport")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("FormTrustOpeningDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FormTrustPlanForGrowth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustPlansForNoGrowth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustProposedNameOfTrust")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("FormTrustReasonApprovaltoConvertasSAT")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FormTrustReasonApprovedPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustReasonForming")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustReasonFreedom")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustReasonGeoAreas")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustReasonImproveTeaching")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormTrustReasonVision")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ProposedTrustName")
-                        .IsRequired()
+                    b.Property<string>("TrustApproverEmail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TrustApproverName")
@@ -488,6 +538,55 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ApplicationJoinTrust", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LeaseState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ApplicationSchoolId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("InterestRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LeaseTerm")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PaymentsToDate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("RepaymentAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ResponsibleForAssets")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ValueOfAssets")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationSchoolId");
+
+                    b.ToTable("ApplicationSchoolLease", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LoanState", b =>
                 {
                     b.Property<int>("Id")
@@ -496,7 +595,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal?>("Amount")
+                    b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ApplicationSchoolId")
@@ -505,19 +604,22 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("InterestRate")
+                    b.Property<decimal>("InterestRate")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Provider")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Purpose")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Schedule")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -921,6 +1023,13 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasForeignKey("ConversionApplicationId");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LeaseState", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", null)
+                        .WithMany("Leases")
+                        .HasForeignKey("ApplicationSchoolId");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LoanState", b =>
                 {
                     b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", null)
@@ -948,6 +1057,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", b =>
                 {
+                    b.Navigation("Leases");
+
                     b.Navigation("Loans");
                 });
 

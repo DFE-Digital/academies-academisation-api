@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+﻿using System;
+
+namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 
 public record ProjectDetails(
 	int Urn,

@@ -1,10 +1,10 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Project;
+using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
-namespace Dfe.Academies.Academisation.Service.Commands.Project;
+namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 
 public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
 {

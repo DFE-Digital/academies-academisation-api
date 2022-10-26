@@ -20,7 +20,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.PreviousFinancialYear.ToServiceModel(),
 			school.Details.CurrentFinancialYear.ToServiceModel(),
 			school.Details.NextFinancialYear.ToServiceModel(),
-			Loans: school.Loans.Select(c=> c.ToServiceModel()).ToList()
+			Loans: school.Loans.Select(c=> c.ToServiceModel()).ToList(),
+			Leases: school.Leases.Select(c => c.ToServiceModel()).ToList()
 		)
 		{
 			SchoolContributionToTrust = school.Details.SchoolContributionToTrust,
@@ -62,7 +63,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			FinancialInvestigationsTrustAware = school.Details.FinancialInvestigationsTrustAware,
 			DeclarationBodyAgree = school.Details.DeclarationBodyAgree,
 			DeclarationIAmTheChairOrHeadteacher = school.Details.DeclarationIAmTheChairOrHeadteacher,
-			DeclarationSignedByName = school.Details.DeclarationSignedByName
+			DeclarationSignedByName = school.Details.DeclarationSignedByName,
+			SchoolConversionReasonsForJoining = school.Details.SchoolConversionReasonsForJoining
 		};
 	}
 
@@ -120,7 +122,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			FinancialInvestigationsTrustAware = serviceModel.FinancialInvestigationsTrustAware,
 			DeclarationBodyAgree = serviceModel.DeclarationBodyAgree,
 			DeclarationIAmTheChairOrHeadteacher = serviceModel.DeclarationIAmTheChairOrHeadteacher,
-			DeclarationSignedByName = serviceModel.DeclarationSignedByName
+			DeclarationSignedByName = serviceModel.DeclarationSignedByName,
+			SchoolConversionReasonsForJoining = serviceModel.SchoolConversionReasonsForJoining
 		};
 	}
 }

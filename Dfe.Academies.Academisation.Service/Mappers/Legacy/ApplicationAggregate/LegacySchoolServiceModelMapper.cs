@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ApplicationAggregate;
 
@@ -10,13 +11,7 @@ internal static class LegacySchoolServiceModelMapper
 	{
 		ICollection<LegacySchoolServiceModel> schools = 
 			application.Schools.Select(s => MapToServiceModel(s.Details, 
-				s.Loans.Select(l => new LoanDetails(
-					l.Details.Amount,
-					l.Details.Purpose,
-					l.Details.Provider,
-					l.Details.InterestRate,
-					l.Details.Schedule)
-				))).ToList();
+				new List<LoanDetails>())).ToList();
 
 		return schools;
 	}

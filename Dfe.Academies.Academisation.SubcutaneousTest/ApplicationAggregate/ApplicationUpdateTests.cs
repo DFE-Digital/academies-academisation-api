@@ -18,6 +18,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -32,17 +33,15 @@ public class ApplicationUpdateTests
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
-
+	private readonly IMediator _mediator;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
-	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly ApplicationController _applicationController;
 
@@ -52,22 +51,19 @@ public class ApplicationUpdateTests
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
-
+		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
-		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
-		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
+		_mediator = new Mock<IMediator>().Object;
 
 		_applicationController = new(
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
-			_applicationSubmitCommand,
-			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
+			_mediator,
 			_applicationLogger);
 
 		_fixture.Customize<ApplicationContributorServiceModel>(composer =>
@@ -92,6 +88,9 @@ public class ApplicationUpdateTests
 		_fixture.Customize<LoanServiceModel>(composer =>
 			composer
 				.With(s => s.LoanId, 0));
+		_fixture.Customize<LeaseServiceModel>(composer =>
+			composer
+				.With(s => s.LeaseId, 0));
 	}
 
 	[Fact]
@@ -151,6 +150,12 @@ public class ApplicationUpdateTests
 						applicationSchoolServiceModel.Loans.ToArray()[0] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[0].LoanId},
 						applicationSchoolServiceModel.Loans.ToArray()[1] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[1].LoanId},
 						applicationSchoolServiceModel.Loans.ToArray()[2] with { LoanId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Loans.ToArray()[2].LoanId}
+					},
+					Leases = new List<LeaseServiceModel>()
+					{
+						applicationSchoolServiceModel.Leases.ToArray()[0] with { LeaseId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Leases.ToArray()[0].LeaseId},
+						applicationSchoolServiceModel.Leases.ToArray()[1] with { LeaseId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Leases.ToArray()[1].LeaseId},
+						applicationSchoolServiceModel.Leases.ToArray()[2] with { LeaseId = gotApplication.Schools.Single(s => s.Urn == applicationSchoolServiceModel.Urn).Leases.ToArray()[2].LeaseId}
 					}
 				},
 				existingApplication.Schools.ToArray()[2]

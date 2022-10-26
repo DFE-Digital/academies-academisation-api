@@ -18,6 +18,7 @@ public record ApplicationSchoolServiceModel(
 	FinancialYearServiceModel? NextFinancialYear,
 	// leases & loans
 	IReadOnlyCollection<LoanServiceModel> Loans,
+	IReadOnlyCollection<LeaseServiceModel> Leases,
 	string? SchoolContributionToTrust = null,
 	string? GoverningBodyConsentEvidenceDocumentLink = null,
 	bool? AdditionalInformationAdded = null,
@@ -64,5 +65,6 @@ public record ApplicationSchoolServiceModel(
 	// Declaration
 	bool? DeclarationBodyAgree = null,
 	bool? DeclarationIAmTheChairOrHeadteacher = null,
-	string? DeclarationSignedByName = null
+	string? DeclarationSignedByName = null,
+	string? SchoolConversionReasonsForJoining = null
 );

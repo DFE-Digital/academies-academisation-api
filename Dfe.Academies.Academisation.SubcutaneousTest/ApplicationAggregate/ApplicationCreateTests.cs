@@ -18,6 +18,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -32,16 +33,14 @@ public class ApplicationCreateTests
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-	private readonly IApplicationSubmitCommand _applicationSubmitCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
-
+	private readonly IMediator _mediator;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
-	private readonly ISetJoinTrustDetailsCommandHandler _setTrustCommandHandler;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	public ApplicationCreateTests()
 	{
@@ -53,10 +52,9 @@ public class ApplicationCreateTests
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
-		_applicationSubmitCommand = new Mock<IApplicationSubmitCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_setTrustCommandHandler = new Mock<ISetJoinTrustDetailsCommandHandler>().Object;
+		_mediator = new Mock<IMediator>().Object;
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -69,10 +67,9 @@ public class ApplicationCreateTests
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
 			_applicationGetQuery,
-			_applicationUpdateCommand,
-			_applicationSubmitCommand, 
-			_setTrustCommandHandler,
+			_applicationUpdateCommand, 
 			_applicationsListByUserQuery,
+			_mediator,
 			_applicationLogger);
 
 		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
@@ -105,7 +102,7 @@ public class ApplicationCreateTests
 				applicationCreateRequestModel.Contributor.Role,
 				applicationCreateRequestModel.Contributor.OtherRoleName) },
 			new List<ApplicationSchoolServiceModel>(),
-			null, null);
+			null, null, null);
 
 		Assert.Equivalent(expectedApplication, actualApplication);
 	}
@@ -118,9 +115,8 @@ public class ApplicationCreateTests
 			_applicationCreateCommand,
 			_applicationGetQuery,
 			_applicationUpdateCommand,
-			_applicationSubmitCommand,
-			_setTrustCommandHandler,
 			_applicationsListByUserQuery,
+			_mediator,
 			_applicationLogger);
 
 		_fixture.Customize<ContributorRequestModel>(composer =>

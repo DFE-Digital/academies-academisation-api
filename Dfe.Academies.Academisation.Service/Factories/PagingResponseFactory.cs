@@ -9,7 +9,7 @@ internal static class PagingResponseFactory
 	{
 		var pagingResponse = new PagingResponse { RecordCount = recordCount, Page = page };
 
-		if (recordCount != count) return pagingResponse;
+		if ((page * count) >= recordCount) return pagingResponse;
 		
 		pagingResponse.NextPageUrl = $"{path}?page={page + 1}&count={count}";
 

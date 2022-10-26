@@ -1,11 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
-	public class JoinTrustCommandHandler : ISetJoinTrustDetailsCommandHandler
+	public class JoinTrustCommandHandler : IRequestHandler<SetJoinTrustDetailsCommand, CommandResult>
 	{
 
 		private readonly IApplicationGetDataQuery _applicationGetDataQuery;
@@ -17,9 +17,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			_applicationUpdateDataCommand = applicationUpdateDataCommand;
 		}
 
-		public async Task<CommandResult> Handle(int applicationId, SetJoinTrustDetailsCommand command)
+		public async Task<CommandResult> Handle(SetJoinTrustDetailsCommand command, CancellationToken cancellationToken)
 		{
-			var existingApplication = await _applicationGetDataQuery.Execute(applicationId);
+			var existingApplication = await _applicationGetDataQuery.Execute(command.applicationId);
+
 			if (existingApplication is null)
 			{
 				return new NotFoundCommandResult();
@@ -44,6 +45,5 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			await _applicationUpdateDataCommand.Execute(existingApplication);
 			return result;
 		}
-
 	}
 }

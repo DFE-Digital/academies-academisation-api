@@ -10,11 +10,11 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 		{
 			return new(
 				loan.Id, 
-				loan.Details.Amount,
-				loan.Details.Purpose,
-				loan.Details.Provider,
-				loan.Details.InterestRate,
-				loan.Details.Schedule
+				loan.Amount,
+				loan.Purpose,
+				loan.Provider,
+				loan.InterestRate,
+				loan.Schedule
 			);
 		}
 

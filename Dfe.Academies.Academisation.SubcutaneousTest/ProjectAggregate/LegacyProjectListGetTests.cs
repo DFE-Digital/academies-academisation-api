@@ -4,11 +4,10 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Project;
+using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
@@ -27,7 +26,7 @@ public class LegacyProjectListGetTests
 		ILegacyProjectListGetQuery legacyProjectGetQuery = new LegacyProjectListGetQuery(projectGetDataQuery);
 
 		_subject = new LegacyProjectController(Mock.Of<ILegacyProjectGetQuery>(), legacyProjectGetQuery,
-			Mock.Of<ILegacyProjectUpdateCommand>());
+			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>());
 	}
 
 	[Fact]
@@ -43,7 +42,7 @@ public class LegacyProjectListGetTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var result = await _subject.GetProjects(null, 1, 3);
+		var result = await _subject.GetProjects(null, null, null, 1, 3);
 
 		// assert
 		var (_, getProjects) = DfeAssert.OkObjectResult(result);
