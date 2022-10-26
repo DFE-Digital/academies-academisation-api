@@ -1,173 +1,109 @@
 const AuthorisedUserCanUpdatePayload = {
-    "applicationId": 25,
+    "applicationId": 27,
     "applicationType": "joinAMat",
     "applicationStatus": "inProgress",
     "contributors": [
         {
-            "contributorId": 128,
+            "contributorId": 27,
             "firstName": "Dan",
             "lastName": "Good",
             "emailAddress": "Dan.GOOD@education.gov.uk",
             "role": "other"
-        },
-        {
-            "contributorId": 129,
-            "firstName": "Andrew",
-            "lastName": "Parsons",
-            "emailAddress": "andrew.parsons@plym.sch.uk",
-            "role": "other",
-            "otherRoleName": "HeadTeacher"
-        },
-        {
-            "contributorId": 130,
-            "firstName": "Sean",
-            "lastName": "Cormac",
-            "emailAddress": "sean.cormac@plym.sch.uk",
-            "role": "other",
-            "otherRoleName": "DeputyHead"
         }
     ],
     "schools": [
         {
-            "id": 48,
-            "urn": 113537,
-            "schoolName": "Plymstock School",
+            "id": 21,
+            "urn": 113538,
+            "schoolName": "Coombe Dean School",
             "landAndBuildings": {
-                "ownerExplained": "Andrew Parsons",
+                "ownerExplained": "Parsons",
                 "worksPlanned": false,
-                "worksPlannedDate": "2023-11-15T15:06:55.953",
-                "worksPlannedExplained": "Andrew Parsons has got in contractors to build the new classrooms with a business deal.",
-                "facilitiesShared": true,
-                "facilitiesSharedExplained": "facilitiesSharedExplained string",
-                "grants": true,
-                "grantsAwardingBodies": "grantsAwardingBodies String",
+                "facilitiesShared": false,
+                "grants": false,
+                "grantsAwardingBodies": "Sport England",
                 "partOfPfiScheme": false,
-                "partOfPrioritySchoolsBuildingProgramme": true,
-                "partOfBuildingSchoolsForFutureProgramme": true
+                "partOfPrioritySchoolsBuildingProgramme": false,
+                "partOfBuildingSchoolsForFutureProgramme": false
             },
-            "performance": {
-                "inspectedButReportNotPublished": false,
-                "inspectedButReportNotPublishedExplain": "inspectedButReportNotPublishedExplain string",
-                "ongoingSafeguardingInvestigations": false,
-                "ongoingSafeguardingDetails": "ongoingSafeguardingDetails string"
-            },
-            "localAuthority": {
-                "partOfLaReorganizationPlan": false,
-                "laReorganizationDetails": "laReorganizationDetails string",
-                "partOfLaClosurePlan": false,
-                "laClosurePlanDetails": "laClosurePlanDetails string"
-            },
-            "partnershipsAndAffliations": {
-                "isPartOfFederation": false,
-                "isSupportedByFoundation": false,
-                "supportedFoundationName": "supportedFoundationName string",
-                "supportedFoundationEvidenceDocumentLink": "supportedFoundationEvidenceDocumentLink string",
-                "feederSchools": "feederSchools string"
-            },
-            "religiousEducation": {
-                "faithSchool": false,
-                "faithSchoolDioceseName": "faithSchoolDioceseName string",
-                "diocesePermissionEvidenceDocumentLink": "diocesePermissionEvidenceDocumentLink string",
-                "hasSACREException": false,
-                "sacreExemptionEndDate": "2023-11-15T15:06:55.953"
-            },
+            "performance": {},
+            "localAuthority": {},
+            "partnershipsAndAffliations": {},
+            "religiousEducation": {},
             "previousFinancialYear": {
-                "financialYearEndDate": "2023-11-15T15:06:55.953",
-                "revenue": 50000.00,
-                "revenueStatus": "surplus",
-                "revenueStatusExplained": "revenueExplained String",
-                "revenueStatusFileLink": "revenueStatusFileLink",
-                "capitalCarryForward": 20000.00,
-                "capitalCarryForwardStatus": "surplus",
-                "capitalCarryForwardExplained": "capital CarryForwardExplained String",
-                "capitalCarryForwardFileLink": "capitalCarryForwardFileLink String"
+                "financialYearEndDate": "2021-04-05T00:00:00",
+                "revenue": 500000.00,
+                "revenueStatus": "deficit",
+                "revenueStatusExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ip",
+                "capitalCarryForward": 400000.00,
+                "capitalCarryForwardStatus": "deficit",
+                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ip"
             },
             "currentFinancialYear": {
-                "financialYearEndDate": "2023-11-15T15:06:55.953",
-                "revenue": 500000.99,
-                "revenueStatus": "surplus",
-                "revenueStatusExplained": "revenueStatusExplained string",
-                "revenueStatusFileLink": "revenueStatusFileLink string",
-                "capitalCarryForward": 30000.00,
-                "capitalCarryForwardStatus": "surplus",
-                "capitalCarryForwardExplained": "capitalCarryForwardExplained string",
-                "capitalCarryForwardFileLink": "capitalCarryForwardFileLink string"
+                "financialYearEndDate": "2022-05-04T00:00:00",
+                "revenue": 45510.50,
+                "revenueStatus": "deficit",
+                "revenueStatusExplained": "Andrew Parsons is in the process of selling off some land to build some new science labs for the school.  Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsu",
+                "capitalCarryForward": 45510.50,
+                "capitalCarryForwardStatus": "deficit",
+                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum "
             },
             "nextFinancialYear": {
-                "financialYearEndDate": "2023-11-15T15:06:55.953",
-                "revenue": 60000.00,
+                "financialYearEndDate": "2023-01-12T00:00:00",
+                "revenue": 1.00,
                 "revenueStatus": "deficit",
-                "revenueStatusExplained": "revenueStatusExplained string Next Finanical Year",
-                "revenueStatusFileLink": "revenueStatusFileLink string Next Financial Year",
-                "capitalCarryForward": 60000.00,
+                "revenueStatusExplained": "rjrjrtjtjrt",
+                "capitalCarryForward": 1.00,
                 "capitalCarryForwardStatus": "deficit",
-                "capitalCarryForwardExplained": "capitalCarryForwardExplained string next Financial Year",
-                "capitalCarryForwardFileLink": "capitalCarryForwardFileLink string"
+                "capitalCarryForwardExplained": "sdfbdsfbdb"
             },
             "loans": [
                 {
-                    "loanId": 26,
-                    "amount": 500000.00,
-                    "purpose": "The purpose of this is to totally revitalise Plymstock School as an even better",
+                    "loanId": 41,
+                    "amount": 30000.00,
+                    "purpose": "string",
                     "provider": "string",
-                    "interestRate": 3.25,
+                    "interestRate": 10.00,
                     "schedule": "string"
                 }
             ],
             "leases": [
                 {
-                    "leaseId": 3,
-                    "leaseTerm": 3,
-                    "repaymentAmount": 10000.00,
+                    "leaseId": 10,
+                    "leaseTerm": "3 years",
+                    "repaymentAmount": 50000.00,
                     "interestRate": 10.00,
-                    "paymentsToDate": 1000.00,
-                    "purpose": "To fund the new science labs",
-                    "valueOfAssets": "50000",
-                    "responsibleForAssets": "Mr Smith"
+                    "paymentsToDate": 10000.00,
+                    "purpose": "To build new science labs",
+                    "valueOfAssets": "100000",
+                    "responsibleForAssets": "Andrew Parsons"
                 }
             ],
-            "schoolContributionToTrust": "string",
-            "governingBodyConsentEvidenceDocumentLink": "string",
-            "additionalInformationAdded": false,
-            "additionalInformation": "string",
-            "equalitiesImpactAssessmentCompleted": "consideredUnlikely",
-            "equalitiesImpactAssessmentDetails": "string",
-            "schoolConversionContactHeadName": "string",
-            "schoolConversionContactHeadEmail": "andrew.parsons1@plymstock.plym.sch.uk",
-            "schoolConversionContactHeadTel": "string",
-            "schoolConversionContactChairName": "string",
-            "schoolConversionContactChairEmail": "lee.fisher@plymouth.gov.uk",
-            "schoolConversionContactChairTel": "string",
-            "schoolConversionContactRole": "string",
-            "schoolConversionMainContactOtherName": "string",
-            "schoolConversionMainContactOtherEmail": "andrea.hamley@plymstock.sch.uk",
-            "schoolConversionMainContactOtherTelephone": "string",
-            "schoolConversionMainContactOtherRole": "string",
-            "schoolConversionApproverContactName": "string",
-            "schoolConversionApproverContactEmail": "dangood84@me.com",
+            "schoolConversionContactHeadName": "Andrew Parsons",
+            "schoolConversionContactHeadEmail": "aparsons@plymstock.sch.uk",
+            "schoolConversionContactHeadTel": "01752600500",
+            "schoolConversionContactChairName": "Lee Fisher",
+            "schoolConversionContactChairEmail": "lee.fisher@plymstock.sch.uk",
+            "schoolConversionContactChairTel": "01752484000",
+            "schoolConversionContactRole": "ChairOfGoverningBody",
+            "schoolConversionApproverContactName": "Lee Fisher",
+            "schoolConversionApproverContactEmail": "lee.fisher@plymstock.sch.uk",
             "schoolConversionTargetDateSpecified": true,
-            "schoolConversionTargetDate": "2023-11-15T15:06:55.953",
-            "schoolConversionTargetDateExplained": "string",
-            "conversionChangeNamePlanned": true,
-            "proposedNewSchoolName": "string",
-            "applicationJoinTrustReason": "Because this trust is awesome!",
+            "schoolConversionTargetDate": "2023-02-28T00:00:00",
+            "schoolConversionTargetDateExplained": "This date suits us at the moment.",
+            "conversionChangeNamePlanned": false,
+            "proposedNewSchoolName": "The Ridgeway Academy",
             "projectedPupilNumbersYear1": 1000,
             "projectedPupilNumbersYear2": 1250,
             "projectedPupilNumbersYear3": 1500,
-            "schoolCapacityAssumptions": "Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons Andrew Parsons ",
-            "schoolCapacityPublishedAdmissionsNumber": 1001,
-            "schoolSupportGrantFundsPaidTo": "school",
-            "confirmPaySupportGrantToSchool": false
+            "schoolCapacityAssumptions": "<iframe src=\"/default.asp\" width=\"100%\" height=\"300\" style=\"border:none;\"></iframe>",
+            "schoolCapacityPublishedAdmissionsNumber": 1000,
+            "schoolSupportGrantFundsPaidTo": "trust",
+            "confirmPaySupportGrantToSchool": false,
+            "financeOngoingInvestigations": false,
+            "declarationBodyAgree": true,
+            "declarationIAmTheChairOrHeadteacher": true
         }
-    ],
-    "joinTrustDetails": {
-        "id": 2,
-        "ukprn": 1001,
-        "trustName": "Plymouth Community Trust",
-        "changesToTrust": false,
-        "changesToTrustExplained": "Changes To Trust Explanation",
-        "changesToLaGovernance": true,
-        "changesToLaGovernanceExplained": "Governance Governance Governance. Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum "
-    }
+    ]
 }
 module.exports = {AuthorisedUserCanUpdatePayload}
