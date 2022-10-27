@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
@@ -8,10 +9,24 @@ public record ApplicationSchoolServiceModel(
 	string SchoolName,
 	LandAndBuildingsServiceModel? LandAndBuildings,
 	// additional information - split up
-	PerformanceServiceModel? Performance,
-	LocalAuthorityServiceModel? LocalAuthority,
-	PartnershipsAndAffliationsServiceModel? PartnershipsAndAffliations,
-	ReligiousEducationServiceModel? ReligiousEducation,
+	
+	
+	string TrustBenefitDetails, 
+	string? OfstedInspectionDetails, 
+	string? SafeguardingDetails, 
+	string? LocalAuthorityReorganisationDetails,
+	string? LocalAuthorityClosurePlanDetails,
+	string? DioceseName,
+	string DioceseFolderIdentifier,
+	bool PartOfFederation,
+	string? FoundationTrustOrBodyName,
+	string FoundationConsentFolderIdentifier,
+	DateTimeOffset? ExemptionEndDate,
+	string MainFeederSchools,
+	string ResolutionConsentFolderIdentifier,
+	SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics,
+	string? FurtherInformation,
+	
 	// finances
 	FinancialYearServiceModel? PreviousFinancialYear,
 	FinancialYearServiceModel? CurrentFinancialYear,

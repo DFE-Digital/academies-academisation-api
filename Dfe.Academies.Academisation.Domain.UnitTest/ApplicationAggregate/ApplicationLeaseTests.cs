@@ -136,7 +136,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				null,
 				null);
 
-			var result = subject.DeleteLease(1, 2);
+			var result = subject. DeleteLease(1, 2);
 
 			Assert.IsType<NotFoundCommandResult>(result);
 		}

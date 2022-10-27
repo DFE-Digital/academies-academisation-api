@@ -1,5 +1,9 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using Autofac;
+using Autofac.Core;
+using Autofac.Extensions.DependencyInjection;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
@@ -20,16 +24,17 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
-using Dfe.Academies.Academisation.IService.Commands.Application.School;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
+using Dfe.Academies.Academisation.Service.Behaviours;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Academisation.WebApi.AutofacModules;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.Filters;
 using Dfe.Academies.Academisation.WebApi.Middleware;
@@ -95,12 +100,6 @@ builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
-builder.Services.AddScoped<ICreateLoanCommandHandler,CreateLoanCommandHandler>();
-builder.Services.AddScoped<ICreateLeaseCommandHandler,CreateLeaseCommandHandler>();
-builder.Services.AddScoped<IUpdateLoanCommandHandler,UpdateLoanCommandHandler>();
-builder.Services.AddScoped<IUpdateLeaseCommandHandler, UpdateLeaseCommandHandler>();
-builder.Services.AddScoped<IDeleteLoanCommandHandler, DeleteLoanCommandHandler>();
-builder.Services.AddScoped<IDeleteLeaseCommandHandler, DeleteLeaseCommandHandler>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
@@ -137,16 +136,6 @@ builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 
 //Validators
-builder.Services.AddScoped<IRequest<bool>, CreateLeaseCommand>();
-builder.Services.AddScoped<IRequest<bool>, UpdateLeaseCommand>();
-builder.Services.AddScoped<IRequest<bool>, CreateLoanCommand>();
-builder.Services.AddScoped<IRequest<bool>, UpdateLoanCommand>();
-builder.Services.AddScoped<AbstractValidator<CreateLeaseCommand>, CreateLeaseCommandValidator>();
-builder.Services.AddScoped<AbstractValidator<UpdateLeaseCommand>, UpdateLeaseCommandValidator>();
-builder.Services.AddScoped<AbstractValidator<CreateLoanCommand>, CreateLoanCommandValidator>();
-builder.Services.AddScoped<AbstractValidator<UpdateLoanCommand>, UpdateLoanCommandValidator>();
-
-builder.Services.AddScoped(typeof(IValidatorFactory<>), typeof(ValidatorFactory<>));
 
 builder.Services.AddDbContext<AcademisationContext>(options => options
 	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],
@@ -155,7 +144,40 @@ builder.Services.AddDbContext<AcademisationContext>(options => options
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 builder.Services.AddMediatR(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!);
+builder.Services.AddMediatR(typeof(CreateLoanCommandHandler).GetTypeInfo().Assembly);
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+/*
+builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateLoanCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
+*/
+builder.Services.AddScoped(typeof(IValidator<SetAdditionalDetailsCommand>), typeof(SetAdditionalDetailsCommandValidator));
+builder.Services.AddScoped<IRequest<CommandResult>, CreateLeaseCommand>();
+builder.Services.AddScoped<IRequest<CommandResult>, UpdateLeaseCommand>();
+builder.Services.AddScoped<IRequest<CommandResult>, DeleteLeaseCommand>();
+builder.Services.AddScoped<IRequest<CommandResult>, CreateLoanCommand>();
+builder.Services.AddScoped<IRequest<CommandResult>, UpdateLoanCommand>();
+builder.Services.AddScoped<IRequest<CommandResult>, DeleteLoanCommand>();
+builder.Services.AddScoped<IRequest<CommandResult>, SetAdditionalDetailsCommand>();
+
+builder.Services.AddScoped<AbstractValidator<CreateLeaseCommand>, CreateLeaseCommandValidator>();
+builder.Services.AddScoped<AbstractValidator<UpdateLeaseCommand>, UpdateLeaseCommandValidator>();
+builder.Services.AddScoped<AbstractValidator<CreateLoanCommand>, CreateLoanCommandValidator>();
+builder.Services.AddScoped<AbstractValidator<UpdateLoanCommand>, UpdateLoanCommandValidator>();
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!);
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(UpdateLoanCommandHandler))!);
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(CreateLoanCommandHandler))!);
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(DeleteLoanCommandHandler))!);
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(UpdateLeaseCommandHandler))!);
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(CreateLeaseCommandHandler))!);
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(DeleteLeaseCommandHandler))!);
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(SetAdditionalDetailsCommandHandler))!);
+
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+
 
 var app = builder.Build();
 

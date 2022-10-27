@@ -1,24 +1,32 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+
+namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 public record SchoolDetails(
 	int Urn,
 	string SchoolName,
 	LandAndBuildings? LandAndBuildings,
 	// additional information - split out
-	Performance? Performance,
-	LocalAuthority? LocalAuthority,
-	PartnershipsAndAffliations? PartnershipsAndAffliations,
-	ReligiousEducation? ReligiousEducation,
+	string TrustBenefitDetails, 
+	string? OfstedInspectionDetails, 
+	string? SafeguardingDetails, 
+	string? LocalAuthorityReorganisationDetails,
+	string? LocalAuthorityClosurePlanDetails,
+	string? DioceseName,
+	string? DioceseFolderIdentifier,
+	bool PartOfFederation,
+	string? FoundationTrustOrBodyName,
+	string? FoundationConsentFolderIdentifier,
+	DateTimeOffset? ExemptionEndDate,
+	string MainFeederSchools,
+	string ResolutionConsentFolderIdentifier,
+	SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics,
+	string? FurtherInformation,
+
 	// finances
 	FinancialYear? PreviousFinancialYear,
 	FinancialYear? CurrentFinancialYear,
 	FinancialYear? NextFinancialYear,
-	string? SchoolContributionToTrust = null,
-	string? GoverningBodyConsentEvidenceDocumentLink = null,
-	bool? AdditionalInformationAdded = null,
-	string? AdditionalInformation = null,
-	EqualityImpact? EqualitiesImpactAssessmentCompleted = null,
-	string? EqualitiesImpactAssessmentDetails = null, // there is no text input within the UI, just a radio with the enum values
 	// contact details
 	string? ContactHeadName = null,
 	string? ContactHeadEmail = null,

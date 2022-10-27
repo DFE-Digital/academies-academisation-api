@@ -246,5 +246,45 @@ public class Application : IApplication, IAggregateRoot
 
 		return new CommandSuccessResult();
 	}
+
+	public CommandResult SetAdditionalDetails(
+		int schoolId,
+		string trustBenefitDetails, 
+		string? ofstedInspectionDetails, 
+		string? safeguardingDetails, 
+		string? localAuthorityReorganisationDetails,
+		string? localAuthorityClosurePlanDetails,
+		string? dioceseName,
+		string dioceseFolderIdentifier,
+		bool partOfFederation,
+		string? foundationTrustOrBodyName,
+		string foundationConsentFolderIdentifier,
+		DateTimeOffset? exemptionEndDate,
+		string mainFeederSchools,
+		string resolutionConsentFolderIdentifier,
+		SchoolEqualitiesProtectedCharacteristics? protectedCharacteristics,
+		string? furtherInformation)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		if (school == null) return new NotFoundCommandResult();
+		school.SetAdditionalDetails(
+			trustBenefitDetails,
+			ofstedInspectionDetails,
+			safeguardingDetails,
+			localAuthorityReorganisationDetails,
+			localAuthorityClosurePlanDetails,
+			dioceseName,
+			dioceseFolderIdentifier,
+			partOfFederation,
+			foundationTrustOrBodyName,
+			foundationConsentFolderIdentifier,
+			exemptionEndDate,
+			mainFeederSchools,
+			resolutionConsentFolderIdentifier,
+			protectedCharacteristics,
+			furtherInformation);
+		
+		return new CommandSuccessResult();
+	}
 }
 

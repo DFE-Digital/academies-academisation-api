@@ -63,6 +63,9 @@ internal static class LegacySchoolServiceModelMapper
 
 			// additional information
 			// Performance
+			
+			
+			/*
 			SchoolAdInspectedButReportNotPublished = school.Performance.InspectedButReportNotPublished,
 			SchoolAdInspectedButReportNotPublishedExplain = school.Performance.InspectedButReportNotPublishedExplain,
 			SchoolOngoingSafeguardingInvestigations = school.Performance.OngoingSafeguardingInvestigations,
@@ -84,13 +87,10 @@ internal static class LegacySchoolServiceModelMapper
 			DiocesePermissionEvidenceDocumentLink = school.ReligiousEducation.DiocesePermissionEvidenceDocumentLink,
 			SchoolHasSACREException = school.ReligiousEducation.HasSACREException,
 			SchoolSACREExemptionEndDate = school.ReligiousEducation.SACREExemptionEndDate,
+			*/
+			
 			// other additional information
-			SchoolAdSchoolContributionToTrust = school.SchoolContributionToTrust,
-			GoverningBodyConsentEvidenceDocumentLink = school.GoverningBodyConsentEvidenceDocumentLink,
-			SchoolAdditionalInformationAdded = school.AdditionalInformationAdded,
-			SchoolAdditionalInformation = school.AdditionalInformation,
-			SchoolAdEqualitiesImpactAssessmentCompleted = !string.IsNullOrWhiteSpace(school.EqualitiesImpactAssessmentDetails),
-			SchoolAdEqualitiesImpactAssessmentDetails = school.EqualitiesImpactAssessmentDetails,
+
 			// Finances
 			PreviousFinancialYear = new LegacyFinancialYearServiceModel
 			{
