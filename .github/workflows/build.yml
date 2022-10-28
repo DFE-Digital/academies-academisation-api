@@ -45,5 +45,5 @@ jobs:
       run: |
         dotnet-sonarscanner begin /k:"DFE-Digital_academies-academisation-api" /o:"dfe-digital" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
         dotnet build --no-restore
-        dotnet test --no-build --verbosity normal
+        dotnet test --no-build --verbosity normal --collect "Code Coverage"
         dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
