@@ -57,7 +57,7 @@ public class Project : IProject
 			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme),
 			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
 			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
-			EqualitiesImpactAssessmentConsidered = ToYesNoString(school.EqualitiesImpactAssessmentCompleted != Core.ApplicationAggregate.EqualityImpact.NotConsidered),
+			
 			//SponsorName = application.SponsorName,
 			//SponsorReferenceNumber = application.SponsorReferenceNumber,
 			//RevenueCarryForwardAtEndMarchCurrentYear = school.SchoolCFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolCFYRevenueIsDeficit),
