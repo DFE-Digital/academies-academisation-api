@@ -1,13 +1,10 @@
 using System.Runtime.Serialization;
+using Dfe.Academies.Academisation.Core;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 
-
-//Mediatr isn't currently used but the IRequest interface will make it easier to manually inject validators into the command handlers
-//This makes the refactoring later with moving commands to mediatr simple
-
-public class CreateLeaseCommand : IRequest<bool>
+public class CreateLeaseCommand : IRequest<CommandResult>
 {
 	[DataMember]
 	public int ApplicationId { get; set; }

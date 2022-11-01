@@ -57,12 +57,10 @@ public class ApplicationSchoolState : BaseEntity
 	public bool? PartOfBuildingSchoolsForFutureProgramme { get; set; }
 	// application pre-support grant
 	public PayFundsTo? SupportGrantFundsPaidTo { get; set; }
-	public PayFundsTo? SchoolSupportGrantFundsPaidTo { get; set; }
 	public bool? ConfirmPaySupportGrantToSchool { get; set; }
 
 	// additional information - for data storage - store them flat !
-
-	public string? ApplicationJoinTrustReason { get; set; }
+	
 	public string? TrustBenefitDetails { get; set; }
 	public string? OfstedInspectionDetails { get; set; }
 	public string? SafeguardingDetails { get; set; }
@@ -288,6 +286,21 @@ public class ApplicationSchoolState : BaseEntity
 				PartOfPrioritySchoolsBuildingProgramme = PartOfPrioritySchoolsBuildingProgramme,
 				PartOfBuildingSchoolsForFutureProgramme = PartOfBuildingSchoolsForFutureProgramme
 			},
+			TrustBenefitDetails,
+			OfstedInspectionDetails,
+			SafeguardingDetails,
+			LocalAuthorityReoganisationDetails,
+			LocalAuthorityClosurePlanDetails,
+			DioceseName,
+			DioceseFolderIdentifier,
+			PartOfFederation,
+			FoundationTrustOrBodyName,
+			FoundationConsentFolderIdentifier,
+			ExemptionEndDate,
+			MainFeederSchools,
+			ResolutionConsentFolderIdentifier,
+			ProtectedCharacteristics,
+			FurtherInformation,
 			// previous financial yr
 			new FinancialYear
 			{
@@ -327,21 +340,6 @@ public class ApplicationSchoolState : BaseEntity
 				CapitalCarryForwardExplained = NextFinancialYearCapitalCarryForwardExplained,
 				CapitalCarryForwardFileLink = NextFinancialYearCapitalCarryForwardFileLink
 			},
-			TrustBenefitDetails,
-			OfstedInspectionDetails,
-			SafeguardingDetails,
-			LocalAuthorityReoganisationDetails,
-			LocalAuthorityClosurePlanDetails,
-			DioceseName,
-			DioceseFolderIdentifier,
-			PartOfFederation,
-			FoundationTrustOrBodyName,
-			FoundationConsentFolderIdentifier,
-			ExemptionEndDate,
-			MainFeederSchools,
-			ResolutionConsentFolderIdentifier,
-			ProtectedCharacteristics,
-			FurtherInformation,
 			ContactHeadName = ContactHeadName,
 			ContactHeadEmail = ContactHeadEmail,
 			ContactChairTel = ContactChairTel,
@@ -360,13 +358,13 @@ public class ApplicationSchoolState : BaseEntity
 			ConversionTargetDateExplained = ConversionTargetDateExplained,
 			ConversionChangeNamePlanned = ConversionChangeNamePlanned,
 			ProposedNewSchoolName = ProposedNewSchoolName,
-			ApplicationJoinTrustReason = JoinTrustReason,
+			JoinTrustReason = JoinTrustReason,
 			ProjectedPupilNumbersYear1 = ProjectedPupilNumbersYear1,
 			ProjectedPupilNumbersYear2 = ProjectedPupilNumbersYear2,
 			ProjectedPupilNumbersYear3 = ProjectedPupilNumbersYear3,
 			CapacityAssumptions = CapacityAssumptions,
 			CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber,
-			SchoolSupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
+			SupportGrantFundsPaidTo = SupportGrantFundsPaidTo,
 			ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool,
 			SchoolHasConsultedStakeholders = SchoolHasConsultedStakeholders,
 			SchoolPlanToConsultStakeholders = SchoolPlanToConsultStakeholders,

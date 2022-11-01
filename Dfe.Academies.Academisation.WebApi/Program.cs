@@ -148,14 +148,12 @@ builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 builder.Services.AddMediatR(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!);
 builder.Services.AddMediatR(typeof(CreateLoanCommandHandler).GetTypeInfo().Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
-/*
 builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
-*/
-builder.Services.AddScoped(typeof(IValidator<SetAdditionalDetailsCommand>), typeof(SetAdditionalDetailsCommandValidator));
-builder.Services.AddScoped<IRequest<CommandResult>, CreateLeaseCommand>();
+/*
+ builder.Services.AddScoped<IRequest<CommandResult>, CreateLeaseCommand>();
 builder.Services.AddScoped<IRequest<CommandResult>, UpdateLeaseCommand>();
 builder.Services.AddScoped<IRequest<CommandResult>, DeleteLeaseCommand>();
 builder.Services.AddScoped<IRequest<CommandResult>, CreateLoanCommand>();
@@ -177,6 +175,9 @@ builder.Services.AddMediatR(Assembly.GetAssembly(typeof(DeleteLeaseCommandHandle
 builder.Services.AddMediatR(Assembly.GetAssembly(typeof(SetAdditionalDetailsCommandHandler))!);
 
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+*/
+//builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+//builder.Host.ConfigureContainer<ContainerBuilder>(autofacBuilder => autofacBuilder.RegisterModule(new MediatorModule()));
 
 
 var app = builder.Build();

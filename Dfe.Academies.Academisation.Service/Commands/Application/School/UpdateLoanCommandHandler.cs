@@ -1,35 +1,21 @@
-using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Application.School;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.Service.CommandValidations;
+using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application.School;
 
-public class UpdateLoanCommandHandler : IUpdateLoanCommandHandler
+public class UpdateLoanCommandHandler : IRequestHandler<UpdateLoanCommand, CommandResult>
 {
 	private readonly IApplicationRepository _applicationRepository;
-	private readonly IValidatorFactory<UpdateLoanCommand> _validatorFactory;
-	public UpdateLoanCommandHandler(IApplicationRepository applicationRepository, IValidatorFactory<UpdateLoanCommand> validatorFactory)
+	public UpdateLoanCommandHandler(IApplicationRepository applicationRepository)
 	{
 		_applicationRepository = applicationRepository;
-		_validatorFactory = validatorFactory;
 	}
 
-	public async Task<CommandResult> Handle(UpdateLoanCommand loanCommand)
+	public async Task<CommandResult> Handle(UpdateLoanCommand loanCommand,  CancellationToken cancellationToken)
 	{
-		var validator = _validatorFactory.GetCommandValidator();
-		var validationResult = await validator.ValidateAsync(loanCommand);
-
-		if (!validationResult.IsValid || validationResult.Errors.Any())
-		{
-			var validationErrors = new List<ValidationError>();
-			validationErrors.AddRange(validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
-			return new CommandValidationErrorResult(validationErrors);
-		}
-		
 		var existingApplication = await _applicationRepository.GetByIdAsync(loanCommand.ApplicationId);
 		if (existingApplication == null) return new NotFoundCommandResult();
 			

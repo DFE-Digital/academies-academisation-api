@@ -1,13 +1,12 @@
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Application.School;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
+using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application.School;
 
-public class DeleteLoanCommandHandler : IDeleteLoanCommandHandler
+public class DeleteLoanCommandHandler : IRequestHandler<DeleteLoanCommand, CommandResult>
 {
 	private readonly IApplicationRepository _applicationRepository; 
 
@@ -16,7 +15,7 @@ public class DeleteLoanCommandHandler : IDeleteLoanCommandHandler
 		_applicationRepository = applicationRepository;
 	}
 
-	public async Task<CommandResult> Handle(DeleteLoanCommand loanCommand)
+	public async Task<CommandResult> Handle(DeleteLoanCommand loanCommand, CancellationToken cancellationToken)
 	{
 		var existingApplication = await _applicationRepository.GetByIdAsync(loanCommand.ApplicationId);
 		if (existingApplication == null) return new NotFoundCommandResult();

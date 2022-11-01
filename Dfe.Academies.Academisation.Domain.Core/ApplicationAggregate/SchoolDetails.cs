@@ -6,10 +6,6 @@ public record SchoolDetails(
 	int Urn,
 	string SchoolName,
 	LandAndBuildings? LandAndBuildings,
-	// finances
-	FinancialYear? PreviousFinancialYear,
-	FinancialYear? CurrentFinancialYear,
-	FinancialYear? NextFinancialYear,
 	// additional information - split out
 	string TrustBenefitDetails, 
 	string? OfstedInspectionDetails, 
@@ -26,6 +22,10 @@ public record SchoolDetails(
 	string ResolutionConsentFolderIdentifier,
 	SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics,
 	string? FurtherInformation,
+	// finances
+	FinancialYear? PreviousFinancialYear,
+	FinancialYear? CurrentFinancialYear,
+	FinancialYear? NextFinancialYear,
 	// contact details
 	string? ContactHeadName = null,
 	string? ContactHeadEmail = null,
