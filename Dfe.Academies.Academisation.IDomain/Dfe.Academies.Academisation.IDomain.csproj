@@ -10,11 +10,5 @@
     <ProjectReference Include="..\Dfe.Academies.Academisation.Core\Dfe.Academies.Academisation.Core.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Domain.Core\Dfe.Academies.Academisation.Domain.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Dfe.Academies.Academisation.Domain">
-      <HintPath>..\Dfe.Academies.Academisation.WebApi\bin\Debug\net6.0\Dfe.Academies.Academisation.Domain.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
+	
 </Project>
