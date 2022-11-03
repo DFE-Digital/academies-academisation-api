@@ -11,19 +11,19 @@ public record ApplicationSchoolServiceModel(
 	// additional information - split up
 	
 	
-	string TrustBenefitDetails, 
+	string? TrustBenefitDetails, 
 	string? OfstedInspectionDetails, 
 	string? SafeguardingDetails, 
 	string? LocalAuthorityReorganisationDetails,
 	string? LocalAuthorityClosurePlanDetails,
 	string? DioceseName,
-	string DioceseFolderIdentifier,
-	bool PartOfFederation,
+	string? DioceseFolderIdentifier,
+	bool? PartOfFederation,
 	string? FoundationTrustOrBodyName,
-	string FoundationConsentFolderIdentifier,
+	string? FoundationConsentFolderIdentifier,
 	DateTimeOffset? ExemptionEndDate,
-	string MainFeederSchools,
-	string ResolutionConsentFolderIdentifier,
+	string? MainFeederSchools,
+	string? ResolutionConsentFolderIdentifier,
 	SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics,
 	string? FurtherInformation,
 	

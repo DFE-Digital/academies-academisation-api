@@ -68,14 +68,14 @@ public class ApplicationSchoolState : BaseEntity
 	public string? LocalAuthorityClosurePlanDetails { get; set; }
 	public string? DioceseName { get; set; }
 	public string? DioceseFolderIdentifier { get; set; }
-	public bool PartOfFederation { get; set; }
+	public bool? PartOfFederation { get; set; }
 	
 	public string? FoundationTrustOrBodyName { get; set; }
 
 	public string? FoundationConsentFolderIdentifier { get; set; }
 	public DateTimeOffset? ExemptionEndDate { get; set; }
 	
-	public string MainFeederSchools { get; set; }
+	public string? MainFeederSchools { get; set; }
 	public string? ResolutionConsentFolderIdentifier { get; set; }
 	public SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics { get; set; }
 	public string? FurtherInformation { get; set; }
@@ -286,21 +286,6 @@ public class ApplicationSchoolState : BaseEntity
 				PartOfPrioritySchoolsBuildingProgramme = PartOfPrioritySchoolsBuildingProgramme,
 				PartOfBuildingSchoolsForFutureProgramme = PartOfBuildingSchoolsForFutureProgramme
 			},
-			TrustBenefitDetails,
-			OfstedInspectionDetails,
-			SafeguardingDetails,
-			LocalAuthorityReoganisationDetails,
-			LocalAuthorityClosurePlanDetails,
-			DioceseName,
-			DioceseFolderIdentifier,
-			PartOfFederation,
-			FoundationTrustOrBodyName,
-			FoundationConsentFolderIdentifier,
-			ExemptionEndDate,
-			MainFeederSchools,
-			ResolutionConsentFolderIdentifier,
-			ProtectedCharacteristics,
-			FurtherInformation,
 			// previous financial yr
 			new FinancialYear
 			{
@@ -378,6 +363,23 @@ public class ApplicationSchoolState : BaseEntity
 			SchoolConversionReasonsForJoining = SchoolConversionReasonsForJoining
 		);
 
-		return new School(Id, schoolDetails, Loans.Select(n => n.MapToDomain()), Leases.Select(n => n.MapToDomain()));
+		return new School(Id, 
+			TrustBenefitDetails,
+			OfstedInspectionDetails,
+			SafeguardingDetails,
+			LocalAuthorityReoganisationDetails,
+			LocalAuthorityClosurePlanDetails,
+			DioceseName,
+			DioceseFolderIdentifier,
+			PartOfFederation,
+			FoundationTrustOrBodyName,
+			FoundationConsentFolderIdentifier,
+			ExemptionEndDate,
+			MainFeederSchools,
+			ResolutionConsentFolderIdentifier,
+			ProtectedCharacteristics,
+			FurtherInformation,
+			schoolDetails, 
+			Loans.Select(n => n.MapToDomain()), Leases.Select(n => n.MapToDomain()));
 	}
 }

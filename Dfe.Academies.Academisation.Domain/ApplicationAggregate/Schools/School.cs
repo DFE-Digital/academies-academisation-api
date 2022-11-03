@@ -22,8 +22,8 @@ public class School : ISchool
 
 	#region Additional Details
 
-	private string _trustBenefitDetails { get; set; }
-	public string TrustBenefitDetails => _trustBenefitDetails;
+	private string? _trustBenefitDetails { get; set; }
+	public string? TrustBenefitDetails => _trustBenefitDetails;
 	
 	private string? _ofstedInspectionDetails { get; set; }
 	public string? OfstedInspectionDetails => _ofstedInspectionDetails;
@@ -43,8 +43,8 @@ public class School : ISchool
 	private string? _dioceseFolderIdentifier;
 	public string? DioceseFolderIdentifier => _dioceseFolderIdentifier;
 	
-	private bool _partOfFederation { get; set; }
-	public bool PartOfFederation => _partOfFederation;
+	private bool? _partOfFederation { get; set; }
+	public bool? PartOfFederation => _partOfFederation;
 	
 	private string? _foundationTrustOrBodyName { get; set; }
 	public string? FoundationTrustOrBodyName => _foundationTrustOrBodyName;
@@ -55,8 +55,8 @@ public class School : ISchool
 	private DateTimeOffset? _exemptionEndDate { get; set; }
 	public DateTimeOffset? ExemptionEndDate => _exemptionEndDate;
 	
-	private string _mainFeederSchools { get; set; }
-	public string MainFeederSchools => _mainFeederSchools;
+	private string? _mainFeederSchools { get; set; }
+	public string? MainFeederSchools => _mainFeederSchools;
 	
 	private string? _resolutionConsentFolderIdentifier;
 	public string? ResolutionConsentFolderIdentifier => _resolutionConsentFolderIdentifier;
@@ -78,9 +78,42 @@ public class School : ISchool
 		_leases = new();
 	}
 
-	public School(int id, SchoolDetails details, IEnumerable<Loan> loans, IEnumerable<Lease> leases) : this(details)
+	public School(int id, 	
+		string? trustBenefitDetails, 
+		string? ofstedInspectionDetails, 
+		string? safeguardingDetails, 
+		string? localAuthorityReorganisationDetails,
+		string? localAuthorityClosurePlanDetails,
+		string? dioceseName,
+		string? dioceseFolderIdentifier,
+		bool? partOfFederation,
+		string? foundationTrustOrBodyName,
+		string? foundationConsentFolderIdentifier,
+		DateTimeOffset? exemptionEndDate,
+		string? mainFeederSchools,
+		string? resolutionConsentFolderIdentifier,
+		SchoolEqualitiesProtectedCharacteristics? protectedCharacteristics,
+		string? furtherInformation, 
+		SchoolDetails details, 
+		IEnumerable<Loan> loans, 
+		IEnumerable<Lease> leases) : this(details)
 	{
 		Id = id;
+		_trustBenefitDetails = trustBenefitDetails;
+		_ofstedInspectionDetails = ofstedInspectionDetails;
+		_safeguardingDetails = safeguardingDetails;
+		_localAuthorityReoganisationDetails = localAuthorityReorganisationDetails;
+		_localAuthorityClosurePlanDetails = localAuthorityClosurePlanDetails;
+		_dioceseName = dioceseName;
+		_dioceseFolderIdentifier = dioceseFolderIdentifier;
+		_partOfFederation = partOfFederation;
+		_foundationTrustOrBodyName = foundationTrustOrBodyName;
+		_foundationConsentFolderIdentifier = foundationConsentFolderIdentifier;
+		_exemptionEndDate = exemptionEndDate;
+		_mainFeederSchools = mainFeederSchools;
+		_resolutionConsentFolderIdentifier = resolutionConsentFolderIdentifier;
+		_protectedCharacteristics = protectedCharacteristics;
+		_furtherInformation = furtherInformation;
 		_loans = loans.ToList();
 		_leases = leases.ToList();
 	}

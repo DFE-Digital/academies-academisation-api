@@ -7,18 +7,18 @@ public interface ISchool
 {
 	public int Id { get; }
 	public SchoolDetails Details { get; }
-	public string TrustBenefitDetails { get; } 
+	public string? TrustBenefitDetails { get; } 
 	public string? OfstedInspectionDetails{ get; }
 	public string? SafeguardingDetails{ get; }
 	public string? LocalAuthorityReorganisationDetails{ get; }
 	public string? LocalAuthorityClosurePlanDetails{ get; }
 	public string? DioceseName{ get; }
 	public string? DioceseFolderIdentifier{ get; }
-	public bool PartOfFederation{ get; }
+	public bool? PartOfFederation{ get; }
 	public string? FoundationTrustOrBodyName{ get; }
 	public string? FoundationConsentFolderIdentifier{ get; }
 	public DateTimeOffset? ExemptionEndDate{ get; }
-	public string MainFeederSchools{ get; }
+	public string? MainFeederSchools{ get; }
 	public string? ResolutionConsentFolderIdentifier{ get; }
 	public SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics{ get; }
 	public string? FurtherInformation{ get; }

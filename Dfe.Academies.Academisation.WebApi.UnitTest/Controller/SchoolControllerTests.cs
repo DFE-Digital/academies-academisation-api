@@ -51,20 +51,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 		
 		[Fact]
-		public async Task UpdateLoan_ReturnsBadRequest()
-		{
-			var command = new UpdateLoanCommand();
-			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>{new ValidationError("Some prop", "Some error")}));
-
-			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
-
-			var result = await sut.UpdateLoan(command) as BadRequestObjectResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.BadRequest);
-		}
-		
-		[Fact]
 		public async Task CreateLoan_ReturnsOk()
 		{
 			var command = new CreateLoanCommand();
@@ -90,20 +76,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await sut.CreateLoan(command) as NotFoundResult;
 			
 			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
-		}
-		
-		[Fact]
-		public async Task CreateLoan_ReturnsBadRequest()
-		{
-			var command = new CreateLoanCommand();
-			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>{new ValidationError("Some prop", "Some error")}));
-
-			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
-
-			var result = await sut.CreateLoan(command) as BadRequestObjectResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.BadRequest);
 		}
 		
 		[Fact]
@@ -135,20 +107,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 		
 		[Fact]
-		public async Task DeleteLoan_ReturnsBadRequest()
-		{
-			var command = new DeleteLoanCommand();
-			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>{new ValidationError("Some prop", "Some error")}));
-
-			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
-
-			var result = await sut.DeleteLoan(command) as BadRequestObjectResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.BadRequest);
-		}
-		
-		[Fact]
 		public async Task UpdateLease_ReturnsOk()
 		{
 			var command = new UpdateLeaseCommand();
@@ -174,20 +132,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await sut.UpdateLease(command) as NotFoundResult;
 			
 			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
-		}
-		
-		[Fact]
-		public async Task UpdateLease_ReturnsBadRequest()
-		{
-			var command = new UpdateLeaseCommand();
-			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>{new ValidationError("Some prop", "Some error")}));
-
-			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
-
-			var result = await sut.UpdateLease(command) as BadRequestObjectResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.BadRequest);
 		}
 		
 		[Fact]
@@ -219,20 +163,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 		
 		[Fact]
-		public async Task CreateLease_ReturnsBadRequest()
-		{
-			var command = new CreateLeaseCommand();
-			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>{new ValidationError("Some prop", "Some error")}));
-
-			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
-
-			var result = await sut.CreateLease(command) as BadRequestObjectResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.BadRequest);
-		}
-		
-		[Fact]
 		public async Task DeleteLease_ReturnsOk()
 		{
 			var command = new DeleteLeaseCommand();
@@ -258,20 +188,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await sut.DeleteLease(command) as NotFoundResult;
 			
 			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
-		}
-		
-		[Fact]
-		public async Task DeleteLease_ReturnsBadRequest()
-		{
-			var command = new DeleteLeaseCommand();
-			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>{new ValidationError("Some prop", "Some error")}));
-
-			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
-
-			var result = await sut.DeleteLease(command) as BadRequestObjectResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.BadRequest);
 		}
 		
 		[Fact]
@@ -302,18 +218,5 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
 		}
 		
-		[Fact]
-		public async Task SetAdditionalDetails_ReturnsBadRequest()
-		{
-			var command = new SetAdditionalDetailsCommand();
-			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
-				.ReturnsAsync(new CommandValidationErrorResult(new List<ValidationError>{new ValidationError("Some prop", "Some error")}));
-
-			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
-
-			var result = await sut.SetAdditionalDetails(command) as BadRequestObjectResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.BadRequest);
-		}
 	}
 }
