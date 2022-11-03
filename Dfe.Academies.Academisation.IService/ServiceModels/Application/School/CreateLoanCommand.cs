@@ -1,9 +1,10 @@
 using System.Runtime.Serialization;
+using Dfe.Academies.Academisation.Core;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 
-public class CreateLoanCommand : IRequest<bool>
+public class CreateLoanCommand : IRequest<CommandResult>
 {
 	[DataMember]
 	public int ApplicationId { get; set; }

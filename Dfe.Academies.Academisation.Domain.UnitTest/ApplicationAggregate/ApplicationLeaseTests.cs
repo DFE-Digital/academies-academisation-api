@@ -81,7 +81,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(2, _fixture.Build<SchoolDetails>().Create(),
+					new School(2, 			"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),
 						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
 				},
 				null,
@@ -105,7 +120,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(1, _fixture.Build<SchoolDetails>().Create(),
+					new School(1, 			"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),
 						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
 				},
 				null,
@@ -129,14 +159,29 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(1, _fixture.Build<SchoolDetails>().Create(),
+					new School(1, 			"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),
 						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
 				},
 				null,
 				null,
 				null);
 
-			var result = subject.DeleteLease(1, 2);
+			var result = subject. DeleteLease(1, 2);
 
 			Assert.IsType<NotFoundCommandResult>(result);
 		}
@@ -153,7 +198,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(1, _fixture.Build<SchoolDetails>().Create(),
+					new School(1, 			"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),
 						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
 				},
 				null,
