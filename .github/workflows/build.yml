@@ -34,8 +34,8 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
     - name: Install EF for tests
       run: dotnet tool install --global dotnet-ef --version 6.0.5
-    - name: Install dotnet-coverage
-      run: dotnet tool install --global dotnet-coverage
+    - name: Install dotCover
+      run: dotnet tool install --global JetBrains.dotCover.GlobalTool
     - name: Restore dependencies
       run: dotnet restore
     - name: Build, Test and Analyze
@@ -43,7 +43,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        dotnet-sonarscanner begin /k:"DFE-Digital_academies-academisation-api" /o:"dfe-digital" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet-sonarscanner begin /k:"DFE-Digital_academies-academisation-api" /o:"dfe-digital" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
         dotnet build --no-restore
-        dotnet test --no-build --verbosity normal --collect "Code Coverage"
+        dotnet dotcover test --no-build --verbosity normal --dcReportType=HTML
         dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
