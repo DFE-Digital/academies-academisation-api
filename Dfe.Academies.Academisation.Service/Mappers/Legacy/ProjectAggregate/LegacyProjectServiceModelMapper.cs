@@ -89,7 +89,8 @@ internal static class LegacyProjectServiceModelMapper
 			LegalRequirementsSectionComplete = project.Details.LegalRequirementsSectionComplete,
 			
 			// school budget info
-			RevenueCarryForwardAtEndMarchCurrentYear = project.Details.RevenueCarryForwardAtEndMarchCurrentYear,
+			EndOfCurrentFinancialYear = project.Details.EndOfCurrentFinancialYear,
+			EndOfNextFinancialYear = project.Details.EndOfNextFinancialYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = project.Details.ProjectedRevenueBalanceAtEndMarchNextYear,
 			CapitalCarryForwardAtEndMarchCurrentYear = project.Details.CapitalCarryForwardAtEndMarchCurrentYear,
 			CapitalCarryForwardAtEndMarchNextYear = project.Details.CapitalCarryForwardAtEndMarchNextYear,

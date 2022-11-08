@@ -163,6 +163,8 @@ public class Project : IProject
 			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete,
 			
 			// school budget info
+			EndOfCurrentFinancialYear = detailsToUpdate.EndOfCurrentFinancialYear,
+			EndOfNextFinancialYear = detailsToUpdate.EndOfNextFinancialYear,
 			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear,
 			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear,

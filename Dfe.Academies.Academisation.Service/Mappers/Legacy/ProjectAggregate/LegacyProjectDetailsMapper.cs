@@ -89,6 +89,8 @@ internal static class LegacyProjectDetailsMapper
 			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete ?? existingProject.Details.LegalRequirementsSectionComplete,
 			
 			// school budget info
+			EndOfCurrentFinancialYear = detailsToUpdate.EndOfCurrentFinancialYear ?? existingProject.Details.EndOfCurrentFinancialYear,
+			EndOfNextFinancialYear = detailsToUpdate.EndOfNextFinancialYear ?? existingProject.Details.EndOfNextFinancialYear,
 			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear ?? existingProject.Details.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear ?? existingProject.Details.ProjectedRevenueBalanceAtEndMarchNextYear,
 			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear ?? existingProject.Details.CapitalCarryForwardAtEndMarchCurrentYear,

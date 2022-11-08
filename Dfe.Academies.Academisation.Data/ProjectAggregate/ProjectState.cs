@@ -85,8 +85,10 @@ public class ProjectState : BaseEntity
 	public YesNoNotApplicable? DiocesanConsent { get; set; }
 	public YesNoNotApplicable? FoundationConsent { get; set; }
 	public bool? LegalRequirementsSectionComplete { get; set; }
-	
+
 	// school budget info
+	public DateTime? EndOfCurrentFinancialYear { get; set; }
+	public DateTime? EndOfNextFinancialYear { get; set; }
 	public decimal? RevenueCarryForwardAtEndMarchCurrentYear { get; set; }
 	public decimal? ProjectedRevenueBalanceAtEndMarchNextYear { get; set; }
 	public decimal? CapitalCarryForwardAtEndMarchCurrentYear { get; set; }
@@ -309,6 +311,8 @@ public class ProjectState : BaseEntity
 			LegalRequirementsSectionComplete = project.Details.LegalRequirementsSectionComplete,
 
 			// school budget info
+			EndOfCurrentFinancialYear = project.Details.EndOfCurrentFinancialYear,
+			EndOfNextFinancialYear = project.Details.EndOfNextFinancialYear,
 			RevenueCarryForwardAtEndMarchCurrentYear = project.Details.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = project.Details.ProjectedRevenueBalanceAtEndMarchNextYear,
 			CapitalCarryForwardAtEndMarchCurrentYear = project.Details.CapitalCarryForwardAtEndMarchCurrentYear,
