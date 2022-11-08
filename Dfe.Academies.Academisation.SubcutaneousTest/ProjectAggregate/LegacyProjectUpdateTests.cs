@@ -158,6 +158,8 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.GoverningBodyResolution, getProject.GoverningBodyResolution),
 					() => Assert.Equal(existingProject.LegalRequirementsSectionComplete, getProject.LegalRequirementsSectionComplete),
 					() => Assert.Equal(existingProject.SchoolPerformanceAdditionalInformation, getProject.SchoolPerformanceAdditionalInformation),
+					() => Assert.Equal(existingProject.EndOfCurrentFinancialYear, getProject.EndOfCurrentFinancialYear),
+					() => Assert.Equal(existingProject.EndOfNextFinancialYear, getProject.EndOfNextFinancialYear),
 					() => Assert.Equal(existingProject.CapitalCarryForwardAtEndMarchCurrentYear, getProject.CapitalCarryForwardAtEndMarchCurrentYear),
 					() => Assert.Equal(existingProject.CapitalCarryForwardAtEndMarchNextYear, getProject.CapitalCarryForwardAtEndMarchNextYear),
 					() => Assert.Equal(existingProject.SchoolBudgetInformationAdditionalInformation, getProject.SchoolBudgetInformationAdditionalInformation),
