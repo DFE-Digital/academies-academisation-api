@@ -197,6 +197,8 @@ public class ProjectState : BaseEntity
 			LegalRequirementsSectionComplete = LegalRequirementsSectionComplete,
 			
 			// school budget info
+			EndOfCurrentFinancialYear = EndOfCurrentFinancialYear,
+			EndOfNextFinancialYear = EndOfNextFinancialYear,
 			RevenueCarryForwardAtEndMarchCurrentYear = RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = ProjectedRevenueBalanceAtEndMarchNextYear,
 			CapitalCarryForwardAtEndMarchCurrentYear = CapitalCarryForwardAtEndMarchCurrentYear,
