@@ -58,6 +58,7 @@ public class Project : IProject
 			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
 			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
 			
+			
 			//SponsorName = application.SponsorName,
 			//SponsorReferenceNumber = application.SponsorReferenceNumber,
 			//RevenueCarryForwardAtEndMarchCurrentYear = school.SchoolCFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolCFYRevenueIsDeficit),
