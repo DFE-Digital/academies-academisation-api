@@ -97,6 +97,21 @@ public class Application : IApplication, IAggregateRoot
 		{
 			_schools.Add(new School(
 				school.Id, 
+				school.TrustBenefitDetails,
+				school.OfstedInspectionDetails,
+				school.SafeguardingDetails,
+				school.LocalAuthorityReorganisationDetails,
+				school.LocalAuthorityClosurePlanDetails,
+				school.DioceseName,
+				school.DioceseFolderIdentifier,
+				school.PartOfFederation,
+				school.FoundationTrustOrBodyName,
+				school.FoundationConsentFolderIdentifier,
+				school.ExemptionEndDate,
+				school.MainFeederSchools,
+				school.ResolutionConsentFolderIdentifier,
+				school.ProtectedCharacteristics,
+				school.FurtherInformation,
 				school.SchoolDetails,
 				school.Loans.Select(l => new Loan(l.Key, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
 				school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets))
@@ -244,6 +259,46 @@ public class Application : IApplication, IAggregateRoot
 			FormTrust = Trusts.FormTrust.Create(formTrustDetails);
 		}
 
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult SetAdditionalDetails(
+		int schoolId,
+		string trustBenefitDetails, 
+		string? ofstedInspectionDetails, 
+		string? safeguardingDetails, 
+		string? localAuthorityReorganisationDetails,
+		string? localAuthorityClosurePlanDetails,
+		string? dioceseName,
+		string dioceseFolderIdentifier,
+		bool partOfFederation,
+		string? foundationTrustOrBodyName,
+		string foundationConsentFolderIdentifier,
+		DateTimeOffset? exemptionEndDate,
+		string mainFeederSchools,
+		string resolutionConsentFolderIdentifier,
+		SchoolEqualitiesProtectedCharacteristics? protectedCharacteristics,
+		string? furtherInformation)
+	{
+		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
+		if (school == null) return new NotFoundCommandResult();
+		school.SetAdditionalDetails(
+			trustBenefitDetails,
+			ofstedInspectionDetails,
+			safeguardingDetails,
+			localAuthorityReorganisationDetails,
+			localAuthorityClosurePlanDetails,
+			dioceseName,
+			dioceseFolderIdentifier,
+			partOfFederation,
+			foundationTrustOrBodyName,
+			foundationConsentFolderIdentifier,
+			exemptionEndDate,
+			mainFeederSchools,
+			resolutionConsentFolderIdentifier,
+			protectedCharacteristics,
+			furtherInformation);
+		
 		return new CommandSuccessResult();
 	}
 }

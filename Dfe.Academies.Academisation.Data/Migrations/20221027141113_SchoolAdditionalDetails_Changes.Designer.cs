@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20221027141113_SchoolAdditionalDetails_Changes")]
+    partial class SchoolAdditionalDetails_Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +32,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationJoinTrustReason")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApproverContactEmail")
                         .HasColumnType("nvarchar(max)");
@@ -185,6 +190,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MainFeederSchools")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("NextFinancialYearCapitalCarryForward")
@@ -223,7 +229,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<bool?>("PartOfBuildingSchoolsForFutureProgramme")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("PartOfFederation")
+                    b.Property<bool>("PartOfFederation")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("PartOfPfiScheme")
@@ -295,6 +301,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("SchoolPlanToConsultStakeholders")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SchoolSupportGrantFundsPaidTo")
+                        .HasColumnType("int");
 
                     b.Property<int?>("SupportGrantFundsPaidTo")
                         .HasColumnType("int");

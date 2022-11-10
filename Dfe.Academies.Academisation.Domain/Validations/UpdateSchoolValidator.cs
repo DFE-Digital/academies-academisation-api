@@ -7,9 +7,10 @@ internal class UpdateSchoolValidator : AbstractValidator<SchoolDetailsPair>
 {
 	public UpdateSchoolValidator()
 	{
-		RuleFor(x => x)
-			.Must(x => x.existing.Urn == x.updated.Urn)
-			.OverridePropertyName(nameof(SchoolDetails.Urn));
+		//107147 bug fix - remove validator so school can me changed on an update
+		//RuleFor(x => x)
+		//	.Must(x => x.existing.Urn == x.updated.Urn)
+		//	.OverridePropertyName(nameof(SchoolDetails.Urn));
 	}
 }
 
