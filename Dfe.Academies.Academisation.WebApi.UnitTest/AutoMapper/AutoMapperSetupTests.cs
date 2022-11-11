@@ -47,7 +47,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			Mock.Get(joinTrustDomainObj).Setup(x => x.Id).Returns(10101);		
 			Mock.Get(joinTrustDomainObj).Setup(x => x.UKPRN).Returns(295061);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.TrustName).Returns("Test Trust");
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrust).Returns(true);
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrust).Returns(ChangesToTrust.Yes);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained it has changed");
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernance).Returns(true);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained it has changed");
@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			joinTrustStateObj.Id = 10101;
 			joinTrustStateObj.UKPRN = 295061;
 			joinTrustStateObj.TrustName = "Test Trust";
-			joinTrustStateObj.ChangesToTrust = true;
+			joinTrustStateObj.ChangesToTrust = ChangesToTrust.Yes;
 			joinTrustStateObj.ChangesToTrustExplained = "ChangesToTrustExplained it has changed";
 			joinTrustStateObj.ChangesToLaGovernance = true;
 			joinTrustStateObj.ChangesToLaGovernanceExplained = "ChangesToLaGovernanceExplained it has changed";
@@ -91,7 +91,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			Mock.Get(joinTrustDomainObj).Setup(x => x.Id).Returns(10101);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.UKPRN).Returns(295061);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.TrustName).Returns("Test Trust");
-			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrust).Returns(true);
+			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrust).Returns(ChangesToTrust.Yes);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained it has changed");
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernance).Returns(true);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained it has changed");

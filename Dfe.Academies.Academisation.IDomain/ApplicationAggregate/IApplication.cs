@@ -42,6 +42,6 @@ public interface IApplication
 	CommandResult CreateLease(int schoolId, string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets);
 	CommandResult UpdateLease(int schoolId, int leaseId, string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets);
 	CommandResult DeleteLease(int schoolId, int leaseId);
-	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
+	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
 	CommandResult SetFormTrustDetails(FormTrustDetails formTrustDetails);
 }

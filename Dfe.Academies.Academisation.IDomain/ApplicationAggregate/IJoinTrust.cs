@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 {
@@ -14,7 +15,7 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		public int UKPRN { get; }
 
-		public bool? ChangesToTrust { get; }
+		public ChangesToTrust? ChangesToTrust { get; }
 
 		public string? ChangesToTrustExplained { get; }
 
@@ -22,6 +23,6 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		public string? ChangesToLaGovernanceExplained { get; }
 
-		public void Update(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
+		public void Update(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
 	}
 }

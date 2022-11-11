@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
 	public class JoinTrust : IJoinTrust
 	{
-		private JoinTrust(int id, int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		private JoinTrust(int id, int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			this.Id = id;
 			this.UKPRN = UKPRN;
@@ -27,7 +27,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 
 		public string TrustName { get; private set; }
 
-		public bool? ChangesToTrust { get; private set; }
+		public ChangesToTrust? ChangesToTrust { get; private set; }
 
 		public string? ChangesToTrustExplained { get; private set; }
 
@@ -35,12 +35,12 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 
 		public string? ChangesToLaGovernanceExplained { get; private set; }
 
-		public static IJoinTrust Create(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		public static IJoinTrust Create(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			return new JoinTrust(0, UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 		}
 
-		public void Update(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		public void Update(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			this.UKPRN = UKPRN;
 			this.TrustName = trustName;
