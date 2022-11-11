@@ -69,7 +69,7 @@ public class LegacyProjectController : ControllerBase
 	public async Task<ActionResult<LegacyProjectServiceModel>> Patch(int id, LegacyProjectServiceModel projectUpdate)
 	{
 		var result = await _legacyProjectUpdateCommand.Execute(projectUpdate with { Id = id });
-
+		
 		return result switch
 		{
 			CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(id)),

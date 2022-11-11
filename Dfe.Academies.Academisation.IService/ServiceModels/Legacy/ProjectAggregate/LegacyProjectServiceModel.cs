@@ -82,8 +82,10 @@ public record LegacyProjectServiceModel(
 	YesNoNotApplicable? DiocesanConsent = null,
 	YesNoNotApplicable? FoundationConsent = null,
 	bool? LegalRequirementsSectionComplete = null,
-	
+
 	// school budget info
+	DateTime? EndOfCurrentFinancialYear = null,
+	DateTime? EndOfNextFinancialYear = null,	
 	decimal? RevenueCarryForwardAtEndMarchCurrentYear = null,
 	decimal? ProjectedRevenueBalanceAtEndMarchNextYear = null,
 	decimal? CapitalCarryForwardAtEndMarchCurrentYear = null,

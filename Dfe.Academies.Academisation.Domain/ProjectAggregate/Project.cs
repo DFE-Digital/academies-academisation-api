@@ -58,8 +58,11 @@ public class Project : IProject
 			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
 			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
 			
+			
 			//SponsorName = application.SponsorName,
 			//SponsorReferenceNumber = application.SponsorReferenceNumber,
+			//EndOfCurrentFinancialYear = school.CurrentFinancialYear,
+			//EndOfNextFinancialYear = school.NextFinancialYear,
 			//RevenueCarryForwardAtEndMarchCurrentYear = school.SchoolCFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolCFYRevenueIsDeficit),
 			//ProjectedRevenueBalanceAtEndMarchNextYear = school.SchoolNFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolNFYRevenueIsDeficit),
 			//CapitalCarryForwardAtEndMarchCurrentYear = school.SchoolCFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolCFYCapitalIsDeficit),
@@ -163,6 +166,8 @@ public class Project : IProject
 			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete,
 			
 			// school budget info
+			EndOfCurrentFinancialYear = detailsToUpdate.EndOfCurrentFinancialYear,
+			EndOfNextFinancialYear = detailsToUpdate.EndOfNextFinancialYear,
 			RevenueCarryForwardAtEndMarchCurrentYear = detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear,
 			ProjectedRevenueBalanceAtEndMarchNextYear = detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear,
 			CapitalCarryForwardAtEndMarchCurrentYear = detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear,
@@ -185,7 +190,7 @@ public class Project : IProject
 			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
 			
 			// assigned users
-			AssignedUser = new User(detailsToUpdate.AssignedUser!.Id, detailsToUpdate.AssignedUser.FullName, detailsToUpdate.AssignedUser.EmailAddress)
+			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
 
 		return new CommandSuccessResult();
@@ -195,5 +200,10 @@ public class Project : IProject
 	{
 		if (!value.HasValue) return null;
 		return value == true ? "Yes" : "No";
+	}
+	private static User? MapUser(User? user)
+	{
+		if(user == null) return null;
+		return new User(user.Id, user.FullName, user.EmailAddress);
 	}
 }
