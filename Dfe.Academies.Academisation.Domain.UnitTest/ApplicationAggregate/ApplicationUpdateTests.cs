@@ -644,7 +644,7 @@ public class ApplicationUpdateTests
 		Mock.Get(updateJoinTrust).Setup(x => x.Id).Returns(10101);
 		Mock.Get(updateJoinTrust).Setup(x => x.UKPRN).Returns(295061);
 		Mock.Get(updateJoinTrust).Setup(x => x.TrustName).Returns("Test Trust");
-		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrust).Returns(true);
+		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrust).Returns(ChangesToTrust.Yes);
 		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained, it has changed");
 		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToLaGovernance).Returns(true);
 		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained, it has changed");
@@ -755,7 +755,7 @@ public class ApplicationUpdateTests
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			schools,
-			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
+			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<ChangesToTrust>(), _fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
 			null);
 
 		return application;

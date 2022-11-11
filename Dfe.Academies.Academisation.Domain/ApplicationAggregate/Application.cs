@@ -151,7 +151,7 @@ public class Application : IApplication, IAggregateRoot
 		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
 	}
 
-	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, bool? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 	{
 		// check the application type allows join trust details to be set
 		var validationResult = setJoinTrustDetailsValidator.Validate(this);
