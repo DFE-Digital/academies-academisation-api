@@ -1,6 +1,8 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using ServiceUser = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
+using DomainUser = Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
@@ -114,13 +116,29 @@ internal static class LegacyProjectDetailsMapper
 			
 			// assigned user
 			AssignedUser = detailsToUpdate.AssignedUser != null 
-				? MapUser(detailsToUpdate.AssignedUser!.Id, detailsToUpdate.AssignedUser.FullName, detailsToUpdate.AssignedUser.EmailAddress)
-				: MapUser(existingProject.Details.AssignedUser!.Id, existingProject.Details.AssignedUser.FullName, existingProject.Details.AssignedUser.EmailAddress)
+				? MapServiceUser(detailsToUpdate.AssignedUser)
+				: MapDomainUser(existingProject.Details.AssignedUser)
 		};
 	}
 
-	private static Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User MapUser(Guid id, string fullName, string emailAddress)
+	private static DomainUser? MapServiceUser(ServiceUser? user)
 	{
-		return new Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User(id, fullName, emailAddress);
+		switch (user)
+		{
+			case not null:
+				return new DomainUser(user.Id, user.FullName, user.EmailAddress);
+			default:
+				return null;
+		}
+	}
+	private static DomainUser? MapDomainUser(DomainUser? user)
+	{
+		switch (user)
+		{
+			case not null:
+				return new DomainUser(user.Id, user.FullName, user.EmailAddress);
+			default:
+				return null;
+		}
 	}
 }

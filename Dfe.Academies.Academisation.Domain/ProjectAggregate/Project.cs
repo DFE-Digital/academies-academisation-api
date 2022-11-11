@@ -190,7 +190,7 @@ public class Project : IProject
 			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
 			
 			// assigned users
-			AssignedUser = new User(detailsToUpdate.AssignedUser!.Id, detailsToUpdate.AssignedUser.FullName, detailsToUpdate.AssignedUser.EmailAddress)
+			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
 
 		return new CommandSuccessResult();
@@ -200,5 +200,10 @@ public class Project : IProject
 	{
 		if (!value.HasValue) return null;
 		return value == true ? "Yes" : "No";
+	}
+	private static User? MapUser(User? user)
+	{
+		if(user == null) return null;
+		return new User(user.Id, user.FullName, user.EmailAddress);
 	}
 }
