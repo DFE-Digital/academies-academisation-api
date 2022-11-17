@@ -57,11 +57,11 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 					s.ResolutionConsentFolderIdentifier,
 					s.ProtectedCharacteristics,
 					s.FurtherInformation,
-					s.ToDomain(), new List<KeyValuePair<int, LoanDetails>>(
-					s.Loans.Select(l=> new KeyValuePair<int,LoanDetails>(l.LoanId, l.ToDomain()))),
-					new List<KeyValuePair<int, LeaseDetails>>(
-						s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.LeaseId, l.ToDomain()))
-					))));
+					s.ToDomain(), 
+					new List<KeyValuePair<int, LoanDetails>>(s.Loans.Select(l=> new KeyValuePair<int,LoanDetails>(l.LoanId, l.ToDomain()))),
+					new List<KeyValuePair<int, LeaseDetails>>(s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.LeaseId, l.ToDomain()))),
+					s.HasLoans,
+					s.HasLeases)));
 		if (result is CommandValidationErrorResult)
 		{
 			return result;

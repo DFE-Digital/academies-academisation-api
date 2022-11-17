@@ -100,7 +100,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, false)
 				},
 				null,
 				null,
@@ -141,7 +141,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, false)
 				},
 				null,
 				null,
@@ -182,7 +182,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, null )
 				},
 				null,
 				null,
@@ -223,7 +223,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, null )
 				},
 				null,
 				null,

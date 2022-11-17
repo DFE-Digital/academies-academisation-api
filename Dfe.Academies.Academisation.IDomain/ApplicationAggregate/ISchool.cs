@@ -22,8 +22,10 @@ public interface ISchool
 	public string? ResolutionConsentFolderIdentifier{ get; }
 	public SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics{ get; }
 	public string? FurtherInformation{ get; }
-
+	public bool? HasLoans { get; }
 	public IReadOnlyCollection<ILoan> Loans { get; }
+
+	public bool? HasLeases { get; }
 	public IReadOnlyCollection<ILease> Leases { get; }
 
 }

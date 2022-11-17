@@ -81,5 +81,7 @@ public record ApplicationSchoolServiceModel(
 	bool? DeclarationBodyAgree = null,
 	bool? DeclarationIAmTheChairOrHeadteacher = null,
 	string? DeclarationSignedByName = null,
-	string? SchoolConversionReasonsForJoining = null
+	string? SchoolConversionReasonsForJoining = null, 
+	bool? HasLoans = null,
+	bool? HasLeases = null
 );

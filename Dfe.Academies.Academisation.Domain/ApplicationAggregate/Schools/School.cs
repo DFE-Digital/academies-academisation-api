@@ -11,8 +11,9 @@ public class School : ISchool
 	public SchoolDetails Details { get; set; }
 
 	#region Leases and Loans
-
+	public bool? HasLoans { get; private set; }
 	public IReadOnlyCollection<ILoan> Loans => _loans.AsReadOnly();
+	public bool? HasLeases { get; private set; }
 	public IReadOnlyCollection<ILease> Leases => _leases.AsReadOnly();
 
 	private readonly List<Loan> _loans;
@@ -66,6 +67,8 @@ public class School : ISchool
 	
 	private string? _furtherInformation { get; set; }
 	public string? FurtherInformation => _furtherInformation;
+
+
 	#endregion
 
 	
@@ -96,7 +99,8 @@ public class School : ISchool
 		string? furtherInformation, 
 		SchoolDetails details, 
 		IEnumerable<Loan> loans, 
-		IEnumerable<Lease> leases) : this(details)
+		IEnumerable<Lease> leases,
+		bool? hasLoans, bool? hasLeases) : this(details)
 	{
 		Id = id;
 		_trustBenefitDetails = trustBenefitDetails;
@@ -116,6 +120,8 @@ public class School : ISchool
 		_furtherInformation = furtherInformation;
 		_loans = loans.ToList();
 		_leases = leases.ToList();
+		HasLoans = hasLoans;
+		HasLeases = hasLeases;
 	}
 	public void AddLoan(decimal amount, string purpose, string provider, decimal interestRate, string schedule)
 	{

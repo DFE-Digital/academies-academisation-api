@@ -66,7 +66,8 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.HasLoans, s.HasLeases)
 				));
 
 		// assert
@@ -105,7 +106,9 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.HasLoans,
+				s.HasLeases)
 			));
 
 		// assert
@@ -145,7 +148,9 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.HasLoans,
+				s.HasLeases)
 			));
 
 		// assert
@@ -192,7 +197,9 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.HasLoans,
+				s.HasLeases)
 			));
 
 		// assert
@@ -234,7 +241,9 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 				s.Details,
 				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.HasLoans,
+				s.HasLeases)
 			));
 
 		// assert
@@ -268,7 +277,9 @@ public class ApplicationUpdateTests
 			s.FurtherInformation,
 			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.HasLoans,
+			s.HasLeases)
 		).ToList();
 
 		schoolsUpdated.Add(new UpdateSchoolParameter(0, 
@@ -289,7 +300,8 @@ public class ApplicationUpdateTests
 			"",
 			_fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" },
 		new List<KeyValuePair<int, LoanDetails>>(),
-		new List<KeyValuePair<int, LeaseDetails>>()
+		new List<KeyValuePair<int, LeaseDetails>>(),
+			null, null
 		));
 
 		// act
@@ -330,7 +342,9 @@ public class ApplicationUpdateTests
 			s.FurtherInformation,
 			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.HasLoans,
+			s.HasLeases)
 		).ToList();
 
 		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with {Id = 99});
@@ -395,7 +409,9 @@ public class ApplicationUpdateTests
 			s.FurtherInformation,
 			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.HasLoans,
+			s.HasLeases)
 		).ToList();
 
 		IEnumerable<int> allIndices = schoolsUpdated.Select((s, i) => new { Str = s, Index = i })
@@ -491,7 +507,9 @@ public class ApplicationUpdateTests
 			s.FurtherInformation,
 			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.HasLoans,
+			s.HasLeases)
 		).ToList();
 
 		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
@@ -513,7 +531,9 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 						s.Details,
 						s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
-						s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets))));
+						s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
+				s.HasLoans,
+				s.HasLeases));
 
 		IEnumerable<int> allIndices = updateSchoolParameters.Select((s, i) => new { Str = s, Index = i })
 			.Select(x => x.Index);
@@ -580,7 +600,9 @@ public class ApplicationUpdateTests
 			s.FurtherInformation,
 			s.Details,
 			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList())
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.HasLoans,
+			s.HasLeases)
 		).ToList();
 
 		var schoolDetailsToAdd = _fixture.Create<UpdateSchoolParameter>();
@@ -605,7 +627,9 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 				s.Details,
 				s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
-				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets))));
+				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
+				s.HasLoans,
+				s.HasLeases));
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -805,7 +829,9 @@ public class ApplicationUpdateTests
 					s.FurtherInformation,
 					s.Details, s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
 					s.Leases.Select(x =>
-						new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)))), application.JoinTrust, application.FormTrust
+						new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
+					s.HasLoans,
+					s.HasLeases)), application.JoinTrust, application.FormTrust
 		);
 	}
 }
