@@ -69,7 +69,9 @@ internal static class ApplicationSchoolServiceModelMapper
 			DeclarationBodyAgree = school.Details.DeclarationBodyAgree,
 			DeclarationIAmTheChairOrHeadteacher = school.Details.DeclarationIAmTheChairOrHeadteacher,
 			DeclarationSignedByName = school.Details.DeclarationSignedByName,
-			SchoolConversionReasonsForJoining = school.Details.SchoolConversionReasonsForJoining
+			SchoolConversionReasonsForJoining = school.Details.SchoolConversionReasonsForJoining,
+			HasLoans = school.HasLoans,
+			HasLeases = school.HasLeases
 		};
 	}
 

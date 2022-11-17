@@ -97,7 +97,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						null,
 						"",
 						_fixture.Build<SchoolDetails>().Create(),
-						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
+						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")}, null, true)
 				},
 				null,
 				null,
@@ -136,7 +136,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						null,
 						"",
 						_fixture.Build<SchoolDetails>().Create(),
-						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
+						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")}, null, true)
 				},
 				null,
 				null,
@@ -175,7 +175,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						null,
 						"",
 						_fixture.Build<SchoolDetails>().Create(),
-						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
+						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")}, null, true)
 				},
 				null,
 				null,
@@ -214,7 +214,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 						null,
 						"",
 						_fixture.Build<SchoolDetails>().Create(),
-						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")})
+						new List<Loan>(), new List<Lease>() {new Lease(1, "str", 1m, 1m, 1m, "str", "str", "str")}, null, true)
 				},
 				null,
 				null,

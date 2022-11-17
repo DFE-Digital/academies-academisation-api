@@ -112,9 +112,12 @@ public class ApplicationSchoolState : BaseEntity
 	public string? NextFinancialYearCapitalCarryForwardFileLink { get; set; }
 
 	// leases & loans
+	public bool? HasLoans { get; set; }
+
 	[ForeignKey("ApplicationSchoolId")]
 	public HashSet<LoanState> Loans { get; set; } = new();
-	
+
+	public bool? HasLeases { get; set; }
 	[ForeignKey("ApplicationSchoolId")]
 	public HashSet<LeaseState> Leases { get; set; } = new();
 
@@ -249,6 +252,8 @@ public class ApplicationSchoolState : BaseEntity
 					ValueOfAssets = e.ValueOfAssets,
 					ResponsibleForAssets = e.ResponsibleForAssets
 				}).ToList() ?? new List<LeaseState>()),
+			HasLeases = applyingSchool.HasLeases,
+			HasLoans = applyingSchool.HasLoans,
 			
 			// Finances Investigations
 			FinanceOngoingInvestigations = applyingSchool.Details.FinanceOngoingInvestigations,
@@ -380,6 +385,6 @@ public class ApplicationSchoolState : BaseEntity
 			ProtectedCharacteristics,
 			FurtherInformation,
 			schoolDetails, 
-			Loans.Select(n => n.MapToDomain()), Leases.Select(n => n.MapToDomain()));
+			Loans.Select(n => n.MapToDomain()), Leases.Select(n => n.MapToDomain()), HasLoans, HasLeases);
 	}
 }

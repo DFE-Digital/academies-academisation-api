@@ -21,5 +21,6 @@ namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
 		string? FurtherInformation,
 		SchoolDetails SchoolDetails,
 		ICollection<KeyValuePair<int, LoanDetails>> Loans,
-		ICollection<KeyValuePair<int, LeaseDetails>> Leases);
+		ICollection<KeyValuePair<int, LeaseDetails>> Leases, 
+		bool? HasLoans, bool? HasLeases);
 }
