@@ -125,6 +125,7 @@ public class School : ISchool
 	}
 	public void AddLoan(decimal amount, string purpose, string provider, decimal interestRate, string schedule)
 	{
+		HasLoans = true;
 		_loans.Add(Loan.Create(amount, purpose, provider, interestRate, schedule));
 	}
 
@@ -140,11 +141,13 @@ public class School : ISchool
 		var loan = _loans.FirstOrDefault(x => x.Id == id);
 		if (loan == null) return;
 		_loans.Remove(loan);
+		HasLoans = _loans.Any();
 	}
 	
 	public void AddLease(string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
 	{
 		_leases.Add(new Lease(0, leaseTerm, repaymentAmount, interestRate, paymentsToDate, purpose, valueOfAssets, responsibleForAssets));
+		HasLeases = true;
 	}
 	
 	public void UpdateLease(int id, string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
@@ -158,6 +161,7 @@ public class School : ISchool
 		var lease = _leases.FirstOrDefault(x => x.Id == id);
 		if (lease == null) return;
 		_leases.Remove(lease);
+		HasLeases = _leases.Any();
 	}
 
 	public void SetAdditionalDetails(
