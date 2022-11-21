@@ -13,10 +13,11 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_context = context;
 		}
 
-		public async Task<(IEnumerable<IProject>, int)> SearchProjects(string[]? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn)
+		public async Task<(IEnumerable<IProject>, int)> SearchProjects(string[]? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn, IEnumerable<int?> regions = default)
 		{
 			IQueryable<ProjectState> queryable = _context.Projects;
 
+			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
 			queryable = FilterByUrn(urn, queryable);
 			queryable = FilterBySchool(title, queryable);
@@ -28,6 +29,15 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 				.Take(count).ToListAsync();
 
 			return (projects.Select(p => p.MapToDomain()), totalProjects);
+		}
+		private static IQueryable<ProjectState> FilterByRegion(IEnumerable<int?> regions, IQueryable<ProjectState> queryable)
+		{
+			if (regions != null && regions!.Any())
+			{
+				queryable = queryable.Where(p => regions.Contains(p.Urn));
+			}
+
+			return queryable;
 		}
 
 		private static IQueryable<ProjectState> FilterByStatus(string[]? states, IQueryable<ProjectState> queryable)
