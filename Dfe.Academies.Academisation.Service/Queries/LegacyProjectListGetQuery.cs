@@ -16,7 +16,7 @@ public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
 	}
 
 	public async Task<LegacyApiResponse<LegacyProjectServiceModel>?> GetProjects(
-		string? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn, int?[]? regions)
+		string? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn, int[]? regions)
 	{
 		var statusList = string.IsNullOrEmpty(states)
 			? null

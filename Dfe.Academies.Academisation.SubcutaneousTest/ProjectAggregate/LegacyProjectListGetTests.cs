@@ -62,7 +62,7 @@ public class LegacyProjectListGetTests
 		await _context.Projects.AddAsync(project3);
 		await _context.SaveChangesAsync();
 
-		int?[] regions =  { project1.Urn, project2.Urn };
+		int[] regions =  { project1.Urn, project2.Urn };
 
 		// act
 		var result = await _subject.GetProjects(null, null, null, 1, 3, null, regions);

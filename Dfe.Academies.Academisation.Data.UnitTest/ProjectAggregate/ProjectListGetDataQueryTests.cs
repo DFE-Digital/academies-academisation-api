@@ -139,11 +139,11 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchProjectsByMultipleRegions__ReturnsProjects()
 	{
 		// arrange
-		int?[]? regions = { 5, 10 };
+		int[] regions = { 5, 10 };
 		for (int i = 0; i < 6; i++)
 		{
 			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
-			if (i < 2) projectState.Urn = (int)regions[i];
+			if (i < 2) projectState.Urn = regions[i];
 			_context.Projects.Add(projectState);
 		}
 
