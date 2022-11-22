@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_context = context;
 		}
 
-		public async Task<(IEnumerable<IProject>, int)> SearchProjects(string[]? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn, IEnumerable<int?> regions = default)
+		public async Task<(IEnumerable<IProject>, int)> SearchProjects(string[]? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn, int?[]? regions = default)
 		{
 			IQueryable<ProjectState> queryable = _context.Projects;
 

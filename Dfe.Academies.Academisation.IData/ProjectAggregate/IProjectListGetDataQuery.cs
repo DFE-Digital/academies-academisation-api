@@ -5,6 +5,6 @@ namespace Dfe.Academies.Academisation.IData.ProjectAggregate
 	public interface IProjectListGetDataQuery
 	{
 		Task<(IEnumerable<IProject>, int)> SearchProjects(
-			string[]? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn, IEnumerable<int?> regions = default);
+			string[]? states, string? title, string[]? deliveryOfficers, int page, int count, int? urn,int?[]? regions = default);
 	}
 }

@@ -136,6 +136,31 @@ public class ProjectsListGetDataQueryTests
 	}
 
 	[Fact]
+	public async Task ProjectsExists_SearchProjectsByMultipleRegions__ReturnsProjects()
+	{
+		// arrange
+		int?[]? regions = { 5, 10 };
+		for (int i = 0; i < 6; i++)
+		{
+			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			if (i < 2) projectState.Urn = (int)regions[i];
+			_context.Projects.Add(projectState);
+		}
+
+		await _context.SaveChangesAsync();
+
+		// act		
+		var projects = (await _subject.SearchProjects(null, null, null, 1, 10, null, regions)).Item1.ToList();
+
+		// assert		
+		Assert.Multiple(
+			() => Assert.Equal(2, projects.Count),
+			() => Assert.Equal(regions[0], projects[0].Details.Urn),
+			() => Assert.Equal(regions[1], projects[1].Details.Urn)
+		);
+	}
+
+	[Fact]
 	public async Task ProjectsExists_SearchProjectsByAllCriteria__ReturnsProject()
 	{
 		// arrange
