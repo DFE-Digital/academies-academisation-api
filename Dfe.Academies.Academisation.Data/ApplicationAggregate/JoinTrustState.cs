@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 		public int UKPRN { get; set; }
 		public string TrustName { get; set; } = null!;
 
-		public bool? ChangesToTrust { get; set; }
+		public ChangesToTrust? ChangesToTrust { get; set; }
 		public string? ChangesToTrustExplained { get; set; }
 		public bool? ChangesToLaGovernance { get; set; }
 		public string? ChangesToLaGovernanceExplained { get; set;  }

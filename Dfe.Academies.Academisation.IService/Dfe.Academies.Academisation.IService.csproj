@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Dfe.Academies.Academisation.IData\Dfe.Academies.Academisation.IData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\Application\School" />
+  </ItemGroup>
+
 </Project>

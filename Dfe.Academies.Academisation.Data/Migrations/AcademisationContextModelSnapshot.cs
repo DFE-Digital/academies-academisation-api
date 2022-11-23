@@ -31,12 +31,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("AdditionalInformationAdded")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ApproverContactEmail")
                         .HasColumnType("nvarchar(max)");
 
@@ -127,28 +121,19 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("DeclarationSignedByName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DiocesePermissionEvidenceDocumentLink")
+                    b.Property<string>("DioceseFolderIdentifier")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EqualitiesImpactAssessmentCompleted")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EqualitiesImpactAssessmentDetails")
+                    b.Property<string>("DioceseName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ExemptionEndDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool?>("FacilitiesShared")
                         .HasColumnType("bit");
 
                     b.Property<string>("FacilitiesSharedExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("FaithSchool")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FaithSchoolDioceseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FeederSchools")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("FinanceOngoingInvestigations")
@@ -160,7 +145,13 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<bool?>("FinancialInvestigationsTrustAware")
                         .HasColumnType("bit");
 
-                    b.Property<string>("GoverningBodyConsentEvidenceDocumentLink")
+                    b.Property<string>("FoundationConsentFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FoundationTrustOrBodyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FurtherInformation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Grants")
@@ -169,32 +160,23 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("GrantsAwardingBodies")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("HasSACREException")
+                    b.Property<bool?>("HasLeases")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("InspectedButReportNotPublished")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("InspectedButReportNotPublishedExplain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsPartOfFederation")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsSupportedByFoundation")
+                    b.Property<bool?>("HasLoans")
                         .HasColumnType("bit");
 
                     b.Property<string>("JoinTrustReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LaClosurePlanDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LaReorganizationDetails")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LocalAuthorityClosurePlanDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LocalAuthorityReoganisationDetails")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MainContactOtherEmail")
                         .HasColumnType("nvarchar(max)");
@@ -206,6 +188,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MainContactOtherTelephone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainFeederSchools")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("NextFinancialYearCapitalCarryForward")
@@ -235,11 +220,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("NextFinancialYearRevenueStatusFileLink")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OngoingSafeguardingDetails")
+                    b.Property<string>("OfstedInspectionDetails")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("OngoingSafeguardingInvestigations")
-                        .HasColumnType("bit");
 
                     b.Property<string>("OwnerExplained")
                         .HasColumnType("nvarchar(max)");
@@ -247,10 +229,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<bool?>("PartOfBuildingSchoolsForFutureProgramme")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("PartOfLaClosurePlan")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("PartOfLaReorganizationPlan")
+                    b.Property<bool?>("PartOfFederation")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("PartOfPfiScheme")
@@ -301,10 +280,13 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("ProposedNewSchoolName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("SACREExemptionEndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int?>("ProtectedCharacteristics")
+                        .HasColumnType("int");
 
-                    b.Property<string>("SchoolContributionToTrust")
+                    b.Property<string>("ResolutionConsentFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SafeguardingDetails")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SchoolConversionReasonsForJoining")
@@ -323,10 +305,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<int?>("SupportGrantFundsPaidTo")
                         .HasColumnType("int");
 
-                    b.Property<string>("SupportedFoundationEvidenceDocumentLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SupportedFoundationName")
+                    b.Property<string>("TrustBenefitDetails")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Urn")
@@ -514,8 +493,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("ChangesToLaGovernanceExplained")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("ChangesToTrust")
-                        .HasColumnType("bit");
+                    b.Property<int?>("ChangesToTrust")
+                        .HasColumnType("int");
 
                     b.Property<string>("ChangesToTrustExplained")
                         .HasColumnType("nvarchar(max)");
@@ -811,6 +790,12 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("DistanceFromSchoolToTrustHeadquartersAdditionalInformation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndOfCurrentFinancialYear")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EndOfNextFinancialYear")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("EqualitiesImpactAssessmentConsidered")
                         .HasColumnType("nvarchar(max)");

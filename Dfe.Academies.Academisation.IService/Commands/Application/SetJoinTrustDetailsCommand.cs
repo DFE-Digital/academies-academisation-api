@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.IService.Commands.Application
@@ -12,7 +13,7 @@ namespace Dfe.Academies.Academisation.IService.Commands.Application
 		int applicationId,
 		string trustName,
 		int UKPRN,
-		bool? changesToTrust,
+		ChangesToTrust? changesToTrust,
 		string? changesToTrustExplained,
 		bool? changesToLaGovernance,
 		string? changesToLaGovernanceExplained) : IRequest<CommandResult>;

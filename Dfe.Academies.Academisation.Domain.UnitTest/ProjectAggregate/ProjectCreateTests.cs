@@ -79,7 +79,6 @@ public class ProjectCreateTests
 			() => Assert.Equal(25000, project.Details.ConversionSupportGrantAmount),
 			() => Assert.Equal(school.Details.CapacityPublishedAdmissionsNumber.ToString(), project.Details.PublishedAdmissionNumber),
 			() => Assert.Equal(ToYesNoString(school.Details.LandAndBuildings!.PartOfPfiScheme), project.Details.PartOfPfiScheme),
-			() => Assert.Equal(ToYesNoString(school.Details.EqualitiesImpactAssessmentCompleted != EqualityImpact.NotConsidered), project.Details.EqualitiesImpactAssessmentConsidered),
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear1, project.Details.YearOneProjectedPupilNumbers),
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear2, project.Details.YearTwoProjectedPupilNumbers),
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear3, project.Details.YearThreeProjectedPupilNumbers)			

@@ -81,10 +81,26 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(2, _fixture.Build<SchoolDetails>().Create(),new List<Loan>
+					new School(2, 
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, false)
 				},
 				null,
 				null,
@@ -107,10 +123,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(1, _fixture.Build<SchoolDetails>().Create(),new List<Loan>
+					new School(1, 			"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, false)
 				},
 				null,
 				null,
@@ -133,10 +164,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(1, _fixture.Build<SchoolDetails>().Create(),new List<Loan>
+					new School(1, 			"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, null )
 				},
 				null,
 				null,
@@ -159,10 +205,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>
 				{
-					new School(1, _fixture.Build<SchoolDetails>().Create(),new List<Loan>
+					new School(1, 			"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						"",
+						true,
+						"",
+						"",
+						DateTimeOffset.Now, 
+						"",
+						"",
+						null,
+						"",
+						_fixture.Build<SchoolDetails>().Create(),new List<Loan>
 					{
 						new Loan(1,Decimal.One, "str", "str", Decimal.One, "str")
-					}, new List<Lease>() )
+					}, new List<Lease>(), true, null )
 				},
 				null,
 				null,
