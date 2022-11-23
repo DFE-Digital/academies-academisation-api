@@ -118,23 +118,57 @@ dotnet ef database update --connection "Server=localhost,1433;Database=sip;User=
 
 6) run academisation EF migration to apply database changes specific to this API onto docker image database:-
 
-### Launching with docker-compose
+7) Cypress testing
+Note: We've introduced a new Cypress Selector process - Here at https://github.com/DFE-Digital/a2b-internal/blob/main/Cypress_Selectors.md
 
-1. Copy the example `.env` files:
+Install cypress and dependencies:
 
-```
-cp .env.development.local.example .env.development.local
-cp .env.database.example .env.database
-```
+Run 'npm install' from the ApplyToBecomeCypressTests directory
+Test execution
+You will need to set a secret in secrets.json in the following format to run the Cypress command against (you can use any value):
 
-1. Launch the `webapi` and `db` with docker-compose:
+{
+  "AzureAd": {
+    "ClientSecret": "<SECRET HERE>"
+  }
+}
+To execute the tests locally and view the output:
 
-```
-docker-compose -f docker-compose.yml -f up --build
-```
+First set the database config as an environment variable - For bash -
 
-1. By default, it uses a new SQL database, and runs the migrations against it. If you want to use the `trams-development-database` that you have previously launched, change the connection string within `.env.development` and relaunch with docker-compose.
+export db='{"server":"localhost", "userName":"sa", "password":"StrongPassword905", "options": { "database": "sip" } }'
+For windows -
 
+set db='{"server":"localhost", "userName":"sa", "password":"StrongPassword905", "options": { "database": "sip" } }'
+The secret in the below command should match what was set in the secrets.json file.
+
+npm run cy:open -- --env url="BASE_URL_OF_APP",authorizationHeader="<SECRET HERE>"
+To execute the tests in headless mode, run the following (the output will log to the console):
+
+npm run cy:run -- --env url="BASE_URL_OF_APP",authorizationHeader="<SECRET HERE>"
+Useful tips
+Maintaining sessions
+Each 'it' block usually runs the test with a clear cache. For our purposes, we may need to maintain the user session to test various scenarios. This can be achieved by adding the following code to your tests:
+
+afterEach(() => {
+		cy.storeSessionData();
+	});
+Writing global commands
+The cypress.json file in the support folder contains functions which can be used globally throughout your tests. Below is an example of a custom login command
+
+Cypress.Commands.add("login",()=> {
+	cy.visit(Cypress.env('url')+"/login");
+	cy.get("#username").type(Cypress.env('username'));
+	cy.get("#password").type(Cypress.env('password')+"{enter}");
+	cy.saveLocalStorage();
+})
+
+Which you can access in your tests like so:
+
+before(function () {
+	cy.login();
+});
+Further details about Cypress can be found here: https://docs.cypress.io/api/table-of-contents
 ### Code commit comment rules
 Nothing formal, but been using the following pattern:
 AB#105435 - conversion target date - store whether target date has been chosen - 'description of this commit'
