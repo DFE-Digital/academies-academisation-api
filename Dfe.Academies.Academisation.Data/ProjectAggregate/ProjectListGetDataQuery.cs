@@ -32,7 +32,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 		}
 		private static IQueryable<ProjectState> FilterByRegion(IEnumerable<int>? regions, IQueryable<ProjectState> queryable)
 		{
-			if (regions != null && regions!.Any())
+			if (regions != null)
 			{
 				queryable = queryable.Where(p => regions.Contains(p.Urn));
 			}
