@@ -35,9 +35,10 @@ public class LegacyProjectController : ControllerBase
 		[FromQuery] string[]? deliveryOfficers,
 		[FromQuery] int page = 1,		
 		[FromQuery] int count = 50,
-		[FromQuery] int? urn = null)
+		[FromQuery] int? urn = null,
+		[FromQuery] int[]? regions = default)
 	{
-		var result = await _legacyProjectListGetQuery.GetProjects(states, title, deliveryOfficers, page, count, urn);
+		var result = await _legacyProjectListGetQuery.GetProjects(states, title, deliveryOfficers, page, count, urn, regions);
 		return result is null ? NotFound() : Ok(result);
 	}
 

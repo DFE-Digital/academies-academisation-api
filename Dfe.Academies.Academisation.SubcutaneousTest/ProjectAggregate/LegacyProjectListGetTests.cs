@@ -49,4 +49,27 @@ public class LegacyProjectListGetTests
 		
 		Assert.Equal(3, getProjects.Data.Count());
 	}
+	[Fact]
+	public async Task ProjectsExists_ProjectListReturned_WithRegionFilter()
+	{
+		// arrange 
+		var project1 = _fixture.Create<ProjectState>();
+		var project2 = _fixture.Create<ProjectState>();
+		var project3 = _fixture.Create<ProjectState>();
+
+		await _context.Projects.AddAsync(project1);
+		await _context.Projects.AddAsync(project2);
+		await _context.Projects.AddAsync(project3);
+		await _context.SaveChangesAsync();
+
+		int[] regions =  { project1.Urn, project2.Urn };
+
+		// act
+		var result = await _subject.GetProjects(null, null, null, 1, 3, null, regions);
+
+		// assert
+		var (_, getProjects) = DfeAssert.OkObjectResult(result);
+
+		Assert.Equal(2, getProjects.Data.Count());
+	}
 }

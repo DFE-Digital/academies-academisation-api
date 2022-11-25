@@ -24,11 +24,11 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<string[]?>(), It.IsAny<string>(), It.IsAny<string[]?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<int[]?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		
 		// Act
-		var result = await _subject.GetProjects("complete,active", null, null,  1, 1, 1234);
+		var result = await _subject.GetProjects("complete,active", null, null,  1, 1, 1234, default);
 	
 		// Assert
 		Assert.Multiple(
@@ -43,16 +43,16 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<string[]?>(), It.IsAny<string>(), It.IsAny<string[]?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<int[]?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		(string states, int page, int count, int? urn) = ("active,complete", 1, 1, 123);
 		
 		// Act
-		var result = await _subject.GetProjects(states, null, null, page, count, urn);
+		var result = await _subject.GetProjects(states, null, null, page, count, urn, null);
 	
 		// Assert
 		var statusList = states.Split(",");
-		_query.Verify(m => m.SearchProjects(statusList, null, null, page, count, urn),
+		_query.Verify(m => m.SearchProjects(statusList, null, null, page, count, urn, It.IsAny<int[]?>()),
 			Times.Once);
 	}
 	
@@ -62,12 +62,12 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<string[]?>(), It.IsAny<string>(), It.IsAny<string[]?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<int[]?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		(string states, int page, int count, int? urn) = ("active,complete", 1, 1, 123);
 		
 		// Act
-		var result = await _subject.GetProjects(states, null, null, page, count, urn);
+		var result = await _subject.GetProjects(states, null, null, page, count, urn, null);
 	
 		// Assert
 		Assert.Multiple(
