@@ -42,23 +42,21 @@ public class Project : IProject
 			school.Urn
 		)
 		{
-			// TODO: map additional fields as they become available
+			SchoolName = school.SchoolName,
 			//LocalAuthority = school.LocalAuthority.LocalAuthorityName,
-			//ApplicationReferenceNumber = application.ApplicationId
+			ApplicationReferenceNumber = application.ApplicationId.ToString(),
 			ProjectStatus = "Converter Pre-AO (C)",
-			//ApplicationReceivedDate = application.ApplicationSubmittedOn
+			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			OpeningDate = DateTime.Today.AddMonths(6),
-			//TrustReferenceNumber = application.ExistingTrust.ReferenceNumber
-			//NameOfTrust = application.ExistingTrust.TrustName
+			TrustReferenceNumber = application.JoinTrust!.Id.ToString(),
+			NameOfTrust = application.JoinTrust.TrustName,
 			AcademyTypeAndRoute = "Converter",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme),
 			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
-			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
-			
-			
+			RationaleForTrust = school.SchoolConversionReasonsForJoining,
 			//SponsorName = application.SponsorName,
 			//SponsorReferenceNumber = application.SponsorReferenceNumber,
 			//EndOfCurrentFinancialYear = school.CurrentFinancialYear,
