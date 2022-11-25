@@ -117,6 +117,62 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPost("{applicationId}/form-trust/key-person", Name = "AddKeyPerson")]
+		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] AddTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "UpdateKeyPerson")]
+		public async Task<ActionResult> UpdateKeyPerson(int applicationId, [FromBody] UpdateTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpDelete("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "DeleteKeyPerson")]
+		public async Task<ActionResult> UpdateKeyPerson(int applicationId, [FromBody] DeleteTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpGet("{applicationId}/form-trust/key-person/", Name = "GetKeyPersons")]
+		public async Task<ActionResult<List<object>>> GetKeyPersons(int applicationId, CancellationToken cancellationToken)
+		{
+			var result = await _applicationGetQuery.Execute(applicationId);
+			return result is null ? NotFound() : Ok(result);
+		}
+
+		[HttpGet("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "GetKeyPerson")]
+		public async Task<ActionResult<object>> GetKeyPerson(int applicationId, int keyPersonId, CancellationToken cancellationToken)
+		{
+			var result = await _applicationGetQuery.Execute(applicationId);
+			return result is null ? NotFound() : Ok(result);
+		}
+
 		[HttpPost("{applicationId:int}/submit", Name = "Submit")]
 		public async Task<ActionResult> Submit(int applicationId)
 		{
