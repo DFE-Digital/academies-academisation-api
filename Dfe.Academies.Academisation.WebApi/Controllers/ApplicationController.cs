@@ -22,6 +22,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IApplicationGetQuery _applicationGetQuery;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
+		private readonly ITrustQueryService _trustQueryService;
 		private readonly IMediator _mediator;
 		private readonly ILogger<ApplicationController> _logger;
 
@@ -29,6 +30,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			IApplicationGetQuery applicationGetQuery,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			IApplicationListByUserQuery applicationsListByUserQuery,
+			ITrustQueryService trustQueryService,
 			IMediator mediator, 
 			ILogger<ApplicationController> logger
 			)
@@ -38,6 +40,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_applicationGetQuery = applicationGetQuery;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_applicationsListByUserQuery = applicationsListByUserQuery;
+			_trustQueryService = trustQueryService;
 			_mediator = mediator;
 			_logger = logger;
 		}
@@ -159,17 +162,17 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpGet("{applicationId}/form-trust/key-person/", Name = "GetKeyPersons")]
-		public async Task<ActionResult<List<object>>> GetKeyPersons(int applicationId, CancellationToken cancellationToken)
+		[HttpGet("{applicationId}/form-trust/key-person/", Name = "GetKeyPeople")]
+		public async Task<ActionResult<List<object>>> GetKeyPeople(int applicationId, CancellationToken cancellationToken)
 		{
-			var result = await _applicationGetQuery.Execute(applicationId);
+			var result = await _trustQueryService.GetAllTrustKeyPeople(applicationId);
 			return result is null ? NotFound() : Ok(result);
 		}
 
 		[HttpGet("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "GetKeyPerson")]
 		public async Task<ActionResult<object>> GetKeyPerson(int applicationId, int keyPersonId, CancellationToken cancellationToken)
 		{
-			var result = await _applicationGetQuery.Execute(applicationId);
+			var result = await _trustQueryService.GetTrustKeyPerson(applicationId, keyPersonId);
 			return result is null ? NotFound() : Ok(result);
 		}
 
