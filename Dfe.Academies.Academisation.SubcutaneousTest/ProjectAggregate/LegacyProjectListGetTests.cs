@@ -41,8 +41,9 @@ public class LegacyProjectListGetTests
 		await _context.Projects.AddAsync(project3);
 		await _context.SaveChangesAsync();
 
+		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, null, null);
 		// act
-		var result = await _subject.GetProjects(null, null, null, 1, 3);
+		var result = await _subject.GetProjects(searchModel);
 
 		// assert
 		var (_, getProjects) = DfeAssert.OkObjectResult(result);
@@ -63,9 +64,9 @@ public class LegacyProjectListGetTests
 		await _context.SaveChangesAsync();
 
 		int[] regions =  { project1.Urn, project2.Urn };
-
+		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, regions, null);
 		// act
-		var result = await _subject.GetProjects(null, null, null, 1, 3, null, regions);
+		var result = await _subject.GetProjects(searchModel);
 
 		// assert
 		var (_, getProjects) = DfeAssert.OkObjectResult(result);
