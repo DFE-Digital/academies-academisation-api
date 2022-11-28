@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
@@ -12,14 +13,26 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_context = context;
 		}
 
-		public async Task<List<string?>> Execute()
+		public async Task<ProjectFilterParameters> Execute()
 		{
-			return await _context.Projects
+			ProjectFilterParameters filterParameters = new ProjectFilterParameters
+			{
+				Statuses = await _context.Projects
 				.AsNoTracking()
 				.Select(p => p.ProjectStatus)
 				.Distinct()
 				.OrderBy(p => p)
-				.ToListAsync();
+				.ToListAsync(),
+				AssignedUsers = await _context.Projects
+					.OrderByDescending(p => p.AssignedUserFullName)
+					.AsNoTracking()
+					.Select(p => p.AssignedUserFullName)
+					.Where(p => !string.IsNullOrEmpty(p))
+					.Distinct()
+					.ToListAsync()
+			};
+
+			return filterParameters;
 		}
 	}
 }
