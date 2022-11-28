@@ -36,8 +36,8 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			var results = await _subject.Execute();
 
 			Assert.Multiple(
-				() => Assert.Equal(status, results.First()),
-				() => Assert.Single(results)
+				() => Assert.Equal(status, results.Statuses.First()),
+				() => Assert.Single(results.Statuses)
 			);
 		}
 
@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			var results = await _subject.Execute();
 
-			Assert.Empty(results);
+			Assert.Empty(results.Statuses);
 		}
 
 		[Fact]
@@ -62,10 +62,10 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			var results = await _subject.Execute();
 
 			Assert.Multiple(
-				() => Assert.Equal(3, results.Count),
-				() => Assert.Equal("Active", results.First()),
-				() => Assert.Equal("Closed", results[1]),
-				() => Assert.Equal("InProgress", results.Last())
+				() => Assert.Equal(3, results.Statuses.Count),
+				() => Assert.Equal("Active", results.Statuses.First()),
+				() => Assert.Equal("Closed", results.Statuses[1]),
+				() => Assert.Equal("InProgress", results.Statuses.Last())
 			);
 		}
 	}
