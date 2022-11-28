@@ -2,7 +2,7 @@
 {
 	public class ProjectFilterParameters
 	{
-		public List<string?> Statuses { get; set; }
-		public List<string?> AssignedUsers { get; set; }
+		public List<string>? Statuses { get; set; }
+		public List<string>? AssignedUsers { get; set; }
 	}
 }
