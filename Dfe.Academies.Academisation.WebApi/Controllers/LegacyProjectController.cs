@@ -35,7 +35,7 @@ public class LegacyProjectController : ControllerBase
 		GetAcademyConversionSearchModel? searchModel,
 		[FromQuery] int? urn = null)
 	{
-		var result = await _legacyProjectListGetQuery.GetProjects(searchModel.StatusQueryString, searchModel.TitleFilter, searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn, searchModel.RegionUrnsQueryString);
+		var result = await _legacyProjectListGetQuery.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter, searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn, searchModel.RegionUrnsQueryString);
 		return result is null ? NotFound() : Ok(result);
 	}
 
