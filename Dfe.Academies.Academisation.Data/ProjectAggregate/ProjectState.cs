@@ -57,7 +57,7 @@ public class ProjectState : BaseEntity
 	public string? PartOfPfiScheme { get; set; }
 	public string? ViabilityIssues { get; set; }
 	public string? FinancialDeficit { get; set; }
-	public string? DiocesanTrust { get; set; }	
+	public string? DiocesanTrust { get; set; }
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; set; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }
 	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; set; }
@@ -108,8 +108,8 @@ public class ProjectState : BaseEntity
 	// key stage performance tables
 	public string? KeyStage2PerformanceAdditionalInformation { get; set; }
 	public string? KeyStage4PerformanceAdditionalInformation { get; set; }
-	public string? KeyStage5PerformanceAdditionalInformation { get; set; }	
-	
+	public string? KeyStage5PerformanceAdditionalInformation { get; set; }
+
 	// assigned user
 	public Guid? AssignedUserId { get; set; }
 	public string? AssignedUserEmailAddress { get; set; }
@@ -118,10 +118,9 @@ public class ProjectState : BaseEntity
 	internal Project MapToDomain()
 	{
 		ProjectDetails projectDetails = new(Urn)
-		{		
+		{
 			IfdPipelineId = IfdPipelineId,
 			SchoolName = SchoolName,
-			LocalAuthority = LocalAuthority,
 			ApplicationReferenceNumber = ApplicationReferenceNumber,
 			ProjectStatus = ProjectStatus,
 			ApplicationReceivedDate = ApplicationReceivedDate,
@@ -195,7 +194,7 @@ public class ProjectState : BaseEntity
 			DiocesanConsent = DiocesanConsent,
 			FoundationConsent = FoundationConsent,
 			LegalRequirementsSectionComplete = LegalRequirementsSectionComplete,
-			
+
 			// school budget info
 			EndOfCurrentFinancialYear = EndOfCurrentFinancialYear,
 			EndOfNextFinancialYear = EndOfNextFinancialYear,
@@ -206,7 +205,7 @@ public class ProjectState : BaseEntity
 			SchoolBudgetInformationAdditionalInformation = SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast			
+			// pupil schools forecast
 			YearOneProjectedCapacity = YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = YearTwoProjectedCapacity,
@@ -219,10 +218,10 @@ public class ProjectState : BaseEntity
 			KeyStage2PerformanceAdditionalInformation = KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = KeyStage5PerformanceAdditionalInformation,
-			
+
 			// assigned user
-			AssignedUser = AssignedUserId == null 
-				? null 
+			AssignedUser = AssignedUserId == null
+				? null
 				: new User(AssignedUserId.Value, AssignedUserFullName ?? "", AssignedUserEmailAddress ?? "")
 		};
 
@@ -237,7 +236,6 @@ public class ProjectState : BaseEntity
 			Urn = project.Details.Urn,
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
-			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
@@ -304,7 +302,7 @@ public class ProjectState : BaseEntity
 			RisksAndIssues = project.Details.RisksAndIssues,
 			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
-			
+
 			// legal requirements
 			GoverningBodyResolution = project.Details.GoverningBodyResolution,
 			Consultation = project.Details.Consultation,
@@ -322,7 +320,7 @@ public class ProjectState : BaseEntity
 			SchoolBudgetInformationAdditionalInformation = project.Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = project.Details.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast			
+			// pupil schools forecast
 			YearOneProjectedCapacity = project.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = project.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = project.Details.YearTwoProjectedCapacity,
@@ -335,7 +333,7 @@ public class ProjectState : BaseEntity
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
-			
+
 			// assigned user
 			AssignedUserId = project.Details.AssignedUser?.Id,
 			AssignedUserFullName = project.Details.AssignedUser?.FullName,

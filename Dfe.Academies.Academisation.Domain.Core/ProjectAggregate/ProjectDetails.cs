@@ -6,9 +6,8 @@ public record ProjectDetails(
 	int Urn,
 	int? IfdPipelineId = null,
 	string? SchoolName = null,
-	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
-	string? ProjectStatus = null, // could be enum
+	string? ProjectStatus = null,
 	DateTime? ApplicationReceivedDate = null,
 	DateTime? AssignedDate = null,
 	DateTime? HeadTeacherBoardDate = null,
@@ -38,7 +37,7 @@ public record ProjectDetails(
 	string? AcademyTypeAndRoute = null,
 	DateTime? ProposedAcademyOpeningDate = null,
 	bool? SchoolAndTrustInformationSectionComplete = null,
-	decimal? ConversionSupportGrantAmount = null,  // had to make this nullable or move it to the top
+	decimal? ConversionSupportGrantAmount = null,
 	string? ConversionSupportGrantChangeReason = null,
 
 	// general info
@@ -49,7 +48,7 @@ public record ProjectDetails(
 	int? Capacity = null,
 	string? PublishedAdmissionNumber = null,
 	decimal? PercentageFreeSchoolMeals = null,
-	string? PartOfPfiScheme = null, 
+	string? PartOfPfiScheme = null,
 	string? ViabilityIssues = null,
 	string? FinancialDeficit = null,
 	string? DiocesanTrust = null,
@@ -91,7 +90,7 @@ public record ProjectDetails(
 	string? SchoolBudgetInformationAdditionalInformation = null,
 	bool? SchoolBudgetInformationSectionComplete = null,
 
-	// pupil schools forecast	
+	// pupil schools forecast
 	int? YearOneProjectedCapacity = null,
 	int? YearOneProjectedPupilNumbers = null,
 	int? YearTwoProjectedCapacity = null,
@@ -104,7 +103,7 @@ public record ProjectDetails(
 	string? KeyStage2PerformanceAdditionalInformation = null,
 	string? KeyStage4PerformanceAdditionalInformation = null,
 	string? KeyStage5PerformanceAdditionalInformation = null,
-	
+
 	// assigned user
 	User? AssignedUser = null
 );
