@@ -27,7 +27,7 @@ public class LegacyProjectController : ControllerBase
 		_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 	}
 
-	[HttpGet("projects", Name = "GetLegacyProjects")]
+	[HttpPost("projects", Name = "GetLegacyProjects")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
