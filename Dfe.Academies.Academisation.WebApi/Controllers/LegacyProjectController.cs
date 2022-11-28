@@ -1,4 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -25,20 +27,15 @@ public class LegacyProjectController : ControllerBase
 		_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 	}
 
-	[HttpGet("projects", Name = "GetLegacyProjects")]
+	[HttpPost("projects", Name = "GetLegacyProjects")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>> GetProjects(
-		[FromQuery] string? states,
-		[FromQuery] string? title,
-		[FromQuery] string[]? deliveryOfficers,
-		[FromQuery] int page = 1,		
-		[FromQuery] int count = 50,
-		[FromQuery] int? urn = null,
-		[FromQuery] int[]? regions = default)
+		GetAcademyConversionSearchModel? searchModel,
+		[FromQuery] int? urn = null)
 	{
-		var result = await _legacyProjectListGetQuery.GetProjects(states, title, deliveryOfficers, page, count, urn, regions);
+		var result = await _legacyProjectListGetQuery.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter, searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn, searchModel.RegionUrnsQueryString);
 		return result is null ? NotFound() : Ok(result);
 	}
 
@@ -46,7 +43,7 @@ public class LegacyProjectController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<ActionResult<List<string>>> GetStatuses()
+	public async Task<ActionResult<ProjectFilterParameters>> GetFilterParameters()
 	{
 		var result = await _projectGetStatusesQuery.Execute();
 		return Ok(result);

@@ -1,5 +1,8 @@
-﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -12,7 +15,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_projectGetStatusesQuery = projectGetStatusesQuery;
 		}
 
-		public async Task<List<string?>> Execute()
+		public async Task<ProjectFilterParameters> Execute()
 		{
 			return await _projectGetStatusesQuery.Execute();
 		}
