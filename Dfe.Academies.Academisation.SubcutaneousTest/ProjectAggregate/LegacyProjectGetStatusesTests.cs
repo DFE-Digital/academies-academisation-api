@@ -45,9 +45,9 @@ public class LegacyProjectGetStatusesTests
 		var response = DfeAssert.OkObjectResult(result);
 
 		Assert.Multiple(
-			() => Assert.Equal("Active", response.Item2.Statuses[0]),
-			() => Assert.Equal("Closed", response.Item2.Statuses[1]),
-			() => Assert.Equal(2, response.Item2.Statuses.Count)
+			() => Assert.Equal("Active", response.Item2.Statuses![0]),
+			() => Assert.Equal("Closed", response.Item2.Statuses![1]),
+			() => Assert.Equal(2, response.Item2.Statuses!.Count)
 		);
 	}	
 }
