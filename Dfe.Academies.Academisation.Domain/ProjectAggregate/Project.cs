@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -27,7 +28,7 @@ public class Project : IProject
 
 	public static CreateResult<IProject> Create(IApplication application)
 	{
-		if (application.ApplicationType != Core.ApplicationAggregate.ApplicationType.JoinAMat)
+		if (application.ApplicationType != ApplicationType.JoinAMat)
 		{
 			return new CreateValidationErrorResult<IProject>(
 				new List<ValidationError>
@@ -43,28 +44,25 @@ public class Project : IProject
 		)
 		{
 			SchoolName = school.SchoolName,
-			//LocalAuthority = school.LocalAuthority.LocalAuthorityName,
 			ApplicationReferenceNumber = application.ApplicationId.ToString(),
 			ProjectStatus = "Converter Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			OpeningDate = DateTime.Today.AddMonths(6),
-			TrustReferenceNumber = application.JoinTrust!.Id.ToString(),
-			NameOfTrust = application.JoinTrust.TrustName,
+			TrustReferenceNumber = application.JoinTrust?.Id.ToString(),
+			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
-			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme),
-			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
+			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
+			FinancialDeficit = ToYesNoString(IsDeficit(school.CurrentFinancialYear?.CapitalCarryForwardStatus)),
 			RationaleForTrust = school.SchoolConversionReasonsForJoining,
-			//SponsorName = application.SponsorName,
-			//SponsorReferenceNumber = application.SponsorReferenceNumber,
-			//EndOfCurrentFinancialYear = school.CurrentFinancialYear,
-			//EndOfNextFinancialYear = school.NextFinancialYear,
-			//RevenueCarryForwardAtEndMarchCurrentYear = school.SchoolCFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolCFYRevenueIsDeficit),
-			//ProjectedRevenueBalanceAtEndMarchNextYear = school.SchoolNFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolNFYRevenueIsDeficit),
-			//CapitalCarryForwardAtEndMarchCurrentYear = school.SchoolCFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolCFYCapitalIsDeficit),
-			//CapitalCarryForwardAtEndMarchNextYear = school.SchoolNFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolNFYCapitalIsDeficit),
+			EndOfCurrentFinancialYear = school.CurrentFinancialYear?.FinancialYearEndDate,
+			EndOfNextFinancialYear = school.NextFinancialYear?.FinancialYearEndDate,
+			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.Revenue, IsDeficit(school.CurrentFinancialYear?.RevenueStatus)),
+			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.Revenue, IsDeficit(school.NextFinancialYear?.RevenueStatus)),
+			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.CapitalCarryForward, IsDeficit(school.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.CapitalCarryForward, IsDeficit(school.NextFinancialYear?.CapitalCarryForwardStatus)),
 			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
 			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
@@ -77,9 +75,9 @@ public class Project : IProject
 	{
 		if (Details.Urn != detailsToUpdate.Urn)
 		{
-			return new CommandValidationErrorResult(new List<ValidationError> 
-			{ 
-				new ValidationError("Urn", "Urn in update model must match existing record") 
+			return new CommandValidationErrorResult(new List<ValidationError>
+			{
+				new ValidationError("Urn", "Urn in update model must match existing record")
 			});
 		}
 
@@ -88,7 +86,6 @@ public class Project : IProject
 			Urn = detailsToUpdate.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId,
 			SchoolName = detailsToUpdate.SchoolName,
-			LocalAuthority = detailsToUpdate.LocalAuthority,
 			ApplicationReferenceNumber = detailsToUpdate.ApplicationReferenceNumber,
 			ProjectStatus = detailsToUpdate.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
@@ -162,7 +159,7 @@ public class Project : IProject
 			DiocesanConsent = detailsToUpdate.DiocesanConsent,
 			FoundationConsent = detailsToUpdate.FoundationConsent,
 			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete,
-			
+
 			// school budget info
 			EndOfCurrentFinancialYear = detailsToUpdate.EndOfCurrentFinancialYear,
 			EndOfNextFinancialYear = detailsToUpdate.EndOfNextFinancialYear,
@@ -173,7 +170,7 @@ public class Project : IProject
 			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast			
+			// pupil schools forecast
 			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = detailsToUpdate.YearTwoProjectedCapacity,
@@ -186,7 +183,7 @@ public class Project : IProject
 			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
-			
+
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
@@ -194,14 +191,29 @@ public class Project : IProject
 		return new CommandSuccessResult();
 	}
 
+	private static bool IsDeficit(RevenueType? revenueType)
+	{
+		return revenueType.HasValue && revenueType == RevenueType.Deficit;
+	}
+
+	private static decimal? ConvertDeficitAmountToNegative(decimal? amount, bool? isDeficit)
+	{
+		if (isDeficit.HasValue)
+		{
+			return isDeficit.Value ? amount * -1.0M : amount;
+		}
+		return null;
+	}
+
 	private static string? ToYesNoString(bool? value)
 	{
 		if (!value.HasValue) return null;
 		return value == true ? "Yes" : "No";
 	}
+
 	private static User? MapUser(User? user)
 	{
-		if(user == null) return null;
+		if (user == null) return null;
 		return new User(user.Id, user.FullName, user.EmailAddress);
 	}
 }
