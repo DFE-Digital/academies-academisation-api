@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.IService.Query
 {
 	public interface ITrustQueryService
 	{
-		Task<TrustKeyPerson> GetTrustKeyPerson(int applicationId, int keyPersonId);
-		Task<List<TrustKeyPerson>> GetAllTrustKeyPeople(int applicationId);
+		Task<TrustKeyPersonServiceModel> GetTrustKeyPerson(int applicationId, int keyPersonId);
+		Task<List<TrustKeyPersonServiceModel>> GetAllTrustKeyPeople(int applicationId);
 	}
 }

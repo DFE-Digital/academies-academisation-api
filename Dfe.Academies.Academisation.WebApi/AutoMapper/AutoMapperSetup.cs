@@ -5,8 +5,6 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
-using Dfe.Academies.Academisation.WebApi.AutoMapper;
-using TrustKeyPerson = Dfe.Academies.Academisation.IService.ServiceModels.Application.TrustKeyPerson;
 
 namespace Dfe.Academies.Academisation.Service.AutoMapper;
 
@@ -56,10 +54,11 @@ public static class AutoMapperSetup
 				wrapper.TrustDetails.FormTrustGrowthPlansYesNo,
 				wrapper.TrustDetails.FormTrustImprovementSupport,
 				wrapper.TrustDetails.FormTrustImprovementStrategy,
-				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor));
+				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor,
+				wrapper.KeyPeople.Select(x => new TrustKeyPersonServiceModel(x.Id, x.FirstName, x.Surname, x.DateOfBirth, x.ContactEmailAddress, x.Role, x.TimeInRole, x.Biography)).ToList()));
 
 		profile.CreateMap<TrustKeyPersonState, ITrustKeyPerson>().ReverseMap();
-		profile.CreateMap<TrustKeyPersonState, Domain.ApplicationAggregate.Trusts.TrustKeyPerson>().ReverseMap();
-		profile.CreateMap<TrustKeyPerson, Domain.ApplicationAggregate.Trusts.TrustKeyPerson>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonState, TrustKeyPerson>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonServiceModel, TrustKeyPerson>().ReverseMap();
 	}
 }
