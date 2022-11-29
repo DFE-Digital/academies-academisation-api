@@ -135,9 +135,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "UpdateKeyPerson")]
-		public async Task<ActionResult> UpdateKeyPerson(int applicationId, [FromBody] UpdateTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> UpdateKeyPerson(int applicationId, int keyPersonId, [FromBody] UpdateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
+			var result = await _mediator.Send(command with { ApplicationId = applicationId, KeyPersonId = keyPersonId }, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
@@ -149,9 +149,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpDelete("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "DeleteKeyPerson")]
-		public async Task<ActionResult> UpdateKeyPerson(int applicationId, [FromBody] DeleteTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> UpdateKeyPerson(int applicationId, int keyPersonId, [FromBody] DeleteTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
+			var result = await _mediator.Send(command with { ApplicationId = applicationId, KeyPersonId = keyPersonId }, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
