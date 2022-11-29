@@ -59,6 +59,8 @@ public class ProjectCreateTests
 		var currentYear = _fixture.Build<FinancialYear>()
 							.With(fy => fy.CapitalCarryForwardStatus, (RevenueType?) null)
 							.With(fy => fy.RevenueStatus, (RevenueType?) null)
+							.With(fy => fy.CapitalCarryForward, (decimal?)null)
+							.With(fy => fy.Revenue, (decimal?)null)
 							.Create();
 		var nextYear = _fixture.Build<FinancialYear>()
 							.With(fy => fy.CapitalCarryForwardStatus, (RevenueType?) null)
