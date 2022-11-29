@@ -31,5 +31,8 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 		public string? FormTrustImprovementSupport { get; set; }
 		public string? FormTrustImprovementStrategy { get; set; }
 		public string? FormTrustImprovementApprovedSponsor { get; set; }
+
+		[ForeignKey("ApplicationFormTrustId")]
+		public HashSet<TrustKeyPersonState> KeyPeople { get; set; } = new();
 	}
 }

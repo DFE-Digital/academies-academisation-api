@@ -10,10 +10,9 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
 	public class TrustKeyPerson : ITrustKeyPerson
 	{
-		private TrustKeyPerson(int id, int trustId, string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
+		private TrustKeyPerson(int id, string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
 		{
 			Id = id;
-			TrustId = trustId;
 			FirstName = firstName;
 			Surname = surname;
 			DateOfBirth = dateOfBirth;
@@ -23,18 +22,16 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 			Biography = biography;
 		}
 
-		public int Id { get; set; }
-		public int TrustId { get; set; }
-		public KeyPersonRole Role { get; set; }
-		public string TimeInRole { get; set; }
-		public int PersonId { get; set; }
-		public string FirstName { get; set; }
+		public int Id { get; private set; }
+		public KeyPersonRole Role { get; private set; }
+		public string TimeInRole { get; private set; }
+		public string FirstName { get; private set; }
 
-		public string Surname { get; set; }
+		public string Surname { get; private set; }
 
-		public string? ContactEmailAddress { get; set; }
-		public DateTime? DateOfBirth { get; set; }
-		public string Biography { get; set; }
+		public string? ContactEmailAddress { get; private set; }
+		public DateTime? DateOfBirth { get; private set; }
+		public string Biography { get; private set; }
 
 		public void Update(string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role,
 			string timeInRole, string biography)
@@ -48,9 +45,9 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 			this.Biography = biography;
 		}
 
-		public static ITrustKeyPerson Create(int trustId, string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
+		public static ITrustKeyPerson Create(string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
 		{
-			return new TrustKeyPerson(0, trustId, firstName, surname, dateOfBirth, contactEmailAddress, role,
+			return new TrustKeyPerson(0, firstName, surname, dateOfBirth, contactEmailAddress, role,
 				timeInRole, biography);
 		}
 	}

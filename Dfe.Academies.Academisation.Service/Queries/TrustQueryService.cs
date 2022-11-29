@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -21,32 +23,40 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_mapper = mapper;
 		}
 
-		public Task<TrustKeyPerson> GetTrustKeyPerson(int applicationId, int keyPersonId)
+		public async Task<TrustKeyPerson> GetTrustKeyPerson(int applicationId, int keyPersonId)
 		{
-			//List<ApplicationState> applicationStates = await _context.Applications
-			//	.AsNoTracking()
-			//	.Include(a => a.Contributors)
-			//	.Include(a => a.Schools)
-			//	.ThenInclude(a => a.Loans)
-			//	.Where(a => a.Contributors.Any(c => c.EmailAddress == userEmail))
-			//	.ToListAsync();
+			var applicationState = await _context.Applications
+				.AsNoTracking()
+				.Include(a => a.FormTrust)
+				.ThenInclude(x => x.KeyPeople)
+				.Include(a => a.Schools)
+				.ThenInclude(a => a.Loans)
+				.Where(a => a.Id == applicationId)
+				.SingleOrDefaultAsync();
 
-			//return applicationStates.Select(a => a.MapToDomain(this.mapper)).ToList();
-			return null;
+			var keyPerson =
+				_mapper.Map<Domain.ApplicationAggregate.Trusts.TrustKeyPerson>(applicationState.FormTrust
+					.KeyPeople.SingleOrDefault(kp => kp.Id == keyPersonId));
+
+			return _mapper.Map<TrustKeyPerson>(keyPerson);
 		}
 
-		public Task<List<TrustKeyPerson>> GetAllTrustKeyPeople(int applicationId)
+		public async Task<List<TrustKeyPerson>> GetAllTrustKeyPeople(int applicationId)
 		{
-			//List<ApplicationState> applicationStates = await _context.Applications
-			//	.AsNoTracking()
-			//	.Include(a => a.Contributors)
-			//	.Include(a => a.Schools)
-			//	.ThenInclude(a => a.Loans)
-			//	.Where(a => a.Contributors.Any(c => c.EmailAddress == userEmail))
-			//	.ToListAsync();
+			var applicationState = await _context.Applications
+				.AsNoTracking()
+				.Include(a => a.FormTrust)
+				.ThenInclude(x => x.KeyPeople)
+				.Include(a => a.Schools)
+				.ThenInclude(a => a.Loans)
+				.Where(a => a.Id == applicationId)
+				.SingleOrDefaultAsync();
 
-			//return applicationStates.Select(a => a.MapToDomain(this.mapper)).ToList();
-			return null;
+			var keyPeople =
+				_mapper.Map<List<Domain.ApplicationAggregate.Trusts.TrustKeyPerson>>(applicationState.FormTrust
+					.KeyPeople);
+
+			return _mapper.Map<List<TrustKeyPerson>>(keyPeople);
 		}
 	}
 }

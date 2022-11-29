@@ -128,6 +128,7 @@ builder.Services.AddScoped<ILegacyProjectListGetQuery, LegacyProjectListGetQuery
 builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
 builder.Services.AddScoped<IProjectStatusesDataQuery, ProjectStatusesDataQuery>();
 builder.Services.AddScoped<IProjectGetStatusesQuery, ProjectGetStatusesQuery>();
+builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 
 //utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

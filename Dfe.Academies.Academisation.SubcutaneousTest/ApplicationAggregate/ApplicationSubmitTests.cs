@@ -46,6 +46,7 @@ public class ApplicationSubmitTests
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationGetQuery _applicationGetQuery;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
+	private readonly ITrustQueryService _trustQueryService;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
@@ -67,6 +68,7 @@ public class ApplicationSubmitTests
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
+		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
@@ -108,6 +110,7 @@ public class ApplicationSubmitTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationsListByUserQuery,
+			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);
 

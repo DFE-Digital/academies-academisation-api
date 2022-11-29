@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
@@ -11,14 +12,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
 	public class AddTrustKeyPersonCommandHandler : IRequestHandler<AddTrustKeyPersonCommand, CommandResult>
 	{
+		private readonly IApplicationRepository _applicationRepository;
 
-		private readonly IApplicationGetDataQuery _applicationGetDataQuery;
-		private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
-
-		public AddTrustKeyPersonCommandHandler(IApplicationGetDataQuery applicationGetDataQuery, IApplicationUpdateDataCommand applicationUpdateDataCommand)
+		public AddTrustKeyPersonCommandHandler(IApplicationRepository applicationRepository)
 		{
-			_applicationGetDataQuery = applicationGetDataQuery;
-			_applicationUpdateDataCommand = applicationUpdateDataCommand;
+			_applicationRepository = applicationRepository;
 		}
 
 		public async Task<CommandResult> Handle(AddTrustKeyPersonCommand command, CancellationToken cancellationToken)
@@ -26,7 +24,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			// cancellation token will be passed down to the database requests when the repository pattern is brought in
 			// shouldn't be anything that is long running just found it a good habit with async
 
-			var existingApplication = await _applicationGetDataQuery.Execute(command.ApplicationId);
+			var existingApplication = await _applicationRepository.GetByIdAsync(command.ApplicationId);
 			if (existingApplication is null)
 			{
 				return new NotFoundCommandResult();
@@ -38,14 +36,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				return result;
 			}
+
 			if (result is not CommandSuccessResult)
 			{
 				throw new NotImplementedException();
 			}
 
-			await _applicationUpdateDataCommand.Execute(existingApplication);
-
-			return result;
+			_applicationRepository.Update(existingApplication);
+			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
+				? new CommandSuccessResult()
+				: new BadRequestCommandResult();
 		}
 
 	}
