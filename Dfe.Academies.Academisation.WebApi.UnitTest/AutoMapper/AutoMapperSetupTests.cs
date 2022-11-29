@@ -11,6 +11,7 @@ using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using FluentAssertions;
 using Moq;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
@@ -185,9 +186,19 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 
 			// relying on the all details been set here by autofixture
 			var trustDetails = this.fixture.Create<FormTrustDetails>();
+			var keyPerson = this.fixture.Create<ITrustKeyPerson>();
+			Mock.Get(keyPerson).Setup(x => x.Id).Returns(this.fixture.Create<int>());
+			Mock.Get(keyPerson).Setup(x => x.FirstName).Returns(this.fixture.Create<string>());
+			Mock.Get(keyPerson).Setup(x => x.Surname).Returns(this.fixture.Create<string>());
+			Mock.Get(keyPerson).Setup(x => x.ContactEmailAddress).Returns(this.fixture.Create<string>());
+			Mock.Get(keyPerson).Setup(x => x.DateOfBirth).Returns(this.fixture.Create<DateTime>());
+			Mock.Get(keyPerson).Setup(x => x.Role).Returns(this.fixture.Create<KeyPersonRole>());
+			Mock.Get(keyPerson).Setup(x => x.TimeInRole).Returns(this.fixture.Create<string>());
+			Mock.Get(keyPerson).Setup(x => x.Biography).Returns(this.fixture.Create<string>());
 
 			Mock.Get(formTrustDomainObj).Setup(x => x.Id).Returns(10101);
 			Mock.Get(formTrustDomainObj).Setup(x => x.TrustDetails).Returns(trustDetails);
+			Mock.Get(formTrustDomainObj).Setup(x => x.KeyPeople).Returns(new List<ITrustKeyPerson>{keyPerson}.AsReadOnly());
 
 			// Act
 			var result = mapper.Map<ApplicationFormTrustServiceModel>(formTrustDomainObj);
@@ -214,6 +225,15 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			result.FormTrustReasonVision.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.FormTrustReasonVision);
 			result.TrustApproverEmail.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.TrustApproverEmail);
 			result.TrustApproverName.Should().BeEquivalentTo(formTrustDomainObj.TrustDetails.TrustApproverName);
+			result.KeyPeople.Count.Should().Be(1);
+			result.KeyPeople[0].Id.Should().Be(keyPerson.Id);
+			result.KeyPeople[0].Biography.Should().Be(keyPerson.Biography);
+			result.KeyPeople[0].ContactEmailAddress.Should().Be(keyPerson.ContactEmailAddress);
+			result.KeyPeople[0].DateOfBirth.Should().Be(keyPerson.DateOfBirth);
+			result.KeyPeople[0].FirstName.Should().Be(keyPerson.FirstName);
+			result.KeyPeople[0].Role.Should().Be(keyPerson.Role);
+			result.KeyPeople[0].Surname.Should().Be(keyPerson.Surname);
+			result.KeyPeople[0].TimeInRole.Should().Be(keyPerson.TimeInRole);
 			result.Id.Should().Be(formTrustDomainObj.Id);
 		}
 	}
