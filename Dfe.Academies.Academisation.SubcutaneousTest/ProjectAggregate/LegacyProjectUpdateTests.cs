@@ -44,7 +44,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(), 
+		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand);
 		var existingProject = _fixture.Create<ProjectState>();
 		await _context.Projects.AddAsync(existingProject);
@@ -55,11 +55,11 @@ public class ProjectUpdateTests
 			.With(p => p.Urn, existingProject.Urn)
 			.Create();
 
-		// Act		
+		// Act
 		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 
 		// Assert
-		(_, var project) = DfeAssert.OkObjectResult(updateResult);	
+		(_, var project) = DfeAssert.OkObjectResult(updateResult);
 
 		Assert.Equivalent(updatedProject, project);
 	}
@@ -80,7 +80,7 @@ public class ProjectUpdateTests
 			.With(p => p.Urn, existingProject.Urn)
 			.Create();
 
-		// Act		
+		// Act
 		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 		DfeAssert.OkObjectResult(updateResult);
 
@@ -106,11 +106,10 @@ public class ProjectUpdateTests
 		var updatedProject = new LegacyProjectServiceModel(existingProject.Id)
 		{
 			ProjectStatus = "TestStatus",
-			LocalAuthority = "LocalAuthority",
 			EqualitiesImpactAssessmentConsidered = "Yes sir"
 		};
 
-		// Act		
+		// Act
 		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 
 		// Assert
@@ -121,7 +120,6 @@ public class ProjectUpdateTests
 		(_, var getProject) = DfeAssert.OkObjectResult(getResult);
 
 		existingProject.ProjectStatus = updatedProject.ProjectStatus;
-		existingProject.LocalAuthority = updatedProject.LocalAuthority;
 		existingProject.EqualitiesImpactAssessmentConsidered = updatedProject.EqualitiesImpactAssessmentConsidered;
 
 		Assert.Multiple(
@@ -159,7 +157,7 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.FoundationConsent, getProject.FoundationConsent),
 					() => Assert.Equal(existingProject.GoverningBodyResolution, getProject.GoverningBodyResolution),
 					() => Assert.Equal(existingProject.LegalRequirementsSectionComplete, getProject.LegalRequirementsSectionComplete),
-					() => Assert.Equal(existingProject.SchoolPerformanceAdditionalInformation, getProject.SchoolPerformanceAdditionalInformation),			
+					() => Assert.Equal(existingProject.SchoolPerformanceAdditionalInformation, getProject.SchoolPerformanceAdditionalInformation),
 					() => Assert.Equal(existingProject.CapitalCarryForwardAtEndMarchCurrentYear, getProject.CapitalCarryForwardAtEndMarchCurrentYear),
 					() => Assert.Equal(existingProject.CapitalCarryForwardAtEndMarchNextYear, getProject.CapitalCarryForwardAtEndMarchNextYear),
 					() => Assert.Equal(existingProject.SchoolBudgetInformationAdditionalInformation, getProject.SchoolBudgetInformationAdditionalInformation),

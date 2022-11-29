@@ -6,7 +6,6 @@ using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -52,15 +51,35 @@ public class ProjectCreateTests
 	}
 
 	[Fact]
-	public void Create_JoinAMatApplicationType___ReturnsCreateSuccessResult()
+	public void Create_JoinAMatApplicationType_WithNulls___ReturnsCreateSuccessResult()
 	{
 		// Arrange
 		var now = DateTime.Now;
 
+		var currentYear = _fixture.Build<FinancialYear>()
+							.With(fy => fy.CapitalCarryForwardStatus, (RevenueType?) null)
+							.With(fy => fy.RevenueStatus, (RevenueType?) null)
+							.With(fy => fy.CapitalCarryForward, (decimal?)null)
+							.With(fy => fy.Revenue, (decimal?)null)
+							.Create();
+		var nextYear = _fixture.Build<FinancialYear>()
+							.With(fy => fy.CapitalCarryForwardStatus, (RevenueType?) null)
+							.With(fy => fy.RevenueStatus, (RevenueType?) null)
+							.Create();
+
+		var schoolDetails = _fixture.Build<SchoolDetails>()
+								.With(sd => sd.CurrentFinancialYear, currentYear)
+								.With(sd => sd.NextFinancialYear, nextYear)
+								.Create();
+
+		var school = _fixture.Build<School>()
+						.With(s => s.Details, schoolDetails)
+						.Create();
+
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new List<School> {_fixture.Create<School>()}, _fixture.Create<IJoinTrust>(),
+			new List<School> { school }, _fixture.Create<IJoinTrust>(),
 			null);
 
 		// Act
@@ -68,20 +87,76 @@ public class ProjectCreateTests
 
 		// Assert
 		IProject project = Assert.IsType<CreateSuccessResult<IProject>>(createResult).Payload;
-		var school = application.Schools.Single();		
 
-		Assert.Multiple(			
+		Assert.Multiple(
+			() => Assert.Null(project.Details.RevenueCarryForwardAtEndMarchCurrentYear),
+			() => Assert.Null(project.Details.ProjectedRevenueBalanceAtEndMarchNextYear),
+			() => Assert.Null(project.Details.CapitalCarryForwardAtEndMarchCurrentYear),
+			() => Assert.Null(project.Details.CapitalCarryForwardAtEndMarchNextYear)
+		);
+	}
+
+	[Fact]
+	public void Create_JoinAMatApplicationType___ReturnsCreateSuccessResult()
+	{
+		// Arrange
+		var now = DateTime.Now;
+
+		var currentYear = _fixture.Build<FinancialYear>()
+							.With(fy => fy.CapitalCarryForwardStatus, RevenueType.Deficit)
+							.With(fy => fy.RevenueStatus, RevenueType.Deficit)
+							.Create();
+		var nextYear = _fixture.Build<FinancialYear>()
+							.With(fy => fy.CapitalCarryForwardStatus, RevenueType.Surplus)
+							.With(fy => fy.RevenueStatus, RevenueType.Surplus)
+							.Create();
+
+		var schoolDetails = _fixture.Build<SchoolDetails>()
+								.With(sd => sd.CurrentFinancialYear, currentYear)
+								.With(sd => sd.NextFinancialYear, nextYear)
+								.Create();
+
+		var school = _fixture.Build<School>()
+						.With(s => s.Details, schoolDetails)
+						.Create();
+
+		var application = new Application(1, now, now, ApplicationType.JoinAMat,
+			_fixture.Create<ApplicationStatus>(),
+			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
+			new List<School> { school }, _fixture.Create<IJoinTrust>(),
+			null);
+
+		// Act
+		var createResult = new ProjectFactory().Create(application);
+
+		// Assert
+		IProject project = Assert.IsType<CreateSuccessResult<IProject>>(createResult).Payload;
+
+		Assert.Multiple(
 			() => Assert.Equal(school.Details.Urn, project.Details.Urn),
+			() => Assert.Equal(school.Details.SchoolName, project.Details.SchoolName),
+			() => Assert.Equal(application.ApplicationId.ToString(), project.Details.ApplicationReferenceNumber),
 			() => Assert.Equal("Converter Pre-AO (C)", project.Details.ProjectStatus),
+			() => Assert.Equal(application.ApplicationSubmittedDate, project.Details.ApplicationReceivedDate),
 			() => Assert.Equal(DateTime.Today.AddMonths(6), project.Details.OpeningDate),
+			() => Assert.Equal(application.JoinTrust?.Id.ToString(), project.Details.TrustReferenceNumber),
+			() => Assert.Equal(application.JoinTrust?.TrustName, project.Details.NameOfTrust),
 			() => Assert.Equal("Converter", project.Details.AcademyTypeAndRoute),
 			() => Assert.Equal(school.Details.ConversionTargetDate, project.Details.ProposedAcademyOpeningDate),
 			() => Assert.Equal(25000, project.Details.ConversionSupportGrantAmount),
 			() => Assert.Equal(school.Details.CapacityPublishedAdmissionsNumber.ToString(), project.Details.PublishedAdmissionNumber),
 			() => Assert.Equal(ToYesNoString(school.Details.LandAndBuildings!.PartOfPfiScheme), project.Details.PartOfPfiScheme),
+			() => Assert.Equal("Yes", project.Details.FinancialDeficit),
+			() => Assert.Equal(school.Details.SchoolConversionReasonsForJoining, project.Details.RationaleForTrust),
+			() => Assert.Equal(school.Details.CurrentFinancialYear.FinancialYearEndDate, project.Details.EndOfCurrentFinancialYear),
+			() => Assert.Equal(school.Details.NextFinancialYear.FinancialYearEndDate, project.Details.EndOfNextFinancialYear),
+			() => Assert.Equal(school.Details.CurrentFinancialYear.Revenue * -1.0M, project.Details.RevenueCarryForwardAtEndMarchCurrentYear),
+			() => Assert.Equal(school.Details.NextFinancialYear.Revenue, project.Details.ProjectedRevenueBalanceAtEndMarchNextYear),
+			() => Assert.Equal(school.Details.CurrentFinancialYear.CapitalCarryForward * -1.0M, project.Details.CapitalCarryForwardAtEndMarchCurrentYear),
+			() => Assert.Equal(school.Details.NextFinancialYear.CapitalCarryForward, project.Details.CapitalCarryForwardAtEndMarchNextYear),
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear1, project.Details.YearOneProjectedPupilNumbers),
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear2, project.Details.YearTwoProjectedPupilNumbers),
-			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear3, project.Details.YearThreeProjectedPupilNumbers)			
+			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear3, project.Details.YearThreeProjectedPupilNumbers)
 		);
 	}
 
