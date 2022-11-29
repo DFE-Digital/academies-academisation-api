@@ -1,7 +1,9 @@
 ﻿using AutoFixture;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
+using Fare;
 using Moq;
 using Xunit;
 
@@ -23,12 +25,12 @@ public class LegacyProjectListGetQueryTests
 	{
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
-		_query.Setup(m => m.SearchProjects(It.IsAny<string[]?>(), It.IsAny<string>(), It.IsAny<string[]?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>()))
+		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(), 
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<int>?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
-		
+		List<string> status = new List<string>() { "complete", "active"};
 		// Act
-		var result = await _subject.GetProjects("complete,active", null, null,  1, 1, 1234);
+		var result = await _subject.GetProjects(status, null, null,  1, 1, 1234, default);
 	
 		// Assert
 		Assert.Multiple(
@@ -42,17 +44,16 @@ public class LegacyProjectListGetQueryTests
 	{
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
-		_query.Setup(m => m.SearchProjects(It.IsAny<string[]?>(), It.IsAny<string>(), It.IsAny<string[]?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>()))
-			.ReturnsAsync((expectedProjects, expectedProjects.Count));
-		(string states, int page, int count, int? urn) = ("active,complete", 1, 1, 123);
-		
+		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(),
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<int>?>()))
+				.ReturnsAsync((expectedProjects, expectedProjects.Count));
+		(int page, int count, int? urn) = (1, 1, 123);
+		List<string>? status = new List<string>() {"complete", "active"};
 		// Act
-		var result = await _subject.GetProjects(states, null, null, page, count, urn);
+		var result = await _subject.GetProjects(status, null, null, page, count, urn, null);
 	
 		// Assert
-		var statusList = states.Split(",");
-		_query.Verify(m => m.SearchProjects(statusList, null, null, page, count, urn),
+		_query.Verify(m => m.SearchProjects(status, null, null, page, count, urn, null),
 			Times.Once);
 	}
 	
@@ -61,20 +62,18 @@ public class LegacyProjectListGetQueryTests
 	{
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
-		_query.Setup(m => m.SearchProjects(It.IsAny<string[]?>(), It.IsAny<string>(), It.IsAny<string[]?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>()))
+		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(),
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<int>?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
-		(string states, int page, int count, int? urn) = ("active,complete", 1, 1, 123);
-		
+		(int page, int count, int? urn) = (1, 1, 123);
+		List<string> status = new List<string>() { "complete", "active" };
 		// Act
-		var result = await _subject.GetProjects(states, null, null, page, count, urn);
+		var result = await _subject.GetProjects(status, null, null, page, count, urn, null);
 	
 		// Assert
 		Assert.Multiple(
 			() => Assert.Equal(page, result!.Paging.Page),
-			() => Assert.Equal(expectedProjects.Count, result!.Paging.RecordCount),
-			() => Assert.Equal($"legacy/projects?page={page + 1}&count={count}&states={states}&urn={urn}", 
-				result!.Paging.NextPageUrl)
+			() => Assert.Equal(expectedProjects.Count, result!.Paging.RecordCount)
 		);
 	}
 }

@@ -3,7 +3,7 @@
 	public record FinancialYear(
 		DateTime? FinancialYearEndDate = null,
 		decimal? Revenue = null,
-		RevenueType? RevenueStatus = null,
+		RevenueType? RevenueStatus = null,		
 		string? RevenueStatusExplained = null,
 		string? RevenueStatusFileLink = null,
 		decimal? CapitalCarryForward = null,

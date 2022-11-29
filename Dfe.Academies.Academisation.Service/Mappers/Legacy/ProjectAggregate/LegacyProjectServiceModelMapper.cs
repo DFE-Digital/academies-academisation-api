@@ -14,7 +14,6 @@ internal static class LegacyProjectServiceModelMapper
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
-			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
@@ -87,7 +86,7 @@ internal static class LegacyProjectServiceModelMapper
 			DiocesanConsent = project.Details.DiocesanConsent,
 			FoundationConsent = project.Details.FoundationConsent,
 			LegalRequirementsSectionComplete = project.Details.LegalRequirementsSectionComplete,
-			
+
 			// school budget info
 			EndOfCurrentFinancialYear = project.Details.EndOfCurrentFinancialYear,
 			EndOfNextFinancialYear = project.Details.EndOfNextFinancialYear,
@@ -98,7 +97,7 @@ internal static class LegacyProjectServiceModelMapper
 			SchoolBudgetInformationAdditionalInformation = project.Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = project.Details.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast					
+			// pupil schools forecast
 			YearOneProjectedCapacity = project.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = project.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = project.Details.YearTwoProjectedCapacity,
@@ -111,7 +110,7 @@ internal static class LegacyProjectServiceModelMapper
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
-			
+
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null
 				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress)

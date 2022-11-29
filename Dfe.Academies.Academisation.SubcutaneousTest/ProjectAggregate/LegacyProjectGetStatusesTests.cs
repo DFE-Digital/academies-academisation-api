@@ -39,15 +39,15 @@ public class LegacyProjectGetStatusesTests
 		_context.SaveChanges();
 
 		// act
-		var result = await _legacyProjectController.GetStatuses();
+		var result = await _legacyProjectController.GetFilterParameters();
 
 		// assert
-		var (_, statuses) = DfeAssert.OkObjectResult(result);
+		var response = DfeAssert.OkObjectResult(result);
 
 		Assert.Multiple(
-			() => Assert.Equal("Active", statuses[0]),
-			() => Assert.Equal("Closed", statuses[1]),
-			() => Assert.Equal(2, statuses.Count)
+			() => Assert.Equal("Active", response.Item2.Statuses![0]),
+			() => Assert.Equal("Closed", response.Item2.Statuses![1]),
+			() => Assert.Equal(2, response.Item2.Statuses!.Count)
 		);
 	}	
 }
