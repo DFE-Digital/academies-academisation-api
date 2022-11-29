@@ -11,7 +11,6 @@ public class ProjectState : BaseEntity
 	public int Urn { get; set; }
 	public int? IfdPipelineId { get; set; }
 	public string? SchoolName { get; set; }
-	public string? LocalAuthority { get; set; }
 	public string? ApplicationReferenceNumber { get; set; }
 	public string? ProjectStatus { get; set; }
 	public DateTime? ApplicationReceivedDate { get; set; }
