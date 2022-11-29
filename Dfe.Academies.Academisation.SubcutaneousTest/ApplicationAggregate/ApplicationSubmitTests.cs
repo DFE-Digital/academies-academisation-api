@@ -59,7 +59,7 @@ public class ApplicationSubmitTests
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		
+
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
@@ -75,10 +75,11 @@ public class ApplicationSubmitTests
 		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
 
 		_mediator.Setup(x => x.Send(It.IsAny<SubmitApplicationCommand>(), It.IsAny<CancellationToken>()))
-			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) => {
-				
+			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) =>
+			{
+
 				return await submitApplicationHandler.Handle((SubmitApplicationCommand)cmd, ct);
-			});		
+			});
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -93,12 +94,12 @@ public class ApplicationSubmitTests
 		_fixture.Customize<LoanServiceModel>(composer =>
 			composer
 				.With(s => s.LoanId, 0));
-		
+
 		_fixture.Customize<LeaseServiceModel>(composer =>
 			composer
 				.With(s => s.LeaseId, 0));
 	}
-	
+
 	[Fact]
 	public async Task JoinAMatApplicationExists___ApplicationIsSubmitted_And_ProjectIsCreated()
 	{
@@ -125,7 +126,7 @@ public class ApplicationSubmitTests
 		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
 		DfeAssert.OkResult(updateResult);
 
-		// Act		
+		// Act
 		var submissionResult = await applicationController.Submit(createdPayload.ApplicationId);
 
 		// Assert

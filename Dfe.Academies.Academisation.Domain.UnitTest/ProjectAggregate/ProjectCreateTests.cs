@@ -51,6 +51,50 @@ public class ProjectCreateTests
 	}
 
 	[Fact]
+	public void Create_JoinAMatApplicationType_WithNulls___ReturnsCreateSuccessResult()
+	{
+		// Arrange
+		var now = DateTime.Now;
+
+		var currentYear = _fixture.Build<FinancialYear>()
+							.With(fy => fy.CapitalCarryForwardStatus, (RevenueType?) null)
+							.With(fy => fy.RevenueStatus, (RevenueType?) null)
+							.Create();
+		var nextYear = _fixture.Build<FinancialYear>()
+							.With(fy => fy.CapitalCarryForwardStatus, (RevenueType?) null)
+							.With(fy => fy.RevenueStatus, (RevenueType?) null)
+							.Create();
+
+		var schoolDetails = _fixture.Build<SchoolDetails>()
+								.With(sd => sd.CurrentFinancialYear, currentYear)
+								.With(sd => sd.NextFinancialYear, nextYear)
+								.Create();
+
+		var school = _fixture.Build<School>()
+						.With(s => s.Details, schoolDetails)
+						.Create();
+
+		var application = new Application(1, now, now, ApplicationType.JoinAMat,
+			_fixture.Create<ApplicationStatus>(),
+			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
+			new List<School> { school }, _fixture.Create<IJoinTrust>(),
+			null);
+
+		// Act
+		var createResult = new ProjectFactory().Create(application);
+
+		// Assert
+		IProject project = Assert.IsType<CreateSuccessResult<IProject>>(createResult).Payload;
+
+		Assert.Multiple(
+			() => Assert.Null(project.Details.RevenueCarryForwardAtEndMarchCurrentYear),
+			() => Assert.Null(project.Details.ProjectedRevenueBalanceAtEndMarchNextYear),
+			() => Assert.Null(project.Details.CapitalCarryForwardAtEndMarchCurrentYear),
+			() => Assert.Null(project.Details.CapitalCarryForwardAtEndMarchNextYear)
+		);
+	}
+
+	[Fact]
 	public void Create_JoinAMatApplicationType___ReturnsCreateSuccessResult()
 	{
 		// Arrange

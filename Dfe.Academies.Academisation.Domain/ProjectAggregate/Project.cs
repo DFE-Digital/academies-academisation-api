@@ -59,10 +59,10 @@ public class Project : IProject
 			RationaleForTrust = school.SchoolConversionReasonsForJoining,
 			EndOfCurrentFinancialYear = school.CurrentFinancialYear?.FinancialYearEndDate,
 			EndOfNextFinancialYear = school.NextFinancialYear?.FinancialYearEndDate,
-			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.Revenue, IsDeficit(school.CurrentFinancialYear?.RevenueStatus)),
-			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.Revenue, IsDeficit(school.NextFinancialYear?.RevenueStatus)),
-			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.CapitalCarryForward, IsDeficit(school.CurrentFinancialYear?.CapitalCarryForwardStatus)),
-			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.CapitalCarryForward, IsDeficit(school.NextFinancialYear?.CapitalCarryForwardStatus)),
+			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.Revenue, school.CurrentFinancialYear?.RevenueStatus),
+			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.Revenue, school.NextFinancialYear?.RevenueStatus),
+			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.CapitalCarryForward, school.CurrentFinancialYear?.CapitalCarryForwardStatus),
+			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.CapitalCarryForward, school.NextFinancialYear?.CapitalCarryForwardStatus),
 			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
 			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
@@ -191,16 +191,18 @@ public class Project : IProject
 		return new CommandSuccessResult();
 	}
 
-	private static bool IsDeficit(RevenueType? revenueType)
+	private static bool? IsDeficit(RevenueType? revenueType)
 	{
-		return revenueType.HasValue && revenueType == RevenueType.Deficit;
+		return revenueType.HasValue
+			? revenueType == RevenueType.Deficit
+			: null;
 	}
 
-	private static decimal? ConvertDeficitAmountToNegative(decimal? amount, bool? isDeficit)
+	private static decimal? ConvertDeficitAmountToNegative(decimal? amount, RevenueType? revenueType)
 	{
-		if (isDeficit.HasValue)
+		if (revenueType.HasValue)
 		{
-			return isDeficit.Value ? amount * -1.0M : amount;
+			return IsDeficit(revenueType)!.Value ? amount * -1.0M : amount;
 		}
 		return null;
 	}
