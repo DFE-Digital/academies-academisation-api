@@ -34,6 +34,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Academisation.WebApi;
 using Dfe.Academies.Academisation.WebApi.AutofacModules;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.Filters;
@@ -152,6 +153,8 @@ builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateL
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
+
+builder.Services.AddHostedService<EnrichProjectService>();
 /*
  builder.Services.AddScoped<IRequest<CommandResult>, CreateLeaseCommand>();
 builder.Services.AddScoped<IRequest<CommandResult>, UpdateLeaseCommand>();
@@ -198,6 +201,8 @@ app.MapHealthChecks("/healthcheck");
 app.MapControllers();
 
 app.Run();
+
+
 
 namespace Dfe.Academies.Academisation.WebApi
 {
