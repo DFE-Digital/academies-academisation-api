@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Data;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -258,6 +259,46 @@ public class Application : IApplication, IAggregateRoot
 		{
 			FormTrust = Trusts.FormTrust.Create(formTrustDetails);
 		}
+
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult AddTrustKeyPerson(string firstName, string surname, DateTime? dateOfBirth,
+		string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
+	{
+		if (this.FormTrust == null)
+		{
+			throw new InvalidOperationException("Cannot add trust key persons without setting form trust details");
+		}
+
+		this.FormTrust.AddTrustKeyPerson(firstName, surname, dateOfBirth,
+			contactEmailAddress, role, timeInRole, biography);
+
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult UpdateTrustKeyPerson(int keyPersonId, string firstName, string surname, DateTime? dateOfBirth,
+		string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
+	{
+		if (this.FormTrust == null)
+		{
+			throw new InvalidOperationException("Cannot add trust key persons without setting form trust details");
+		}
+
+		this.FormTrust.UpdateTrustKeyPerson(keyPersonId, firstName, surname, dateOfBirth,
+			contactEmailAddress, role, timeInRole, biography);
+
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult DeleteTrustKeyPerson(int keyPersonId)
+	{
+		if (this.FormTrust == null)
+		{
+			throw new InvalidOperationException("Cannot add trust key persons without setting form trust details");
+		}
+
+		this.FormTrust.DeleteTrustKeyPerson(keyPersonId);
 
 		return new CommandSuccessResult();
 	}

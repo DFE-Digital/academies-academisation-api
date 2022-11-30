@@ -42,6 +42,8 @@ public class ApplicationCreateTests
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
+	private readonly ITrustQueryService _trustQueryService;
+
 	public ApplicationCreateTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
@@ -50,6 +52,7 @@ public class ApplicationCreateTests
 
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
+		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
@@ -69,6 +72,7 @@ public class ApplicationCreateTests
 			_applicationGetQuery,
 			_applicationUpdateCommand, 
 			_applicationsListByUserQuery,
+			_trustQueryService,
 			_mediator,
 			_applicationLogger);
 
@@ -116,6 +120,7 @@ public class ApplicationCreateTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationsListByUserQuery,
+			_trustQueryService,
 			_mediator,
 			_applicationLogger);
 

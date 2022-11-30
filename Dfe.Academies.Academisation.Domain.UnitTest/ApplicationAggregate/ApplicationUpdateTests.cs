@@ -10,6 +10,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using FluentAssertions;
 using Moq;
 using Xunit;
 
@@ -722,6 +723,111 @@ public class ApplicationUpdateTests
 		DfeAssert.CommandValidationError(result, nameof(ApplicationType));
 		Assert.Equivalent(expected, subject);
 	}
+
+	[Fact]
+	public void FormMatDetailsAddTrustKeyPerson__SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.FormAMat);
+
+		var updateJoinTrust = _fixture.Create<IFormTrust>();
+		var formTrustDetails = _fixture.Create<FormTrustDetails>();
+
+		Mock.Get(updateJoinTrust).Setup(x => x.TrustDetails).Returns(formTrustDetails);
+		var dob = DateTime.Now.AddYears(-30);
+		// act
+		var result = subject.SetFormTrustDetails(formTrustDetails);
+		result = subject.AddTrustKeyPerson("Bob", "Smith", dob, "test.@email.com", KeyPersonRole.CEO,
+			"1 year", "test biography");
+
+		// assert
+		DfeAssert.CommandSuccess(result);
+		subject.FormTrust!.KeyPeople.Should().NotBeNullOrEmpty();
+		subject.FormTrust!.KeyPeople.Should().HaveCount(1);
+		subject.FormTrust!.KeyPeople[0].FirstName.Should().Be("Bob");
+		subject.FormTrust!.KeyPeople[0].Surname.Should().Be("Smith");
+		subject.FormTrust!.KeyPeople[0].DateOfBirth.Should().Be(dob);
+		subject.FormTrust!.KeyPeople[0].Role.Should().Be(KeyPersonRole.CEO);
+		subject.FormTrust!.KeyPeople[0].TimeInRole.Should().Be("1 year");
+		subject.FormTrust!.KeyPeople[0].Biography.Should().Be("test biography");
+	}
+
+	[Fact]
+	public void FormMatDetailsUpdateTrustKeyPerson__SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.FormAMat);
+
+		var updateJoinTrust = _fixture.Create<IFormTrust>();
+		var formTrustDetails = _fixture.Create<FormTrustDetails>();
+
+		Mock.Get(updateJoinTrust).Setup(x => x.TrustDetails).Returns(formTrustDetails);
+		var dob = DateTime.Now.AddYears(-30);
+
+		var result = subject.SetFormTrustDetails(formTrustDetails);
+		var keyPerson = _fixture.Create<ITrustKeyPerson>();
+		Mock.Get(keyPerson).Setup(x => x.FirstName).Returns("Bob");
+		Mock.Get(keyPerson).Setup(x => x.Surname).Returns("Smith");
+		Mock.Get(keyPerson).Setup(x => x.DateOfBirth).Returns(dob);
+		Mock.Get(keyPerson).Setup(x => x.ContactEmailAddress).Returns("test.@email.com");
+		Mock.Get(keyPerson).Setup(x => x.Role).Returns(KeyPersonRole.CEO);
+		Mock.Get(keyPerson).Setup(x => x.TimeInRole).Returns("1 year");
+		Mock.Get(keyPerson).Setup(x => x.Biography).Returns("test biography");
+
+		// act
+		result = subject.AddTrustKeyPerson(keyPerson.FirstName, keyPerson.Surname, keyPerson.DateOfBirth, keyPerson.ContactEmailAddress, keyPerson.Role,
+			keyPerson.TimeInRole, keyPerson.Biography);
+
+		result = subject.UpdateTrustKeyPerson(0, "Ted","John", keyPerson.DateOfBirth, keyPerson.ContactEmailAddress, keyPerson.Role,
+			keyPerson.TimeInRole, keyPerson.Biography);
+
+		// assert
+		DfeAssert.CommandSuccess(result);
+		subject.FormTrust!.KeyPeople.Should().NotBeNullOrEmpty();
+		subject.FormTrust!.KeyPeople.Should().HaveCount(1);
+		subject.FormTrust!.KeyPeople[0].FirstName.Should().Be("Ted");
+		subject.FormTrust!.KeyPeople[0].Surname.Should().Be("John");
+		subject.FormTrust!.KeyPeople[0].DateOfBirth.Should().Be(keyPerson.DateOfBirth);
+		subject.FormTrust!.KeyPeople[0].Role.Should().Be(keyPerson.Role);
+		subject.FormTrust!.KeyPeople[0].TimeInRole.Should().Be(keyPerson.TimeInRole);
+		subject.FormTrust!.KeyPeople[0].Biography.Should().Be(keyPerson.Biography);
+	}
+
+	[Fact]
+	public void FormMatDetailsDeleteTrustKeyPerson__SuccessReturned_Mutated()
+	{
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 1, ApplicationType.FormAMat);
+
+		var updateJoinTrust = _fixture.Create<IFormTrust>();
+		var formTrustDetails = _fixture.Create<FormTrustDetails>();
+
+		Mock.Get(updateJoinTrust).Setup(x => x.TrustDetails).Returns(formTrustDetails);
+		var dob = DateTime.Now.AddYears(-30);
+
+		var result = subject.SetFormTrustDetails(formTrustDetails);
+		var keyPerson = _fixture.Create<ITrustKeyPerson>();
+		Mock.Get(keyPerson).Setup(x => x.FirstName).Returns("Bob");
+		Mock.Get(keyPerson).Setup(x => x.Surname).Returns("Smith");
+		Mock.Get(keyPerson).Setup(x => x.DateOfBirth).Returns(dob);
+		Mock.Get(keyPerson).Setup(x => x.ContactEmailAddress).Returns("test.@email.com");
+		Mock.Get(keyPerson).Setup(x => x.Role).Returns(KeyPersonRole.CEO);
+		Mock.Get(keyPerson).Setup(x => x.TimeInRole).Returns("1 year");
+		Mock.Get(keyPerson).Setup(x => x.Biography).Returns("test biography");
+
+		// act
+		result = subject.AddTrustKeyPerson(keyPerson.FirstName, keyPerson.Surname, keyPerson.DateOfBirth,
+			keyPerson.ContactEmailAddress, keyPerson.Role,
+			keyPerson.TimeInRole, keyPerson.Biography);
+
+		result = subject.DeleteTrustKeyPerson(0);
+
+		// assert
+		DfeAssert.CommandSuccess(result);
+		subject.FormTrust!.KeyPeople.Should().NotBeNull();
+		subject.FormTrust!.KeyPeople.Should().HaveCount(0);
+	}
+
 
 	[Fact]
 	public void SetFormMatDetails___SuccessReturned_Mutated()

@@ -70,6 +70,16 @@ public class AcademisationContext : DbContext, IUnitOfWork
 					}
 				}
 
+				if (childType == typeof(FormTrustState))
+				{
+					var formTrustState = (FormTrustState)child;
+
+					foreach (var keyPerson in formTrustState.KeyPeople)
+					{
+						Remove(keyPerson);
+					}
+				}
+
 				Remove(child);
 			}
 		}
