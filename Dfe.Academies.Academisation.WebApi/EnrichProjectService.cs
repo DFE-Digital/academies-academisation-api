@@ -17,7 +17,7 @@
 				//probably best to open a new DI scope here an resolve stateful dependencies (anything using dbcontext)
 				//simulate per request lifetime
 				//get projects that need LA data
-				//get LA data from academisation api, handle service failure
+				//get LA data from academies api, handle service failure
 				//log any issues
 				//update projects
 				_logger.LogInformation("Enrich Project Service running at: {time}", DateTimeOffset.Now);
