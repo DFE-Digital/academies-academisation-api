@@ -6,11 +6,14 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 	{
 		private readonly ILogger<EnrichProjectService> _logger;
 		private readonly IServiceScopeFactory _factory;
+		private readonly int _delayInMilliseconds;
 
-		public EnrichProjectService(ILogger<EnrichProjectService> logger, IServiceScopeFactory factory)
+		public EnrichProjectService(ILogger<EnrichProjectService> logger, IServiceScopeFactory factory,
+			IConfiguration config)
 		{
 			_logger = logger;
 			_factory = factory;
+			_delayInMilliseconds = config.GetValue<int?>("DatabasePollingDelay") ?? 60_000;
 		}
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,7 +34,7 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 						_logger.LogError("Error enriching project", ex);
 					}
 
-					await Task.Delay(60_000, stoppingToken);
+					await Task.Delay(_delayInMilliseconds, stoppingToken);
 				}
 			}
 		}
