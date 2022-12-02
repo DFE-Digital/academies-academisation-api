@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 		{
 			var incompleteProjects = await _incompleteProjectsGetDataQuery.GetIncompleteProjects();
 
-			if (incompleteProjects == null)
+			if (incompleteProjects == null || !incompleteProjects.Any())
 			{
 				_logger.LogInformation("No projects requiring enrichment found.");
 				return;
