@@ -33,8 +33,6 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			// mock establishment
 			_establishment = _fixture.Create<Establishment>();
 			_httpClientFactory = new Mock<IHttpClientFactory>();
-			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/*")
-					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
 
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
 			httpClient.BaseAddress = new Uri("http://localhost");

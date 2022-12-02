@@ -27,7 +27,6 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public async Task ProjectExists___GetProject()
 		{
 			// arrange
-			// arrange
 			(ProjectDetails projectDetails1, ProjectState projectState1) = CreateTestProject(region: "region1");
 			(ProjectDetails projectDetails2, ProjectState projectState2) = CreateTestProject("localAuth2");
 			(_, ProjectState projectState3) = CreateTestProject("localAuth3", "region3");
