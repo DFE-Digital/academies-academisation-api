@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
@@ -31,6 +31,8 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.ThenInclude(x => x.Loans)
 				.Include(x => x.Schools)
 				.ThenInclude(x => x.Leases)
+				.Include(x => x.FormTrust)
+				.ThenInclude(x => x.KeyPeople)
 				.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.Id == (int)id))?.MapToDomain(_mapper);
 		}

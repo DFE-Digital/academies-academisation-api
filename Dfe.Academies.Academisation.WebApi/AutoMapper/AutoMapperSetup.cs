@@ -5,7 +5,6 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
-using Dfe.Academies.Academisation.WebApi.AutoMapper;
 
 namespace Dfe.Academies.Academisation.Service.AutoMapper;
 
@@ -27,12 +26,14 @@ public static class AutoMapperSetup
 
 		profile.CreateMap<FormTrustState, IFormTrust>()
 			.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
-			.ReverseMap();
+			.ForMember(dest => dest.KeyPeople, opt => opt.Ignore())
+			.ReverseMap().ForMember(x => x.KeyPeople, opt => opt.Ignore());
 
 		profile.CreateMap<FormTrustState, FormTrust>()
 			.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
 			.ForCtorParam(nameof(FormTrust.TrustDetails), opt => opt.MapFrom(src => src))
-			.ReverseMap();
+			.ForCtorParam(nameof(FormTrust.KeyPeople), (opt) => opt.MapFrom(x => x.KeyPeople))
+			.ReverseMap();//.ForMember(x => x.KeyPeople, opt => opt.Ignore());
 
 		profile.CreateMap<IFormTrust, ApplicationFormTrustServiceModel>()
 			.ConvertUsing((wrapper, destination, context) => new ApplicationFormTrustServiceModel(
@@ -53,6 +54,11 @@ public static class AutoMapperSetup
 				wrapper.TrustDetails.FormTrustGrowthPlansYesNo,
 				wrapper.TrustDetails.FormTrustImprovementSupport,
 				wrapper.TrustDetails.FormTrustImprovementStrategy,
-				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor));
+				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor,
+				wrapper.KeyPeople.Select(x => new TrustKeyPersonServiceModel(x.Id, x.FirstName, x.Surname, x.DateOfBirth, x.ContactEmailAddress, x.Role, x.TimeInRole, x.Biography)).ToList()));
+
+		profile.CreateMap<TrustKeyPersonState, ITrustKeyPerson>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonState, TrustKeyPerson>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonServiceModel, TrustKeyPerson>().ReverseMap();
 	}
 }

@@ -33,6 +33,12 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			// mock establishment
 			_establishment = _fixture.Create<Establishment>();
 			_httpClientFactory = new Mock<IHttpClientFactory>();
+			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/*")
+					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
+
+			var httpClient = _mockHttpMessageHandler.ToHttpClient();
+			httpClient.BaseAddress = new Uri("http://localhost");
+			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
 
 			// create command
 			_sut = new EnrichProjectCommand(
@@ -48,6 +54,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			// Arrange
 			var (project1, project2, project3) = ( CreateProject(1), CreateProject(1), CreateProject(1, "Bristol", "South West") );
 			_context.Projects.AddRange(project1, project2, project3);
+
 			await _context.SaveChangesAsync();
 
 			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/{project1.Urn}")

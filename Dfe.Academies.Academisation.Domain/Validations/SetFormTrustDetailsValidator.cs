@@ -1,8 +1,9 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using FluentValidation;
 
-namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+namespace Dfe.Academies.Academisation.Domain.Validations;
 
 public class SetFormTrustDetailsValidator
 	: AbstractValidator<Application>
