@@ -1,0 +1,83 @@
+﻿using AutoFixture;
+using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Data.Establishment;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.IData.Establishment;
+using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Newtonsoft.Json;
+using RichardSzalay.MockHttp;
+
+namespace Dfe.Academies.Academisation.SubcutaneousTest
+{
+	public class EnrichProjectCommandTests
+	{
+		private readonly AcademisationContext _context;
+		private readonly Mock<IHttpClientFactory> _httpClientFactory;
+		private readonly MockHttpMessageHandler _mockHttpMessageHandler = new MockHttpMessageHandler();
+		private readonly EnrichProjectCommand _sut;
+
+		private readonly Establishment _establishment;
+
+		private readonly Fixture _fixture = new Fixture();
+
+		public EnrichProjectCommandTests()
+		{
+			_context = new TestProjectContext().CreateContext();
+
+			// mock establishment
+			_establishment = _fixture.Create<Establishment>();
+			_httpClientFactory = new Mock<IHttpClientFactory>();
+			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/*")
+					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
+
+			var httpClient = _mockHttpMessageHandler.ToHttpClient();
+			httpClient.BaseAddress = new Uri("http://localhost");
+			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
+
+			// create command
+			_sut = new EnrichProjectCommand(
+				Mock.Of<ILogger<EnrichProjectCommand>>(),
+				new IncompleteProjectsGetDataQuery(_context),
+				new EstablishmentGetDataQuery(Mock.Of<ILogger<EstablishmentGetDataQuery>>(), _httpClientFactory.Object),
+				new ProjectUpdateDataCommand(_context));
+		}
+
+		[Fact]
+		public async Task SomeProjectsAreIncomplete__EnrichIncompleteProjectsWithMissingData()
+		{
+			var (project1, project2, project3) = ( CreateProject(1), CreateProject(1), CreateProject(1, "Bristol", "South West") );
+			_context.Projects.AddRange(project1, project2, project3);
+
+			await _context.SaveChangesAsync();
+
+			await _sut.Execute();
+
+			var updatedProject1 = await _context.Projects.FirstAsync(p => p.Id == project1.Id);
+			var updatedProject2 = await _context.Projects.FirstAsync(p => p.Id == project2.Id);
+			var updatedProject3 = await _context.Projects.FirstAsync(p => p.Id == project3.Id);
+
+			Assert.Multiple(
+				() => Assert.Equal(_establishment.LocalAuthorityName, updatedProject1.LocalAuthority),
+				() => Assert.Equal(_establishment.Gor.Name, updatedProject1.Region),
+				() => Assert.Equal(_establishment.LocalAuthorityName, updatedProject2.LocalAuthority),
+				() => Assert.Equal(_establishment.Gor.Name, updatedProject2.Region),
+				() => Assert.Equal("Bristol", updatedProject3.LocalAuthority),
+				() => Assert.Equal("South West", updatedProject3.Region)
+			);
+		}
+
+		private ProjectState CreateProject(int? urn = 0, string? la = null, string? region = null)
+		{
+			return _fixture.Build<ProjectState>()
+							.With(p => p.LocalAuthority, la)
+							.With(p => p.Urn, urn)
+							.With(p => p.Region, region)
+							.Create();
+		}
+	}
+}

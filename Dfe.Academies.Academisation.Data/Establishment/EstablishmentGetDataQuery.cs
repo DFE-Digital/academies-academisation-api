@@ -1,25 +1,29 @@
 ﻿using System.Net.Http.Json;
 using Dfe.Academies.Academisation.IData.Establishment;
+using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Data.Establishment
 {
 	public class EstablishmentGetDataQuery : IEstablishmentGetDataQuery
 	{
-		private readonly HttpClient _httpClient;
+		private readonly ILogger<EstablishmentGetDataQuery> _logger;
+		private readonly IHttpClientFactory _httpClientFactory;
 
-		public EstablishmentGetDataQuery(IHttpClientFactory httpClientFactory)
+		public EstablishmentGetDataQuery(ILogger<EstablishmentGetDataQuery> logger, IHttpClientFactory httpClientFactory)
 		{
-			_httpClient = httpClientFactory.CreateClient("AcademiesApi");
+			_logger = logger;
+			_httpClientFactory = httpClientFactory;
 		}
 
 		public async Task<IData.Establishment.Establishment?> GetEstablishment(int urn)
 		{
-			var response = await _httpClient.GetAsync($"/establishment/urn/{urn}");
+			var httpClient = _httpClientFactory.CreateClient("AcademiesApi");
+			var response = await httpClient.GetAsync($"/establishment/urn/{urn}");
 
-			if (response == null || !response.IsSuccessStatusCode)
+			if (!response.IsSuccessStatusCode)
 			{
-				// Log something
-				return new IData.Establishment.Establishment();
+				_logger.LogError("Request for establishment failed for urn - {urn}, statuscode - {statusCode}", urn, response!.StatusCode);
+				return null;
 			}
 
 			return await response.Content.ReadFromJsonAsync<IData.Establishment.Establishment>();
