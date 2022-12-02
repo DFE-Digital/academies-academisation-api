@@ -30,8 +30,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Services
 			serviceProvider.Setup(x => x.GetService(typeof(IServiceScopeFactory))).Returns(serviceScopeFactory.Object);
 
 			IConfiguration configuration = new ConfigurationBuilder()
-				.AddInMemoryCollection(new Dictionary<string, string>()
-					{ { "DatabasePollingDelay", "100" } })
+				.AddInMemoryCollection(new Dictionary<string, string> { { "DatabasePollingDelay", "100" } })
 				.Build();
 
 			_sut = new EnrichProjectService(Mock.Of<ILogger<EnrichProjectService>>(), serviceScopeFactory.Object,
@@ -41,11 +40,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Services
 		[Fact]
 		public async Task StartAsync__ExecutesCommand__WaitsAppropriateTime__AndGoesAgain()
 		{
-			await _sut.StartAsync(new CancellationTokenSource(500).Token);
+			await _sut.StartAsync(new CancellationTokenSource(550).Token);
 
-			await Task.Delay(500);
+			await Task.Delay(520);
 
-			_enrichProjectCommand.Verify(m => m.Execute(), Times.Exactly(5));
+			_enrichProjectCommand.Verify(m => m.Execute(), Times.AtLeast(5));
 
 			_sut.Dispose();
 		}
@@ -57,11 +56,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Services
 				.Throws<Exception>()
 				.PassAsync();
 
-			await _sut.StartAsync(new CancellationTokenSource(500).Token);
+			await _sut.StartAsync(new CancellationTokenSource(550).Token);
 
-			await Task.Delay(200);
+			await Task.Delay(300);
 
-			_enrichProjectCommand.Verify(m => m.Execute(), Times.Exactly(2));
+			_enrichProjectCommand.Verify(m => m.Execute(), Times.AtLeast(2));
 
 			_sut.Dispose();
 		}

@@ -88,11 +88,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 
 		}
 
-		public static Mock<ILogger<T>> VerifyLogging<T>(Mock<ILogger<T>> logger, string expectedMessage, LogLevel expectedLogLevel = LogLevel.Information, Times? times = null)
+		public static Mock<ILogger<T>> VerifyLogging<T>(Mock<ILogger<T>> logger, string? expectedMessage, LogLevel expectedLogLevel = LogLevel.Information, Times? times = null)
 		{
 			times ??= Times.Once();
 
-			Func<object, Type, bool> state = (v, t) => v!.ToString().CompareTo(expectedMessage) == 0;
+			Func<object, Type, bool> state = (v, t) => v?.ToString()?.CompareTo(expectedMessage) == 0;
 
 			logger.Verify(
 				x => x.Log(
@@ -100,7 +100,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 					It.IsAny<EventId>(),
 					It.Is<It.IsAnyType>((v, t) => state(v, t)),
 					It.IsAny<Exception>(),
-					It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), (Times)times);
+					It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)), (Times)times);
 
 			return logger;
 		}
