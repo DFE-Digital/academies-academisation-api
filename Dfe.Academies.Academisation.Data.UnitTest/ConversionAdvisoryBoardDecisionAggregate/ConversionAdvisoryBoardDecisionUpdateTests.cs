@@ -36,7 +36,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		 	.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
 
 		//Act & Assert
-		await Assert.ThrowsAsync<ApplicationException>(() => query.Execute(_mockDecision.Object));
+		await Assert.ThrowsAsync<InvalidOperationException>(() => query.Execute(_mockDecision.Object));
 	}
 
 	[Fact]
