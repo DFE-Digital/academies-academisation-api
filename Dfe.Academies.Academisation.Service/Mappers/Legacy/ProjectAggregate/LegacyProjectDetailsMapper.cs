@@ -15,6 +15,7 @@ internal static class LegacyProjectDetailsMapper
 			Urn = detailsToUpdate.Urn ?? existingProject.Details.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId ?? existingProject.Details.IfdPipelineId,
 			SchoolName = detailsToUpdate.SchoolName ?? existingProject.Details.SchoolName,
+			LocalAuthority = detailsToUpdate.LocalAuthority ?? existingProject.Details.LocalAuthority,
 			ApplicationReferenceNumber = detailsToUpdate.ApplicationReferenceNumber ?? existingProject.Details.ApplicationReferenceNumber,
 			ProjectStatus = detailsToUpdate.ProjectStatus ?? existingProject.Details.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate ?? existingProject.Details.ApplicationReceivedDate,
@@ -48,6 +49,7 @@ internal static class LegacyProjectDetailsMapper
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? existingProject.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? existingProject.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? existingProject.Details.ConversionSupportGrantChangeReason,
+			Region = detailsToUpdate.Region ?? existingProject.Details.Region,
 
 			// general info
 			SchoolPhase = detailsToUpdate.SchoolPhase ?? existingProject.Details.SchoolPhase,

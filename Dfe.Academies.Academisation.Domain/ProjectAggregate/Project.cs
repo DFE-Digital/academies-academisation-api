@@ -86,6 +86,7 @@ public class Project : IProject
 			Urn = detailsToUpdate.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId,
 			SchoolName = detailsToUpdate.SchoolName,
+			LocalAuthority = detailsToUpdate.LocalAuthority,
 			ApplicationReferenceNumber = detailsToUpdate.ApplicationReferenceNumber,
 			ProjectStatus = detailsToUpdate.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
@@ -119,6 +120,7 @@ public class Project : IProject
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
+			Region	= detailsToUpdate.Region,
 
 			// general info
 			SchoolPhase = detailsToUpdate.SchoolPhase,
