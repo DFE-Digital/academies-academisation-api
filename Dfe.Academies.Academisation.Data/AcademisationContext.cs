@@ -38,7 +38,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		if (entity is null)
 		{
-			throw new ApplicationException($"An entity matching Id: {baseEntity.Id} is not being tracked");
+			throw new InvalidOperationException($"An entity matching Id: {baseEntity.Id} is not being tracked");
 		}
 
 		var childCollections = entity.Collections
@@ -70,16 +70,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 					}
 				}
 
-				if (childType == typeof(FormTrustState))
-				{
-					var formTrustState = (FormTrustState)child;
-
-					foreach (var keyPerson in formTrustState.KeyPeople)
-					{
-						Remove(keyPerson);
-					}
-				}
-
 				Remove(child);
 			}
 		}
@@ -101,7 +91,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		/*
 		 * await _mediator.DispatchDomainEventsAsync(this);
 		 */
-		int result = await base.SaveChangesAsync(cancellationToken);
+		await base.SaveChangesAsync(cancellationToken);
 		return true;
 	}
 

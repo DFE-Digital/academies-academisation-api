@@ -49,7 +49,7 @@ public class ApplicationUpdateDataCommandTests
 		 	.Returns(new List<ISchool>());
 
 		//Act & Assert
-		await Assert.ThrowsAsync<ApplicationException>(() => _subject.Execute(mockApplication.Object));
+		await Assert.ThrowsAsync<InvalidOperationException>(() => _subject.Execute(mockApplication.Object));
 	}
 
 	[Fact]

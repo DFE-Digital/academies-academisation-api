@@ -149,9 +149,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpDelete("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "DeleteKeyPerson")]
-		public async Task<ActionResult> UpdateKeyPerson(int applicationId, int keyPersonId, [FromBody] DeleteTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> DeleteKeyPerson(int applicationId, int keyPersonId, CancellationToken cancellationToken)
 		{
-			var result = await _mediator.Send(command with { ApplicationId = applicationId, KeyPersonId = keyPersonId }, cancellationToken).ConfigureAwait(false);
+			var result = await _mediator.Send(new DeleteTrustKeyPersonCommand(applicationId, keyPersonId), cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
