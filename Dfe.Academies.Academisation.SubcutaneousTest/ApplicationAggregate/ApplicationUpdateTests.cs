@@ -44,6 +44,7 @@ public class ApplicationUpdateTests
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly ApplicationController _applicationController;
+	private readonly ITrustQueryService _trustQueryService;
 
 	public ApplicationUpdateTests()
 	{
@@ -55,6 +56,7 @@ public class ApplicationUpdateTests
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
+		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>().Object;
 
@@ -63,6 +65,7 @@ public class ApplicationUpdateTests
 			_applicationGetQuery,
 			_applicationUpdateCommand,
 			_applicationsListByUserQuery,
+			_trustQueryService,
 			_mediator,
 			_applicationLogger);
 

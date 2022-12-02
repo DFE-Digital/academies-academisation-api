@@ -29,10 +29,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private readonly Mock<ILogger<ApplicationController>> _applicationLogger = new ();
 		private readonly Mock<IMediator> _mockMediator = new();
 		private readonly ApplicationController _subject;
+		private readonly Mock<ITrustQueryService>_trustQueryService = new();
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _listByUserMock.Object, _mockMediator.Object, _applicationLogger.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _listByUserMock.Object, _trustQueryService.Object, _mockMediator.Object, _applicationLogger.Object);
 		}
 
 		[Fact]

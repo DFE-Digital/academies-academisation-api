@@ -27,6 +27,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 					.ThenInclude(a => a.Leases)
 				.Include(a => a.JoinTrust)
 				.Include(a => a.FormTrust)
+					.ThenInclude(a => a.KeyPeople)
 				.SingleOrDefaultAsync(a => a.Id == id);
 
 			return applicationState?.MapToDomain(this.mapper);

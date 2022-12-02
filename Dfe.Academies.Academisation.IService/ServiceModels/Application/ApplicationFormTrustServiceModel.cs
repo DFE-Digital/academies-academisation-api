@@ -24,5 +24,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Application
 		bool? FormTrustGrowthPlansYesNo,
 		string? FormTrustImprovementSupport,
 		string? FormTrustImprovementStrategy,
-		string? FormTrustImprovementApprovedSponsor);
+		string? FormTrustImprovementApprovedSponsor,
+		List<TrustKeyPersonServiceModel> KeyPeople);
 }
