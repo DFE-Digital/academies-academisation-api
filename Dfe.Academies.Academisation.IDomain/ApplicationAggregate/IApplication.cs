@@ -25,7 +25,7 @@ public interface IApplication
 	/// This is in the format $"A2B_{ApplicationId}"
 	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
 	/// </summary>
-	string ApplicationReference { get; set; }
+	string? ApplicationReference { get; set; }
 
 	CommandResult Update(
 		ApplicationType applicationType,

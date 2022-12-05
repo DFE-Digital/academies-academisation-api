@@ -28,7 +28,7 @@ public class ApplicationState : BaseEntity
 	/// This is in the format $"A2B_{ApplicationId}"
 	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
 	/// </summary>
-	public string ApplicationReference { get; set; }
+	public string? ApplicationReference { get; set; }
 
 	public static ApplicationState MapFromDomain(IApplication application, IMapper mapper)
 	{
