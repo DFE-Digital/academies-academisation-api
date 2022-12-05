@@ -18,6 +18,7 @@ internal static class ApplicationServiceModelMapper
 				.Select(ApplicationSchoolServiceModelMapper.FromDomain).ToList(),
 			mapper.Map<ApplicationJoinTrustServiceModel>(application.JoinTrust),
 			mapper.Map<ApplicationFormTrustServiceModel>(application.FormTrust),
-			application.ApplicationSubmittedDate);
+			application.ApplicationSubmittedDate,
+			application.ApplicationReference);
 	}
 }
