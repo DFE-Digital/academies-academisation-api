@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 {
