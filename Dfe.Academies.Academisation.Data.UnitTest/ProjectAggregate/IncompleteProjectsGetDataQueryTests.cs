@@ -27,13 +27,13 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public async Task ProjectExists___GetProject()
 		{
 			// arrange
-			(ProjectDetails projectDetails1, ProjectState projectState1) = CreateTestProject(region: "region1");
-			(ProjectDetails projectDetails2, ProjectState projectState2) = CreateTestProject("localAuth2");
-			(_, ProjectState projectState3) = CreateTestProject("localAuth3", "region3");
+			(ProjectDetails incompleteProjectDetails1, ProjectState incompleteProjectState1) = CreateTestProject(region: "region1");
+			(ProjectDetails incompleteProjectDetails2, ProjectState incompleteProjectState2) = CreateTestProject("localAuth2");
+			(_, ProjectState completeProjectState3) = CreateTestProject("localAuth3", "region3");
 
-			_context.Projects.Add(projectState1);
-			_context.Projects.Add(projectState2);
-			_context.Projects.Add(projectState3);
+			_context.Projects.Add(incompleteProjectState1);
+			_context.Projects.Add(incompleteProjectState2);
+			_context.Projects.Add(completeProjectState3);
 
 			await _context.SaveChangesAsync();
 
@@ -43,8 +43,8 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			// assert
 			Assert.Multiple(
 				() => Assert.Equal(2, result.Count),
-				() => Assert.Equivalent(projectDetails1, result.First().Details),
-				() => Assert.Equivalent(projectDetails2, result.Last().Details)
+				() => Assert.Equivalent(incompleteProjectDetails1, result.First().Details),
+				() => Assert.Equivalent(incompleteProjectDetails2, result.Last().Details)
 			);
 		}
 

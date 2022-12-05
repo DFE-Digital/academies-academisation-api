@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -16,7 +11,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 {
 	public class EnrichProjectCommandTests
 	{
-		private readonly EnrichProjectCommand _sut;
+		private readonly EnrichProjectCommand _subject;
 		private readonly Mock<IIncompleteProjectsGetDataQuery> _incompleteProjectGetDataQuery;
 		private readonly Mock<IEstablishmentGetDataQuery> _establishmentGetDataQuery;
 		private readonly Mock<IProjectUpdateDataCommand> _updateCommand;
@@ -31,7 +26,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			_updateCommand = new Mock<IProjectUpdateDataCommand>();
 			_logger = new Mock<ILogger<EnrichProjectCommand>>();
 
-			_sut = new EnrichProjectCommand(
+			_subject = new EnrichProjectCommand(
 				_logger.Object,
 				_incompleteProjectGetDataQuery.Object,
 				_establishmentGetDataQuery.Object,
@@ -41,7 +36,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		[Fact]
 		public async Task NoIncompleteProjects__LogAndReturn()
 		{
-			await _sut.Execute();
+			await _subject.Execute();
 
 			Assert.Multiple(
 				() => VerifyLogging(_logger, "No projects requiring enrichment found."),
@@ -62,7 +57,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 				.ReturnsAsync(_fixture.Create<Establishment>())
 				.ReturnsAsync(_fixture.Create<Establishment>());
 
-			await _sut.Execute();
+			await _subject.Execute();
 
 			Assert.Multiple(
 				() => VerifyLogging(_logger, $"No schools found for project - {projects.First().Id}, urn - {projects.First().Details.Urn}",
@@ -81,11 +76,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			_establishmentGetDataQuery.Setup(m => m.GetEstablishment(It.IsAny<int>()))
 				.ReturnsAsync(_fixture.Create<Establishment>());
 
-			await _sut.Execute();
+			await _subject.Execute();
 
-			Assert.Multiple(
-				() => _updateCommand.Verify(m => m.Execute(project), Times.Once));
-
+			_updateCommand.Verify(m => m.Execute(project), Times.Once);
 		}
 
 		public static Mock<ILogger<T>> VerifyLogging<T>(Mock<ILogger<T>> logger, string? expectedMessage, LogLevel expectedLogLevel = LogLevel.Information, Times? times = null)

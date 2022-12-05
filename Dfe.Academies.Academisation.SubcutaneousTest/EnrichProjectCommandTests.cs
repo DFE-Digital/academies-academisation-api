@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		private readonly AcademisationContext _context;
 		private readonly Mock<IHttpClientFactory> _httpClientFactory;
 		private readonly MockHttpMessageHandler _mockHttpMessageHandler = new MockHttpMessageHandler();
-		private readonly EnrichProjectCommand _sut;
+		private readonly EnrichProjectCommand _subject;
 
 		private readonly Establishment _establishment;
 
@@ -39,7 +39,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
 
 			// create command
-			_sut = new EnrichProjectCommand(
+			_subject = new EnrichProjectCommand(
 				Mock.Of<ILogger<EnrichProjectCommand>>(),
 				new IncompleteProjectsGetDataQuery(_context),
 				new EstablishmentGetDataQuery(Mock.Of<ILogger<EstablishmentGetDataQuery>>(), _httpClientFactory.Object),
@@ -62,7 +62,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
 
 			// Act
-			await _sut.Execute();
+			await _subject.Execute();
 
 			var updatedProject1 = await _context.Projects.FirstAsync(p => p.Id == project1.Id);
 			var updatedProject2 = await _context.Projects.FirstAsync(p => p.Id == project2.Id);
@@ -93,7 +93,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
 
 			// Act
-			await _sut.Execute();
+			await _subject.Execute();
 
 			var updatedProject1 = await _context.Projects.FirstAsync(p => p.Id == project1.Id);
 			var updatedProject2 = await _context.Projects.FirstAsync(p => p.Id == project2.Id);
