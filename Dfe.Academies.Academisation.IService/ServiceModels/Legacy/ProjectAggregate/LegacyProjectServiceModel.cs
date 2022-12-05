@@ -7,7 +7,8 @@ public record LegacyProjectServiceModel(
 	int Id,
 	int? Urn = null,
 	[property: JsonIgnore] int? IfdPipelineId = null,
-	string? SchoolName = null,	
+	string? SchoolName = null,
+	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
 	string? ProjectStatus = null,
 	DateTime? ApplicationReceivedDate = null,
@@ -41,8 +42,9 @@ public record LegacyProjectServiceModel(
 	bool? SchoolAndTrustInformationSectionComplete = null,
 	decimal? ConversionSupportGrantAmount = null,  // had to make this nullable or move it to the top
 	string? ConversionSupportGrantChangeReason = null,
+	string? Region = null,
 
-	// general info		
+	// general info
 	[property: JsonIgnore] string? SchoolPhase = null,
 	[property: JsonIgnore] string? AgeRange = null,
 	[property: JsonIgnore] string? SchoolType = null,
