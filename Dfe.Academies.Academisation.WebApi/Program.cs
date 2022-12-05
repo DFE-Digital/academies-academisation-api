@@ -1,22 +1,19 @@
 ﻿using System.Reflection;
 using System.Text.Json;
-using Autofac;
-using Autofac.Core;
-using Autofac.Extensions.DependencyInjection;
-using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -34,11 +31,11 @@ using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.Queries;
-using Dfe.Academies.Academisation.WebApi.AutofacModules;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.Filters;
 using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
+using Dfe.Academies.Academisation.WebApi.Services;
 using Dfe.Academies.Academisation.WebApi.Swagger;
 using FluentValidation;
 using MediatR;
@@ -62,7 +59,7 @@ builder.Host.ConfigureLogging((context, logging) =>
 {
 	logging.AddConfiguration(context.Configuration.GetSection("Logging"));
 
-	logging.ClearProviders();	
+	logging.ClearProviders();
 
 	logging.AddJsonConsole(options =>
 	{
@@ -100,6 +97,7 @@ builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
+builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
@@ -128,6 +126,8 @@ builder.Services.AddScoped<ILegacyProjectListGetQuery, LegacyProjectListGetQuery
 builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
 builder.Services.AddScoped<IProjectStatusesDataQuery, ProjectStatusesDataQuery>();
 builder.Services.AddScoped<IProjectGetStatusesQuery, ProjectGetStatusesQuery>();
+builder.Services.AddScoped<IEstablishmentGetDataQuery, EstablishmentGetDataQuery>();
+builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 
 //utils
@@ -153,33 +153,23 @@ builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateL
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
-/*
- builder.Services.AddScoped<IRequest<CommandResult>, CreateLeaseCommand>();
-builder.Services.AddScoped<IRequest<CommandResult>, UpdateLeaseCommand>();
-builder.Services.AddScoped<IRequest<CommandResult>, DeleteLeaseCommand>();
-builder.Services.AddScoped<IRequest<CommandResult>, CreateLoanCommand>();
-builder.Services.AddScoped<IRequest<CommandResult>, UpdateLoanCommand>();
-builder.Services.AddScoped<IRequest<CommandResult>, DeleteLoanCommand>();
-builder.Services.AddScoped<IRequest<CommandResult>, SetAdditionalDetailsCommand>();
 
-builder.Services.AddScoped<AbstractValidator<CreateLeaseCommand>, CreateLeaseCommandValidator>();
-builder.Services.AddScoped<AbstractValidator<UpdateLeaseCommand>, UpdateLeaseCommandValidator>();
-builder.Services.AddScoped<AbstractValidator<CreateLoanCommand>, CreateLoanCommandValidator>();
-builder.Services.AddScoped<AbstractValidator<UpdateLoanCommand>, UpdateLoanCommandValidator>();
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!);
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(UpdateLoanCommandHandler))!);
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(CreateLoanCommandHandler))!);
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(DeleteLoanCommandHandler))!);
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(UpdateLeaseCommandHandler))!);
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(CreateLeaseCommandHandler))!);
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(DeleteLeaseCommandHandler))!);
-builder.Services.AddMediatR(Assembly.GetAssembly(typeof(SetAdditionalDetailsCommandHandler))!);
+builder.Services.AddHostedService<EnrichProjectService>();
 
-builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
-*/
-//builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-//builder.Host.ConfigureContainer<ContainerBuilder>(autofacBuilder => autofacBuilder.RegisterModule(new MediatorModule()));
-
+builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
+{
+	var configuration = sp.GetRequiredService<IConfiguration>();
+	var url = configuration.GetValue<string?>("AcademiesUrl");
+	if (!string.IsNullOrEmpty(url))
+	{
+		client.BaseAddress = new Uri(url);
+		client.DefaultRequestHeaders.Add("ApiKey", configuration.GetValue<string>("AcademiesApiKey"));
+	}
+	else
+	{
+		sp.GetRequiredService<ILogger<Program>>().LogError("Academies API http client not configured.");
+	}
+});
 
 var app = builder.Build();
 

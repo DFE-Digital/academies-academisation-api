@@ -14,6 +14,7 @@ internal static class LegacyProjectServiceModelMapper
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
+			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
@@ -47,6 +48,7 @@ internal static class LegacyProjectServiceModelMapper
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,  // had to make this nullable or move it to the top
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
+			Region = project.Details.Region,
 
 			// general info
 			SchoolPhase = project.Details.SchoolPhase,

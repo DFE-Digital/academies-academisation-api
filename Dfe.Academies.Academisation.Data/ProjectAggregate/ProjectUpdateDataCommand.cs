@@ -20,7 +20,7 @@ public class ProjectUpdateDataCommand : IProjectUpdateDataCommand
 		await _context.Projects.SingleAsync(p => p.Id == project.Id);
 
 		_context.ReplaceTracked(projectState);
-		
+
 		await _context.SaveChangesAsync();
 	}
 }

@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20221201171507_Add_LocalAuthority_and_Region_to_Project")]
+    partial class Add_LocalAuthority_and_Region_to_Project
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -608,55 +610,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ApplicationSchoolLoan", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustKeyPersonState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ApplicationFormTrustId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Biography")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactEmailAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TimeInRole")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationFormTrustId");
-
-                    b.ToTable("ApplicationFormTrustKeyPerson", "academisation");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
                     b.Property<int>("Id")
@@ -1074,13 +1027,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasForeignKey("ApplicationSchoolId");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.TrustKeyPersonState", b =>
-                {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", null)
-                        .WithMany("KeyPeople")
-                        .HasForeignKey("ApplicationFormTrustId");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
                     b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", null)
@@ -1111,11 +1057,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Navigation("Contributors");
 
                     b.Navigation("Schools");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", b =>
-                {
-                    b.Navigation("KeyPeople");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>

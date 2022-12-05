@@ -11,6 +11,7 @@ public class ProjectState : BaseEntity
 	public int Urn { get; set; }
 	public int? IfdPipelineId { get; set; }
 	public string? SchoolName { get; set; }
+	public string? LocalAuthority { get; set; }
 	public string? ApplicationReferenceNumber { get; set; }
 	public string? ProjectStatus { get; set; }
 	public DateTime? ApplicationReceivedDate { get; set; }
@@ -44,6 +45,7 @@ public class ProjectState : BaseEntity
 	public bool? SchoolAndTrustInformationSectionComplete { get; set; }
 	public decimal? ConversionSupportGrantAmount { get; set; }
 	public string? ConversionSupportGrantChangeReason { get; set; }
+	public string? Region { get; set; }
 
 	//general info
 	public string? SchoolPhase { get; set; }
@@ -120,6 +122,7 @@ public class ProjectState : BaseEntity
 		{
 			IfdPipelineId = IfdPipelineId,
 			SchoolName = SchoolName,
+			LocalAuthority = LocalAuthority,
 			ApplicationReferenceNumber = ApplicationReferenceNumber,
 			ProjectStatus = ProjectStatus,
 			ApplicationReceivedDate = ApplicationReceivedDate,
@@ -153,6 +156,7 @@ public class ProjectState : BaseEntity
 			SchoolAndTrustInformationSectionComplete = SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = ConversionSupportGrantChangeReason,
+			Region = Region,
 
 			// general info
 			SchoolPhase = SchoolPhase,
@@ -235,6 +239,7 @@ public class ProjectState : BaseEntity
 			Urn = project.Details.Urn,
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
+			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
@@ -268,6 +273,7 @@ public class ProjectState : BaseEntity
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
+			Region = project.Details.Region,
 
 			// general info
 			SchoolPhase = project.Details.SchoolPhase,

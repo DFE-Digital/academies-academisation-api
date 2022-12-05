@@ -6,6 +6,7 @@ public record ProjectDetails(
 	int Urn,
 	int? IfdPipelineId = null,
 	string? SchoolName = null,
+	string? LocalAuthority = null,
 	string? ApplicationReferenceNumber = null,
 	string? ProjectStatus = null,
 	DateTime? ApplicationReceivedDate = null,
@@ -39,6 +40,7 @@ public record ProjectDetails(
 	bool? SchoolAndTrustInformationSectionComplete = null,
 	decimal? ConversionSupportGrantAmount = null,
 	string? ConversionSupportGrantChangeReason = null,
+	string? Region = null,
 
 	// general info
 	string? SchoolPhase = null,
