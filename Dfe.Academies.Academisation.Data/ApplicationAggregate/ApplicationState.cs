@@ -21,6 +21,9 @@ public class ApplicationState : BaseEntity
 	public FormTrustState? FormTrust { get; set; }
 	public DateTime? ApplicationSubmittedDate { get; set; }
 
+	// MR:- below mods for Dynamics -> SQL server A2B external app conversion
+	public Guid? DynamicsApplicationId { get; set; }
+
 	public static ApplicationState MapFromDomain(IApplication application, IMapper mapper)
 	{
 		return new()

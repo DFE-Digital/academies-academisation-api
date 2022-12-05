@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
@@ -20,5 +15,8 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 		public string? ContactEmailAddress { get; set; }
 		public DateTime? DateOfBirth { get; set; }
 		public string Biography { get; set; }
+
+		// MR:- below mods for Dynamics -> SQL server A2B external app conversion
+		public Guid DynamicsKeyPersonId { get; set; }
 	}
 }
