@@ -21,6 +21,12 @@ public interface IApplication
 	DateTime? ApplicationSubmittedDate { get;  }
 	void SetIdsOnCreate(int applicationId, int conversionId);
 
+	/// <summary>
+	/// This is in the format $"A2B_{ApplicationId}"
+	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
+	/// </summary>
+	string ApplicationReference { get; set; }
+
 	CommandResult Update(
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
