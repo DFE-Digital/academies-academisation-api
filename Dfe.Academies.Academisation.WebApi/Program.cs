@@ -156,14 +156,14 @@ builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(Create
 
 builder.Services.AddHostedService<EnrichProjectService>();
 
-builder.Services.AddHttpClient(AcademiesApiOptions.Name, (sp, client) =>
+builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 {
 	var configuration = sp.GetRequiredService<IConfiguration>();
-	var academiesApiOptions = configuration.GetSection(AcademiesApiOptions.Name).Get<AcademiesApiOptions>();
-	if (!string.IsNullOrEmpty(academiesApiOptions?.Url))
+	var url = configuration.GetValue<string?>("AcademiesUrl");
+	if (!string.IsNullOrEmpty(url))
 	{
-		client.BaseAddress = new Uri(academiesApiOptions!.Url);
-		client.DefaultRequestHeaders.Add("ApiKey", academiesApiOptions.ApiKey);
+		client.BaseAddress = new Uri(url);
+		client.DefaultRequestHeaders.Add("ApiKey", configuration.GetValue<string>("AcademiesApiKey"));
 	}
 	else
 	{

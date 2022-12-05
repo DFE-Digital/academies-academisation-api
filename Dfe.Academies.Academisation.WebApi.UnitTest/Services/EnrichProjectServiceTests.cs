@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Services
 			serviceProvider.Setup(x => x.GetService(typeof(IServiceScopeFactory))).Returns(serviceScopeFactory.Object);
 
 			IConfiguration configuration = new ConfigurationBuilder()
-				.AddInMemoryCollection(new Dictionary<string, string> { { "DatabasePollingDelay", "100" } })
+				.AddInMemoryCollection(new Dictionary<string, string> { { "DatabasePollingDelay", "50" } })
 				.Build();
 
 			_subject = new EnrichProjectService(Mock.Of<ILogger<EnrichProjectService>>(), serviceScopeFactory.Object,
@@ -58,7 +58,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Services
 
 			await _subject.StartAsync(new CancellationTokenSource(550).Token);
 
-			await Task.Delay(300);
+			await Task.Delay(350);
 
 			_enrichProjectCommand.Verify(m => m.Execute(), Times.AtLeast(2));
 
