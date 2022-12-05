@@ -160,7 +160,7 @@ builder.Services.AddHttpClient(AcademiesApiOptions.Name, (sp, client) =>
 {
 	var configuration = sp.GetRequiredService<IConfiguration>();
 	var academiesApiOptions = configuration.GetSection(AcademiesApiOptions.Name).Get<AcademiesApiOptions>();
-	if (!string.IsNullOrEmpty(academiesApiOptions.Url))
+	if (!string.IsNullOrEmpty(academiesApiOptions?.Url))
 	{
 		client.BaseAddress = new Uri(academiesApiOptions!.Url);
 		client.DefaultRequestHeaders.Add("ApiKey", academiesApiOptions.ApiKey);
