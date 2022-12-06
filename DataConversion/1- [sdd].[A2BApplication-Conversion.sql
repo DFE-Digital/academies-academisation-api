@@ -4,7 +4,7 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 	/*** TODO:- set [academisation].[ConversionApplication].[Id] = 10000 ***/
 
 	/*** STEP 1 - populate [academisation].[ConversionApplication] ***/
-	-- TODO MR:- below are nullable - backfill as 4th / 5th step
+	-- MR:- below are nullable - backfill as 4th / 5th step
 	--,<FormTrustId, int,>
 	--,<JoinTrustId, int,>
 
@@ -18,19 +18,14 @@ BEGIN TRANSACTION PortDynamicsApplicationData
            ,[ApplicationSubmittedDate]
            ,[ApplicationReference]
            ,[DynamicsApplicationId])
---     VALUES
---           (<ApplicationType, nvarchar(max),>
---           ,<CreatedOn, datetime2(7),>
---           ,<LastModifiedOn, datetime2(7),>
---           ,<ApplicationStatus, nvarchar(max),>
---           ,<FormTrustId, int,>
---           ,<JoinTrustId, int,>
---           ,<ApplicationSubmittedDate, datetime2(7),>)
-
-	SELECT	[ApplicationType],
+	SELECT	[ApplicationType], -- TODO MR:- data conversion
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-		-- TODO:- the rest !!!!
+			[ApplicationStatusId], -- TODO MR:- data conversion
+			NULL as 'FormTrustId',
+			NULL as 'JoinTrustId',
+			--[ApplicationSubmitted]
+			NULL as 'ApplicationSubmittedDate',
 			[Name] as 'ApplicationReference',
 			[DynamicsApplicationId]
 	FROM [sdd].[A2BApplication]
@@ -44,20 +39,16 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			   ,[ChangesToTrust]
 			   ,[ChangesToTrustExplained]
 			   ,[ChangesToLaGovernance]
-			   ,[ChangesToLaGovernanceExplained])
-	--     VALUES
-	--           (<UKPRN, int,>
-	--           ,<TrustName, nvarchar(max),>
-	--           ,<CreatedOn, datetime2(7),>
-	--           ,<LastModifiedOn, datetime2(7),>
-	--           ,<ChangesToTrust, int,>
-	--           ,<ChangesToTrustExplained, nvarchar(max),>
-	--           ,<ChangesToLaGovernance, bit,>
-	--           ,<ChangesToLaGovernanceExplained, nvarchar(max),>)
-
-	SELECT 	GETDATE() as 'CreatedOn',
+			   ,[ChangesToLaGovernanceExplained]
+			   ,[DynamicsApplicationId])
+	SELECT 	[TrustId],
+			[TrustName],
+			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-		-- TODO:- the rest !!!!
+			[ChangesToTrust],
+			[ChangesToTrustExplained],
+			[ChangesToLaGovernance],
+			[ChangesToLaGovernanceExplained],
 			[DynamicsApplicationId]
 	FROM [sdd].[A2BApplication]
 	WHERE ApplicationType = 'JAM';
@@ -82,12 +73,10 @@ BEGIN TRANSACTION PortDynamicsApplicationData
            ,[FormTrustReasonGeoAreas]
            ,[FormTrustReasonImproveTeaching]
            ,[FormTrustReasonVision]
-           ,[TrustApproverEmail])
+           ,[TrustApproverEmail]
+		   ,[DynamicsApplicationId])
      --VALUES
-     --      (<TrustApproverName, nvarchar(max),>
-     --      ,<CreatedOn, datetime2(7),>
-     --      ,<LastModifiedOn, datetime2(7),>
-     --      ,<FormTrustGrowthPlansYesNo, bit,>
+     --      (<FormTrustGrowthPlansYesNo, bit,>
      --      ,<FormTrustImprovementApprovedSponsor, nvarchar(max),>
      --      ,<FormTrustImprovementStrategy, nvarchar(max),>
      --      ,<FormTrustImprovementSupport, nvarchar(max),>
@@ -103,7 +92,8 @@ BEGIN TRANSACTION PortDynamicsApplicationData
      --      ,<FormTrustReasonImproveTeaching, nvarchar(max),>
      --      ,<FormTrustReasonVision, nvarchar(max),>
      --      ,<TrustApproverEmail, nvarchar(max),>)
-	SELECT 	GETDATE() as 'CreatedOn',
+	SELECT 	[TrustApproverName],
+			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
 		-- TODO:- the rest !!!!
 			[DynamicsApplicationId]
