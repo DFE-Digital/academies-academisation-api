@@ -21,6 +21,15 @@ public class ApplicationState : BaseEntity
 	public FormTrustState? FormTrust { get; set; }
 	public DateTime? ApplicationSubmittedDate { get; set; }
 
+	// MR:- below mods for Dynamics -> SQL server A2B external app conversion
+	public Guid? DynamicsApplicationId { get; set; }
+
+	/// <summary>
+	/// This is in the format $"A2B_{ApplicationId}"
+	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
+	/// </summary>
+	public string? ApplicationReference { get; set; }
+
 	public static ApplicationState MapFromDomain(IApplication application, IMapper mapper)
 	{
 		return new()
@@ -38,7 +47,8 @@ public class ApplicationState : BaseEntity
 				.ToHashSet(),
 			FormTrust = mapper.Map<FormTrustState>(application.FormTrust),
 			JoinTrust = mapper.Map<JoinTrustState>(application.JoinTrust),
-			ApplicationSubmittedDate = application.ApplicationSubmittedDate
+			ApplicationSubmittedDate = application.ApplicationSubmittedDate,
+			ApplicationReference = application.ApplicationReference
 		};
 	}
 

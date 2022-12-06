@@ -19,6 +19,9 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 
 		public string Schedule { get; set; }
 
+		// MR:- below mods for Dynamics -> SQL server A2B external app conversion
+		public Guid? DynamicsSchoolLoanId { get; set; }
+
 		public static Loan MapFromDomain(ILoan loan)
 		{
 			return new Loan(loan.Id, loan.Amount, loan.Purpose, loan.Provider, loan.InterestRate, loan.Schedule);

@@ -138,6 +138,9 @@ public class ApplicationSchoolState : BaseEntity
 	// Reason for joning trust
 	public string? SchoolConversionReasonsForJoining { get; set; }
 
+	// MR:- below mods for Dynamics -> SQL server A2B external app conversion
+	public Guid? DynamicsApplyingSchoolId { get; set; }
+
 	public static ApplicationSchoolState MapFromDomain(ISchool applyingSchool)
 	{
 		return new()

@@ -14,7 +14,10 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 		public string Purpose { get; set; }
 		public string ValueOfAssets { get; set; }
 		public string ResponsibleForAssets { get; set; }
-		
+
+		// MR:- below mods for Dynamics -> SQL server A2B external app conversion
+		public Guid? DynamicsSchoolLeaseId { get; set; }
+
 		public static Lease MapFromDomain(ILease lease)
 		{
 			return new Lease(lease.Id, lease.LeaseTerm, lease.RepaymentAmount, lease.InterestRate, lease.PaymentsToDate, lease.Purpose, lease.ValueOfAssets, lease.ResponsibleForAssets);

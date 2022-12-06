@@ -1,7 +1,5 @@
-﻿using System.Data;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.Validations;
@@ -35,7 +33,8 @@ public class Application : IApplication, IAggregateRoot
 		IEnumerable<School> schools,
 		IJoinTrust? joinTrust,
 		IFormTrust? formTrust,
-		DateTime? applicationSubmittedOn = null)
+		DateTime? applicationSubmittedOn = null,
+		string? applicationReference = null)
 	{
 		ApplicationId = applicationId;
 		CreatedOn = createdOn;
@@ -47,6 +46,7 @@ public class Application : IApplication, IAggregateRoot
 		JoinTrust = joinTrust;
 		FormTrust = formTrust;
 		ApplicationSubmittedDate = applicationSubmittedOn;
+		ApplicationReference = applicationReference;
 	}
 
 	public int ApplicationId { get; private set; }
@@ -67,6 +67,12 @@ public class Application : IApplication, IAggregateRoot
 		ApplicationId = applicationId;
 		_contributors.Single().Id = contributorId;
 	}
+
+	/// <summary>
+	/// This is in the format $"A2B_{ApplicationId}"
+	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
+	/// </summary>
+	public string? ApplicationReference { get; set; }
 
 	public CommandResult Update(
 		ApplicationType applicationType,
