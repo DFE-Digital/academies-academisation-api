@@ -207,6 +207,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			--   ,<DynamicsApplyingSchoolId, uniqueidentifier,>)
 
 	SELECT ASS.[Urn],
+			APP.Id,
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
 			-- TODO:- the rest !!!!
@@ -214,7 +215,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			NULL as HasLoans,
 			ASS.[DynamicsApplyingSchoolId]
 	FROM [sdd].[A2BApplicationApplyingSchool] as ASS
-	INNER JOIN [sdd].[A2BApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
+	INNER JOIN [academisation].[ConversionApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
 
 	-- TODO MR:- add [DynamicsApplicationId] to [sdd].[A2BApplicationApplyingSchool]
 
