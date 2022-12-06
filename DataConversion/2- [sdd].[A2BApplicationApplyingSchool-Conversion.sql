@@ -217,8 +217,6 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 	FROM [sdd].[A2BApplicationApplyingSchool] as ASS
 	INNER JOIN [academisation].[ConversionApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
 
-	-- TODO MR:- add [DynamicsApplicationId] to [sdd].[A2BApplicationApplyingSchool]
-
 	COMMIT TRAN PortDynamicsSchoolData
 	--ROLLBACK TRAN PortDynamicsSchoolData
 
