@@ -105,16 +105,6 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			   ,[HasLeases]
 			   ,[HasLoans]
 			   ,[DynamicsApplyingSchoolId])
-		 --VALUES (<FinanceOngoingInvestigations, bit,>
-			--   ,<FinancialInvestigationsExplain, nvarchar(max),>
-			--   ,<FinancialInvestigationsTrustAware, bit,>
-			--   ,<DeclarationBodyAgree, bit,>
-			--   ,<DeclarationIAmTheChairOrHeadteacher, bit,>
-			--   ,<DeclarationSignedByName, nvarchar(max),>
-			--   ,<SchoolConversionReasonsForJoining, nvarchar(max),>
-			--   ,<ExemptionEndDate, datetimeoffset(7),>
-			--   )
-
 	SELECT ASS.[Urn],
 			APP.Id,
 			GETDATE() as 'CreatedOn',
@@ -200,7 +190,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolPFYCapitalForward],
 			ASS.[SchoolPFYCapitalForwardStatusExplained],
 			NULL as 'PreviousFinancialYearCapitalCarryForwardFileLink',
-			ASS.[SchoolPFYCapitalIsDeficit],  -- TODO:- check spreadsheet. bit -> int v1.5
+			ASS.[SchoolPFYCapitalIsDeficit], -- TODO:- check spreadsheet. bit -> int v1.5
 			ASS.[SchoolPFYEndDate],
 			ASS.[SchoolPFYRevenue],
 			ASS.[SchoolPFYRevenueIsDeficit],
@@ -209,8 +199,19 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			-- ****
 			ASS.[SchoolConsultationStakeholders],
 			ASS.[SchoolConsultationStakeholdersConsult],
-
-			-- TODO:- the rest !!!!
+			ASS.[SchoolFinancialInvestigations],
+			ASS.[SchoolFinancialInvestigationsExplain],
+			ASS.[SchoolFinancialInvestigationsTrustAware],
+			-- ****
+			ASS.[SchoolDeclarationBodyAgree],
+			ASS.[SchoolDeclarationTeacherChair],
+			ASS.[SchoolDeclarationSignedByEmail], -- TODO:- check spreadsheet.
+			-- ****
+			ASS.[SchoolConversionReasonsForJoining],
+			-- ****
+			--ASS.[SchoolSACREExemption], - not in v1.5 schema ??
+			ASS.[SchoolSACREExemptionEndDate],
+			-- ****
 			ASS.[SchoolAdFeederSchools],
 			ASS.[SchoolPartOfFederation],
 			'' as 'ProtectedCharacteristics', -- TODO:- check spreadsheet
