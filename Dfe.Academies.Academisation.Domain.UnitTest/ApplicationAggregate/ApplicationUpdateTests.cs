@@ -737,19 +737,17 @@ public class ApplicationUpdateTests
 		var dob = DateTime.Now.AddYears(-30);
 		// act
 		var result = subject.SetFormTrustDetails(formTrustDetails);
-		result = subject.AddTrustKeyPerson("Bob", "Smith", dob, "test.@email.com", KeyPersonRole.CEO,
-			"1 year", "test biography");
+		result = subject.AddTrustKeyPerson("Bob Smith", dob, "test biography", new List<ITrustKeyPersonRole>{ TrustKeyPersonRole.Create(KeyPersonRole.CEO,"1 year")});
 
 		// assert
 		DfeAssert.CommandSuccess(result);
 		subject.FormTrust!.KeyPeople.Should().NotBeNullOrEmpty();
 		subject.FormTrust!.KeyPeople.Should().HaveCount(1);
-		subject.FormTrust!.KeyPeople[0].FirstName.Should().Be("Bob");
-		subject.FormTrust!.KeyPeople[0].Surname.Should().Be("Smith");
+		subject.FormTrust!.KeyPeople[0].Name.Should().Be("Bob Smith");
 		subject.FormTrust!.KeyPeople[0].DateOfBirth.Should().Be(dob);
-		subject.FormTrust!.KeyPeople[0].Role.Should().Be(KeyPersonRole.CEO);
-		subject.FormTrust!.KeyPeople[0].TimeInRole.Should().Be("1 year");
-		subject.FormTrust!.KeyPeople[0].Biography.Should().Be("test biography");
+		subject.FormTrust!.KeyPeople[0].Biography.Should().Be("test biography");		
+		subject.FormTrust!.KeyPeople[0].Roles[0].Role.Should().Be(KeyPersonRole.CEO);
+		subject.FormTrust!.KeyPeople[0].Roles[0].TimeInRole.Should().Be("1 year");
 	}
 
 	[Fact]
@@ -765,32 +763,21 @@ public class ApplicationUpdateTests
 		var dob = DateTime.Now.AddYears(-30);
 
 		var result = subject.SetFormTrustDetails(formTrustDetails);
-		var keyPerson = _fixture.Create<ITrustKeyPerson>();
-		Mock.Get(keyPerson).Setup(x => x.FirstName).Returns("Bob");
-		Mock.Get(keyPerson).Setup(x => x.Surname).Returns("Smith");
-		Mock.Get(keyPerson).Setup(x => x.DateOfBirth).Returns(dob);
-		Mock.Get(keyPerson).Setup(x => x.ContactEmailAddress).Returns("test.@email.com");
-		Mock.Get(keyPerson).Setup(x => x.Role).Returns(KeyPersonRole.CEO);
-		Mock.Get(keyPerson).Setup(x => x.TimeInRole).Returns("1 year");
-		Mock.Get(keyPerson).Setup(x => x.Biography).Returns("test biography");
 
 		// act
-		result = subject.AddTrustKeyPerson(keyPerson.FirstName, keyPerson.Surname, keyPerson.DateOfBirth, keyPerson.ContactEmailAddress, keyPerson.Role,
-			keyPerson.TimeInRole, keyPerson.Biography);
+		result = subject.AddTrustKeyPerson("Bob Smith", dob, "test biography", new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.CEO, "1 year") });
 
-		result = subject.UpdateTrustKeyPerson(0, "Ted","John", keyPerson.DateOfBirth, keyPerson.ContactEmailAddress, keyPerson.Role,
-			keyPerson.TimeInRole, keyPerson.Biography);
+		result = subject.UpdateTrustKeyPerson(0, "Ted Glen", dob, "test biography", new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(0,KeyPersonRole.Chair, "2 years") });
 
 		// assert
 		DfeAssert.CommandSuccess(result);
 		subject.FormTrust!.KeyPeople.Should().NotBeNullOrEmpty();
 		subject.FormTrust!.KeyPeople.Should().HaveCount(1);
-		subject.FormTrust!.KeyPeople[0].FirstName.Should().Be("Ted");
-		subject.FormTrust!.KeyPeople[0].Surname.Should().Be("John");
-		subject.FormTrust!.KeyPeople[0].DateOfBirth.Should().Be(keyPerson.DateOfBirth);
-		subject.FormTrust!.KeyPeople[0].Role.Should().Be(keyPerson.Role);
-		subject.FormTrust!.KeyPeople[0].TimeInRole.Should().Be(keyPerson.TimeInRole);
-		subject.FormTrust!.KeyPeople[0].Biography.Should().Be(keyPerson.Biography);
+		subject.FormTrust!.KeyPeople[0].Name.Should().Be("Ted Glen");
+		subject.FormTrust!.KeyPeople[0].DateOfBirth.Should().Be(dob);
+		subject.FormTrust!.KeyPeople[0].Biography.Should().Be("test biography");
+		subject.FormTrust!.KeyPeople[0].Roles[0].Role.Should().Be(KeyPersonRole.Chair);
+		subject.FormTrust!.KeyPeople[0].Roles[0].TimeInRole.Should().Be("2 years");
 	}
 
 	[Fact]
@@ -807,18 +794,14 @@ public class ApplicationUpdateTests
 
 		var result = subject.SetFormTrustDetails(formTrustDetails);
 		var keyPerson = _fixture.Create<ITrustKeyPerson>();
-		Mock.Get(keyPerson).Setup(x => x.FirstName).Returns("Bob");
-		Mock.Get(keyPerson).Setup(x => x.Surname).Returns("Smith");
+		Mock.Get(keyPerson).Setup(x => x.Name).Returns("Bob Smith");
 		Mock.Get(keyPerson).Setup(x => x.DateOfBirth).Returns(dob);
-		Mock.Get(keyPerson).Setup(x => x.ContactEmailAddress).Returns("test.@email.com");
-		Mock.Get(keyPerson).Setup(x => x.Role).Returns(KeyPersonRole.CEO);
-		Mock.Get(keyPerson).Setup(x => x.TimeInRole).Returns("1 year");
 		Mock.Get(keyPerson).Setup(x => x.Biography).Returns("test biography");
+		Mock.Get(keyPerson).Setup(x => x.Roles)
+			.Returns(new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.CEO, "1 year") }.AsReadOnly);
 
 		// act
-		result = subject.AddTrustKeyPerson(keyPerson.FirstName, keyPerson.Surname, keyPerson.DateOfBirth,
-			keyPerson.ContactEmailAddress, keyPerson.Role,
-			keyPerson.TimeInRole, keyPerson.Biography);
+		subject.AddTrustKeyPerson(keyPerson.Name, keyPerson.DateOfBirth, keyPerson.Biography, keyPerson.Roles);
 
 		result = subject.DeleteTrustKeyPerson(0);
 

@@ -5,6 +5,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 	[Table(name: "ApplicationFormTrust")]
 	public class FormTrustState : BaseEntity
 	{
+		public Guid? DynamicsApplicationId { get; set; }
 		public DateTime? FormTrustOpeningDate { get; set; }
 		public string? FormTrustProposedNameOfTrust { get; set; }
 		public string? TrustApproverName { get; set; }

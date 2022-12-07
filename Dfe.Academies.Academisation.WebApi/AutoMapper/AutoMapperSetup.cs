@@ -17,7 +17,8 @@ public static class AutoMapperSetup
 		// Trust mappings
 		profile.CreateMap<IJoinTrust, JoinTrustState>()
 			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
-			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore());
+			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore())
+			.ForMember(x => x.DynamicsApplicationId, opt => opt.Ignore());
 		profile.CreateMap<JoinTrustState, JoinTrust>();
 		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
 
@@ -55,10 +56,18 @@ public static class AutoMapperSetup
 				wrapper.TrustDetails.FormTrustImprovementSupport,
 				wrapper.TrustDetails.FormTrustImprovementStrategy,
 				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor,
-				wrapper.KeyPeople.Select(x => new TrustKeyPersonServiceModel(x.Id, x.FirstName, x.Surname, x.DateOfBirth, x.ContactEmailAddress, x.Role, x.TimeInRole, x.Biography)).ToList()));
+				wrapper.KeyPeople.Select(x => new TrustKeyPersonServiceModel(x.Id, x.Name, x.DateOfBirth, x.Biography, context.Mapper.Map<IEnumerable<TrustKeyPersonRoleServiceModel>>(x.Roles))).ToList()));
 
 		profile.CreateMap<TrustKeyPersonState, ITrustKeyPerson>().ReverseMap();
-		profile.CreateMap<TrustKeyPersonState, TrustKeyPerson>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonState, TrustKeyPerson>()
+			.ForCtorParam(nameof(TrustKeyPerson.Roles), (opt) => opt.MapFrom(x => x.Roles))
+			.ReverseMap();
+
 		profile.CreateMap<TrustKeyPersonServiceModel, TrustKeyPerson>().ReverseMap();
+
+		profile.CreateMap<TrustKeyPersonRoleState, ITrustKeyPersonRole>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonRoleState, TrustKeyPersonRole>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonRoleServiceModel, TrustKeyPersonRole>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonRoleServiceModel, ITrustKeyPersonRole>().ReverseMap();
 	}
 }

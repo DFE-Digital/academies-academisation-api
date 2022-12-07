@@ -80,7 +80,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 
 			// Assert
 			Assert.NotNull(result);
-			result.Should().BeEquivalentTo(joinTrustStateObj, cfg => cfg.Excluding(x => x.CreatedOn).Excluding(x => x.LastModifiedOn));
+			result.Should().BeEquivalentTo(joinTrustStateObj, cfg => cfg.Excluding(x => x.CreatedOn).Excluding(x => x.LastModifiedOn).Excluding(x => x.DynamicsApplicationId));
 		}
 
 		[Fact]
@@ -188,13 +188,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			var trustDetails = this.fixture.Create<FormTrustDetails>();
 			var keyPerson = this.fixture.Create<ITrustKeyPerson>();
 			Mock.Get(keyPerson).Setup(x => x.Id).Returns(this.fixture.Create<int>());
-			Mock.Get(keyPerson).Setup(x => x.FirstName).Returns(this.fixture.Create<string>());
-			Mock.Get(keyPerson).Setup(x => x.Surname).Returns(this.fixture.Create<string>());
-			Mock.Get(keyPerson).Setup(x => x.ContactEmailAddress).Returns(this.fixture.Create<string>());
+			Mock.Get(keyPerson).Setup(x => x.Name).Returns(this.fixture.Create<string>());
 			Mock.Get(keyPerson).Setup(x => x.DateOfBirth).Returns(this.fixture.Create<DateTime>());
-			Mock.Get(keyPerson).Setup(x => x.Role).Returns(this.fixture.Create<KeyPersonRole>());
-			Mock.Get(keyPerson).Setup(x => x.TimeInRole).Returns(this.fixture.Create<string>());
 			Mock.Get(keyPerson).Setup(x => x.Biography).Returns(this.fixture.Create<string>());
+			Mock.Get(keyPerson).Setup(x => x.Roles).Returns(new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.Trustee, "10 months") }.AsReadOnly());
 
 			Mock.Get(formTrustDomainObj).Setup(x => x.Id).Returns(10101);
 			Mock.Get(formTrustDomainObj).Setup(x => x.TrustDetails).Returns(trustDetails);
@@ -228,12 +225,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			result.KeyPeople.Count.Should().Be(1);
 			result.KeyPeople[0].Id.Should().Be(keyPerson.Id);
 			result.KeyPeople[0].Biography.Should().Be(keyPerson.Biography);
-			result.KeyPeople[0].ContactEmailAddress.Should().Be(keyPerson.ContactEmailAddress);
 			result.KeyPeople[0].DateOfBirth.Should().Be(keyPerson.DateOfBirth);
-			result.KeyPeople[0].FirstName.Should().Be(keyPerson.FirstName);
-			result.KeyPeople[0].Role.Should().Be(keyPerson.Role);
-			result.KeyPeople[0].Surname.Should().Be(keyPerson.Surname);
-			result.KeyPeople[0].TimeInRole.Should().Be(keyPerson.TimeInRole);
+			result.KeyPeople[0].Name.Should().Be(keyPerson.Name);
 			result.Id.Should().Be(formTrustDomainObj.Id);
 		}
 	}

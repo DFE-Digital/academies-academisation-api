@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				return new NotFoundCommandResult();
 			}
 
-			var result = existingApplication.UpdateTrustKeyPerson(command.KeyPersonId, command.FirstName, command.Surname, command.DateOfBirth, command.ContactEmailAddress, command.Role, command.TimeInRole, command.Biography);
+			var result = existingApplication.UpdateTrustKeyPerson(command.KeyPersonId, command.Name, command.DateOfBirth, command.Biography, command.Roles.Select(x => TrustKeyPersonRole.Create(x.Id, x.Role, x.TimeInRole)));
 			
 			if (result is CommandValidationErrorResult)
 			{
