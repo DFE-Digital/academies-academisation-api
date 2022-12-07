@@ -11,6 +11,12 @@
 	'FormMat' = > 'FormAMat'
 **/
 
+/**
+[ApplicationStatus] - as-is -> v1.5
+ALWAYS = null on live !!!
+so, hard code it to => 'InProgress'
+**/
+
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsApplicationData
 
@@ -36,7 +42,8 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			END as 'AppType',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			[ApplicationStatusId], -- TODO MR:- data conversion
+			--[ApplicationStatusId], -- MR:- ALWAYS = null on live !!!
+			'InProgress' as AppStatus,
 			NULL as 'FormTrustId',
 			NULL as 'JoinTrustId',
 			--[ApplicationSubmitted] - ???
@@ -57,7 +64,7 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			   ,[ChangesToLaGovernance]
 			   ,[ChangesToLaGovernanceExplained]
 			   ,[DynamicsApplicationId])
-	SELECT 	[TrustId], -- TODO:- to confirm
+	SELECT 	[TrustId], -- TODO:- to confirm => Live data = 'TR00751'
 			[TrustName], -- TODO:- to confirm
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
