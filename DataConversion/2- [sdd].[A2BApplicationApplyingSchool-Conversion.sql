@@ -6,8 +6,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 	--,[HasLeases]
 	--,[HasLoans]
 
-	-- TODO MR: will need to grab DB generated [ConversionApplicationId]
-	-- by joining onto [academisation].[ConversionApplication]
+	-- MR: grabbing DB generated [ConversionApplicationId] by joining onto [academisation].[ConversionApplication]
 	INSERT INTO [academisation].[ApplicationSchool]
 			   ([Urn]
 			   ,[ConversionApplicationId]
@@ -107,19 +106,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			   ,[HasLoans]
 			   ,[DynamicsApplyingSchoolId])
 		 --VALUES
-			--   (<Urn, int,>
-			--   ,<ConversionApplicationId, int,>
-			--   ,<CreatedOn, datetime2(7),>
-			--   ,<LastModifiedOn, datetime2(7),>
-			--   ,<ProjectedPupilNumbersYear1, int,>
-			--   ,<ProjectedPupilNumbersYear2, int,>
-			--   ,<ProjectedPupilNumbersYear3, int,>
-			--   ,<ProposedNewSchoolName, nvarchar(max),>
-			--   ,<MainContactOtherTelephone, nvarchar(max),>
-			--   ,<CapacityPublishedAdmissionsNumber, int,>
-			--   ,<ApproverContactEmail, nvarchar(max),>
-			--   ,<ApproverContactName, nvarchar(max),>
-			--   ,<CapacityAssumptions, nvarchar(max),>
+			--   (CapacityAssumptions, nvarchar(max),>
 			--   ,<ContactChairEmail, nvarchar(max),>
 			--   ,<ContactChairName, nvarchar(max),>
 			--   ,<ContactChairTel, nvarchar(max),>
@@ -209,6 +196,15 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			APP.Id,
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
+			ASS.[ProjectedPupilNumbersYear1],
+			ASS.[ProjectedPupilNumbersYear2],
+			ASS.[ProjectedPupilNumbersYear3],
+			ASS.[SchoolConversionChangeNameValue], -- TODO:- check spreadsheet
+			ASS.[SchoolConversionMainContactOtherTelephone],
+			ASS.[SchoolCapacityPublishedAdmissionsNumber],
+			ASS.[SchoolConversionApproverContactEmail],
+			ASS.[SchoolConversionApproverContactName],
+			ASS.[SchoolCapacityAssumptions],
 			-- TODO:- the rest !!!!
 			NULL as HasLeases, --populated in later script
 			NULL as HasLoans, --populated in later script
