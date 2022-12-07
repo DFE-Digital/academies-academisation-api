@@ -6,15 +6,27 @@ BEGIN TRANSACTION PortDynamicsSchoolLoansData
 	-- MR:- need to grab DB generated [ApplicationSchoolId]
 	-- by joining onto [academisation].[ApplicationSchool]
 	INSERT INTO [academisation].[ApplicationSchoolLoan]
-
-
-	SELECT ASL.SchoolLeaseTerm,
-			-- TODO:- the rest !!!!
+           ([Amount]
+           ,[Purpose]
+           ,[Provider]
+           ,[InterestRate]
+           ,[Schedule]
+           ,[ApplicationSchoolId]
+           ,[CreatedOn]
+           ,[LastModifiedOn]
+           ,[DynamicsSchoolLoanId])
+	 	 
+	 -- TODO MR:- negative amounts
+	SELECT ASL.[SchoolLoanAmount],
+			ASL.[SchoolLoanPurpose],
+			ASL.SchoolLoanProvider,
+			ASL.SchoolLoanInterestRate,
+			ASL.SchoolLoanSchedule,
 			SCH.Id as 'ApplicationSchoolId',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			ASL.DynamicsSchoolLeaseId
-			--ASS.[DynamicsApplyingSchoolId]
+			ASL.DynamicsSchoolLoanId
+			--ASS.[DynamicsApplyingSchoolId] -- other
 	FROM [sdd].[A2BApplicationApplyingSchool] As ASS	
 	INNER JOIN [sdd].[A2BSchoolLoan] as ASL ON ASL.ApplyingSchoolId = ASS.ApplyingSchoolId
 	INNER JOIN [academisation].[ApplicationSchool] as SCH on SCH.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
