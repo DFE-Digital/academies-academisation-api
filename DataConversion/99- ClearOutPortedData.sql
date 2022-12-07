@@ -3,28 +3,29 @@ BEGIN TRANSACTION PortDynamicsClearData
 
 	/*** STEP 1 - clear out [academisation].[ApplicationSchoolLeases] ***/
 	DELETE FROM [academisation].[ApplicationSchoolLease]
-	WHERE [DynamicsApplicationId] IS NOT NULL
+	WHERE [DynamicsSchoolLeaseId] IS NOT NULL
 
 	/*** STEP 2 - clear out [academisation].[ApplicationSchoolLoans] ***/
 	DELETE FROM [academisation].[ApplicationSchoolLoan]
-	WHERE [DynamicsApplicationId] IS NOT NULL
+	WHERE [DynamicsSchoolLoanId] IS NOT NULL
 
-	/*** STEP 5 - clear out [academisation].[ApplicationFormTrust] ***/
-	--contributors
+	/*** STEP 3 - clear out [academisation].[ConversionApplicationContributor] ***/
+	DELETE FROM [academisation].[ConversionApplicationContributor]
+	WHERE [DynamicsApplicationId] IS NOT NULL -- TODO
 
-	/*** STEP 6 - clear out [academisation].[ApplicationFormTrust] ***/
+	/*** STEP 4 - clear out [academisation].[ApplicationFormTrust] ***/
 	DELETE FROM [academisation].[ApplicationFormTrust]
-	WHERE [DynamicsApplicationId] IS NOT NULL
+	WHERE [DynamicsApplicationId] IS NOT NULL -- TODO
 
-	/*** STEP 7 - clear out [academisation].[ApplicationJoinTrust] ***/
+	/*** STEP 5 - clear out [academisation].[ApplicationJoinTrust] ***/
 	DELETE FROM [academisation].[ApplicationJoinTrust]
-	WHERE [DynamicsApplicationId] IS NOT NULL
+	WHERE [DynamicsApplicationId] IS NOT NULL -- TODO
 
-	/*** STEP 8 - clear out [academisation].[ApplicationSchool] ***/
+	/*** STEP 6 - clear out [academisation].[ApplicationSchool] ***/
 	DELETE FROM [academisation].[ApplicationSchool]
-	WHERE [DynamicsApplicationId] IS NOT NULL
+	WHERE [DynamicsApplyingSchoolId] IS NOT NULL
 
-	/*** STEP 9 - clear out [academisation].[ConversionApplication] ***/
+	/*** STEP 7 - clear out [academisation].[ConversionApplication] ***/
 	DELETE FROM [academisation].[ConversionApplication]
 	WHERE [DynamicsApplicationId] IS NOT NULL
 
