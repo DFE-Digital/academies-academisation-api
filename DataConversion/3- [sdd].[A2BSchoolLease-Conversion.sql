@@ -17,26 +17,20 @@ BEGIN TRANSACTION PortDynamicsSchoolLeaseData
 			   ,[CreatedOn]
 			   ,[LastModifiedOn]
 			   ,[DynamicsSchoolLeaseId])
-     --VALUES
-     --      (<LeaseTerm, nvarchar(max),>
-     --      ,<RepaymentAmount, decimal(18,2),>
-     --      ,<InterestRate, decimal(18,2),>
-     --      ,<PaymentsToDate, decimal(18,2),>
-     --      ,<Purpose, nvarchar(max),>
-     --      ,<ValueOfAssets, nvarchar(max),>
-     --      ,<ResponsibleForAssets, nvarchar(max),>
-     --      ,<ApplicationSchoolId, int,>
-     --      ,<CreatedOn, datetime2(7),>
-     --      ,<LastModifiedOn, datetime2(7),>
-     --      ,<DynamicsSchoolLeaseId, uniqueidentifier,>)
 
+	 -- TODO MR:- negative amounts
 	SELECT ASL.SchoolLeaseTerm,
-			-- TODO:- the rest !!!!
+			ASL.[SchoolLeaseRepaymentValue],
+			ASL.[SchoolLeaseInterestRate],
+			ASL.SchoolLeasePaymentToDate,
+			ASL.SchoolLeasePurpose,
+			ASL.[SchoolLeaseValueOfAssets],
+			ASL.[SchoolLeaseResponsibleForAssets],
 			SCH.Id as 'ApplicationSchoolId',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
 			ASL.DynamicsSchoolLeaseId
-			--ASS.[DynamicsApplyingSchoolId]
+			--ASS.[DynamicsApplyingSchoolId] -- other
 	FROM [sdd].[A2BApplicationApplyingSchool] As ASS	
 	INNER JOIN [sdd].[A2BSchoolLease] as ASL ON ASL.ApplyingSchoolId = ASS.ApplyingSchoolId
 	INNER JOIN [academisation].[ApplicationSchool] as SCH on SCH.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
