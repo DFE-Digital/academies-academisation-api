@@ -2,4 +2,4 @@
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
-public record TrustKeyPersonServiceModel(int Id, string FirstName, string Surname, DateTime? DateOfBirth, string? ContactEmailAddress, KeyPersonRole Role, string TimeInRole, string Biography);
+public record TrustKeyPersonServiceModel(int Id, string Name, DateTime DateOfBirth, string Biography, IEnumerable<TrustKeyPersonRoleServiceModel> Roles);

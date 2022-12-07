@@ -27,10 +27,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			// shouldn't be anything that is long running just found it a good habit with async
 
 			var existingApplication = await _applicationRepository.GetByIdAsync(command.ApplicationId);
+
 			if (existingApplication is null)
 			{
 				return new NotFoundCommandResult();
 			}
+
+			var keyPersonToDelete = existingApplication.FormTrust!.KeyPeople.SingleOrDefault(x => x.Id == command.KeyPersonId);
 
 			var result = existingApplication.DeleteTrustKeyPerson(command.KeyPersonId);
 			
@@ -46,6 +49,15 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			_applicationRepository.Update(existingApplication);
 
 			//TODO: This can be removed when there is no longer a disconnect between domain and persistence entities
+
+			if (keyPersonToDelete != null)
+			{
+				foreach (var role in keyPersonToDelete.Roles)
+				{
+					await _applicationRepository.DeleteChildObjectById<TrustKeyPersonRoleState>(role.Id);
+				}
+			}
+
 			await _applicationRepository.DeleteChildObjectById<TrustKeyPersonState>(command.KeyPersonId);
 
 			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(new CancellationToken())

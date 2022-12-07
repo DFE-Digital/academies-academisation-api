@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using AutoMapper;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -13,10 +14,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 	public class AddTrustKeyPersonCommandHandler : IRequestHandler<AddTrustKeyPersonCommand, CommandResult>
 	{
 		private readonly IApplicationRepository _applicationRepository;
+		private readonly IMapper _mapper;
 
-		public AddTrustKeyPersonCommandHandler(IApplicationRepository applicationRepository)
+		public AddTrustKeyPersonCommandHandler(IApplicationRepository applicationRepository, IMapper mapper)
 		{
 			_applicationRepository = applicationRepository;
+			_mapper = mapper;
 		}
 
 		public async Task<CommandResult> Handle(AddTrustKeyPersonCommand command, CancellationToken cancellationToken)
@@ -30,7 +33,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				return new NotFoundCommandResult();
 			}
 
-			var result = existingApplication.AddTrustKeyPerson(command.FirstName, command.Surname, command.DateOfBirth, command.ContactEmailAddress, command.Role, command.TimeInRole, command.Biography);
+			var result = existingApplication.AddTrustKeyPerson(command.Name, command.DateOfBirth, command.Biography, command.Roles.Select(x => TrustKeyPersonRole.Create(x.Role, x.TimeInRole)));
 			
 			if (result is CommandValidationErrorResult)
 			{
