@@ -8,7 +8,6 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 
 	-- TODO MR: will need to grab DB generated [ConversionApplicationId]
 	-- by joining onto [academisation].[ConversionApplication]
-
 	INSERT INTO [academisation].[ApplicationSchool]
 			   ([Urn]
 			   ,[ConversionApplicationId]
@@ -211,13 +210,13 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
 			-- TODO:- the rest !!!!
-			NULL as HasLeases,
-			NULL as HasLoans,
+			NULL as HasLeases, --populated in later script
+			NULL as HasLoans, --populated in later script
 			ASS.[DynamicsApplyingSchoolId]
 	FROM [sdd].[A2BApplicationApplyingSchool] as ASS
 	INNER JOIN [academisation].[ConversionApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
 
-	COMMIT TRAN PortDynamicsSchoolData
+	--COMMIT TRAN PortDynamicsSchoolData
 	--ROLLBACK TRAN PortDynamicsSchoolData
 
 END TRY
