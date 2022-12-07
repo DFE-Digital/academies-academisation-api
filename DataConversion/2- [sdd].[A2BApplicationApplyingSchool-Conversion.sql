@@ -105,53 +105,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			   ,[HasLeases]
 			   ,[HasLoans]
 			   ,[DynamicsApplyingSchoolId])
-		 --VALUES
-			--   (,<ConversionTargetDate, datetime2(7),>
-			--   ,<ConversionTargetDateSpecified, bit,>
-			--   ,<ConversionChangeNamePlanned, bit,>
-			--   ,<ConfirmPaySupportGrantToSchool, bit,>
-			--   ,<SupportGrantFundsPaidTo, int,>
-			--   ,<DioceseFolderIdentifier, nvarchar(max),>
-			--   ,<DioceseName, nvarchar(max),>
-			--   ,<FoundationConsentFolderIdentifier, nvarchar(max),>
-			--   ,<FoundationTrustOrBodyName, nvarchar(max),>
-			--   ,<FurtherInformation, nvarchar(max),>
-			--   ,<LocalAuthorityClosurePlanDetails, nvarchar(max),>
-			--   ,<LocalAuthorityReoganisationDetails, nvarchar(max),>
-			--   ,<OfstedInspectionDetails, nvarchar(max),>
-			--   ,<ResolutionConsentFolderIdentifier, nvarchar(max),>
-			--   ,<SafeguardingDetails, nvarchar(max),>
-			--   ,<TrustBenefitDetails, nvarchar(max),>
-			--   ,<CurrentFinancialYearCapitalCarryForward, decimal(18,2),>
-			--   ,<CurrentFinancialYearCapitalCarryForwardExplained, nvarchar(max),>
-			--   ,<CurrentFinancialYearCapitalCarryForwardFileLink, nvarchar(max),>
-			--   ,<CurrentFinancialYearCapitalCarryForwardStatus, int,>
-			--   ,<CurrentFinancialYearEndDate, datetime2(7),>
-			--   ,<CurrentFinancialYearRevenue, decimal(18,2),>
-			--   ,<CurrentFinancialYearRevenueStatus, int,>
-			--   ,<CurrentFinancialYearRevenueStatusExplained, nvarchar(max),>
-			--   ,<CurrentFinancialYearRevenueStatusFileLink, nvarchar(max),>
-			--   ,<NextFinancialYearCapitalCarryForward, decimal(18,2),>
-			--   ,<NextFinancialYearCapitalCarryForwardExplained, nvarchar(max),>
-			--   ,<NextFinancialYearCapitalCarryForwardFileLink, nvarchar(max),>
-			--   ,<NextFinancialYearCapitalCarryForwardStatus, int,>
-			--   ,<NextFinancialYearEndDate, datetime2(7),>
-			--   ,<NextFinancialYearRevenue, decimal(18,2),>
-			--   ,<NextFinancialYearRevenueStatus, int,>
-			--   ,<NextFinancialYearRevenueStatusExplained, nvarchar(max),>
-			--   ,<NextFinancialYearRevenueStatusFileLink, nvarchar(max),>
-			--   ,<PreviousFinancialYearCapitalCarryForward, decimal(18,2),>
-			--   ,<PreviousFinancialYearCapitalCarryForwardExplained, nvarchar(max),>
-			--   ,<PreviousFinancialYearCapitalCarryForwardFileLink, nvarchar(max),>
-			--   ,<PreviousFinancialYearCapitalCarryForwardStatus, int,>
-			--   ,<PreviousFinancialYearEndDate, datetime2(7),>
-			--   ,<PreviousFinancialYearRevenue, decimal(18,2),>
-			--   ,<PreviousFinancialYearRevenueStatus, int,>
-			--   ,<PreviousFinancialYearRevenueStatusExplained, nvarchar(max),>
-			--   ,<PreviousFinancialYearRevenueStatusFileLink, nvarchar(max),>
-			--   ,<SchoolHasConsultedStakeholders, bit,>
-			--   ,<SchoolPlanToConsultStakeholders, nvarchar(max),>
-			--   ,<FinanceOngoingInvestigations, bit,>
+		 --VALUES (<FinanceOngoingInvestigations, bit,>
 			--   ,<FinancialInvestigationsExplain, nvarchar(max),>
 			--   ,<FinancialInvestigationsTrustAware, bit,>
 			--   ,<DeclarationBodyAgree, bit,>
@@ -188,6 +142,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionMainContactOtherName],
 			ASS.[SchoolConversionMainContactOtherRole],
 			ASS.[Name],  -- TODO:- check spreadsheet
+			--**** land & buildings ****
 			ASS.[SchoolBuildLandSharedFacilities],
 			ASS.[SchoolBuildLandSharedFacilitiesExplained],
 			ASS.[SchoolBuildLandGrants],
@@ -200,6 +155,60 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolBuildLandWorksPlanned],
 			ASS.[SchoolBuildLandWorksPlannedDate],
 			ASS.[SchoolBuildLandWorksPlannedExplained],
+			-- **** xxx ****
+			ASS.[SchoolConversionTargetDateDate],
+			ASS.[SchoolConversionTargetDateDifferent] as 'ConversionChangeNamePlanned',-- TODO:- check spreadsheet
+			0 as 'ConfirmPaySupportGrantToSchool', -- TODO:- check spreadsheet
+			--ASS.[SchoolSupportGrantFundsPaidTo],
+			0 as 'SupportGrantFundsPaidTo', -- TODO:- check spreadsheet
+			--**** additional info ****
+			--ASS.[SchoolFaithSchool] - not in v1.5 schema ??
+			NULL as 'DioceseFolderIdentifier',
+			ASS.[SchoolFaithSchoolDioceseName],
+			NULL as 'FoundationConsentFolderIdentifier',
+			ASS.[SchoolSupportedFoundationBodyName], -- TODO:- check spreadsheet
+			ASS.[SchoolFurtherInformation], -- TODO:- check spreadsheet
+			--ASS.[SchoolLaClosurePlans], - not in v1.5 schema ??
+			ASS.[SchoolLaClosurePlansExplain],
+			--ASS.[SchoolLaClosurePlans], - not in v1.5 schema ??
+			ASS.[SchoolLaReorganizationExplain],
+			--ASS.[SchoolAdInspectedButReportNotPublished], - not in v1.5 schema ??
+			ASS.[SchoolAdInspectedReportNotPublishedExplain],
+			NULL AS 'ResolutionConsentFolderIdentifier',
+			--ASS.[SchoolAdSafeguarding], - not in v1.5 schema ??
+			ASS.[SchoolAdSafeguardingExplained],
+			'' as 'TrustBenefitDetails', -- TODO:- check spreadsheet
+			-- **** CFY / NFY / PFY details ****
+			ASS.[SchoolCFYCapitalForward],
+			ASS.[SchoolCFYCapitalForwardStatusExplained],
+			NULL as 'CurrentFinancialYearCapitalCarryForwardFileLink',
+			ASS.[SchoolCFYCapitalIsDeficit], -- TODO:- check spreadsheet. bit -> int v1.5
+			ASS.[SchoolCFYEndDate],
+			ASS.[SchoolCFYRevenue],
+			ASS.[SchoolCFYRevenueIsDeficit], -- TODO:- check spreadsheet. bit -> int v1.5
+			ASS.[SchoolCFYRevenueStatusExplained],
+			NULL as 'CurrentFinancialYearRevenueStatusFileLink',
+			ASS.[SchoolNFYCapitalForward],
+			ASS.[SchoolCFYCapitalForwardStatusExplained],
+			NULL as 'NextFinancialYearCapitalCarryForwardFileLink',
+			ASS.[SchoolNFYRevenueIsDeficit],  -- TODO:- check spreadsheet. bit -> int v1.5
+			ASS.[SchoolNFYEndDate],
+			ASS.[SchoolNFYRevenue],
+			ASS.[SchoolNFYRevenueIsDeficit],  -- TODO:- check spreadsheet. bit -> int v1.5
+			ASS.[SchoolNFYRevenueStatusExplained],
+			NULL as 'NextFinancialYearRevenueStatusFileLink',
+			ASS.[SchoolPFYCapitalForward],
+			ASS.[SchoolPFYCapitalForwardStatusExplained],
+			NULL as 'PreviousFinancialYearCapitalCarryForwardFileLink',
+			ASS.[SchoolPFYCapitalIsDeficit],  -- TODO:- check spreadsheet. bit -> int v1.5
+			ASS.[SchoolPFYEndDate],
+			ASS.[SchoolPFYRevenue],
+			ASS.[SchoolPFYRevenueIsDeficit],
+			ASS.[SchoolPFYRevenueStatusExplained],
+			NULL as 'PreviousFinancialYearRevenueStatusFileLink',
+			-- ****
+			ASS.[SchoolConsultationStakeholders],
+			ASS.[SchoolConsultationStakeholdersConsult],
 
 			-- TODO:- the rest !!!!
 			ASS.[SchoolAdFeederSchools],
