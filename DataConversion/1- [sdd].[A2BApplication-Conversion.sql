@@ -41,8 +41,8 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			   ,[ChangesToLaGovernance]
 			   ,[ChangesToLaGovernanceExplained]
 			   ,[DynamicsApplicationId])
-	SELECT 	[TrustId],
-			[TrustName],
+	SELECT 	[TrustId], -- TODO:- to confirm
+			[TrustName], -- TODO:- to confirm
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
 			[ChangesToTrust],
@@ -75,27 +75,25 @@ BEGIN TRANSACTION PortDynamicsApplicationData
            ,[FormTrustReasonVision]
            ,[TrustApproverEmail]
 		   ,[DynamicsApplicationId])
-     --VALUES
-     --      (<FormTrustGrowthPlansYesNo, bit,>
-     --      ,<FormTrustImprovementApprovedSponsor, nvarchar(max),>
-     --      ,<FormTrustImprovementStrategy, nvarchar(max),>
-     --      ,<FormTrustImprovementSupport, nvarchar(max),>
-     --      ,<FormTrustOpeningDate, datetime2(7),>
-     --      ,<FormTrustPlanForGrowth, nvarchar(max),>
-     --      ,<FormTrustPlansForNoGrowth, nvarchar(max),>
-     --      ,<FormTrustProposedNameOfTrust, nvarchar(max),>
-     --      ,<FormTrustReasonApprovaltoConvertasSAT, bit,>
-     --      ,<FormTrustReasonApprovedPerson, nvarchar(max),>
-     --      ,<FormTrustReasonForming, nvarchar(max),>
-     --      ,<FormTrustReasonFreedom, nvarchar(max),>
-     --      ,<FormTrustReasonGeoAreas, nvarchar(max),>
-     --      ,<FormTrustReasonImproveTeaching, nvarchar(max),>
-     --      ,<FormTrustReasonVision, nvarchar(max),>
-     --      ,<TrustApproverEmail, nvarchar(max),>)
 	SELECT 	[TrustApproverName],
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-		-- TODO:- the rest !!!!
+			[FormTrustGrowthPlansYesNo],
+			[FormTrustImprovementApprovedSponsor],
+			[FormTrustImprovementStrategy],
+			[FormTrustImprovementSupport],
+			[FormTrustOpeningDate],
+			[FormTrustPlanForGrowth],
+			[FormTrustPlansForNoGrowth],
+			[TrustName], -- TODO:- to confirm
+				[FormTrustReasonApprovalToConvertAsSat],
+			[FormTrustReasonApprovedPerson],
+			[FormTrustReasonForming],
+			[FormTrustReasonFreedom],
+			[FormTrustReasonGeoAreas],
+			[FormTrustReasonImproveTeaching],
+			[FormTrustReasonVision],
+			[TrustApproverEmail],
 			[DynamicsApplicationId]
 	FROM [sdd].[A2BApplication]
 	WHERE ApplicationType = 'FAM';
@@ -114,7 +112,7 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 	FROM [academisation].[ConversionApplication] As CA
 	INNER JOIN [academisation].[ApplicationJoinTrust] as AJT ON AJT.[DynamicsApplicationId] = CA.[DynamicsApplicationId]
 
-	COMMIT TRAN PortDynamicsApplicationData
+	--COMMIT TRAN PortDynamicsApplicationData
 	--ROLLBACK TRAN PortDynamicsApplicationData
 
 END TRY
