@@ -1,3 +1,16 @@
+/**
+[ApplicationType] - dynamics -> as-is mapping
+	100000001 => 'JoinMat',
+	907660000 => 'FormMat',
+	907660001 => 'FormSat'
+**/
+
+/**
+[ApplicationType] - as-is -> v1.5
+	'JoinMat' => 'JoinAMat'
+	'FormMat' = > 'FormAMat'
+**/
+
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsApplicationData
 
@@ -7,7 +20,6 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 	-- MR:- below are nullable - backfill as 4th / 5th step
 	--,<FormTrustId, int,>
 	--,<JoinTrustId, int,>
-
 	INSERT INTO [academisation].[ConversionApplication]
            ([ApplicationType]
            ,[CreatedOn]
@@ -18,17 +30,21 @@ BEGIN TRANSACTION PortDynamicsApplicationData
            ,[ApplicationSubmittedDate]
            ,[ApplicationReference]
            ,[DynamicsApplicationId])
-	SELECT	[ApplicationType], -- TODO MR:- data conversion
+	SELECT	CASE [ApplicationType] 
+				WHEN 'JoinMat' THEN 'JoinAMat'
+				WHEN 'FormMat' THEN 'FormAMat'
+			END as 'AppType',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
 			[ApplicationStatusId], -- TODO MR:- data conversion
 			NULL as 'FormTrustId',
 			NULL as 'JoinTrustId',
-			--[ApplicationSubmitted]
+			--[ApplicationSubmitted] - ???
 			NULL as 'ApplicationSubmittedDate',
 			[Name] as 'ApplicationReference',
 			[DynamicsApplicationId]
 	FROM [sdd].[A2BApplication]
+	WHERE [ApplicationType] IN ('JoinMat','FormMat')
 
 	/*** STEP 2 - populate [academisation].[ApplicationJoinTrust] ***/
 	INSERT INTO [academisation].[ApplicationJoinTrust]
@@ -51,7 +67,7 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			[ChangesToLaGovernanceExplained],
 			[DynamicsApplicationId]
 	FROM [sdd].[A2BApplication]
-	WHERE ApplicationType = 'JAM';
+	WHERE ApplicationType = 'JoinMat';
 	
 	/*** STEP 3 - populate [academisation].[ApplicationFormTrust] ***/
 	INSERT INTO [academisation].[ApplicationFormTrust]
@@ -86,7 +102,7 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			[FormTrustPlanForGrowth],
 			[FormTrustPlansForNoGrowth],
 			[TrustName], -- TODO:- to confirm
-				[FormTrustReasonApprovalToConvertAsSat],
+			[FormTrustReasonApprovalToConvertAsSat],
 			[FormTrustReasonApprovedPerson],
 			[FormTrustReasonForming],
 			[FormTrustReasonFreedom],
@@ -96,7 +112,7 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			[TrustApproverEmail],
 			[DynamicsApplicationId]
 	FROM [sdd].[A2BApplication]
-	WHERE ApplicationType = 'FAM';
+	WHERE ApplicationType = 'FormMat';
 
 	/*** STEP 4 - backfill <FormTrustId, int,> from ***/
 	-- TODO MR:- need to add [DynamicsApplicationId] to [academisation].[ApplicationFormTrust]
