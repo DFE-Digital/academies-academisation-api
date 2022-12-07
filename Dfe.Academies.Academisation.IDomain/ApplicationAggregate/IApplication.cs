@@ -50,7 +50,7 @@ public interface IApplication
 	CommandResult DeleteLease(int schoolId, int leaseId);
 	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
 	CommandResult SetFormTrustDetails(FormTrustDetails formTrustDetails);
-	CommandResult AddTrustKeyPerson(string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography);
-	CommandResult UpdateTrustKeyPerson(int keyPersonId, string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography);
+	CommandResult AddTrustKeyPerson(string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
+	CommandResult UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 	CommandResult DeleteTrustKeyPerson(int keyPersonId);
 }

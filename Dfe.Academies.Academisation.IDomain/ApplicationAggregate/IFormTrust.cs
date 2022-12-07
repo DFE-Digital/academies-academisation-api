@@ -18,10 +18,10 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		void Update(FormTrustDetails formTrustDetails);
 
-		void AddTrustKeyPerson(string firstName, string surname, DateTime? dateOfBirth,
-			string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography);
+		void AddTrustKeyPerson(string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 
-		void UpdateTrustKeyPerson(int keyPersonId, string firstName, string surname, DateTime? dateOfBirth, string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography);
+		void UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
+
 		void DeleteTrustKeyPerson(int keyPersonId);
 	}
 }

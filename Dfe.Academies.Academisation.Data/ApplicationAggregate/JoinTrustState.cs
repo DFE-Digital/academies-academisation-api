@@ -6,6 +6,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 	[Table(name: "ApplicationJoinTrust")]
 	public class JoinTrustState : BaseEntity
 	{
+		public Guid? DynamicsApplicationId { get; set; }
 		public int UKPRN { get; set; }
 		public string TrustName { get; set; } = null!;
 

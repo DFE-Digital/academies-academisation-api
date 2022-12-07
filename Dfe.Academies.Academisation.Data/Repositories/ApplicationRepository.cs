@@ -33,6 +33,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.ThenInclude(x => x.Leases)
 				.Include(x => x.FormTrust)
 				.ThenInclude(x => x.KeyPeople)
+				.ThenInclude(x => x.Roles)
 				.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.Id == (int)id))?.MapToDomain(_mapper);
 		}

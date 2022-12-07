@@ -269,30 +269,26 @@ public class Application : IApplication, IAggregateRoot
 		return new CommandSuccessResult();
 	}
 
-	public CommandResult AddTrustKeyPerson(string firstName, string surname, DateTime? dateOfBirth,
-		string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
+	public CommandResult AddTrustKeyPerson(string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles)
 	{
 		if (this.FormTrust == null)
 		{
 			throw new InvalidOperationException("Cannot add trust key persons without setting form trust details");
 		}
 
-		this.FormTrust.AddTrustKeyPerson(firstName, surname, dateOfBirth,
-			contactEmailAddress, role, timeInRole, biography);
+		this.FormTrust.AddTrustKeyPerson(name, dateOfBirth, biography, roles);
 
 		return new CommandSuccessResult();
 	}
 
-	public CommandResult UpdateTrustKeyPerson(int keyPersonId, string firstName, string surname, DateTime? dateOfBirth,
-		string? contactEmailAddress, KeyPersonRole role, string timeInRole, string biography)
+	public CommandResult UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles)
 	{
 		if (this.FormTrust == null)
 		{
 			throw new InvalidOperationException("Cannot add trust key persons without setting form trust details");
 		}
 
-		this.FormTrust.UpdateTrustKeyPerson(keyPersonId, firstName, surname, dateOfBirth,
-			contactEmailAddress, role, timeInRole, biography);
+		this.FormTrust.UpdateTrustKeyPerson(keyPersonId, name, dateOfBirth, biography, roles);
 
 		return new CommandSuccessResult();
 	}
