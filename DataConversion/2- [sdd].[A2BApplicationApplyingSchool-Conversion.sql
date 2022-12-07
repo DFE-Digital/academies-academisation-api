@@ -106,33 +106,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			   ,[HasLoans]
 			   ,[DynamicsApplyingSchoolId])
 		 --VALUES
-			--   (CapacityAssumptions, nvarchar(max),>
-			--   ,<ContactChairEmail, nvarchar(max),>
-			--   ,<ContactChairName, nvarchar(max),>
-			--   ,<ContactChairTel, nvarchar(max),>
-			--   ,<ContactHeadEmail, nvarchar(max),>
-			--   ,<ContactHeadName, nvarchar(max),>
-			--   ,<ContactHeadTel, nvarchar(max),>
-			--   ,<ContactRole, nvarchar(max),>
-			--   ,<ConversionTargetDateExplained, nvarchar(max),>
-			--   ,<JoinTrustReason, nvarchar(max),>
-			--   ,<MainContactOtherEmail, nvarchar(max),>
-			--   ,<MainContactOtherName, nvarchar(max),>
-			--   ,<MainContactOtherRole, nvarchar(max),>
-			--   ,<SchoolName, nvarchar(max),>
-			--   ,<FacilitiesShared, bit,>
-			--   ,<FacilitiesSharedExplained, nvarchar(max),>
-			--   ,<Grants, bit,>
-			--   ,<GrantsAwardingBodies, nvarchar(max),>
-			--   ,<OwnerExplained, nvarchar(max),>
-			--   ,<PartOfBuildingSchoolsForFutureProgramme, bit,>
-			--   ,<PartOfPfiScheme, bit,>
-			--   ,<PartOfPfiSchemeType, nvarchar(max),>
-			--   ,<PartOfPrioritySchoolsBuildingProgramme, bit,>
-			--   ,<WorksPlanned, bit,>
-			--   ,<WorksPlannedDate, datetime2(7),>
-			--   ,<WorksPlannedExplained, nvarchar(max),>
-			--   ,<ConversionTargetDate, datetime2(7),>
+			--   (,<ConversionTargetDate, datetime2(7),>
 			--   ,<ConversionTargetDateSpecified, bit,>
 			--   ,<ConversionChangeNamePlanned, bit,>
 			--   ,<ConfirmPaySupportGrantToSchool, bit,>
@@ -185,12 +159,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			--   ,<DeclarationSignedByName, nvarchar(max),>
 			--   ,<SchoolConversionReasonsForJoining, nvarchar(max),>
 			--   ,<ExemptionEndDate, datetimeoffset(7),>
-			--   ,<MainFeederSchools, nvarchar(max),>
-			--   ,<PartOfFederation, bit,>
-			--   ,<ProtectedCharacteristics, int,>
-			--   ,<HasLeases, bit,>
-			--   ,<HasLoans, bit,>
-			--   ,<DynamicsApplyingSchoolId, uniqueidentifier,>)
+			--   )
 
 	SELECT ASS.[Urn],
 			APP.Id,
@@ -205,7 +174,37 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionApproverContactEmail],
 			ASS.[SchoolConversionApproverContactName],
 			ASS.[SchoolCapacityAssumptions],
+			ASS.[SchoolConversionContactChairEmail],
+			ASS.[SchoolConversionContactChairName],
+			ASS.[SchoolConversionContactChairTel],
+			ASS.[SchoolConversionContactHeadEmail],
+			ASS.[SchoolConversionContactHeadName],
+			ASS.[SchoolConversionContactHeadTel],
+			ASS.[SchoolConversionContactRole],
+			--[SchoolConversionTargetDateDifferent] -- not captured v1.5
+			ASS.[SchoolConversionTargetDateExplained],
+			ASS.[SchoolConversionReasonsForJoining], --JoinTrustReason  -- TODO:- check spreadsheet
+			ASS.[SchoolConversionMainContactOtherEmail],
+			ASS.[SchoolConversionMainContactOtherName],
+			ASS.[SchoolConversionMainContactOtherRole],
+			ASS.[Name],  -- TODO:- check spreadsheet
+			ASS.[SchoolBuildLandSharedFacilities],
+			ASS.[SchoolBuildLandSharedFacilitiesExplained],
+			ASS.[SchoolBuildLandGrants],
+			ASS.[SchoolBuildLandGrantsBody],
+			ASS.[SchoolBuildLandOwnerExplained],
+			ASS.[SchoolBuildLandFutureProgramme],
+			ASS.[SchoolBuildLandPFIScheme],
+			ASS.[SchoolBuildLandPFISchemeType],
+			ASS.[SchoolBuildLandPriorityBuildingProgramme],
+			ASS.[SchoolBuildLandWorksPlanned],
+			ASS.[SchoolBuildLandWorksPlannedDate],
+			ASS.[SchoolBuildLandWorksPlannedExplained],
+
 			-- TODO:- the rest !!!!
+			ASS.[SchoolAdFeederSchools],
+			ASS.[SchoolPartOfFederation],
+			'' as 'ProtectedCharacteristics', -- TODO:- check spreadsheet
 			NULL as HasLeases, --populated in later script
 			NULL as HasLoans, --populated in later script
 			ASS.[DynamicsApplyingSchoolId]
