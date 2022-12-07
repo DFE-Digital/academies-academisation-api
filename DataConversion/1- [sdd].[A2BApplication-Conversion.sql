@@ -122,14 +122,12 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 	WHERE ApplicationType = 'FormMat';
 
 	/*** STEP 4 - backfill <FormTrustId, int,> from ***/
-	-- TODO MR:- need to add [DynamicsApplicationId] to [academisation].[ApplicationFormTrust]
 	UPDATE CA
 	SET CA.FormTrustId = AFT.Id
 	FROM [academisation].[ConversionApplication] As CA
 	INNER JOIN [academisation].[ApplicationFormTrust] as AFT ON AFT.[DynamicsApplicationId] = CA.[DynamicsApplicationId]
 
 	/*** STEP 5 - backfill <JoinTrustId, int,> ***/
-	-- TODO MR:- need to add [DynamicsApplicationId] to [academisation].[ApplicationJoinTrust]
 	UPDATE CA
 	SET CA.FormTrustId = AJT.Id
 	FROM [academisation].[ConversionApplication] As CA

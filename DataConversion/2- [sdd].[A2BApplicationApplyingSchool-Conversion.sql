@@ -145,7 +145,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolBuildLandWorksPlanned],
 			ASS.[SchoolBuildLandWorksPlannedDate],
 			ASS.[SchoolBuildLandWorksPlannedExplained],
-			-- **** xxx ****
+			-- ****
 			ASS.[SchoolConversionTargetDateDate],
 			ASS.[SchoolConversionTargetDateDifferent] as 'ConversionChangeNamePlanned',-- TODO:- check spreadsheet
 			0 as 'ConfirmPaySupportGrantToSchool', -- TODO:- check spreadsheet
