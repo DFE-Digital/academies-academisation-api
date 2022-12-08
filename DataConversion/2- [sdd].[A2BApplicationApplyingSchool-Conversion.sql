@@ -166,7 +166,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolAdInspectedReportNotPublishedExplain],
 			NULL AS 'ResolutionConsentFolderIdentifier',
 			--ASS.[SchoolAdSafeguarding], - not in v1.5 schema ??
-			ASS.[SchoolAdSafeguardingExplained],
+			ASS.[SchoolAdSafeguardingExplained] as 'SafeguardingDetails',
 			'' as 'TrustBenefitDetails', -- TODO:- check spreadsheet
 			-- **** CFY / NFY / PFY details ****
 			ASS.[SchoolCFYCapitalForward],
