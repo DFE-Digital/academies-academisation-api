@@ -17,6 +17,23 @@ ALWAYS = null on live !!!
 so, hard code it to => 'InProgress'
 **/
 
+/** from c# ->
+public enum ApplicationTypes
+{
+	JoinAMat,
+	FormAMat
+	//[Description("Form new single academy trust")]
+	//FormASat
+}
+
+public enum ApplicationStatus
+{
+	InProgress,
+	Submitted
+}
+
+**/
+
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsApplicationData
 

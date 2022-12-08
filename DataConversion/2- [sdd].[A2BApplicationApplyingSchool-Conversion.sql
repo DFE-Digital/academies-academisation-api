@@ -1,3 +1,60 @@
+/** 
+enums values from c#->
+public enum SelectOption
+{
+	Yes = 1,
+	No = 0
+}
+
+public enum SchoolEqualitiesProtectedCharacteristics
+{
+	[Description("That the Secretary of State's decision is unlikely to disproportionately affect any particular person or group who share protected characteristics")]
+	Unlikely = 1,
+	[Description("That there are some impacts but on balance the changes will not disproportionately affect any particular person or group who share protected characteristics")]
+	WillNot = 0
+}
+
+public enum MainConversionContact
+{
+	[Description("The headteacher")]
+	HeadTeacher = 1,
+	[Description("The chair of the governing body")]
+	ChairOfGoverningBody = 2,
+	[Description("Someone else")]
+	Other = 3
+}
+
+public enum PayFundsTo
+{
+	[Description("To the school")]
+	School = 1,
+	[Description("To the trust the school is joining")]
+	Trust = 2
+}
+
+public enum EqualityImpact
+{
+	ConsideredUnlikely,
+	ConsideredWillNot,
+	NotConsidered
+}
+
+public enum RevenueType
+{
+	Surplus = 1,
+	Deficit = 2
+}
+
+public enum TrustChange
+{
+	Yes = 1,
+	No = 2,
+	[Description("Unknown at this point")]
+	Unknown = 3
+}
+
+**/
+
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsSchoolData
 
