@@ -262,7 +262,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			-- ****
 			ASS.[SchoolDeclarationBodyAgree],
 			ASS.[SchoolDeclarationTeacherChair],
-			ASS.[SchoolDeclarationSignedByEmail] as 'DeclarationSignedByName', -- TODO:- ???.
+			ASS.[SchoolDeclarationSignedByName] as 'DeclarationSignedByName',
 			-- ****
 			ASS.[SchoolConversionReasonsForJoining],
 			-- **** more additional info
