@@ -6,25 +6,18 @@ public enum SelectOption
 	No = 0
 }
 
-public enum SchoolEqualitiesProtectedCharacteristics
-{
-	[Description("That the Secretary of State's decision is unlikely to disproportionately affect any particular person or group who share protected characteristics")]
-	Unlikely = 1,
-	[Description("That there are some impacts but on balance the changes will not disproportionately affect any particular person or group who share protected characteristics")]
-	WillNot = 0
-}
+as-is data->
+Headteacher
+Other
 
-public enum MainConversionContact
+public enum MainConversionContact = DONE
 {
-	[Description("The headteacher")]
 	HeadTeacher = 1,
-	[Description("The chair of the governing body")]
 	ChairOfGoverningBody = 2,
-	[Description("Someone else")]
 	Other = 3
 }
 
-public enum PayFundsTo
+public enum PayFundsTo = DONE
 {
 	[Description("To the school")]
 	School = 1,
@@ -32,17 +25,25 @@ public enum PayFundsTo
 	Trust = 2
 }
 
-public enum EqualityImpact
+public enum RevenueType = DONE
+{
+	Surplus = 1,
+	Deficit = 2
+}
+
+public EqualityImpact enum  = TODO?? 0 references in code !!!
 {
 	ConsideredUnlikely,
 	ConsideredWillNot,
 	NotConsidered
 }
 
-public enum RevenueType
+public enum SchoolEqualitiesProtectedCharacteristics
 {
-	Surplus = 1,
-	Deficit = 2
+	[Description("That the Secretary of State's decision is unlikely to disproportionately affect any particular person or group who share protected characteristics")]
+	Unlikely = 1,
+	[Description("That there are some impacts but on balance the changes will not disproportionately affect any particular person or group who share protected characteristics")]
+	WillNot = 0
 }
 
 **/
@@ -142,7 +143,12 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			   ,[MainFeederSchools]
 			   ,[PartOfFederation]
 			   ,[ProtectedCharacteristics]
-			   ,[DynamicsApplyingSchoolId])
+			   ,[DynamicsApplyingSchoolId]
+			   --MR:- below not in v1.5
+			--,[DiocesePermissionEvidenceDocumentLink]
+			--,[FoundationEvidenceDocumentLink]
+			--,[GoverningBodyConsentEvidenceDocumentLink]			   
+			)
 	SELECT 
 			ASS.[Urn],
 			APP.Id as [ConversionApplicationId],
@@ -163,7 +169,12 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionContactHeadEmail],
 			ASS.[SchoolConversionContactHeadName],
 			ASS.[SchoolConversionContactHeadTel],
-			ASS.[SchoolConversionContactRole], -- TODO MR:- need mapper - string -> int !
+			--ASS.[SchoolConversionContactRole], -- MR:- need mapper - string -> int !
+			CASE ASS.[SchoolConversionContactRole]
+				WHEN 'HeadTeacher' THEN 1
+				WHEN 'ChairGovernor' THEN 2
+				WHEN 'Other' THEN 3
+			END as 'ContactRole',
 			ASS.[SchoolConversionTargetDateExplained],
 			ASS.[SchoolConversionReasonsForJoining] as 'JoinTrustReason',
 			ASS.[SchoolConversionMainContactOtherEmail],
@@ -188,7 +199,11 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionTargetDateDifferent], -- BIT
 			ASS.[SchoolConversionChangeName], -- BIT
 			0 as 'ConfirmPaySupportGrantToSchool', -- BIT TODO:- ????
-			ASS.[SchoolSupportGrantFundsPaidTo] as 'SupportGrantFundsPaidTo', -- TODO:- mapper strint -> int
+			--ASS.[SchoolSupportGrantFundsPaidTo] as 'SupportGrantFundsPaidTo', MR:- need mapper - string -> int !
+			CASE ASS.SchoolSupportGrantFundsPaidTo
+				WHEN 'School' THEN 1
+				WHEN 'Trust' THEN 2
+			END as 'SupportGrantFundsPaidTo',
 			--**** additional info ****
 			--ASS.[SchoolFaithSchool] - not in v1.5 schema ??
 			ASS.[SchoolFaithSchoolDioceseName] AS 'DioceseName',
@@ -254,7 +269,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			-- ****
 			ASS.[SchoolDeclarationBodyAgree],
 			ASS.[SchoolDeclarationTeacherChair],
-			ASS.[SchoolDeclarationSignedByEmail] as 'DeclarationSignedByName', -- TODO:- check spreadsheet.
+			ASS.[SchoolDeclarationSignedByEmail] as 'DeclarationSignedByName', -- TODO:- ???.
 			-- ****
 			ASS.[SchoolConversionReasonsForJoining],
 			-- **** more additional info
@@ -265,6 +280,10 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolPartOfFederation],
 			ASS.SchoolAdEqualitiesImpactAssessmentDetails as 'ProtectedCharacteristics', -- TODO MR:- need mapper - string -> int !
 			ASS.[DynamicsApplyingSchoolId]
+			--MR:- below not in v1.5
+			--ASS.[DiocesePermissionEvidenceDocumentLink],
+			--ASS.[FoundationEvidenceDocumentLink],
+			--ASS.[GoverningBodyConsentEvidenceDocumentLink]
 	FROM [sdd].[A2BApplicationApplyingSchool] as ASS
 	INNER JOIN [academisation].[ConversionApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
 
