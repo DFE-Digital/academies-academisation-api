@@ -278,7 +278,11 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			-- ****
 			ASS.[SchoolAdFeederSchools],
 			ASS.[SchoolPartOfFederation],
-			ASS.SchoolAdEqualitiesImpactAssessmentDetails as 'ProtectedCharacteristics', -- TODO MR:- need mapper - string -> int !
+			--ASS.SchoolAdEqualitiesImpactAssessmentDetails as 'ProtectedCharacteristics', -- MR:- need mapper - string -> int !
+			CASE ASS.SchoolAdEqualitiesImpactAssessmentDetails
+				WHEN 'That the Secretary of State''s decision is unlikely to disproportionately affect any particular person or group who share protected characteristics' THEN 1
+				WHEN 'That there are some impacts but on balance the changes will not disproportionately affect any particular person or group who share protected characteristics' THEN 0
+			END as 'ProtectedCharacteristics',
 			ASS.[DynamicsApplyingSchoolId]
 			--MR:- below not in v1.5
 			--ASS.[DiocesePermissionEvidenceDocumentLink],
