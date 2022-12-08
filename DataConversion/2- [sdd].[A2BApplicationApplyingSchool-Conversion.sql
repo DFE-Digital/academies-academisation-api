@@ -31,14 +31,7 @@ public enum RevenueType = DONE
 	Deficit = 2
 }
 
-public EqualityImpact enum  = TODO?? 0 references in code !!!
-{
-	ConsideredUnlikely,
-	ConsideredWillNot,
-	NotConsidered
-}
-
-public enum SchoolEqualitiesProtectedCharacteristics
+public enum SchoolEqualitiesProtectedCharacteristics = DONE
 {
 	[Description("That the Secretary of State's decision is unlikely to disproportionately affect any particular person or group who share protected characteristics")]
 	Unlikely = 1,
@@ -274,7 +267,10 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionReasonsForJoining],
 			-- **** more additional info
 			--ASS.[SchoolSACREExemption], BIT - not in v1.5 schema
-			ASS.[SchoolSACREExemptionEndDate], -- TODO MR:- need data conversion, string in as-is !!!
+			--CAST('12/01/2019' as date)
+			--CONVERT(DATETIME,'13/12/2019')
+			--ASS.[SchoolSACREExemptionEndDate], -- MR:- need data conversion, string in as-is !!!
+			CONVERT(datetimeoffset(7),ASS.[SchoolSACREExemptionEndDate]) as '[ExemptionEndDate]',
 			-- ****
 			ASS.[SchoolAdFeederSchools],
 			ASS.[SchoolPartOfFederation],
