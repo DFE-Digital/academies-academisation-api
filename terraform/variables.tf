@@ -58,3 +58,8 @@ variable "enable_mssql_database" {
   description = "Set to true to create an Azure SQL server/database, with aprivate endpoint within the virtual network"
   type        = bool
 }
+
+variable "enable_cdn_frontdoor" {
+  description = "Enable Azure CDN FrontDoor. This will use the Container Apps endpoint as the origin."
+  type        = bool
+}
