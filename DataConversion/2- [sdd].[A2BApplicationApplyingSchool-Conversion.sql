@@ -215,21 +215,41 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			-- **** CFY / NFY / PFY details ****
 			ASS.[SchoolCFYCapitalForward],
 			ASS.[SchoolCFYCapitalForwardStatusExplained],
-			ASS.[SchoolCFYCapitalIsDeficit], -- TODO:- check spreadsheet. bit -> int v1.5
+			--ASS.[SchoolCFYCapitalIsDeficit], -- bit -> int v1.5 - Surplus = 1,Deficit = 2
+			CASE ASS.[SchoolCFYCapitalIsDeficit]
+				WHEN 0 THEN 1
+				WHEN 1 THEN 2
+			END as 'CurrentFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolCFYEndDate],
 			ASS.[SchoolCFYRevenue],
-			ASS.[SchoolCFYRevenueIsDeficit], -- TODO:- check spreadsheet. bit -> int v1.5
+			--ASS.[SchoolCFYRevenueIsDeficit], -- bit -> int v1.5
+			CASE ASS.[SchoolCFYRevenueIsDeficit]
+				WHEN 0 THEN 1
+				WHEN 1 THEN 2
+			END as 'CurrentFinancialYearRevenueStatus',
 			ASS.[SchoolCFYRevenueStatusExplained],
 			ASS.[SchoolNFYCapitalForward],
 			ASS.[SchoolNFYCapitalForwardStatusExplained],
-			ASS.[SchoolNFYCapitalIsDeficit],  -- TODO:- check spreadsheet. bit -> int v1.5
+			--ASS.[SchoolNFYCapitalIsDeficit], bit -> int v1.5
+			CASE ASS.[SchoolNFYCapitalIsDeficit]
+				WHEN 0 THEN 1
+				WHEN 1 THEN 2
+			END as 'NextFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolNFYEndDate],
 			ASS.[SchoolNFYRevenue],
-			ASS.[SchoolNFYRevenueIsDeficit],  -- TODO:- check spreadsheet. bit -> int v1.5
+			--ASS.[SchoolNFYRevenueIsDeficit],  -- bit -> int v1.5
+			CASE ASS.[SchoolNFYRevenueIsDeficit]
+				WHEN 0 THEN 1
+				WHEN 1 THEN 2
+			END as 'NextFinancialYearRevenueStatus',
 			ASS.[SchoolNFYRevenueStatusExplained],
 			ASS.[SchoolPFYCapitalForward],
 			ASS.[SchoolPFYCapitalForwardStatusExplained],
-			ASS.[SchoolPFYCapitalIsDeficit], -- TODO:- check spreadsheet. bit -> int v1.5
+			--ASS.[SchoolPFYCapitalIsDeficit], -- bit -> int v1.5
+			CASE ASS.[SchoolPFYCapitalIsDeficit]
+				WHEN 0 THEN 1
+				WHEN 1 THEN 2
+			END as 'PreviousFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolPFYEndDate],
 			ASS.[SchoolPFYRevenue],
 			ASS.[SchoolPFYRevenueIsDeficit],
