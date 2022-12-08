@@ -45,14 +45,6 @@ public enum RevenueType
 	Deficit = 2
 }
 
-public enum TrustChange
-{
-	Yes = 1,
-	No = 2,
-	[Description("Unknown at this point")]
-	Unknown = 3
-}
-
 **/
 
 BEGIN TRY
@@ -159,7 +151,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[ProjectedPupilNumbersYear1],
 			ASS.[ProjectedPupilNumbersYear2],
 			ASS.[ProjectedPupilNumbersYear3],
-			ASS.[SchoolConversionChangeNameValue] as 'ProposedNewSchoolName', -- TODO:- check spreadsheet
+			ASS.[SchoolConversionChangeNameValue] as 'ProposedNewSchoolName',
 			ASS.[SchoolConversionMainContactOtherTelephone],
 			ASS.[SchoolCapacityPublishedAdmissionsNumber],
 			ASS.[SchoolConversionApproverContactEmail],
@@ -171,13 +163,13 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionContactHeadEmail],
 			ASS.[SchoolConversionContactHeadName],
 			ASS.[SchoolConversionContactHeadTel],
-			ASS.[SchoolConversionContactRole],
+			ASS.[SchoolConversionContactRole], -- TODO MR:- need mapper - string -> int !
 			ASS.[SchoolConversionTargetDateExplained],
-			ASS.[SchoolConversionReasonsForJoining] as 'JoinTrustReason', -- TODO:- check spreadsheet
+			ASS.[SchoolConversionReasonsForJoining] as 'JoinTrustReason',
 			ASS.[SchoolConversionMainContactOtherEmail],
 			ASS.[SchoolConversionMainContactOtherName],
 			ASS.[SchoolConversionMainContactOtherRole],
-			ASS.[Name] as 'SchoolName',  -- TODO:- check spreadsheet
+			ASS.[Name] as 'SchoolName',
 			--**** land & buildings ****
 			ASS.[SchoolBuildLandSharedFacilities],
 			ASS.[SchoolBuildLandSharedFacilitiesExplained],
@@ -193,36 +185,35 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolBuildLandWorksPlannedExplained],
 			-- ****
 			ASS.[SchoolConversionTargetDateDate],
-			ASS.[SchoolConversionTargetDateDifferent], -- bool
-			ASS.[SchoolConversionChangeName], -- bool
-			0 as 'ConfirmPaySupportGrantToSchool', -- TODO:- check spreadsheet
-			--ASS.[SchoolSupportGrantFundsPaidTo],
-			0 as 'SupportGrantFundsPaidTo', -- TODO:- check spreadsheet
+			ASS.[SchoolConversionTargetDateDifferent], -- BIT
+			ASS.[SchoolConversionChangeName], -- BIT
+			0 as 'ConfirmPaySupportGrantToSchool', -- BIT TODO:- ????
+			ASS.[SchoolSupportGrantFundsPaidTo] as 'SupportGrantFundsPaidTo', -- TODO:- mapper strint -> int
 			--**** additional info ****
 			--ASS.[SchoolFaithSchool] - not in v1.5 schema ??
 			ASS.[SchoolFaithSchoolDioceseName] AS 'DioceseName',
-			ASS.[SchoolSupportedFoundationBodyName] AS 'FoundationTrustOrBodyName', -- TODO:- check spreadsheet
-			ASS.[SchoolFurtherInformation] as 'FurtherInformation', -- TODO:- check spreadsheet
-			--ASS.[SchoolLaClosurePlans], - BOOL - not in v1.5 schema
+			ASS.[SchoolSupportedFoundationBodyName] AS 'FoundationTrustOrBodyName',
+			ASS.[SchoolFurtherInformation] as 'FurtherInformation',
+			--ASS.[SchoolLaClosurePlans], - BIT - not in v1.5 schema
 			ASS.[SchoolLaClosurePlansExplain],
-			--ASS.[SchoolLaReorganization], BOOL - not in v1.5 schema
+			--ASS.[SchoolLaReorganization], BIT - not in v1.5 schema
 			ASS.[SchoolLaReorganizationExplain],
-			--ASS.[SchoolAdInspectedButReportNotPublished], BOOL - not in v1.5 schema
+			--ASS.[SchoolAdInspectedButReportNotPublished], BIT - not in v1.5 schema
 			ASS.[SchoolAdInspectedReportNotPublishedExplain],
-			--ASS.[SchoolAdSafeguarding], BOOL - not in v1.5 schema
+			--ASS.[SchoolAdSafeguarding], BIT - not in v1.5 schema
 			ASS.[SchoolAdSafeguardingExplained] as 'SafeguardingDetails',
-			'' as 'TrustBenefitDetails', -- TODO:- check spreadsheet
+			ASS.[SchoolAdSchoolContributionToTrust] as 'TrustBenefitDetails',
 			-- **** CFY / NFY / PFY details ****
 			ASS.[SchoolCFYCapitalForward],
 			ASS.[SchoolCFYCapitalForwardStatusExplained],
-			--ASS.[SchoolCFYCapitalIsDeficit], -- bit -> int v1.5 - Surplus = 1,Deficit = 2
+			--ASS.[SchoolCFYCapitalIsDeficit], -- BIT -> int v1.5 - Surplus = 1,Deficit = 2
 			CASE ASS.[SchoolCFYCapitalIsDeficit]
 				WHEN 0 THEN 1
 				WHEN 1 THEN 2
 			END as 'CurrentFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolCFYEndDate],
 			ASS.[SchoolCFYRevenue],
-			--ASS.[SchoolCFYRevenueIsDeficit], -- bit -> int v1.5
+			--ASS.[SchoolCFYRevenueIsDeficit], -- BIT -> int v1.5
 			CASE ASS.[SchoolCFYRevenueIsDeficit]
 				WHEN 0 THEN 1
 				WHEN 1 THEN 2
@@ -230,14 +221,14 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolCFYRevenueStatusExplained],
 			ASS.[SchoolNFYCapitalForward],
 			ASS.[SchoolNFYCapitalForwardStatusExplained],
-			--ASS.[SchoolNFYCapitalIsDeficit], bit -> int v1.5
+			--ASS.[SchoolNFYCapitalIsDeficit], BIT -> int v1.5
 			CASE ASS.[SchoolNFYCapitalIsDeficit]
 				WHEN 0 THEN 1
 				WHEN 1 THEN 2
 			END as 'NextFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolNFYEndDate],
 			ASS.[SchoolNFYRevenue],
-			--ASS.[SchoolNFYRevenueIsDeficit],  -- bit -> int v1.5
+			--ASS.[SchoolNFYRevenueIsDeficit],  -- BIT -> int v1.5
 			CASE ASS.[SchoolNFYRevenueIsDeficit]
 				WHEN 0 THEN 1
 				WHEN 1 THEN 2
@@ -245,7 +236,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolNFYRevenueStatusExplained],
 			ASS.[SchoolPFYCapitalForward],
 			ASS.[SchoolPFYCapitalForwardStatusExplained],
-			--ASS.[SchoolPFYCapitalIsDeficit], -- bit -> int v1.5
+			--ASS.[SchoolPFYCapitalIsDeficit], -- BIT -> int v1.5
 			CASE ASS.[SchoolPFYCapitalIsDeficit]
 				WHEN 0 THEN 1
 				WHEN 1 THEN 2
@@ -267,12 +258,12 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			-- ****
 			ASS.[SchoolConversionReasonsForJoining],
 			-- **** more additional info
-			--ASS.[SchoolSACREExemption], BOOL - not in v1.5 schema
-			ASS.[SchoolSACREExemptionEndDate],
+			--ASS.[SchoolSACREExemption], BIT - not in v1.5 schema
+			ASS.[SchoolSACREExemptionEndDate], -- TODO MR:- need data conversion, string in as-is !!!
 			-- ****
 			ASS.[SchoolAdFeederSchools],
 			ASS.[SchoolPartOfFederation],
-			'' as 'ProtectedCharacteristics', -- TODO:- check spreadsheet
+			ASS.SchoolAdEqualitiesImpactAssessmentDetails as 'ProtectedCharacteristics', -- TODO MR:- need mapper - string -> int !
 			ASS.[DynamicsApplyingSchoolId]
 	FROM [sdd].[A2BApplicationApplyingSchool] as ASS
 	INNER JOIN [academisation].[ConversionApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
