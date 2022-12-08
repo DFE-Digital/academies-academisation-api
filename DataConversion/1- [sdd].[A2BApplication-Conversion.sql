@@ -32,6 +32,16 @@ public enum ApplicationStatus
 	Submitted
 }
 
+public enum TrustChange
+{
+	[Description("Yes")]
+	Yes = 1,
+	[Description("No")]
+	No = 2,
+	[Description("Unknown at this point")]
+	Unknown = 3
+}
+
 **/
 
 BEGIN TRY
@@ -81,11 +91,15 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			   ,[ChangesToLaGovernance]
 			   ,[ChangesToLaGovernanceExplained]
 			   ,[DynamicsApplicationId])
-	SELECT 	[TrustId], -- TODO:- to confirm => Live data = 'TR00751'
-			[TrustName], -- TODO:- to confirm
+	SELECT 	[TrustId], -- INT in v1.5, string in as-is !! TODO:- to confirm => Live data = 'TR00751'
+			[TrustName], -- TODO:- to confirm - service support team !!
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			[ChangesToTrust],
+			--[ChangesToTrust], -- convert bit -> enum value. god knows what happens to 'unknown in dynamics'!!
+			CASE ChangesToTrust
+				WHEN 0 THEN 2
+				WHEN 1 THEN 1
+			END as 'ChangesToTrust',
 			[ChangesToTrustExplained],
 			[ChangesToLaGovernance],
 			[ChangesToLaGovernanceExplained],
@@ -125,7 +139,7 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			[FormTrustOpeningDate],
 			[FormTrustPlanForGrowth],
 			[FormTrustPlansForNoGrowth],
-			[TrustName], -- TODO:- to confirm
+			[TrustName], -- TODO:- to confirm - service support team !!
 			[FormTrustReasonApprovalToConvertAsSat],
 			[FormTrustReasonApprovedPerson],
 			[FormTrustReasonForming],
