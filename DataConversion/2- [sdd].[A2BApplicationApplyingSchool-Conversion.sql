@@ -102,7 +102,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[ProjectedPupilNumbersYear1],
 			ASS.[ProjectedPupilNumbersYear2],
 			ASS.[ProjectedPupilNumbersYear3],
-			ASS.[SchoolConversionChangeNameValue], -- TODO:- check spreadsheet
+			ASS.[SchoolConversionChangeNameValue] as 'ProposedNewSchoolName', -- TODO:- check spreadsheet
 			ASS.[SchoolConversionMainContactOtherTelephone],
 			ASS.[SchoolCapacityPublishedAdmissionsNumber],
 			ASS.[SchoolConversionApproverContactEmail],
@@ -116,11 +116,11 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionContactHeadTel],
 			ASS.[SchoolConversionContactRole],
 			ASS.[SchoolConversionTargetDateExplained],
-			ASS.[SchoolConversionReasonsForJoining], --JoinTrustReason  -- TODO:- check spreadsheet
+			ASS.[SchoolConversionReasonsForJoining] as 'JoinTrustReason', -- TODO:- check spreadsheet
 			ASS.[SchoolConversionMainContactOtherEmail],
 			ASS.[SchoolConversionMainContactOtherName],
 			ASS.[SchoolConversionMainContactOtherRole],
-			ASS.[Name] as [SchoolName],  -- TODO:- check spreadsheet
+			ASS.[Name] as 'SchoolName',  -- TODO:- check spreadsheet
 			--**** land & buildings ****
 			ASS.[SchoolBuildLandSharedFacilities],
 			ASS.[SchoolBuildLandSharedFacilitiesExplained],
@@ -143,16 +143,16 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			0 as 'SupportGrantFundsPaidTo', -- TODO:- check spreadsheet
 			--**** additional info ****
 			--ASS.[SchoolFaithSchool] - not in v1.5 schema ??
-			ASS.[SchoolFaithSchoolDioceseName] AS [DioceseName],
-			ASS.[SchoolSupportedFoundationBodyName], -- TODO:- check spreadsheet
-			ASS.[SchoolFurtherInformation], -- TODO:- check spreadsheet
-			--ASS.[SchoolLaClosurePlans], - not in v1.5 schema ??
+			ASS.[SchoolFaithSchoolDioceseName] AS 'DioceseName',
+			ASS.[SchoolSupportedFoundationBodyName] AS 'FoundationTrustOrBodyName', -- TODO:- check spreadsheet
+			ASS.[SchoolFurtherInformation] as 'FurtherInformation', -- TODO:- check spreadsheet
+			--ASS.[SchoolLaClosurePlans], - BOOL - not in v1.5 schema
 			ASS.[SchoolLaClosurePlansExplain],
-			--ASS.[SchoolLaClosurePlans], - not in v1.5 schema ??
+			--ASS.[SchoolLaReorganization], BOOL - not in v1.5 schema
 			ASS.[SchoolLaReorganizationExplain],
-			--ASS.[SchoolAdInspectedButReportNotPublished], - not in v1.5 schema ??
+			--ASS.[SchoolAdInspectedButReportNotPublished], BOOL - not in v1.5 schema
 			ASS.[SchoolAdInspectedReportNotPublishedExplain],
-			--ASS.[SchoolAdSafeguarding], - not in v1.5 schema ??
+			--ASS.[SchoolAdSafeguarding], BOOL - not in v1.5 schema
 			ASS.[SchoolAdSafeguardingExplained] as 'SafeguardingDetails',
 			'' as 'TrustBenefitDetails', -- TODO:- check spreadsheet
 			-- **** CFY / NFY / PFY details ****
@@ -190,7 +190,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			-- ****
 			ASS.[SchoolConversionReasonsForJoining],
 			-- **** more additional info
-			--ASS.[SchoolSACREExemption], BOOL - not in v1.5 schema ??
+			--ASS.[SchoolSACREExemption], BOOL - not in v1.5 schema
 			ASS.[SchoolSACREExemptionEndDate],
 			-- ****
 			ASS.[SchoolAdFeederSchools],
