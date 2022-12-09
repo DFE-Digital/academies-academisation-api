@@ -1,6 +1,12 @@
 /****
 Role enum from c#
-
+public enum SchoolRoles
+{
+	[Description("The chair of the school's governors")]
+	ChairOfGovernors = 1,
+	[Description("Something else")]
+	Other = 2
+}
 
 ****/
 
@@ -34,7 +40,7 @@ BEGIN TRANSACTION CreateContributorsData
 	SELECT	'' as [FirstName], -- TODO MR:- split [ApplicationLeadAuthorName] using space?
 			'' as [LastName], -- TODO MR:- split [ApplicationLeadAuthorName] using space?
 			APP.ApplicationLeadEmail,
-			1 as [Role], -- TODO MR:- hard cpde to something
+			2 as [Role], -- TODO MR:- hard cpde to something
 			'ApplicationLeadAuthor' as [OtherRoleName], -- TODO MR:- hard code to something
 			NEWAPP.[Id] as 'ConversionApplicationId',
 			GETDATE() as 'CreatedOn',
