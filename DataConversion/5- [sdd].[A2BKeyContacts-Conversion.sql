@@ -1,35 +1,52 @@
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsSchoolKeyContactsData
 
-	/*** STEP 1 - populate [academisation].[??] ***/
+	/*** STEP 1 - populate [academisation].[ApplicationFormTrustKeyPerson] ***/
 
-	-- MR:- need to grab DB generated [ApplicationSchoolId]
-	-- by joining onto [academisation].[ApplicationSchool]
-	INSERT INTO [academisation].[ApplicationSchoolLoan]
-           ([Amount]
-           ,[Purpose]
-           ,[Provider]
-           ,[InterestRate]
-           ,[Schedule]
-           ,[ApplicationSchoolId]
+	-- MR:- need to grab ApplicationFormTrustId
+	-- by joining onto [academisation].[ConversionApplication]
+	INSERT INTO [academisation].[ApplicationFormTrustKeyPerson]
+           ([Name]
+           ,[DateOfBirth]
+           ,[Biography]
+           ,[ApplicationFormTrustId]
            ,[CreatedOn]
            ,[LastModifiedOn]
-           ,[DynamicsSchoolLoanId])
-	SELECT ASL.[SchoolLoanAmount],
-			ASL.[SchoolLoanPurpose],
-			ASL.SchoolLoanProvider,
-			ASL.SchoolLoanInterestRate,
-			ASL.SchoolLoanSchedule,
-			SCH.Id as 'ApplicationSchoolId',
-			GETDATE() as 'CreatedOn',
-			GETDATE() as 'LastModifiedOn',
-			ASL.DynamicsSchoolLoanId
-			--ASS.[DynamicsApplyingSchoolId] -- other
-	FROM [sdd].[A2BApplicationApplyingSchool] As ASS	
-	INNER JOIN [sdd].[A2BSchoolLoan] as ASL ON ASL.ApplyingSchoolId = ASS.ApplyingSchoolId
-	INNER JOIN [academisation].[ApplicationSchool] as SCH on SCH.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
+           ,[DynamicsKeyPersonId])
+	SELECT [Name],
+		[KeyPersonDateOfBirth],
+		[KeyPersonBiography],
+		NewApp.[FormTrustId] as 'ApplicationFormTrustId',
+		-- roles hived off to another table !!
+		--,[KeyPersonCeoExecutive] = BIT = NULL
+		--,[KeyPersonChairOfTrust] = BIT = NULL
+		--,[KeyPersonFinancialDirector] = BIT = NULL
+		--,[KeyPersonMember] = BIT = NULL
+		--,[KeyPersonOther] = BIT = NULL
+		--,[KeyPersonTrustee] = BIT = NULL
+		GETDATE() as 'CreatedOn',
+		GETDATE() as 'LastModifiedOn',
+		[DynamicsKeyPersonId]
+	FROM [sdd].[A2BApplicationKeyPersons] AKP
+	INNER JOIN [sdd].[A2BApplication] as APP on APP.[ApplicationId] = AKP.ApplicationId
+	INNER JOIN [academisation].[ConversionApplication] as NewApp on NewApp.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
+	WHERE NewApp.[FormTrustId] IS NOT NULL
+	
+	/*** STEP 2 - populate [academisation].[ApplicationFormTrustKeyPersonRole] - roles ***/
+	INSERT INTO [academisation].[ApplicationFormTrustKeyPersonRole]
+			   ([Role]
+			   ,[TimeInRole]
+			   ,[ApplicationFormTrustKeyPersonRoleId]
+			   ,[CreatedOn]
+			   ,[LastModifiedOn])
+     --VALUES
+     --      (<Role, int,>
+     --      ,<TimeInRole, nvarchar(max),>
+     --      ,<ApplicationFormTrustKeyPersonRoleId, int,>
+     --      ,<CreatedOn, datetime2(7),>
+     --      ,<LastModifiedOn, datetime2(7),>)
 
-	/*** STEP 2 - populate [academisation].[??] - roles ***/
+
 
 	--COMMIT TRAN PortDynamicsSchoolKeyContactsData
 	--ROLLBACK TRAN PortDynamicsSchoolKeyContactsData
