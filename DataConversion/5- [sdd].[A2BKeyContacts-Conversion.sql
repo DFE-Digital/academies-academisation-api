@@ -51,6 +51,17 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 	WHERE NewApp.[FormTrustId] IS NOT NULL
 	
 	-- TODO MR:- need to pivot role data. hard code roleId's as part of pivot?
+	-- Unpivot the table.  
+	SELECT [KeyPersonId],[DynamicsKeyPersonId], Roles, TrueFalse  
+	FROM   
+	   (SELECT [KeyPersonId],[DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
+	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee]
+	   FROM [sdd].[A2BApplicationKeyPersons]) p  
+	UNPIVOT  
+	   (TrueFalse FOR Roles IN   
+		  ([KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
+	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee])  
+	)AS unpvt;  
 
 	/*** STEP 2 - populate [academisation].[ApplicationFormTrustKeyPersonRole] - roles ***/
 	INSERT INTO [academisation].[ApplicationFormTrustKeyPersonRole]
