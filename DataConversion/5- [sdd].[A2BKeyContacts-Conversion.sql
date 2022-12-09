@@ -1,5 +1,23 @@
+/***
+from c# for data conversion:-
+	public enum KeyPersonRole
+	{
+		[Description("CEO")]
+		CEO = 1,
+		[Description("The chair of the trust")]
+		Chair = 2,
+		[Description("Financial director")]
+		FinancialDirector = 3,
+		[Description("Trustee")]
+		Trustee = 4,
+		[Description("Other")]
+		Other = 5
+	}
+
+***/
+
 BEGIN TRY
-BEGIN TRANSACTION PortDynamicsSchoolKeyContactsData
+BEGIN TRANSACTION PortDynamicsKeyContactsData
 
 	/*** STEP 1 - populate [academisation].[ApplicationFormTrustKeyPerson] ***/
 
@@ -13,10 +31,10 @@ BEGIN TRANSACTION PortDynamicsSchoolKeyContactsData
            ,[CreatedOn]
            ,[LastModifiedOn]
            ,[DynamicsKeyPersonId])
-	SELECT [Name],
-		[KeyPersonDateOfBirth],
-		[KeyPersonBiography],
-		NewApp.[FormTrustId] as 'ApplicationFormTrustId',
+	SELECT AKP.[Name],
+			AKP.[KeyPersonDateOfBirth],
+			AKP.[KeyPersonBiography],
+			NewApp.[FormTrustId] as 'ApplicationFormTrustId',
 		-- roles hived off to another table !!
 		--,[KeyPersonCeoExecutive] = BIT = NULL
 		--,[KeyPersonChairOfTrust] = BIT = NULL
@@ -32,24 +50,30 @@ BEGIN TRANSACTION PortDynamicsSchoolKeyContactsData
 	INNER JOIN [academisation].[ConversionApplication] as NewApp on NewApp.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
 	WHERE NewApp.[FormTrustId] IS NOT NULL
 	
+	-- TODO MR:- need to pivot role data. hard code roleId's as part of pivot?
+
 	/*** STEP 2 - populate [academisation].[ApplicationFormTrustKeyPersonRole] - roles ***/
 	INSERT INTO [academisation].[ApplicationFormTrustKeyPersonRole]
-			   ([Role]
+			   ([ApplicationFormTrustKeyPersonRoleId]
+			   ,[Role]
 			   ,[TimeInRole]
-			   ,[ApplicationFormTrustKeyPersonRoleId]
 			   ,[CreatedOn]
 			   ,[LastModifiedOn])
-     --VALUES
-     --      (<Role, int,>
+     --VALUES      --      (,<ApplicationFormTrustKeyPersonRoleId, int,>
+	 --<Role, int,> = see enum values above !!!
      --      ,<TimeInRole, nvarchar(max),>
-     --      ,<ApplicationFormTrustKeyPersonRoleId, int,>
      --      ,<CreatedOn, datetime2(7),>
      --      ,<LastModifiedOn, datetime2(7),>)
-
-
-
-	--COMMIT TRAN PortDynamicsSchoolKeyContactsData
-	--ROLLBACK TRAN PortDynamicsSchoolKeyContactsData
+	 SELECT AKPNEW.[Id] as [ApplicationFormTrustKeyPersonRoleId],
+			1 as 'Role',
+			'' as [TimeInRole],
+			GETDATE() as 'CreatedOn',
+			GETDATE() as 'LastModifiedOn'
+	 FROM [academisation].[ApplicationFormTrustKeyPerson] AKPNEW
+	 INNER JOIN [sdd].[A2BApplicationKeyPersons] AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId]
+	 
+	--COMMIT TRAN PortDynamicsKeyContactsData
+	--ROLLBACK TRAN PortDynamicsKeyContactsData
 
 END TRY
 BEGIN CATCH
