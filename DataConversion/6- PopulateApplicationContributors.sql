@@ -1,51 +1,51 @@
+/****
+Role enum from c#
+
+
+****/
+
 BEGIN TRY
-BEGIN TRANSACTION CreateApplicationContributorsData
+BEGIN TRANSACTION CreateContributorsData
 
-	/*** STEP 1 - populate [academisation].[??] ***/
+	/*** STEP 1 - populate [academisation].[ConversionApplicationContributor] ***/
 
-	-- MR:- need to grab DB generated [ApplicationSchoolId]
-	-- by joining onto [academisation].[ApplicationSchool]
-	INSERT INTO [academisation].[??]
-           ([Amount]
-           ,[Purpose]
-           ,[Provider]
-           ,[InterestRate]
-           ,[Schedule]
-           ,[ApplicationSchoolId]
-           ,[CreatedOn]
-           ,[LastModifiedOn]
-           ,[DynamicsSchoolLoanId])
-	-- TODO MR:- take data from application author
-	SELECT	
+	-- MR:- need to grab DB generated [ConversionApplicationId]
+	-- by joining onto [academisation].[Application]
+	INSERT INTO [academisation].[ConversionApplicationContributor]
+			   ([FirstName]
+			   ,[LastName]
+			   ,[EmailAddress]
+			   ,[Role]
+			   ,[OtherRoleName]
+			   ,[ConversionApplicationId]
+			   ,[CreatedOn]
+			   ,[LastModifiedOn]
+			   ,[DynamicsApplicationId])
+		 --VALUES
+		 --      (<FirstName, nvarchar(max),>
+		 --      ,<LastName, nvarchar(max),>
+		 --      ,<EmailAddress, nvarchar(max),>
+		 --      ,<Role, int,> = going to need to hard code to something !
+		 --      ,<OtherRoleName, nvarchar(max),>
+		 --      ,<ConversionApplicationId, int,>
+		 --      ,<CreatedOn, datetime2(7),>
+		 --      ,<LastModifiedOn, datetime2(7),>)
+		 		 
+	SELECT	'' as [FirstName], -- TODO MR:- split [ApplicationLeadAuthorName] using space?
+			'' as [LastName], -- TODO MR:- split [ApplicationLeadAuthorName] using space?
+			APP.ApplicationLeadEmail,
+			1 as [Role], -- TODO MR:- hard cpde to something
+			'ApplicationLeadAuthor' as [OtherRoleName], -- TODO MR:- hard code to something
+			NEWAPP.[Id] as 'ConversionApplicationId',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			--[ApplicationStatusId], -- MR:- ALWAYS = null on live !!!
-			'InProgress' as AppStatus,
-			NULL as 'FormTrustId',
-			NULL as 'JoinTrustId',
-			--[ApplicationSubmitted] - ???
-			NULL as 'ApplicationSubmittedDate',
-			[Name] as 'ApplicationReference',
-			[DynamicsApplicationId]
-	FROM [sdd].[A2BApplication]
-	WHERE [ApplicationType] IN ('JoinMat','FormMat')
+			APP.[DynamicsApplicationId]
+	FROM [sdd].[A2BApplication] as APP
+	INNER JOIN [academisation].[ConversionApplication] as NEWAPP on NEWAPP.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
+	WHERE APP.[ApplicationType] IN ('JoinMat','FormMat')
 
-	--SELECT ASL.[SchoolLoanAmount],
-	--		ASL.[SchoolLoanPurpose],
-	--		ASL.SchoolLoanProvider,
-	--		ASL.SchoolLoanInterestRate,
-	--		ASL.SchoolLoanSchedule,
-	--		SCH.Id as 'ApplicationSchoolId',
-	--		GETDATE() as 'CreatedOn',
-	--		GETDATE() as 'LastModifiedOn',
-	--		ASL.DynamicsSchoolLoanId
-	--		--ASS.[DynamicsApplyingSchoolId] -- other
-	--FROM [sdd].[A2BApplicationApplyingSchool] As ASS	
-	--INNER JOIN [sdd].[A2BSchoolLoan] as ASL ON ASL.ApplyingSchoolId = ASS.ApplyingSchoolId
-	--INNER JOIN [academisation].[ApplicationSchool] as SCH on SCH.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
-
-	--COMMIT TRAN CreateApplicationContributorsData
-	--ROLLBACK TRAN CreateApplicationContributorsData
+	--COMMIT TRAN CreateContributorsData
+	--ROLLBACK TRAN CreateContributorsData
 
 END TRY
 BEGIN CATCH
