@@ -82,6 +82,10 @@ builder.Services.AddSwaggerGen(config =>
 		Title = "Academisation API",
 		Version = "v1"
 	});
+
+	string descriptions = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	string descriptionsPath = Path.Combine(AppContext.BaseDirectory, descriptions);
+	if (File.Exists(descriptionsPath)) config.IncludeXmlComments(descriptionsPath);
 });
 
 builder.Services.AddHealthChecks();
@@ -98,6 +102,7 @@ builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataC
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
+builder.Services.AddScoped<ILegacyProjectAddNoteCommand, LegacyProjectAddNoteCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
