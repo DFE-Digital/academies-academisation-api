@@ -37,11 +37,21 @@ BEGIN TRANSACTION CreateContributorsData
 		 --      ,<CreatedOn, datetime2(7),>
 		 --      ,<LastModifiedOn, datetime2(7),>)
 		 		 
-	SELECT	'' as [FirstName], -- TODO MR:- split [ApplicationLeadAuthorName] using space?
-			'' as [LastName], -- TODO MR:- split [ApplicationLeadAuthorName] using space?
+	SELECT	substring(APP.[ApplicationLeadAuthorName], 1 , CHARINDEX(' ', APP.[ApplicationLeadAuthorName])-1) as 'FirstName',
+			SUBSTRING([ApplicationLeadAuthorName], CHARINDEX(' ', [ApplicationLeadAuthorName])+1, len([ApplicationLeadAuthorName])) as 'LastName',
 			APP.ApplicationLeadEmail,
-			2 as [Role], -- TODO MR:- hard cpde to something
-			'ApplicationLeadAuthor' as [OtherRoleName], -- TODO MR:- hard code to something
+		  --[ApplicationRole],
+	  		CASE APP.[ApplicationRole]
+				WHEN 'HeadTeacher' THEN 2
+				WHEN 'ChairGovernor' THEN 1
+				WHEN 'Other' THEN 2
+			END as 'ContributorRole',
+			--[ApplicationRoleOtherDescription]
+			CASE APP.[ApplicationRole]
+				WHEN 'HeadTeacher' THEN 'Head Teacher'
+				WHEN 'ChairGovernor' THEN ''
+				WHEN 'Other' THEN APP.[ApplicationRoleOtherDescription]
+			END as 'ContributorDescription',
 			NEWAPP.[Id] as 'ConversionApplicationId',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
