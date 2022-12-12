@@ -25,7 +25,8 @@ public class ApplicationStateTests
 			LastName: _faker.Name.LastName(),
 			EmailAddress: _faker.Internet.Email(),
 			ContributorRole.ChairOfGovernors,
-			OtherRoleName: null
+			OtherRoleName: null,
+			DynamicsApplicationId: null
 		);
 
 		var mockApplication = new Mock<IApplication>();
