@@ -12,7 +12,8 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 				requestModel.Contributor.LastName,
 				requestModel.Contributor.EmailAddress,
 				requestModel.Contributor.Role,
-				requestModel.Contributor.OtherRoleName);
+				requestModel.Contributor.OtherRoleName,
+				null);
 
 			return (requestModel.ApplicationType, contributorDetails);
 		}
