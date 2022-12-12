@@ -87,7 +87,7 @@ public class ApplicationCreateTests
 
 		object? idValue = createdAtRouteResult.RouteValues!["id"];
 		int id = Assert.IsType<int>(idValue);
-
+		var applicationReference = $"A2B_{id}";
 		var getResult = await applicationController.Get(id);
 
 		var getOkayResult = Assert.IsAssignableFrom<OkObjectResult>(getResult.Result);
@@ -106,7 +106,7 @@ public class ApplicationCreateTests
 				applicationCreateRequestModel.Contributor.Role,
 				applicationCreateRequestModel.Contributor.OtherRoleName) },
 			new List<ApplicationSchoolServiceModel>(),
-			null, null, null, null);
+			null, null, null, id.ToString());
 
 		Assert.Equivalent(expectedApplication, actualApplication);
 	}

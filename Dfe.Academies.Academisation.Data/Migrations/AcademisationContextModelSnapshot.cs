@@ -339,7 +339,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ApplicationReference")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComputedColumnSql("'A2B_' + CAST([Id] AS NVARCHAR(255))", true);
 
                     b.Property<string>("ApplicationStatus")
                         .IsRequired()
