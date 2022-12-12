@@ -124,6 +124,10 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.Property(e => e.ApplicationStatus)
 			.HasConversion<string>();
 
+		modelBuilder.Entity<ApplicationState>()
+			.Property(p => p.ApplicationReference)
+			.HasComputedColumnSql("'A2B_' + CAST([Id] AS NVARCHAR(255))", stored: true);
+
 		OnAdvisoryBoardDecisionCreating(modelBuilder);
 
 		OnProjectCreating(modelBuilder);
