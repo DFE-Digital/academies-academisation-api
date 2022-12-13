@@ -13,6 +13,9 @@ public class ContributorState : BaseEntity
 	public ContributorRole Role { get; set; }
 	public string? OtherRoleName { get; set; }
 
+	// MR:- below mods for Dynamics -> SQL server A2B external app conversion
+	public Guid? DynamicsApplicationId { get; set; }
+
 	public static ContributorState MapFromDomain(IContributor contributor)
 	{
 		return new()
@@ -22,7 +25,8 @@ public class ContributorState : BaseEntity
 			LastName = contributor.Details.LastName,
 			EmailAddress = contributor.Details.EmailAddress,
 			Role = contributor.Details.Role,
-			OtherRoleName = contributor.Details.OtherRoleName
+			OtherRoleName = contributor.Details.OtherRoleName,
+			DynamicsApplicationId = contributor.Details.DynamicsApplicationId
 		};
 	}
 }

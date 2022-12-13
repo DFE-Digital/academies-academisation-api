@@ -6,5 +6,6 @@ public record ContributorDetails
 	string LastName,
 	string EmailAddress,
 	ContributorRole Role,
-	string? OtherRoleName
+	string? OtherRoleName,
+	Guid? DynamicsApplicationId
 );

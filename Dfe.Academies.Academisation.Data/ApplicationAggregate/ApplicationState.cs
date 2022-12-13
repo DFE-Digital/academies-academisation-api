@@ -56,7 +56,7 @@ public class ApplicationState : BaseEntity
 	{
 		var contributorsDictionary = Contributors.ToDictionary(
 			c => c.Id,
-			c => new ContributorDetails(c.FirstName, c.LastName, c.EmailAddress, c.Role, c.OtherRoleName));
+			c => new ContributorDetails(c.FirstName, c.LastName, c.EmailAddress, c.Role, c.OtherRoleName, c.DynamicsApplicationId));
 
 		var schoolsList = Schools.Select(n => n.MapToDomain());
 
@@ -64,6 +64,6 @@ public class ApplicationState : BaseEntity
 		contributorsDictionary, schoolsList,
 								mapper.Map<JoinTrust>(JoinTrust),
 								mapper.Map<FormTrust>(FormTrust),
-								ApplicationSubmittedDate);
+								ApplicationSubmittedDate, ApplicationReference);
 	}
 }
