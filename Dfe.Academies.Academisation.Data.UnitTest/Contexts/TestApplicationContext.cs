@@ -27,16 +27,19 @@ public class TestApplicationContext : TestAcademisationContext
 				.With(d => d.Id, 1)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)
+				.With(d => d.ApplicationReference, $"A2B_{1}")
 				.Create(),
 			_fixture.Build<ApplicationState>()
 				.With(d => d.Id, 2)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)
+				.With(d => d.ApplicationReference, $"A2B_{2}")
 				.Create(),
 			_fixture.Build<ApplicationState>()
 				.With(d => d.Id, 3)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)
+				.With(d => d.ApplicationReference, $"A2B_{3}")
 				.Create()
 		};
 

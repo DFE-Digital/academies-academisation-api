@@ -64,6 +64,6 @@ public class ApplicationState : BaseEntity
 		contributorsDictionary, schoolsList,
 								mapper.Map<JoinTrust>(JoinTrust),
 								mapper.Map<FormTrust>(FormTrust),
-								ApplicationSubmittedDate);
+								ApplicationSubmittedDate, ApplicationReference);
 	}
 }
