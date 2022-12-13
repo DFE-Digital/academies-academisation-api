@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -71,9 +72,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return Ok(result);
 		}
 
+		/// <summary>
+		/// Returns the project with the specified <paramref name="id"/>.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns><see cref="LegacyProjectServiceModel"/></returns>
+		/// <response code="200">The project with the specified ID was found and returned</response>
+		/// <response code="404">The project with the specified ID was not found</response>
 		[HttpGet("project/{id}", Name = "GetLegacyProject")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
 		{
@@ -90,7 +97,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			int id,
 			LegacyProjectServiceModel projectUpdate)
 		{
-			CommandResult result = await _legacyProjectUpdateCommand.Execute(projectUpdate with { Id = id });
+			projectUpdate.Id = id;
+			CommandResult result = await _legacyProjectUpdateCommand.Execute(projectUpdate);
 
 			return result switch
 			{
@@ -113,13 +121,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
-		public async Task<ActionResult> AddNote(int id, ProjectNote note)
+		public async Task<ActionResult> AddNote(int id, AddNoteRequest note)
 		{
-			CommandResult result = await _legacyProjectAddNoteCommand.Execute(
-				new LegacyProjectAddNoteModel(id,
-					note.Subject,
-					note.Note,
-					note.Author));
+			CommandResult result = await _legacyProjectAddNoteCommand.Execute(note.ToAddNoteModel(id));
 
 			return result switch
 			{

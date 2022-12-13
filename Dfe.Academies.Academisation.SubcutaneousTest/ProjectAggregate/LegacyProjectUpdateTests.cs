@@ -55,11 +55,13 @@ public class ProjectUpdateTests
 			.With(p => p.Urn, existingProject.Urn)
 			.Create();
 
+		updatedProject.Notes?.Clear();
+
 		// Act
 		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 
 		// Assert
-		(_, var project) = DfeAssert.OkObjectResult(updateResult);
+		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(updateResult);
 
 		Assert.Equivalent(updatedProject, project);
 	}
@@ -80,6 +82,8 @@ public class ProjectUpdateTests
 			.With(p => p.Urn, existingProject.Urn)
 			.Create();
 
+		updatedProject.Notes?.Clear();
+
 		// Act
 		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 		DfeAssert.OkObjectResult(updateResult);
@@ -87,7 +91,7 @@ public class ProjectUpdateTests
 		var getResult = await legacyProjectController.Get(updatedProject.Id);
 
 		// Assert
-		(_, var project) = DfeAssert.OkObjectResult(getResult);
+		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(getResult);
 
 		Assert.Equivalent(updatedProject, project);
 	}
