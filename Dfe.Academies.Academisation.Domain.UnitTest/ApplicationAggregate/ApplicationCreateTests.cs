@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -23,6 +24,7 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Internet.Email(),
 			ContributorRole.ChairOfGovernors,
+			null,
 			null);
 		var applicationType = _fixture.Create<ApplicationType>();
 
@@ -50,7 +52,7 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Internet.Email(),
 			ContributorRole.Other,
-			otherRoleName);
+			otherRoleName, null);
 
 		// Act
 		var result = target.Create(applicationType, contributor);
@@ -75,7 +77,7 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Internet.Email(),
 			ContributorRole.ChairOfGovernors,
-			otherRoleName);
+			otherRoleName, null);
 
 		// Act
 		var result = target.Create(applicationType, contributor);
@@ -97,7 +99,7 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Random.Chars(count: 20).ToString()!,
 			ContributorRole.ChairOfGovernors,
-			null);
+			null, null);
 
 		// Act
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
@@ -121,7 +123,7 @@ public class ApplicationCreateTests
 			lastName,
 			_faker.Random.Chars(count: 20).ToString()!,
 			ContributorRole.ChairOfGovernors,
-			null);
+			null, null);
 
 		// Act
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
