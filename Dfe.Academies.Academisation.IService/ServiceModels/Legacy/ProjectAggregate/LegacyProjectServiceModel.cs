@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 {
-	public class LegacyProjectServiceModel : IEquatable<LegacyProjectServiceModel>
+	public sealed class LegacyProjectServiceModel : IEquatable<LegacyProjectServiceModel>
 	{
 		public LegacyProjectServiceModel(int Id,
 										 int? Urn = null,

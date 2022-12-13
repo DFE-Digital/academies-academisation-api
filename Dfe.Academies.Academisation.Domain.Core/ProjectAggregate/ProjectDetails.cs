@@ -6,7 +6,7 @@
 /// <remarks>
 ///     The notes associated with the project do not affect equality, while all other properties do.
 /// </remarks>
-public class ProjectDetails : IEquatable<ProjectDetails>
+public sealed class ProjectDetails : IEquatable<ProjectDetails>
 {
 	public ProjectDetails(int Urn,
 						  int? IfdPipelineId = null,

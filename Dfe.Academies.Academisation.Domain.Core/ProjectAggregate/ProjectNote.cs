@@ -2,26 +2,17 @@
 {
 	public class ProjectNote
 	{
-		public ProjectNote(string Subject,
-						   string Note,
-						   string Author)
+		public ProjectNote(string? subject,
+						   string? note,
+						   string? author)
 		{
-			this.Subject = Subject;
-			this.Note = Note;
-			this.Author = Author;
+			Subject = subject;
+			Note = note;
+			Author = author;
 		}
 
-		public string Subject { get; init; }
-		public string Note { get; init; }
-		public string Author { get; init; }
-
-		public void Deconstruct(out string Subject,
-								out string Note,
-								out string Author)
-		{
-			Subject = this.Subject;
-			Note = this.Note;
-			Author = this.Author;
-		}
+		public string? Subject { get; init; }
+		public string? Note { get; init; }
+		public string? Author { get; init; }
 	}
 }
