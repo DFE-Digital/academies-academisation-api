@@ -9,9 +9,8 @@ internal static class LegacyProjectServiceModelMapper
 {
 	internal static LegacyProjectServiceModel MapToServiceModel(this IProject project)
 	{
-		LegacyProjectServiceModel serviceModel = new()
+		LegacyProjectServiceModel serviceModel = new(project.Id)
 		{
-			Id = project.Id,
 			Urn = project.Details.Urn,
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,

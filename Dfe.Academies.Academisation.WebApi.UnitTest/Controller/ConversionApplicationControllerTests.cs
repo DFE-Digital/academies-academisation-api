@@ -150,7 +150,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel { Id = 1 };
+			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1);
 			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CreateSuccessResult<LegacyProjectServiceModel>(projectServiceModel));
 
