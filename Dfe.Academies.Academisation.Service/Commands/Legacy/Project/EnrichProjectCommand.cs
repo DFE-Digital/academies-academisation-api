@@ -47,11 +47,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 				}
 
 				var projectChanges = new LegacyProjectServiceModel
-				(
-					project.Id,
-					LocalAuthority: school.LocalAuthorityName,
-					Region: school.Gor.Name
-				);
+				{
+					Id = project.Id, LocalAuthority = school.LocalAuthorityName, Region = school.Gor.Name
+				};
 
 				project.Update(LegacyProjectDetailsMapper.MapNonEmptyFields(projectChanges, project));
 

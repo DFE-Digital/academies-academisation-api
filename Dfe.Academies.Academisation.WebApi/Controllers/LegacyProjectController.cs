@@ -97,8 +97,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			int id,
 			LegacyProjectServiceModel projectUpdate)
 		{
-			projectUpdate.Id = id;
-			CommandResult result = await _legacyProjectUpdateCommand.Execute(projectUpdate);
+			CommandResult result = await _legacyProjectUpdateCommand.Execute(id, projectUpdate);
 
 			return result switch
 			{

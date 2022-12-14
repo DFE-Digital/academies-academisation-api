@@ -107,10 +107,9 @@ public class ProjectUpdateTests
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
-		var updatedProject = new LegacyProjectServiceModel(existingProject.Id)
+		var updatedProject = new LegacyProjectServiceModel
 		{
-			ProjectStatus = "TestStatus",
-			EqualitiesImpactAssessmentConsidered = "Yes sir"
+			Id = existingProject.Id, ProjectStatus = "TestStatus", EqualitiesImpactAssessmentConsidered = "Yes sir"
 		};
 
 		// Act

@@ -121,8 +121,9 @@ public class ProjectState : BaseEntity
 
 	internal Project MapToDomain()
 	{
-		ProjectDetails projectDetails = new(Urn)
+		ProjectDetails projectDetails = new()
 		{
+			Urn = Urn,
 			IfdPipelineId = IfdPipelineId,
 			SchoolName = SchoolName,
 			LocalAuthority = LocalAuthority,

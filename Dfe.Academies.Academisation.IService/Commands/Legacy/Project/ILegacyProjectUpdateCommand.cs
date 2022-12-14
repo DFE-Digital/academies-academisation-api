@@ -5,5 +5,5 @@ namespace Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 
 public interface ILegacyProjectUpdateCommand
 {
-	Task<CommandResult> Execute(LegacyProjectServiceModel legacyProjectServiceModel);
+	Task<CommandResult> Execute(int id, LegacyProjectServiceModel legacyProjectServiceModel);
 }

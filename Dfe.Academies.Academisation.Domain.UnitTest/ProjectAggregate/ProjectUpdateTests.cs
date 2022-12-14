@@ -18,7 +18,7 @@ public class ProjectUpdateTests
 		var initialProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, initialProject);
 		var updatedProject = _fixture.Build<ProjectDetails>().With(p => p.Urn, initialProject.Urn).Create();
-		updatedProject.Notes.Clear();
+		updatedProject.Notes = default;
 
 		// Act
 		var result = sut.Update(updatedProject);
@@ -36,7 +36,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var existingProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, existingProject);
-		var updatedProject = new ProjectDetails(1);
+		var updatedProject = new ProjectDetails { Urn = 1 };
 
 		// Act
 		var result = sut.Update(updatedProject);

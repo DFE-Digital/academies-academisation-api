@@ -39,10 +39,9 @@ public class Project : IProject
 
 		var school = application.Schools.Single().Details;
 
-		var projectDetails = new ProjectDetails(
-			school.Urn
-		)
+		var projectDetails = new ProjectDetails
 		{
+			Urn = school.Urn,
 			SchoolName = school.SchoolName,
 			ApplicationReferenceNumber = application.ApplicationId.ToString(),
 			ProjectStatus = "Converter Pre-AO (C)",
@@ -77,11 +76,11 @@ public class Project : IProject
 		{
 			return new CommandValidationErrorResult(new List<ValidationError>
 			{
-				new ValidationError("Urn", "Urn in update model must match existing record")
+				new("Urn", "Urn in update model must match existing record")
 			});
 		}
 
-		Details = new ProjectDetails(detailsToUpdate.Urn)
+		Details = new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId,
