@@ -5,5 +5,5 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 public interface IApplicationFactory
 {
-	CreateResult<IApplication> Create(ApplicationType applicationType, ContributorDetails initialContributor);
+	CreateResult Create(ApplicationType applicationType, ContributorDetails initialContributor);
 }

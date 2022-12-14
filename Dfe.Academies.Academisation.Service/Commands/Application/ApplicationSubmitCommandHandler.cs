@@ -4,7 +4,6 @@ using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Application;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 using MediatR;
 
@@ -44,7 +43,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				case CommandValidationErrorResult:
 					return domainServiceResult;
-				case CreateValidationErrorResult<IProject> createValidationErrorResult:
+				case CreateValidationErrorResult:
 					return domainServiceResult;
 				case CommandSuccessResult:
 					break;
@@ -61,8 +60,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				case CommandResult:
 					return domainServiceResult;
-				case CreateValidationErrorResult<IProject> createValidationErrorResult:
-					return createValidationErrorResult.MapToPayloadType<LegacyProjectServiceModel>();
+				case CreateValidationErrorResult createValidationErrorResult:
+					return createValidationErrorResult.MapToPayloadType();
 				case CreateSuccessResult<IProject> createSuccessResult:
 					return createSuccessResult.MapToPayloadType(p => p.MapToServiceModel());
 				default:

@@ -144,14 +144,14 @@ public class Application : IApplication, IAggregateRoot
 		return new CommandSuccessResult();
 	}
 
-	internal static CreateResult<IApplication> Create(ApplicationType applicationType,
+	internal static CreateResult Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
 		var validationResult = new CreateApplicationValidator().Validate(initialContributor);
 
 		if (!validationResult.IsValid)
 		{
-			return new CreateValidationErrorResult<IApplication>(
+			return new CreateValidationErrorResult(
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 

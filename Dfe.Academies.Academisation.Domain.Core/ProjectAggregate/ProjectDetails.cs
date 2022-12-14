@@ -90,7 +90,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage4PerformanceAdditionalInformation { get; init; }
 	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	public User? AssignedUser { get; init; }
-	public ICollection<ProjectNote>? Notes { get; set; }
+	public ICollection<ProjectNote> Notes { get; init; } = new List<ProjectNote>();
 	
 	public bool Equals(ProjectDetails? other)
 	{

@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Moq;
@@ -12,7 +13,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands;
 
 public class AdvisoryBoardDecisionCreateCommandExecuteTests
 {
-	private class UnhandledCreateResult : CreateResult<IConversionAdvisoryBoardDecision>
+	private class UnhandledCreateResult : CreateResult
 	{
 		public UnhandledCreateResult() : base(default) { }
 	}
@@ -38,7 +39,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 
 		//Act
-		_ = await target.Execute(new());
+		_ = await target.Execute(new AdvisoryBoardDecisionCreateRequestModel());
 
 		//Assert
 		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
@@ -86,7 +87,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		//Arrange
 		_mockDecisionFactory
 			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>()))
-			.Returns(new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(Enumerable.Empty<ValidationError>()));
+			.Returns(new CreateValidationErrorResult(Enumerable.Empty<ValidationError>()));
 
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 
@@ -108,6 +109,6 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 
 		//Act && Assert
-		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new()));
+		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new AdvisoryBoardDecisionCreateRequestModel()));
 	}
 }

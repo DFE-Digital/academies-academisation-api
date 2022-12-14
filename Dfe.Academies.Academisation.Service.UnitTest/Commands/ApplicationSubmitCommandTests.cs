@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands;
 
 public class ApplicationSubmitCommandTests
 {
-	private readonly Fixture fixture = new();
+	private readonly Fixture _fixture = new();
 
 	private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
 	private readonly Mock<IApplicationUpdateDataCommand> _updateDataCommandMock = new();
@@ -31,7 +31,7 @@ public class ApplicationSubmitCommandTests
 
 	public ApplicationSubmitCommandTests()
 	{
-		_applicationId = fixture.Create<int>();
+		_applicationId = _fixture.Create<int>();
 		_subject = new ApplicationSubmitCommandHandler(
 			_getDataQueryMock.Object,
 			_updateDataCommandMock.Object,
@@ -120,7 +120,7 @@ public class ApplicationSubmitCommandTests
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
 		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
 
-		CreateValidationErrorResult<IProject> createValidationErrorResult = new(new List<ValidationError>());
+		CreateValidationErrorResult createValidationErrorResult = new(new List<ValidationError>());
 
 		_applicationSubmissionServiceMock.Setup(m => m.SubmitApplication(_applicationMock.Object))
 			.Returns(createValidationErrorResult);
@@ -129,7 +129,7 @@ public class ApplicationSubmitCommandTests
 		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
 
 		// assert
-		Assert.IsType<CreateValidationErrorResult<IProject>>(result);
+		Assert.IsType<CreateValidationErrorResult>(result);
 		Assert.Equal(createValidationErrorResult, result);
 		_projectCreateDataCommand.Verify(x => x.Execute(It.IsAny<IProject>()), Times.Never);
 		_updateDataCommandMock.Verify(x => x.Execute(_applicationMock.Object), Times.Never);

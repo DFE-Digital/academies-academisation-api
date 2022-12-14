@@ -36,14 +36,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <summary>
 		///     Retrieve all projects matching specified filter conditions
 		/// </summary>
+		/// <param name="searchModel"><see cref="GetAcademyConversionSearchModel"/> describing filtering requirements for the request</param>
 		/// <param name="urn">URN of a specific project to retrieve</param>
 		/// <remarks>
 		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
 		///     Delivery Officer.
 		/// </remarks>
+		/// <response code="200">One or more projects matching the specified filter criteria were found</response>
+		/// <response code="404">No projects matched the specified search criteria</response>
 		[HttpPost("projects", Name = "GetLegacyProjects")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>> GetProjects(
 			GetAcademyConversionSearchModel? searchModel,
@@ -62,10 +64,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <remarks>
 		///     Statuses or users not in use in the current project data will not be present in the returned data
 		/// </remarks>
+		/// <response code="200">details of available filter parameters are provided</response>
 		[HttpGet("projects/status")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ProjectFilterParameters>> GetFilterParameters()
 		{
 			ProjectFilterParameters result = await _projectGetStatusesQuery.Execute();
@@ -89,6 +90,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 
+		/// <summary>
+		/// Updates the project with the specified id using the provided partial data in <paramref name="projectUpdate"/>
+		/// </summary>
+		/// <param name="id">The ID of the project to update</param>
+		/// <param name="projectUpdate">The partial data describing the changes</param>
+		/// <exception cref="NotImplementedException"></exception>
+		/// <response code="200">The update was applied successfully and the updated project is returned</response>
+		/// <response code="400">The request failed validation and the errors are returned</response>
+		/// <response code="404">The Project with the specified ID was not found</response>
 		[HttpPatch("project/{id}", Name = "PatchLegacyProject")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]

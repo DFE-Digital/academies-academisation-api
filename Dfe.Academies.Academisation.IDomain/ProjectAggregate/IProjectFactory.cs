@@ -5,5 +5,5 @@ namespace Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 public interface IProjectFactory
 {
-	CreateResult<IProject> Create(IApplication application);
+	CreateResult Create(IApplication application);
 }

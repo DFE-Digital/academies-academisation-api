@@ -9,7 +9,6 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.WebApi.Controllers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -18,7 +17,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller;
 
 public class ConversionAdvisoryBoardDecisionControllerPostTests
 {
-	private class UnhandledCreateResult : CreateResult<ConversionAdvisoryBoardDecisionServiceModel>
+	private class UnhandledCreateResult : CreateResult
 	{
 		public UnhandledCreateResult() : base(default) { }
 	}
@@ -63,7 +62,7 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 		_mockCreateCommand
 			.Setup(c => c.Execute(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()))
 			.ReturnsAsync(
-				new CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel>(expectedValidationErrors));
+				new CreateValidationErrorResult(expectedValidationErrors));
 
 		var subject = new ConversionAdvisoryBoardDecisionController(
 			_mockCreateCommand.Object,
