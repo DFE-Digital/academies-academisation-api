@@ -80,7 +80,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <returns><see cref="LegacyProjectServiceModel"/></returns>
 		/// <response code="200">The project with the specified ID was found and returned</response>
 		/// <response code="404">The project with the specified ID was not found</response>
-		[HttpGet("project/{id}", Name = "GetLegacyProject")]
+		[HttpGet("project/{id:int}", Name = "GetLegacyProject")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
@@ -99,7 +99,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <response code="200">The update was applied successfully and the updated project is returned</response>
 		/// <response code="400">The request failed validation and the errors are returned</response>
 		/// <response code="404">The Project with the specified ID was not found</response>
-		[HttpPatch("project/{id}", Name = "PatchLegacyProject")]
+		[HttpPatch("project/{id:int}", Name = "PatchLegacyProject")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -126,7 +126,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <param name="note">Project Note data</param>
 		/// <response code="404">The ID does not correspond to a known Project</response>
 		/// <response code="201">The note has been added to the specified Project</response>
-		[HttpPost("project/{id}/notes")]
+		[HttpPost("project/{id:int}/notes")]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
