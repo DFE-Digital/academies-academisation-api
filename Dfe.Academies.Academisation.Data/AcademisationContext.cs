@@ -128,6 +128,11 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.Property(p => p.ApplicationReference)
 			.HasComputedColumnSql("'A2B_' + CAST([Id] AS NVARCHAR(255))", stored: true);
 
+		modelBuilder.Entity<ProjectState>()
+			.HasMany(x => x.Notes)
+			.WithOne()
+			.HasForeignKey("ProjectId");
+
 		OnAdvisoryBoardDecisionCreating(modelBuilder);
 
 		OnProjectCreating(modelBuilder);

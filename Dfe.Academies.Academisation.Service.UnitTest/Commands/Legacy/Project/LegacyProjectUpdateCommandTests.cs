@@ -32,7 +32,7 @@ public class LegacyProjectUpdateCommandTests
 		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync((IProject?)null);
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel);
+		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
 
 		// Assert
 		Assert.IsType<NotFoundCommandResult>(result);
@@ -51,7 +51,7 @@ public class LegacyProjectUpdateCommandTests
 		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);		
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel);
+		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
 
 		// Assert
 		Assert.Equal(validationErrorResult, result);
@@ -71,7 +71,7 @@ public class LegacyProjectUpdateCommandTests
 		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);
 
 		// Act & Assert
-		var result = await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Execute(projectServiceModel));		
+		await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Execute(projectServiceModel.Id, projectServiceModel));		
 	}
 
 	[Fact]
@@ -85,7 +85,7 @@ public class LegacyProjectUpdateCommandTests
 			.ReturnsAsync(projectMock.Object);
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel);
+		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
 
 		// Assert
 		Assert.Multiple(

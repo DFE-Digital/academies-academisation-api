@@ -10,7 +10,7 @@ internal static class LegacyProjectDetailsMapper
 {
 	internal static ProjectDetails MapNonEmptyFields(this LegacyProjectServiceModel detailsToUpdate, IProject existingProject)
 	{
-		return new(detailsToUpdate.Urn ?? existingProject.Details.Urn)
+		return new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn ?? existingProject.Details.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId ?? existingProject.Details.IfdPipelineId,

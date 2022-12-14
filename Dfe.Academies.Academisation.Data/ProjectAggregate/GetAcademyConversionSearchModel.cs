@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dfe.Academies.Academisation.Data.ProjectAggregate
+﻿namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 {
 	public class GetAcademyConversionSearchModel
 	{
-		public GetAcademyConversionSearchModel()
-		{
-
-		}
 		public GetAcademyConversionSearchModel(int page, int count, string? titleFilter,
 			IEnumerable<string>? deliveryOfficerQueryString, IEnumerable<int>? regionUrnsQueryString,
 			IEnumerable<string>? statusQueryString)

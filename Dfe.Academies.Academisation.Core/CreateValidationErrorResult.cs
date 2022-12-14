@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Core;
 
-public class CreateValidationErrorResult<TPayload> : CreateResult<TPayload>
+public class CreateValidationErrorResult : CreateResult
 {
 	public CreateValidationErrorResult(IEnumerable<ValidationError> validationErrors)
 		: base(ResultType.ValidationError)
@@ -10,8 +10,8 @@ public class CreateValidationErrorResult<TPayload> : CreateResult<TPayload>
 
 	public IReadOnlyCollection<ValidationError> ValidationErrors { get; }
 
-	public CreateValidationErrorResult<TDestinationPayload> MapToPayloadType<TDestinationPayload>()
+	public CreateValidationErrorResult MapToPayloadType()
 	{
-		return new CreateValidationErrorResult<TDestinationPayload>(ValidationErrors);
+		return new CreateValidationErrorResult(ValidationErrors);
 	}
 }

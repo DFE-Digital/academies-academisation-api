@@ -28,7 +28,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 		var result = _target.Create(details);
 
 		//Assert
-		Assert.IsType<CreateValidationErrorResult<IConversionAdvisoryBoardDecision>>(result);
+		Assert.IsType<CreateValidationErrorResult>(result);
 	}
 
 	[Fact]

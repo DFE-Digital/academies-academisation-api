@@ -35,4 +35,8 @@
     <InternalsVisibleTo Include="Dfe.Academies.Academisation.Data.UnitTest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

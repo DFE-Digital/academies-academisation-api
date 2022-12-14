@@ -8,7 +8,6 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Application;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Moq;
@@ -18,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands;
 
 public class ApplicationSubmitCommandTests
 {
-	private readonly Fixture fixture = new();
+	private readonly Fixture _fixture = new();
 
 	private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
 	private readonly Mock<IApplicationUpdateDataCommand> _updateDataCommandMock = new();
@@ -32,7 +31,7 @@ public class ApplicationSubmitCommandTests
 
 	public ApplicationSubmitCommandTests()
 	{
-		_applicationId = fixture.Create<int>();
+		_applicationId = _fixture.Create<int>();
 		_subject = new ApplicationSubmitCommandHandler(
 			_getDataQueryMock.Object,
 			_updateDataCommandMock.Object,
@@ -98,7 +97,7 @@ public class ApplicationSubmitCommandTests
 	{
 		// arrange
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
-		_projectMock.SetupGet(p => p.Details).Returns(new ProjectDetails(1));
+		_projectMock.SetupGet(p => p.Details).Returns(new ProjectDetails { Urn = 1 });
 		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
 		_applicationMock.Setup(x => x.Submit(It.IsAny<DateTime>())).Returns(new CommandSuccessResult());
 		_projectCreateDataCommand.Setup(m => m.Execute(_projectMock.Object)).ReturnsAsync(_projectMock.Object);
@@ -121,7 +120,7 @@ public class ApplicationSubmitCommandTests
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
 		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
 
-		CreateValidationErrorResult<IProject> createValidationErrorResult = new(new List<ValidationError>());
+		CreateValidationErrorResult createValidationErrorResult = new(new List<ValidationError>());
 
 		_applicationSubmissionServiceMock.Setup(m => m.SubmitApplication(_applicationMock.Object))
 			.Returns(createValidationErrorResult);
@@ -130,7 +129,7 @@ public class ApplicationSubmitCommandTests
 		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
 
 		// assert
-		Assert.IsType<CreateValidationErrorResult<IProject>>(result);
+		Assert.IsType<CreateValidationErrorResult>(result);
 		Assert.Equal(createValidationErrorResult, result);
 		_projectCreateDataCommand.Verify(x => x.Execute(It.IsAny<IProject>()), Times.Never);
 		_updateDataCommandMock.Verify(x => x.Execute(_applicationMock.Object), Times.Never);

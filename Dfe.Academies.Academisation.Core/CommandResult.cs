@@ -2,7 +2,4 @@
 
 public abstract class CommandResult : CommandOrCreateResult
 {
-	protected CommandResult()
-	{
-	}
 }

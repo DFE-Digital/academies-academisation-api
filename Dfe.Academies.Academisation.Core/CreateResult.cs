@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Core;
 
-public abstract class CreateResult<TPayload> : CommandOrCreateResult
+public abstract class CreateResult : CommandOrCreateResult
 {
 	protected CreateResult(ResultType resultType)
 	{
