@@ -5,9 +5,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 {
 	public sealed class LegacyProjectServiceModel : IEquatable<LegacyProjectServiceModel>
 	{
-		public LegacyProjectServiceModel(int id)
+		public LegacyProjectServiceModel(int id, int urn)
 		{
 			Id = id;
+			Urn = urn;
 		}
 
 		public int Id { get; init; }
