@@ -104,7 +104,110 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			return true;
 		}
 
-		return Urn == other.Urn && IfdPipelineId == other.IfdPipelineId && string.Equals(SchoolName, other.SchoolName, StringComparison.InvariantCultureIgnoreCase) && string.Equals(LocalAuthority, other.LocalAuthority, StringComparison.InvariantCultureIgnoreCase) && string.Equals(ApplicationReferenceNumber, other.ApplicationReferenceNumber, StringComparison.InvariantCultureIgnoreCase) && string.Equals(ProjectStatus, other.ProjectStatus, StringComparison.InvariantCultureIgnoreCase) && Nullable.Equals(ApplicationReceivedDate, other.ApplicationReceivedDate) && Nullable.Equals(AssignedDate, other.AssignedDate) && Nullable.Equals(HeadTeacherBoardDate, other.HeadTeacherBoardDate) && Nullable.Equals(OpeningDate, other.OpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) && Nullable.Equals(LocalAuthorityInformationTemplateSentDate, other.LocalAuthorityInformationTemplateSentDate) && Nullable.Equals(LocalAuthorityInformationTemplateReturnedDate, other.LocalAuthorityInformationTemplateReturnedDate) && string.Equals(LocalAuthorityInformationTemplateComments, other.LocalAuthorityInformationTemplateComments, StringComparison.InvariantCultureIgnoreCase) && string.Equals(LocalAuthorityInformationTemplateLink, other.LocalAuthorityInformationTemplateLink, StringComparison.InvariantCultureIgnoreCase) && LocalAuthorityInformationTemplateSectionComplete == other.LocalAuthorityInformationTemplateSectionComplete && string.Equals(RecommendationForProject, other.RecommendationForProject, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Author, other.Author, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Version, other.Version, StringComparison.InvariantCultureIgnoreCase) && string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) && string.Equals(AcademyOrderRequired, other.AcademyOrderRequired, StringComparison.InvariantCultureIgnoreCase) && string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion, StringComparison.InvariantCultureIgnoreCase) && Nullable.Equals(PreviousHeadTeacherBoardDate, other.PreviousHeadTeacherBoardDate) && string.Equals(PreviousHeadTeacherBoardLink, other.PreviousHeadTeacherBoardLink, StringComparison.InvariantCultureIgnoreCase) && string.Equals(TrustReferenceNumber, other.TrustReferenceNumber, StringComparison.InvariantCultureIgnoreCase) && string.Equals(NameOfTrust, other.NameOfTrust, StringComparison.InvariantCultureIgnoreCase) && string.Equals(SponsorReferenceNumber, other.SponsorReferenceNumber, StringComparison.InvariantCultureIgnoreCase) && string.Equals(SponsorName, other.SponsorName, StringComparison.InvariantCultureIgnoreCase) && string.Equals(AcademyTypeAndRoute, other.AcademyTypeAndRoute, StringComparison.InvariantCultureIgnoreCase) && Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) && SchoolAndTrustInformationSectionComplete == other.SchoolAndTrustInformationSectionComplete && ConversionSupportGrantAmount == other.ConversionSupportGrantAmount && string.Equals(ConversionSupportGrantChangeReason, other.ConversionSupportGrantChangeReason, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Region, other.Region, StringComparison.InvariantCultureIgnoreCase) && string.Equals(SchoolPhase, other.SchoolPhase, StringComparison.InvariantCultureIgnoreCase) && string.Equals(AgeRange, other.AgeRange, StringComparison.InvariantCultureIgnoreCase) && string.Equals(SchoolType, other.SchoolType, StringComparison.InvariantCultureIgnoreCase) && ActualPupilNumbers == other.ActualPupilNumbers && Capacity == other.Capacity && string.Equals(PublishedAdmissionNumber, other.PublishedAdmissionNumber, StringComparison.InvariantCultureIgnoreCase) && PercentageFreeSchoolMeals == other.PercentageFreeSchoolMeals && string.Equals(PartOfPfiScheme, other.PartOfPfiScheme, StringComparison.InvariantCultureIgnoreCase) && string.Equals(ViabilityIssues, other.ViabilityIssues, StringComparison.InvariantCultureIgnoreCase) && string.Equals(FinancialDeficit, other.FinancialDeficit, StringComparison.InvariantCultureIgnoreCase) && string.Equals(DiocesanTrust, other.DiocesanTrust, StringComparison.InvariantCultureIgnoreCase) && PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust == other.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust && DistanceFromSchoolToTrustHeadquarters == other.DistanceFromSchoolToTrustHeadquarters && string.Equals(DistanceFromSchoolToTrustHeadquartersAdditionalInformation, other.DistanceFromSchoolToTrustHeadquartersAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) && string.Equals(MemberOfParliamentParty, other.MemberOfParliamentParty, StringComparison.InvariantCultureIgnoreCase) && string.Equals(MemberOfParliamentName, other.MemberOfParliamentName, StringComparison.InvariantCultureIgnoreCase) && GeneralInformationSectionComplete == other.GeneralInformationSectionComplete && string.Equals(SchoolPerformanceAdditionalInformation, other.SchoolPerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) && string.Equals(RationaleForProject, other.RationaleForProject, StringComparison.InvariantCultureIgnoreCase) && string.Equals(RationaleForTrust, other.RationaleForTrust, StringComparison.InvariantCultureIgnoreCase) && RationaleSectionComplete == other.RationaleSectionComplete && string.Equals(RisksAndIssues, other.RisksAndIssues, StringComparison.InvariantCultureIgnoreCase) && string.Equals(EqualitiesImpactAssessmentConsidered, other.EqualitiesImpactAssessmentConsidered, StringComparison.InvariantCultureIgnoreCase) && RisksAndIssuesSectionComplete == other.RisksAndIssuesSectionComplete && GoverningBodyResolution == other.GoverningBodyResolution && Consultation == other.Consultation && DiocesanConsent == other.DiocesanConsent && FoundationConsent == other.FoundationConsent && LegalRequirementsSectionComplete == other.LegalRequirementsSectionComplete && Nullable.Equals(EndOfCurrentFinancialYear, other.EndOfCurrentFinancialYear) && Nullable.Equals(EndOfNextFinancialYear, other.EndOfNextFinancialYear) && RevenueCarryForwardAtEndMarchCurrentYear == other.RevenueCarryForwardAtEndMarchCurrentYear && ProjectedRevenueBalanceAtEndMarchNextYear == other.ProjectedRevenueBalanceAtEndMarchNextYear && CapitalCarryForwardAtEndMarchCurrentYear == other.CapitalCarryForwardAtEndMarchCurrentYear && CapitalCarryForwardAtEndMarchNextYear == other.CapitalCarryForwardAtEndMarchNextYear && string.Equals(SchoolBudgetInformationAdditionalInformation, other.SchoolBudgetInformationAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) && SchoolBudgetInformationSectionComplete == other.SchoolBudgetInformationSectionComplete && YearOneProjectedCapacity == other.YearOneProjectedCapacity && YearOneProjectedPupilNumbers == other.YearOneProjectedPupilNumbers && YearTwoProjectedCapacity == other.YearTwoProjectedCapacity && YearTwoProjectedPupilNumbers == other.YearTwoProjectedPupilNumbers && YearThreeProjectedCapacity == other.YearThreeProjectedCapacity && YearThreeProjectedPupilNumbers == other.YearThreeProjectedPupilNumbers && string.Equals(SchoolPupilForecastsAdditionalInformation, other.SchoolPupilForecastsAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) && string.Equals(KeyStage2PerformanceAdditionalInformation, other.KeyStage2PerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) && string.Equals(KeyStage4PerformanceAdditionalInformation, other.KeyStage4PerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) && string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);
+		return Urn == other.Urn && IfdPipelineId == other.IfdPipelineId &&
+			   string.Equals(SchoolName, other.SchoolName, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(LocalAuthority, other.LocalAuthority, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(ApplicationReferenceNumber, other.ApplicationReferenceNumber,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(ProjectStatus, other.ProjectStatus, StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(ApplicationReceivedDate, other.ApplicationReceivedDate) &&
+			   Nullable.Equals(AssignedDate, other.AssignedDate) &&
+			   Nullable.Equals(HeadTeacherBoardDate, other.HeadTeacherBoardDate) &&
+			   Nullable.Equals(OpeningDate, other.OpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
+			   Nullable.Equals(LocalAuthorityInformationTemplateSentDate,
+				   other.LocalAuthorityInformationTemplateSentDate) &&
+			   Nullable.Equals(LocalAuthorityInformationTemplateReturnedDate,
+				   other.LocalAuthorityInformationTemplateReturnedDate) &&
+			   string.Equals(LocalAuthorityInformationTemplateComments, other.LocalAuthorityInformationTemplateComments,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(LocalAuthorityInformationTemplateLink, other.LocalAuthorityInformationTemplateLink,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   LocalAuthorityInformationTemplateSectionComplete ==
+			   other.LocalAuthorityInformationTemplateSectionComplete &&
+			   string.Equals(RecommendationForProject, other.RecommendationForProject,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(Author, other.Author, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(Version, other.Version, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(PreviousHeadTeacherBoardDate, other.PreviousHeadTeacherBoardDate) &&
+			   string.Equals(PreviousHeadTeacherBoardLink, other.PreviousHeadTeacherBoardLink,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(TrustReferenceNumber, other.TrustReferenceNumber,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(NameOfTrust, other.NameOfTrust, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(SponsorReferenceNumber, other.SponsorReferenceNumber,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(SponsorName, other.SponsorName, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(AcademyTypeAndRoute, other.AcademyTypeAndRoute,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) &&
+			   SchoolAndTrustInformationSectionComplete == other.SchoolAndTrustInformationSectionComplete &&
+			   ConversionSupportGrantAmount == other.ConversionSupportGrantAmount &&
+			   string.Equals(ConversionSupportGrantChangeReason, other.ConversionSupportGrantChangeReason,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(Region, other.Region, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(SchoolPhase, other.SchoolPhase, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(AgeRange, other.AgeRange, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(SchoolType, other.SchoolType, StringComparison.InvariantCultureIgnoreCase) &&
+			   ActualPupilNumbers == other.ActualPupilNumbers && Capacity == other.Capacity &&
+			   string.Equals(PublishedAdmissionNumber, other.PublishedAdmissionNumber,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   PercentageFreeSchoolMeals == other.PercentageFreeSchoolMeals &&
+			   string.Equals(PartOfPfiScheme, other.PartOfPfiScheme, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(ViabilityIssues, other.ViabilityIssues, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(FinancialDeficit, other.FinancialDeficit, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(DiocesanTrust, other.DiocesanTrust, StringComparison.InvariantCultureIgnoreCase) &&
+			   PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust ==
+			   other.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust &&
+			   DistanceFromSchoolToTrustHeadquarters == other.DistanceFromSchoolToTrustHeadquarters &&
+			   string.Equals(DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
+				   other.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(MemberOfParliamentParty, other.MemberOfParliamentParty,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(MemberOfParliamentName, other.MemberOfParliamentName,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   GeneralInformationSectionComplete == other.GeneralInformationSectionComplete &&
+			   string.Equals(SchoolPerformanceAdditionalInformation, other.SchoolPerformanceAdditionalInformation,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(RationaleForProject, other.RationaleForProject,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(RationaleForTrust, other.RationaleForTrust, StringComparison.InvariantCultureIgnoreCase) &&
+			   RationaleSectionComplete == other.RationaleSectionComplete &&
+			   string.Equals(RisksAndIssues, other.RisksAndIssues, StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(EqualitiesImpactAssessmentConsidered, other.EqualitiesImpactAssessmentConsidered,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   RisksAndIssuesSectionComplete == other.RisksAndIssuesSectionComplete &&
+			   GoverningBodyResolution == other.GoverningBodyResolution && Consultation == other.Consultation &&
+			   DiocesanConsent == other.DiocesanConsent && FoundationConsent == other.FoundationConsent &&
+			   LegalRequirementsSectionComplete == other.LegalRequirementsSectionComplete &&
+			   Nullable.Equals(EndOfCurrentFinancialYear, other.EndOfCurrentFinancialYear) &&
+			   Nullable.Equals(EndOfNextFinancialYear, other.EndOfNextFinancialYear) &&
+			   RevenueCarryForwardAtEndMarchCurrentYear == other.RevenueCarryForwardAtEndMarchCurrentYear &&
+			   ProjectedRevenueBalanceAtEndMarchNextYear == other.ProjectedRevenueBalanceAtEndMarchNextYear &&
+			   CapitalCarryForwardAtEndMarchCurrentYear == other.CapitalCarryForwardAtEndMarchCurrentYear &&
+			   CapitalCarryForwardAtEndMarchNextYear == other.CapitalCarryForwardAtEndMarchNextYear &&
+			   string.Equals(SchoolBudgetInformationAdditionalInformation,
+				   other.SchoolBudgetInformationAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) &&
+			   SchoolBudgetInformationSectionComplete == other.SchoolBudgetInformationSectionComplete &&
+			   YearOneProjectedCapacity == other.YearOneProjectedCapacity &&
+			   YearOneProjectedPupilNumbers == other.YearOneProjectedPupilNumbers &&
+			   YearTwoProjectedCapacity == other.YearTwoProjectedCapacity &&
+			   YearTwoProjectedPupilNumbers == other.YearTwoProjectedPupilNumbers &&
+			   YearThreeProjectedCapacity == other.YearThreeProjectedCapacity &&
+			   YearThreeProjectedPupilNumbers == other.YearThreeProjectedPupilNumbers &&
+			   string.Equals(SchoolPupilForecastsAdditionalInformation, other.SchoolPupilForecastsAdditionalInformation,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(KeyStage2PerformanceAdditionalInformation, other.KeyStage2PerformanceAdditionalInformation,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(KeyStage4PerformanceAdditionalInformation, other.KeyStage4PerformanceAdditionalInformation,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation,
+				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);
 	}
 
 	public override bool Equals(object? obj)

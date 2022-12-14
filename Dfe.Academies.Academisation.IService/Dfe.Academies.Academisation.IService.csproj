@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Dfe.Academies.Academisation.IData\Dfe.Academies.Academisation.IData.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ServiceModels\Legacy\Extensions\" />
-  </ItemGroup>
-
 </Project>
