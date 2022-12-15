@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.IService.Commands.Application
 {
-	public record AddTrustKeyPersonCommand(
+	public record CreateTrustKeyPersonCommand(
 		int ApplicationId,
 		IEnumerable<TrustKeyPersonRoleServiceModel> Roles,
 		string Name,

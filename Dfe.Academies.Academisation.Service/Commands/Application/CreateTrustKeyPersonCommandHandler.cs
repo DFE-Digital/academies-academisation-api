@@ -11,18 +11,18 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
-	public class AddTrustKeyPersonCommandHandler : IRequestHandler<AddTrustKeyPersonCommand, CommandResult>
+	public class CreateTrustKeyPersonCommandHandler : IRequestHandler<CreateTrustKeyPersonCommand, CommandResult>
 	{
 		private readonly IApplicationRepository _applicationRepository;
 		private readonly IMapper _mapper;
 
-		public AddTrustKeyPersonCommandHandler(IApplicationRepository applicationRepository, IMapper mapper)
+		public CreateTrustKeyPersonCommandHandler(IApplicationRepository applicationRepository, IMapper mapper)
 		{
 			_applicationRepository = applicationRepository;
 			_mapper = mapper;
 		}
 
-		public async Task<CommandResult> Handle(AddTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		public async Task<CommandResult> Handle(CreateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
 			// cancellation token will be passed down to the database requests when the repository pattern is brought in
 			// shouldn't be anything that is long running just found it a good habit with async

@@ -119,7 +119,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPost("{applicationId}/form-trust/key-person", Name = "AddKeyPerson")]
-		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] AddTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] CreateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
 
