@@ -53,4 +53,5 @@ public interface IApplication
 	CommandResult AddTrustKeyPerson(string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 	CommandResult UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 	CommandResult DeleteTrustKeyPerson(int keyPersonId);
+	CommandResult DeleteSchool(int urn);
 }

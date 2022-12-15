@@ -160,6 +160,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpDelete("{applicationId}/form-trust/school/{urn}", Name = "DeleteSchool")]
+		public async Task<ActionResult> DeleteSchool(int applicationId, int urn, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new DeleteSchoolCommand(applicationId, urn), cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpGet("{applicationId}/form-trust/key-person/", Name = "GetKeyPeople")]
 		public async Task<ActionResult<List<object>>> GetKeyPeople(int applicationId, CancellationToken cancellationToken)
 		{

@@ -305,6 +305,15 @@ public class Application : IApplication, IAggregateRoot
 		return new CommandSuccessResult();
 	}
 
+	public CommandResult DeleteSchool(int urn)
+	{
+		var school = _schools.FirstOrDefault(x => x.Details.Urn == urn);
+		if (school == null)  return new NotFoundCommandResult();
+		_schools.Remove(school);
+
+		return new CommandSuccessResult();
+	}
+
 	public CommandResult SetAdditionalDetails(
 		int schoolId,
 		string trustBenefitDetails, 
