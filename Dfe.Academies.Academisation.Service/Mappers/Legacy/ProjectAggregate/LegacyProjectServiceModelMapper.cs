@@ -128,7 +128,7 @@ internal static class LegacyProjectServiceModelMapper
 
 		return notes.Select(note => new ProjectNoteServiceModel
 		{
-			Author = note.Author, Note = note.Note, Subject = note.Subject
+			Author = note.Author, Note = note.Note, Subject = note.Subject, Date = note.Date
 		});
 	}
 }

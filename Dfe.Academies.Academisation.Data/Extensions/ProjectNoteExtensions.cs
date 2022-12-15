@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.Data.Extensions
 			if (notes is null) return Enumerable.Empty<ProjectNoteState>();
 
 			return notes.Select(note =>
-				new ProjectNoteState { Author = note.Author, Note = note.Note, Subject = note.Subject }
+				new ProjectNoteState { Author = note.Author, Note = note.Note, Subject = note.Subject, Date = note.Date }
 			);
 		}
 
@@ -19,7 +19,7 @@ namespace Dfe.Academies.Academisation.Data.Extensions
 			if (notes is null) return Enumerable.Empty<ProjectNote>();
 
 			return notes.Select(note =>
-				new ProjectNote(note.Subject, note.Note, note.Author));
+				new ProjectNote(note.Subject, note.Note, note.Author, note.Date));
 		}
 	}
 }

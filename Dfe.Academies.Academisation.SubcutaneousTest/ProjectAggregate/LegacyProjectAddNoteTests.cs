@@ -45,7 +45,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 
 			LegacyProjectController controller = System_under_test();
 
-			ActionResult result = await controller.AddNote(1234, new AddNoteRequest("Subject", "Note", "Author"));
+			ActionResult result =
+				await controller.AddNote(1234, new AddNoteRequest("Subject", "Note", "Author", DateTime.Today));
 
 			result.Should().BeOfType<CreatedResult>();
 		}
@@ -59,7 +60,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 
 			LegacyProjectController controller = System_under_test();
 
-			ActionResult result = await controller.AddNote(1234, new AddNoteRequest("Subject", "Note", "Author"));
+			ActionResult result =
+				await controller.AddNote(1234, new AddNoteRequest("Subject", "Note", "Author", DateTime.UtcNow));
 
 			result.Should().BeOfType<NotFoundResult>();
 		}
