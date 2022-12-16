@@ -144,14 +144,14 @@ public class Application : IApplication, IAggregateRoot
 		return new CommandSuccessResult();
 	}
 
-	internal static CreateResult<IApplication> Create(ApplicationType applicationType,
+	internal static CreateResult Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
 		var validationResult = new CreateApplicationValidator().Validate(initialContributor);
 
 		if (!validationResult.IsValid)
 		{
-			return new CreateValidationErrorResult<IApplication>(
+			return new CreateValidationErrorResult(
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
@@ -301,6 +301,15 @@ public class Application : IApplication, IAggregateRoot
 		}
 
 		this.FormTrust.DeleteTrustKeyPerson(keyPersonId);
+
+		return new CommandSuccessResult();
+	}
+
+	public CommandResult DeleteSchool(int urn)
+	{
+		var school = _schools.FirstOrDefault(x => x.Details.Urn == urn);
+		if (school == null)  return new NotFoundCommandResult();
+		_schools.Remove(school);
 
 		return new CommandSuccessResult();
 	}

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Threading;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
@@ -55,7 +53,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result switch
 			{
 				CreateSuccessResult<ApplicationServiceModel> successResult => CreatedAtRoute(GetRouteName, new { id = successResult.Payload.ApplicationId }, successResult.Payload),
-				CreateValidationErrorResult<ApplicationServiceModel> validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				CreateValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
 		}
@@ -121,7 +119,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPost("{applicationId}/form-trust/key-person", Name = "AddKeyPerson")]
-		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] AddTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] CreateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
 
@@ -162,6 +160,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpDelete("{applicationId}/form-trust/school/{urn}", Name = "DeleteSchool")]
+		public async Task<ActionResult> DeleteSchool(int applicationId, int urn, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new DeleteSchoolCommand(applicationId, urn), cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpGet("{applicationId}/form-trust/key-person/", Name = "GetKeyPeople")]
 		public async Task<ActionResult<List<object>>> GetKeyPeople(int applicationId, CancellationToken cancellationToken)
 		{
@@ -186,7 +198,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				NotFoundCommandResult => NotFound(),
 				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				CommandSuccessResult => Ok(),
-				CreateValidationErrorResult<LegacyProjectServiceModel> createValidationErrorResult => BadRequest(createValidationErrorResult.ValidationErrors),
+				CreateValidationErrorResult createValidationErrorResult => BadRequest(createValidationErrorResult.ValidationErrors),
 				CreateSuccessResult<LegacyProjectServiceModel> createSuccessResult => CreatedAtRoute("GetLegacyProject", new { id = createSuccessResult.Payload.Id }, createSuccessResult.Payload),
 				_ => throw new NotImplementedException()
 			};

@@ -806,6 +806,36 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectNoteState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectNotes", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", b =>
                 {
                     b.Property<int>("Id")
@@ -1152,6 +1182,13 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectNoteState", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", null)
+                        .WithMany("Notes")
+                        .HasForeignKey("ProjectId");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", b =>
                 {
                     b.Navigation("Leases");
@@ -1181,6 +1218,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Navigation("DeclinedReasons");
 
                     b.Navigation("DeferredReasons");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

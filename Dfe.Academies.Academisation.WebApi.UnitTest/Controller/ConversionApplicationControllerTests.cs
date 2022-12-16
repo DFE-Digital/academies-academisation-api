@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -63,7 +62,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var requestModel = _fixture.Create<ApplicationCreateRequestModel>();
 			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
 			_createCommandMock.Setup(x => x.Execute(requestModel))
-				.ReturnsAsync(new CreateValidationErrorResult<ApplicationServiceModel>(expectedValidationError));
+				.ReturnsAsync(new CreateValidationErrorResult(expectedValidationError));
 
 			// act
 			var result = await _subject.Post(requestModel);
@@ -134,7 +133,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 			List<ValidationError> expectedValidationError = new();
 			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new CreateValidationErrorResult<LegacyProjectServiceModel>(expectedValidationError));
+				.ReturnsAsync(new CreateValidationErrorResult(expectedValidationError));
 
 			// act
 			var result = await _subject.Submit(applicationId);
@@ -151,7 +150,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1);
+			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1, 1);
 			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CreateSuccessResult<LegacyProjectServiceModel>(projectServiceModel));
 

@@ -40,11 +40,11 @@ public class ProjectCreateTests
 		// Act
 		var project = new ProjectFactory().Create(application);
 
-		CreateValidationErrorResult<IProject>? result = null;
+		CreateValidationErrorResult? result = null;
 
 		// Assert
 		Assert.Multiple(
-			() => result = Assert.IsType<CreateValidationErrorResult<IProject>>(project),
+			() => result = Assert.IsType<CreateValidationErrorResult>(project),
 			() => Assert.Equal("Only projects of type JoinAMat are supported", result!.ValidationErrors.Single().ErrorMessage),
 			() => Assert.Equal("ApplicationStatus", result!.ValidationErrors.Single().PropertyName)
 		);

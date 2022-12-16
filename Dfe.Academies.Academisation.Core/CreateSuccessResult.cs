@@ -2,7 +2,7 @@
 
 namespace Dfe.Academies.Academisation.Core;
 
-public class CreateSuccessResult<TPayload> : CreateResult<TPayload>
+public class CreateSuccessResult<TPayload> : CreateResult
 {
 	public CreateSuccessResult(TPayload payload) : base(ResultType.Success)
 	{

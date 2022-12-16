@@ -3,7 +3,6 @@ using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.RequestModels;
-using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 
 namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
@@ -20,7 +19,7 @@ public class AdvisoryBoardDecisionCreateCommand : IAdvisoryBoardDecisionCreateCo
 		_factory = factory;
 	}
 
-	public async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> Execute(
+	public async Task<CreateResult> Execute(
 		AdvisoryBoardDecisionCreateRequestModel requestModel)
 	{
 		var result = _factory.Create(requestModel.AsDomain());
@@ -29,13 +28,13 @@ public class AdvisoryBoardDecisionCreateCommand : IAdvisoryBoardDecisionCreateCo
 		{
 			CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
 				await ExecuteDataCommand(successResult),
-			CreateValidationErrorResult<IConversionAdvisoryBoardDecision> errorResult =>
-				errorResult.MapToPayloadType<ConversionAdvisoryBoardDecisionServiceModel>(),
+			CreateValidationErrorResult errorResult =>
+				errorResult.MapToPayloadType(),
 			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
 		};
 	}
 
-	private async Task<CreateResult<ConversionAdvisoryBoardDecisionServiceModel>> ExecuteDataCommand(
+	private async Task<CreateResult> ExecuteDataCommand(
 		CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult)
 	{
 		await _createDataCommand.Execute(successResult.Payload);

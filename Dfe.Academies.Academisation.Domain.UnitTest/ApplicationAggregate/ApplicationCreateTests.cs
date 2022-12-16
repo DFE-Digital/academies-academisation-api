@@ -1,5 +1,4 @@
-﻿using System;
-using AutoFixture;
+﻿using AutoFixture;
 using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -58,9 +57,9 @@ public class ApplicationCreateTests
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateValidationErrorResult<IApplication>>(result);
+		Assert.IsType<CreateValidationErrorResult>(result);
 
-		var validationErrorResult = result as CreateValidationErrorResult<IApplication>;
+		var validationErrorResult = result as CreateValidationErrorResult;
 		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == "OtherRoleName");
 	}
 
@@ -105,9 +104,9 @@ public class ApplicationCreateTests
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
 
 		// Assert
-		Assert.IsType<CreateValidationErrorResult<IApplication>>(result);
+		Assert.IsType<CreateValidationErrorResult>(result);
 
-		var validationErrorResult = result as CreateValidationErrorResult<IApplication>;
+		var validationErrorResult = result as CreateValidationErrorResult;
 		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == "EmailAddress");
 	}
 
@@ -129,9 +128,9 @@ public class ApplicationCreateTests
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
 
 		// Assert
-		Assert.IsType<CreateValidationErrorResult<IApplication>>(result);
+		Assert.IsType<CreateValidationErrorResult>(result);
 
-		var validationErrorResult = result as CreateValidationErrorResult<IApplication>;
+		var validationErrorResult = result as CreateValidationErrorResult;
 		Assert.Contains(validationErrorResult!.ValidationErrors, x => x.PropertyName == expectedValidationError);
 	}
 }

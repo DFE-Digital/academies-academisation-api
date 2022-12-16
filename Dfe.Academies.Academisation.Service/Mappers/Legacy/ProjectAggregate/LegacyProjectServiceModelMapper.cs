@@ -1,5 +1,7 @@
-﻿using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using User = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
@@ -7,10 +9,7 @@ internal static class LegacyProjectServiceModelMapper
 {
 	internal static LegacyProjectServiceModel MapToServiceModel(this IProject project)
 	{
-		LegacyProjectServiceModel serviceModel = new(
-			project.Id,
-			project.Details.Urn
-			)
+		LegacyProjectServiceModel serviceModel = new(project.Id, project.Details.Urn)
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
@@ -115,9 +114,21 @@ internal static class LegacyProjectServiceModelMapper
 
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null
-				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress)
+				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress),
+
+			Notes = project.Details.Notes.ToProjectNoteServiceModels().ToList()
 		};
 
 		return serviceModel;
+	}
+
+	private static IEnumerable<ProjectNoteServiceModel> ToProjectNoteServiceModels(this IEnumerable<ProjectNote>? notes)
+	{
+		if (notes is null) return Enumerable.Empty<ProjectNoteServiceModel>();
+
+		return notes.Select(note => new ProjectNoteServiceModel
+		{
+			Author = note.Author, Note = note.Note, Subject = note.Subject, Date = note.Date
+		});
 	}
 }

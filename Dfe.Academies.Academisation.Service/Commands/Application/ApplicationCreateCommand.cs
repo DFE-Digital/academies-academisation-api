@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.RequestModels;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Mappers.Application;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application;
@@ -22,14 +22,14 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 		_mapper = mapper;
 	}
 
-	public async Task<CreateResult<ApplicationServiceModel>> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
+	public async Task<CreateResult> Execute(ApplicationCreateRequestModel applicationCreateRequestModel)
 	{
-		var (applicationType, contributorDetails) = applicationCreateRequestModel.AsDomain();
+		(ApplicationType applicationType, ContributorDetails contributorDetails) = applicationCreateRequestModel.AsDomain();
 		var result = _domainFactory.Create(applicationType, contributorDetails);
 
-		if (result is CreateValidationErrorResult<IApplication> domainValidationErrorResult)
+		if (result is CreateValidationErrorResult domainValidationErrorResult)
 		{
-			return domainValidationErrorResult.MapToPayloadType<ApplicationServiceModel>();
+			return domainValidationErrorResult.MapToPayloadType();
 		}
 
 		if (result is not CreateSuccessResult<IApplication> domainSuccessResult)
