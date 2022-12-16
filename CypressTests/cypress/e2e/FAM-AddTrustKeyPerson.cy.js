@@ -1,5 +1,6 @@
 /// <reference types="Cypress" />
 import { AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCanCreateNewFAMTrustKeyPerson.spec'
+import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson.spec'
 import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCanUpdateNewFAMTrustKeyPerson.spec'
 import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB.spec'
 describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
@@ -153,20 +154,7 @@ cy.request({
           'x-api-key' : 'INVALIDAPIKEY'
         },
         body:
-        {
-          "applicationId": 177,
-          "keyPersonId": 105,
-          "roles": [
-            {
-              "id": 1,
-              "role": 3,
-              "timeInRole": "6 years"
-            }
-          ],
-          "name": "Andrew Parsons",
-          "dateOfBirth": "1945-12-12T14:08:05.835Z",
-          "biography": "Wonderful Headmaster and astute businessman"
-        }
+        UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload
     }).then((response) => {
     //cy.log(JSON.stringify(response))
     expect(response).to.have.property('status', 401)
