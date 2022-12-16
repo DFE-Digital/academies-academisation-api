@@ -17,16 +17,16 @@ public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
 		_projectUpdateDataCommand = projectUpdateDataCommand;
 	}
 
-	public async Task<CommandResult> Execute(LegacyProjectServiceModel legacyProjectServiceModel)
+	public async Task<CommandResult> Execute(int id, LegacyProjectServiceModel legacyProjectServiceModel)
 	{
-		var existingProject = await _projectGetDataQuery.Execute(legacyProjectServiceModel.Id);
+		var existingProject = await _projectGetDataQuery.Execute(id);
 
 		if (existingProject is null)
 		{
 			return new NotFoundCommandResult();
 		}
 
-		var result = existingProject.Update(LegacyProjectDetailsMapper.MapNonEmptyFields(legacyProjectServiceModel, existingProject));
+		var result = existingProject.Update(legacyProjectServiceModel.MapNonEmptyFields(existingProject));
 
 		if (result is CommandValidationErrorResult)
 		{

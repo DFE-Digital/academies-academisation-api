@@ -50,7 +50,7 @@ public class SetAdditionalDetailsCommand : IRequest<CommandResult>
 	public string MainFeederSchools { get; set; }
 	
 	[DataMember]
-	public string ResolutionConsentFolderIdentifier { get; set; }
+	public string? ResolutionConsentFolderIdentifier { get; set; }
 
 	[DataMember]
 	public SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics { get; set; }

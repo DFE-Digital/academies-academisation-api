@@ -141,7 +141,7 @@ public class ApplicationSubmitTests
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
 		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>());
+			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>());
 		var projectResult = await projectController.Get(1);
 
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);

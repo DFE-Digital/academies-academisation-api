@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggr
 
 public class ConversionAdvisoryBoardDecisionFactory : IConversionAdvisoryBoardDecisionFactory
 {
-	public CreateResult<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
+	public CreateResult Create(AdvisoryBoardDecisionDetails details)
 	{
 		return ConversionAdvisoryBoardDecision.Create(details);
 	}

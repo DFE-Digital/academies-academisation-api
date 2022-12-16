@@ -29,14 +29,14 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision
 	public DateTime CreatedOn { get; }
 	public DateTime LastModifiedOn { get; }
 
-	internal static CreateResult<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details)
+	internal static CreateResult Create(AdvisoryBoardDecisionDetails details)
 	{
 		var validationResult = Validator.Validate(details);
 
 		return validationResult.IsValid
 			? new CreateSuccessResult<IConversionAdvisoryBoardDecision>(
 				new ConversionAdvisoryBoardDecision(details))
-			: new CreateValidationErrorResult<IConversionAdvisoryBoardDecision>(
+			: new CreateValidationErrorResult(
 				validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
 	}
 

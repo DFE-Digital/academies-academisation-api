@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
 public class ApplicationFactory : IApplicationFactory
 {
-	public CreateResult<IApplication> Create(ApplicationType applicationType,
+	public CreateResult Create(ApplicationType applicationType,
 		ContributorDetails initialContributor)
 	{
 		return Application.Create(applicationType, initialContributor);

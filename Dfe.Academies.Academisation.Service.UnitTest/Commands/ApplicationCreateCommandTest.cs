@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]
 		[InlineData(ApplicationType.JoinAMat)]
-		public async void ApplicationReturnedFromFactory___ApplicationPassedToDataLayer_ServiceModelReturned(ApplicationType applicationType)
+		public async Task ApplicationReturnedFromFactory___ApplicationPassedToDataLayer_ServiceModelReturned(ApplicationType applicationType)
 		{
 			// arrange
 			var applicationCreateRequestModel = new ApplicationCreateRequestModelBuilder()
@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		[Theory]
 		[InlineData(ApplicationType.FormAMat)]
 		[InlineData(ApplicationType.JoinAMat)]
-		public async void ValidationErrorReturnedFromFactory___ApplicationNotPassedToDataLayer_ValidationErrorReturned(ApplicationType applicationType)
+		public async Task ValidationErrorReturnedFromFactory___ApplicationNotPassedToDataLayer_ValidationErrorReturned(ApplicationType applicationType)
 		{
 			// arrange
 			var applicationCreateRequestModel = new ApplicationCreateRequestModelBuilder()
@@ -62,7 +62,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 			_applicationFactoryMock
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
-				.Returns(new CreateValidationErrorResult<IApplication>(new List<ValidationError>()));
+				.Returns(new CreateValidationErrorResult(new List<ValidationError>()));
 
 			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _applicationCreateDataCommandMock.Object, _mockMapper.Object);
 
@@ -73,7 +73,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			_applicationCreateDataCommandMock
 				.Verify(x => x.Execute(It.IsAny<IApplication>()), Times.Never());
 
-			Assert.IsType<CreateValidationErrorResult<ApplicationServiceModel>>(result);
+			Assert.IsType<CreateValidationErrorResult>(result);
 		}
 	}
 }

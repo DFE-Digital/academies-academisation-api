@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
 public class ProjectFactory : IProjectFactory
 {
-	public CreateResult<IProject> Create(IApplication application)
+	public CreateResult Create(IApplication application)
 	{
 		return Project.Create(application);
 	}

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Dfe.Academies.Academisation.Data.Extensions;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -116,10 +117,13 @@ public class ProjectState : BaseEntity
 	public string? AssignedUserEmailAddress { get; set; }
 	public string? AssignedUserFullName { get; set; }
 
+	public ICollection<ProjectNoteState>? Notes { get; set; }
+
 	internal Project MapToDomain()
 	{
-		ProjectDetails projectDetails = new(Urn)
+		ProjectDetails projectDetails = new()
 		{
+			Urn = Urn,
 			IfdPipelineId = IfdPipelineId,
 			SchoolName = SchoolName,
 			LocalAuthority = LocalAuthority,
@@ -225,7 +229,9 @@ public class ProjectState : BaseEntity
 			// assigned user
 			AssignedUser = AssignedUserId == null
 				? null
-				: new User(AssignedUserId.Value, AssignedUserFullName ?? "", AssignedUserEmailAddress ?? "")
+				: new User(AssignedUserId.Value, AssignedUserFullName ?? "", AssignedUserEmailAddress ?? ""),
+
+			Notes = Notes.ToProjectNotes().ToList()
 		};
 
 		return new Project(Id, projectDetails);
@@ -342,7 +348,10 @@ public class ProjectState : BaseEntity
 			// assigned user
 			AssignedUserId = project.Details.AssignedUser?.Id,
 			AssignedUserFullName = project.Details.AssignedUser?.FullName,
-			AssignedUserEmailAddress = project.Details.AssignedUser?.EmailAddress
+			AssignedUserEmailAddress = project.Details.AssignedUser?.EmailAddress,
+
+			// Notes
+			Notes = project.Details.Notes.ToProjectNoteStates().ToList()
 		};
 	}
 }
