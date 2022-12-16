@@ -1,18 +1,20 @@
 /***
 from c# for data conversion:-
-	public enum KeyPersonRole
-	{
-		[Description("CEO")]
-		CEO = 1,
-		[Description("The chair of the trust")]
-		Chair = 2,
-		[Description("Financial director")]
-		FinancialDirector = 3,
-		[Description("Trustee")]
-		Trustee = 4,
-		[Description("Other")]
-		Other = 5
-	}
+public enum KeyPersonRole
+{
+	[Description("CEO / executive")]
+	CEO = 1, = 'KeyPersonCeoExecutive'
+	[Description("Chair of trust")]
+	Chair = 2, = 'KeyPersonChairOfTrust'
+	[Description("Financial director")]
+	FinancialDirector = 3, = 'KeyPersonFinancialDirector'
+	[Description("Trustee")]
+	Trustee = 4, = 'KeyPersonTrustee'
+	[Description("Other")]
+	Other = 5, = 'KeyPersonOther'
+	[Description("Member")]
+	Member = 6 = 'KeyPersonMember'
+}
 
 ***/
 
@@ -50,18 +52,39 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 	INNER JOIN [academisation].[ConversionApplication] as NewApp on NewApp.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
 	WHERE NewApp.[FormTrustId] IS NOT NULL
 	
-	-- TODO MR:- need to pivot role data. hard code roleId's as part of pivot?
-	-- Unpivot the table.  
-	SELECT [KeyPersonId],[DynamicsKeyPersonId], Roles, TrueFalse  
+	-- MR:- need to un-pivot role data. hard code roleId's as part of pivot?
+	DECLARE @KeyPersonRoles TABLE
+	(KeyPersonId INT, 
+	 [DynamicsKeyPersonId] uniqueidentifier, 
+	 KeyPersonRole nvarchar(50),
+	 TrueFalse BIT,
+	 NewRoleId INT
+	)	
+	
+	INSERT INTO @KeyPersonRoles
+	(KeyPersonId,[DynamicsKeyPersonId],KeyPersonRole, TrueFalse, NewRoleId)
+
+	SELECT [KeyPersonId],[DynamicsKeyPersonId], Roles, TrueFalse, 
+	CASE Roles 
+		WHEN 'KeyPersonCeoExecutive' THEN 1
+		WHEN 'KeyPersonChairOfTrust' THEN 2
+		WHEN 'KeyPersonFinancialDirector' THEN 3
+		WHEN 'KeyPersonTrustee' THEN 4
+		WHEN 'KeyPersonOther' THEN 5
+		WHEN 'KeyPersonMember' THEN 6
+	END as NewRoleId
 	FROM   
-	   (SELECT [KeyPersonId],[DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
+		(SELECT [KeyPersonId],[DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
 	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee]
-	   FROM [sdd].[A2BApplicationKeyPersons]) p  
+		FROM [sdd].[A2BApplicationKeyPersons]) p  
 	UNPIVOT  
-	   (TrueFalse FOR Roles IN   
-		  ([KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
+		(TrueFalse FOR Roles IN   
+			([KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
 	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee])  
 	)AS unpvt;  
+
+	--SELECT *
+	--FROM @KeyPersonRoles 
 
 	/*** STEP 2 - populate [academisation].[ApplicationFormTrustKeyPersonRole] - roles ***/
 	INSERT INTO [academisation].[ApplicationFormTrustKeyPersonRole]
@@ -70,18 +93,13 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 			   ,[TimeInRole]
 			   ,[CreatedOn]
 			   ,[LastModifiedOn])
-     --VALUES      --      (,<ApplicationFormTrustKeyPersonRoleId, int,>
-	 --<Role, int,> = see enum values above !!!
-     --      ,<TimeInRole, nvarchar(max),>
-     --      ,<CreatedOn, datetime2(7),>
-     --      ,<LastModifiedOn, datetime2(7),>)
 	 SELECT AKPNEW.[Id] as [ApplicationFormTrustKeyPersonRoleId],
-			1 as 'Role',
+			NewRoleId as 'Role',
 			'' as [TimeInRole],
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn'
 	 FROM [academisation].[ApplicationFormTrustKeyPerson] AKPNEW
-	 INNER JOIN [sdd].[A2BApplicationKeyPersons] AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId]
+	 INNER JOIN @KeyPersonRoles AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId]
 	 
 	--COMMIT TRAN PortDynamicsKeyContactsData
 	--ROLLBACK TRAN PortDynamicsKeyContactsData
