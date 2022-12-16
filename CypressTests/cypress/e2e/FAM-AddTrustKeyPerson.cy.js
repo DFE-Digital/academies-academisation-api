@@ -5,17 +5,18 @@ import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../suppo
 import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB.spec'
 describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
+
     let apiKey = Cypress.env('apiKey');
+    let url = Cypress.env('url');
     let applicationNumber = 177
 
     //let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})Z?$/
-   
-    Cypress.config('baseUrl', 'https://s184d01-aca-aca-app.nicedesert-a691fec6.westeurope.azurecontainerapps.io')
+
 
     it('POST - Verify An UnAuthorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', () => {
       cy.request({
               method: 'POST',
-              url: '/application/' + applicationNumber + '/form-trust/key-person',
+              url: url + '/application/' + applicationNumber + '/form-trust/key-person',
               failOnStatusCode: false,
               headers: 
               {
@@ -33,7 +34,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
     it('POST - Verify An Authorised User Is Able To Create New FAM-Trust Key Person - Form-Trust Key-Person - 200 CREATED Expected', () => {
           cy.request({
                   method: 'POST',
-                  url: '/application/' + applicationNumber + '/form-trust/key-person',
+                  url: url + '/application/' + applicationNumber + '/form-trust/key-person',
                   headers: 
                   {
                     'x-api-key' : apiKey
@@ -50,7 +51,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       it('POST - Verify An Authorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person WITH AN INVALID DOB - 400 BAD REQUEST Expected', () => {
         cy.request({
                 method: 'POST',
-                url: '/application/' + applicationNumber + '/form-trust/key-person',
+                url: url + '/application/' + applicationNumber + '/form-trust/key-person',
                 failOnStatusCode: false,
                 headers: 
                 {
@@ -68,7 +69,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       it('GET - Verify An UNAuthorised User Is UNAble To GET FAM-Trust Key PERSONS - Form-Trust Key-PersonS - 401 UNAUTHORISED Expected', () => {
         cy.request({
                 method: 'GET',
-                url: '/application/' + applicationNumber + '/form-trust/key-person',
+                url: url + '/application/' + applicationNumber + '/form-trust/key-person',
                 failOnStatusCode: false,
                 headers: 
                 {
@@ -86,7 +87,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       it('GET - Verify An Authorised User Is Able To GET FAM-Trust Key PERSONS - Form-Trust Key-PersonS - 200 OK Expected', () => {
         cy.request({
                 method: 'GET',
-                url: '/application/' + applicationNumber + '/form-trust/key-person',
+                url: url + '/application/' + applicationNumber + '/form-trust/key-person',
                 headers: 
                 {
                   'x-api-key' : apiKey
@@ -105,7 +106,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   it('GET - Verify An UNAuthorised User Is UNAble To GET FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', () => {
     cy.request({
             method: 'GET',
-            url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 105,
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 105,
             failOnStatusCode: false,
             headers: 
             {
@@ -124,7 +125,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   it('GET - Verify An Authorised User Is Able To GET FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
     cy.request({
             method: 'GET',
-            url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 105,
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 105,
             headers: 
             {
               'x-api-key' : apiKey
@@ -146,7 +147,7 @@ it('PUT - Verify An UNAuthorised User Is UNAble To UPDATE a FAM-Trust Key Person
 cy.log(JSON.stringify("Id = " + Cypress.env('responseIDForRequest')))
 cy.request({
         method: 'PUT',
-        url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 19,
+        url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 19,
         failOnStatusCode: false,
         headers: 
         {
@@ -170,7 +171,7 @@ cy.request({
    cy.log(JSON.stringify("Id = " + Cypress.env('responseIDForRequest')))
     cy.request({
             method: 'PUT',
-            url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 19,
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 19,
             headers: 
             {
               'x-api-key' : apiKey
@@ -190,7 +191,7 @@ cy.request({
 it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', () => {
   cy.request({
           method: 'DELETE',
-          url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
+          url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
           failOnStatusCode: false,
           headers: 
           {
@@ -206,7 +207,7 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
   it('DELETE - Verify An Authorised User Is Able To DELETE FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
     cy.request({
             method: 'DELETE',
-            url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
             headers: 
             {
               'x-api-key' : apiKey
@@ -224,7 +225,7 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
   it('DELETE - Verify An Authorised User Is UNable To DELETE FAM-Trust Key Person THAT DOES NOT EXIST - Form-Trust Key-Person THAT DOES NOT EXIST - 500 SERVER ERROR Expected - (May change to 400 later)', () => {
     cy.request({
             method: 'DELETE',
-            url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
             failOnStatusCode: false,
             headers: 
             {
