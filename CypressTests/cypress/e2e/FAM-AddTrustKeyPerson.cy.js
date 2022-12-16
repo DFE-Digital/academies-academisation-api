@@ -7,7 +7,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
     let apiKey = Cypress.env('apiKey');
     let applicationNumber = 177
-    //let trustKeyPersonNumber = 11;
+
     //let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})Z?$/
    
     Cypress.config('baseUrl', 'https://s184d01-aca-aca-app.nicedesert-a691fec6.westeurope.azurecontainerapps.io')
@@ -24,7 +24,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
               body: 
               AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload
           }).then((response) => {
-          //cy.log(JSON.stringify(response))
+
           expect(response).to.have.property('status', 401)
 
           })
@@ -41,7 +41,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
                   body: 
                   AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload
               }).then((response) => {
-              //cy.log(JSON.stringify(response))
+
               expect(response).to.have.property('status', 200)
 
               })
@@ -59,7 +59,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
                 body: 
                 AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload
             }).then((response) => {
-            //cy.log(JSON.stringify(response))
+
             expect(response).to.have.property('status', 400)
   
             })
@@ -75,7 +75,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
                   'x-api-key' : 'INVALIDAPIKEY'
                 },
             }).then((response) => {
-                //cy.log(JSON.stringify(response))
+
                 expect(response).to.have.property('status', 401)
 
 
@@ -92,7 +92,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
                   'x-api-key' : apiKey
                 },
             }).then((response) => {
-                //cy.log(JSON.stringify(response))
+
                 expect(response).to.have.property('status', 200)
                 expect(response.body[0]).to.have.property('id')
                 Cypress.env('responseIDForRequest',response.body[0].id)
@@ -112,10 +112,9 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
               'x-api-key' : 'INVALIDAPIKEY'
             },
         }).then((response) => {
-            //cy.log(JSON.stringify(response))
+
             expect(response).to.have.property('status', 401)
-            //expect(response.body).to.have.property('id')
-            //Cypress.env('responseIDForRequest',response.body[0].id)
+
 
 
 })
@@ -131,10 +130,10 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
               'x-api-key' : apiKey
             },
         }).then((response) => {
-            //cy.log(JSON.stringify(response))
+
             expect(response).to.have.property('status', 200)
             expect(response.body).to.have.property('id')
-            //Cypress.env('responseIDForRequest',response.body[0].id)
+
 
 
 })
@@ -143,7 +142,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
 it('PUT - Verify An UNAuthorised User Is UNAble To UPDATE a FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', () => {
 
-  //cy.contains('id', Id)
+
 cy.log(JSON.stringify("Id = " + Cypress.env('responseIDForRequest')))
 cy.request({
         method: 'PUT',
@@ -156,7 +155,7 @@ cy.request({
         body:
         UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload
     }).then((response) => {
-    //cy.log(JSON.stringify(response))
+
     expect(response).to.have.property('status', 401)
   })
 
@@ -167,7 +166,7 @@ cy.request({
 
   it('PUT - Verify An Authorised User Is Able To UPDATE a FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
 
-      //cy.contains('id', Id)
+
    cy.log(JSON.stringify("Id = " + Cypress.env('responseIDForRequest')))
     cy.request({
             method: 'PUT',
@@ -179,7 +178,7 @@ cy.request({
             body:
             AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload
         }).then((response) => {
-        //cy.log(JSON.stringify(response))
+   
         expect(response).to.have.property('status', 200)
       })
 
