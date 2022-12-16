@@ -198,7 +198,7 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
             'x-api-key' : 'INVALID APIKEY'
           },
       }).then((response) => {
-      //cy.log(JSON.stringify(response))
+
       expect(response).to.have.property('status', 401)
 
       })
@@ -213,7 +213,7 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
               'x-api-key' : apiKey
             },
         }).then((response) => {
-        //cy.log(JSON.stringify(response))
+   
         expect(response).to.have.property('status', 200)
 
         })
@@ -232,7 +232,7 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
               'x-api-key' : apiKey
             },
         }).then((response) => {
-        //cy.log(JSON.stringify(response))
+
         expect(response).to.have.property('status', 500)
   
         })
