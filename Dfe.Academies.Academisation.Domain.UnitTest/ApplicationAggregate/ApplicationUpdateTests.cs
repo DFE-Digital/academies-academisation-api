@@ -851,6 +851,55 @@ public class ApplicationUpdateTests
 		Assert.Equivalent(expected, subject);
 	}
 
+	[Fact]
+	public void FormMatDeleteSchool__SuccessReturned_Mutated()
+	{
+		// arrange
+		// arrange
+		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
+
+		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
+			s.Id,
+			s.TrustBenefitDetails,
+			s.OfstedInspectionDetails,
+			s.SafeguardingDetails,
+			s.LocalAuthorityReorganisationDetails,
+			s.LocalAuthorityClosurePlanDetails,
+			s.DioceseName,
+			s.DioceseFolderIdentifier,
+			s.PartOfFederation,
+			s.FoundationTrustOrBodyName,
+			s.FoundationConsentFolderIdentifier,
+			s.ExemptionEndDate,
+			s.MainFeederSchools,
+			s.ResolutionConsentFolderIdentifier,
+			s.ProtectedCharacteristics,
+			s.FurtherInformation,
+			s.Details,
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.HasLoans,
+			s.HasLeases)
+		).ToList();
+
+		var schoolDetailsToAdd = _fixture.Create<UpdateSchoolParameter>();
+		updateSchoolParameters.Add(schoolDetailsToAdd);
+
+		subject.Update(
+			subject.ApplicationType,
+			subject.ApplicationStatus,
+			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
+			updateSchoolParameters);
+
+		// act
+		var result = subject.DeleteSchool(schoolDetailsToAdd.SchoolDetails.Urn);
+
+		// assert
+		DfeAssert.CommandSuccess(result);
+		subject.Schools.Should().NotBeNull();
+		subject.Schools.Should().HaveCount(0);
+	}
+
 	private Application BuildApplication(ApplicationStatus applicationStatus, int numberOfSchools, ApplicationType? type = null)
 	{
 		var schools = new List<School>();

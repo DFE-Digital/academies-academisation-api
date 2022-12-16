@@ -119,7 +119,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPost("{applicationId}/form-trust/key-person", Name = "AddKeyPerson")]
-		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] AddTrustKeyPersonCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] CreateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
 
@@ -150,6 +150,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult> DeleteKeyPerson(int applicationId, int keyPersonId, CancellationToken cancellationToken)
 		{
 			var result = await _mediator.Send(new DeleteTrustKeyPersonCommand(applicationId, keyPersonId), cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpDelete("{applicationId}/form-trust/school/{urn}", Name = "DeleteSchool")]
+		public async Task<ActionResult> DeleteSchool(int applicationId, int urn, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(new DeleteSchoolCommand(applicationId, urn), cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
