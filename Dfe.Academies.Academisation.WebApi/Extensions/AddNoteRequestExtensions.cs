@@ -10,6 +10,7 @@ namespace Dfe.Academies.Academisation.WebApi.Extensions
 				Subject: request.Subject,
 				Note: request.Note,
 				Author: request.Author,
+				Date: request.Date,
 				ProjectId: id);
 		}
 	}

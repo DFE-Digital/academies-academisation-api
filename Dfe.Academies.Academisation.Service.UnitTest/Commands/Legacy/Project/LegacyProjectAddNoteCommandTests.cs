@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -21,7 +20,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		{
 			_projectGetDataQuery = new Mock<IProjectGetDataQuery>();
 			_projectUpdateDataCommand = new Mock<IProjectUpdateDataCommand>();
-			_addNoteModel = new LegacyProjectAddNoteModel("Subject", "Note", "Author", 1234);
+			_addNoteModel = new LegacyProjectAddNoteModel("Subject", "Note", "Author", DateTime.Today, 1234);
 		}
 
 		private LegacyProjectAddNoteCommand System_under_test()
@@ -60,7 +59,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			await command.Execute(_addNoteModel with { ProjectId = project.Id });
 
 			project.Details.Notes
-				.Should().ContainEquivalentOf(new ProjectNote("Subject", "Note", "Author"));
+				.Should().ContainEquivalentOf(new ProjectNote("Subject", "Note", "Author", _addNoteModel.Date));
 		}
 
 		[Fact]
