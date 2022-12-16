@@ -233,6 +233,22 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
 
 
   })
+
+  it('DELETE - Verify An Authorised User Is UNable To DELETE FAM-Trust Key Person THAT DOES NOT EXIST - Form-Trust Key-Person THAT DOES NOT EXIST - 500 SERVER ERROR Expected - (May change to 400 later)', () => {
+    cy.request({
+            method: 'DELETE',
+            url: '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
+            failOnStatusCode: false,
+            headers: 
+            {
+              'x-api-key' : apiKey
+            },
+        }).then((response) => {
+        //cy.log(JSON.stringify(response))
+        expect(response).to.have.property('status', 500)
+  
+        })
+  })
   
 
 })
