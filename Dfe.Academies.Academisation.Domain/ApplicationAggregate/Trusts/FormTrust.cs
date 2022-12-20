@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+﻿using System.Collections.ObjectModel;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class FormTrust : IFormTrust
+	public class FormTrust : Entity, IFormTrust
 	{
 		private readonly List<TrustKeyPerson> _keyPeople;
 		private FormTrust(int id, FormTrustDetails trustDetails, IEnumerable<TrustKeyPerson> keyPeople)
@@ -23,7 +17,6 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 
 		public FormTrustDetails TrustDetails { get; private set; }
 		public ReadOnlyCollection<ITrustKeyPerson> KeyPeople => this._keyPeople.Cast<ITrustKeyPerson>().ToList().AsReadOnly();
-		public int Id { get; }
 
 		public static IFormTrust Create(FormTrustDetails trustDetails)
 		{

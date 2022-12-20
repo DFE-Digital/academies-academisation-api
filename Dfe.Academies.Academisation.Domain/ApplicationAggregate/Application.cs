@@ -7,7 +7,7 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-public class Application : IApplication, IAggregateRoot
+public class Application : DynamicsApplicationEntity, IApplication, IAggregateRoot
 {
 	private readonly List<Contributor> _contributors = new();
 	private readonly List<School> _schools = new();
@@ -49,9 +49,9 @@ public class Application : IApplication, IAggregateRoot
 		ApplicationReference = applicationReference;
 	}
 
+	public override int Id { get { return ApplicationId; } }
+
 	public int ApplicationId { get; private set; }
-	public DateTime CreatedOn { get; }
-	public DateTime LastModifiedOn { get; }
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
 	public DateTime? ApplicationSubmittedDate { get; private set; }

@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 
-public class School : ISchool
+public class School : Entity, ISchool
 {
 	public int Id { get;  set; }
 

@@ -1,8 +1,9 @@
+﻿using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 {
-	public class Lease : ILease
+	public class Lease : Entity, ILease
 	{
 		public int Id { get; private set; }
 		public string LeaseTerm { get; private set; }

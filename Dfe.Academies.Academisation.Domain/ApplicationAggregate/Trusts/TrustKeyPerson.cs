@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class TrustKeyPerson : ITrustKeyPerson
+	public class TrustKeyPerson : Entity, ITrustKeyPerson
 	{
 		private readonly List<TrustKeyPersonRole> _roles;
 		private TrustKeyPerson(int id, string name, DateTime dateOfBirth, string biography, IEnumerable<TrustKeyPersonRole> roles)

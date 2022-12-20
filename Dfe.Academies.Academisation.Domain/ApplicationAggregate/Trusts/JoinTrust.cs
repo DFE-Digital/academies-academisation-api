@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class JoinTrust : IJoinTrust
+	public class JoinTrust : Entity, IJoinTrust
 	{
 		private JoinTrust(int id, int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
@@ -20,8 +21,6 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 			this.ChangesToLaGovernance = changesToLaGovernance;
 			this.ChangesToLaGovernanceExplained = changesToLaGovernanceExplained;
 		}
-
-		public int Id { get; }
 
 		public int UKPRN { get; private set; }
 

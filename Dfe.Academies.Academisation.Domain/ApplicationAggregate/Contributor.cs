@@ -1,9 +1,10 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-public class Contributor : IContributor
+public class Contributor : Entity, IContributor
 {
 	internal Contributor(ContributorDetails details)
 	{

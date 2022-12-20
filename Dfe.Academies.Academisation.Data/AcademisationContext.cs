@@ -1,28 +1,37 @@
-﻿using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+﻿using System.Reflection.Emit;
+using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dfe.Academies.Academisation.Data;
 
 public class AcademisationContext : DbContext, IUnitOfWork
 {
+	const string DEFAULT_SCHEMA = "academisation";
 	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options)
 	{
 		
 	}
 
-	public DbSet<ApplicationState> Applications { get; set; } = null!;
-	public DbSet<ContributorState> Contributors { get; set; } = null!;
-	public DbSet<ApplicationSchoolState> Schools { get; set; } = null!;
-	public DbSet<LoanState> SchoolLoans { get; set; } = null!;
-	public DbSet<LeaseState> SchoolLeases { get; set; } = null!;
+	public DbSet<Application> Applications { get; set; } = null!; // done
+	public DbSet<Contributor> Contributors { get; set; } = null!; // done
+	public DbSet<School> Schools { get; set; } = null!; // done
+	public DbSet<LoanState> SchoolLoans { get; set; } = null!;  // done
+	public DbSet<LeaseState> SchoolLeases { get; set; } = null!; // done
+
+	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; // done
+	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
+                                                           
 	public DbSet<ProjectState> Projects { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
-	public DbSet<JoinTrustState> JoinTrusts { get; set; } = null!;
-	public DbSet<FormTrustState> FormTrusts { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
@@ -115,23 +124,15 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.HasDefaultSchema("academisation");
-		modelBuilder.Entity<ApplicationState>()
-			.Property(e => e.ApplicationType)
-			.HasConversion<string>();
-
-		modelBuilder.Entity<ApplicationState>()
-			.Property(e => e.ApplicationStatus)
-			.HasConversion<string>();
-
-		modelBuilder.Entity<ApplicationState>()
-			.Property(p => p.ApplicationReference)
-			.HasComputedColumnSql("'A2B_' + CAST([Id] AS NVARCHAR(255))", stored: true);
-
-		modelBuilder.Entity<ProjectState>()
-			.HasMany(x => x.Notes)
-			.WithOne()
-			.HasForeignKey("ProjectId");
+		modelBuilder.Entity<Application>(ConfigureApplication);
+		modelBuilder.Entity<School>(ConfigureSchool);
+		modelBuilder.Entity<Contributor>(ConfigureContributor);
+		modelBuilder.Entity<FormTrust>(ConfigureFormTrust);
+		modelBuilder.Entity<JoinTrust>(ConfigureJoinTrust);
+		modelBuilder.Entity<Loan>(ConfigureLoan);
+		modelBuilder.Entity<Lease>(ConfigureLease);
+		modelBuilder.Entity<TrustKeyPerson>(ConfigureTrustKeyPerson);
+		modelBuilder.Entity<TrustKeyPersonRole>(ConfigureTrustKeyPersonRole);
 
 		OnAdvisoryBoardDecisionCreating(modelBuilder);
 
@@ -142,6 +143,11 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	private static void OnProjectCreating(ModelBuilder modelBuilder)
 	{
+		modelBuilder.Entity<ProjectState>()
+			.HasMany(x => x.Notes)
+			.WithOne()
+			.HasForeignKey("ProjectId");
+
 		modelBuilder.Entity<ProjectState>()
 			.Property(e => e.GoverningBodyResolution).HasConversion<string>();
 		modelBuilder.Entity<ProjectState>()
@@ -169,5 +175,131 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>()
 			.Property(e => e.Decision)
 			.HasConversion<string>();
+	}
+
+	/// <summary>
+	/// New mapping for refactoring
+	/// </summary>
+	/// <param name="applicationConfiguration"></param>
+
+	void ConfigureApplication(EntityTypeBuilder<Application> applicationConfiguration)
+	{
+		applicationConfiguration.ToTable("ConversionApplication", DEFAULT_SCHEMA);
+		applicationConfiguration
+		.Property(e => e.ApplicationType)
+			.HasConversion<string>();
+
+		applicationConfiguration
+		.Property(e => e.ApplicationStatus)
+			.HasConversion<string>();
+
+		applicationConfiguration
+			.Property(p => p.ApplicationReference)
+			.HasComputedColumnSql("'A2B_' + CAST([Id] AS NVARCHAR(255))", stored: true);
+
+		applicationConfiguration.HasKey(a => a.Id);
+
+		var navigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Schools));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+	}
+
+	void ConfigureSchool(EntityTypeBuilder<School> schoolConfiguration)
+	{
+		schoolConfiguration.ToTable("ApplicationSchool", DEFAULT_SCHEMA);
+		schoolConfiguration.HasKey(a => a.Id);
+
+		var loanNavigation = schoolConfiguration.Metadata.FindNavigation(nameof(School.Loans));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		loanNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		var leaseNavigation = schoolConfiguration.Metadata.FindNavigation(nameof(School.Leases));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		leaseNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		schoolConfiguration.HasOne<Application>()
+			.WithMany()
+			.IsRequired(false)
+			.HasForeignKey("ConversionApplicationId");
+	}
+
+	void ConfigureContributor(EntityTypeBuilder<Contributor> contributorConfiguration)
+	{
+		contributorConfiguration.ToTable("ConversionApplicationContributor", DEFAULT_SCHEMA);
+		contributorConfiguration.HasKey(a => a.Id);
+
+		contributorConfiguration.HasOne<Application>()
+			.WithMany()
+			.IsRequired(false)
+			.HasForeignKey("ConversionApplicationId");
+	}
+
+	void ConfigureFormTrust(EntityTypeBuilder<FormTrust> formTrustConfiguration)
+	{
+		formTrustConfiguration.ToTable("ApplicationFormTrust", DEFAULT_SCHEMA);
+		formTrustConfiguration.HasKey(a => a.Id);
+
+		var navigation = formTrustConfiguration.Metadata.FindNavigation(nameof(FormTrust.KeyPeople));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+	}
+
+	void ConfigureJoinTrust(EntityTypeBuilder<JoinTrust> joinTrustConfiguration)
+	{
+		joinTrustConfiguration.ToTable("ApplicationJoinTrust", DEFAULT_SCHEMA);
+		joinTrustConfiguration.HasKey(a => a.Id);
+	}
+
+	void ConfigureLoan(EntityTypeBuilder<Loan> loanConfiguration)
+	{
+		loanConfiguration.ToTable("ApplicationSchoolLoan", DEFAULT_SCHEMA);
+		loanConfiguration.HasKey(a => a.Id);
+
+		loanConfiguration.HasOne<School>()
+			.WithMany()
+			.IsRequired(false)
+			.HasForeignKey("ApplicationSchoolId");
+	}
+
+	void ConfigureLease(EntityTypeBuilder<Lease> leaseConfiguration)
+	{
+		leaseConfiguration.ToTable("ApplicationSchoolLease", DEFAULT_SCHEMA);
+		leaseConfiguration.HasKey(a => a.Id);
+
+		leaseConfiguration.HasOne<School>()
+			.WithMany()
+			.IsRequired(false)
+			.HasForeignKey("ApplicationSchoolId");
+	}
+
+	void ConfigureTrustKeyPerson(EntityTypeBuilder<TrustKeyPerson> trustKeyPersonConfiguration)
+	{
+		trustKeyPersonConfiguration.ToTable("ApplicationFormTrustKeyPerson", DEFAULT_SCHEMA);
+		trustKeyPersonConfiguration.HasKey(a => a.Id);
+
+		var navigation = trustKeyPersonConfiguration.Metadata.FindNavigation(nameof(TrustKeyPerson.Roles));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		trustKeyPersonConfiguration.HasOne<FormTrust>()
+			.WithMany()
+			.IsRequired(false)
+			.HasForeignKey("ApplicationFormTrustId");
+	}
+
+	void ConfigureTrustKeyPersonRole(EntityTypeBuilder<TrustKeyPersonRole> trustKeyPersonRoleConfiguration)
+	{
+		trustKeyPersonRoleConfiguration.ToTable("ApplicationFormTrustKeyPersonRole", DEFAULT_SCHEMA);
+		trustKeyPersonRoleConfiguration.HasKey(a => a.Id);
+
+		trustKeyPersonRoleConfiguration.HasOne<TrustKeyPerson>()
+			.WithMany()
+			.IsRequired(false)
+			.HasForeignKey("ApplicationFormTrustKeyPersonRoleId");
 	}
 }
