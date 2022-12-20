@@ -11,6 +11,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
 	public class JoinTrust : Entity, IJoinTrust
 	{
+		protected JoinTrust() { }
 		private JoinTrust(int id, int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			this.Id = id;
@@ -34,7 +35,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 
 		public string? ChangesToLaGovernanceExplained { get; private set; }
 
-		public static IJoinTrust Create(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		public static JoinTrust Create(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			return new JoinTrust(0, UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 		}

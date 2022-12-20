@@ -21,7 +21,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public IUnitOfWork UnitOfWork => _context;
 		public async Task<IEnumerable<Application>> GetAllAsync()
 		{
-			return await _context.Applications.Select(x => x.MapToDomain(_mapper)).ToListAsync();
+			return await _context.Applications.ToListAsync();
 		}
 		
 		public async Task<Application?> GetByIdAsync(object id)
@@ -35,18 +35,17 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.ThenInclude(x => x.KeyPeople)
 				.ThenInclude(x => x.Roles)
 				.AsNoTracking()
-				.FirstOrDefaultAsync(x => x.Id == (int)id))?.MapToDomain(_mapper);
+				.FirstOrDefaultAsync(x => x.Id == (int)id));
 		}
 
 		public async Task Insert(Application obj)
 		{
-			await _context.Applications.AddAsync(ApplicationState.MapFromDomain(obj, _mapper));
+			await _context.Applications.AddAsync(obj);
 		}
 
 		public void Update(Application obj)
 		{
-			var entity = ApplicationState.MapFromDomain(obj, _mapper);
-			_context.Update(entity);
+			_context.Update(obj);
 		}
 
 		public async Task Delete(object id)

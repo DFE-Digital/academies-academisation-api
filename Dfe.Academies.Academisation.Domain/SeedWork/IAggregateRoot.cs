@@ -1,6 +1,6 @@
 ﻿namespace Dfe.Academies.Academisation.Domain.SeedWork
 {
-	public interface IAggregateRoot, IEntity
+	public interface IAggregateRoot
 	{
 		
 	}

@@ -10,6 +10,7 @@ using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data;
 
@@ -24,8 +25,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<Application> Applications { get; set; } = null!; // done
 	public DbSet<Contributor> Contributors { get; set; } = null!; // done
 	public DbSet<School> Schools { get; set; } = null!; // done
-	public DbSet<LoanState> SchoolLoans { get; set; } = null!;  // done
-	public DbSet<LeaseState> SchoolLeases { get; set; } = null!; // done
+	public DbSet<Loan> SchoolLoans { get; set; } = null!;  // done
+	public DbSet<Lease> SchoolLeases { get; set; } = null!; // done
 
 	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; // done
 	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
@@ -53,35 +54,35 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		var childCollections = entity.Collections
 			.Select(collection => collection.CurrentValue);
 
-		foreach (var children in childCollections)
-		{
-			if (children is null)
-			{
-				continue;
-			}
+		//foreach (var children in childCollections)
+		//{
+		//	if (children is null)
+		//	{
+		//		continue;
+		//	}
 
-			foreach (object? child in children)
-			{
-				Type childType = child.GetType();
+		//	foreach (object? child in children)
+		//	{
+		//		Type childType = child.GetType();
 
-				if (childType == typeof(ApplicationSchoolState))
-				{
-					var schoolState = (ApplicationSchoolState)child;
+		//		if (childType == typeof(ApplicationSchoolState))
+		//		{
+		//			var schoolState = (ApplicationSchoolState)child;
 
-					foreach (var loan in schoolState.Loans)
-					{
-						Remove(loan);
-					}
+		//			foreach (var loan in schoolState.Loans)
+		//			{
+		//				Remove(loan);
+		//			}
 
-					foreach (var lease in schoolState.Leases)
-					{
-						Remove(lease);
-					}
-				}
+		//			foreach (var lease in schoolState.Leases)
+		//			{
+		//				Remove(lease);
+		//			}
+		//		}
 
-				Remove(child);
-			}
-		}
+		//		Remove(child);
+		//	}
+		//}
 
 		entity.State = EntityState.Detached;
 
@@ -197,18 +198,42 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.Property(p => p.ApplicationReference)
 			.HasComputedColumnSql("'A2B_' + CAST([Id] AS NVARCHAR(255))", stored: true);
 
+
 		applicationConfiguration.HasKey(a => a.Id);
 
-		var navigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Schools));
+		var schoolNavigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Schools));
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
-		navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+		schoolNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		var contributorNavigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Contributors));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		contributorNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	void ConfigureSchool(EntityTypeBuilder<School> schoolConfiguration)
 	{
 		schoolConfiguration.ToTable("ApplicationSchool", DEFAULT_SCHEMA);
 		schoolConfiguration.HasKey(a => a.Id);
+		schoolConfiguration.OwnsOne(x => x.Details, sd =>
+		{
+			sd.Property(d => d.Urn).HasColumnName("Urn");
+			sd.Property(d => d.SchoolName).HasColumnName("SchoolName");
+			sd.Property(d => d.SchoolSupportGrantFundsPaidTo).HasColumnName("");
+			sd.Property(d => d.Urn).HasColumnName("");
+			sd.Property(d => d.Urn).HasColumnName("");
+			sd.Property(d => d.Urn).HasColumnName("");
+			sd.Property(d => d.Urn).HasColumnName("");
+			sd.Property(d => d.Urn).HasColumnName("");
+			sd.OwnsOne(d => d.PreviousFinancialYear);
+			sd.OwnsOne(d => d.CurrentFinancialYear);
+			sd.OwnsOne(d => d.NextFinancialYear);
+			sd.OwnsOne(d => d.LandAndBuildings);
+		});
+		//schoolConfiguration.OwnsOne(x => x.Details).OwnsOne(sd => sd.CurrentFinancialYear);
+		//schoolConfiguration.OwnsOne(x => x.Details).OwnsOne(sd => sd.CurrentFinancialYear);
+		//schoolConfiguration.OwnsOne(x => x.Details).OwnsOne(sd => sd.NextFinancialYear);
 
 		var loanNavigation = schoolConfiguration.Metadata.FindNavigation(nameof(School.Loans));
 		// DDD Patterns comment:
@@ -241,7 +266,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		formTrustConfiguration.ToTable("ApplicationFormTrust", DEFAULT_SCHEMA);
 		formTrustConfiguration.HasKey(a => a.Id);
-
+		formTrustConfiguration.OwnsOne(x => x.TrustDetails);
 		var navigation = formTrustConfiguration.Metadata.FindNavigation(nameof(FormTrust.KeyPeople));
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field

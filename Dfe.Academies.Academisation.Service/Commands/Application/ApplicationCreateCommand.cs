@@ -32,7 +32,7 @@ public class ApplicationCreateCommand : IApplicationCreateCommand
 			return domainValidationErrorResult.MapToPayloadType();
 		}
 
-		if (result is not CreateSuccessResult<IApplication> domainSuccessResult)
+		if (result is not CreateSuccessResult<Domain.ApplicationAggregate.Application> domainSuccessResult)
 		{
 			throw new NotImplementedException("Other CreateResult types not expected");
 		}

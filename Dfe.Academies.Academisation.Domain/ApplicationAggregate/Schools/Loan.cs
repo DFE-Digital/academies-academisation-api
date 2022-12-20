@@ -6,6 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 {
 	public class Loan : Entity, ILoan
 	{
+		protected Loan() { }
 		public Loan(int id, decimal amount, string purpose, string provider, decimal interestRate, string schedule)
 		{
 			Id = id;

@@ -6,6 +6,7 @@ using AutoFixture;
 using AutoMapper;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Moq;
@@ -27,7 +28,7 @@ public class ApplicationUpdateDataCommandTests
 		_query = new ApplicationGetDataQuery(_context, _mapper.Object);
 		_subject = new ApplicationUpdateDataCommand(_context, _mapper.Object);
 
-		_fixture.Customize<LoanState>(composer =>
+		_fixture.Customize<Loan>(composer =>
 			composer
 				.With(s => s.Id, 0));
 	}

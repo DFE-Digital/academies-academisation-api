@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -44,7 +45,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 			// assert
 			_applicationCreateDataCommandMock
-				.Verify(x => x.Execute(It.Is<IApplication>(y => y == applicationMock.Object)), Times.Once());
+				.Verify(x => x.Execute(It.Is<Application>(y => y == applicationMock.Object)), Times.Once());
 
 			var successResult = result as CreateSuccessResult<ApplicationServiceModel>;
 			Assert.IsType<ApplicationServiceModel>(successResult!.Payload);
@@ -71,7 +72,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 
 			// assert
 			_applicationCreateDataCommandMock
-				.Verify(x => x.Execute(It.IsAny<IApplication>()), Times.Never());
+				.Verify(x => x.Execute(It.IsAny<Application>()), Times.Never());
 
 			Assert.IsType<CreateValidationErrorResult>(result);
 		}

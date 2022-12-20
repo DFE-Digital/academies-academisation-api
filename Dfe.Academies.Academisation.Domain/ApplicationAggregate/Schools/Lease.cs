@@ -5,6 +5,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 {
 	public class Lease : Entity, ILease
 	{
+		protected Lease() { }
 		public int Id { get; private set; }
 		public string LeaseTerm { get; private set; }
 

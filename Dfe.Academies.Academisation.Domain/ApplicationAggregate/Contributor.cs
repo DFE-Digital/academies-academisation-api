@@ -6,6 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
 public class Contributor : Entity, IContributor
 {
+	protected Contributor() { }
 	internal Contributor(ContributorDetails details)
 	{
 		Details = details;

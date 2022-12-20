@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 
@@ -21,21 +22,21 @@ public class TestApplicationContext : TestAcademisationContext
 
 		var timestamp = DateTime.UtcNow;
 
-		var seed = new List<ApplicationState>
+		var seed = new List<Application>
 		{
-			_fixture.Build<ApplicationState>()
+			_fixture.Build<Application>()
 				.With(d => d.Id, 1)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)
 				.With(d => d.ApplicationReference, $"A2B_{1}")
 				.Create(),
-			_fixture.Build<ApplicationState>()
+			_fixture.Build<Application>()
 				.With(d => d.Id, 2)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)
 				.With(d => d.ApplicationReference, $"A2B_{2}")
 				.Create(),
-			_fixture.Build<ApplicationState>()
+			_fixture.Build<Application>()
 				.With(d => d.Id, 3)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)

@@ -6,15 +6,18 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 
 public class School : Entity, ISchool
 {
+	protected School() { }
 	public int Id { get;  set; }
 
 	public SchoolDetails Details { get; set; }
 
 	#region Leases and Loans
+	public IEnumerable<Loan> Loans => _loans.AsReadOnly();
+	public IEnumerable<Lease> Leases => _leases.AsReadOnly();
 	public bool? HasLoans { get; private set; }
-	public IReadOnlyCollection<ILoan> Loans => _loans.AsReadOnly();
+	IReadOnlyCollection<ILoan> ISchool.Loans => _loans.AsReadOnly();
 	public bool? HasLeases { get; private set; }
-	public IReadOnlyCollection<ILease> Leases => _leases.AsReadOnly();
+	IReadOnlyCollection<ILease> ISchool.Leases => _leases.AsReadOnly();
 
 	private readonly List<Loan> _loans;
 	private readonly List<Lease> _leases;

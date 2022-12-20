@@ -50,15 +50,15 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 
 			//TODO: This can be removed when there is no longer a disconnect between domain and persistence entities
 
-			if (keyPersonToDelete != null)
-			{
-				foreach (var role in keyPersonToDelete.Roles)
-				{
-					await _applicationRepository.DeleteChildObjectById<TrustKeyPersonRoleState>(role.Id);
-				}
-			}
+			//if (keyPersonToDelete != null)
+			//{
+			//	foreach (var role in keyPersonToDelete.Roles)
+			//	{
+			//		await _applicationRepository.DeleteChildObjectById<TrustKeyPersonRoleState>(role.Id);
+			//	}
+			//}
 
-			await _applicationRepository.DeleteChildObjectById<TrustKeyPersonState>(command.KeyPersonId);
+			//await _applicationRepository.DeleteChildObjectById<TrustKeyPersonState>(command.KeyPersonId);
 
 			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(new CancellationToken())
 				? new CommandSuccessResult()

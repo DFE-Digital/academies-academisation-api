@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
@@ -29,7 +29,7 @@ public class DeleteLoanCommandHandler : IRequestHandler<DeleteLoanCommand, Comma
 		_applicationRepository.Update(existingApplication);
 		
 		//TODO: This can be removed when there is no longer a disconnect between domain and persistence entities
-		await _applicationRepository.DeleteChildObjectById<LoanState>(loanCommand.LoanId);
+		//await _applicationRepository.DeleteChildObjectById<LoanState>(loanCommand.LoanId);
 		
 		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(new CancellationToken()) 
 			? new CommandSuccessResult()

@@ -299,7 +299,7 @@ public class ApplicationUpdateTests
 			"",
 			null,
 			"",
-			_fixture.Create<SchoolDetails>() with { ApproverContactEmail = "InvalidEmail" },
+			_fixture.Create<SchoolDetails>().ApproverContactEmail = "InvalidEmail" ,
 		new List<KeyValuePair<int, LoanDetails>>(),
 		new List<KeyValuePair<int, LeaseDetails>>(),
 			null, null
@@ -743,11 +743,11 @@ public class ApplicationUpdateTests
 		DfeAssert.CommandSuccess(result);
 		subject.FormTrust!.KeyPeople.Should().NotBeNullOrEmpty();
 		subject.FormTrust!.KeyPeople.Should().HaveCount(1);
-		subject.FormTrust!.KeyPeople[0].Name.Should().Be("Bob Smith");
-		subject.FormTrust!.KeyPeople[0].DateOfBirth.Should().Be(dob);
-		subject.FormTrust!.KeyPeople[0].Biography.Should().Be("test biography");		
-		subject.FormTrust!.KeyPeople[0].Roles[0].Role.Should().Be(KeyPersonRole.CEO);
-		subject.FormTrust!.KeyPeople[0].Roles[0].TimeInRole.Should().Be("1 year");
+		subject.FormTrust!.KeyPeople.First().Name.Should().Be("Bob Smith");
+		subject.FormTrust!.KeyPeople.First().DateOfBirth.Should().Be(dob);
+		subject.FormTrust!.KeyPeople.First().Biography.Should().Be("test biography");		
+		subject.FormTrust!.KeyPeople.First().Roles.First().Role.Should().Be(KeyPersonRole.CEO);
+		subject.FormTrust!.KeyPeople.First().Roles.First().TimeInRole.Should().Be("1 year");
 	}
 
 	[Fact]
@@ -773,11 +773,11 @@ public class ApplicationUpdateTests
 		DfeAssert.CommandSuccess(result);
 		subject.FormTrust!.KeyPeople.Should().NotBeNullOrEmpty();
 		subject.FormTrust!.KeyPeople.Should().HaveCount(1);
-		subject.FormTrust!.KeyPeople[0].Name.Should().Be("Ted Glen");
-		subject.FormTrust!.KeyPeople[0].DateOfBirth.Should().Be(dob);
-		subject.FormTrust!.KeyPeople[0].Biography.Should().Be("test biography");
-		subject.FormTrust!.KeyPeople[0].Roles[0].Role.Should().Be(KeyPersonRole.Chair);
-		subject.FormTrust!.KeyPeople[0].Roles[0].TimeInRole.Should().Be("2 years");
+		subject.FormTrust!.KeyPeople.First().Name.Should().Be("Ted Glen");
+		subject.FormTrust!.KeyPeople.First().DateOfBirth.Should().Be(dob);
+		subject.FormTrust!.KeyPeople.First().Biography.Should().Be("test biography");
+		subject.FormTrust!.KeyPeople.First().Roles.First().Role.Should().Be(KeyPersonRole.Chair);
+		subject.FormTrust!.KeyPeople.First().Roles.First().TimeInRole.Should().Be("2 years");
 	}
 
 	[Fact]

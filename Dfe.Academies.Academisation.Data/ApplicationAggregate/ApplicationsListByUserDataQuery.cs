@@ -19,15 +19,15 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 
 		public async Task<IList<Application>> Execute(string userEmail)
 		{
-			List<ApplicationState> applicationStates = await _context.Applications
+			var applicationStates = await _context.Applications
 				.AsNoTracking()
 				.Include(a => a.Contributors)
 				.Include(a => a.Schools)
 					.ThenInclude(a => a.Loans)
-				.Where(a => a.Contributors.Any(c => c.EmailAddress == userEmail))
+				.Where(a => a.Contributors.Any(c => c.Details.EmailAddress == userEmail))
 				.ToListAsync();
 
-			return applicationStates.Select(a => a.MapToDomain(this.mapper)).ToList();
+			return applicationStates.ToList();
 		}
 	}
 }

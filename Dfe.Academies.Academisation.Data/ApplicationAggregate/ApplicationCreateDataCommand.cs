@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -15,15 +16,15 @@ public class ApplicationCreateDataCommand : IApplicationCreateDataCommand
 		this.mapper = mapper;
 	}
 
-	public async Task Execute(IApplication application)
+	public async Task Execute(Application application)
 	{
-		var applicationState = ApplicationState.MapFromDomain(application, this.mapper);
+		//var applicationState = ApplicationState.MapFromDomain(application, this.mapper);
 
-		_context.Applications.Add(applicationState);
+		_context.Applications.Add(application);
 		await _context.SaveChangesAsync();
 
-		application.SetIdsOnCreate(
-			applicationState.Id,
-			applicationState.Contributors.Single().Id);
+		//application.SetIdsOnCreate(
+		//	applicationState.Id,
+		//	applicationState.Contributors.Single().Id);
 	}
 }

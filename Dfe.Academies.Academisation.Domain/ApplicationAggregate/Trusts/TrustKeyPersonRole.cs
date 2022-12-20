@@ -11,6 +11,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
 	public class TrustKeyPersonRole : Entity, ITrustKeyPersonRole
 	{
+		protected TrustKeyPersonRole() { }
 		private TrustKeyPersonRole(int id, KeyPersonRole role, string timeInRole)
 		{
 			Id = id;

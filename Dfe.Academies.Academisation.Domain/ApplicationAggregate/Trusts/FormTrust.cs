@@ -7,6 +7,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
 	public class FormTrust : Entity, IFormTrust
 	{
+		protected FormTrust() { }
 		private readonly List<TrustKeyPerson> _keyPeople;
 		private FormTrust(int id, FormTrustDetails trustDetails, IEnumerable<TrustKeyPerson> keyPeople)
 		{
@@ -16,9 +17,10 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 		}
 
 		public FormTrustDetails TrustDetails { get; private set; }
-		public ReadOnlyCollection<ITrustKeyPerson> KeyPeople => this._keyPeople.Cast<ITrustKeyPerson>().ToList().AsReadOnly();
+		IReadOnlyCollection<ITrustKeyPerson> IFormTrust.KeyPeople => this._keyPeople.AsReadOnly();
+		public IEnumerable<TrustKeyPerson> KeyPeople => this._keyPeople.AsReadOnly();
 
-		public static IFormTrust Create(FormTrustDetails trustDetails)
+		public static FormTrust Create(FormTrustDetails trustDetails)
 		{
 			return new FormTrust(0, trustDetails, new List<TrustKeyPerson>());
 		}

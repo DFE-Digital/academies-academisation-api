@@ -12,6 +12,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
 	public class TrustKeyPerson : Entity, ITrustKeyPerson
 	{
+		protected TrustKeyPerson() { }
 		private readonly List<TrustKeyPersonRole> _roles;
 		private TrustKeyPerson(int id, string name, DateTime dateOfBirth, string biography, IEnumerable<TrustKeyPersonRole> roles)
 		{
@@ -29,7 +30,8 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 		public DateTime DateOfBirth { get; private set; }
 		public string Biography { get; private set; }
 
-		public ReadOnlyCollection<ITrustKeyPersonRole> Roles => _roles.Cast<ITrustKeyPersonRole>().ToList().AsReadOnly();
+		IReadOnlyCollection<ITrustKeyPersonRole> ITrustKeyPerson.Roles => _roles.AsReadOnly();
+		public IEnumerable<TrustKeyPersonRole> Roles => _roles.AsReadOnly();
 
 		public void Update(string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles)
 		{

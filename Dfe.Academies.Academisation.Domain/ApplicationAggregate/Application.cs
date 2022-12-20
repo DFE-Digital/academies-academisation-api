@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.Validations;
@@ -16,6 +17,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 	private readonly SetJoinTrustDetailsValidator setJoinTrustDetailsValidator = new();
 	private readonly SetFormTrustDetailsValidator setformJoinTrustDetailsValidator = new();
 
+	protected Application() { }
+
 	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
 		ApplicationStatus = ApplicationStatus.InProgress;
@@ -31,12 +34,12 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
 		IEnumerable<School> schools,
-		IJoinTrust? joinTrust,
-		IFormTrust? formTrust,
+		JoinTrust? joinTrust,
+		FormTrust? formTrust,
 		DateTime? applicationSubmittedOn = null,
 		string? applicationReference = null)
 	{
-		ApplicationId = applicationId;
+		Id = applicationId;
 		CreatedOn = createdOn;
 		LastModifiedOn = lastModifiedOn;
 		ApplicationType = applicationType;
@@ -49,22 +52,28 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		ApplicationReference = applicationReference;
 	}
 
-	public override int Id { get { return ApplicationId; } }
-
-	public int ApplicationId { get; private set; }
+	public int ApplicationId { get { return Id; } }
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
 	public DateTime? ApplicationSubmittedDate { get; private set; }
-	public IFormTrust? FormTrust { get; private set; }
-	public IJoinTrust? JoinTrust { get; private set; }
 
-	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
+	public FormTrust? FormTrust { get; private set; }
+	public JoinTrust? JoinTrust { get; private set; }
 
-	public IReadOnlyCollection<ISchool> Schools => _schools.AsReadOnly();
+	IFormTrust? IApplication.FormTrust => FormTrust;
+	IJoinTrust? IApplication.JoinTrust => JoinTrust;
+
+	//these need to be doubled up for EF config until we merge the IDomain and Domain projects
+	public IEnumerable<Contributor> Contributors => _contributors.AsReadOnly();
+	public IEnumerable<School> Schools => _schools.AsReadOnly();
+
+	IReadOnlyCollection<IContributor> IApplication.Contributors => _contributors.AsReadOnly();
+
+	IReadOnlyCollection<ISchool> IApplication.Schools => _schools.AsReadOnly();
 
 	public void SetIdsOnCreate(int applicationId, int contributorId)
 	{
-		ApplicationId = applicationId;
+		Id = applicationId;
 		_contributors.Single().Id = contributorId;
 	}
 
@@ -176,7 +185,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 
 		}
 		else { 
-			JoinTrust = Trusts.JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
+			JoinTrust = JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
 		}
 
 		return new CommandSuccessResult();
@@ -263,7 +272,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		}
 		else
 		{
-			FormTrust = Trusts.FormTrust.Create(formTrustDetails);
+			FormTrust = FormTrust.Create(formTrustDetails);
 		}
 
 		return new CommandSuccessResult();

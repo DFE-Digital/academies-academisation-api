@@ -31,7 +31,7 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 				.ThenInclude(a => a.Roles)
 				.SingleOrDefaultAsync(a => a.Id == id);
 
-			return applicationState?.MapToDomain(this.mapper);
+			return applicationState;
 		}
 	}
 }
