@@ -5,10 +5,10 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class FormTrust : Entity, IFormTrust
+	public class FormTrust : DynamicsApplicationEntity, IFormTrust
 	{
 		protected FormTrust() { }
-		private readonly List<TrustKeyPerson> _keyPeople;
+		private readonly List<TrustKeyPerson> _keyPeople = new();
 		private FormTrust(int id, FormTrustDetails trustDetails, IEnumerable<TrustKeyPerson> keyPeople)
 		{
 			this.Id = id;

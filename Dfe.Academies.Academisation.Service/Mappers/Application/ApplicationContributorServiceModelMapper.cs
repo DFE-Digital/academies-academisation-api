@@ -25,8 +25,7 @@ internal static class ApplicationContributorServiceModelMapper
 			serviceModel.LastName,
 			serviceModel.EmailAddress,
 			serviceModel.Role,
-			serviceModel.OtherRoleName,
-			null
+			serviceModel.OtherRoleName
 		);
 	}
 }

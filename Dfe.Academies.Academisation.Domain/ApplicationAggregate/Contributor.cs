@@ -4,7 +4,7 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-public class Contributor : Entity, IContributor
+public class Contributor : DynamicsApplicationEntity, IContributor
 {
 	protected Contributor() { }
 	internal Contributor(ContributorDetails details)

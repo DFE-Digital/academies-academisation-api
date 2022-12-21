@@ -18,20 +18,18 @@ namespace Dfe.Academies.Academisation.Data.ApplicationAggregate
 
 		public async Task<IApplication?> Execute(int id)
 		{
-			var applicationState = await _context.Applications
-				.AsNoTracking()
+			var applicationStateQuery = _context.Applications
 				.Include(a => a.Contributors)
 				.Include(a => a.Schools)
-					.ThenInclude(a => a.Loans)
+				.ThenInclude(a => a.Loans)
 				.Include(a => a.Schools)
-					.ThenInclude(a => a.Leases)
+				.ThenInclude(a => a.Leases)
 				.Include(a => a.JoinTrust)
 				.Include(a => a.FormTrust)
-					.ThenInclude(a => a.KeyPeople)
-				.ThenInclude(a => a.Roles)
-				.SingleOrDefaultAsync(a => a.Id == id);
+				.ThenInclude(a => a.KeyPeople)
+				.ThenInclude(a => a.Roles);
 
-			return applicationState;
+			return await applicationStateQuery.SingleOrDefaultAsync(a => a.Id == id);
 		}
 	}
 }

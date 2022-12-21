@@ -143,9 +143,15 @@ builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 
 //Validators
 
-builder.Services.AddDbContext<AcademisationContext>(options => options
-	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],
-		optionsBuilder => { optionsBuilder.MigrationsHistoryTable("__EFMigrationsHistory", "academisation"); }));
+builder.Services.AddDbContext<AcademisationContext>(options =>
+	{
+		options.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],
+			optionsBuilder => { optionsBuilder.MigrationsHistoryTable("__EFMigrationsHistory", "academisation"); });
+#if DEBUG
+		options.LogTo(Console.WriteLine, LogLevel.Information);
+#endif
+	}
+);
 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
