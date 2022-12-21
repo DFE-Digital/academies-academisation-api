@@ -1,22 +1,21 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.RequestModels;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Mappers.Application;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application;
 
 public class ApplicationUpdateCommand : IApplicationUpdateCommand
 {
-	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+	private readonly IApplicationRepository _applicationRepository;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 
-	public ApplicationUpdateCommand(IApplicationGetDataQuery applicationGetDataQuery, IApplicationUpdateDataCommand applicationUpdateDataCommand)
+	public ApplicationUpdateCommand(IApplicationRepository applicationRepository, IApplicationUpdateDataCommand applicationUpdateDataCommand)
 	{
-		_applicationGetDataQuery = applicationGetDataQuery;
+		_applicationRepository = applicationRepository;
 		_applicationUpdateDataCommand = applicationUpdateDataCommand;
 	}
 
@@ -30,7 +29,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 				});
 		}
 
-		var existingApplication = await _applicationGetDataQuery.Execute(applicationId);
+		var existingApplication = await _applicationRepository.GetByIdAsync(applicationId);
 		if (existingApplication is null)
 		{
 			return new NotFoundCommandResult();

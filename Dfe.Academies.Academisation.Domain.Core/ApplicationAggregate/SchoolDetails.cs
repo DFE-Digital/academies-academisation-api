@@ -103,10 +103,10 @@ public class SchoolDetails
 
 	public int Urn { get; init; }
 	public string SchoolName { get; init; }
-	public LandAndBuildings? LandAndBuildings { get; init; }
-	public FinancialYear? PreviousFinancialYear { get; init; }
-	public FinancialYear? CurrentFinancialYear { get; init; }
-	public FinancialYear? NextFinancialYear { get; init; }
+	public LandAndBuildings? LandAndBuildings { get; init; } = new();
+	public FinancialYear? PreviousFinancialYear { get; init; } = new();
+	public FinancialYear? CurrentFinancialYear { get; init; } = new();
+	public FinancialYear? NextFinancialYear { get; init; } = new();
 	public string? ContactHeadName { get; init; }
 	public string? ContactHeadEmail { get; init; }
 	public string? ContactHeadTel { get; init; }

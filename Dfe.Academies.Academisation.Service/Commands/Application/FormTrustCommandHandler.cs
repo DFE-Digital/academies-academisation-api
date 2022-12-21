@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
@@ -9,12 +10,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 	public class FormTrustCommandHandler : IRequestHandler<SetFormTrustDetailsCommand, CommandResult>
 	{
 
-		private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+		private readonly IApplicationRepository _applicationRepository;
 		private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 
-		public FormTrustCommandHandler(IApplicationGetDataQuery applicationGetDataQuery, IApplicationUpdateDataCommand applicationUpdateDataCommand)
+		public FormTrustCommandHandler(IApplicationRepository applicationRepository, IApplicationUpdateDataCommand applicationUpdateDataCommand)
 		{
-			_applicationGetDataQuery = applicationGetDataQuery;
+			_applicationRepository = applicationRepository;
 			_applicationUpdateDataCommand = applicationUpdateDataCommand;
 		}
 
@@ -23,7 +24,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			// cancellation token will be passed down to the database requests when the repository pattern is brought in
 			// shouldn't be anything that is long running just found it a good habit with async
 
-			var existingApplication = await _applicationGetDataQuery.Execute(command.applicationId);
+			var existingApplication = await _applicationRepository.GetByIdAsync(command.applicationId);
 			if (existingApplication is null)
 			{
 				return new NotFoundCommandResult();

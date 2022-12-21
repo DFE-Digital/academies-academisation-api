@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -11,18 +12,19 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
 	public class ApplicationSubmitCommandHandler : IRequestHandler<SubmitApplicationCommand, CommandOrCreateResult>
 	{
-		private readonly IApplicationGetDataQuery _dataQuery;
+		private readonly IApplicationRepository dataQuery,
+			_applicationRepository;
 		private readonly IApplicationUpdateDataCommand _dataCommand;
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 		private readonly IApplicationSubmissionService _applicationSubmissionService;
 
 		public ApplicationSubmitCommandHandler(
-			IApplicationGetDataQuery dataQuery,
+			IApplicationRepository applicationRepository,
 			IApplicationUpdateDataCommand dataCommand,
 			IProjectCreateDataCommand projectCreateDataCommand,
 			IApplicationSubmissionService applicationSubmissionService)
 		{
-			_dataQuery = dataQuery;
+			_applicationRepository = applicationRepository;
 			_dataCommand = dataCommand;
 			_projectCreateDataCommand = projectCreateDataCommand;
 			_applicationSubmissionService = applicationSubmissionService;
@@ -30,7 +32,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 
 		public async Task<CommandOrCreateResult> Handle(SubmitApplicationCommand command, CancellationToken cancellationToken)
 		{
-			var application = await _dataQuery.Execute(command.applicationId);
+			var application = await _applicationRepository.GetByIdAsync(command.applicationId);
 
 			if (application is null)
 			{

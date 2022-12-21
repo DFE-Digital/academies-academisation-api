@@ -118,10 +118,7 @@ builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateCommand, AdvisoryBoardDec
 builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateDataCommand, AdvisoryBoardDecisionUpdateDataCommand>();
 
 // Queries
-builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
-builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
-builder.Services.AddScoped<IApplicationsListByUserDataQuery, ApplicationsListByUserDataQuery>();
-builder.Services.AddScoped<IApplicationListByUserQuery, ApplicationListByUserQuery>();
+builder.Services.AddScoped<IApplicationQueryService, ApplicationQueryService>();
 builder.Services.AddScoped<IProjectGetDataQuery, ProjectGetDataQuery>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();

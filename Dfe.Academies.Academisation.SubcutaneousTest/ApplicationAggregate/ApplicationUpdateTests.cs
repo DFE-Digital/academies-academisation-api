@@ -31,7 +31,7 @@ public class ApplicationUpdateTests
 	private readonly Faker _faker = new();
 
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
-	private readonly IApplicationGetQuery _applicationGetQuery;
+	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
@@ -54,7 +54,7 @@ public class ApplicationUpdateTests
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
+		_applicationQueryService = new ApplicationQueryService(_applicationGetDataQuery, _mapper.Object);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
@@ -62,7 +62,7 @@ public class ApplicationUpdateTests
 
 		_applicationController = new(
 			_applicationCreateCommand,
-			_applicationGetQuery,
+			_applicationQueryService,
 			_applicationUpdateCommand,
 			_applicationsListByUserQuery,
 			_trustQueryService,
@@ -128,7 +128,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.OkResult(updateResult);
-		var gotApplication = await _applicationGetQuery.Execute(existingApplication.ApplicationId);
+		var gotApplication = await _applicationQueryService.GetById(existingApplication.ApplicationId);
 		Assert.NotNull(gotApplication);
 
 		var expectedApplication = existingApplication with
@@ -211,6 +211,6 @@ public class ApplicationUpdateTests
 
 		await _applicationController.Update(createSuccessResult.Payload.ApplicationId, applicationToUpdate);
 
-		return await _applicationGetQuery.Execute(id);
+		return await _applicationQueryService.GetById(id);
 	}
 }

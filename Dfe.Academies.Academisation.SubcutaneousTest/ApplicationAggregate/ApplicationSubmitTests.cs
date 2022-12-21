@@ -44,7 +44,7 @@ public class ApplicationSubmitTests
 	private readonly IProjectFactory _projectFactory = new ProjectFactory();
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
-	private readonly IApplicationGetQuery _applicationGetQuery;
+	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly ITrustQueryService _trustQueryService;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
@@ -66,7 +66,7 @@ public class ApplicationSubmitTests
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
+		_applicationQueryService = new ApplicationQueryService(_applicationGetDataQuery, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
@@ -108,7 +108,7 @@ public class ApplicationSubmitTests
 		// Arrange
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
-			_applicationGetQuery,
+			_applicationQueryService,
 			_applicationUpdateCommand,
 			_applicationsListByUserQuery,
 			_trustQueryService,

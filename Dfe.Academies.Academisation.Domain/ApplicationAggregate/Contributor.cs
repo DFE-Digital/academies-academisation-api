@@ -17,7 +17,9 @@ public class Contributor : DynamicsApplicationEntity, IContributor
 		Details = details;
 	}
 
-	public int Id { get; internal set; }
-
-	public ContributorDetails Details { get; }
+	public ContributorDetails Details { get; private set; }
+	public void Update(ContributorDetails details)
+	{
+		this.Details = details;
+	}
 }

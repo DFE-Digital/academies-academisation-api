@@ -101,6 +101,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		/*
 		 * await _mediator.DispatchDomainEventsAsync(this);
 		 */
+		//SetModifiedAndCreatedDates();
 		await base.SaveChangesAsync(cancellationToken);
 		return true;
 	}
@@ -487,13 +488,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		trustKeyPersonConfiguration
 			.HasMany(a => a.Roles)
 			.WithOne()
-			.HasForeignKey("ApplicationFormTrustKeyPersonRoleId");
-
-		trustKeyPersonConfiguration
-			.HasMany(a => a.Roles)
-			.WithOne()
 			.HasForeignKey("ApplicationFormTrustKeyPersonRoleId")
-			.IsRequired(false);
+			.IsRequired(false)
+			.OnDelete(DeleteBehavior.Cascade);
 
 		var navigation = trustKeyPersonConfiguration.Metadata.FindNavigation(nameof(TrustKeyPerson.Roles));
 		// DDD Patterns comment:

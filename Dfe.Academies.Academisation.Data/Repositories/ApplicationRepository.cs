@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Reflection.Metadata.Ecma335;
+using AutoMapper;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
@@ -26,14 +28,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		
 		public async Task<Application?> GetByIdAsync(object id)
 		{
-			return (await _context.Applications
-				.Include(x => x.Schools)
-				.ThenInclude(x => x.Loans)
-				.Include(x => x.Schools)
-				.ThenInclude(x => x.Leases)
-				.Include(x => x.FormTrust)
-				.ThenInclude(x => x.KeyPeople)
-				.ThenInclude(x => x.Roles)
+			return (await DefaultIncludes()
 				.FirstOrDefaultAsync(x => x.Id == (int)id));
 		}
 
@@ -44,6 +39,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public void Update(Application obj)
 		{
+			_context.Entry(obj).State = EntityState.Modified;
 			_context.Update(obj);
 		}
 
@@ -54,10 +50,34 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				_context.Applications.Remove(entity);
 		}
 
-		public async Task DeleteChildObjectById<T>(object id) where T : class
+		//public async Task DeleteChildObjectById<T>(object id) where T : class
+		//{
+		//	 var entity = await _context.FindAsync<T>(id);
+		//	 _context.Remove(entity);
+		//}
+
+		public async Task<List<Application>> GetByUserEmail(string userEmail)
 		{
-			 var entity = await _context.FindAsync<T>(id);
-			 _context.Remove(entity);
+			var applications = await DefaultIncludes()
+				.Where(a => a.Contributors.Any(c => c.Details.EmailAddress == userEmail))
+				.ToListAsync();
+
+			return applications;
+		}
+
+		private IQueryable<Application> DefaultIncludes()
+		{
+			var x =  _context.Applications
+				.Include(x => x.Contributors)
+				.Include(x => x.Schools)
+				.ThenInclude(x => x.Loans)
+				.Include(x => x.Schools)
+				.ThenInclude(x => x.Leases)
+				.Include(x => x.FormTrust)
+				.ThenInclude(x => x.KeyPeople)
+				.ThenInclude(x => x.Roles).AsQueryable();
+
+			return x;
 		}
 	}
 }

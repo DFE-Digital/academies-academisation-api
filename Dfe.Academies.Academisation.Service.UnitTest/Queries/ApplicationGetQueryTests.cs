@@ -17,10 +17,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			//Arrange
 			const int requestedId = 4;
 
-			ApplicationGetQuery query = new(_mockDataQuery.Object, _mockMapper.Object);
+			ApplicationQueryService queryService = new(_mockDataQuery.Object, _mockMapper.Object);
 
 			//Act
-			var result = await query.Execute(requestedId);
+			var result = await queryService.GetById(requestedId);
 
 			//Assert
 			Assert.Null(result);

@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Security.Cryptography.X509Certificates;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -97,16 +98,40 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		_contributors.RemoveAll(c => true);
-
-		foreach (var contributor in contributors)
+		for (int i = _contributors.Count -1; i >= 0; i--)
 		{
-			_contributors.Add(new Contributor(
-				contributor.Key,
-				contributor.Value
-				));
+			var contributor = _contributors[i];
+
+			// if it has an update in the list
+			if (contributors.Any(x => x.Key == contributor.Id))
+			{
+				var contributorUpdate = contributors.SingleOrDefault(x => x.Key == contributor.Id);
+				contributor.Update(contributorUpdate.Value);
+
+			}
+
+			// if it isn't in the list remove it
+			if (contributors.All(x => x.Key != contributor.Id))
+			{
+				_contributors.Remove(contributor);
+			}
 		}
-		
+
+		// add ones that are new
+		var contributorsToAdd = contributors.Where(x => _contributors.All(c => c.Id != x.Key));
+		_contributors.AddRange(contributorsToAdd.Select(x => new Contributor(
+					x.Key,
+					x.Value
+					)));
+
+		//foreach (var contributor in contributors)
+		//{
+		//	_contributors.Add(new Contributor(
+		//		contributor.Key,
+		//		contributor.Value
+		//		));
+		//}
+
 		_schools.RemoveAll(s => true);
 
 		foreach (var school in schools)
@@ -164,7 +189,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
+		return new CreateSuccessResult<Application>(new Application(applicationType, initialContributor));
 	}
 
 	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)

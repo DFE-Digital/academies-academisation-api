@@ -22,7 +22,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 	{
 		private readonly Fixture _fixture = new();
 		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
-		private readonly Mock<IApplicationGetQuery> _getQueryMock = new();
+		private readonly Mock<IApplicationQueryService> _getQueryMock = new();
 		private readonly Mock<IApplicationListByUserQuery> _listByUserMock = new();
 		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly Mock<ILogger<ApplicationController>> _applicationLogger = new ();
@@ -182,7 +182,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 			var applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
 
-			_getQueryMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(applicationServiceModel);
+			_getQueryMock.Setup(x => x.GetById(applicationId)).ReturnsAsync(applicationServiceModel);
 
 			// act
 			var result = await _subject.Get(applicationId);

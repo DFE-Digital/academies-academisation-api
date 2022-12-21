@@ -31,7 +31,7 @@ public class ApplicationCreateTests
 	private readonly Faker _faker = new();
 
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
-	private readonly IApplicationGetQuery _applicationGetQuery;
+	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
@@ -51,7 +51,7 @@ public class ApplicationCreateTests
 		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
 
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
+		_applicationQueryService = new ApplicationQueryService(_applicationGetDataQuery, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
@@ -69,7 +69,7 @@ public class ApplicationCreateTests
 		// arrange
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
-			_applicationGetQuery,
+			_applicationQueryService,
 			_applicationUpdateCommand, 
 			_applicationsListByUserQuery,
 			_trustQueryService,
@@ -117,7 +117,7 @@ public class ApplicationCreateTests
 		// arrange
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
-			_applicationGetQuery,
+			_applicationQueryService,
 			_applicationUpdateCommand,
 			_applicationsListByUserQuery,
 			_trustQueryService,

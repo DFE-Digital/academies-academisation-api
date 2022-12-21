@@ -8,21 +8,28 @@ using Dfe.Academies.Academisation.Service.Mappers.Application;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
-	public class ApplicationGetQuery : IApplicationGetQuery
+	public class ApplicationQueryService : IApplicationQueryService
 	{
 		private readonly IApplicationRepository _applicationRepository;
 		private readonly IMapper _mapper;
 
-		public ApplicationGetQuery(IApplicationRepository applicationRepository, IMapper mapper)
+		public ApplicationQueryService(IApplicationRepository applicationRepository, IMapper mapper)
 		{
 			_applicationRepository = applicationRepository;
 			_mapper = mapper;
 		}
 
-		public async Task<ApplicationServiceModel?> Execute(int id)
+		public async Task<ApplicationServiceModel?> GetById(int id)
 		{
 			var application = await _applicationRepository.GetByIdAsync(id);
 			return application?.MapFromDomain(_mapper);
+		}
+
+		public async Task<List<ApplicationServiceModel>> GetByUserEmail(string email)
+		{
+			var applications = await _applicationRepository.GetByUserEmail(email);
+
+			return applications.Select(a => a.MapFromDomain(_mapper)).ToList();
 		}
 	}
 }

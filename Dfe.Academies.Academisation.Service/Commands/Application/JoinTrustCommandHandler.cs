@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using MediatR;
@@ -8,18 +9,18 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 	public class JoinTrustCommandHandler : IRequestHandler<SetJoinTrustDetailsCommand, CommandResult>
 	{
 
-		private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+		private readonly IApplicationRepository _applicationRepository;
 		private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 
-		public JoinTrustCommandHandler(IApplicationGetDataQuery applicationGetDataQuery, IApplicationUpdateDataCommand applicationUpdateDataCommand)
+		public JoinTrustCommandHandler(IApplicationRepository applicationRepository, IApplicationUpdateDataCommand applicationUpdateDataCommand)
 		{
-			_applicationGetDataQuery = applicationGetDataQuery;
+			_applicationRepository = applicationRepository;
 			_applicationUpdateDataCommand = applicationUpdateDataCommand;
 		}
 
 		public async Task<CommandResult> Handle(SetJoinTrustDetailsCommand command, CancellationToken cancellationToken)
 		{
-			var existingApplication = await _applicationGetDataQuery.Execute(command.applicationId);
+			var existingApplication = await _applicationRepository.GetByIdAsync(command.applicationId);
 
 			if (existingApplication is null)
 			{
