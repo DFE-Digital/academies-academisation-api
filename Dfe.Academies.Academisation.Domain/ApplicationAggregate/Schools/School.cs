@@ -200,4 +200,32 @@ public class School : Entity, ISchool
 		_protectedCharacteristics = protectedCharacteristics;
 		_furtherInformation = furtherInformation;
 	}
+
+	public void Update(UpdateSchoolParameter schoolUpdate)
+	{
+		//school.Loans.Select(l => new Loan(l.Key, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
+		//school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
+
+		// this update is to handle any legacy updates that are updating the entore application using the put
+		_trustBenefitDetails = schoolUpdate.TrustBenefitDetails;
+		_ofstedInspectionDetails = schoolUpdate.OfstedInspectionDetails;
+		_safeguardingDetails = schoolUpdate.SafeguardingDetails;
+		_localAuthorityReoganisationDetails = schoolUpdate.LocalAuthorityReorganisationDetails;
+		_localAuthorityClosurePlanDetails = schoolUpdate.LocalAuthorityClosurePlanDetails;
+		_dioceseName = schoolUpdate.DioceseName;
+		_dioceseFolderIdentifier = schoolUpdate.DioceseFolderIdentifier;
+		_partOfFederation = schoolUpdate.PartOfFederation;
+		_foundationTrustOrBodyName = schoolUpdate.FoundationTrustOrBodyName;
+		_foundationConsentFolderIdentifier = schoolUpdate.FoundationConsentFolderIdentifier;
+		_exemptionEndDate = schoolUpdate.ExemptionEndDate;
+		_mainFeederSchools = schoolUpdate.MainFeederSchools;
+		_resolutionConsentFolderIdentifier = schoolUpdate.ResolutionConsentFolderIdentifier;
+		_protectedCharacteristics = schoolUpdate.ProtectedCharacteristics;
+		_furtherInformation = schoolUpdate.FurtherInformation;
+		Details = schoolUpdate.SchoolDetails;
+		//_loans = loans.ToList();
+		//_leases = leases.ToList();
+		HasLoans = schoolUpdate.HasLoans;
+		HasLeases = schoolUpdate.HasLeases;
+	}
 }

@@ -98,6 +98,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
+		// Update Contributors
 		for (int i = _contributors.Count -1; i >= 0; i--)
 		{
 			var contributor = _contributors[i];
@@ -124,20 +125,31 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 					x.Value
 					)));
 
-		//foreach (var contributor in contributors)
-		//{
-		//	_contributors.Add(new Contributor(
-		//		contributor.Key,
-		//		contributor.Value
-		//		));
-		//}
-
-		_schools.RemoveAll(s => true);
-
-		foreach (var school in schools)
+		// Update Schools
+		for (int i = _schools.Count - 1; i >= 0; i--)
 		{
-			_schools.Add(new School(
-				school.Id, 
+			var school = _schools[i];
+
+			// if it has an update in the list
+			if (schools.Any(x => x.Id == school.Id))
+			{
+				var schoolUpdate = schools.SingleOrDefault(x => x.Id == school.Id);
+				school.Update(schoolUpdate);
+
+			}
+
+			// if it isn't in the list remove it
+			if (schools.All(x => x.Id != school.Id))
+			{
+				_schools.Remove(school);
+			}
+		}
+
+		// add ones that are new
+		var schoolsToAdd = schools.Where(x => _schools.All(c => c.Id != x.Id));
+		_schools.AddRange(schoolsToAdd.Select(school =>
+			new School(
+				school.Id,
 				school.TrustBenefitDetails,
 				school.OfstedInspectionDetails,
 				school.SafeguardingDetails,
@@ -156,9 +168,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 				school.SchoolDetails,
 				school.Loans.Select(l => new Loan(l.Key, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
 				school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
-				school.HasLoans, school.HasLeases));
-		}
-		
+				school.HasLoans, school.HasLeases)));
+
 		return new CommandSuccessResult();
 	}
 

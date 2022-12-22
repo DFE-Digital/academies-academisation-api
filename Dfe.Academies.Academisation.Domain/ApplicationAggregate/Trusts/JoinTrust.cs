@@ -9,7 +9,7 @@ using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class JoinTrust : Entity, IJoinTrust
+	public class JoinTrust : DynamicsApplicationEntity, IJoinTrust
 	{
 		protected JoinTrust() { }
 		private JoinTrust(int id, int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
