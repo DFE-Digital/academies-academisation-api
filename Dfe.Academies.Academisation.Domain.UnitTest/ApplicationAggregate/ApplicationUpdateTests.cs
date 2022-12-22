@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Bogus;
@@ -31,8 +32,8 @@ public class ApplicationUpdateTests
 				.With(s => s.MainContactOtherEmail, _faker.Internet.Email()));
 
 		_fixture.Customize<UpdateSchoolParameter>(composer =>
-				composer
-					.With(s => s.Id, 0));
+			composer
+				.With(s => s.Id, 0));
 		_fixture.Customize(new AutoMoqCustomization());
 	}
 
@@ -48,8 +49,8 @@ public class ApplicationUpdateTests
 			subject.ApplicationType,
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			subject.Schools.Select(s=> new UpdateSchoolParameter(
-				s.Id, 
+			subject.Schools.Select(s => new UpdateSchoolParameter(
+				s.Id,
 				s.TrustBenefitDetails,
 				s.OfstedInspectionDetails,
 				s.SafeguardingDetails,
@@ -66,10 +67,13 @@ public class ApplicationUpdateTests
 				s.ProtectedCharacteristics,
 				s.FurtherInformation,
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+					new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+					new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+						l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 				s.HasLoans, s.HasLeases)
-				));
+			));
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationStatus));
@@ -89,7 +93,7 @@ public class ApplicationUpdateTests
 			ApplicationStatus.Submitted,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			subject.Schools.Select(s => new UpdateSchoolParameter(
-				s.Id, 
+				s.Id,
 				s.TrustBenefitDetails,
 				s.OfstedInspectionDetails,
 				s.SafeguardingDetails,
@@ -106,8 +110,11 @@ public class ApplicationUpdateTests
 				s.ProtectedCharacteristics,
 				s.FurtherInformation,
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+					new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+					new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+						l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 				s.HasLoans,
 				s.HasLeases)
 			));
@@ -131,7 +138,7 @@ public class ApplicationUpdateTests
 			subject.ApplicationStatus,
 			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
 			subject.Schools.Select(s => new UpdateSchoolParameter(
-				s.Id, 
+				s.Id,
 				s.TrustBenefitDetails,
 				s.OfstedInspectionDetails,
 				s.SafeguardingDetails,
@@ -148,8 +155,11 @@ public class ApplicationUpdateTests
 				s.ProtectedCharacteristics,
 				s.FurtherInformation,
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+					new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+					new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+						l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 				s.HasLoans,
 				s.HasLeases)
 			));
@@ -168,10 +178,10 @@ public class ApplicationUpdateTests
 
 		var contributors = subject.Contributors.ToDictionary(c => c.Id, c => c.Details);
 		int randomContributorKey = PickRandomElement(contributors.Keys);
-		contributors[randomContributorKey] = contributors[randomContributorKey] with
-		{
-			EmailAddress = _faker.Internet.Email()
-		};
+
+		contributors[randomContributorKey] = new ContributorDetails(contributors[randomContributorKey].FirstName,
+			contributors[randomContributorKey].LastName, _faker.Internet.Email(),
+			contributors[randomContributorKey].Role, contributors[randomContributorKey].OtherRoleName);
 
 		int index = contributors.Keys.ToList().IndexOf(randomContributorKey);
 
@@ -180,7 +190,7 @@ public class ApplicationUpdateTests
 			subject.ApplicationStatus,
 			contributors,
 			subject.Schools.Select(s => new UpdateSchoolParameter(
-				s.Id, 
+				s.Id,
 				s.TrustBenefitDetails,
 				s.OfstedInspectionDetails,
 				s.SafeguardingDetails,
@@ -197,14 +207,18 @@ public class ApplicationUpdateTests
 				s.ProtectedCharacteristics,
 				s.FurtherInformation,
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+					new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+					new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+						l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 				s.HasLoans,
 				s.HasLeases)
 			));
 
 		// assert
-		DfeAssert.CommandValidationError(result, $"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}");
+		DfeAssert.CommandValidationError(result,
+			$"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}");
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -224,7 +238,7 @@ public class ApplicationUpdateTests
 			subject.ApplicationStatus,
 			contributorsUpdated,
 			subject.Schools.Select(s => new UpdateSchoolParameter(
-				s.Id, 
+				s.Id,
 				s.TrustBenefitDetails,
 				s.OfstedInspectionDetails,
 				s.SafeguardingDetails,
@@ -241,8 +255,11 @@ public class ApplicationUpdateTests
 				s.ProtectedCharacteristics,
 				s.FurtherInformation,
 				s.Details,
-				s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+				s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+					new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+				s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+					new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+						l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 				s.HasLoans,
 				s.HasLeases)
 			));
@@ -260,7 +277,7 @@ public class ApplicationUpdateTests
 		Application expected = Clone(subject);
 
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
-			s.Id, 
+			s.Id,
 			s.TrustBenefitDetails,
 			s.OfstedInspectionDetails,
 			s.SafeguardingDetails,
@@ -277,13 +294,16 @@ public class ApplicationUpdateTests
 			s.ProtectedCharacteristics,
 			s.FurtherInformation,
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+				new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+				new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+					l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 			s.HasLoans,
 			s.HasLeases)
 		).ToList();
 
-		schoolsUpdated.Add(new UpdateSchoolParameter(0, 
+		schoolsUpdated.Add(new UpdateSchoolParameter(0,
 			"",
 			"",
 			"",
@@ -294,14 +314,14 @@ public class ApplicationUpdateTests
 			true,
 			"",
 			"",
-			DateTimeOffset.Now, 
+			DateTimeOffset.Now,
 			"",
 			"",
 			null,
 			"",
-			_fixture.Create<SchoolDetails>().ApproverContactEmail = "InvalidEmail" ,
-		new List<KeyValuePair<int, LoanDetails>>(),
-		new List<KeyValuePair<int, LeaseDetails>>(),
+			_fixture.Create<SchoolDetails>(),
+			new List<KeyValuePair<int, LoanDetails>>(),
+			new List<KeyValuePair<int, LeaseDetails>>(),
 			null, null
 		));
 
@@ -325,7 +345,7 @@ public class ApplicationUpdateTests
 		Application expected = Clone(subject);
 
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
-			s.Id, 
+			s.Id,
 			s.TrustBenefitDetails,
 			s.OfstedInspectionDetails,
 			s.SafeguardingDetails,
@@ -342,13 +362,16 @@ public class ApplicationUpdateTests
 			s.ProtectedCharacteristics,
 			s.FurtherInformation,
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+				new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+				new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+					l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 			s.HasLoans,
 			s.HasLeases)
 		).ToList();
 
-		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with {Id = 99});
+		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with { Id = 99 });
 
 		// act
 		var result = subject.Update(
@@ -368,9 +391,11 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
 		Application expected = Clone(subject);
+		var sutBuilder = new SchoolDetailsBuilder();
 
 		var schoolsUpdated = new List<UpdateSchoolParameter>();
-		schoolsUpdated.Add(_fixture.Create<UpdateSchoolParameter>() with { SchoolDetails = _fixture.Create<SchoolDetails>() with { Urn = 0 } });
+		schoolsUpdated.Add(
+			_fixture.Create<UpdateSchoolParameter>() with { SchoolDetails = sutBuilder.WithUrn(0).Build() });
 
 		// act
 		var result = subject.Update(
@@ -390,9 +415,10 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 3, ApplicationType.FormAMat);
 		Application expected = Clone(subject);
+		var sutBuilder = new SchoolDetailsBuilder();
 
 		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
-			s.Id, 
+			s.Id,
 			s.TrustBenefitDetails,
 			s.OfstedInspectionDetails,
 			s.SafeguardingDetails,
@@ -409,8 +435,11 @@ public class ApplicationUpdateTests
 			s.ProtectedCharacteristics,
 			s.FurtherInformation,
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+				new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+				new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+					l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 			s.HasLoans,
 			s.HasLeases)
 		).ToList();
@@ -419,9 +448,8 @@ public class ApplicationUpdateTests
 			.Select(x => x.Index);
 
 		int randomKey = PickRandomElement(allIndices);
-		schoolsUpdated[randomKey] = schoolsUpdated[randomKey] with 
-									{ SchoolDetails = schoolsUpdated[randomKey].SchoolDetails 
-										with { ContactHeadEmail = "ghjk" } };
+		schoolsUpdated[randomKey] = schoolsUpdated[randomKey].SchoolDetails = sutBuilder.WithDetails(schoolsUpdated[randomKey].SchoolDetails).WithContactHeadEmail("ghjk").Build();
+
 
 		// act
 		var result = subject.Update(
@@ -455,7 +483,8 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		DfeAssert.CommandValidationError(result, nameof(ApplicationType), "Cannot add more than one school when forming a single academy trust.");
+		DfeAssert.CommandValidationError(result, nameof(ApplicationType),
+			"Cannot add more than one school when forming a single academy trust.");
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -479,7 +508,8 @@ public class ApplicationUpdateTests
 			schoolsUpdated);
 
 		// assert
-		DfeAssert.CommandValidationError(result, nameof(ApplicationType), "Cannot add more than one school when joining a multi academy trust.");
+		DfeAssert.CommandValidationError(result, nameof(ApplicationType),
+			"Cannot add more than one school when joining a multi academy trust.");
 		Assert.Equivalent(expected, subject);
 	}
 
@@ -490,7 +520,7 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 3, ApplicationType.FormAMat);
 
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
-			s.Id, 
+			s.Id,
 			s.TrustBenefitDetails,
 			s.OfstedInspectionDetails,
 			s.SafeguardingDetails,
@@ -507,14 +537,17 @@ public class ApplicationUpdateTests
 			s.ProtectedCharacteristics,
 			s.FurtherInformation,
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+				new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+				new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+					l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 			s.HasLoans,
 			s.HasLeases)
 		).ToList();
 
-		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
-			new School(s.Id, 
+		IEnumerable<School> updateSchools = subject.Schools.Select(s =>
+			new School(s.Id,
 				s.TrustBenefitDetails,
 				s.OfstedInspectionDetails,
 				s.SafeguardingDetails,
@@ -530,9 +563,10 @@ public class ApplicationUpdateTests
 				s.ResolutionConsentFolderIdentifier,
 				s.ProtectedCharacteristics,
 				s.FurtherInformation,
-						s.Details,
-						s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
-						s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
+				s.Details,
+				s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate,
+					x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
 				s.HasLoans,
 				s.HasLeases));
 
@@ -544,7 +578,9 @@ public class ApplicationUpdateTests
 		{
 			SchoolDetails = updateSchoolParameters[randomSchoolKey].SchoolDetails
 				with
-			{ Urn = updateSchoolParameters[randomSchoolKey].SchoolDetails.Urn }
+				{
+					Urn = updateSchoolParameters[randomSchoolKey].SchoolDetails.Urn
+				}
 		};
 
 		SchoolDetails updatedSchool = updateSchoolParameters[randomSchoolKey].SchoolDetails;
@@ -583,7 +619,7 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
 
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
-			s.Id, 
+			s.Id,
 			s.TrustBenefitDetails,
 			s.OfstedInspectionDetails,
 			s.SafeguardingDetails,
@@ -600,8 +636,11 @@ public class ApplicationUpdateTests
 			s.ProtectedCharacteristics,
 			s.FurtherInformation,
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int,LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+				new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+				new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+					l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 			s.HasLoans,
 			s.HasLeases)
 		).ToList();
@@ -609,8 +648,8 @@ public class ApplicationUpdateTests
 		var schoolDetailsToAdd = _fixture.Create<UpdateSchoolParameter>();
 		updateSchoolParameters.Add(schoolDetailsToAdd);
 
-		IEnumerable<School> updateSchools = subject.Schools.Select(s => 
-			new School(s.Id, 
+		IEnumerable<School> updateSchools = subject.Schools.Select(s =>
+			new School(s.Id,
 				s.TrustBenefitDetails,
 				s.OfstedInspectionDetails,
 				s.SafeguardingDetails,
@@ -628,7 +667,8 @@ public class ApplicationUpdateTests
 				s.FurtherInformation,
 				s.Details,
 				s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
-				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
+				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate,
+					x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
 				s.HasLoans,
 				s.HasLeases));
 
@@ -664,15 +704,7 @@ public class ApplicationUpdateTests
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 0, ApplicationType.JoinAMat);
 
-		var updateJoinTrust = _fixture.Create<IJoinTrust>();
-
-		Mock.Get(updateJoinTrust).Setup(x => x.Id).Returns(10101);
-		Mock.Get(updateJoinTrust).Setup(x => x.UKPRN).Returns(295061);
-		Mock.Get(updateJoinTrust).Setup(x => x.TrustName).Returns("Test Trust");
-		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrust).Returns(ChangesToTrust.Yes);
-		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained, it has changed");
-		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToLaGovernance).Returns(true);
-		Mock.Get(updateJoinTrust).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained, it has changed");
+		var updateJoinTrust = _fixture.Create<JoinTrust>();
 
 		Application expected = new(
 			subject.ApplicationId,
@@ -737,7 +769,8 @@ public class ApplicationUpdateTests
 		var dob = DateTime.Now.AddYears(-30);
 		// act
 		var result = subject.SetFormTrustDetails(formTrustDetails);
-		result = subject.AddTrustKeyPerson("Bob Smith", dob, "test biography", new List<ITrustKeyPersonRole>{ TrustKeyPersonRole.Create(KeyPersonRole.CEO,"1 year")});
+		result = subject.AddTrustKeyPerson("Bob Smith", dob, "test biography",
+			new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.CEO, "1 year") });
 
 		// assert
 		DfeAssert.CommandSuccess(result);
@@ -745,7 +778,7 @@ public class ApplicationUpdateTests
 		subject.FormTrust!.KeyPeople.Should().HaveCount(1);
 		subject.FormTrust!.KeyPeople.First().Name.Should().Be("Bob Smith");
 		subject.FormTrust!.KeyPeople.First().DateOfBirth.Should().Be(dob);
-		subject.FormTrust!.KeyPeople.First().Biography.Should().Be("test biography");		
+		subject.FormTrust!.KeyPeople.First().Biography.Should().Be("test biography");
 		subject.FormTrust!.KeyPeople.First().Roles.First().Role.Should().Be(KeyPersonRole.CEO);
 		subject.FormTrust!.KeyPeople.First().Roles.First().TimeInRole.Should().Be("1 year");
 	}
@@ -765,9 +798,11 @@ public class ApplicationUpdateTests
 		var result = subject.SetFormTrustDetails(formTrustDetails);
 
 		// act
-		result = subject.AddTrustKeyPerson("Bob Smith", dob, "test biography", new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.CEO, "1 year") });
+		result = subject.AddTrustKeyPerson("Bob Smith", dob, "test biography",
+			new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.CEO, "1 year") });
 
-		result = subject.UpdateTrustKeyPerson(0, "Ted Glen", dob, "test biography", new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(0,KeyPersonRole.Chair, "2 years") });
+		result = subject.UpdateTrustKeyPerson(0, "Ted Glen", dob, "test biography",
+			new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(0, KeyPersonRole.Chair, "2 years") });
 
 		// assert
 		DfeAssert.CommandSuccess(result);
@@ -798,7 +833,8 @@ public class ApplicationUpdateTests
 		Mock.Get(keyPerson).Setup(x => x.DateOfBirth).Returns(dob);
 		Mock.Get(keyPerson).Setup(x => x.Biography).Returns("test biography");
 		Mock.Get(keyPerson).Setup(x => x.Roles)
-			.Returns(new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.CEO, "1 year") }.AsReadOnly);
+			.Returns(
+				new List<ITrustKeyPersonRole> { TrustKeyPersonRole.Create(KeyPersonRole.CEO, "1 year") }.AsReadOnly);
 
 		// act
 		subject.AddTrustKeyPerson(keyPerson.Name, keyPerson.DateOfBirth, keyPerson.Biography, keyPerson.Roles);
@@ -876,8 +912,11 @@ public class ApplicationUpdateTests
 			s.ProtectedCharacteristics,
 			s.FurtherInformation,
 			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
+			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
+				new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
+			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
+				new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
+					l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
 			s.HasLoans,
 			s.HasLeases)
 		).ToList();
@@ -900,7 +939,8 @@ public class ApplicationUpdateTests
 		subject.Schools.Should().HaveCount(0);
 	}
 
-	private Application BuildApplication(ApplicationStatus applicationStatus, int numberOfSchools, ApplicationType? type = null)
+	private Application BuildApplication(ApplicationStatus applicationStatus, int numberOfSchools,
+		ApplicationType? type = null)
 	{
 		var schools = new List<School>();
 
@@ -917,7 +957,8 @@ public class ApplicationUpdateTests
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			schools,
-			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<ChangesToTrust>(), _fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
+			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<ChangesToTrust>(),
+				_fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
 			null);
 
 		return application;
@@ -949,7 +990,7 @@ public class ApplicationUpdateTests
 			application.ApplicationType,
 			application.ApplicationStatus,
 			application.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			application.Schools.Select(s => 
+			application.Schools.Select(s =>
 				new School(s.Id, s.TrustBenefitDetails,
 					s.OfstedInspectionDetails,
 					s.SafeguardingDetails,
@@ -965,12 +1006,90 @@ public class ApplicationUpdateTests
 					s.ResolutionConsentFolderIdentifier,
 					s.ProtectedCharacteristics,
 					s.FurtherInformation,
-					s.Details, s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
+					s.Details,
+					s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
 					s.Leases.Select(x =>
-						new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
+						new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate, x.Purpose,
+							x.ValueOfAssets, x.ResponsibleForAssets)),
 					s.HasLoans,
 					s.HasLeases)), application.JoinTrust, application.FormTrust
 		);
 	}
+
+	public class SchoolDetailsBuilder
+	{
+		private readonly Fixture _fixture = new();
+		private SchoolDetails _defaultSchoolDetails;
+		private string _email;
+		private int _urn;
+		private string _contactHeadEmail;
+
+		public SchoolDetailsBuilder()
+		{
+			_defaultSchoolDetails = _fixture.Create<SchoolDetails>();
+			_email = _defaultSchoolDetails.ApproverContactEmail;
+			_urn = _defaultSchoolDetails.Urn;
+			_contactHeadEmail = _defaultSchoolDetails.ContactHeadEmail;
+		}
+
+		public SchoolDetails Build()
+		{
+			return new SchoolDetails(
+				_defaultSchoolDetails.Urn, _defaultSchoolDetails.SchoolName, _defaultSchoolDetails.LandAndBuildings,
+				_defaultSchoolDetails.PreviousFinancialYear, _defaultSchoolDetails.CurrentFinancialYear,
+				_defaultSchoolDetails.NextFinancialYear, _defaultSchoolDetails.ContactHeadName,
+				_contactHeadEmail,
+				_defaultSchoolDetails.ContactHeadTel, _defaultSchoolDetails.ContactChairName,
+				_defaultSchoolDetails.ContactChairEmail, _defaultSchoolDetails.ContactChairTel,
+				_defaultSchoolDetails.ContactRole, _defaultSchoolDetails.MainContactOtherName,
+				_defaultSchoolDetails.MainContactOtherEmail, _defaultSchoolDetails.MainContactOtherTelephone,
+				_defaultSchoolDetails.MainContactOtherRole, _defaultSchoolDetails.ApproverContactName,
+				_email, _defaultSchoolDetails.ConversionTargetDateSpecified,
+				_defaultSchoolDetails.ConversionTargetDate, _defaultSchoolDetails.ConversionTargetDateExplained,
+				_defaultSchoolDetails.ConversionChangeNamePlanned, _defaultSchoolDetails.ProposedNewSchoolName,
+				_defaultSchoolDetails.ApplicationJoinTrustReason, _defaultSchoolDetails.ProjectedPupilNumbersYear1,
+				_defaultSchoolDetails.ProjectedPupilNumbersYear2, _defaultSchoolDetails.ProjectedPupilNumbersYear3,
+				_defaultSchoolDetails.CapacityAssumptions, _defaultSchoolDetails.CapacityPublishedAdmissionsNumber,
+				_defaultSchoolDetails.SchoolSupportGrantFundsPaidTo,
+				_defaultSchoolDetails.ConfirmPaySupportGrantToSchool,
+				_defaultSchoolDetails.SchoolHasConsultedStakeholders,
+				_defaultSchoolDetails.SchoolPlanToConsultStakeholders,
+				_defaultSchoolDetails.FinanceOngoingInvestigations,
+				_defaultSchoolDetails.FinancialInvestigationsExplain,
+				_defaultSchoolDetails.FinancialInvestigationsTrustAware, _defaultSchoolDetails.DeclarationBodyAgree,
+				_defaultSchoolDetails.DeclarationIAmTheChairOrHeadteacher,
+				_defaultSchoolDetails.DeclarationSignedByName, _defaultSchoolDetails.SchoolConversionReasonsForJoining);
+
+		}
+
+		public SchoolDetailsBuilder WithEmail(string email)
+		{
+			_email = email;
+
+			return this;
+		}
+
+		public SchoolDetailsBuilder WithUrn(int urn)
+		{
+			_urn = urn;
+
+			return this;
+		}
+
+		public SchoolDetailsBuilder WithContactHeadEmail(string contactHeadEmail)
+		{
+			_contactHeadEmail = contactHeadEmail;
+
+			return this;
+		}
+
+		public SchoolDetailsBuilder WithDetails(SchoolDetails schoolDetails)
+		{
+			_defaultSchoolDetails = schoolDetails;
+
+			return this;
+		}
+	}
 }
+
 

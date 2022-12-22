@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
 using Moq;
@@ -8,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 {
 	public class ApplicationGetQueryTests
 	{
-		private readonly Mock<IApplicationGetDataQuery> _mockDataQuery = new();
+		private readonly Mock<IApplicationRepository> _mockDataQuery = new();
 		private readonly Mock<IMapper> _mockMapper = new();
 
 		[Fact]

@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
@@ -19,7 +20,7 @@ public class ApplicationSubmitCommandTests
 {
 	private readonly Fixture _fixture = new();
 
-	private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
+	private readonly Mock<IApplicationRepository> _getDataQueryMock = new();
 	private readonly Mock<IApplicationUpdateDataCommand> _updateDataCommandMock = new();
 	private readonly Mock<IProjectCreateDataCommand> _projectCreateDataCommand = new();
 	private readonly Mock<IApplicationSubmissionService> _applicationSubmissionServiceMock = new();
@@ -44,7 +45,7 @@ public class ApplicationSubmitCommandTests
 	public async Task NotFound___NotPassedToDataLayer_NotFoundReturned()
 	{
 		// arrange
-		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync((IApplication?)null);
+		_getDataQueryMock.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync((Application?)null);
 
 		// act
 		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
@@ -58,7 +59,7 @@ public class ApplicationSubmitCommandTests
 	public async Task SubmitApplicationValidationError___NotPassedToUpdateDataCommand_ValidationErrorsReturned()
 	{
 		// arrange
-		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_getDataQueryMock.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
 
 		CommandValidationErrorResult commandValidationErrorResult = new(new List<ValidationError>());
 		_applicationSubmissionServiceMock.Setup(x => x.SubmitApplication(_applicationMock.Object)).Returns(commandValidationErrorResult);

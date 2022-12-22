@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -15,7 +16,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 	{
 		private readonly Fixture _fixture = new();
 
-		private readonly Mock<IApplicationGetDataQuery> _getDataQueryMock = new();
+		private readonly Mock<IApplicationRepository> _getDataQueryMock = new();
 		private readonly Mock<IApplicationUpdateDataCommand> _updateApplicationCommandMock = new();
 		private readonly ApplicationUpdateCommand _subject;
 
@@ -42,7 +43,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		{
 			// Arrange
 			ApplicationUpdateRequestModel applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
-			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId)).ReturnsAsync((IApplication?)null);
+			_getDataQueryMock.Setup(x => x.GetByIdAsync(applicationServiceModel.ApplicationId)).ReturnsAsync((Application?)null);
 
 			// Act
 			var result = await _subject.Execute(applicationServiceModel.ApplicationId, applicationServiceModel);
@@ -63,8 +64,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				It.IsAny<IEnumerable<KeyValuePair<int, ContributorDetails>>>(),
 				It.IsAny<IEnumerable<UpdateSchoolParameter>>()
 				)).Returns(new CommandSuccessResult());
-			_getDataQueryMock.Setup(x => x.Execute(applicationServiceModel.ApplicationId))
-				.ReturnsAsync(applicationMock.Object);
+			_getDataQueryMock.Setup(x => x.GetByIdAsync(applicationServiceModel.ApplicationId))
+				.ReturnsAsync(applicationMock.Object as Application);
 
 			// Act
 			var result = await _subject.Execute(applicationServiceModel.ApplicationId, applicationServiceModel);

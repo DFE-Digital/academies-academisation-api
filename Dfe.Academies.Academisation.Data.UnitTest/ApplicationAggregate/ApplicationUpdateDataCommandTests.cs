@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoMapper;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -18,14 +20,14 @@ public class ApplicationUpdateDataCommandTests
 {
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new();
-	private readonly ApplicationGetDataQuery _query;
+	private readonly IApplicationRepository _query;
 	private readonly ApplicationUpdateDataCommand _subject;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
 	public ApplicationUpdateDataCommandTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		_query = new ApplicationGetDataQuery(_context, _mapper.Object);
+		_query = new ApplicationRepository(_context, _mapper.Object);
 		_subject = new ApplicationUpdateDataCommand(_context, _mapper.Object);
 
 		_fixture.Customize<Loan>(composer =>
@@ -59,7 +61,7 @@ public class ApplicationUpdateDataCommandTests
 		//Arrange
 		const int applicationId = 1;
 
-		var existingApplication = await _query.Execute(applicationId);
+		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
 		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
@@ -67,7 +69,7 @@ public class ApplicationUpdateDataCommandTests
 		//Act
 		await _subject.Execute(mockApplication.Object);
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.Execute(applicationId);
+		var updatedApplication = await _query.GetByIdAsync(applicationId);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
@@ -83,7 +85,7 @@ public class ApplicationUpdateDataCommandTests
 		//Arrange
 		const int applicationId = 1;
 
-		var existingApplication = await _query.Execute(applicationId);
+		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
 		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
@@ -94,7 +96,7 @@ public class ApplicationUpdateDataCommandTests
 		//Act
 		await _subject.Execute(mockApplication.Object);
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.Execute(applicationId);
+		var updatedApplication = await _query.GetByIdAsync(applicationId);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
@@ -110,7 +112,7 @@ public class ApplicationUpdateDataCommandTests
 		//Arrange
 		const int applicationId = 1;
 
-		var existingApplication = await _query.Execute(applicationId);
+		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
 		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
@@ -120,7 +122,7 @@ public class ApplicationUpdateDataCommandTests
 		addedContributor.SetupGet(c => c.Details).Returns(addedContributorDetails);
 
 		mockApplication.SetupGet(d => d.Contributors)
-		 	.Returns(new List<IContributor>(existingApplication.Contributors)
+		 	.Returns(new List<IContributor>((IEnumerable<IContributor>)existingApplication.Contributors)
 			{
 				addedContributor.Object
 			});
@@ -128,7 +130,7 @@ public class ApplicationUpdateDataCommandTests
 		//Act
 		await _subject.Execute(mockApplication.Object);
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.Execute(applicationId);
+		var updatedApplication = await _query.GetByIdAsync(applicationId);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
@@ -141,12 +143,12 @@ public class ApplicationUpdateDataCommandTests
 		//Arrange
 		const int applicationId = 1;
 
-		var existingApplication = await _query.Execute(applicationId);
+		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
 		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
 
-		var mutatedContributorList = new List<IContributor>(existingApplication.Contributors);
+		var mutatedContributorList = new List<IContributor>((IEnumerable<IContributor>)existingApplication.Contributors);
 		var contributorToRemove = PickRandomElement(mutatedContributorList);
 		mutatedContributorList.Remove(contributorToRemove);
 
@@ -156,7 +158,7 @@ public class ApplicationUpdateDataCommandTests
 		//Act
 		await _subject.Execute(mockApplication.Object);
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.Execute(applicationId);
+		var updatedApplication = await _query.GetByIdAsync(applicationId);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
@@ -169,7 +171,7 @@ public class ApplicationUpdateDataCommandTests
 		//Arrange
 		const int applicationId = 1;
 
-		var existingApplication = await _query.Execute(applicationId);
+		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
 		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
@@ -179,7 +181,7 @@ public class ApplicationUpdateDataCommandTests
 		addedSchool.SetupGet(c => c.Details).Returns(addedSchoolDetails);
 
 		mockApplication.SetupGet(d => d.Schools)
-		 	.Returns(new List<ISchool>(existingApplication.Schools)
+		 	.Returns(new List<ISchool>((IEnumerable<ISchool>)existingApplication.Schools)
 			{
 				addedSchool.Object
 			});
@@ -187,7 +189,7 @@ public class ApplicationUpdateDataCommandTests
 		//Act
 		await _subject.Execute(mockApplication.Object);
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.Execute(applicationId);
+		var updatedApplication = await _query.GetByIdAsync(applicationId);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
@@ -200,12 +202,12 @@ public class ApplicationUpdateDataCommandTests
 		//Arrange
 		const int applicationId = 1;
 
-		var existingApplication = await _query.Execute(applicationId);
+		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
 		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
 
-		var mutatedSchoolList = new List<ISchool>(existingApplication.Schools);
+		var mutatedSchoolList = new List<ISchool>((IEnumerable<ISchool>)existingApplication.Schools);
 		var contributorToRemove = PickRandomElement(mutatedSchoolList);
 		mutatedSchoolList.Remove(contributorToRemove);
 
@@ -215,7 +217,7 @@ public class ApplicationUpdateDataCommandTests
 		//Act
 		await _subject.Execute(mockApplication.Object);
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.Execute(applicationId);
+		var updatedApplication = await _query.GetByIdAsync(applicationId);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
