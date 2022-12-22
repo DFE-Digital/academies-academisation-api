@@ -5,6 +5,7 @@ using Castle.Core.Logging;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -33,14 +34,13 @@ public class ApplicationCreateTests
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IMediator _mediator;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
-	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+	private readonly IApplicationRepository _applicationGetDataQuery;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly ITrustQueryService _trustQueryService;
 
@@ -48,14 +48,13 @@ public class ApplicationCreateTests
 	{
 		_context = new TestApplicationContext().CreateContext();
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
+		_applicationGetDataQuery = new ApplicationRepository(_context, _mapper.Object);
 
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationQueryService = new ApplicationQueryService(_applicationGetDataQuery, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
-		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>().Object;
 
@@ -70,8 +69,7 @@ public class ApplicationCreateTests
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
 			_applicationQueryService,
-			_applicationUpdateCommand, 
-			_applicationsListByUserQuery,
+			_applicationUpdateCommand,
 			_trustQueryService,
 			_mediator,
 			_applicationLogger);
@@ -119,7 +117,6 @@ public class ApplicationCreateTests
 			_applicationCreateCommand,
 			_applicationQueryService,
 			_applicationUpdateCommand,
-			_applicationsListByUserQuery,
 			_trustQueryService,
 			_mediator,
 			_applicationLogger);

@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -52,7 +53,7 @@ public class ApplicationSubmitTests
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
 	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
-	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+	private readonly IApplicationRepository _applicationGetDataQuery;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new Mock<IDateTimeProvider>();
@@ -63,7 +64,7 @@ public class ApplicationSubmitTests
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
+		_applicationGetDataQuery = new ApplicationRepository(_context, _mapper.Object);
 		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
 		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
 		_applicationQueryService = new ApplicationQueryService(_applicationGetDataQuery, _mapper.Object);
@@ -110,7 +111,6 @@ public class ApplicationSubmitTests
 			_applicationCreateCommand,
 			_applicationQueryService,
 			_applicationUpdateCommand,
-			_applicationsListByUserQuery,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);

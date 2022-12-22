@@ -59,7 +59,7 @@ public class ApplicationSubmitCommandTests
 	public async Task SubmitApplicationValidationError___NotPassedToUpdateDataCommand_ValidationErrorsReturned()
 	{
 		// arrange
-		_getDataQueryMock.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_getDataQueryMock.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object as Application);
 
 		CommandValidationErrorResult commandValidationErrorResult = new(new List<ValidationError>());
 		_applicationSubmissionServiceMock.Setup(x => x.SubmitApplication(_applicationMock.Object)).Returns(commandValidationErrorResult);
@@ -78,7 +78,7 @@ public class ApplicationSubmitCommandTests
 	{
 		// arrange
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
-		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_getDataQueryMock.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object as Application);
 		_applicationSubmissionServiceMock.Setup(x => x.SubmitApplication(_applicationMock.Object)).Returns(new CommandSuccessResult());
 		_projectCreateDataCommand.Setup(m => m.Execute(_projectMock.Object)).ReturnsAsync(_projectMock.Object);
 		_applicationSubmissionServiceMock.Setup(m => m.SubmitApplication(_applicationMock.Object))
@@ -99,7 +99,7 @@ public class ApplicationSubmitCommandTests
 		// arrange
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
 		_projectMock.SetupGet(p => p.Details).Returns(new ProjectDetails { Urn = 1 });
-		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_getDataQueryMock.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object as Application);
 		_applicationMock.Setup(x => x.Submit(It.IsAny<DateTime>())).Returns(new CommandSuccessResult());
 		_projectCreateDataCommand.Setup(m => m.Execute(_projectMock.Object)).ReturnsAsync(_projectMock.Object);
 		_applicationSubmissionServiceMock.Setup(m => m.SubmitApplication(_applicationMock.Object))
@@ -119,7 +119,7 @@ public class ApplicationSubmitCommandTests
 	{
 		// arrange
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
-		_getDataQueryMock.Setup(x => x.Execute(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_getDataQueryMock.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object as Application);
 
 		CreateValidationErrorResult createValidationErrorResult = new(new List<ValidationError>());
 

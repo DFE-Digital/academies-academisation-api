@@ -448,7 +448,28 @@ public class ApplicationUpdateTests
 			.Select(x => x.Index);
 
 		int randomKey = PickRandomElement(allIndices);
-		schoolsUpdated[randomKey] = schoolsUpdated[randomKey].SchoolDetails = sutBuilder.WithDetails(schoolsUpdated[randomKey].SchoolDetails).WithContactHeadEmail("ghjk").Build();
+		schoolsUpdated[randomKey] = new UpdateSchoolParameter(
+			schoolsUpdated[randomKey].Id,
+			schoolsUpdated[randomKey].TrustBenefitDetails,
+			schoolsUpdated[randomKey].OfstedInspectionDetails,
+			schoolsUpdated[randomKey].SafeguardingDetails,
+			schoolsUpdated[randomKey].LocalAuthorityReorganisationDetails,
+			schoolsUpdated[randomKey].LocalAuthorityClosurePlanDetails,
+			schoolsUpdated[randomKey].DioceseName,
+			schoolsUpdated[randomKey].DioceseFolderIdentifier,
+			schoolsUpdated[randomKey].PartOfFederation,
+			schoolsUpdated[randomKey].FoundationTrustOrBodyName,
+			schoolsUpdated[randomKey].FoundationConsentFolderIdentifier,
+			schoolsUpdated[randomKey].ExemptionEndDate,
+			schoolsUpdated[randomKey].MainFeederSchools,
+			schoolsUpdated[randomKey].ResolutionConsentFolderIdentifier,
+			schoolsUpdated[randomKey].ProtectedCharacteristics,
+			schoolsUpdated[randomKey].FurtherInformation,
+			sutBuilder.WithDetails(schoolsUpdated[randomKey].SchoolDetails).WithContactHeadEmail("ghjk").Build(),
+			schoolsUpdated[randomKey].Loans,
+			schoolsUpdated[randomKey].Leases,
+			schoolsUpdated[randomKey].HasLoans,
+			schoolsUpdated[randomKey].HasLeases);
 
 
 		// act
@@ -518,6 +539,7 @@ public class ApplicationUpdateTests
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 3, ApplicationType.FormAMat);
+		var sutBuilder = new SchoolDetailsBuilder();
 
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
 			s.Id,
@@ -574,14 +596,28 @@ public class ApplicationUpdateTests
 			.Select(x => x.Index);
 
 		int randomSchoolKey = PickRandomElement(allIndices);
-		updateSchoolParameters[randomSchoolKey] = updateSchoolParameters[randomSchoolKey] with
-		{
-			SchoolDetails = updateSchoolParameters[randomSchoolKey].SchoolDetails
-				with
-				{
-					Urn = updateSchoolParameters[randomSchoolKey].SchoolDetails.Urn
-				}
-		};
+		updateSchoolParameters[randomSchoolKey] = new UpdateSchoolParameter(
+			updateSchoolParameters[randomSchoolKey].Id,
+			updateSchoolParameters[randomSchoolKey].TrustBenefitDetails,
+			updateSchoolParameters[randomSchoolKey].OfstedInspectionDetails,
+			updateSchoolParameters[randomSchoolKey].SafeguardingDetails,
+			updateSchoolParameters[randomSchoolKey].LocalAuthorityReorganisationDetails,
+			updateSchoolParameters[randomSchoolKey].LocalAuthorityClosurePlanDetails,
+			updateSchoolParameters[randomSchoolKey].DioceseName,
+			updateSchoolParameters[randomSchoolKey].DioceseFolderIdentifier,
+			updateSchoolParameters[randomSchoolKey].PartOfFederation,
+			updateSchoolParameters[randomSchoolKey].FoundationTrustOrBodyName,
+			updateSchoolParameters[randomSchoolKey].FoundationConsentFolderIdentifier,
+			updateSchoolParameters[randomSchoolKey].ExemptionEndDate,
+			updateSchoolParameters[randomSchoolKey].MainFeederSchools,
+			updateSchoolParameters[randomSchoolKey].ResolutionConsentFolderIdentifier,
+			updateSchoolParameters[randomSchoolKey].ProtectedCharacteristics,
+			updateSchoolParameters[randomSchoolKey].FurtherInformation,
+			sutBuilder.WithDetails(updateSchoolParameters[randomSchoolKey].SchoolDetails).WithUrn(updateSchoolParameters[randomSchoolKey].SchoolDetails.Urn).Build(),
+			updateSchoolParameters[randomSchoolKey].Loans,
+			updateSchoolParameters[randomSchoolKey].Leases,
+			updateSchoolParameters[randomSchoolKey].HasLoans,
+			updateSchoolParameters[randomSchoolKey].HasLeases);
 
 		SchoolDetails updatedSchool = updateSchoolParameters[randomSchoolKey].SchoolDetails;
 		int randomSchoolId = updateSchoolParameters[randomSchoolKey].Id;
