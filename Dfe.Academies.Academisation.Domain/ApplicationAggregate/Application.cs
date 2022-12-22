@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
 using Dfe.Academies.Academisation.Domain.Validations;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 

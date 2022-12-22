@@ -230,7 +230,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasMany(a => a.Schools)
 			.WithOne()
 			.HasForeignKey("ConversionApplicationId")
-			.IsRequired(false);
+			.IsRequired();
 
 		var schoolNavigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Schools));
 		// DDD Patterns comment:
@@ -241,7 +241,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasMany(a => a.Contributors)
 			.WithOne()
 			.HasForeignKey("ConversionApplicationId")
-			.IsRequired(false);
+			.IsRequired();
 
 		var contributorNavigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Contributors));
 		// DDD Patterns comment:
@@ -253,8 +253,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		schoolConfiguration.ToTable("ApplicationSchool", DEFAULT_SCHEMA);
 		schoolConfiguration.HasKey(a => a.Id);
-		schoolConfiguration.Property<int>("ConversionApplicationId")
-			.IsRequired();
+		schoolConfiguration.Property<int?>("ConversionApplicationId")
+			.IsRequired(false);
 
 		schoolConfiguration.OwnsOne(x => x.Details, sd =>
 		{
@@ -384,7 +384,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasMany(a => a.Loans)
 			.WithOne()
 			.HasForeignKey("ApplicationSchoolId")
-			.IsRequired(false);
+			.IsRequired();
 
 		var loanNavigation = schoolConfiguration.Metadata.FindNavigation(nameof(School.Loans));
 		// DDD Patterns comment:
@@ -395,7 +395,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasMany(a => a.Leases)
 			.WithOne()
 			.HasForeignKey("ApplicationSchoolId")
-			.IsRequired(false);
+			.IsRequired();
 
 		var leaseNavigation = schoolConfiguration.Metadata.FindNavigation(nameof(School.Leases));
 		// DDD Patterns comment:
@@ -407,8 +407,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		contributorConfiguration.ToTable("ConversionApplicationContributor", DEFAULT_SCHEMA);
 		contributorConfiguration.HasKey(a => a.Id);
-		contributorConfiguration.Property<int>("ConversionApplicationId")
-			.IsRequired();
+		contributorConfiguration.Property<int?>("ConversionApplicationId")
+			.IsRequired(false);
 
 		contributorConfiguration.OwnsOne(x => x.Details, c =>
 		{
@@ -451,7 +451,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasMany(a => a.KeyPeople)
 			.WithOne()
 			.HasForeignKey("ApplicationFormTrustId")
-			.IsRequired(false);
+			.IsRequired();
 
 		var navigation = formTrustConfiguration.Metadata.FindNavigation(nameof(FormTrust.KeyPeople));
 		// DDD Patterns comment:
@@ -469,28 +469,27 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		loanConfiguration.ToTable("ApplicationSchoolLoan", DEFAULT_SCHEMA);
 		loanConfiguration.HasKey(a => a.Id);
-		loanConfiguration.Property<int>("ApplicationSchoolId").IsRequired();
+		loanConfiguration.Property<int?>("ApplicationSchoolId").IsRequired(false);
 	}
 
 	void ConfigureLease(EntityTypeBuilder<Lease> leaseConfiguration)
 	{
 		leaseConfiguration.ToTable("ApplicationSchoolLease", DEFAULT_SCHEMA);
 		leaseConfiguration.HasKey(a => a.Id);
-		leaseConfiguration.Property<int>("ApplicationSchoolId").IsRequired();
+		leaseConfiguration.Property<int?>("ApplicationSchoolId").IsRequired(false);
 	}
 
 	void ConfigureTrustKeyPerson(EntityTypeBuilder<TrustKeyPerson> trustKeyPersonConfiguration)
 	{
 		trustKeyPersonConfiguration.ToTable("ApplicationFormTrustKeyPerson", DEFAULT_SCHEMA);
 		trustKeyPersonConfiguration.HasKey(a => a.Id);
-		trustKeyPersonConfiguration.Property<int>("ApplicationFormTrustId").IsRequired();
+		trustKeyPersonConfiguration.Property<int?>("ApplicationFormTrustId").IsRequired(false);
 
 		trustKeyPersonConfiguration
 			.HasMany(a => a.Roles)
 			.WithOne()
 			.HasForeignKey("ApplicationFormTrustKeyPersonRoleId")
-			.IsRequired(false)
-			.OnDelete(DeleteBehavior.Cascade);
+			.IsRequired();
 
 		var navigation = trustKeyPersonConfiguration.Metadata.FindNavigation(nameof(TrustKeyPerson.Roles));
 		// DDD Patterns comment:
@@ -502,6 +501,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		trustKeyPersonRoleConfiguration.ToTable("ApplicationFormTrustKeyPersonRole", DEFAULT_SCHEMA);
 		trustKeyPersonRoleConfiguration.HasKey(a => a.Id);
-		trustKeyPersonRoleConfiguration.Property<int>("ApplicationFormTrustKeyPersonRoleId").IsRequired();
+		trustKeyPersonRoleConfiguration.Property<int?>("ApplicationFormTrustKeyPersonRoleId").IsRequired(false);
 	}
 }
