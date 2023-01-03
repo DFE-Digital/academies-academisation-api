@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -11,7 +10,6 @@ using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
@@ -96,9 +94,7 @@ builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
-builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
-builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();

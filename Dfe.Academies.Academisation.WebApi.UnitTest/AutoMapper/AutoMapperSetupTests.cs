@@ -1,12 +1,9 @@
 ﻿using AutoFixture;
-using AutoFixture.AutoMoq;
 using AutoMapper;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
-using Dfe.Academies.Academisation.Service.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using FluentAssertions;
 using Moq;

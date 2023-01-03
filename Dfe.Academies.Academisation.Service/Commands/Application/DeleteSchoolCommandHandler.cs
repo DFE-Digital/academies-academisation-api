@@ -1,12 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application
@@ -50,7 +44,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			//TODO: This can be removed when there is no longer a disconnect between domain and persistence entities
 			//await _applicationRepository.DeleteChildObjectById<ApplicationSchoolState>(schoolToDelete.Id);
 
-			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(new CancellationToken())
+			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
 				? new CommandSuccessResult()
 				: new BadRequestCommandResult();
 		}

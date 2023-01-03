@@ -12,6 +12,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using FluentAssertions;
+using FluentAssertions.Equivalency;
 using Moq;
 using Xunit;
 
@@ -77,7 +78,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationStatus));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -121,7 +122,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationStatus));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Theory]
@@ -166,7 +167,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.ApplicationType));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -219,7 +220,7 @@ public class ApplicationUpdateTests
 		// assert
 		DfeAssert.CommandValidationError(result,
 			$"{nameof(Contributor)}[{index}].{nameof(ContributorDetails.EmailAddress)}");
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -266,7 +267,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(Application.Contributors));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -276,54 +277,10 @@ public class ApplicationUpdateTests
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 0);
 		Application expected = Clone(subject);
 
-		var schoolsUpdated = subject.Schools.Select(s => new UpdateSchoolParameter(
-			s.Id,
-			s.TrustBenefitDetails,
-			s.OfstedInspectionDetails,
-			s.SafeguardingDetails,
-			s.LocalAuthorityReorganisationDetails,
-			s.LocalAuthorityClosurePlanDetails,
-			s.DioceseName,
-			s.DioceseFolderIdentifier,
-			s.PartOfFederation,
-			s.FoundationTrustOrBodyName,
-			s.FoundationConsentFolderIdentifier,
-			s.ExemptionEndDate,
-			s.MainFeederSchools,
-			s.ResolutionConsentFolderIdentifier,
-			s.ProtectedCharacteristics,
-			s.FurtherInformation,
-			s.Details,
-			s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id,
-				new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule))).ToList(),
-			s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id,
-				new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose,
-					l.ValueOfAssets, l.ResponsibleForAssets))).ToList(),
-			s.HasLoans,
-			s.HasLeases)
-		).ToList();
-
-		schoolsUpdated.Add(new UpdateSchoolParameter(0,
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			true,
-			"",
-			"",
-			DateTimeOffset.Now,
-			"",
-			"",
-			null,
-			"",
-			_fixture.Create<SchoolDetails>(),
-			new List<KeyValuePair<int, LoanDetails>>(),
-			new List<KeyValuePair<int, LeaseDetails>>(),
-			null, null
-		));
+		var sutBuilder = new SchoolDetailsBuilder();
+		var schoolsUpdated = new List<UpdateSchoolParameter>();
+		schoolsUpdated.Add(
+			_fixture.Create<UpdateSchoolParameter>() with { SchoolDetails = sutBuilder.WithApproverContactEmail("badEmail").Build() });
 
 		// act
 		var result = subject.Update(
@@ -334,7 +291,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(SchoolDetails.ApproverContactEmail));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -406,7 +363,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(SchoolDetails.Urn));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -481,7 +438,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(SchoolDetails.ContactHeadEmail));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -506,7 +463,7 @@ public class ApplicationUpdateTests
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(ApplicationType),
 			"Cannot add more than one school when forming a single academy trust.");
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -531,7 +488,7 @@ public class ApplicationUpdateTests
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(ApplicationType),
 			"Cannot add more than one school when joining a multi academy trust.");
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -539,6 +496,8 @@ public class ApplicationUpdateTests
 	{
 		// arrange
 		Application subject = BuildApplication(ApplicationStatus.InProgress, 3, ApplicationType.FormAMat);
+		Application original = Clone(subject);
+
 		var sutBuilder = new SchoolDetailsBuilder();
 
 		var updateSchoolParameters = subject.Schools.Select(s => new UpdateSchoolParameter(
@@ -568,30 +527,6 @@ public class ApplicationUpdateTests
 			s.HasLeases)
 		).ToList();
 
-		IEnumerable<School> updateSchools = subject.Schools.Select(s =>
-			new School(s.Id,
-				s.TrustBenefitDetails,
-				s.OfstedInspectionDetails,
-				s.SafeguardingDetails,
-				s.LocalAuthorityReorganisationDetails,
-				s.LocalAuthorityClosurePlanDetails,
-				s.DioceseName,
-				s.DioceseFolderIdentifier,
-				s.PartOfFederation,
-				s.FoundationTrustOrBodyName,
-				s.FoundationConsentFolderIdentifier,
-				s.ExemptionEndDate,
-				s.MainFeederSchools,
-				s.ResolutionConsentFolderIdentifier,
-				s.ProtectedCharacteristics,
-				s.FurtherInformation,
-				s.Details,
-				s.Loans.Select(l => new Loan(l.Id, l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)),
-				s.Leases.Select(x => new Lease(x.Id, x.LeaseTerm, x.RepaymentAmount, x.InterestRate, x.PaymentsToDate,
-					x.Purpose, x.ValueOfAssets, x.ResponsibleForAssets)),
-				s.HasLoans,
-				s.HasLeases));
-
 		IEnumerable<int> allIndices = updateSchoolParameters.Select((s, i) => new { Str = s, Index = i })
 			.Select(x => x.Index);
 
@@ -613,25 +548,13 @@ public class ApplicationUpdateTests
 			updateSchoolParameters[randomSchoolKey].ResolutionConsentFolderIdentifier,
 			updateSchoolParameters[randomSchoolKey].ProtectedCharacteristics,
 			updateSchoolParameters[randomSchoolKey].FurtherInformation,
-			sutBuilder.WithDetails(updateSchoolParameters[randomSchoolKey].SchoolDetails).WithUrn(updateSchoolParameters[randomSchoolKey].SchoolDetails.Urn).Build(),
+			sutBuilder.WithDetails(updateSchoolParameters[randomSchoolKey].SchoolDetails).WithUrn(101).Build(),
 			updateSchoolParameters[randomSchoolKey].Loans,
 			updateSchoolParameters[randomSchoolKey].Leases,
 			updateSchoolParameters[randomSchoolKey].HasLoans,
 			updateSchoolParameters[randomSchoolKey].HasLeases);
 
-		SchoolDetails updatedSchool = updateSchoolParameters[randomSchoolKey].SchoolDetails;
 		int randomSchoolId = updateSchoolParameters[randomSchoolKey].Id;
-
-		Application expected = new(
-			subject.ApplicationId,
-			subject.CreatedOn,
-			subject.LastModifiedOn,
-			subject.ApplicationType,
-			subject.ApplicationStatus,
-			subject.Contributors.ToDictionary(c => c.Id, c => c.Details),
-			updateSchools,
-			subject.JoinTrust,
-			subject.FormTrust);
 
 		// act
 		var result = subject.Update(
@@ -643,9 +566,10 @@ public class ApplicationUpdateTests
 		// assert
 		DfeAssert.CommandSuccess(result);
 
-		Assert.Equivalent(expected, subject);
+		original.Should().NotBeEquivalentTo(subject, DefaultExcludes);
 		var schoolMutated = Assert.Single(subject.Schools, s => s.Id == randomSchoolId);
-		Assert.Equivalent(updatedSchool, schoolMutated.Details);
+		schoolMutated.Details.Urn.Should().Be(101);
+
 	}
 
 	[Fact]
@@ -789,7 +713,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(ApplicationType));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -920,7 +844,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.CommandValidationError(result, nameof(ApplicationType));
-		Assert.Equivalent(expected, subject);
+		expected.Should().BeEquivalentTo(subject, DefaultExcludes);
 	}
 
 	[Fact]
@@ -982,7 +906,34 @@ public class ApplicationUpdateTests
 
 		for (int i = 0; i < numberOfSchools; i++)
 		{
-			schools.Add(_fixture.Create<School>());
+			var ms = _fixture.Create<School>();
+			var schoolToAdd = new School(ms.Id, ms.TrustBenefitDetails, ms.OfstedInspectionDetails,
+				ms.SafeguardingDetails,
+				ms.LocalAuthorityReorganisationDetails, ms.LocalAuthorityClosurePlanDetails, ms.DioceseName,
+				ms.DioceseFolderIdentifier, ms.PartOfFederation, ms.FoundationTrustOrBodyName,
+				ms.FoundationConsentFolderIdentifier, ms.ExemptionEndDate, ms.MainFeederSchools,
+				ms.ResolutionConsentFolderIdentifier, ms.ProtectedCharacteristics, ms.FurtherInformation,
+				new SchoolDetails(ms.Details.Urn, ms.Details.ProposedNewSchoolName!, ms.Details.LandAndBuildings,
+					ms.Details.PreviousFinancialYear, ms.Details.CurrentFinancialYear, ms.Details.NextFinancialYear,
+					ms.Details.ContactHeadName, _faker.Internet.Email(), ms.Details.ContactHeadTel,
+					ms.Details.ContactChairName, _faker.Internet.Email(), ms.Details.ContactChairTel,
+					ms.Details.ContactRole, ms.Details.MainContactOtherName,
+					_faker.Internet.Email(),
+					ms.Details.MainContactOtherTelephone, ms.Details.MainContactOtherRole,
+					ms.Details.ApproverContactName, _faker.Internet.Email(),
+					ms.Details.ConversionTargetDateSpecified, ms.Details.ConversionTargetDate,
+					ms.Details.ConversionTargetDateExplained, ms.Details.ConversionChangeNamePlanned,
+					ms.Details.ProposedNewSchoolName, ms.Details.ApplicationJoinTrustReason,
+					ms.Details.ProjectedPupilNumbersYear1, ms.Details.ProjectedPupilNumbersYear1,
+					ms.Details.ProjectedPupilNumbersYear1, ms.Details.CapacityAssumptions,
+					ms.Details.CapacityPublishedAdmissionsNumber, ms.Details.SchoolSupportGrantFundsPaidTo,
+					ms.Details.ConfirmPaySupportGrantToSchool, ms.Details.SchoolHasConsultedStakeholders,
+					ms.Details.SchoolPlanToConsultStakeholders, ms.Details.FinanceOngoingInvestigations,
+					ms.Details.FinancialInvestigationsExplain, ms.Details.FinancialInvestigationsTrustAware,
+					ms.Details.DeclarationBodyAgree, ms.Details.DeclarationIAmTheChairOrHeadteacher,
+					ms.Details.DeclarationSignedByName, ms.Details.SchoolConversionReasonsForJoining),
+				ms.Loans, ms.Leases, ms.HasLoans, ms.HasLeases);
+			schools.Add(schoolToAdd);
 		}
 
 		Application application = new(
@@ -1052,35 +1003,48 @@ public class ApplicationUpdateTests
 		);
 	}
 
+	public static EquivalencyAssertionOptions<_> DefaultExcludes<_>(EquivalencyAssertionOptions<_> opt)
+	{
+		opt.Excluding(m => m.Name.Equals("CreatedOn"));
+		opt.Excluding(m => m.Name.Equals("LastModifiedOn"));
+		opt.Excluding(m => m.Name.Contains("Dynamics"));
+		return opt;
+	}
+
 	public class SchoolDetailsBuilder
 	{
 		private readonly Fixture _fixture = new();
+		private readonly Faker _faker = new();
 		private SchoolDetails _defaultSchoolDetails;
-		private string _email;
+		private string _approverEmail;
 		private int _urn;
+		private string _chairEmail;
+		private string _otherEmail;
 		private string _contactHeadEmail;
 
 		public SchoolDetailsBuilder()
 		{
 			_defaultSchoolDetails = _fixture.Create<SchoolDetails>();
-			_email = _defaultSchoolDetails.ApproverContactEmail;
 			_urn = _defaultSchoolDetails.Urn;
-			_contactHeadEmail = _defaultSchoolDetails.ContactHeadEmail;
+			_approverEmail = _faker.Internet.Email();
+			_contactHeadEmail = _faker.Internet.Email();
+			_otherEmail = _faker.Internet.Email();
+			_chairEmail = _faker.Internet.Email();
 		}
 
 		public SchoolDetails Build()
 		{
 			return new SchoolDetails(
-				_defaultSchoolDetails.Urn, _defaultSchoolDetails.SchoolName, _defaultSchoolDetails.LandAndBuildings,
+				_urn, _defaultSchoolDetails.SchoolName, _defaultSchoolDetails.LandAndBuildings,
 				_defaultSchoolDetails.PreviousFinancialYear, _defaultSchoolDetails.CurrentFinancialYear,
 				_defaultSchoolDetails.NextFinancialYear, _defaultSchoolDetails.ContactHeadName,
 				_contactHeadEmail,
 				_defaultSchoolDetails.ContactHeadTel, _defaultSchoolDetails.ContactChairName,
-				_defaultSchoolDetails.ContactChairEmail, _defaultSchoolDetails.ContactChairTel,
+				_chairEmail, _defaultSchoolDetails.ContactChairTel,
 				_defaultSchoolDetails.ContactRole, _defaultSchoolDetails.MainContactOtherName,
-				_defaultSchoolDetails.MainContactOtherEmail, _defaultSchoolDetails.MainContactOtherTelephone,
+				_otherEmail, _defaultSchoolDetails.MainContactOtherTelephone,
 				_defaultSchoolDetails.MainContactOtherRole, _defaultSchoolDetails.ApproverContactName,
-				_email, _defaultSchoolDetails.ConversionTargetDateSpecified,
+				_approverEmail, _defaultSchoolDetails.ConversionTargetDateSpecified,
 				_defaultSchoolDetails.ConversionTargetDate, _defaultSchoolDetails.ConversionTargetDateExplained,
 				_defaultSchoolDetails.ConversionChangeNamePlanned, _defaultSchoolDetails.ProposedNewSchoolName,
 				_defaultSchoolDetails.ApplicationJoinTrustReason, _defaultSchoolDetails.ProjectedPupilNumbersYear1,
@@ -1100,7 +1064,7 @@ public class ApplicationUpdateTests
 
 		public SchoolDetailsBuilder WithEmail(string email)
 		{
-			_email = email;
+			_approverEmail = email;
 
 			return this;
 		}
@@ -1122,6 +1086,13 @@ public class ApplicationUpdateTests
 		public SchoolDetailsBuilder WithDetails(SchoolDetails schoolDetails)
 		{
 			_defaultSchoolDetails = schoolDetails;
+
+			return this;
+		}
+
+		public SchoolDetailsBuilder WithApproverContactEmail(string email)
+		{
+			_approverEmail = email;
 
 			return this;
 		}

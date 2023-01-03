@@ -1,5 +1,4 @@
 ﻿using System.Reflection.Emit;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -119,6 +118,20 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		}
 
 		foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		// for new domain object mapped directly to the database
+		var domainEntities = ChangeTracker.Entries<Entity>().ToList();
+
+		foreach (var entity in domainEntities.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in domainEntities.Where(e => e.State == EntityState.Modified))
 		{
 			entity.Entity.LastModifiedOn = timestamp;
 		}
@@ -255,6 +268,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		schoolConfiguration.HasKey(a => a.Id);
 		schoolConfiguration.Property<int?>("ConversionApplicationId")
 			.IsRequired(false);
+
+		//schoolConfiguration.Property(x => x.DioceseFolderIdentifier).HasColumnName("DioceseFolderIdentifier");
 
 		schoolConfiguration.OwnsOne(x => x.Details, sd =>
 		{

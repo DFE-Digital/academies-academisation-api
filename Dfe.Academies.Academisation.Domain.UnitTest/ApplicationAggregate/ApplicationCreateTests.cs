@@ -30,9 +30,9 @@ public class ApplicationCreateTests
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateSuccessResult<IApplication>>(result);
+		Assert.IsType<CreateSuccessResult<Application>>(result);
 
-		var successResult = (CreateSuccessResult<IApplication>)result;
+		var successResult = (CreateSuccessResult<Application>)result;
 		Assert.Equal(ApplicationStatus.InProgress, successResult.Payload.ApplicationStatus);
 		Assert.Single(successResult.Payload.Contributors, c => c.Details == contributor);
 	}
@@ -81,9 +81,9 @@ public class ApplicationCreateTests
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateSuccessResult<IApplication>>(result);
+		Assert.IsType<CreateSuccessResult<Application>>(result);
 
-		var successResult = result as CreateSuccessResult<IApplication>;
+		var successResult = result as CreateSuccessResult<Application>;
 		Assert.IsType<Application>(successResult!.Payload);
 	}
 

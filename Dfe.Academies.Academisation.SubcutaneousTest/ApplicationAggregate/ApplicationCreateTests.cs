@@ -1,15 +1,12 @@
 ﻿using AutoFixture;
 using AutoMapper;
 using Bogus;
-using Castle.Core.Logging;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
@@ -39,19 +36,17 @@ public class ApplicationCreateTests
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
-	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
-	private readonly IApplicationRepository _applicationGetDataQuery;
+	private readonly IApplicationRepository _repo;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly ITrustQueryService _trustQueryService;
 
 	public ApplicationCreateTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
-		_applicationGetDataQuery = new ApplicationRepository(_context, _mapper.Object);
+		_repo = new ApplicationRepository(_context, _mapper.Object);
 
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
-		_applicationQueryService = new ApplicationQueryService(_applicationGetDataQuery, _mapper.Object);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _repo, _mapper.Object);
+		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 
 		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;

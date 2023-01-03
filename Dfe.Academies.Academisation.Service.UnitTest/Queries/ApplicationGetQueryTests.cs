@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
 using Moq;
 using Xunit;

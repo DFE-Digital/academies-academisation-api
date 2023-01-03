@@ -122,7 +122,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		// add ones that are new
 		var contributorsToAdd = contributors.Where(x => _contributors.All(c => c.Id != x.Key));
 		_contributors.AddRange(contributorsToAdd.Select(x => new Contributor(
-					x.Key,
+					0,
 					x.Value
 					)));
 
@@ -149,8 +149,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		// add ones that are new
 		var schoolsToAdd = schools.Where(x => _schools.All(c => c.Id != x.Id));
 		_schools.AddRange(schoolsToAdd.Select(school =>
-			new School(
-				school.Id,
+			new School(0,
 				school.TrustBenefitDetails,
 				school.OfstedInspectionDetails,
 				school.SafeguardingDetails,
@@ -167,8 +166,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 				school.ProtectedCharacteristics,
 				school.FurtherInformation,
 				school.SchoolDetails,
-				school.Loans.Select(l => new Loan(l.Key, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
-				school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
+				school.Loans.Select(l => new Loan(0, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
+				school.Leases.Select(l => new Lease(0, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
 				school.HasLoans, school.HasLeases)));
 
 		return new CommandSuccessResult();

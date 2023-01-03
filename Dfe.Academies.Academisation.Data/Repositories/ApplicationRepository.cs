@@ -1,15 +1,11 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using AutoMapper;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+﻿using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
-	//TODO: Change the AcademisationContext Applications return an Application entity type instead of mapping it to a domain
 	public class ApplicationRepository : IApplicationRepository
 	{
 		private readonly IMapper _mapper;
@@ -24,7 +20,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public IUnitOfWork UnitOfWork => _context;
 		public async Task<IEnumerable<Application>> GetAllAsync()
 		{
-			return await _context.Applications.ToListAsync();
+			return await DefaultIncludes().ToListAsync();
 		}
 		
 		public async Task<Application?> GetByIdAsync(object id)
@@ -64,6 +60,16 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.ToListAsync();
 
 			return applications;
+		}
+
+		public async Task<IApplication?> GetApplicationByIdAsync(int id)
+		{
+			return await GetByIdAsync(id);
+		}
+
+		public void UpdateApplication(IApplication application)
+		{
+			Update(application as Application);
 		}
 
 		private IQueryable<Application> DefaultIncludes()

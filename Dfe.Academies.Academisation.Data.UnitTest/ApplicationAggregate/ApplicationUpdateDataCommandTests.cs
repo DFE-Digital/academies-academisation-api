@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using AutoMapper;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -20,233 +20,294 @@ public class ApplicationUpdateDataCommandTests
 {
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new();
-	private readonly IApplicationRepository _query;
-	private readonly ApplicationUpdateDataCommand _subject;
+	private readonly IApplicationRepository _repo;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 
 	public ApplicationUpdateDataCommandTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		_query = new ApplicationRepository(_context, _mapper.Object);
-		_subject = new ApplicationUpdateDataCommand(_context, _mapper.Object);
-
-		_fixture.Customize<Loan>(composer =>
-			composer
-				.With(s => s.Id, 0));
-	}
-
-	[Fact]
-	public async Task WhenRecordDoesNotExist___ThrowsApplicationException()
-	{
-		// Arrange
-		const int applicationId = 4;
-
-		Mock<IApplication> mockApplication = new();
-
-		mockApplication.SetupGet(a => a.ApplicationId).Returns(applicationId);
-
-		mockApplication.SetupGet(d => d.Contributors)
-		 	.Returns(new List<IContributor>());
-
-		mockApplication.SetupGet(d => d.Schools)
-		 	.Returns(new List<ISchool>());
-
-		//Act & Assert
-		await Assert.ThrowsAsync<InvalidOperationException>(() => _subject.Execute(mockApplication.Object));
+		_repo = new ApplicationRepository(_context, _mapper.Object);
+		_fixture.Customize(new AutoMoqCustomization());
+		//_fixture.Customize<Loan>(composer =>
+		//	composer
+		//		.With(s => s.Id, 0));
 	}
 
 	[Fact]
 	public async Task RecordAlreadyExists_NoChange___LastModifiedOnUpdated()
 	{
 		//Arrange
-		const int applicationId = 1;
-
-		var existingApplication = await _query.GetByIdAsync(applicationId);
+		var existingApplications = await _repo.GetAllAsync();
+		var existingApplication = existingApplications.FirstOrDefault();
 		Assert.NotNull(existingApplication);
 
-		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
+		var existingModDate = existingApplication.LastModifiedOn;
+		var existingCreatedDate = existingApplication.CreatedOn;
 
 		//Act
-		await _subject.Execute(mockApplication.Object);
+		_repo.Update(existingApplication);
+		await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.GetByIdAsync(applicationId);
+		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
 		Assert.Multiple(
-			() => Assert.Equal(existingApplication.CreatedOn, updatedApplication.CreatedOn),
-			() => Assert.NotEqual(existingApplication.LastModifiedOn, updatedApplication.LastModifiedOn)
+			() => Assert.Equal(existingCreatedDate, updatedApplication.CreatedOn),
+			() => Assert.NotEqual(existingModDate, updatedApplication.LastModifiedOn)
 		);
 	}
 
 	[Fact]
-	public async Task RecordAlreadyExists_FieldsChanged___FieldChangesPersisted()
+	public async Task RecordAlreadyExists_Submit___FieldChangesPersisted()
 	{
 		//Arrange
-		const int applicationId = 1;
+		var existingApplications = await _repo.GetAllAsync();
+		var existingApplication = existingApplications.FirstOrDefault();
 
-		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
+		var subDate = DateTime.Now;
 
-		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
-
-		mockApplication.SetupGet(a => a.ApplicationStatus).Returns(_fixture.Create<ApplicationStatus>());
-		mockApplication.SetupGet(a => a.ApplicationType).Returns(_fixture.Create<ApplicationType>());
+		existingApplication.Submit(subDate);
 
 		//Act
-		await _subject.Execute(mockApplication.Object);
+		_repo.Update(existingApplication);
+				await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.GetByIdAsync(applicationId);
+		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
-		Assert.Multiple(
-			() => Assert.Equal(existingApplication.ApplicationStatus, updatedApplication.ApplicationStatus),
-			() => Assert.Equal(existingApplication.ApplicationType, updatedApplication.ApplicationType)
-		);
+		Assert.Equal(ApplicationStatus.Submitted, updatedApplication.ApplicationStatus);
+		Assert.Equal(subDate, updatedApplication.ApplicationSubmittedDate);
 	}
 
 	[Fact]
 	public async Task RecordAlreadyExists_ContributorAdded___AddedContributorPersisted()
 	{
 		//Arrange
-		const int applicationId = 1;
+		var existingApplications = await _repo.GetAllAsync();
+		var existingApplication = existingApplications.FirstOrDefault();
 
-		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
-		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
-
 		var addedContributorDetails = _fixture.Create<ContributorDetails>();
-		var addedContributor = new Mock<IContributor>();
-		addedContributor.SetupGet(c => c.Details).Returns(addedContributorDetails);
 
-		mockApplication.SetupGet(d => d.Contributors)
-		 	.Returns(new List<IContributor>((IEnumerable<IContributor>)existingApplication.Contributors)
-			{
-				addedContributor.Object
-			});
+		existingApplication.Update(existingApplication.ApplicationType, existingApplication.ApplicationStatus,
+			existingApplication.Contributors.ToDictionary(x => x.Id, x => x.Details).Append(new KeyValuePair<int, ContributorDetails>(
+					0, addedContributorDetails)),
+			existingApplication.Schools.Select(s =>
+				new UpdateSchoolParameter(s.Id,
+					s.TrustBenefitDetails,
+					s.OfstedInspectionDetails,
+					s.SafeguardingDetails,
+					s.LocalAuthorityReorganisationDetails,
+					s.LocalAuthorityClosurePlanDetails,
+					s.DioceseName,
+					s.DioceseFolderIdentifier,
+					s.PartOfFederation,
+					s.FoundationTrustOrBodyName,
+					s.FoundationConsentFolderIdentifier,
+					s.ExemptionEndDate,
+					s.MainFeederSchools,
+					s.ResolutionConsentFolderIdentifier,
+					s.ProtectedCharacteristics,
+					s.FurtherInformation,
+					s.Details,
+					new List<KeyValuePair<int, LoanDetails>>(s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)))),
+					new List<KeyValuePair<int, LeaseDetails>>(s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets)))),
+					s.HasLoans,
+					s.HasLeases)));
 
 		//Act
-		await _subject.Execute(mockApplication.Object);
+		_repo.Update(existingApplication);
+		await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.GetByIdAsync(applicationId);
+		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
-		Assert.Contains(addedContributorDetails, updatedApplication.Contributors.Select(c => c.Details));
+		Assert.True(updatedApplication.Contributors.Any(x =>
+			x.Details.EmailAddress == addedContributorDetails.EmailAddress &&
+			x.Details.FirstName == addedContributorDetails.FirstName &&
+			x.Details.LastName == addedContributorDetails.LastName &&
+			x.Details.OtherRoleName == addedContributorDetails.OtherRoleName &&
+			x.Details.Role == addedContributorDetails.Role));
 	}
 
 	[Fact]
 	public async Task RecordAlreadyExists_ContributorRemoved___RemovedContributorPersisted()
 	{
 		//Arrange
-		const int applicationId = 1;
+		var existingApplications = await _repo.GetAllAsync();
+		var existingApplication = existingApplications.FirstOrDefault();
 
-		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
-
-		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
 
 		var mutatedContributorList = new List<IContributor>((IEnumerable<IContributor>)existingApplication.Contributors);
 		var contributorToRemove = PickRandomElement(mutatedContributorList);
 		mutatedContributorList.Remove(contributorToRemove);
 
-		mockApplication.SetupGet(d => d.Contributors)
-		 	.Returns(mutatedContributorList);
+		existingApplication.Update(existingApplication.ApplicationType, existingApplication.ApplicationStatus,
+			mutatedContributorList.ToDictionary(x => x.Id, x => x.Details),
+			existingApplication.Schools.Select(s =>
+				new UpdateSchoolParameter(s.Id,
+					s.TrustBenefitDetails,
+					s.OfstedInspectionDetails,
+					s.SafeguardingDetails,
+					s.LocalAuthorityReorganisationDetails,
+					s.LocalAuthorityClosurePlanDetails,
+					s.DioceseName,
+					s.DioceseFolderIdentifier,
+					s.PartOfFederation,
+					s.FoundationTrustOrBodyName,
+					s.FoundationConsentFolderIdentifier,
+					s.ExemptionEndDate,
+					s.MainFeederSchools,
+					s.ResolutionConsentFolderIdentifier,
+					s.ProtectedCharacteristics,
+					s.FurtherInformation,
+					s.Details,
+					new List<KeyValuePair<int, LoanDetails>>(s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)))),
+					new List<KeyValuePair<int, LeaseDetails>>(s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets)))),
+					s.HasLoans,
+					s.HasLeases)));
 
 		//Act
-		await _subject.Execute(mockApplication.Object);
+		_repo.Update(existingApplication);
+				await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.GetByIdAsync(applicationId);
+		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
-		Assert.DoesNotContain(contributorToRemove.Details, updatedApplication.Contributors.Select(c => c.Details));
+		Assert.False(updatedApplication.Contributors.Any(x =>
+			x.Details.EmailAddress == contributorToRemove.Details.EmailAddress &&
+			x.Details.FirstName == contributorToRemove.Details.FirstName &&
+			x.Details.LastName == contributorToRemove.Details.LastName &&
+			x.Details.OtherRoleName == contributorToRemove.Details.OtherRoleName &&
+			x.Details.Role == contributorToRemove.Details.Role));
 	}
 
-	[Fact(Skip = "Flaky test that's too volatile to be reliable")]
+	[Fact]
 	public async Task RecordAlreadyExists_SchoolAdded___AddedSchoolPersisted()
 	{
 		//Arrange
-		const int applicationId = 1;
+		var existingApplications = await _repo.GetAllAsync();
+		var existingApplication = existingApplications.FirstOrDefault();
 
-		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
-		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
+		var ms = _fixture.Create<School>();
 
-		var addedSchoolDetails = _fixture.Create<SchoolDetails>();
-		var addedSchool = new Mock<ISchool>();
-		addedSchool.SetupGet(c => c.Details).Returns(addedSchoolDetails);
+		var addedSchool = new School(0, ms.TrustBenefitDetails, ms.OfstedInspectionDetails, ms.SafeguardingDetails,
+			ms.LocalAuthorityReorganisationDetails, ms.LocalAuthorityClosurePlanDetails, ms.DioceseName,
+			ms.DioceseFolderIdentifier, ms.PartOfFederation, ms.FoundationTrustOrBodyName,
+			ms.FoundationConsentFolderIdentifier, ms.ExemptionEndDate, ms.MainFeederSchools, ms.ResolutionConsentFolderIdentifier, ms.ProtectedCharacteristics, ms.FurtherInformation,
+			new SchoolDetails(ms.Details.Urn, ms.Details.ProposedNewSchoolName!, ms.Details.LandAndBuildings,
+				ms.Details.PreviousFinancialYear, ms.Details.CurrentFinancialYear, ms.Details.NextFinancialYear,
+				ms.Details.ContactHeadName, $"{ms.Details.ContactHeadEmail}@test.com", ms.Details.ContactHeadTel,
+				ms.Details.ContactChairName, $"{ms.Details.ContactChairEmail}@test.com", ms.Details.ContactChairTel,
+				ms.Details.ContactRole, ms.Details.MainContactOtherName, $"{ms.Details.MainContactOtherEmail}@test.com",
+				ms.Details.MainContactOtherTelephone, ms.Details.MainContactOtherRole,
+				ms.Details.ApproverContactName, $"{ms.Details.ApproverContactEmail}@test.com",
+				ms.Details.ConversionTargetDateSpecified, ms.Details.ConversionTargetDate,
+				ms.Details.ConversionTargetDateExplained, ms.Details.ConversionChangeNamePlanned,
+				ms.Details.ProposedNewSchoolName, ms.Details.ApplicationJoinTrustReason,
+				ms.Details.ProjectedPupilNumbersYear1, ms.Details.ProjectedPupilNumbersYear1,
+				ms.Details.ProjectedPupilNumbersYear1, ms.Details.CapacityAssumptions,
+				ms.Details.CapacityPublishedAdmissionsNumber, ms.Details.SchoolSupportGrantFundsPaidTo,
+				ms.Details.ConfirmPaySupportGrantToSchool, ms.Details.SchoolHasConsultedStakeholders,
+				ms.Details.SchoolPlanToConsultStakeholders, ms.Details.FinanceOngoingInvestigations,
+				ms.Details.FinancialInvestigationsExplain, ms.Details.FinancialInvestigationsTrustAware,
+				ms.Details.DeclarationBodyAgree, ms.Details.DeclarationIAmTheChairOrHeadteacher,
+				ms.Details.DeclarationSignedByName, ms.Details.SchoolConversionReasonsForJoining),
+			ms.Loans, ms.Leases, ms.HasLoans, ms.HasLeases);
 
-		mockApplication.SetupGet(d => d.Schools)
-		 	.Returns(new List<ISchool>((IEnumerable<ISchool>)existingApplication.Schools)
-			{
-				addedSchool.Object
-			});
+		var schools = new List<School>{ addedSchool};
+
+		existingApplication.Update(existingApplication.ApplicationType, existingApplication.ApplicationStatus,
+			existingApplication.Contributors.ToDictionary(x => x.Id, x => x.Details),
+			schools.Select(s =>
+				new UpdateSchoolParameter(s.Id,
+					s.TrustBenefitDetails,
+					s.OfstedInspectionDetails,
+					s.SafeguardingDetails,
+					s.LocalAuthorityReorganisationDetails,
+					s.LocalAuthorityClosurePlanDetails,
+					s.DioceseName,
+					s.DioceseFolderIdentifier,
+					s.PartOfFederation,
+					s.FoundationTrustOrBodyName,
+					s.FoundationConsentFolderIdentifier,
+					s.ExemptionEndDate,
+					s.MainFeederSchools,
+					s.ResolutionConsentFolderIdentifier,
+					s.ProtectedCharacteristics,
+					s.FurtherInformation,
+					s.Details,
+					new List<KeyValuePair<int, LoanDetails>>(s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)))),
+					new List<KeyValuePair<int, LeaseDetails>>(s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets)))),
+					s.HasLoans,
+					s.HasLeases)));
+
 
 		//Act
-		await _subject.Execute(mockApplication.Object);
+		_repo.Update(existingApplication);
+				await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.GetByIdAsync(applicationId);
+		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
-		Assert.Contains(addedSchoolDetails, updatedApplication.Schools.Select(s => s.Details));
+		Assert.True(updatedApplication.Schools.Any(x => x.Details.Urn == addedSchool.Details.Urn));
 	}
 
 	[Fact]
 	public async Task RecordAlreadyExists_SchoolRemoved___RemovedSchoolPersisted()
 	{
 		//Arrange
-		const int applicationId = 1;
+		var existingApplications = await _repo.GetAllAsync();
+		var existingApplication = existingApplications.FirstOrDefault();
 
-		var existingApplication = await _query.GetByIdAsync(applicationId);
 		Assert.NotNull(existingApplication);
 
-		Mock<IApplication> mockApplication = CloneAsMock(existingApplication);
+		var mutatedSchoolList = new List<ISchool>();
 
-		var mutatedSchoolList = new List<ISchool>((IEnumerable<ISchool>)existingApplication.Schools);
-		var contributorToRemove = PickRandomElement(mutatedSchoolList);
-		mutatedSchoolList.Remove(contributorToRemove);
-
-		mockApplication.SetupGet(d => d.Schools)
-		 	.Returns(mutatedSchoolList);
+		existingApplication.Update(existingApplication.ApplicationType, existingApplication.ApplicationStatus,
+			existingApplication.Contributors.ToDictionary(x => x.Id, x => x.Details),
+			mutatedSchoolList.Select(s =>
+				new UpdateSchoolParameter(s.Id,
+					s.TrustBenefitDetails,
+					s.OfstedInspectionDetails,
+					s.SafeguardingDetails,
+					s.LocalAuthorityReorganisationDetails,
+					s.LocalAuthorityClosurePlanDetails,
+					s.DioceseName,
+					s.DioceseFolderIdentifier,
+					s.PartOfFederation,
+					s.FoundationTrustOrBodyName,
+					s.FoundationConsentFolderIdentifier,
+					s.ExemptionEndDate,
+					s.MainFeederSchools,
+					s.ResolutionConsentFolderIdentifier,
+					s.ProtectedCharacteristics,
+					s.FurtherInformation,
+					s.Details,
+					new List<KeyValuePair<int, LoanDetails>>(s.Loans.Select(l => new KeyValuePair<int, LoanDetails>(l.Id, new LoanDetails(l.Amount, l.Purpose, l.Provider, l.InterestRate, l.Schedule)))),
+					new List<KeyValuePair<int, LeaseDetails>>(s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.Id, new LeaseDetails(l.LeaseTerm, l.RepaymentAmount, l.InterestRate, l.PaymentsToDate, l.Purpose, l.ValueOfAssets, l.ResponsibleForAssets)))),
+					s.HasLoans,
+					s.HasLeases)));
 
 		//Act
-		await _subject.Execute(mockApplication.Object);
+		_repo.Update(existingApplication);
+				await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
-		var updatedApplication = await _query.GetByIdAsync(applicationId);
+		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
 		//Assert
 		Assert.NotNull(updatedApplication);
-		Assert.DoesNotContain(contributorToRemove.Details, updatedApplication.Schools.Select(s => s.Details));
-	}
-
-	private static Mock<IApplication> CloneAsMock(IApplication existingApplication)
-	{
-		Mock<IApplication> mockApplication = new();
-
-		mockApplication
-			.SetupGet(a => a.ApplicationId)
-			.Returns(existingApplication.ApplicationId);
-
-		mockApplication
-			.SetupGet(a => a.CreatedOn)
-			.Returns(existingApplication.CreatedOn);
-
-		mockApplication
-			.SetupGet(a => a.LastModifiedOn)
-			.Returns(existingApplication.LastModifiedOn);
-
-		mockApplication.SetupGet(d => d.Contributors)
-			 .Returns(existingApplication.Contributors);
-
-		mockApplication.SetupGet(d => d.Schools)
-			.Returns(existingApplication.Schools);
-
-		return mockApplication;
+		Assert.False(updatedApplication.Schools.Any());
 	}
 
 	private static T PickRandomElement<T>(IEnumerable<T> enumerable)

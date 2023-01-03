@@ -1,7 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.Service.Mappers.Application;
@@ -11,12 +10,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application;
 public class ApplicationUpdateCommand : IApplicationUpdateCommand
 {
 	private readonly IApplicationRepository _applicationRepository;
-	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
 
-	public ApplicationUpdateCommand(IApplicationRepository applicationRepository, IApplicationUpdateDataCommand applicationUpdateDataCommand)
+	public ApplicationUpdateCommand(IApplicationRepository applicationRepository)
 	{
 		_applicationRepository = applicationRepository;
-		_applicationUpdateDataCommand = applicationUpdateDataCommand;
 	}
 
 	public async Task<CommandResult> Execute(int applicationId, ApplicationUpdateRequestModel applicationServiceModel)
@@ -29,7 +26,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 				});
 		}
 
-		var existingApplication = await _applicationRepository.GetByIdAsync(applicationId);
+		var existingApplication = await _applicationRepository.GetApplicationByIdAsync(applicationId);
 		if (existingApplication is null)
 		{
 			return new NotFoundCommandResult();
@@ -69,7 +66,8 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 		{
 			throw new NotImplementedException();
 		}
-		await _applicationUpdateDataCommand.Execute(existingApplication);
+		_applicationRepository.UpdateApplication(existingApplication);
+		await _applicationRepository.UnitOfWork.SaveChangesAsync();
 		return result;
 	}
 }

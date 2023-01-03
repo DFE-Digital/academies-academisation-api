@@ -1,8 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
@@ -63,11 +61,19 @@ public static class AutoMapperSetup
 		//	.ForCtorParam(nameof(TrustKeyPerson.Roles), (opt) => opt.MapFrom(x => x.Roles))
 		//	.ReverseMap();
 
-		profile.CreateMap<TrustKeyPersonServiceModel, TrustKeyPerson>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonServiceModel, TrustKeyPerson>()
+			.ForMember(x => x.DynamicsKeyPersonId, opt => opt.Ignore())
+			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
+			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore())
+			.ReverseMap();
 
 		//profile.CreateMap<TrustKeyPersonRoleState, ITrustKeyPersonRole>().ReverseMap();
 		//profile.CreateMap<TrustKeyPersonRoleState, TrustKeyPersonRole>().ReverseMap();
-		profile.CreateMap<TrustKeyPersonRoleServiceModel, TrustKeyPersonRole>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonRoleServiceModel, TrustKeyPersonRole>()
+			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
+			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore())
+			.ReverseMap();
+
 		profile.CreateMap<TrustKeyPersonRoleServiceModel, ITrustKeyPersonRole>().ReverseMap();
 	}
 }

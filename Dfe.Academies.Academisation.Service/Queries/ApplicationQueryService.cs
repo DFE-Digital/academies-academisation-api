@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
-using Dfe.Academies.Academisation.Service.Mappers;
 using Dfe.Academies.Academisation.Service.Mappers.Application;
 
 namespace Dfe.Academies.Academisation.Service.Queries
