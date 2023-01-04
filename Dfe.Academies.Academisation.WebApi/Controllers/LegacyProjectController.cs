@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			LegacyApiResponse<LegacyProjectServiceModel>? result =
 				await _legacyProjectListGetQuery.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn,
-					searchModel.RegionUrnsQueryString);
+					searchModel.RegionQueryString);
 			return result is null ? NotFound() : Ok(result);
 		}
 
