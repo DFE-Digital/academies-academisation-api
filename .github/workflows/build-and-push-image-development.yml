@@ -30,8 +30,8 @@ jobs:
             VERSION=sha-${GITHUB_SHA}
             TAGS="$TAGS,${DOCKER_IMAGE}:${VERSION}"
           fi
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=deploy-version::${VERSION}
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+          echo "deploy-version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Push image
         uses: docker/build-push-action@v3
