@@ -58,7 +58,7 @@ public class ApplicationSubmitCommandTests
 	public async Task SubmitApplicationValidationError___NotPassedToUpdateDataCommand_ValidationErrorsReturned()
 	{
 		// arrange
-		_repo.Setup(x => x.GetApplicationByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_repo.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
 
 		CommandValidationErrorResult commandValidationErrorResult = new(new List<ValidationError>());
 		_applicationSubmissionServiceMock.Setup(x => x.SubmitApplication(_applicationMock.Object)).Returns(commandValidationErrorResult);
@@ -69,7 +69,7 @@ public class ApplicationSubmitCommandTests
 		// assert
 		Assert.IsType<CommandValidationErrorResult>(result);
 		Assert.Equal(commandValidationErrorResult, result);
-		_repo.Verify(x => x.UpdateApplication(_applicationMock.Object), Times.Never);
+		_repo.Verify(x => x.Update(_applicationMock.Object), Times.Never);
 	}
 
 	[Fact]
@@ -77,7 +77,7 @@ public class ApplicationSubmitCommandTests
 	{
 		// arrange
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
-		_repo.Setup(x => x.GetApplicationByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_repo.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
 		_applicationSubmissionServiceMock.Setup(x => x.SubmitApplication(_applicationMock.Object)).Returns(new CommandSuccessResult());
 		_projectCreateDataCommand.Setup(m => m.Execute(_projectMock.Object)).ReturnsAsync(_projectMock.Object);
 		_applicationSubmissionServiceMock.Setup(m => m.SubmitApplication(_applicationMock.Object))
@@ -89,7 +89,7 @@ public class ApplicationSubmitCommandTests
 		// assert
 		Assert.IsType<CommandSuccessResult>(result);
 		_projectCreateDataCommand.Verify(x => x.Execute(_projectMock.Object), Times.Never);
-		_repo.Verify(x => x.UpdateApplication(_applicationMock.Object), Times.Once);		
+		_repo.Verify(x => x.Update(_applicationMock.Object), Times.Once);		
 	}
 	
 	[Fact]
@@ -98,7 +98,7 @@ public class ApplicationSubmitCommandTests
 		// arrange
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
 		_projectMock.SetupGet(p => p.Details).Returns(new ProjectDetails { Urn = 1 });
-		_repo.Setup(x => x.GetApplicationByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_repo.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
 		_applicationMock.Setup(x => x.Submit(It.IsAny<DateTime>())).Returns(new CommandSuccessResult());
 		_projectCreateDataCommand.Setup(m => m.Execute(_projectMock.Object)).ReturnsAsync(_projectMock.Object);
 		_applicationSubmissionServiceMock.Setup(m => m.SubmitApplication(_applicationMock.Object))
@@ -110,7 +110,7 @@ public class ApplicationSubmitCommandTests
 		// assert
 		Assert.IsType<CreateSuccessResult<LegacyProjectServiceModel>>(result);
 		_projectCreateDataCommand.Verify(x => x.Execute(_projectMock.Object), Times.Once);
-		_repo.Verify(x => x.UpdateApplication(_applicationMock.Object), Times.Once);		
+		_repo.Verify(x => x.Update(_applicationMock.Object), Times.Once);		
 	}
 
 	[Fact]
@@ -118,7 +118,7 @@ public class ApplicationSubmitCommandTests
 	{
 		// arrange
 		_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
-		_repo.Setup(x => x.GetApplicationByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
+		_repo.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
 
 		CreateValidationErrorResult createValidationErrorResult = new(new List<ValidationError>());
 
@@ -132,6 +132,6 @@ public class ApplicationSubmitCommandTests
 		Assert.IsType<CreateValidationErrorResult>(result);
 		Assert.Equal(createValidationErrorResult, result);
 		_projectCreateDataCommand.Verify(x => x.Execute(It.IsAny<IProject>()), Times.Never);
-		_repo.Verify(x => x.UpdateApplication(_applicationMock.Object), Times.Never);
+		_repo.Verify(x => x.Update(_applicationMock.Object), Times.Never);
 	}
 }

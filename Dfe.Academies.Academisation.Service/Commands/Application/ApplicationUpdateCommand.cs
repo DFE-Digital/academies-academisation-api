@@ -26,7 +26,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 				});
 		}
 
-		var existingApplication = await _applicationRepository.GetApplicationByIdAsync(applicationId);
+		var existingApplication = await _applicationRepository.GetByIdAsync(applicationId);
 		if (existingApplication is null)
 		{
 			return new NotFoundCommandResult();
@@ -66,7 +66,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 		{
 			throw new NotImplementedException();
 		}
-		_applicationRepository.UpdateApplication(existingApplication);
+		_applicationRepository.Update(existingApplication);
 		await _applicationRepository.UnitOfWork.SaveChangesAsync();
 		return result;
 	}

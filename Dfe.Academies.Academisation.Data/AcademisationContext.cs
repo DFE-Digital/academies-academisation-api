@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
@@ -150,6 +151,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<TrustKeyPersonRole>(ConfigureTrustKeyPersonRole);
 
 		modelBuilder.Entity<ProjectState>(ConfigureProject);
+		modelBuilder.Entity<ProjectNoteState>(ConfigureProjectNotes);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
@@ -159,6 +161,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	private static void ConfigureProject(EntityTypeBuilder<ProjectState> projectConfiguration)
 	{
+		projectConfiguration.ToTable("Project", DEFAULT_SCHEMA);
 		projectConfiguration
 			.HasMany(x => x.Notes)
 			.WithOne()
@@ -174,8 +177,14 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.Property(e => e.FoundationConsent).HasConversion<string>();
 	}
 
+	private static void ConfigureProjectNotes(EntityTypeBuilder<ProjectNoteState> projectNoteConfiguration)
+	{
+		projectNoteConfiguration.ToTable("ProjectNotes", DEFAULT_SCHEMA);
+	}
+
 	private static void ConfigureConversionAdvisoryBoardDecision(EntityTypeBuilder<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionConfiguration)
 	{
+		ConversionAdvisoryBoardDecisionConfiguration.ToTable("ConversionAdvisoryBoardDecision", DEFAULT_SCHEMA);
 		ConversionAdvisoryBoardDecisionConfiguration
 			.Property(e => e.DecisionMadeBy)
 			.HasConversion<string>();
@@ -187,6 +196,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	private static void ConfigureConversionAdvisoryBoardDecisionDeferredReason(EntityTypeBuilder<ConversionAdvisoryBoardDecisionDeferredReasonState> ConversionAdvisoryBoardDecisionDeferredReasonConfiguration)
 	{
+		ConversionAdvisoryBoardDecisionDeferredReasonConfiguration.ToTable("ConversionAdvisoryBoardDecisionDeferredReason", DEFAULT_SCHEMA);
 		ConversionAdvisoryBoardDecisionDeferredReasonConfiguration
 			.Property(e => e.Reason)
 			.HasConversion<string>();
@@ -194,6 +204,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	private static void ConfigureConversionAdvisoryBoardDecisionDeclinedReason(EntityTypeBuilder<ConversionAdvisoryBoardDecisionDeclinedReasonState> ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration)
 	{
+		ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration.ToTable("ConversionAdvisoryBoardDecisionDeclinedReason", DEFAULT_SCHEMA);
 		ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration
 			.Property(e => e.Reason)
 			.HasConversion<string>();
@@ -268,8 +279,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		schoolConfiguration.HasKey(a => a.Id);
 		schoolConfiguration.Property<int?>("ConversionApplicationId")
 			.IsRequired(false);
-
-		//schoolConfiguration.Property(x => x.DioceseFolderIdentifier).HasColumnName("DioceseFolderIdentifier");
 
 		schoolConfiguration.OwnsOne(x => x.Details, sd =>
 		{

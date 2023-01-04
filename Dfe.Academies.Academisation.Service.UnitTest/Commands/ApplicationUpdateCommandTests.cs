@@ -65,7 +65,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				It.IsAny<IEnumerable<UpdateSchoolParameter>>()
 				)).Returns(new CommandSuccessResult());
 
-			_repo.Setup(x => x.GetApplicationByIdAsync(applicationServiceModel.ApplicationId))
+			_repo.Setup(x => x.GetByIdAsync(applicationServiceModel.ApplicationId))
 				.ReturnsAsync(applicationMock.Object);
 
 			// Act

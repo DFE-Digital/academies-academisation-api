@@ -27,7 +27,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 
 		public async Task<CommandOrCreateResult> Handle(SubmitApplicationCommand command, CancellationToken cancellationToken)
 		{
-			var application = await _applicationRepository.GetApplicationByIdAsync(command.applicationId);
+			var application = await _applicationRepository.GetByIdAsync(command.applicationId);
 
 			if (application is null)
 			{
@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}
 			
-			_applicationRepository.UpdateApplication(application);
+			_applicationRepository.Update(application);
 			await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			switch (domainServiceResult)

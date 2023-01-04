@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.HasIndex("AdvisoryBoardDecisionId");
 
-                    b.ToTable("ConversionAdvisoryBoardDecisionDeclinedReason");
+                    b.ToTable("ConversionAdvisoryBoardDecisionDeclinedReason", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeferredReasonState", b =>
@@ -83,7 +83,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.HasIndex("AdvisoryBoardDecisionId");
 
-                    b.ToTable("ConversionAdvisoryBoardDecisionDeferredReason");
+                    b.ToTable("ConversionAdvisoryBoardDecisionDeferredReason", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>
@@ -122,7 +122,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConversionAdvisoryBoardDecision");
+                    b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectNoteState", b =>
@@ -152,7 +152,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectNotes");
+                    b.ToTable("ProjectNotes", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", b =>
@@ -423,7 +423,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Project");
+                    b.ToTable("Project", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>
@@ -616,8 +616,26 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DioceseFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DioceseName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("DynamicsApplyingSchoolId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ExemptionEndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FoundationConsentFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FoundationTrustOrBodyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FurtherInformation")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("HasLeases")
                         .HasColumnType("bit");
@@ -627,6 +645,33 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LocalAuthorityClosurePlanDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LocalAuthorityReorganisationDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainFeederSchools")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfstedInspectionDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PartOfFederation")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ProtectedCharacteristics")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResolutionConsentFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SafeguardingDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrustBenefitDetails")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

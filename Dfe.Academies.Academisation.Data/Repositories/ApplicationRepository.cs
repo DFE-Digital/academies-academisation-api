@@ -18,26 +18,26 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		}
 
 		public IUnitOfWork UnitOfWork => _context;
-		public async Task<IEnumerable<Application>> GetAllAsync()
+		public async Task<IEnumerable<IApplication>> GetAllAsync()
 		{
 			return await DefaultIncludes().ToListAsync();
 		}
 		
-		public async Task<Application?> GetByIdAsync(object id)
+		public async Task<IApplication?> GetByIdAsync(object id)
 		{
 			return (await DefaultIncludes()
 				.FirstOrDefaultAsync(x => x.Id == (int)id));
 		}
 
-		public async Task Insert(Application obj)
+		public async Task Insert(IApplication obj)
 		{
-			await _context.Applications.AddAsync(obj);
+			await _context.Applications.AddAsync(obj as Application);
 		}
 
-		public void Update(Application obj)
+		public void Update(IApplication obj)
 		{
-			_context.Entry(obj).State = EntityState.Modified;
-			_context.Update(obj);
+			_context.Entry(obj as Application).State = EntityState.Modified;
+			_context.Update(obj as Application);
 		}
 
 		public async Task Delete(object id)
@@ -47,29 +47,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				_context.Applications.Remove(entity);
 		}
 
-		//public async Task DeleteChildObjectById<T>(object id) where T : class
-		//{
-		//	 var entity = await _context.FindAsync<T>(id);
-		//	 _context.Remove(entity);
-		//}
-
-		public async Task<List<Application>> GetByUserEmail(string userEmail)
+		public async Task<List<IApplication>> GetByUserEmail(string userEmail)
 		{
 			var applications = await DefaultIncludes()
 				.Where(a => a.Contributors.Any(c => c.Details.EmailAddress == userEmail))
+				.Cast<IApplication>()
 				.ToListAsync();
 
 			return applications;
-		}
-
-		public async Task<IApplication?> GetApplicationByIdAsync(int id)
-		{
-			return await GetByIdAsync(id);
-		}
-
-		public void UpdateApplication(IApplication application)
-		{
-			Update(application as Application);
 		}
 
 		private IQueryable<Application> DefaultIncludes()

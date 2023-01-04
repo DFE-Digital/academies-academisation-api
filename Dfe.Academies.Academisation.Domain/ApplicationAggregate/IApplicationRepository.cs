@@ -5,10 +5,10 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
 public interface IApplicationRepository : IRepository<Application>
 {
-	public Task<List<Application>> GetByUserEmail(string userEmail);
-
-	public Task<IApplication?> GetApplicationByIdAsync(int id);
-
-	public void UpdateApplication(IApplication application);
-
+	public Task<IEnumerable<IApplication>> GetAllAsync();
+	public Task<IApplication?> GetByIdAsync(object id);
+	public Task Insert(IApplication obj);
+	public void Update(IApplication obj);
+	public Task Delete(object id);
+	public Task<List<IApplication>> GetByUserEmail(string userEmail);
 }

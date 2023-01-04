@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -55,4 +56,22 @@ public interface IApplication
 	CommandResult UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 	CommandResult DeleteTrustKeyPerson(int keyPersonId);
 	CommandResult DeleteSchool(int urn);
+
+	CommandResult SetAdditionalDetails(
+		int schoolId,
+		string trustBenefitDetails,
+		string? ofstedInspectionDetails,
+		string? safeguardingDetails,
+		string? localAuthorityReorganisationDetails,
+		string? localAuthorityClosurePlanDetails,
+		string? dioceseName,
+		string dioceseFolderIdentifier,
+		bool partOfFederation,
+		string? foundationTrustOrBodyName,
+		string foundationConsentFolderIdentifier,
+		DateTimeOffset? exemptionEndDate,
+		string mainFeederSchools,
+		string resolutionConsentFolderIdentifier,
+		SchoolEqualitiesProtectedCharacteristics? protectedCharacteristics,
+		string? furtherInformation);
 }
