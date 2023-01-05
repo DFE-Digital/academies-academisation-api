@@ -28,4 +28,6 @@ public interface ISchool
 	public bool? HasLeases { get; }
 	public IReadOnlyCollection<ILease> Leases { get; }
 
+	void Update(UpdateSchoolParameter schoolUpdate);
+
 }

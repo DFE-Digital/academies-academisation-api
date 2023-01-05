@@ -1,4 +1,4 @@
-namespace Dfe.Academies.Academisation.Domain.SeedWork
+﻿namespace Dfe.Academies.Academisation.Domain.SeedWork
 {
 	public interface IAggregateRoot
 	{

@@ -1,10 +1,13 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools
 {
-	public class Loan : ILoan
+	public class Loan : DynamicsSchoolLoanEntity, ILoan
 	{
+		protected Loan() { }
 		public Loan(int id, decimal amount, string purpose, string provider, decimal interestRate, string schedule)
 		{
 			Id = id;

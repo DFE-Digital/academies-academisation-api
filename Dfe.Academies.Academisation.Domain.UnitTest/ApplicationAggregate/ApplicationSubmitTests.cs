@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Xunit;
@@ -33,7 +34,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationStatus.Submitted,
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>(),
-				_fixture.Create<IJoinTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act
@@ -58,7 +59,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				ApplicationStatus.InProgress,
 				new Dictionary<int, ContributorDetails>(),
 				new List<School>(),
-				_fixture.Create<IJoinTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act
@@ -86,7 +87,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					_fixture.Create<School>(),
 					_fixture.Create<School>()
 				},
-				_fixture.Create<IJoinTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			// act
@@ -113,7 +114,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					 _fixture.Create<School>()
 				},
-				_fixture.Create<IJoinTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 			var submittedDate = DateTime.UtcNow;
 
@@ -143,7 +144,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 					_fixture.Create<School>(),
 					_fixture.Create<School>()
 				},
-				_fixture.Create<IJoinTrust>(),
+				_fixture.Create<JoinTrust>(),
 				null);
 
 			var submittedDate = DateTime.UtcNow;

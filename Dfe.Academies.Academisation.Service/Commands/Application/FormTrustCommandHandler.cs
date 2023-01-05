@@ -1,6 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using MediatR;
 
@@ -9,13 +9,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 	public class FormTrustCommandHandler : IRequestHandler<SetFormTrustDetailsCommand, CommandResult>
 	{
 
-		private readonly IApplicationGetDataQuery _applicationGetDataQuery;
-		private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
+		private readonly IApplicationRepository _applicationRepository;
 
-		public FormTrustCommandHandler(IApplicationGetDataQuery applicationGetDataQuery, IApplicationUpdateDataCommand applicationUpdateDataCommand)
+		public FormTrustCommandHandler(IApplicationRepository applicationRepository)
 		{
-			_applicationGetDataQuery = applicationGetDataQuery;
-			_applicationUpdateDataCommand = applicationUpdateDataCommand;
+			_applicationRepository = applicationRepository;
 		}
 
 		public async Task<CommandResult> Handle(SetFormTrustDetailsCommand command, CancellationToken cancellationToken)
@@ -23,7 +21,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			// cancellation token will be passed down to the database requests when the repository pattern is brought in
 			// shouldn't be anything that is long running just found it a good habit with async
 
-			var existingApplication = await _applicationGetDataQuery.Execute(command.applicationId);
+			var existingApplication = await _applicationRepository.GetByIdAsync(command.applicationId);
 			if (existingApplication is null)
 			{
 				return new NotFoundCommandResult();
@@ -58,7 +56,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				throw new NotImplementedException();
 			}
 
-			await _applicationUpdateDataCommand.Execute(existingApplication);
+			_applicationRepository.Update(existingApplication);
+			await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			return result;
 		}
