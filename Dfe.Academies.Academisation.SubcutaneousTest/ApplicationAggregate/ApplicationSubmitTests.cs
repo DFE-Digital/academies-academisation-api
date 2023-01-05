@@ -5,14 +5,13 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -44,15 +43,13 @@ public class ApplicationSubmitTests
 	private readonly IProjectFactory _projectFactory = new ProjectFactory();
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
-	private readonly IApplicationGetQuery _applicationGetQuery;
+	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly ITrustQueryService _trustQueryService;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
-	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
-	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
-	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
+	private readonly IApplicationRepository _repo;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new Mock<IDateTimeProvider>();
@@ -62,19 +59,17 @@ public class ApplicationSubmitTests
 		_context = new TestApplicationContext().CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
-		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
-		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
+		_repo = new ApplicationRepository(_context, _mapper.Object);
+		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
-		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
+		_applicationUpdateCommand = new ApplicationUpdateCommand(_repo);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _repo, _mapper.Object);
 		_mediator = new Mock<IMediator>();
 
-		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationGetDataQuery, _applicationUpdateDataCommand, _projectCreateDataCommand, _applicationSubmissionService);
+		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_repo, _projectCreateDataCommand, _applicationSubmissionService);
 
 		_mediator.Setup(x => x.Send(It.IsAny<SubmitApplicationCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) =>
@@ -108,9 +103,8 @@ public class ApplicationSubmitTests
 		// Arrange
 		var applicationController = new ApplicationController(
 			_applicationCreateCommand,
-			_applicationGetQuery,
+			_applicationQueryService,
 			_applicationUpdateCommand,
-			_applicationsListByUserQuery,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);

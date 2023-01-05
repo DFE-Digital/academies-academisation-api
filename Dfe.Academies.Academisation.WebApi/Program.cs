@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -11,7 +10,6 @@ using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
@@ -96,9 +94,7 @@ builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
 builder.Services.AddScoped<IApplicationCreateCommand, ApplicationCreateCommand>();
-builder.Services.AddScoped<IApplicationCreateDataCommand, ApplicationCreateDataCommand>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
-builder.Services.AddScoped<IApplicationUpdateDataCommand, ApplicationUpdateDataCommand>();
 builder.Services.AddScoped<IApplicationUpdateCommand, ApplicationUpdateCommand>();
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
@@ -118,10 +114,7 @@ builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateCommand, AdvisoryBoardDec
 builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateDataCommand, AdvisoryBoardDecisionUpdateDataCommand>();
 
 // Queries
-builder.Services.AddScoped<IApplicationGetQuery, ApplicationGetQuery>();
-builder.Services.AddScoped<IApplicationGetDataQuery, ApplicationGetDataQuery>();
-builder.Services.AddScoped<IApplicationsListByUserDataQuery, ApplicationsListByUserDataQuery>();
-builder.Services.AddScoped<IApplicationListByUserQuery, ApplicationListByUserQuery>();
+builder.Services.AddScoped<IApplicationQueryService, ApplicationQueryService>();
 builder.Services.AddScoped<IProjectGetDataQuery, ProjectGetDataQuery>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
@@ -143,9 +136,15 @@ builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 
 //Validators
 
-builder.Services.AddDbContext<AcademisationContext>(options => options
-	.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],
-		optionsBuilder => { optionsBuilder.MigrationsHistoryTable("__EFMigrationsHistory", "academisation"); }));
+builder.Services.AddDbContext<AcademisationContext>(options =>
+	{
+		options.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"],
+			optionsBuilder => { optionsBuilder.MigrationsHistoryTable("__EFMigrationsHistory", "academisation"); });
+#if DEBUG
+		options.LogTo(Console.WriteLine, LogLevel.Information);
+#endif
+	}
+);
 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();

@@ -1,13 +1,16 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Security.Cryptography.X509Certificates;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
 using Dfe.Academies.Academisation.Domain.Validations;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 
-public class Application : IApplication, IAggregateRoot
+public class Application : DynamicsApplicationEntity, IApplication, IAggregateRoot
 {
 	private readonly List<Contributor> _contributors = new();
 	private readonly List<School> _schools = new();
@@ -15,6 +18,8 @@ public class Application : IApplication, IAggregateRoot
 	private readonly UpdateApplicationValidator updateValidator = new();
 	private readonly SetJoinTrustDetailsValidator setJoinTrustDetailsValidator = new();
 	private readonly SetFormTrustDetailsValidator setformJoinTrustDetailsValidator = new();
+
+	protected Application() { }
 
 	private Application(ApplicationType applicationType, ContributorDetails initialContributor)
 	{
@@ -31,12 +36,12 @@ public class Application : IApplication, IAggregateRoot
 		ApplicationStatus applicationStatus,
 		Dictionary<int, ContributorDetails> contributors,
 		IEnumerable<School> schools,
-		IJoinTrust? joinTrust,
-		IFormTrust? formTrust,
+		JoinTrust? joinTrust,
+		FormTrust? formTrust,
 		DateTime? applicationSubmittedOn = null,
 		string? applicationReference = null)
 	{
-		ApplicationId = applicationId;
+		Id = applicationId;
 		CreatedOn = createdOn;
 		LastModifiedOn = lastModifiedOn;
 		ApplicationType = applicationType;
@@ -49,22 +54,28 @@ public class Application : IApplication, IAggregateRoot
 		ApplicationReference = applicationReference;
 	}
 
-	public int ApplicationId { get; private set; }
-	public DateTime CreatedOn { get; }
-	public DateTime LastModifiedOn { get; }
+	public int ApplicationId { get { return Id; } }
 	public ApplicationType ApplicationType { get; }
 	public ApplicationStatus ApplicationStatus { get; private set; }
 	public DateTime? ApplicationSubmittedDate { get; private set; }
-	public IFormTrust? FormTrust { get; private set; }
-	public IJoinTrust? JoinTrust { get; private set; }
 
-	public IReadOnlyCollection<IContributor> Contributors => _contributors.AsReadOnly();
+	public FormTrust? FormTrust { get; private set; }
+	public JoinTrust? JoinTrust { get; private set; }
 
-	public IReadOnlyCollection<ISchool> Schools => _schools.AsReadOnly();
+	IFormTrust? IApplication.FormTrust => FormTrust;
+	IJoinTrust? IApplication.JoinTrust => JoinTrust;
+
+	//these need to be doubled up for EF config until we merge the IDomain and Domain projects
+	public IEnumerable<Contributor> Contributors => _contributors.AsReadOnly();
+	public IEnumerable<School> Schools => _schools.AsReadOnly();
+
+	IReadOnlyCollection<IContributor> IApplication.Contributors => _contributors.AsReadOnly();
+
+	IReadOnlyCollection<ISchool> IApplication.Schools => _schools.AsReadOnly();
 
 	public void SetIdsOnCreate(int applicationId, int contributorId)
 	{
-		ApplicationId = applicationId;
+		Id = applicationId;
 		_contributors.Single().Id = contributorId;
 	}
 
@@ -88,22 +99,57 @@ public class Application : IApplication, IAggregateRoot
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		_contributors.RemoveAll(c => true);
-
-		foreach (var contributor in contributors)
+		// Update Contributors
+		for (int i = _contributors.Count -1; i >= 0; i--)
 		{
-			_contributors.Add(new Contributor(
-				contributor.Key,
-				contributor.Value
-				));
+			var contributor = _contributors[i];
+
+			// if it has an update in the list
+			if (contributors.Any(x => x.Key == contributor.Id))
+			{
+				var contributorUpdate = contributors.SingleOrDefault(x => x.Key == contributor.Id);
+				contributor.Update(contributorUpdate.Value);
+
+			}
+
+			// if it isn't in the list remove it
+			if (contributors.All(x => x.Key != contributor.Id))
+			{
+				_contributors.Remove(contributor);
+			}
 		}
-		
-		_schools.RemoveAll(s => true);
 
-		foreach (var school in schools)
+		// add ones that are new
+		var contributorsToAdd = contributors.Where(x => _contributors.All(c => c.Id != x.Key));
+		_contributors.AddRange(contributorsToAdd.Select(x => new Contributor(
+					0,
+					x.Value
+					)));
+
+		// Update Schools
+		for (int i = _schools.Count - 1; i >= 0; i--)
 		{
-			_schools.Add(new School(
-				school.Id, 
+			var school = _schools[i];
+
+			// if it has an update in the list
+			if (schools.Any(x => x.Id == school.Id))
+			{
+				var schoolUpdate = schools.SingleOrDefault(x => x.Id == school.Id);
+				school.Update(schoolUpdate);
+
+			}
+
+			// if it isn't in the list remove it
+			if (schools.All(x => x.Id != school.Id))
+			{
+				_schools.Remove(school);
+			}
+		}
+
+		// add ones that are new
+		var schoolsToAdd = schools.Where(x => _schools.All(c => c.Id != x.Id));
+		_schools.AddRange(schoolsToAdd.Select(school =>
+			new School(0,
 				school.TrustBenefitDetails,
 				school.OfstedInspectionDetails,
 				school.SafeguardingDetails,
@@ -120,11 +166,10 @@ public class Application : IApplication, IAggregateRoot
 				school.ProtectedCharacteristics,
 				school.FurtherInformation,
 				school.SchoolDetails,
-				school.Loans.Select(l => new Loan(l.Key, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
-				school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
-				school.HasLoans, school.HasLeases));
-		}
-		
+				school.Loans.Select(l => new Loan(0, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
+				school.Leases.Select(l => new Lease(0, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
+				school.HasLoans, school.HasLeases)));
+
 		return new CommandSuccessResult();
 	}
 
@@ -155,7 +200,7 @@ public class Application : IApplication, IAggregateRoot
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
 
-		return new CreateSuccessResult<IApplication>(new Application(applicationType, initialContributor));
+		return new CreateSuccessResult<Application>(new Application(applicationType, initialContributor));
 	}
 
 	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
@@ -176,7 +221,7 @@ public class Application : IApplication, IAggregateRoot
 
 		}
 		else { 
-			JoinTrust = Trusts.JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
+			JoinTrust = JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
 		}
 
 		return new CommandSuccessResult();
@@ -263,7 +308,7 @@ public class Application : IApplication, IAggregateRoot
 		}
 		else
 		{
-			FormTrust = Trusts.FormTrust.Create(formTrustDetails);
+			FormTrust = FormTrust.Create(formTrustDetails);
 		}
 
 		return new CommandSuccessResult();
