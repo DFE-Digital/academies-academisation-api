@@ -16,7 +16,7 @@ public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
 	}
 
 	public async Task<LegacyApiResponse<LegacyProjectServiceModel>?> GetProjects(
-		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<int>? regions)
+		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions)
 	{
 
 		var (projects, totalCount) = await _projectListGetDataQuery.SearchProjects(

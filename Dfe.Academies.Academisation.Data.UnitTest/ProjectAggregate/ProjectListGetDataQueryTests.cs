@@ -139,11 +139,11 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchProjectsByMultipleRegions__ReturnsProjects()
 	{
 		// arrange
-		int[] regions = { 5, 10 };
+		string[] regions = { "east", "west"};
 		for (int i = 0; i < 6; i++)
 		{
 			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
-			if (i < 2) projectState.Urn = regions[i];
+			if (i < 2) projectState.Region = regions[i];
 			_context.Projects.Add(projectState);
 		}
 
@@ -155,8 +155,8 @@ public class ProjectsListGetDataQueryTests
 		// assert		
 		Assert.Multiple(
 			() => Assert.Equal(2, projects.Count),
-			() => Assert.Equal(regions[0], projects[0].Details.Urn),
-			() => Assert.Equal(regions[1], projects[1].Details.Urn)
+			() => Assert.Equal(regions[0], projects[0].Details.Region),
+			() => Assert.Equal(regions[1], projects[1].Details.Region)
 		);
 	}
 
