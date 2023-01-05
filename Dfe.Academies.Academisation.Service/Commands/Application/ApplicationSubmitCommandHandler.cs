@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
@@ -11,26 +11,23 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
 	public class ApplicationSubmitCommandHandler : IRequestHandler<SubmitApplicationCommand, CommandOrCreateResult>
 	{
-		private readonly IApplicationGetDataQuery _dataQuery;
-		private readonly IApplicationUpdateDataCommand _dataCommand;
+		private readonly IApplicationRepository _applicationRepository;
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 		private readonly IApplicationSubmissionService _applicationSubmissionService;
 
 		public ApplicationSubmitCommandHandler(
-			IApplicationGetDataQuery dataQuery,
-			IApplicationUpdateDataCommand dataCommand,
+			IApplicationRepository applicationRepository,
 			IProjectCreateDataCommand projectCreateDataCommand,
 			IApplicationSubmissionService applicationSubmissionService)
 		{
-			_dataQuery = dataQuery;
-			_dataCommand = dataCommand;
+			_applicationRepository = applicationRepository;
 			_projectCreateDataCommand = projectCreateDataCommand;
 			_applicationSubmissionService = applicationSubmissionService;
 		}
 
 		public async Task<CommandOrCreateResult> Handle(SubmitApplicationCommand command, CancellationToken cancellationToken)
 		{
-			var application = await _dataQuery.Execute(command.applicationId);
+			var application = await _applicationRepository.GetByIdAsync(command.applicationId);
 
 			if (application is null)
 			{
@@ -54,7 +51,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}
 			
-			await _dataCommand.Execute(application);
+			_applicationRepository.Update(application);
+			await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			switch (domainServiceResult)
 			{

@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		public FormTrustDetails TrustDetails { get; }
 
-		public ReadOnlyCollection<ITrustKeyPerson> KeyPeople { get; }
+		public IReadOnlyCollection<ITrustKeyPerson> KeyPeople { get; }
 
 		void Update(FormTrustDetails formTrustDetails);
 

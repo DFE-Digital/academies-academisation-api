@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class JoinTrust : IJoinTrust
+	public class JoinTrust : DynamicsApplicationEntity, IJoinTrust
 	{
+		protected JoinTrust() { }
 		private JoinTrust(int id, int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			this.Id = id;
@@ -20,8 +22,6 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 			this.ChangesToLaGovernance = changesToLaGovernance;
 			this.ChangesToLaGovernanceExplained = changesToLaGovernanceExplained;
 		}
-
-		public int Id { get; }
 
 		public int UKPRN { get; private set; }
 
@@ -35,7 +35,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 
 		public string? ChangesToLaGovernanceExplained { get; private set; }
 
-		public static IJoinTrust Create(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		public static JoinTrust Create(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			return new JoinTrust(0, UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 		}

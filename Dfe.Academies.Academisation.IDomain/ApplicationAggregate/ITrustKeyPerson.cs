@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-
-namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
+﻿namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 {
 	public interface ITrustKeyPerson
 	{
@@ -10,7 +7,7 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 		DateTime DateOfBirth { get;  }
 		string Biography { get; }
 
-		public ReadOnlyCollection<ITrustKeyPersonRole> Roles { get; }
+		public IReadOnlyCollection<ITrustKeyPersonRole> Roles { get; }
 
 		void Update(string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 	}

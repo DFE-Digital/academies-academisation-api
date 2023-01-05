@@ -4,11 +4,10 @@ using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
@@ -31,7 +30,7 @@ public class ApplicationUpdateTests
 	private readonly Faker _faker = new();
 
 	private readonly IApplicationCreateCommand _applicationCreateCommand;
-	private readonly IApplicationGetQuery _applicationGetQuery;
+	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
@@ -39,9 +38,7 @@ public class ApplicationUpdateTests
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
-	private readonly IApplicationCreateDataCommand _applicationCreateDataCommand;
-	private readonly IApplicationGetDataQuery _applicationGetDataQuery;
-	private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
+	private readonly IApplicationRepository _repo;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
 	private readonly ApplicationController _applicationController;
 	private readonly ITrustQueryService _trustQueryService;
@@ -49,12 +46,10 @@ public class ApplicationUpdateTests
 	public ApplicationUpdateTests()
 	{
 		_context = new TestApplicationContext().CreateContext();
-		_applicationCreateDataCommand = new ApplicationCreateDataCommand(_context, _mapper.Object);
-		_applicationGetDataQuery = new ApplicationGetDataQuery(_context, _mapper.Object);
-		_applicationUpdateDataCommand = new ApplicationUpdateDataCommand(_context, _mapper.Object);
-		_applicationUpdateCommand = new ApplicationUpdateCommand(_applicationGetDataQuery, _applicationUpdateDataCommand);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _applicationCreateDataCommand, _mapper.Object);
-		_applicationGetQuery = new ApplicationGetQuery(_applicationGetDataQuery, _mapper.Object);
+		_repo = new ApplicationRepository(_context, _mapper.Object);
+		_applicationUpdateCommand = new ApplicationUpdateCommand(_repo);
+		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _repo, _mapper.Object);
+		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
@@ -62,9 +57,8 @@ public class ApplicationUpdateTests
 
 		_applicationController = new(
 			_applicationCreateCommand,
-			_applicationGetQuery,
+			_applicationQueryService,
 			_applicationUpdateCommand,
-			_applicationsListByUserQuery,
 			_trustQueryService,
 			_mediator,
 			_applicationLogger);
@@ -128,7 +122,7 @@ public class ApplicationUpdateTests
 
 		// assert
 		DfeAssert.OkResult(updateResult);
-		var gotApplication = await _applicationGetQuery.Execute(existingApplication.ApplicationId);
+		var gotApplication = await _applicationQueryService.GetById(existingApplication.ApplicationId);
 		Assert.NotNull(gotApplication);
 
 		var expectedApplication = existingApplication with
@@ -211,6 +205,6 @@ public class ApplicationUpdateTests
 
 		await _applicationController.Update(createSuccessResult.Payload.ApplicationId, applicationToUpdate);
 
-		return await _applicationGetQuery.Execute(id);
+		return await _applicationQueryService.GetById(id);
 	}
 }
