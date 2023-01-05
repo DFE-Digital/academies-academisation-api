@@ -33,9 +33,12 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 		}
 		private static IQueryable<ProjectState> FilterByRegion(IEnumerable<string>? regions, IQueryable<ProjectState> queryable)
 		{
-			if (regions != null)
+			
+			if (regions != null && regions.Any())
 			{
-				queryable = queryable.Where(p => regions.Contains(p.Region!.ToLower()));
+				var lowerCaseRegions = regions.Select(region => region.ToLower());
+				queryable = queryable.Where(p =>
+					!string.IsNullOrEmpty(p.Region) && lowerCaseRegions.Contains(p.Region.ToLower()));
 			}
 
 			return queryable;
