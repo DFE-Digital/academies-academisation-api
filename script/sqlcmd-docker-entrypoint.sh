@@ -10,7 +10,7 @@ echo "CREATE DATABASE $MSSQL_INITIAL_DATABASE;" > ./setup.sql
 echo "GO" >> ./setup.sql
 
 echo "Creating initial database ..."
-until /opt/mssql-tools/bin/sqlcmd -S db -U sa -P "$MSSQL_SA_PASSWORD" -d master -i ./setup.sql
+until /opt/mssql-tools/bin/sqlcmd -S db -U sa -P "$MSSQL_SA_PASSWORD" -d master -I -i ./setup.sql
 do
   echo "not ready yet..."
   sleep 1
