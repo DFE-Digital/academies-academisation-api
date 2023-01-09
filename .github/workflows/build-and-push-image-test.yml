@@ -14,7 +14,7 @@ jobs:
       version: ${{ steps.release-version.outputs.version }}
     steps:
       - id: release-version
-        run: echo "version=release-4" >> $GITHUB_OUTPUT
+        run: echo "version=release-5" >> $GITHUB_OUTPUT
 
   build-and-push-image-test:
     name: Build and push image test
