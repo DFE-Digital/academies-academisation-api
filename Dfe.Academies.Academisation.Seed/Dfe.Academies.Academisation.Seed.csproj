@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.17.0" />
+    <PackageReference Include="FakerDotNet" Version="1.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.WebApi\Dfe.Academies.Academisation.WebApi.csproj" />
+  </ItemGroup>
+
+</Project>

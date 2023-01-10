@@ -32,6 +32,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
 
 	public DbSet<ProjectState> Projects { get; set; } = null!;
+	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public override int SaveChanges()
