@@ -1,17 +1,15 @@
-const UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload = {
-              "applicationId": 177,
-              "keyPersonId": 19,
-              "roles": [
-                {
-                  "id": 1,
-                  "role": 3,
-                  "timeInRole": "6 years"
-                }
-              ],
-              "name": "Andrew Parsons",
-              "dateOfBirth": "1945-12-12T14:08:05.835Z",
-              "biography": "Wonderful Headmaster and astute businessman"
-            }
-
-
+const UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload = 
+  {
+    "name": "Sean Cormac",
+    "dateOfBirth": "1947-12-12T13:26:09.748",
+    "biography": "Wonderful Deputy Head",
+    "roles": [
+     {
+     "id": 199,
+     "role": 0,
+     "timeInRole": "4 years"
+     }
+    ]
+}
+            
 module.exports = {UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload}
