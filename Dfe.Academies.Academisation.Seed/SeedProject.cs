@@ -9,41 +9,6 @@ namespace Dfe.Academies.Academisation.Seed;
 
 public static class SeedProject
 {
-	//public static async Task CreateProject(AcademisationContext academisationContext, int numberOfProjects)
-	//{
-	//	var fixture = new Fixture();
-	//	for (int i = 1; i <= numberOfProjects; i++)
-	//	{
-	//		var newAcademyConversionProject = NewAcademyConversionProject();
-	//		var projectNote = fixture.Create<ProjectNoteState>();
-
-	//		using var dbContextTransaction = await academisationContext.Database.BeginTransactionAsync();
-	//		try
-	//		{
-	//			// Create and add project
-	//			var newProjectState = ProjectState.MapFromDomain(newAcademyConversionProject);
-	//			newProjectState.Id = default;
-	//			academisationContext.Projects.Add(newProjectState);
-	//			await academisationContext.SaveChangesAsync();
-
-	//			projectNote.ProjectId = newProjectState.Id;
-	//			projectNote.Id = default;
-	//			academisationContext.ProjectNotes.Add(projectNote);
-	//			await academisationContext.SaveChangesAsync();
-
-	//			await dbContextTransaction.CommitAsync();
-	//		}
-	//		catch (Exception ex)
-	//		{
-	//			await dbContextTransaction.RollbackAsync();
-	//			// better logging and error handling strategy
-	//			Console.WriteLine(ex.ToString());
-	//			throw;
-	//		}
-	//	}
-	//}
-
-
 	public static async Task CreateProject(AcademisationContext academisationContext, int numberOfProjects)
 	{
 		var fixture = new Fixture();
@@ -60,7 +25,7 @@ public static class SeedProject
 				newProjectState.Id = default;
 				newProjectStates.Add(newProjectState);
 
-				if (newProjectStates.Count() % 80 == 0) // let's assume we want to batch insert every 20 items
+				if (newProjectStates.Count() % 80 == 0) // let's assume we want to batch insert every 80 items
 				{
 					academisationContext.Projects.AddRange(newProjectStates);
 					await academisationContext.SaveChangesAsync();
