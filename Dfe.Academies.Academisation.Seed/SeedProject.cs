@@ -27,11 +27,11 @@ public static class SeedProject
 				academisationContext.SaveChanges();
 
 				// Get created project as the Db will assign an Id
-				var project = academisationContext.Projects.First(x => x.Urn == newProjectState.Urn);
+				//var project = academisationContext.Projects.First(x => x.Urn == newProjectState.Urn);
 
 				// Create and add project note
 				var projectNote = fixture.Create<ProjectNoteState>();
-				projectNote.ProjectId = project.Id;
+				projectNote.ProjectId = newProjectState.Id;
 
 				// Clear Id as EF will throw an exception otherwise
 				projectNote.Id = default;
