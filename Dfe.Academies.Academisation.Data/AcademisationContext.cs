@@ -1,16 +1,12 @@
-﻿using System.Reflection.Emit;
-using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+﻿using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
-using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data;
 
@@ -163,6 +159,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	private static void ConfigureProject(EntityTypeBuilder<ProjectState> projectConfiguration)
 	{
 		projectConfiguration.ToTable("Project", DEFAULT_SCHEMA);
+
 		projectConfiguration
 			.HasMany(x => x.Notes)
 			.WithOne()
