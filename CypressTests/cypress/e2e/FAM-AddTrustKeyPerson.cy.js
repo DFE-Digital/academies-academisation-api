@@ -233,7 +233,7 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
             },
         }).then((response) => {
 
-        expect(response).to.have.property('status', 404)
+        expect(response).to.have.property('status', 400)
   
         })
   })
