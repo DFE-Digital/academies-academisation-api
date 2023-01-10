@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 	public class TrustKeyPerson : DynamicsKeyPersonEntity, ITrustKeyPerson
 	{
 		protected TrustKeyPerson() { }
-		private readonly List<TrustKeyPersonRole> _roles;
+		private readonly List<TrustKeyPersonRole> _roles = new();
 		private TrustKeyPerson(int id, string name, DateTime dateOfBirth, string biography, IEnumerable<TrustKeyPersonRole> roles)
 		{
 			Id = id;
