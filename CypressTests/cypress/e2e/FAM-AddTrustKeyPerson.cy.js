@@ -8,9 +8,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
     let apiKey = Cypress.env('apiKey');
     let url = Cypress.env('url');
-    let applicationNumber = 177
-
-    //let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})Z?$/
+    let applicationNumber = 200
 
 
     it('POST - Verify An UnAuthorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', () => {
@@ -96,7 +94,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
                 expect(response).to.have.property('status', 200)
                 expect(response.body[0]).to.have.property('id')
-                Cypress.env('responseIDForRequest',response.body.id)
+                
 
 
     })
@@ -134,7 +132,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
             expect(response).to.have.property('status', 200)
             expect(response.body).to.have.property('id')
-
+            Cypress.env('responseIDForRequest',response.body.id)
 
 
 })
