@@ -3,47 +3,43 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.Seed;
 using FakerDotNet;
+
+namespace Dfe.Academies.Academisation.Seed;
 
 public static class SeedProject
 {
 	public static void CreateProject(AcademisationContext? academisationContext)
 	{
 		var fixture = new Fixture();
-		using (var dbContextTransaction = academisationContext.Database.BeginTransaction())
+		using var dbContextTransaction = academisationContext?.Database.BeginTransaction();
+		try
 		{
-			try
-			{
-				// Create and add project
-				Project newAcademyConversionProject = NewAcademyConversionProject();
-				var newProjectState = ProjectState.MapFromDomain(newAcademyConversionProject);
+			// Create and add project
+			Project newAcademyConversionProject = NewAcademyConversionProject();
+			var newProjectState = ProjectState.MapFromDomain(newAcademyConversionProject);
 
-				// Clear Id as EF will throw an exception otherwise
-				newProjectState.Id = default;
+			// Clear Id as EF will throw an exception otherwise
+			newProjectState.Id = default;
 
-				// Save project
-				academisationContext.Projects.Add(newProjectState);
-				academisationContext.SaveChanges();
+			// Save project
+			academisationContext?.Projects.Add(newProjectState);
+			academisationContext?.SaveChanges();
 
-				// Get created project as the Db will assign an Id
-				//var project = academisationContext.Projects.First(x => x.Urn == newProjectState.Urn);
+			// Create and add project note
+			var projectNote = fixture.Create<ProjectNoteState>();
+			projectNote.ProjectId = newProjectState.Id;
 
-				// Create and add project note
-				var projectNote = fixture.Create<ProjectNoteState>();
-				projectNote.ProjectId = newProjectState.Id;
+			// Clear Id as EF will throw an exception otherwise
+			projectNote.Id = default;
+			academisationContext?.ProjectNotes.Add(projectNote);
+			academisationContext?.SaveChanges();
 
-				// Clear Id as EF will throw an exception otherwise
-				projectNote.Id = default;
-				academisationContext.ProjectNotes.Add(projectNote);
-				academisationContext.SaveChanges();
-
-				dbContextTransaction.Commit();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.ToString());
-			}
+			dbContextTransaction?.Commit();
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.ToString());
 		}
 
 		static Project NewAcademyConversionProject()
@@ -55,7 +51,7 @@ public static class SeedProject
 				Urn = (int)Faker.Number.Between(1, 100000),
 				SchoolName = Faker.Ancient.God() + " " + Faker.Company.Profession(),
 				ApplicationReferenceNumber = $"A2B_{Faker.Number.Between(1, 100000)}",
-				ProjectStatus = ProjectConsts.Statuses[(int)Faker.Number.Between(0, 5)],
+				ProjectStatus = ProjectConsts.Statuses[(int)Faker.Number.Between(0, 7)],
 				ApplicationReceivedDate = DateTime.Now.AddMonths(-2),
 				HeadTeacherBoardDate = DateTime.Now.AddMonths(-2),
 				LocalAuthorityInformationTemplateSentDate = DateTime.Now.AddYears(-2),

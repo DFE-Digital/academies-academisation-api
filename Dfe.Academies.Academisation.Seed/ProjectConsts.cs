@@ -15,6 +15,8 @@ namespace Dfe.Academies.Academisation.Seed
 			"APPROVED WITH CONDITIONS",
 			"Declined",
 			"Deferred",
+			"Approved",
+			"Converter Pre-AO (C)",
 		};
 		public static string[] Regions = new string[]
 		{
