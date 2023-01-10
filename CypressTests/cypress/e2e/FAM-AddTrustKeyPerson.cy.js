@@ -8,7 +8,8 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
     let apiKey = Cypress.env('apiKey');
     let url = Cypress.env('url');
-    let applicationNumber = 200
+    let applicationNumber = 177;
+    let trustKeyPersonNumber = 200;
 
 
     it('POST - Verify An UnAuthorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', () => {
@@ -123,7 +124,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   it('GET - Verify An Authorised User Is Able To GET FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
     cy.request({
             method: 'GET',
-            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 105,
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + trustKeyPersonNumber,
             headers: 
             {
               'x-api-key' : apiKey
