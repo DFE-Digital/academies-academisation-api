@@ -15,19 +15,27 @@ public static class SeedProject
 		{
 			try
 			{
+				// Create and add project
 				Project newAcademyConversionProject = NewAcademyConversionProject();
 				var newProjectState = ProjectState.MapFromDomain(newAcademyConversionProject);
+
+				// Clear Id as EF will throw an exception otherwise
 				newProjectState.Id = default;
 
+				// Save project
 				academisationContext.Projects.Add(newProjectState);
 				academisationContext.SaveChanges();
 
 				// Get created project as the Db will assign an Id
 				var project = academisationContext.Projects.First(x => x.Urn == newProjectState.Urn);
-				// Add project notes
+
+				// Create and add project note
 				var projectNote = fixture.Create<ProjectNoteState>();
-				
-				newProjectState.Notes.Add(projectNote);
+				projectNote.ProjectId = project.Id;
+
+				// Clear Id as EF will throw an exception otherwise
+				projectNote.Id = default;
+				academisationContext.ProjectNotes.Add(projectNote);
 				academisationContext.SaveChanges();
 
 				dbContextTransaction.Commit();
