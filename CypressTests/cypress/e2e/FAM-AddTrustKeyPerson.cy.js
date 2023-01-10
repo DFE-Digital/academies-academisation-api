@@ -207,7 +207,7 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
   it('DELETE - Verify An Authorised User Is Able To DELETE FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
     cy.request({
             method: 'DELETE',
-            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 6,//Cypress.env('responseIDForRequest'),
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
             headers: 
             {
               'x-api-key' : apiKey
