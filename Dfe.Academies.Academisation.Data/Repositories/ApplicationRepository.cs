@@ -57,6 +57,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return applications;
 		}
 
+		public async Task<Application?> GetByApplicationReference(string applicationReference)
+		{
+			return await DefaultIncludes().Where(x => x.ApplicationReference == applicationReference).FirstOrDefaultAsync();
+		}
+
 		private IQueryable<Application> DefaultIncludes()
 		{
 			var x =  _context.Applications
