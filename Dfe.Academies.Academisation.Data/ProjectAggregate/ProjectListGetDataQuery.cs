@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Fare;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
@@ -13,7 +14,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_context = context;
 		}
 
-		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<int>? regions = default)
+		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default)
 		{
 			IQueryable<ProjectState> queryable = _context.Projects;
 
@@ -30,11 +31,14 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 
 			return (projects.Select(p => p.MapToDomain()), totalProjects);
 		}
-		private static IQueryable<ProjectState> FilterByRegion(IEnumerable<int>? regions, IQueryable<ProjectState> queryable)
+		private static IQueryable<ProjectState> FilterByRegion(IEnumerable<string>? regions, IQueryable<ProjectState> queryable)
 		{
-			if (regions != null)
+			
+			if (regions != null && regions.Any())
 			{
-				queryable = queryable.Where(p => regions.Contains(p.Urn));
+				var lowerCaseRegions = regions.Select(region => region.ToLower());
+				queryable = queryable.Where(p =>
+					!string.IsNullOrEmpty(p.Region) && lowerCaseRegions.Contains(p.Region.ToLower()));
 			}
 
 			return queryable;

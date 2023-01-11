@@ -1,6 +1,9 @@
-﻿using AutoMapper;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
+﻿using AutoFixture;
+using AutoMapper;
+using Dfe.Academies.Academisation.Data.Migrations;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
+using FluentAssertions;
 using Moq;
 using Xunit;
 
@@ -8,7 +11,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 {
 	public class ApplicationGetQueryTests
 	{
-		private readonly Mock<IApplicationGetDataQuery> _mockDataQuery = new();
+		private readonly Mock<IApplicationRepository> _mockDataQuery = new();
 		private readonly Mock<IMapper> _mockMapper = new();
 
 		[Fact]
@@ -17,13 +20,44 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			//Arrange
 			const int requestedId = 4;
 
-			ApplicationGetQuery query = new(_mockDataQuery.Object, _mockMapper.Object);
+			ApplicationQueryService queryService = new(_mockDataQuery.Object, _mockMapper.Object);
 
 			//Act
-			var result = await query.Execute(requestedId);
+			var result = await queryService.GetById(requestedId);
 
 			//Assert
 			Assert.Null(result);
+		}
+
+		[Fact]
+		public async Task GetByApplicationReference_ValidApplicationReference_ReturnsApplication()
+		{
+			//Arrange
+			var applicationReference = "A2B_001";
+			_mockDataQuery.Setup(x => x.GetByApplicationReference(applicationReference))
+				.ReturnsAsync(new Fixture().Build<Application>().With(x => x.ApplicationReference, applicationReference).Create());
+			ApplicationQueryService queryService = new(_mockDataQuery.Object, _mockMapper.Object);
+
+			//Act
+			var result = await queryService.GetByApplicationReference(applicationReference);
+			
+			//Assert
+			result.Should().NotBeNull();
+			result?.ApplicationReference.Should().Be(applicationReference);
+		}
+
+		[Fact]
+		public async Task GetByApplicationReference_InvalidApplicationReference_ReturnsNull()
+		{
+			//Arrange
+			var applicationReference = "A2B_000";
+			ApplicationQueryService queryService = new(_mockDataQuery.Object, _mockMapper.Object);
+
+			//Act
+			var result = await queryService.GetByApplicationReference(applicationReference);
+			
+			//Assert
+			result.Should().BeNull();
 		}
 	}
 }

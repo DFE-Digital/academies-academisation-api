@@ -26,7 +26,7 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<int>?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		List<string> status = new List<string>() { "complete", "active"};
 		// Act
@@ -45,7 +45,7 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(),
-				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<int>?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>()))
 				.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		(int page, int count, int? urn) = (1, 1, 123);
 		List<string>? status = new List<string>() {"complete", "active"};
@@ -63,7 +63,7 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(),
-				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<int>?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		(int page, int count, int? urn) = (1, 1, 123);
 		List<string> status = new List<string>() { "complete", "active" };

@@ -23,7 +23,6 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Internet.Email(),
 			ContributorRole.ChairOfGovernors,
-			null,
 			null);
 		var applicationType = _fixture.Create<ApplicationType>();
 
@@ -31,9 +30,9 @@ public class ApplicationCreateTests
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateSuccessResult<IApplication>>(result);
+		Assert.IsType<CreateSuccessResult<Application>>(result);
 
-		var successResult = (CreateSuccessResult<IApplication>)result;
+		var successResult = (CreateSuccessResult<Application>)result;
 		Assert.Equal(ApplicationStatus.InProgress, successResult.Payload.ApplicationStatus);
 		Assert.Single(successResult.Payload.Contributors, c => c.Details == contributor);
 	}
@@ -51,7 +50,7 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Internet.Email(),
 			ContributorRole.Other,
-			otherRoleName, null);
+			otherRoleName);
 
 		// Act
 		var result = target.Create(applicationType, contributor);
@@ -76,15 +75,15 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Internet.Email(),
 			ContributorRole.ChairOfGovernors,
-			otherRoleName, null);
+			otherRoleName);
 
 		// Act
 		var result = target.Create(applicationType, contributor);
 
 		// Assert
-		Assert.IsType<CreateSuccessResult<IApplication>>(result);
+		Assert.IsType<CreateSuccessResult<Application>>(result);
 
-		var successResult = result as CreateSuccessResult<IApplication>;
+		var successResult = result as CreateSuccessResult<Application>;
 		Assert.IsType<Application>(successResult!.Payload);
 	}
 
@@ -98,7 +97,7 @@ public class ApplicationCreateTests
 			_faker.Name.LastName(),
 			_faker.Random.Chars(count: 20).ToString()!,
 			ContributorRole.ChairOfGovernors,
-			null, null);
+			null);
 
 		// Act
 		var result = target.Create(ApplicationType.JoinAMat, contributor);
@@ -122,7 +121,7 @@ public class ApplicationCreateTests
 			lastName,
 			_faker.Random.Chars(count: 20).ToString()!,
 			ContributorRole.ChairOfGovernors,
-			null, null);
+			null);
 
 		// Act
 		var result = target.Create(ApplicationType.JoinAMat, contributor);

@@ -1,4 +1,8 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using AutoFixture;
+using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -12,20 +16,36 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 {
 	public class LegacyProjectAddNoteCommandTests
 	{
-		private readonly Mock<IProjectGetDataQuery> _projectGetDataQuery;
-		private readonly Mock<IProjectUpdateDataCommand> _projectUpdateDataCommand;
 		private readonly LegacyProjectAddNoteModel _addNoteModel;
+		private readonly AcademisationContext _context;
+		private readonly Mock<IProjectGetDataQuery> _projectGetDataQuery;
 
 		public LegacyProjectAddNoteCommandTests()
 		{
+			ProjectState projectState = new Fixture().Create<ProjectState>();
+
+			var testProjectContext = new TestProjectContext();
+			_context = testProjectContext.CreateContext();
+
+			_context.Projects.Add(projectState);
+			_context.SaveChanges();
+
 			_projectGetDataQuery = new Mock<IProjectGetDataQuery>();
-			_projectUpdateDataCommand = new Mock<IProjectUpdateDataCommand>();
-			_addNoteModel = new LegacyProjectAddNoteModel("Subject", "Note", "Author", DateTime.Today, 1234);
+			_addNoteModel = new LegacyProjectAddNoteModel(
+				"Subject",
+				"Note",
+				"Author",
+				DateTime.Today,
+				projectState.Id
+			);
 		}
 
 		private LegacyProjectAddNoteCommand System_under_test()
 		{
-			return new LegacyProjectAddNoteCommand(_projectGetDataQuery.Object, _projectUpdateDataCommand.Object);
+			return new LegacyProjectAddNoteCommand(
+				_projectGetDataQuery.Object,
+				_context
+			);
 		}
 
 		[Fact]
@@ -38,11 +58,19 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			LegacyProjectAddNoteCommand command = System_under_test();
 
 			CommandResult result =
-			await command.Execute(_addNoteModel);
-
-			_projectUpdateDataCommand.Verify(x => x.Execute(It.IsAny<IProject>()), Times.Never);
+				await command.Execute(_addNoteModel);
 
 			result.Should().BeOfType<NotFoundCommandResult>();
+
+			_context.ProjectNotes.Should().NotContainEquivalentOf(
+				new ProjectNoteState
+				{
+					Date = _addNoteModel.Date,
+					Subject = _addNoteModel.Subject,
+					Author = _addNoteModel.Author,
+					Note = _addNoteModel.Note,
+					ProjectId = _addNoteModel.ProjectId
+				}, x => x.Excluding(q => q.Id));
 		}
 
 		[Fact]
@@ -58,8 +86,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 
 			await command.Execute(_addNoteModel with { ProjectId = project.Id });
 
-			project.Details.Notes
-				.Should().ContainEquivalentOf(new ProjectNote("Subject", "Note", "Author", _addNoteModel.Date));
+			_context.ProjectNotes.Should().ContainEquivalentOf(
+				new ProjectNoteState
+				{
+					Date = _addNoteModel.Date,
+					Subject = _addNoteModel.Subject,
+					Author = _addNoteModel.Author,
+					Note = _addNoteModel.Note,
+					ProjectId = _addNoteModel.ProjectId
+				}, x => x.Excluding(q => q.Id));
 		}
 
 		[Fact]
@@ -74,8 +109,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			LegacyProjectAddNoteCommand command = System_under_test();
 
 			CommandResult result = await command.Execute(_addNoteModel with { ProjectId = project.Id });
-
-			_projectUpdateDataCommand.Verify(x => x.Execute(project), Times.Once());
 
 			result.Should().BeOfType<CommandSuccessResult>();
 		}

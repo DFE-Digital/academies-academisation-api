@@ -17,17 +17,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	{
 		private const string GetRouteName = "GetApplication";
 		private readonly IApplicationCreateCommand _applicationCreateCommand;
-		private readonly IApplicationGetQuery _applicationGetQuery;
+		private readonly IApplicationQueryService _applicationQueryService;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-		private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 		private readonly ITrustQueryService _trustQueryService;
 		private readonly IMediator _mediator;
 		private readonly ILogger<ApplicationController> _logger;
 
 		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
-			IApplicationGetQuery applicationGetQuery,
+			IApplicationQueryService applicationQueryService,
 			IApplicationUpdateCommand applicationUpdateCommand,
-			IApplicationListByUserQuery applicationsListByUserQuery,
 			ITrustQueryService trustQueryService,
 			IMediator mediator, 
 			ILogger<ApplicationController> logger
@@ -35,9 +33,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			// need guard clauses on these check for null
 			_applicationCreateCommand = applicationCreateCommand;
-			_applicationGetQuery = applicationGetQuery;
+			_applicationQueryService = applicationQueryService;
 			_applicationUpdateCommand = applicationUpdateCommand;
-			_applicationsListByUserQuery = applicationsListByUserQuery;
 			_trustQueryService = trustQueryService;
 			_mediator = mediator;
 			_logger = logger;
@@ -64,15 +61,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			// basic log line to check logger is working
 			_logger.LogInformation($"Getting application, id: {id}");
 
-			var result = await _applicationGetQuery.Execute(id);
+			var result = await _applicationQueryService.GetById(id);
 			return result is null ? NotFound() : Ok(result);
 		}
 
 		[HttpGet("contributor/{email}", Name = "List")]
 		public async Task<ActionResult<IList<ApplicationServiceModel>>> ListByUser(string email)
 		{
-			var result = await _applicationsListByUserQuery.Execute(email);
+			var result = await _applicationQueryService.GetByUserEmail(email);
 			return Ok(result);
+		}
+
+		[HttpGet("{applicationReference}/applicationReference", Name = "Get")]
+		public async Task<ActionResult<ApplicationServiceModel>> Get(string applicationReference)
+		{
+			var result = await _applicationQueryService.GetByApplicationReference(applicationReference);
+			return result != null ? Ok(result) : NotFound();
 		}
 
 		[HttpPut("{id}", Name = "Update")]

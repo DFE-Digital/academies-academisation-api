@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+﻿using System.Collections.ObjectModel;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 {
-	public class FormTrust : IFormTrust
+	public class FormTrust : DynamicsApplicationEntity, IFormTrust
 	{
-		private readonly List<TrustKeyPerson> _keyPeople;
+		protected FormTrust() { }
+		private readonly List<TrustKeyPerson> _keyPeople = new();
 		private FormTrust(int id, FormTrustDetails trustDetails, IEnumerable<TrustKeyPerson> keyPeople)
 		{
 			this.Id = id;
@@ -22,10 +17,10 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 		}
 
 		public FormTrustDetails TrustDetails { get; private set; }
-		public ReadOnlyCollection<ITrustKeyPerson> KeyPeople => this._keyPeople.Cast<ITrustKeyPerson>().ToList().AsReadOnly();
-		public int Id { get; }
+		IReadOnlyCollection<ITrustKeyPerson> IFormTrust.KeyPeople => this._keyPeople.AsReadOnly();
+		public IEnumerable<TrustKeyPerson> KeyPeople => this._keyPeople.AsReadOnly();
 
-		public static IFormTrust Create(FormTrustDetails trustDetails)
+		public static FormTrust Create(FormTrustDetails trustDetails)
 		{
 			return new FormTrust(0, trustDetails, new List<TrustKeyPerson>());
 		}

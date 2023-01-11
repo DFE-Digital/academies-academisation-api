@@ -1,4 +1,4 @@
-name: Continuous integration
+name: Validate terraform
 
 on:
   push:

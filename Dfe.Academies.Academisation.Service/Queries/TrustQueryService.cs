@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +23,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				.AsNoTracking()
 				.Include(a => a.FormTrust)
 				.ThenInclude(x => x.KeyPeople)
+				.ThenInclude(x => x.Roles)
 				.Include(a => a.Schools)
 				.ThenInclude(a => a.Loans)
 				.Where(a => a.Id == applicationId)
@@ -47,6 +42,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				.AsNoTracking()
 				.Include(a => a.FormTrust)
 				.ThenInclude(x => x.KeyPeople)
+				.ThenInclude(x => x.Roles)
 				.Include(a => a.Schools)
 				.ThenInclude(a => a.Loans)
 				.Where(a => a.Id == applicationId)

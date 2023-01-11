@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using MediatR;
 
@@ -8,18 +8,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 	public class JoinTrustCommandHandler : IRequestHandler<SetJoinTrustDetailsCommand, CommandResult>
 	{
 
-		private readonly IApplicationGetDataQuery _applicationGetDataQuery;
-		private readonly IApplicationUpdateDataCommand _applicationUpdateDataCommand;
+		private readonly IApplicationRepository _applicationRepository;
 
-		public JoinTrustCommandHandler(IApplicationGetDataQuery applicationGetDataQuery, IApplicationUpdateDataCommand applicationUpdateDataCommand)
+		public JoinTrustCommandHandler(IApplicationRepository applicationRepository)
 		{
-			_applicationGetDataQuery = applicationGetDataQuery;
-			_applicationUpdateDataCommand = applicationUpdateDataCommand;
+			_applicationRepository = applicationRepository;
 		}
 
 		public async Task<CommandResult> Handle(SetJoinTrustDetailsCommand command, CancellationToken cancellationToken)
 		{
-			var existingApplication = await _applicationGetDataQuery.Execute(command.applicationId);
+			var existingApplication = await _applicationRepository.GetByIdAsync(command.applicationId);
 
 			if (existingApplication is null)
 			{
@@ -42,7 +40,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				throw new NotImplementedException();
 			}
-			await _applicationUpdateDataCommand.Execute(existingApplication);
+			_applicationRepository.Update(existingApplication);
+			await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			return result;
 		}
 	}

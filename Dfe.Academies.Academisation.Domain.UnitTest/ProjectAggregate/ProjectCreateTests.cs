@@ -6,6 +6,7 @@ using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -34,7 +35,7 @@ public class ProjectCreateTests
 			_fixture.Create<ApplicationStatus>(),
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			_fixture.Create<List<School>>(),
-			_fixture.Create<IJoinTrust>(),
+			_fixture.Create<JoinTrust>(),
 			null);
 
 		// Act
@@ -79,7 +80,7 @@ public class ProjectCreateTests
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new List<School> { school }, _fixture.Create<IJoinTrust>(),
+			new List<School> { school }, _fixture.Create<JoinTrust>(),
 			null);
 
 		// Act
@@ -123,7 +124,7 @@ public class ProjectCreateTests
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new List<School> { school }, _fixture.Create<IJoinTrust>(),
+			new List<School> { school }, _fixture.Create<JoinTrust>(),
 			null);
 
 		// Act
