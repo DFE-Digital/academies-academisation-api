@@ -72,6 +72,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return Ok(result);
 		}
 
+		[HttpGet("{applicationReference}/applicationReference", Name = "Get")]
+		public async Task<ActionResult<ApplicationServiceModel>> Get(string applicationReference)
+		{
+			var result = await _applicationQueryService.GetByApplicationReference(applicationReference);
+			return result != null ? Ok(result) : NotFound();
+		}
+
 		[HttpPut("{id}", Name = "Update")]
 		public async Task<ActionResult> Update(int id, [FromBody] ApplicationUpdateRequestModel serviceModel)
 		{

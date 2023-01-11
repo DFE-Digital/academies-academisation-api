@@ -6,5 +6,6 @@ namespace Dfe.Academies.Academisation.IService.Query
 	{
 		Task<ApplicationServiceModel?> GetById(int id);
 		Task<List<ApplicationServiceModel>> GetByUserEmail(string email);
+		Task<ApplicationServiceModel?> GetByApplicationReference(string applicationReference);
 	}
 }
