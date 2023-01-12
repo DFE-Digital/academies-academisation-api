@@ -10,6 +10,7 @@ using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -282,6 +283,38 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// assert
 			var listResult = Assert.IsType<OkObjectResult>(result.Result);
 			Assert.Equal(applications, listResult.Value);
+		}
+
+		[Fact]
+		public async Task GetByApplicationReference_ReferenceExists_ReturnsOkWithApplication()
+		{
+			//Arrange
+			var applicationReference = "A2B_001";
+			_getQueryMock.Setup(x => x.GetByApplicationReference(applicationReference))
+				.ReturnsAsync(_fixture.Build<ApplicationServiceModel>().With(x => x.ApplicationReference, applicationReference).Create());
+			
+			//Act
+			var result = await _subject.Get(applicationReference);
+			
+			//Assert
+			result.Should().NotBeNull();
+			((result.Result as OkObjectResult).Value as ApplicationServiceModel).ApplicationReference.Should()
+				.Be(applicationReference);
+		}
+
+		[Fact]
+		public async Task GetByApplicationReference_ReferenceNotValid_Returns404()
+		{
+			//Arrange
+			var applicationReference = "A2B_000";
+			_getQueryMock.Setup(x => x.GetByApplicationReference(applicationReference))
+				.ReturnsAsync((ApplicationServiceModel)null!);
+			
+			//Act
+			var result = await _subject.Get(applicationReference);
+
+			//Assert
+			result.Result.Should().BeOfType<NotFoundResult>();
 		}
 	}
 }
