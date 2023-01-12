@@ -43,7 +43,7 @@ public class Project : IProject
 		{
 			Urn = school.Urn,
 			SchoolName = school.SchoolName,
-			ApplicationReferenceNumber = application.ApplicationId.ToString(),
+			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 			ProjectStatus = "Converter Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			OpeningDate = DateTime.Today.AddMonths(6),
