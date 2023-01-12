@@ -26,7 +26,7 @@ public static class SeedProject
 				newProjectStates.Add(newProjectState);
 
 				// Batch save for every 80 project (If over 80)
-				if (newProjectStates.Count() % 80 == 0 || numberOfProjects < 80)
+				if (newProjectStates.Count % 80 == 0 || numberOfProjects < 80)
 				{
 					academisationContext.Projects.AddRange(newProjectStates);
 					await academisationContext.SaveChangesAsync();
