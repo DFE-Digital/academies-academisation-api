@@ -25,7 +25,8 @@ public static class SeedProject
 				newProjectState.Id = default;
 				newProjectStates.Add(newProjectState);
 
-				if (newProjectStates.Count() % 80 == 0) // let's assume we want to batch insert every 80 items
+				// Batch save for every 80 project (If over 80)
+				if (newProjectStates.Count() % 80 == 0 || numberOfProjects < 80)
 				{
 					academisationContext.Projects.AddRange(newProjectStates);
 					await academisationContext.SaveChangesAsync();
@@ -72,6 +73,8 @@ public static class SeedProject
 			LocalAuthorityInformationTemplateReturnedDate = DateTime.Now.AddYears(-1),
 			ProposedAcademyOpeningDate = DateTime.Now.AddMonths(3),
 			Region = ProjectConsts.Regions[(int)Faker.Number.Between(0, 9)],
+			LocalAuthority = Faker.Address.State(),
+			NameOfTrust = Faker.Company.Name()
 		};
 
 		var newProject = new Project(Convert.ToInt32(Faker.Number.Number(7)), projectDetails);
