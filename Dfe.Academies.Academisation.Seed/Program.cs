@@ -6,7 +6,7 @@ using Dfe.Academies.Academisation.Seed;
 AcademisationContext? context = DatabaseConfig.InitialiseDbContext();
 if (context is null)
 {
-	throw new Exception("Context is null");
+	throw new ArgumentNullException("Context");
 }
 
 // Set up Stopwatch
