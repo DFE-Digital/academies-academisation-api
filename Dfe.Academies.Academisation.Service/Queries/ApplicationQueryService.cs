@@ -29,5 +29,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			return applications.Select(a => a.MapFromDomain(_mapper)).ToList();
 		}
+
+		public async Task<ApplicationServiceModel?> GetByApplicationReference(string applicationReference)
+		{
+			var application = await _applicationRepository.GetByApplicationReference(applicationReference);
+			return application?.MapFromDomain(_mapper);
+		}
 	}
 }

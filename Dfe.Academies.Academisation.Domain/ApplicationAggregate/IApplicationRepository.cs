@@ -11,4 +11,5 @@ public interface IApplicationRepository : IRepository<Application>
 	public void Update(IApplication obj);
 	public Task Delete(object id);
 	public Task<List<IApplication>> GetByUserEmail(string userEmail);
+	public Task<Application?> GetByApplicationReference(string applicationReference);
 }
