@@ -1,88 +1,66 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
-using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 {
 	public class LegacyProjectDeleteNoteCommandTests
 	{
-		private readonly AcademisationContext _context;
+		private readonly Mock<IProjectNoteDeleteCommand> _deleteNoteCommand;
 		private readonly Fixture _fixture;
-		private readonly IList<ProjectNoteState> _notes;
 
 		public LegacyProjectDeleteNoteCommandTests()
 		{
-			var testProjectContext = new TestProjectContext();
-			_context = testProjectContext.CreateContext();
-
 			_fixture = new Fixture();
-
-			IList<ProjectState> projects = _fixture.CreateMany<ProjectState>(3).ToList();
-
-			_notes = _fixture.CreateMany<ProjectNoteState>()
-				.Select(x =>
-				{
-					x.ProjectId = projects[Random.Shared.Next(projects.Count)].Id;
-					return x;
-				})
-				.ToList();
-
-			_context.Projects.AddRangeAsync(projects);
-			_context.ProjectNotes.AddRangeAsync(_notes);
-			_context.SaveChanges();
+			_deleteNoteCommand = new Mock<IProjectNoteDeleteCommand>();
 		}
-
-		private ProjectNoteState RandomNote => _notes[Random.Shared.Next(_notes.Count)];
 
 		private LegacyProjectDeleteNoteCommand System_under_test()
 		{
-			return new LegacyProjectDeleteNoteCommand(_context);
-		}
-
-		private static ProjectNoteServiceModel NoteModelFrom(ProjectNoteState noteState)
-		{
-			return new ProjectNoteServiceModel
-			{
-				Author = noteState.Author, Subject = noteState.Subject, Note = noteState.Note, Date = noteState.Date
-			};
+			return new LegacyProjectDeleteNoteCommand(_deleteNoteCommand.Object);
 		}
 
 		[Fact]
-		public async Task Should_return_not_found_result_if_the_note_does_not_exist()
+		public async Task Should_pass_the_request_to_the_data_layer_command()
 		{
-			ProjectNoteState noteToDelete = _fixture.Create<ProjectNoteState>();
-			ProjectNoteServiceModel noteModel = NoteModelFrom(noteToDelete);
+			int projectId = Random.Shared.Next();
+			var note = _fixture.Create<ProjectNoteServiceModel>();
 
 			LegacyProjectDeleteNoteCommand command = System_under_test();
 
-			_context.ProjectNotes.Should().NotContain(noteToDelete);
+			await command.Execute(projectId, note);
 
-			CommandResult result = await command.Execute(noteToDelete.ProjectId, noteModel);
-
-			result.Should().BeOfType<NotFoundCommandResult>();
+			_deleteNoteCommand.Verify(
+				x => x.Execute(
+					It.Is(projectId, EqualityComparer<int>.Default),
+					It.Is<ProjectNote>(n => n.Subject == note.Subject &&
+											n.Note == note.Note &&
+											n.Author == note.Author &&
+											n.Date == note.Date)
+				)
+			);
 		}
 
 		[Fact]
-		public async Task Should_remove_the_note()
+		public async Task Should_return_the_result_produced_by_the_data_layer_command()
 		{
-			ProjectNoteState noteToDelete = RandomNote;
-			ProjectNoteServiceModel noteModel = NoteModelFrom(noteToDelete);
+			var dataCommandResult = new CommandSuccessResult();
+
+			_deleteNoteCommand
+				.Setup(x => x.Execute(It.IsAny<int>(), It.IsAny<ProjectNote>()))
+				.ReturnsAsync(dataCommandResult);
 
 			LegacyProjectDeleteNoteCommand command = System_under_test();
 
-			_context.ProjectNotes.Should().Contain(noteToDelete);
+			CommandResult result = await command.Execute(1, _fixture.Create<ProjectNoteServiceModel>());
 
-			CommandResult result = await command.Execute(noteToDelete.ProjectId, noteModel);
-
-			result.Should().BeOfType<CommandSuccessResult>();
-
-			_context.ProjectNotes.Should().NotContain(noteToDelete);
+			result.Should().Be(dataCommandResult);
 		}
 	}
 }
