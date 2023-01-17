@@ -16,6 +16,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		private readonly ILegacyProjectGetQuery _projectGetQuery;
 		private readonly ILegacyProjectListGetQuery _projectListGetQuery;
 		private readonly ILegacyProjectUpdateCommand _projectUpdateCommand;
+		private ILegacyProjectDeleteNoteCommand _projectDeleteNoteCommand;
 
 		public LegacyProjectAddNoteTests()
 		{
@@ -24,6 +25,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 			_getStatusesQuery = Mock.Of<IProjectGetStatusesQuery>();
 			_projectUpdateCommand = Mock.Of<ILegacyProjectUpdateCommand>();
 			_projectAddNoteCommand = new Mock<ILegacyProjectAddNoteCommand>();
+			_projectDeleteNoteCommand = Mock.Of<ILegacyProjectDeleteNoteCommand>();
 		}
 
 		private LegacyProjectController System_under_test()
@@ -33,7 +35,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 				_projectListGetQuery,
 				_getStatusesQuery,
 				_projectUpdateCommand,
-				_projectAddNoteCommand.Object);
+				_projectAddNoteCommand.Object,
+				_projectDeleteNoteCommand);
 		}
 
 		[Fact]
