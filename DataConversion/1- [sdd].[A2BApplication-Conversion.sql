@@ -1,3 +1,4 @@
+Use [db-t1pp-sip]
 /**
 [ApplicationType] - dynamics -> as-is mapping
 	100000001 => 'JoinMat',
@@ -47,6 +48,8 @@ public enum TrustChange
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsApplicationData
 
+SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
+
 	/*** TODO:- set [academisation].[ConversionApplication].[Id] = 10000 ***/
 
 	/*** STEP 1 - populate [academisation].[ConversionApplication] ***/
@@ -54,7 +57,8 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 	--,<FormTrustId, int,>
 	--,<JoinTrustId, int,>
 	INSERT INTO [academisation].[ConversionApplication]
-           ([ApplicationType]
+           ([Id]
+		   ,[ApplicationType]
            ,[CreatedOn]
            ,[LastModifiedOn]
            ,[ApplicationStatus]
@@ -63,7 +67,9 @@ BEGIN TRANSACTION PortDynamicsApplicationData
            ,[ApplicationSubmittedDate]
            ,[ApplicationReference]
            ,[DynamicsApplicationId])
-	SELECT	CASE [ApplicationType] 
+	SELECT	
+	CAST(value AS int) as Id,
+	CASE [ApplicationType] 
 				WHEN 'JoinMat' THEN 'JoinAMat'
 				WHEN 'FormMat' THEN 'FormAMat'
 			END as 'AppType',
@@ -78,7 +84,12 @@ BEGIN TRANSACTION PortDynamicsApplicationData
 			[Name] as 'ApplicationReference',
 			[DynamicsApplicationId]
 	FROM [sdd].[A2BApplication]
-	WHERE [ApplicationType] IN ('JoinMat','FormMat')
+	CROSS APPLY STRING_SPLIT([Name], '_')
+	WHERE [ApplicationType] IN ('JoinMat','FormMat') 
+	AND [Name] LIKE 'A2B_%' 
+	AND value <> 'A2B'
+
+	SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 
 	/*** STEP 2 - populate [academisation].[ApplicationJoinTrust] ***/
 	INSERT INTO [academisation].[ApplicationJoinTrust]
