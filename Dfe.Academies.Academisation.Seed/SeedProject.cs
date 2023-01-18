@@ -36,6 +36,7 @@ public static class SeedProject
 						var newProjectNote = fixture.Create<ProjectNoteState>();
 						newProjectNote.Id = default;
 						newProjectNote.ProjectId = projectState.Id;
+						newProjectNote.Date = DateTime.Now;
 						projectNotes.Add(newProjectNote);
 					}
 
