@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
@@ -10,33 +9,34 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 {
 	public class LegacyProjectAddNoteCommand : ILegacyProjectAddNoteCommand
 	{
+		private readonly IProjectNoteAddCommand _addNoteCommand;
 		private readonly IProjectGetDataQuery _projectGetDataQuery;
-		private readonly AcademisationContext _context;
 
-		public LegacyProjectAddNoteCommand(IProjectGetDataQuery projectGetDataQuery, AcademisationContext context)
+
+		public LegacyProjectAddNoteCommand(IProjectGetDataQuery projectGetDataQuery,
+										   IProjectNoteAddCommand addNoteCommand)
 		{
 			_projectGetDataQuery = projectGetDataQuery;
-			_context = context;
+			_addNoteCommand = addNoteCommand;
 		}
 
 		public async Task<CommandResult> Execute(LegacyProjectAddNoteModel model)
 		{
 			IProject? project = await _projectGetDataQuery.Execute(model.ProjectId);
 
-			if (project is null) return new NotFoundCommandResult();
-
-			_context.ProjectNotes.Add(new ProjectNoteState
+			if (project is null)
 			{
-				Author = model.Author,
-				Date = model.Date,
-				Subject = model.Subject,
-				Note = model.Note,
-				ProjectId = model.ProjectId
-			});
+				return new NotFoundCommandResult();
+			}
 
-			await _context.SaveChangesAsync();
-
-			return new CommandSuccessResult();
+			return await _addNoteCommand.Execute(
+				model.ProjectId,
+				new ProjectNote(
+					model.Subject,
+					model.Note,
+					model.Author,
+					model.Date)
+			);
 		}
 	}
 }

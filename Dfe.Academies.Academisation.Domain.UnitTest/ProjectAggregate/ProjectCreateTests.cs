@@ -136,7 +136,7 @@ public class ProjectCreateTests
 		Assert.Multiple(
 			() => Assert.Equal(school.Details.Urn, project.Details.Urn),
 			() => Assert.Equal(school.Details.SchoolName, project.Details.SchoolName),
-			() => Assert.Equal(application.ApplicationId.ToString(), project.Details.ApplicationReferenceNumber),
+			() => Assert.Equal($"A2B_{application.ApplicationId}", project.Details.ApplicationReferenceNumber),
 			() => Assert.Equal("Converter Pre-AO (C)", project.Details.ProjectStatus),
 			() => Assert.Equal(application.ApplicationSubmittedDate, project.Details.ApplicationReceivedDate),
 			() => Assert.Equal(DateTime.Today.AddMonths(6), project.Details.OpeningDate),
