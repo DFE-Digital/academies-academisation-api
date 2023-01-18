@@ -26,7 +26,7 @@ public static class SeedProject
 				newProjectStates.Add(newProjectState);
 
 				// Batch save for every 80 project (If over 80)
-				if (newProjectStates.Count % 80 == 0 || numberOfProjects < 80)
+				if (newProjectStates.Count % 12500 == 0 || numberOfProjects < 12500)
 				{
 					academisationContext.Projects.AddRange(newProjectStates);
 					await academisationContext.SaveChangesAsync();
@@ -36,6 +36,7 @@ public static class SeedProject
 						var newProjectNote = fixture.Create<ProjectNoteState>();
 						newProjectNote.Id = default;
 						newProjectNote.ProjectId = projectState.Id;
+						newProjectNote.Date = DateTime.Now;
 						projectNotes.Add(newProjectNote);
 					}
 
