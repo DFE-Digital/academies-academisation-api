@@ -119,7 +119,7 @@ public class ProjectState : BaseEntity
 
 	public ICollection<ProjectNoteState>? Notes { get; set; }
 
-	internal Project MapToDomain()
+	public Project MapToDomain()
 	{
 		ProjectDetails projectDetails = new()
 		{
@@ -237,7 +237,7 @@ public class ProjectState : BaseEntity
 		return new Project(Id, projectDetails);
 	}
 
-	internal static ProjectState MapFromDomain(IProject project)
+	public static ProjectState MapFromDomain(IProject project)
 	{
 		return new ProjectState
 		{

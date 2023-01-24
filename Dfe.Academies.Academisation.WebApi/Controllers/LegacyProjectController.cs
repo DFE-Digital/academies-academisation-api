@@ -15,6 +15,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	public class LegacyProjectController : ControllerBase
 	{
 		private readonly ILegacyProjectAddNoteCommand _legacyProjectAddNoteCommand;
+		private readonly ILegacyProjectDeleteNoteCommand _legacyProjectDeleteNoteCommand;
 		private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
 		private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
 		private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
@@ -24,13 +25,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 									   ILegacyProjectListGetQuery legacyProjectListGetQuery,
 									   IProjectGetStatusesQuery projectGetStatusesQuery,
 									   ILegacyProjectUpdateCommand legacyProjectUpdateCommand,
-									   ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand)
+									   ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
+									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand)
 		{
 			_legacyProjectGetQuery = legacyProjectGetQuery;
 			_legacyProjectListGetQuery = legacyProjectListGetQuery;
 			_projectGetStatusesQuery = projectGetStatusesQuery;
 			_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 			_legacyProjectAddNoteCommand = legacyProjectAddNoteCommand;
+			_legacyProjectDeleteNoteCommand = legacyProjectDeleteNoteCommand;
 		}
 
 		/// <summary>
@@ -137,6 +140,33 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result switch
 			{
 				CommandSuccessResult => Created(new Uri($"/legacy/project/{id}", UriKind.Relative), null),
+				NotFoundCommandResult => NotFound(),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		/// <summary>
+		///     Deletes the provided note from the project with the specified ID
+		/// </summary>
+		/// <param name="id">The ID for the project from which the note should be deleted</param>
+		/// <param name="note">Project note data</param>
+		/// <response code="404">
+		///     Either the project with the specified ID is not found, or the project does not contain the
+		///     provided note
+		/// </response>
+		/// <response code="204">The note has been deleted from the project</response>
+		/// <exception cref="NotImplementedException">Thrown if the underlying command returns an unexpected result type</exception>
+		[HttpDelete("project/{id:int}/notes")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> DeleteNote(int id, ProjectNoteServiceModel note)
+		{
+			CommandResult result = await _legacyProjectDeleteNoteCommand.Execute(id, note);
+
+			return result switch
+			{
+				CommandSuccessResult => NoContent(),
 				NotFoundCommandResult => NotFound(),
 				_ => throw new NotImplementedException()
 			};
