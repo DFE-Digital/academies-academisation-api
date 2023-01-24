@@ -8,6 +8,7 @@ public interface IApplication
 {
 	int ApplicationId { get; }
 	int Id { get; }
+	Guid EntityId { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
 
@@ -21,7 +22,6 @@ public interface IApplication
 	IJoinTrust? JoinTrust { get; }
 
 	DateTime? ApplicationSubmittedDate { get;  }
-	void SetIdsOnCreate(int applicationId, int conversionId);
 
 	/// <summary>
 	/// This is in the format $"A2B_{ApplicationId}"

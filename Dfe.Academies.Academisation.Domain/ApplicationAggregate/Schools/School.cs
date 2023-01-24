@@ -9,7 +9,7 @@ public class School : DynamicsSchoolEntity, ISchool
 {
 	protected School() { }
 	public int Id { get;  set; }
-
+	public Guid EntityId { get => DynamicsApplyingSchoolId ?? Guid.Empty; }
 	public SchoolDetails Details { get; set; }
 
 	#region Leases and Loans
@@ -68,6 +68,9 @@ public class School : DynamicsSchoolEntity, ISchool
 		Details = details;
 		_loans = new();
 		_leases = new();
+		// We need to reuse the DynamicsId to generate a guid to publish unique sharepoint paths
+		// Once moved over from Dynamics this will be renamed to entityId and mapped through in the usual way
+		DynamicsApplyingSchoolId = Guid.NewGuid();
 	}
 
 	public School(int id, 	

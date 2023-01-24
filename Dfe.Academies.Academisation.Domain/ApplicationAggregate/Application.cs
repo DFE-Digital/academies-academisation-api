@@ -26,6 +26,9 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		ApplicationStatus = ApplicationStatus.InProgress;
 		ApplicationType = applicationType;
 		_contributors.Add(new(initialContributor));
+		// We need to reuse the DynamicsId to generate a guid to publish unique sharepoint paths
+		// Once moved over from Dynamics this will be renamed to entityId and mapped through in the usual way
+		DynamicsApplicationId = Guid.NewGuid();
 	}
 
 	public Application(
@@ -73,17 +76,13 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 
 	IReadOnlyCollection<ISchool> IApplication.Schools => _schools.AsReadOnly();
 
-	public void SetIdsOnCreate(int applicationId, int contributorId)
-	{
-		Id = applicationId;
-		_contributors.Single().Id = contributorId;
-	}
-
 	/// <summary>
 	/// This is in the format $"A2B_{ApplicationId}"
 	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
 	/// </summary>
 	public string? ApplicationReference { get; set; }
+
+	public Guid EntityId { get => DynamicsApplicationId ?? Guid.Empty; }
 
 	public CommandResult Update(
 		ApplicationType applicationType,
