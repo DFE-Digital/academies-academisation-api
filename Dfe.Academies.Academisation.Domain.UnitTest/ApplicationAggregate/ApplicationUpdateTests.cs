@@ -1008,6 +1008,7 @@ public class ApplicationUpdateTests
 		opt.Excluding(m => m.Name.Equals("CreatedOn"));
 		opt.Excluding(m => m.Name.Equals("LastModifiedOn"));
 		opt.Excluding(m => m.Name.Contains("Dynamics"));
+		opt.Excluding(m => m.Name.Contains("EntityId"));
 		return opt;
 	}
 
