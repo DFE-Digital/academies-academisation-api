@@ -71,7 +71,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			DeclarationSignedByName = school.Details.DeclarationSignedByName,
 			SchoolConversionReasonsForJoining = school.Details.SchoolConversionReasonsForJoining,
 			HasLoans = school.HasLoans,
-			HasLeases = school.HasLeases
+			HasLeases = school.HasLeases,
+			EntityId = school.EntityId
 		};
 	}
 

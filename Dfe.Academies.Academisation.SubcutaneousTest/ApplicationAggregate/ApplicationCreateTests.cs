@@ -99,7 +99,7 @@ public class ApplicationCreateTests
 				applicationCreateRequestModel.Contributor.Role,
 				applicationCreateRequestModel.Contributor.OtherRoleName) },
 			new List<ApplicationSchoolServiceModel>(),
-			null, null, null, id.ToString());
+			null, null, null, id.ToString(), Guid.Empty);
 
 		Assert.Equivalent(expectedApplication, actualApplication);
 	}
