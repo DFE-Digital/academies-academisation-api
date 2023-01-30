@@ -79,7 +79,7 @@ public class TestApplicationContext : TestAcademisationContext
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			schools,
-			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<ChangesToTrust>(),
+			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<string>(),_fixture.Create<ChangesToTrust>(),
 				_fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
 			null, null, applicationRef);
 

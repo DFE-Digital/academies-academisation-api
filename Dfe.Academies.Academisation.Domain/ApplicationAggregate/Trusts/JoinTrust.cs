@@ -12,11 +12,12 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 	public class JoinTrust : DynamicsApplicationEntity, IJoinTrust
 	{
 		protected JoinTrust() { }
-		private JoinTrust(int id, int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		private JoinTrust(int id, int UKPRN, string trustName, string trustReference, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			this.Id = id;
 			this.UKPRN = UKPRN;
 			this.TrustName = trustName;
+			this.TrustReference = trustReference;
 			this.ChangesToTrust = changesToTrust;
 			this.ChangesToTrustExplained = changesToTrustExplained;
 			this.ChangesToLaGovernance = changesToLaGovernance;
@@ -27,6 +28,8 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 
 		public string TrustName { get; private set; }
 
+		public string TrustReference { get; private set; }
+
 		public ChangesToTrust? ChangesToTrust { get; private set; }
 
 		public string? ChangesToTrustExplained { get; private set; }
@@ -35,15 +38,16 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 
 		public string? ChangesToLaGovernanceExplained { get; private set; }
 
-		public static JoinTrust Create(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		public static JoinTrust Create(int UKPRN, string trustName, string trustReference, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
-			return new JoinTrust(0, UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
+			return new JoinTrust(0, UKPRN, trustName, trustReference, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 		}
 
-		public void Update(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+		public void Update(int UKPRN, string trustName, string trustReference, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
 			this.UKPRN = UKPRN;
 			this.TrustName = trustName;
+			this.TrustReference = trustReference;
 			this.ChangesToTrust = changesToTrust;
 			this.ChangesToTrustExplained = changesToTrustExplained;
 			this.ChangesToLaGovernance = changesToLaGovernance;
