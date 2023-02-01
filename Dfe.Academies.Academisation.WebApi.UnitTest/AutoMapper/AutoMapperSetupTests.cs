@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToTrustExplained).Returns("ChangesToTrustExplained it has changed");
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernance).Returns(true);
 			Mock.Get(joinTrustDomainObj).Setup(x => x.ChangesToLaGovernanceExplained).Returns("ChangesToLaGovernanceExplained it has changed");
-
+			Mock.Get(joinTrustDomainObj).Setup(x => x.TrustReference).Returns("TR0001");
 			// Act
 			var result = mapper.Map<ApplicationJoinTrustServiceModel>(joinTrustDomainObj);
 

@@ -165,6 +165,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.WithOne()
 			.HasForeignKey("ProjectId");
 
+
 		projectConfiguration
 			.Property(e => e.GoverningBodyResolution).HasConversion<string>();
 		projectConfiguration

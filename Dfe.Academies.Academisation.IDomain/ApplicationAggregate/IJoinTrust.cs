@@ -13,6 +13,8 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		public string TrustName { get; }
 
+		public string TrustReference { get; }
+
 		public int UKPRN { get; }
 
 		public ChangesToTrust? ChangesToTrust { get; }
@@ -23,6 +25,6 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 
 		public string? ChangesToLaGovernanceExplained { get; }
 
-		public void Update(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
+		public void Update(int UKPRN, string trustName, string trustReference, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
 	}
 }

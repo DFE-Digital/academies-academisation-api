@@ -47,7 +47,7 @@ public class Project : IProject
 			ProjectStatus = "Converter Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			OpeningDate = DateTime.Today.AddMonths(6),
-			TrustReferenceNumber = application.JoinTrust?.Id.ToString(),
+			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
