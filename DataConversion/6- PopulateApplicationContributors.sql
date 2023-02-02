@@ -1,3 +1,4 @@
+Use [<database_name, sysname, sip>]
 /****
 Role enum from c#
 public enum SchoolRoles
@@ -27,16 +28,6 @@ BEGIN TRANSACTION CreateContributorsData
 			   ,[CreatedOn]
 			   ,[LastModifiedOn]
 			   ,[DynamicsApplicationId])
-		 --VALUES
-		 --      (<FirstName, nvarchar(max),>
-		 --      ,<LastName, nvarchar(max),>
-		 --      ,<EmailAddress, nvarchar(max),>
-		 --      ,<Role, int,> = going to need to hard code to something !
-		 --      ,<OtherRoleName, nvarchar(max),>
-		 --      ,<ConversionApplicationId, int,>
-		 --      ,<CreatedOn, datetime2(7),>
-		 --      ,<LastModifiedOn, datetime2(7),>)
-		 		 
 	SELECT	substring(APP.[ApplicationLeadAuthorName], 1 , CHARINDEX(' ', APP.[ApplicationLeadAuthorName])-1) as 'FirstName',
 			SUBSTRING([ApplicationLeadAuthorName], CHARINDEX(' ', [ApplicationLeadAuthorName])+1, len([ApplicationLeadAuthorName])) as 'LastName',
 			APP.ApplicationLeadEmail,
@@ -60,7 +51,7 @@ BEGIN TRANSACTION CreateContributorsData
 	INNER JOIN [academisation].[ConversionApplication] as NEWAPP on NEWAPP.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
 	WHERE APP.[ApplicationType] IN ('JoinMat','FormMat')
 
-	--COMMIT TRAN CreateContributorsData
+	COMMIT TRAN CreateContributorsData
 	--ROLLBACK TRAN CreateContributorsData
 
 END TRY

@@ -68,27 +68,28 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
            ,[DynamicsApplicationId])
 	SELECT	
 	CAST(value AS int) as Id,
-	CASE [ApplicationType] 
+	CASE app.[ApplicationType] 
 				WHEN 'JoinMat' THEN 'JoinAMat'
 				WHEN 'FormMat' THEN 'FormAMat'
 			END as 'AppType',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-	CASE [ApplicationSubmitted]
+	CASE app.[ApplicationSubmitted]
 		WHEN 1 THEN 'Submitted'
 		WHEN 0 THEN 'InProgress'
 	END as 'AppStatus',
 			NULL as 'FormTrustId',
 			NULL as 'JoinTrustId',
-	CASE [ApplicationSubmitted]
-		WHEN 1 THEN GETDATE() -- the submitted dated is not in sdd so giving it date of now
+	CASE app.[ApplicationSubmitted]
+		WHEN 1 THEN stg.ApplicationSubmittedOn -- the submitted dated is not in sdd so giving it date of now
 		WHEN 0 THEN NULL
 	END as 'ApplicationSubmittedDate',
-			[DynamicsApplicationId]
-	FROM [sdd].[A2BApplication] 
+			app.[DynamicsApplicationId]
+	FROM [sdd].[A2BApplication] app
 	CROSS APPLY STRING_SPLIT([Name], '_')
-	WHERE [ApplicationType] IN ('JoinMat','FormMat') 
-	AND [Name] LIKE 'A2B_%' 
+	INNER JOIN [a2b].[stg_Application] stg ON app.DynamicsApplicationId = stg.DynamicsApplicationId
+	WHERE app.[ApplicationType] IN ('JoinMat','FormMat') 
+	AND app.[Name] LIKE 'A2B_%' 
 	AND value <> 'A2B'
 
 	SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
@@ -183,7 +184,7 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 	FROM [academisation].[ConversionApplication] As CA
 	INNER JOIN [academisation].[ApplicationJoinTrust] as AJT ON AJT.[DynamicsApplicationId] = CA.[DynamicsApplicationId]
 
-	--COMMIT TRAN PortDynamicsApplicationData
+	COMMIT TRAN PortDynamicsApplicationData
 	--ROLLBACK TRAN PortDynamicsApplicationData
 
 END TRY
