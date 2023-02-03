@@ -1,4 +1,4 @@
-Use [db-t1pp-sip]
+Use [<database_name, sysname, sip>]
 /**
 [ApplicationType] - dynamics -> as-is mapping
 	100000001 => 'JoinMat',
@@ -48,14 +48,14 @@ public enum TrustChange
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsApplicationData
 
-SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
+SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 
 	/*** TODO:- set [academisation].[ConversionApplication].[Id] = 10000 ***/
 
 	/*** STEP 1 - populate [academisation].[ConversionApplication] ***/
 	-- MR:- below are nullable - backfill as 4th / 5th step
-	--,<FormTrustId, int,>
-	--,<JoinTrustId, int,>
+	--(FormTrustId, int)
+	--(JoinTrustId, int)
 	INSERT INTO [academisation].[ConversionApplication]
            ([Id]
 		   ,[ApplicationType]
@@ -65,35 +65,42 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
            ,[FormTrustId]
            ,[JoinTrustId]
            ,[ApplicationSubmittedDate]
-           ,[ApplicationReference]
            ,[DynamicsApplicationId])
 	SELECT	
 	CAST(value AS int) as Id,
-	CASE [ApplicationType] 
+	CASE app.[ApplicationType] 
 				WHEN 'JoinMat' THEN 'JoinAMat'
 				WHEN 'FormMat' THEN 'FormAMat'
 			END as 'AppType',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			--[ApplicationStatusId], -- MR:- ALWAYS = null on live !!!
-			'InProgress' as AppStatus,
+	CASE app.[ApplicationSubmitted]
+		WHEN 1 THEN 'Submitted'
+		WHEN 0 THEN 'InProgress'
+	END as 'AppStatus',
 			NULL as 'FormTrustId',
 			NULL as 'JoinTrustId',
-			--[ApplicationSubmitted] - ???
-			NULL as 'ApplicationSubmittedDate',
-			[Name] as 'ApplicationReference',
-			[DynamicsApplicationId]
-	FROM [sdd].[A2BApplication]
+	CASE app.[ApplicationSubmitted]
+		WHEN 1 THEN stg.ApplicationSubmittedOn -- the submitted dated is not in sdd so giving it date of now
+		WHEN 0 THEN NULL
+	END as 'ApplicationSubmittedDate',
+			app.[DynamicsApplicationId]
+	FROM [sdd].[A2BApplication] app
 	CROSS APPLY STRING_SPLIT([Name], '_')
-	WHERE [ApplicationType] IN ('JoinMat','FormMat') 
-	AND [Name] LIKE 'A2B_%' 
+	INNER JOIN [a2b].[stg_Application] stg ON app.DynamicsApplicationId = stg.DynamicsApplicationId
+	WHERE app.[ApplicationType] IN ('JoinMat','FormMat') 
+	AND app.[Name] LIKE 'A2B_%' 
 	AND value <> 'A2B'
 
-	SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
+	SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
+
+	/*** reseed the table so all new applications can be identified from imported ones ***/
+  DBCC CHECKIDENT ('[academisation].[ConversionApplication]', RESEED, 10000);
 
 	/*** STEP 2 - populate [academisation].[ApplicationJoinTrust] ***/
 	INSERT INTO [academisation].[ApplicationJoinTrust]
 			   ([UKPRN]
+			   ,[TrustReference]			   
 			   ,[TrustName]
 			   ,[CreatedOn]
 			   ,[LastModifiedOn]
@@ -102,7 +109,8 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
 			   ,[ChangesToLaGovernance]
 			   ,[ChangesToLaGovernanceExplained]
 			   ,[DynamicsApplicationId])
-	SELECT 	[TrustId], -- INT in v1.5, string in as-is !! TODO:- to confirm => Live data = 'TR00751'
+	SELECT 	[grp].[UKPRN],
+			[TrustId], -- INT in v1.5, string in as-is !! TODO:- to confirm => Live data = 'TR00751'
 			[TrustName], -- TODO:- to confirm - service support team !!
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
@@ -115,7 +123,8 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
 			[ChangesToLaGovernance],
 			[ChangesToLaGovernanceExplained],
 			[DynamicsApplicationId]
-	FROM [sdd].[A2BApplication]
+	FROM [sdd].[A2BApplication] app
+	INNER JOIN [gias].[Group] grp ON app.TrustId = grp.[Group ID]
 	WHERE ApplicationType = 'JoinMat';
 	
 	/*** STEP 3 - populate [academisation].[ApplicationFormTrust] ***/
@@ -150,7 +159,7 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
 			[FormTrustOpeningDate],
 			[FormTrustPlanForGrowth],
 			[FormTrustPlansForNoGrowth],
-			[TrustName], -- TODO:- to confirm - service support team !!
+			[FormTrustProposedNameOfTrust],
 			[FormTrustReasonApprovalToConvertAsSat],
 			[FormTrustReasonApprovedPerson],
 			[FormTrustReasonForming],
@@ -163,19 +172,19 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
 	FROM [sdd].[A2BApplication]
 	WHERE ApplicationType = 'FormMat';
 
-	/*** STEP 4 - backfill <FormTrustId, int,> from ***/
+	/*** STEP 4 - backfill (FormTrustId, int) from ***/
 	UPDATE CA
 	SET CA.FormTrustId = AFT.Id
 	FROM [academisation].[ConversionApplication] As CA
 	INNER JOIN [academisation].[ApplicationFormTrust] as AFT ON AFT.[DynamicsApplicationId] = CA.[DynamicsApplicationId]
 
-	/*** STEP 5 - backfill <JoinTrustId, int,> ***/
+	/*** STEP 5 - backfill (JoinTrustId, int) ***/
 	UPDATE CA
-	SET CA.FormTrustId = AJT.Id
+	SET CA.JoinTrustId = AJT.Id
 	FROM [academisation].[ConversionApplication] As CA
 	INNER JOIN [academisation].[ApplicationJoinTrust] as AJT ON AJT.[DynamicsApplicationId] = CA.[DynamicsApplicationId]
 
-	--COMMIT TRAN PortDynamicsApplicationData
+	COMMIT TRAN PortDynamicsApplicationData
 	--ROLLBACK TRAN PortDynamicsApplicationData
 
 END TRY

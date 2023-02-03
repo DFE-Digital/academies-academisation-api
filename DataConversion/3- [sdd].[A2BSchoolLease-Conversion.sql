@@ -1,3 +1,5 @@
+Use [<database_name, sysname, sip>]
+
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsSchoolLeaseData
 
@@ -43,7 +45,7 @@ BEGIN TRANSACTION PortDynamicsSchoolLeaseData
 	FROM [academisation].[ApplicationSchool] as SCH
 	INNER JOIN [academisation].[ApplicationSchoolLease] as ASL ON ASL.ApplicationSchoolId = SCH.Id
 
-	--COMMIT TRAN PortDynamicsSchoolLeaseData
+	COMMIT TRAN PortDynamicsSchoolLeaseData
 	--ROLLBACK TRAN PortDynamicsSchoolLeaseData
 
 END TRY

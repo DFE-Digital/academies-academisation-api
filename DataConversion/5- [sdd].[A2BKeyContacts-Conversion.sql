@@ -1,3 +1,4 @@
+Use [<database_name, sysname, sip>]
 /***
 from c# for data conversion:-
 public enum KeyPersonRole
@@ -101,7 +102,7 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 	 FROM [academisation].[ApplicationFormTrustKeyPerson] AKPNEW
 	 INNER JOIN @KeyPersonRoles AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId]
 	 
-	--COMMIT TRAN PortDynamicsKeyContactsData
+	COMMIT TRAN PortDynamicsKeyContactsData
 	--ROLLBACK TRAN PortDynamicsKeyContactsData
 
 END TRY
