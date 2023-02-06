@@ -10,4 +10,8 @@ public class ProjectFactory : IProjectFactory
 	{
 		return Project.Create(application);
 	}
+	public CreateResult CreateInvoluntaryProject()
+	{
+		return Project.CreateInvoluntaryProject();
+	}
 }

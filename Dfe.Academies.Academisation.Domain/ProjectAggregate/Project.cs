@@ -70,6 +70,43 @@ public class Project : IProject
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
 
+	public static CreateResult CreateInvoluntaryProject(IInvolunataryProject project)
+	{
+		// Get school 
+		var school = project.Schools.Single().Details;
+		// Get trust
+
+		var projectDetails = new ProjectDetails
+		{
+			Urn = school.Urn,
+			SchoolName = school.SchoolName,
+			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
+			ProjectStatus = "Converter Pre-AO (C)",
+			ApplicationReceivedDate = application.ApplicationSubmittedDate,
+			OpeningDate = DateTime.Today.AddMonths(6),
+			TrustReferenceNumber = application.JoinTrust?.TrustReference,
+			NameOfTrust = application.JoinTrust?.TrustName,
+			AcademyTypeAndRoute = "Converter",
+			ProposedAcademyOpeningDate = school.ConversionTargetDate,
+			ConversionSupportGrantAmount = 25000,
+			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
+			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
+			FinancialDeficit = ToYesNoString(IsDeficit(school.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+			RationaleForTrust = school.SchoolConversionReasonsForJoining,
+			EndOfCurrentFinancialYear = school.CurrentFinancialYear?.FinancialYearEndDate,
+			EndOfNextFinancialYear = school.NextFinancialYear?.FinancialYearEndDate,
+			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.Revenue, school.CurrentFinancialYear?.RevenueStatus),
+			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.Revenue, school.NextFinancialYear?.RevenueStatus),
+			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.CapitalCarryForward, school.CurrentFinancialYear?.CapitalCarryForwardStatus),
+			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.CapitalCarryForward, school.NextFinancialYear?.CapitalCarryForwardStatus),
+			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
+			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
+			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
+		};
+
+		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
 	public CommandResult Update(ProjectDetails detailsToUpdate)
 	{
 		if (Details.Urn != detailsToUpdate.Urn)
