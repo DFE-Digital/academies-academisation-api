@@ -11,8 +11,4 @@ public class ProjectFactory : IProjectFactory
 	{
 		return Project.Create(application);
 	}
-	public CreateResult CreateInvoluntaryProject(IInvoluntaryProject project)
-	{
-		return Project.CreateInvoluntaryProject(project);
-	}
 }

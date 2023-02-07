@@ -70,7 +70,7 @@ public class Project : IProject
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
 
-	public static CreateResult CreateInvoluntaryProject(IInvoluntaryProject project)
+	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
 	{
 		// Get school 
 		var school = project.Schools.Single().Details;

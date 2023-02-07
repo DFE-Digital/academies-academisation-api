@@ -2,11 +2,11 @@
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Service.Commands.Project;
 using Dfe.Academies.Academisation.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -162,8 +162,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		public async Task<ActionResult> AddInvoluntaryConversion(InvoluntaryProject project)
 		{
-			CommandOrCreateResult result = await _createInvoluntaryProjectCommand.Execute(project);
-
+			CommandResult result = await _createInvoluntaryProjectCommand.Execute(project);
+			
 			return result switch
 			{
 				CommandSuccessResult => Created(new Uri("/legacy/project/", UriKind.Relative), null),
