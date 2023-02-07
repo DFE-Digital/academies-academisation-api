@@ -18,4 +18,7 @@ locals {
   tfvars_filename                                 = var.tfvars_filename
   enable_monitoring                               = var.enable_monitoring
   monitor_email_receivers                         = var.monitor_email_receivers
+  container_health_probe_path                     = var.container_health_probe_path
+  cdn_frontdoor_health_probe_path                 = var.cdn_frontdoor_health_probe_path
+  monitor_endpoint_healthcheck                    = var.monitor_endpoint_healthcheck
 }

@@ -93,3 +93,18 @@ variable "monitor_email_receivers" {
   description = "A list of email addresses that should be notified by monitoring alerts"
   type        = list(string)
 }
+
+variable "container_health_probe_path" {
+  description = "Specifies the path that is used to determine the liveness of the Container"
+  type        = string
+}
+
+variable "cdn_frontdoor_health_probe_path" {
+  description = "Specifies the path relative to the origin that is used to determine the health of the origin."
+  type        = string
+}
+
+variable "monitor_endpoint_healthcheck" {
+  description = "Specify a route that should be monitored for a 200 OK status"
+  type        = string
+}
