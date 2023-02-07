@@ -70,22 +70,20 @@ public class Project : IProject
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
 
-	public static CreateResult CreateInvoluntaryProject(IInvolunataryProject project)
+	public static CreateResult CreateInvoluntaryProject(IInvoluntaryProject project)
 	{
 		// Get school 
 		var school = project.Schools.Single().Details;
-		// Get trust
+
 
 		var projectDetails = new ProjectDetails
 		{
 			Urn = school.Urn,
 			SchoolName = school.SchoolName,
-			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 			ProjectStatus = "Converter Pre-AO (C)",
-			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			OpeningDate = DateTime.Today.AddMonths(6),
-			TrustReferenceNumber = application.JoinTrust?.TrustReference,
-			NameOfTrust = application.JoinTrust?.TrustName,
+			TrustReferenceNumber = project.JoinTrust?.TrustReference,
+			NameOfTrust = project.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,

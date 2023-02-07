@@ -8,6 +8,7 @@ using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.Service.Commands.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Moq;
@@ -46,7 +47,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -74,7 +75,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -104,7 +105,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
 
 		await _context.Projects.AddAsync(existingProject);

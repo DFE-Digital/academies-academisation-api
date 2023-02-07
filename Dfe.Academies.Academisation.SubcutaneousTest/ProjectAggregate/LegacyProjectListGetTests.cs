@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.Service.Commands.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using Moq;
@@ -27,7 +28,7 @@ public class LegacyProjectListGetTests
 
 		_subject = new LegacyProjectController(Mock.Of<ILegacyProjectGetQuery>(), legacyProjectGetQuery,
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateInvoluntaryProjectCommand>());
 	}
 
 	[Fact]

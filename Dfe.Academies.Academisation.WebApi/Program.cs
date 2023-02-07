@@ -27,6 +27,7 @@ using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.Service.Commands.Project;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
@@ -102,6 +103,7 @@ builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
 builder.Services.AddScoped<ILegacyProjectAddNoteCommand, LegacyProjectAddNoteCommand>();
 builder.Services.AddScoped<ILegacyProjectDeleteNoteCommand, LegacyProjectDeleteNoteCommand>();
+builder.Services.AddScoped<ICreateInvoluntaryProjectCommand, CreateInvoluntaryProjectCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();

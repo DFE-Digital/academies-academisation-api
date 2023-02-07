@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
@@ -10,8 +11,8 @@ public class ProjectFactory : IProjectFactory
 	{
 		return Project.Create(application);
 	}
-	public CreateResult CreateInvoluntaryProject()
+	public CreateResult CreateInvoluntaryProject(IInvoluntaryProject project)
 	{
-		return Project.CreateInvoluntaryProject();
+		return Project.CreateInvoluntaryProject(project);
 	}
 }
