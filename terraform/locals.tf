@@ -16,4 +16,6 @@ locals {
   cdn_frontdoor_host_add_response_headers         = var.cdn_frontdoor_host_add_response_headers
   key_vault_access_users                          = toset(var.key_vault_access_users)
   tfvars_filename                                 = var.tfvars_filename
+  enable_monitoring                               = var.enable_monitoring
+  monitor_email_receivers                         = var.monitor_email_receivers
 }
