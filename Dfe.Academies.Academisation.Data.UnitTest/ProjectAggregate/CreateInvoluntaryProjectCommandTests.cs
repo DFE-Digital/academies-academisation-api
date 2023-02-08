@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			await command.Execute(_newProject);
 
-			_context.Projects.Count(x => x.SchoolName == _newProject.Schools.FirstOrDefault()!.Details.SchoolName).Should().Be(1);
+			_context.Projects.Count(x => x.SchoolName == _newProject.Schools!.FirstOrDefault()!.Details.SchoolName).Should().Be(1);
 		}
 
 		[Fact]
