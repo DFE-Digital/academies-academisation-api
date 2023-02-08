@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate
 {
 	public class InvoluntaryProject 
 	{
-		public List<School> Schools { get; set; }
+		public List<School>? Schools { get; set; }
 		public JoinTrust? JoinTrust { get; set; } 
 	}
 }
