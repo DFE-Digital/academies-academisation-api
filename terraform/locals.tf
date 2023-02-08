@@ -21,4 +21,6 @@ locals {
   container_health_probe_path                     = var.container_health_probe_path
   cdn_frontdoor_health_probe_path                 = var.cdn_frontdoor_health_probe_path
   monitor_endpoint_healthcheck                    = var.monitor_endpoint_healthcheck
+  monitor_enable_slack_webhook                    = var.monitor_enable_slack_webhook
+  monitor_slack_webhook_receiver                  = var.monitor_slack_webhook_receiver
 }

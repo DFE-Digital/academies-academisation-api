@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.13.2"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=slack"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -27,4 +27,7 @@ module "azure_container_apps_hosting" {
   container_health_probe_path     = local.container_health_probe_path
   cdn_frontdoor_health_probe_path = local.cdn_frontdoor_health_probe_path
   monitor_endpoint_healthcheck    = local.monitor_endpoint_healthcheck
+
+  monitor_enable_slack_webhook   = local.monitor_enable_slack_webhook
+  monitor_slack_webhook_receiver = local.monitor_slack_webhook_receiver
 }
