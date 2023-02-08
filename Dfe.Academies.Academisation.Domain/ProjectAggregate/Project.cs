@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -72,8 +73,24 @@ public class Project : IProject
 
 	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
 	{
+		// Validate 
+		if (project.JoinTrust == null)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("Join Trust", "Join Trust in the model must not be null")
+			});
+		}
+		if (project.Schools == null || project.Schools.Any() is false)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("Schools", "Schools in the model must not be null")
+			});
+		}
+
 		// Get school 
-		var school = project.Schools.Single().Details;
+		var school = project.Schools.FirstOrDefault()!.Details;
 
 
 		var projectDetails = new ProjectDetails
@@ -84,7 +101,7 @@ public class Project : IProject
 			OpeningDate = DateTime.Today.AddMonths(6),
 			TrustReferenceNumber = project.JoinTrust?.TrustReference,
 			NameOfTrust = project.JoinTrust?.TrustName,
-			AcademyTypeAndRoute = "Converter",
+			AcademyTypeAndRoute = "Involuntary Converter",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
