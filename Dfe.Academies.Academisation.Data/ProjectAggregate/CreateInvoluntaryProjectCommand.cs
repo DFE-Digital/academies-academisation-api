@@ -9,8 +9,6 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 	{
 		
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-
-
 		public CreateInvoluntaryProjectCommand(IProjectCreateDataCommand projectCreateDataCommand)
 		{
 			_projectCreateDataCommand = projectCreateDataCommand;
@@ -30,9 +28,6 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}
-
-
-
 		}
 	}
 }

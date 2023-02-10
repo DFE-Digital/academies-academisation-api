@@ -73,7 +73,6 @@ public class Project : IProject
 
 	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
 	{
-		// Validate 
 		if (project.JoinTrust == null)
 		{
 			return new CreateValidationErrorResult(new List<ValidationError>
@@ -89,9 +88,7 @@ public class Project : IProject
 			});
 		}
 
-		// Get school 
 		var school = project.Schools.FirstOrDefault()!.Details;
-
 
 		var projectDetails = new ProjectDetails
 		{
@@ -101,7 +98,7 @@ public class Project : IProject
 			OpeningDate = DateTime.Today.AddMonths(6),
 			TrustReferenceNumber = project.JoinTrust?.TrustReference,
 			NameOfTrust = project.JoinTrust?.TrustName,
-			AcademyTypeAndRoute = "Involuntary Converter",
+			AcademyTypeAndRoute = "Sponsored",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),

@@ -24,19 +24,19 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 			this.ChangesToLaGovernanceExplained = changesToLaGovernanceExplained;
 		}
 
-		public int UKPRN { get;  set; }
+		public int UKPRN { get;  private set; }
 
-		public string TrustName { get;  set; }
+		public string TrustName { get; private set; }
 
-		public string TrustReference { get;  set; }
+		public string TrustReference { get; private set; }
 
-		public ChangesToTrust? ChangesToTrust { get; set; }
+		public ChangesToTrust? ChangesToTrust { get; private set; }
 
-		public string? ChangesToTrustExplained { get; set; }
+		public string? ChangesToTrustExplained { get; private set; }
 
-		public bool? ChangesToLaGovernance { get; set; }
+		public bool? ChangesToLaGovernance { get; private set; }
 
-		public string? ChangesToLaGovernanceExplained { get; set; }
+		public string? ChangesToLaGovernanceExplained { get; private set; }
 
 		public static JoinTrust Create(int UKPRN, string trustName, string trustReference, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 		{
