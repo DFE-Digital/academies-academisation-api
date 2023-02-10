@@ -100,6 +100,7 @@ builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
 builder.Services.AddScoped<ILegacyProjectAddNoteCommand, LegacyProjectAddNoteCommand>();
 builder.Services.AddScoped<ILegacyProjectDeleteNoteCommand, LegacyProjectDeleteNoteCommand>();
+builder.Services.AddScoped<ICreateInvoluntaryProjectCommand, CreateInvoluntaryProjectCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();

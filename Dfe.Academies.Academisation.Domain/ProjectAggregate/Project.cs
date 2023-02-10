@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -50,6 +51,54 @@ public class Project : IProject
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
+			ProposedAcademyOpeningDate = school.ConversionTargetDate,
+			ConversionSupportGrantAmount = 25000,
+			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
+			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
+			FinancialDeficit = ToYesNoString(IsDeficit(school.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+			RationaleForTrust = school.SchoolConversionReasonsForJoining,
+			EndOfCurrentFinancialYear = school.CurrentFinancialYear?.FinancialYearEndDate,
+			EndOfNextFinancialYear = school.NextFinancialYear?.FinancialYearEndDate,
+			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.Revenue, school.CurrentFinancialYear?.RevenueStatus),
+			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.Revenue, school.NextFinancialYear?.RevenueStatus),
+			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.CapitalCarryForward, school.CurrentFinancialYear?.CapitalCarryForwardStatus),
+			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.CapitalCarryForward, school.NextFinancialYear?.CapitalCarryForwardStatus),
+			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
+			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
+			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
+		};
+
+		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
+	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
+	{
+		if (project.JoinTrust == null)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("Join Trust", "Join Trust in the model must not be null")
+			});
+		}
+		if (project.Schools == null || project.Schools.Any() is false)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("Schools", "Schools in the model must not be null")
+			});
+		}
+
+		var school = project.Schools.FirstOrDefault()!.Details;
+
+		var projectDetails = new ProjectDetails
+		{
+			Urn = school.Urn,
+			SchoolName = school.SchoolName,
+			ProjectStatus = "Converter Pre-AO (C)",
+			OpeningDate = DateTime.Today.AddMonths(6),
+			TrustReferenceNumber = project.JoinTrust?.TrustReference,
+			NameOfTrust = project.JoinTrust?.TrustName,
+			AcademyTypeAndRoute = "Sponsored",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),

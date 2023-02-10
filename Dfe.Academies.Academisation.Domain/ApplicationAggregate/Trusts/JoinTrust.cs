@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts
 			this.ChangesToLaGovernanceExplained = changesToLaGovernanceExplained;
 		}
 
-		public int UKPRN { get; private set; }
+		public int UKPRN { get;  private set; }
 
 		public string TrustName { get; private set; }
 
