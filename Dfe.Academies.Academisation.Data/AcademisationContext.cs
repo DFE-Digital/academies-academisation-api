@@ -43,43 +43,17 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.Entries<T>()
 			.SingleOrDefault(s => s.Entity.Id == baseEntity.Id);
 
-		if (entity is null)
-		{
-			throw new InvalidOperationException($"An entity matching Id: {baseEntity.Id} is not being tracked");
-		}
+		if (entity is null) throw new InvalidOperationException("An entity matching this Id is not being tracked");
 
 		var childCollections = entity.Collections
-			.Select(collection => collection.CurrentValue);
+			.Select(collection => collection.CurrentValue)
+			.Select(childCollection => childCollection);
 
-		//foreach (var children in childCollections)
-		//{
-		//	if (children is null)
-		//	{
-		//		continue;
-		//	}
-
-		//	foreach (object? child in children)
-		//	{
-		//		Type childType = child.GetType();
-
-		//		if (childType == typeof(ApplicationSchoolState))
-		//		{
-		//			var schoolState = (ApplicationSchoolState)child;
-
-		//			foreach (var loan in schoolState.Loans)
-		//			{
-		//				Remove(loan);
-		//			}
-
-		//			foreach (var lease in schoolState.Leases)
-		//			{
-		//				Remove(lease);
-		//			}
-		//		}
-
-		//		Remove(child);
-		//	}
-		//}
+		foreach (var children in childCollections)
+		{
+			if (children is null) continue;
+			foreach (var child in children) Remove(child);
+		}
 
 		entity.State = EntityState.Detached;
 
@@ -386,7 +360,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 				nfy.Property(nfyd => nfyd.RevenueStatusFileLink)
 					.HasColumnName("NextFinancialYearRevenueStatusFileLink");
 			});
-			sd.OwnsOne(d => d.LandAndBuildings, lb => 
+			sd.OwnsOne(d => d.LandAndBuildings, lb =>
 			{
 				lb.Property(lbd => lbd.FacilitiesShared).HasColumnName("FacilitiesShared");
 				lb.Property(lbd => lbd.FacilitiesSharedExplained).HasColumnName("FacilitiesSharedExplained");
