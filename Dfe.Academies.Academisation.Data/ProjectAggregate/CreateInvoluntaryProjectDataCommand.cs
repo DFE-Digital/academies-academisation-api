@@ -5,16 +5,15 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 {
-	public class CreateInvoluntaryProjectCommand : ICreateInvoluntaryProjectCommand
+	public class CreateInvoluntaryProjectDataCommand : ICreateInvoluntaryProjectDataCommand
 	{
-		
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-		public CreateInvoluntaryProjectCommand(IProjectCreateDataCommand projectCreateDataCommand)
+		public CreateInvoluntaryProjectDataCommand(IProjectCreateDataCommand projectCreateDataCommand)
 		{
 			_projectCreateDataCommand = projectCreateDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(InvoluntaryProject project)
+		public async Task<CommandResult> Execute(Core.ProjectAggregate.InvoluntaryProject project)
 		{
 			var domainServiceResult = Project.CreateInvoluntaryProject(project);
 

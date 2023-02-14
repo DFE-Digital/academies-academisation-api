@@ -1,8 +1,10 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
+using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.AutoMapper;
 
@@ -19,6 +21,9 @@ public static class AutoMapperSetup
 		//	.ForMember(x => x.DynamicsApplicationId, opt => opt.Ignore());
 		//profile.CreateMap<JoinTrustState, JoinTrust>();
 		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
+		profile.CreateMap<InvoluntaryProjectServiceModel, InvoluntaryProject>();
+		profile.CreateMap<TrustServiceModel, ProjectTrust>();
+		profile.CreateMap<SchoolServiceModel, ProjectSchool>();
 
 		// the mapping for this object is awkward because of the use of records, may have to re-think someof this but this is the best for now
 		//profile.CreateMap<FormTrustState, FormTrustDetails>().ReverseMap();

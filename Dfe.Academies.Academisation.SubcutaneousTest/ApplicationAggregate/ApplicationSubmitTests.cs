@@ -118,7 +118,8 @@ public class ApplicationSubmitTests
 
 		var school = _fixture.Create<ApplicationSchoolServiceModel>();
 
-		var updateRequest = new ApplicationUpdateRequestModel(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors, new List<ApplicationSchoolServiceModel> { school });
+		var updateRequest = new ApplicationUpdateRequestModel(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors,
+			new List<ApplicationSchoolServiceModel> { school });
 
 		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
 		DfeAssert.OkResult(updateResult);
@@ -135,7 +136,8 @@ public class ApplicationSubmitTests
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
 		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
+			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
+			Mock.Of<ICreateInvoluntaryProjectCommand>());
 		var projectResult = await projectController.Get(1);
 
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);

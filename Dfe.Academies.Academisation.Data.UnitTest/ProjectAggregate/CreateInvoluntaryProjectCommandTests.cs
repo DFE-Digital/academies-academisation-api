@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using FluentAssertions;
 using Xunit;
@@ -39,45 +32,36 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			_newProject = _fixture.Create<InvoluntaryProject>();
 		}
 
-		private CreateInvoluntaryProjectCommand System_under_test()
+		private CreateInvoluntaryProjectDataCommand System_under_test()
 		{
-			return new CreateInvoluntaryProjectCommand(_projectCreateDataCommand);
+			return new CreateInvoluntaryProjectDataCommand(_projectCreateDataCommand);
 		}
 
 		[Fact]
 		public async Task Should_add_the_new_involuntary_project()
 		{
-			CreateInvoluntaryProjectCommand command = System_under_test();
+			CreateInvoluntaryProjectDataCommand command = System_under_test();
 
 			await command.Execute(_newProject);
 
-			_context.Projects.Count(x => x.SchoolName == _newProject.Schools!.FirstOrDefault()!.Details.SchoolName).Should().Be(1);
+			_context.Projects.Count(x => x.SchoolName == _newProject!.School!.Name).Should().Be(1);
 		}
 
 		[Fact]
 		public async Task Should_return_error_if_school_is_null()
 		{
-			CreateInvoluntaryProjectCommand command = System_under_test();
+			CreateInvoluntaryProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new InvoluntaryProject
-			{
-				JoinTrust = _fixture.Create<JoinTrust>()
-			});
+			var result = await command.Execute(new InvoluntaryProject(null, _fixture.Create<ProjectTrust>()));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
 		[Fact]
 		public async Task Should_return_error_if_join_trust_is_null()
 		{
-			CreateInvoluntaryProjectCommand command = System_under_test();
+			CreateInvoluntaryProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new InvoluntaryProject
-			{
-				Schools = new List<School>
-				{
-					_fixture.Create<School>()
-				}
-			});
+			var result = await command.Execute(new InvoluntaryProject(_fixture.Create<ProjectSchool>(), null));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
