@@ -17,7 +17,8 @@ public class ProjectUpdateDataCommand : IProjectUpdateDataCommand
 	{
 		var projectState = ProjectState.MapFromDomain(project);
 
-		await _context.Projects.SingleAsync(p => p.Id == project.Id);
+		var projectInDb = await _context.Projects.SingleAsync(p => p.Id == project.Id);
+		projectState.CreatedOn = projectInDb.CreatedOn;
 
 		_context.ReplaceTracked(projectState)
 			.Collection(x => x.Notes!).IsModified = false;
