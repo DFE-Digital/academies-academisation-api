@@ -99,6 +99,7 @@ public class Project : IProject
 			NameOfTrust = project.Trust?.Name,
 			AcademyTypeAndRoute = "Sponsored",
 			ConversionSupportGrantAmount = 25000,
+			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme)
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
