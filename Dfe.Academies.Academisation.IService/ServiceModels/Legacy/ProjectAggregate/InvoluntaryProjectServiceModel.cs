@@ -2,17 +2,17 @@
 {
 	public class InvoluntaryProjectServiceModel
 	{
-		public SchoolServiceModel? School { get; init; }
-		public TrustServiceModel? Trust { get; init; }
+		public InvoluntaryProjectSchoolServiceModel? School { get; init; }
+		public InvoluntaryProjectTrustServiceModel? Trust { get; init; }
 	}
 
-	public class TrustServiceModel
+	public class InvoluntaryProjectTrustServiceModel
 	{
 		public string? Name { get; init; }
 		public string? ReferenceNumber { get; init; }
 	}
 
-	public class SchoolServiceModel
+	public class InvoluntaryProjectSchoolServiceModel
 	{
 		public string? Name { get; init; }
 		public int Urn { get; init; }

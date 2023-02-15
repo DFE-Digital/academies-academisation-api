@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			CreateInvoluntaryProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new InvoluntaryProject(null, _fixture.Create<ProjectTrust>()));
+			var result = await command.Execute(new InvoluntaryProject(null, _fixture.Create<InvoluntaryProjectTrust>()));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
@@ -61,7 +61,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			CreateInvoluntaryProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new InvoluntaryProject(_fixture.Create<ProjectSchool>(), null));
+			var result = await command.Execute(new InvoluntaryProject(_fixture.Create<InvoluntaryProjectSchool>(), null));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}

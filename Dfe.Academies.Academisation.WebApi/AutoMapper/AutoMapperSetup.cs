@@ -22,8 +22,8 @@ public static class AutoMapperSetup
 		//profile.CreateMap<JoinTrustState, JoinTrust>();
 		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
 		profile.CreateMap<InvoluntaryProjectServiceModel, InvoluntaryProject>();
-		profile.CreateMap<TrustServiceModel, ProjectTrust>();
-		profile.CreateMap<SchoolServiceModel, ProjectSchool>();
+		profile.CreateMap<InvoluntaryProjectTrustServiceModel, InvoluntaryProjectTrust>();
+		profile.CreateMap<InvoluntaryProjectSchoolServiceModel, InvoluntaryProjectSchool>();
 
 		// the mapping for this object is awkward because of the use of records, may have to re-think someof this but this is the best for now
 		//profile.CreateMap<FormTrustState, FormTrustDetails>().ReverseMap();
