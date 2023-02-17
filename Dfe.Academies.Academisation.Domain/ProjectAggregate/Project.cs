@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -27,6 +26,7 @@ public class Project : IProject
 	public int Id { get; }
 
 	public ProjectDetails Details { get; private set; }
+
 
 	public static CreateResult Create(IApplication application)
 	{

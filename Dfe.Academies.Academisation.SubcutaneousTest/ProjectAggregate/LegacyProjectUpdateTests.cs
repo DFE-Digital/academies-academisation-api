@@ -10,6 +10,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using FluentAssertions;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
@@ -64,7 +65,7 @@ public class ProjectUpdateTests
 		// Assert
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(updateResult);
 
-		Assert.Equivalent(updatedProject, project);
+		Assert.True(updatedProject.Equals(project));
 	}
 
 
@@ -95,7 +96,7 @@ public class ProjectUpdateTests
 		// Assert
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(getResult);
 
-		Assert.Equivalent(updatedProject, project);
+		updatedProject.Equals(project);
 	}
 
 	[Fact]

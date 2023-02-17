@@ -91,7 +91,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	public User? AssignedUser { get; init; }
 	public ICollection<ProjectNote> Notes { get; init; } = new List<ProjectNote>();
-	
+	public DateTime CreatedOn { get; set; }
+
 	public bool Equals(ProjectDetails? other)
 	{
 		if (ReferenceEquals(null, other))
@@ -207,7 +208,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(KeyStage4PerformanceAdditionalInformation, other.KeyStage4PerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation,
-				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);
+				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);		   
 	}
 
 	public override bool Equals(object? obj)
@@ -315,6 +316,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(KeyStage4PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AssignedUser);
+		hashCode.Add(CreatedOn);
 		return hashCode.ToHashCode();
 	}
 }
