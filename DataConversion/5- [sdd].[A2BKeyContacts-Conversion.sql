@@ -48,24 +48,23 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 		GETDATE() as 'CreatedOn',
 		GETDATE() as 'LastModifiedOn',
 		[DynamicsKeyPersonId]
-	FROM [sdd].[A2BApplicationKeyPersons] AKP
-	INNER JOIN [sdd].[A2BApplication] as APP on APP.[ApplicationId] = AKP.ApplicationId
+	FROM [a2b].[stg_KeyPerson] AKP
+	INNER JOIN [a2b].[stg_Application] as APP on APP.[DynamicsApplicationId] = AKP.DynamicsApplicationId
 	INNER JOIN [academisation].[ConversionApplication] as NewApp on NewApp.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
 	WHERE NewApp.[FormTrustId] IS NOT NULL
 	
 	-- MR:- need to un-pivot role data. hard code roleId's as part of pivot?
 	DECLARE @KeyPersonRoles TABLE
-	(KeyPersonId INT, 
-	 [DynamicsKeyPersonId] uniqueidentifier, 
+	([DynamicsKeyPersonId] uniqueidentifier, 
 	 KeyPersonRole nvarchar(50),
 	 TrueFalse BIT,
 	 NewRoleId INT
 	)	
 	
 	INSERT INTO @KeyPersonRoles
-	(KeyPersonId,[DynamicsKeyPersonId],KeyPersonRole, TrueFalse, NewRoleId)
+	([DynamicsKeyPersonId],KeyPersonRole, TrueFalse, NewRoleId)
 
-	SELECT [KeyPersonId],[DynamicsKeyPersonId], Roles, TrueFalse, 
+	SELECT [DynamicsKeyPersonId], Roles, TrueFalse, 
 	CASE Roles 
 		WHEN 'KeyPersonCeoExecutive' THEN 1
 		WHEN 'KeyPersonChairOfTrust' THEN 2
@@ -75,14 +74,14 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 		WHEN 'KeyPersonMember' THEN 6
 	END as NewRoleId
 	FROM   
-		(SELECT [KeyPersonId],[DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
+		(SELECT [DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
 	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee]
-		FROM [sdd].[A2BApplicationKeyPersons]) p  
+		FROM [a2b].[stg_KeyPerson]) p  
 	UNPIVOT  
 		(TrueFalse FOR Roles IN   
 			([KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
 	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee])  
-	)AS unpvt;  
+	)AS unpvt; 
 
 	--SELECT *
 	--FROM @KeyPersonRoles 

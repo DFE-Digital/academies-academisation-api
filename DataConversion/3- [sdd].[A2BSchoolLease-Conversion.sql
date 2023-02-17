@@ -33,8 +33,8 @@ BEGIN TRANSACTION PortDynamicsSchoolLeaseData
 			GETDATE() as 'LastModifiedOn',
 			ASL.DynamicsSchoolLeaseId
 			--ASS.[DynamicsApplyingSchoolId] -- other
-	FROM [sdd].[A2BApplicationApplyingSchool] As ASS	
-	INNER JOIN [sdd].[A2BSchoolLease] as ASL ON ASL.ApplyingSchoolId = ASS.ApplyingSchoolId
+	FROM [a2b].[stg_ApplyingSchool] As ASS	
+	INNER JOIN [a2b].[stg_SchoolLease] as ASL ON ASL.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
 	INNER JOIN [academisation].[ApplicationSchool] as SCH on SCH.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
 	   
 	/* STEP 2 - backfill [academisation].[ApplicationSchool].HasLeases */

@@ -99,7 +99,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			   ,[FoundationTrustOrBodyName]
 			   ,[FurtherInformation]
 			   ,[LocalAuthorityClosurePlanDetails]
-			   ,[LocalAuthorityReoganisationDetails]
+			   ,[LocalAuthorityReorganisationDetails]
 			   ,[OfstedInspectionDetails]
 			   ,[SafeguardingDetails]
 			   ,[TrustBenefitDetails]
@@ -165,9 +165,9 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionContactHeadTel],
 			--ASS.[SchoolConversionContactRole], -- MR:- need mapper - string -> int !
 			CASE ASS.[SchoolConversionContactRole]
-				WHEN 'HeadTeacher' THEN 1
-				WHEN 'ChairGovernor' THEN 2
-				WHEN 'Other' THEN 3
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 2
+				WHEN 907660002 THEN 3
 			END as 'ContactRole',
 			ASS.[SchoolConversionTargetDateExplained],
 			ASS.[SchoolConversionReasonsForJoining] as 'JoinTrustReason',
@@ -176,27 +176,51 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionMainContactOtherRole],
 			ASS.[Name] as 'SchoolName',
 			--**** land & buildings ****
-			ASS.[SchoolBuildLandSharedFacilities],
+			CASE ASS.[SchoolBuildLandSharedFacilities]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolBuildLandSharedFacilities',
 			ASS.[SchoolBuildLandSharedFacilitiesExplained],
-			ASS.[SchoolBuildLandGrants],
+			CASE ASS.[SchoolBuildLandGrants]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolBuildLandGrants',
 			ASS.[SchoolBuildLandGrantsBody],
-			ASS.[SchoolBuildLandOwnerExplained],
-			ASS.[SchoolBuildLandFutureProgramme],
-			ASS.[SchoolBuildLandPFIScheme],
+			ASS.[SchoolBuildLandOwnerExplained],			
+			CASE ASS.[SchoolBuildLandFutureProgramme]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolBuildLandFutureProgramme',
+			CASE ASS.[SchoolBuildLandPFIScheme]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolBuildLandPFIScheme',
 			ASS.[SchoolBuildLandPFISchemeType],
-			ASS.[SchoolBuildLandPriorityBuildingProgramme],
-			ASS.[SchoolBuildLandWorksPlanned],
+			CASE ASS.[SchoolBuildLandPriorityBuildingProgramme]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolBuildLandPriorityBuildingProgramme',
+			CASE ASS.[SchoolBuildLandWorksPlanned]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolBuildLandWorksPlanned',
 			ASS.[SchoolBuildLandWorksPlannedDate],
 			ASS.[SchoolBuildLandWorksPlannedExplained],
 			-- ****
 			ASS.[SchoolConversionTargetDateDate],
-			ASS.[SchoolConversionTargetDateDifferent], -- BIT
-			ASS.[SchoolConversionChangeName], -- BIT
+			CASE ASS.[SchoolConversionTargetDateDifferent]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolConversionTargetDateDifferent',
+			CASE ASS.[SchoolConversionChangeName]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolConversionChangeName',
 			0 as 'ConfirmPaySupportGrantToSchool', -- BIT TODO:- ????
 			--ASS.[SchoolSupportGrantFundsPaidTo] as 'SupportGrantFundsPaidTo', MR:- need mapper - string -> int !
 			CASE ASS.SchoolSupportGrantFundsPaidTo
-				WHEN 'School' THEN 1
-				WHEN 'Trust' THEN 2
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
 			END as 'SupportGrantFundsPaidTo',
 			--**** additional info ****
 			--ASS.[SchoolFaithSchool] - not in v1.5 schema ??
@@ -216,53 +240,71 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolCFYCapitalForward],
 			ASS.[SchoolCFYCapitalForwardStatusExplained],
 			--ASS.[SchoolCFYCapitalIsDeficit], -- BIT -> int v1.5 - Surplus = 1,Deficit = 2
-			CASE ASS.[SchoolCFYCapitalIsDeficit]
-				WHEN 0 THEN 1
-				WHEN 1 THEN 2
+			CASE ASS.[SchoolCFYCapitalForwardSurplusOrDeficit]--[SchoolCFYCapitalIsDeficit]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 2
 			END as 'CurrentFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolCFYEndDate],
 			ASS.[SchoolCFYRevenue],
 			--ASS.[SchoolCFYRevenueIsDeficit], -- BIT -> int v1.5
-			CASE ASS.[SchoolCFYRevenueIsDeficit]
-				WHEN 0 THEN 1
-				WHEN 1 THEN 2
+			CASE ASS.[SchoolCFYRevenueSurplusOrDeficit]--[SchoolCFYRevenueIsDeficit]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 2
 			END as 'CurrentFinancialYearRevenueStatus',
 			ASS.[SchoolCFYRevenueStatusExplained],
 			ASS.[SchoolNFYCapitalForward],
 			ASS.[SchoolNFYCapitalForwardStatusExplained],
 			--ASS.[SchoolNFYCapitalIsDeficit], BIT -> int v1.5
-			CASE ASS.[SchoolNFYCapitalIsDeficit]
-				WHEN 0 THEN 1
-				WHEN 1 THEN 2
+			CASE ASS.[SchoolNFYCapitalForwardSurplusOrDeficit]--[SchoolNFYCapitalIsDeficit]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 2
 			END as 'NextFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolNFYEndDate],
 			ASS.[SchoolNFYRevenue],
 			--ASS.[SchoolNFYRevenueIsDeficit],  -- BIT -> int v1.5
-			CASE ASS.[SchoolNFYRevenueIsDeficit]
-				WHEN 0 THEN 1
-				WHEN 1 THEN 2
+			CASE ASS.[SchoolNFYRevenueSurplusOrDeficit]--[SchoolNFYRevenueIsDeficit]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 2
 			END as 'NextFinancialYearRevenueStatus',
 			ASS.[SchoolNFYRevenueStatusExplained],
 			ASS.[SchoolPFYCapitalForward],
 			ASS.[SchoolPFYCapitalForwardStatusExplained],
 			--ASS.[SchoolPFYCapitalIsDeficit], -- BIT -> int v1.5
-			CASE ASS.[SchoolPFYCapitalIsDeficit]
-				WHEN 0 THEN 1
-				WHEN 1 THEN 2
+			CASE ASS.[SchoolPFYCapitalForwardSurplusOrDeficit]--[SchoolPFYCapitalIsDeficit]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 2
 			END as 'PreviousFinancialYearCapitalCarryForwardStatus',
 			ASS.[SchoolPFYEndDate],
 			ASS.[SchoolPFYRevenue],
-			ASS.[SchoolPFYRevenueIsDeficit],
+			CASE ASS.[SchoolPFYRevenueSurplusOrDeficit]--[SchoolPFYRevenueIsDeficit]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 2
+			END as 'PreviousFinancialYearRevenueStatus',
 			ASS.[SchoolPFYRevenueStatusExplained],
 			-- ****
-			ASS.[SchoolConsultationStakeholders],
+			CASE ASS.[SchoolConsultationStakeholders]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolConsultationStakeholders',
 			ASS.[SchoolConsultationStakeholdersConsult],
-			ASS.[SchoolFinancialInvestigations],
+			CASE ASS.[SchoolFinancialInvestigations]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolFinancialInvestigations',
 			ASS.[SchoolFinancialInvestigationsExplain],
-			ASS.[SchoolFinancialInvestigationsTrustAware],
+			CASE ASS.[SchoolFinancialInvestigationsTrustAware]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolFinancialInvestigationsTrustAware',
 			-- ****
-			ASS.[SchoolDeclarationBodyAgree],
-			ASS.[SchoolDeclarationTeacherChair],
+			CASE ASS.[SchoolDeclarationBodyAgree]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolDeclarationBodyAgree',
+			CASE ASS.[SchoolDeclarationTeacherChair]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolDeclarationTeacherChair',
 			ASS.[SchoolDeclarationSignedByName] as 'DeclarationSignedByName',
 			-- ****
 			ASS.[SchoolConversionReasonsForJoining],
@@ -274,7 +316,10 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			CONVERT(datetimeoffset(7),ASS.[SchoolSACREExemptionEndDate]) as '[ExemptionEndDate]',
 			-- ****
 			ASS.[SchoolAdFeederSchools],
-			ASS.[SchoolPartOfFederation],
+			CASE ASS.[SchoolPartOfFederation]
+				WHEN 907660000 THEN 1
+				WHEN 907660001 THEN 0
+			END as 'SchoolPartOfFederation',
 			--ASS.SchoolAdEqualitiesImpactAssessmentDetails as 'ProtectedCharacteristics', -- MR:- need mapper - string -> int !
 			CASE ASS.SchoolAdEqualitiesImpactAssessmentDetails
 				WHEN 'That the Secretary of State''s decision is unlikely to disproportionately affect any particular person or group who share protected characteristics' THEN 1
@@ -285,10 +330,10 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			--ASS.[DiocesePermissionEvidenceDocumentLink],
 			--ASS.[FoundationEvidenceDocumentLink],
 			--ASS.[GoverningBodyConsentEvidenceDocumentLink]
-	FROM [sdd].[A2BApplicationApplyingSchool] as ASS
+	FROM [a2b].[stg_ApplyingSchool] as ASS
 	INNER JOIN [academisation].[ConversionApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
 
-	--COMMIT TRAN PortDynamicsSchoolData
+	COMMIT TRAN PortDynamicsSchoolData
 	--ROLLBACK TRAN PortDynamicsSchoolData
 
 END TRY
