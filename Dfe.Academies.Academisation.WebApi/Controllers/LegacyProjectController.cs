@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,13 +21,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
 		private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
 		private readonly IProjectGetStatusesQuery _projectGetStatusesQuery;
+		private readonly ICreateInvoluntaryProjectCommand _createInvoluntaryProjectCommand;
 
 		public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery,
 									   ILegacyProjectListGetQuery legacyProjectListGetQuery,
 									   IProjectGetStatusesQuery projectGetStatusesQuery,
 									   ILegacyProjectUpdateCommand legacyProjectUpdateCommand,
 									   ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
-									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand)
+									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand, 
+									   ICreateInvoluntaryProjectCommand createInvoluntaryProjectCommand)
 		{
 			_legacyProjectGetQuery = legacyProjectGetQuery;
 			_legacyProjectListGetQuery = legacyProjectListGetQuery;
@@ -34,6 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 			_legacyProjectAddNoteCommand = legacyProjectAddNoteCommand;
 			_legacyProjectDeleteNoteCommand = legacyProjectDeleteNoteCommand;
+			_createInvoluntaryProjectCommand = createInvoluntaryProjectCommand;
 		}
 
 		/// <summary>
@@ -140,6 +144,27 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result switch
 			{
 				CommandSuccessResult => Created(new Uri($"/legacy/project/{id}", UriKind.Relative), null),
+				NotFoundCommandResult => NotFound(),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		/// <summary>
+		///     Adds a involuntary conversion project
+		/// </summary>
+		/// <param name="project">The model holding the data required to create an Involuntary conversion</param>
+		/// <response code="201">The project has been added</response>
+		[HttpPost("project/involuntary-conversion-project")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		public async Task<ActionResult> AddInvoluntaryConversion(InvoluntaryProjectServiceModel project)
+		{
+			CommandResult result = await _createInvoluntaryProjectCommand.Execute(project);
+
+			return result switch
+			{
+				CommandSuccessResult => Created(new Uri("/legacy/project/", UriKind.Relative), null),
 				NotFoundCommandResult => NotFound(),
 				_ => throw new NotImplementedException()
 			};

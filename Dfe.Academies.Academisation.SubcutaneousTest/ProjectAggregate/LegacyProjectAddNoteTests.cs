@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -16,6 +17,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		private readonly ILegacyProjectGetQuery _projectGetQuery;
 		private readonly ILegacyProjectListGetQuery _projectListGetQuery;
 		private readonly ILegacyProjectUpdateCommand _projectUpdateCommand;
+		private readonly ICreateInvoluntaryProjectCommand _createInvoluntaryProjectCommand;
 		private ILegacyProjectDeleteNoteCommand _projectDeleteNoteCommand;
 
 		public LegacyProjectAddNoteTests()
@@ -26,6 +28,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 			_projectUpdateCommand = Mock.Of<ILegacyProjectUpdateCommand>();
 			_projectAddNoteCommand = new Mock<ILegacyProjectAddNoteCommand>();
 			_projectDeleteNoteCommand = Mock.Of<ILegacyProjectDeleteNoteCommand>();
+			_createInvoluntaryProjectCommand = Mock.Of<ICreateInvoluntaryProjectCommand>();
 		}
 
 		private LegacyProjectController System_under_test()
@@ -36,7 +39,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 				_getStatusesQuery,
 				_projectUpdateCommand,
 				_projectAddNoteCommand.Object,
-				_projectDeleteNoteCommand);
+				_projectDeleteNoteCommand,
+				_createInvoluntaryProjectCommand);
 		}
 
 		[Fact]

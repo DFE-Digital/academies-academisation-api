@@ -46,7 +46,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -74,7 +74,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -104,7 +104,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
 
 		await _context.Projects.AddAsync(existingProject);
