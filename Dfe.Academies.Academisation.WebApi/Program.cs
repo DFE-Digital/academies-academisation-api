@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Data.Academies;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -38,6 +39,7 @@ using Dfe.Academies.Academisation.WebApi.Swagger;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +52,7 @@ builder.Services
 	{
 		options.SerializerSettings.Converters.Add(new StringEnumConverter(typeof(CamelCaseNamingStrategy)));
 		options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+		options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 	});
 
 // logging
@@ -148,6 +151,14 @@ builder.Services.AddDbContext<AcademisationContext>(options =>
 #endif
 	}
 );
+
+builder.Services.AddDbContext<AcademiesContext>(options =>
+	{
+		options.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"]);
+	}
+);
+
+
 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
