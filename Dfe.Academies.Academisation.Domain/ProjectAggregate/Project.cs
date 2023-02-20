@@ -150,6 +150,8 @@ public class Project : IProject
 			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber,
 			SponsorName = detailsToUpdate.SponsorName,
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute,
+			Form7Received = detailsToUpdate.Form7Received,
+			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,

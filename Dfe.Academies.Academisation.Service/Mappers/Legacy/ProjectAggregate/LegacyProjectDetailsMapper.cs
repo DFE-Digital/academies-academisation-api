@@ -45,6 +45,8 @@ internal static class LegacyProjectDetailsMapper
 			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber ?? existingProject.Details.SponsorReferenceNumber,
 			SponsorName = detailsToUpdate.SponsorName ?? existingProject.Details.SponsorName,
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute ?? existingProject.Details.AcademyTypeAndRoute,
+			Form7Received = detailsToUpdate.Form7Received ?? existingProject.Details.Form7Received,
+			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate ?? existingProject.Details.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate ?? existingProject.Details.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? existingProject.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? existingProject.Details.ConversionSupportGrantAmount,
