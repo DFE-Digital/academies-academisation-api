@@ -44,6 +44,8 @@ internal static class LegacyProjectServiceModelMapper
 			SponsorReferenceNumber = project.Details.SponsorReferenceNumber,
 			SponsorName = project.Details.SponsorName,
 			AcademyTypeAndRoute = project.Details.AcademyTypeAndRoute,
+			Form7Received = project.Details.Form7Received,
+			Form7ReceivedDate = project.Details.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = project.Details.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,  // had to make this nullable or move it to the top
