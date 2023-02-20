@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -43,8 +42,8 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			// assert
 			Assert.Multiple(
 				() => Assert.Equal(2, result.Count),
-				() => Assert.Equivalent(incompleteProjectDetails1, result.First().Details),
-				() => Assert.Equivalent(incompleteProjectDetails2, result.Last().Details)
+				() => Assert.True(incompleteProjectDetails1.Equals(result.First().Details)),
+				() => Assert.True(incompleteProjectDetails2.Equals(result.Last().Details))
 			);
 		}
 

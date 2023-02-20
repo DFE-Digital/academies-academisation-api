@@ -231,7 +231,8 @@ public class ProjectState : BaseEntity
 				? null
 				: new User(AssignedUserId.Value, AssignedUserFullName ?? "", AssignedUserEmailAddress ?? ""),
 
-			Notes = Notes.ToProjectNotes().ToList()
+			Notes = Notes.ToProjectNotes().ToList(),
+			CreatedOn = CreatedOn,
 		};
 
 		return new Project(Id, projectDetails);

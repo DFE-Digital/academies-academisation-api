@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Fare;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
