@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Fare;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
@@ -25,7 +24,8 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
 
 			var totalProjects = queryable.Count();
-			var projects = await queryable.OrderByDescending(acp => acp.ApplicationReceivedDate)
+			var projects = await queryable
+				.OrderByDescending(acp => acp.CreatedOn)
 				.Skip((page - 1) * count)
 				.Take(count).ToListAsync();
 
@@ -33,7 +33,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 		}
 		private static IQueryable<ProjectState> FilterByRegion(IEnumerable<string>? regions, IQueryable<ProjectState> queryable)
 		{
-			
+
 			if (regions != null && regions.Any())
 			{
 				var lowerCaseRegions = regions.Select(region => region.ToLower());
@@ -77,7 +77,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 				if (lowerCaseDeliveryOfficers.Contains("not assigned"))
 				{
 					// Query by unassigned or assigned delivery officer
-					queryable = queryable.Where(p => 
+					queryable = queryable.Where(p =>
 								(!string.IsNullOrEmpty(p.AssignedUserFullName) && lowerCaseDeliveryOfficers.Contains(p.AssignedUserFullName.ToLower()))
 								|| string.IsNullOrEmpty(p.AssignedUserFullName));
 				}

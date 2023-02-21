@@ -83,5 +83,6 @@ public record ApplicationSchoolServiceModel(
 	string? DeclarationSignedByName = null,
 	string? SchoolConversionReasonsForJoining = null, 
 	bool? HasLoans = null,
-	bool? HasLeases = null
+	bool? HasLeases = null,
+	Guid? EntityId = null
 );

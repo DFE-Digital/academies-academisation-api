@@ -27,6 +27,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			var result = existingApplication.SetJoinTrustDetails(
 				command.UKPRN,
 				command.trustName,
+				command.trustReference,
 				command.changesToTrust,
 				command.changesToTrustExplained,
 				command.changesToLaGovernance,

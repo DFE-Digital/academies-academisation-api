@@ -21,6 +21,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public DateTime? BaselineDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
+	public DateTime? Form7ReceivedDate { get; init; }
+	public string? Form7Received { get; init; }
 	public string? LocalAuthorityInformationTemplateComments { get; init; }
 	public string? LocalAuthorityInformationTemplateLink { get; init; }
 	public bool? LocalAuthorityInformationTemplateSectionComplete { get; init; }
@@ -92,6 +94,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	public User? AssignedUser { get; init; }
 	public ICollection<ProjectNote> Notes { get; init; } = new List<ProjectNote>();
+	public DateTime CreatedOn { get; set; }
 
 	public bool Equals(ProjectDetails? other)
 	{
@@ -135,6 +138,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
 			   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
 				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(Form7Received, other.Form7Received, StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(Form7ReceivedDate, other.Form7ReceivedDate) &&
 			   Nullable.Equals(PreviousHeadTeacherBoardDate, other.PreviousHeadTeacherBoardDate) &&
 			   string.Equals(PreviousHeadTeacherBoardLink, other.PreviousHeadTeacherBoardLink,
 				   StringComparison.InvariantCultureIgnoreCase) &&
@@ -247,6 +252,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(OpeningDate);
 		hashCode.Add(BaselineDate);
 		hashCode.Add(LocalAuthorityInformationTemplateSentDate);
+		hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(Form7ReceivedDate);
 		hashCode.Add(LocalAuthorityInformationTemplateReturnedDate);
 		hashCode.Add(LocalAuthorityInformationTemplateComments, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(LocalAuthorityInformationTemplateLink, StringComparer.InvariantCultureIgnoreCase);
@@ -318,6 +325,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(KeyStage4PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AssignedUser);
+		hashCode.Add(CreatedOn);
 		return hashCode.ToHashCode();
 	}
 }

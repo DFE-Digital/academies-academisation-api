@@ -26,6 +26,9 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		ApplicationStatus = ApplicationStatus.InProgress;
 		ApplicationType = applicationType;
 		_contributors.Add(new(initialContributor));
+		// We need to reuse the DynamicsId to generate a guid to publish unique sharepoint paths
+		// Once moved over from Dynamics this will be renamed to entityId and mapped through in the usual way
+		DynamicsApplicationId = Guid.NewGuid();
 	}
 
 	public Application(
@@ -73,17 +76,13 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 
 	IReadOnlyCollection<ISchool> IApplication.Schools => _schools.AsReadOnly();
 
-	public void SetIdsOnCreate(int applicationId, int contributorId)
-	{
-		Id = applicationId;
-		_contributors.Single().Id = contributorId;
-	}
-
 	/// <summary>
 	/// This is in the format $"A2B_{ApplicationId}"
 	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
 	/// </summary>
 	public string? ApplicationReference { get; set; }
+
+	public Guid EntityId { get => DynamicsApplicationId ?? Guid.Empty; }
 
 	public CommandResult Update(
 		ApplicationType applicationType,
@@ -203,7 +202,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		return new CreateSuccessResult<Application>(new Application(applicationType, initialContributor));
 	}
 
-	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
+	public CommandResult SetJoinTrustDetails(int UKPRN, string trustName, string trustReference, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained)
 	{
 		// check the application type allows join trust details to be set
 		var validationResult = setJoinTrustDetailsValidator.Validate(this);
@@ -217,11 +216,11 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		// if the trust is already set update the fields
 		if (JoinTrust != null)
 		{
-			JoinTrust.Update(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
+			JoinTrust.Update(UKPRN, trustName, trustReference, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 
 		}
 		else { 
-			JoinTrust = JoinTrust.Create(UKPRN, trustName, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
+			JoinTrust = JoinTrust.Create(UKPRN, trustName, trustReference, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
 		}
 
 		return new CommandSuccessResult();

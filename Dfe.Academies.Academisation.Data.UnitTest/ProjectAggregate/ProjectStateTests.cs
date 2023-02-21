@@ -21,6 +21,6 @@ public class ProjectStateTests
 		var mapped = ProjectState.MapFromDomain(project);
 		var doubleMapped = mapped.MapToDomain();
 
-		Assert.Equal(projectDetails, doubleMapped.Details);
+		Assert.True(projectDetails.Equals(doubleMapped.Details));
 	}
 }

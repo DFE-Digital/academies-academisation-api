@@ -19,6 +19,7 @@ internal static class ApplicationServiceModelMapper
 			mapper.Map<ApplicationJoinTrustServiceModel>(application.JoinTrust),
 			mapper.Map<ApplicationFormTrustServiceModel>(application.FormTrust),
 			application.ApplicationSubmittedDate,
-			application.ApplicationReference);
+			application.ApplicationReference,
+			application.EntityId);
 	}
 }

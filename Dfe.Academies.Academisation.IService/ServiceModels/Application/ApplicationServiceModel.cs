@@ -11,4 +11,5 @@ public record ApplicationServiceModel(
 	ApplicationJoinTrustServiceModel? joinTrustDetails,
 	ApplicationFormTrustServiceModel? formTrustDetails,
 	DateTime? ApplicationSubmittedDate,
-	string? ApplicationReference);
+	string? ApplicationReference,
+	Guid EntityId);

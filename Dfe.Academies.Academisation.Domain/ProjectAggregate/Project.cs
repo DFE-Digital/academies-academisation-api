@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -26,6 +27,7 @@ public class Project : IProject
 
 	public ProjectDetails Details { get; private set; }
 
+
 	public static CreateResult Create(IApplication application)
 	{
 		if (application.ApplicationType != ApplicationType.JoinAMat)
@@ -47,7 +49,7 @@ public class Project : IProject
 			ProjectStatus = "Converter Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			OpeningDate = DateTime.Today.AddMonths(6),
-			TrustReferenceNumber = application.JoinTrust?.Id.ToString(),
+			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
@@ -65,6 +67,39 @@ public class Project : IProject
 			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
 			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
+		};
+
+		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
+	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
+	{
+		if (project.Trust == null)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("Trust", "Trust in the model must not be null")
+			});
+		}
+		if (project.School == null)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("School", "School in the model must not be null")
+			});
+		}
+
+		var projectDetails = new ProjectDetails
+		{
+			Urn = project.School.Urn,
+			SchoolName = project.School?.Name,
+			ProjectStatus = "Converter Pre-AO (C)",
+			OpeningDate = DateTime.Today.AddMonths(6),
+			TrustReferenceNumber = project.Trust?.ReferenceNumber,
+			NameOfTrust = project.Trust?.Name,
+			AcademyTypeAndRoute = "Sponsored",
+			ConversionSupportGrantAmount = 25000,
+			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme)
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
@@ -116,6 +151,8 @@ public class Project : IProject
 			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber,
 			SponsorName = detailsToUpdate.SponsorName,
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute,
+			Form7Received = detailsToUpdate.Form7Received,
+			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,

@@ -68,8 +68,6 @@ builder.Host.ConfigureLogging((context, logging) =>
 			Indented = true,
 		};
 	});
-
-	logging.AddSentry();
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -102,6 +100,8 @@ builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
 builder.Services.AddScoped<ILegacyProjectAddNoteCommand, LegacyProjectAddNoteCommand>();
 builder.Services.AddScoped<ILegacyProjectDeleteNoteCommand, LegacyProjectDeleteNoteCommand>();
+builder.Services.AddScoped<ICreateInvoluntaryProjectCommand, CreateInvoluntaryProjectCommand>();
+builder.Services.AddScoped<ICreateInvoluntaryProjectDataCommand, CreateInvoluntaryProjectDataCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
@@ -177,6 +177,18 @@ builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 		sp.GetRequiredService<ILogger<Program>>().LogError("Academies API http client not configured.");
 	}
 });
+
+
+builder.Services.AddApplicationInsightsTelemetry();
+var aiOptions = new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions();
+
+// Disables adaptive sampling.
+aiOptions.EnableAdaptiveSampling = false;
+
+// Disables QuickPulse (Live Metrics stream).
+aiOptions.EnableQuickPulseMetricStream = false;
+aiOptions.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+builder.Services.AddApplicationInsightsTelemetry(aiOptions);
 
 var app = builder.Build();
 

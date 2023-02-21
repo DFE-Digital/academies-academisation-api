@@ -37,6 +37,8 @@ public class ProjectState : BaseEntity
 	public DateTime? DaoPackSentDate { get; set; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; set; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; set; }
+	public DateTime? Form7ReceivedDate { get; set; }
+	public string? Form7Received { get; set; }
 	public string? PreviousHeadTeacherBoardLink { get; set; }
 	public string? TrustReferenceNumber { get; set; }
 	public string? NameOfTrust { get; set; }
@@ -152,6 +154,8 @@ public class ProjectState : BaseEntity
 			DaoPackSentDate = DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = PreviousHeadTeacherBoardDate,
+			Form7Received = Form7Received,
+			Form7ReceivedDate = Form7ReceivedDate,
 			PreviousHeadTeacherBoardLink = PreviousHeadTeacherBoardLink,
 			TrustReferenceNumber = TrustReferenceNumber,
 			NameOfTrust = NameOfTrust,
@@ -233,7 +237,8 @@ public class ProjectState : BaseEntity
 				? null
 				: new User(AssignedUserId.Value, AssignedUserFullName ?? "", AssignedUserEmailAddress ?? ""),
 
-			Notes = Notes.ToProjectNotes().ToList()
+			Notes = Notes.ToProjectNotes().ToList(),
+			CreatedOn = CreatedOn,
 		};
 
 		return new Project(Id, projectDetails);
@@ -273,6 +278,8 @@ public class ProjectState : BaseEntity
 			PreviousHeadTeacherBoardDateQuestion = project.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = project.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = project.Details.PreviousHeadTeacherBoardLink,
+			Form7Received = project.Details.Form7Received,
+			Form7ReceivedDate = project.Details.Form7ReceivedDate,
 			TrustReferenceNumber = project.Details.TrustReferenceNumber,
 			NameOfTrust = project.Details.NameOfTrust,
 			SponsorReferenceNumber = project.Details.SponsorReferenceNumber,

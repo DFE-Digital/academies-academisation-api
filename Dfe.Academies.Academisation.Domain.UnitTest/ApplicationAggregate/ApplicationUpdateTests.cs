@@ -681,6 +681,7 @@ public class ApplicationUpdateTests
 		var result = subject.SetJoinTrustDetails(
 			updateJoinTrust.UKPRN,
 			updateJoinTrust.TrustName,
+			updateJoinTrust.TrustReference,
 			updateJoinTrust.ChangesToTrust,
 			updateJoinTrust.ChangesToTrustExplained,
 			updateJoinTrust.ChangesToLaGovernance,
@@ -706,6 +707,7 @@ public class ApplicationUpdateTests
 		var result = subject.SetJoinTrustDetails(
 			updateJoinTrust.UKPRN,
 			updateJoinTrust.TrustName,
+			updateJoinTrust.TrustReference,
 			updateJoinTrust.ChangesToTrust,
 			updateJoinTrust.ChangesToTrustExplained,
 			updateJoinTrust.ChangesToLaGovernance,
@@ -944,7 +946,7 @@ public class ApplicationUpdateTests
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			schools,
-			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<ChangesToTrust>(),
+			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<string>(), _fixture.Create<ChangesToTrust>(),
 				_fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
 			null);
 
@@ -1008,6 +1010,7 @@ public class ApplicationUpdateTests
 		opt.Excluding(m => m.Name.Equals("CreatedOn"));
 		opt.Excluding(m => m.Name.Equals("LastModifiedOn"));
 		opt.Excluding(m => m.Name.Contains("Dynamics"));
+		opt.Excluding(m => m.Name.Contains("EntityId"));
 		return opt;
 	}
 

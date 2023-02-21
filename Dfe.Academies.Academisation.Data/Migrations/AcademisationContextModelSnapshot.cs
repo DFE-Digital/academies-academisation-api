@@ -250,6 +250,12 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("FinancialDeficit")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Form7Received")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Form7ReceivedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FoundationConsent")
                         .HasColumnType("nvarchar(max)");
 
@@ -735,6 +741,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TrustName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrustReference")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

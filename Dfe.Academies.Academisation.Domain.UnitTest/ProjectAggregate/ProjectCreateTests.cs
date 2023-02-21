@@ -140,7 +140,7 @@ public class ProjectCreateTests
 			() => Assert.Equal("Converter Pre-AO (C)", project.Details.ProjectStatus),
 			() => Assert.Equal(application.ApplicationSubmittedDate, project.Details.ApplicationReceivedDate),
 			() => Assert.Equal(DateTime.Today.AddMonths(6), project.Details.OpeningDate),
-			() => Assert.Equal(application.JoinTrust?.Id.ToString(), project.Details.TrustReferenceNumber),
+			() => Assert.Equal(application.JoinTrust?.TrustReference, project.Details.TrustReferenceNumber),
 			() => Assert.Equal(application.JoinTrust?.TrustName, project.Details.NameOfTrust),
 			() => Assert.Equal("Converter", project.Details.AcademyTypeAndRoute),
 			() => Assert.Equal(school.Details.ConversionTargetDate, project.Details.ProposedAcademyOpeningDate),
