@@ -107,6 +107,7 @@ public class Project : IProject
 			Version = detailsToUpdate.Version,
 			ClearedBy = detailsToUpdate.ClearedBy,
 			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired,
+			DaoPackSentDate = detailsToUpdate.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = detailsToUpdate.PreviousHeadTeacherBoardLink,

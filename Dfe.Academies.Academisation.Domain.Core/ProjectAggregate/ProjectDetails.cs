@@ -29,6 +29,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? Version { get; init; }
 	public string? ClearedBy { get; init; }
 	public string? AcademyOrderRequired { get; init; }
+	public DateTime? DaoPackSentDate { get; init; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; init; }
 	public string? PreviousHeadTeacherBoardLink { get; init; }
@@ -91,7 +92,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	public User? AssignedUser { get; init; }
 	public ICollection<ProjectNote> Notes { get; init; } = new List<ProjectNote>();
-	
+
 	public bool Equals(ProjectDetails? other)
 	{
 		if (ReferenceEquals(null, other))
@@ -131,6 +132,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
 				   StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
 			   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   Nullable.Equals(PreviousHeadTeacherBoardDate, other.PreviousHeadTeacherBoardDate) &&
@@ -254,6 +256,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(Version, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ClearedBy, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AcademyOrderRequired, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(DaoPackSentDate);
 		hashCode.Add(PreviousHeadTeacherBoardDateQuestion, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(PreviousHeadTeacherBoardDate);
 		hashCode.Add(PreviousHeadTeacherBoardLink, StringComparer.InvariantCultureIgnoreCase);

@@ -33,6 +33,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? Version { get; init; }
 		public string? ClearedBy { get; init; }
 		public string? AcademyOrderRequired { get; init; }
+		public DateTime? DaoPackSentDate { get; init; }
 		public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 		public DateTime? PreviousHeadTeacherBoardDate { get; init; }
 		public string? PreviousHeadTeacherBoardLink { get; init; }
@@ -136,6 +137,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				   string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
 					   StringComparison.InvariantCultureIgnoreCase) &&
+				   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
 				   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
 					   StringComparison.InvariantCultureIgnoreCase) &&
 				   Nullable.Equals(PreviousHeadTeacherBoardDate, other.PreviousHeadTeacherBoardDate) &&
@@ -264,6 +266,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(Version, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(ClearedBy, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(AcademyOrderRequired, StringComparer.InvariantCultureIgnoreCase);
+			hashCode.Add(DaoPackSentDate);
 			hashCode.Add(PreviousHeadTeacherBoardDateQuestion, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(PreviousHeadTeacherBoardDate);
 			hashCode.Add(PreviousHeadTeacherBoardLink, StringComparer.InvariantCultureIgnoreCase);

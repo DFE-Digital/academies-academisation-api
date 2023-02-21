@@ -37,6 +37,7 @@ internal static class LegacyProjectDetailsMapper
 			Version = detailsToUpdate.Version ?? existingProject.Details.Version,
 			ClearedBy = detailsToUpdate.ClearedBy ?? existingProject.Details.ClearedBy,
 			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired ?? existingProject.Details.AcademyOrderRequired,
+			DaoPackSentDate = detailsToUpdate.DaoPackSentDate ?? existingProject.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion ?? existingProject.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate ?? existingProject.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = detailsToUpdate.PreviousHeadTeacherBoardLink ?? existingProject.Details.PreviousHeadTeacherBoardLink,
