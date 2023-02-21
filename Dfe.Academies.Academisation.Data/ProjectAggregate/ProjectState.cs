@@ -34,6 +34,7 @@ public class ProjectState : BaseEntity
 	public string? Version { get; set; }
 	public string? ClearedBy { get; set; }
 	public string? AcademyOrderRequired { get; set; }
+	public DateTime? DaoPackSentDate { get; set; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; set; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; set; }
 	public DateTime? Form7ReceivedDate { get; set; }
@@ -150,6 +151,7 @@ public class ProjectState : BaseEntity
 			Version = Version,
 			ClearedBy = ClearedBy,
 			AcademyOrderRequired = AcademyOrderRequired,
+			DaoPackSentDate = DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = PreviousHeadTeacherBoardDate,
 			Form7Received = Form7Received,
@@ -272,6 +274,7 @@ public class ProjectState : BaseEntity
 			Version = project.Details.Version,
 			ClearedBy = project.Details.ClearedBy,
 			AcademyOrderRequired = project.Details.AcademyOrderRequired,
+			DaoPackSentDate = project.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = project.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = project.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = project.Details.PreviousHeadTeacherBoardLink,

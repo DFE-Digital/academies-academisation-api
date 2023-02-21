@@ -31,6 +31,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? Version { get; init; }
 	public string? ClearedBy { get; init; }
 	public string? AcademyOrderRequired { get; init; }
+	public DateTime? DaoPackSentDate { get; init; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; init; }
 	public string? PreviousHeadTeacherBoardLink { get; init; }
@@ -134,6 +135,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
 				   StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
 			   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(Form7Received, other.Form7Received, StringComparison.InvariantCultureIgnoreCase) &&
@@ -212,7 +214,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(KeyStage4PerformanceAdditionalInformation, other.KeyStage4PerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation,
-				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);		   
+				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);
 	}
 
 	public override bool Equals(object? obj)
@@ -261,6 +263,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(Version, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ClearedBy, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AcademyOrderRequired, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(DaoPackSentDate);
 		hashCode.Add(PreviousHeadTeacherBoardDateQuestion, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(PreviousHeadTeacherBoardDate);
 		hashCode.Add(PreviousHeadTeacherBoardLink, StringComparer.InvariantCultureIgnoreCase);

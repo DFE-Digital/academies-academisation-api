@@ -36,6 +36,7 @@ internal static class LegacyProjectServiceModelMapper
 			Version = project.Details.Version,
 			ClearedBy = project.Details.ClearedBy,
 			AcademyOrderRequired = project.Details.AcademyOrderRequired,
+			DaoPackSentDate = project.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = project.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = project.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = project.Details.PreviousHeadTeacherBoardLink,
