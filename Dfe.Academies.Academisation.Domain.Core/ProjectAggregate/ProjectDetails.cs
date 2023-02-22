@@ -21,6 +21,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public DateTime? BaselineDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
+	public DateTime? Form7ReceivedDate { get; init; }
+	public string? Form7Received { get; init; }
 	public string? LocalAuthorityInformationTemplateComments { get; init; }
 	public string? LocalAuthorityInformationTemplateLink { get; init; }
 	public bool? LocalAuthorityInformationTemplateSectionComplete { get; init; }
@@ -29,6 +31,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? Version { get; init; }
 	public string? ClearedBy { get; init; }
 	public string? AcademyOrderRequired { get; init; }
+	public DateTime? DaoPackSentDate { get; init; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; init; }
 	public string? PreviousHeadTeacherBoardLink { get; init; }
@@ -132,8 +135,11 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
 				   StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
 			   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
 				   StringComparison.InvariantCultureIgnoreCase) &&
+			   string.Equals(Form7Received, other.Form7Received, StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(Form7ReceivedDate, other.Form7ReceivedDate) &&
 			   Nullable.Equals(PreviousHeadTeacherBoardDate, other.PreviousHeadTeacherBoardDate) &&
 			   string.Equals(PreviousHeadTeacherBoardLink, other.PreviousHeadTeacherBoardLink,
 				   StringComparison.InvariantCultureIgnoreCase) &&
@@ -208,7 +214,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(KeyStage4PerformanceAdditionalInformation, other.KeyStage4PerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation,
-				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);		   
+				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);
 	}
 
 	public override bool Equals(object? obj)
@@ -246,6 +252,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(OpeningDate);
 		hashCode.Add(BaselineDate);
 		hashCode.Add(LocalAuthorityInformationTemplateSentDate);
+		hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(Form7ReceivedDate);
 		hashCode.Add(LocalAuthorityInformationTemplateReturnedDate);
 		hashCode.Add(LocalAuthorityInformationTemplateComments, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(LocalAuthorityInformationTemplateLink, StringComparer.InvariantCultureIgnoreCase);
@@ -255,6 +263,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(Version, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ClearedBy, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AcademyOrderRequired, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(DaoPackSentDate);
 		hashCode.Add(PreviousHeadTeacherBoardDateQuestion, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(PreviousHeadTeacherBoardDate);
 		hashCode.Add(PreviousHeadTeacherBoardLink, StringComparer.InvariantCultureIgnoreCase);
