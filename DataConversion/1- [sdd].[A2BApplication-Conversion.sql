@@ -87,9 +87,11 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 			app.[DynamicsApplicationId]
 	FROM [a2b].[stg_Application] app
 	CROSS APPLY STRING_SPLIT([Name], '_')
+	LEFT OUTER JOIN [academisation].[ConversionApplication] newApp on newApp.DynamicsApplicationId = app.DynamicsApplicationId
 	WHERE app.[ApplicationType] IN (100000001,907660000) 
 	AND app.[Name] LIKE 'A2B_%' 
 	AND value <> 'A2B'
+	AND newApp.DynamicsApplicationId is null
 
 	SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
 
@@ -110,24 +112,26 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 			   ,[DynamicsApplicationId])
 	SELECT 	[grp].[UKPRN],
 			[TrustId], -- INT in v1.5, string in as-is !! TODO:- to confirm => Live data = 'TR00751'
-			[TrustName], -- TODO:- to confirm - service support team !!
+			app.[TrustName], -- TODO:- to confirm - service support team !!
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
 			--[ChangesToTrust], -- convert bit -> enum value. god knows what happens to 'unknown in dynamics'!!
-			CASE ChangesToTrust
+			CASE app.ChangesToTrust
 				WHEN 907660001 THEN 2
 				WHEN 907660000 THEN 1
 			END as 'ChangesToTrust',
-			[ChangesToTrustExplained],
-			CASE ChangesToLaGovernance
+			app.[ChangesToTrustExplained],
+			CASE app.ChangesToLaGovernance
 				WHEN 907660001 THEN 0
 				WHEN 907660000 THEN 1
 			END as 'ChangesToLaGovernance',
-			[ChangesToLaGovernanceExplained],
-			[DynamicsApplicationId]
+			app.[ChangesToLaGovernanceExplained],
+			app.[DynamicsApplicationId]
 	FROM [a2b].[stg_Application] app
 	INNER JOIN [gias].[Group] grp ON app.TrustId = grp.[Group ID] and grp.[UKPRN] IS NOT NULL
-	WHERE ApplicationType = 100000001;
+    LEFT OUTER JOIN [academisation].[ApplicationJoinTrust] newApp on newApp.DynamicsApplicationId = app.DynamicsApplicationId
+	WHERE ApplicationType = 100000001 
+	AND newApp.DynamicsApplicationId is null;
 	
 	/*** STEP 3 - populate [academisation].[ApplicationFormTrust] ***/
 	INSERT INTO [academisation].[ApplicationFormTrust]
@@ -151,34 +155,36 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
            ,[FormTrustReasonVision]
            ,[TrustApproverEmail]
 		   ,[DynamicsApplicationId])
-	SELECT 	[TrustApproverName],
+	SELECT 	app.[TrustApproverName],
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			CASE [FormTrustGrowthPlansYesNo]
+			CASE app.[FormTrustGrowthPlansYesNo]
 				WHEN 907660001 THEN 0
 				WHEN 907660000 THEN 1
 			END as 'FormTrustGrowthPlansYesNo',
-			[FormTrustImprovementApprovedSponsor],
-			[FormTrustImprovementStrategy],
-			[FormTrustImprovementSupport],
-			[FormTrustOpeningDate],
-			[FormTrustPlanForGrowth],
-			[FormTrustPlansForNoGrowth],
-			[FormTrustProposedNameOfTrust],
-			CASE [FormTrustReasonApprovalToConvertAsSat]
+			app.[FormTrustImprovementApprovedSponsor],
+			app.[FormTrustImprovementStrategy],
+			app.[FormTrustImprovementSupport],
+			app.[FormTrustOpeningDate],
+			app.[FormTrustPlanForGrowth],
+			app.[FormTrustPlansForNoGrowth],
+			app.[FormTrustProposedNameOfTrust],
+			CASE app.[FormTrustReasonApprovalToConvertAsSat]
 				WHEN 907660001 THEN 0
 				WHEN 907660000 THEN 1
 			END as 'FormTrustReasonApprovalToConvertAsSat',
-			[FormTrustReasonApprovedPerson],
-			[FormTrustReasonForming],
-			[FormTrustReasonFreedom],
-			[FormTrustReasonGeoAreas],
-			[FormTrustReasonImproveTeaching],
-			[FormTrustReasonVision],
-			[TrustApproverEmail],
-			[DynamicsApplicationId]
-	FROM [a2b].[stg_Application]
-	WHERE ApplicationType = 907660000;
+			app.[FormTrustReasonApprovedPerson],
+			app.[FormTrustReasonForming],
+			app.[FormTrustReasonFreedom],
+			app.[FormTrustReasonGeoAreas],
+			app.[FormTrustReasonImproveTeaching],
+			app.[FormTrustReasonVision],
+			app.[TrustApproverEmail],
+			app.[DynamicsApplicationId]
+	FROM [a2b].[stg_Application] app
+	LEFT OUTER JOIN [academisation].[ApplicationFormTrust] newApp on newApp.DynamicsApplicationId = app.DynamicsApplicationId
+	WHERE ApplicationType = 907660000
+	AND newApp.DynamicsApplicationId is null;
 
 	/*** STEP 4 - backfill (FormTrustId, int) from ***/
 	UPDATE CA

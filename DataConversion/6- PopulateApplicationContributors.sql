@@ -1,5 +1,4 @@
 Use [<database_name, sysname, sip>]
-/****
 Role enum from c#
 public enum SchoolRoles
 {
@@ -36,12 +35,14 @@ BEGIN TRANSACTION CreateContributorsData
 				WHEN 907660000 THEN 2
 				WHEN 907660001 THEN 1
 				WHEN 907660002 THEN 2
+				ELSE 2
 			END as 'ContributorRole',
 			--[ApplicationRoleOtherDescription]
 			CASE APP.[ApplicationRole]
 				WHEN 907660000 THEN 'Head Teacher'
 				WHEN 907660001 THEN ''
 				WHEN 907660002 THEN APP.[ApplicationRoleOtherDescription]
+				ELSE ''
 			END as 'ContributorDescription',
 			NEWAPP.[Id] as 'ConversionApplicationId',
 			GETDATE() as 'CreatedOn',
@@ -49,7 +50,9 @@ BEGIN TRANSACTION CreateContributorsData
 			APP.[DynamicsApplicationId]
 	FROM [a2b].[stg_Application] as APP
 	INNER JOIN [academisation].[ConversionApplication] as NEWAPP on NEWAPP.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
+	LEFT OUTER JOIN [academisation].[ConversionApplicationContributor] newContributor on newContributor.DynamicsApplicationId = APP.DynamicsApplicationId
 	WHERE APP.[ApplicationType] IN (100000001,907660000) 
+	AND newContributor.DynamicsApplicationId is null
 
 	COMMIT TRAN CreateContributorsData
 	--ROLLBACK TRAN CreateContributorsData

@@ -47,11 +47,13 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 		--,[KeyPersonTrustee] = BIT = NULL
 		GETDATE() as 'CreatedOn',
 		GETDATE() as 'LastModifiedOn',
-		[DynamicsKeyPersonId]
+		AKP.[DynamicsKeyPersonId]
 	FROM [a2b].[stg_KeyPerson] AKP
 	INNER JOIN [a2b].[stg_Application] as APP on APP.[DynamicsApplicationId] = AKP.DynamicsApplicationId
 	INNER JOIN [academisation].[ConversionApplication] as NewApp on NewApp.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
+	LEFT OUTER JOIN [academisation].[ApplicationFormTrustKeyPerson] newKeyPerson on newKeyPerson.DynamicsKeyPersonId = AKP.DynamicsKeyPersonId
 	WHERE NewApp.[FormTrustId] IS NOT NULL
+	AND newKeyPerson.DynamicsKeyPersonId IS NULL
 	
 	-- MR:- need to un-pivot role data. hard code roleId's as part of pivot?
 	DECLARE @KeyPersonRoles TABLE
@@ -100,6 +102,8 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 			GETDATE() as 'LastModifiedOn'
 	 FROM [academisation].[ApplicationFormTrustKeyPerson] AKPNEW
 	 INNER JOIN @KeyPersonRoles AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId]
+	 LEFT OUTER JOIN [academisation].[ApplicationFormTrustKeyPersonRole] newRole on newRole.[Role] = AKP.NewRoleId
+	 WHERE newRole.[Role] is null
 	 
 	COMMIT TRAN PortDynamicsKeyContactsData
 	--ROLLBACK TRAN PortDynamicsKeyContactsData

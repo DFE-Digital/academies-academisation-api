@@ -332,6 +332,8 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			--ASS.[GoverningBodyConsentEvidenceDocumentLink]
 	FROM [a2b].[stg_ApplyingSchool] as ASS
 	INNER JOIN [academisation].[ConversionApplication] As APP ON APP.DynamicsApplicationId = ASS.DynamicsApplicationId
+	LEFT OUTER JOIN [academisation].[ApplicationSchool] newSchool on newSchool.DynamicsApplyingSchoolId = ass.DynamicsApplyingSchoolId
+	WHERE newSchool.DynamicsApplyingSchoolId is null
 
 	COMMIT TRAN PortDynamicsSchoolData
 	--ROLLBACK TRAN PortDynamicsSchoolData
