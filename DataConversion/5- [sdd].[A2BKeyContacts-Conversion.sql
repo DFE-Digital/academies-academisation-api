@@ -78,7 +78,7 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 	FROM   
 		(SELECT [DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
 	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee]
-		FROM [a2b].[stg_KeyPerson]) p  
+		FROM [a2b].[stg_KeyPerson] ) p  
 	UNPIVOT  
 		(TrueFalse FOR Roles IN   
 			([KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
@@ -101,8 +101,8 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn'
 	 FROM [academisation].[ApplicationFormTrustKeyPerson] AKPNEW
-	 INNER JOIN @KeyPersonRoles AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId]
-	 LEFT OUTER JOIN [academisation].[ApplicationFormTrustKeyPersonRole] newRole on newRole.[Role] = AKP.NewRoleId
+	 INNER JOIN @KeyPersonRoles AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId] and akp.TrueFalse = 1
+	 LEFT OUTER JOIN [academisation].[ApplicationFormTrustKeyPersonRole] newRole on newRole.[Role] = AKP.NewRoleId and newRole.ApplicationFormTrustKeyPersonRoleId = AKPNEW.Id
 	 WHERE newRole.[Role] is null
 	 
 	COMMIT TRAN PortDynamicsKeyContactsData
