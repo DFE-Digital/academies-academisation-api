@@ -22,4 +22,9 @@ public class UpdateLoanCommand : IRequest<CommandResult>
 	public decimal InterestRate { get; set; }
 	[DataMember]
 	public string Schedule { get; set; }
+
+	public override string ToString()
+	{
+		return $"Application ID: {ApplicationId}\n School ID: {SchoolId}\n Loan ID: {LoanId}";
+	}
 }

@@ -45,6 +45,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost]
 		public async Task<ActionResult<ApplicationServiceModel>> Post([FromBody] ApplicationCreateRequestModel request)
 		{
+			_logger.LogInformation($"Creating application using post endpoint with contributor: {request?.Contributor?.EmailAddress}");
 			var result = await _applicationCreateCommand.Execute(request);
 
 			return result switch
@@ -58,7 +59,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("{id}", Name = GetRouteName)]
 		public async Task<ActionResult<ApplicationServiceModel>> Get(int id)
 		{
-			// basic log line to check logger is working
 			_logger.LogInformation($"Getting application, id: {id}");
 
 			var result = await _applicationQueryService.GetById(id);
@@ -82,6 +82,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPut("{id}", Name = "Update")]
 		public async Task<ActionResult> Update(int id, [FromBody] ApplicationUpdateRequestModel serviceModel)
 		{
+			_logger.LogInformation($"Updating application: {serviceModel.ApplicationId} with values: {serviceModel.ToString()}");
 			var result = await _applicationUpdateCommand.Execute(id, serviceModel);
 
 			return result switch
@@ -96,6 +97,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPut("{applicationId}/join-trust", Name = "SetJoinTrustDetails")]
 		public async Task<ActionResult> SetJoinTrustDetails(int applicationId, [FromBody] SetJoinTrustDetailsCommand command, CancellationToken cancellationToken)
 		{
+			_logger.LogInformation($"Setting join trust information for application: {applicationId} with details: {command.ToString()}");
 			var result = await _mediator.Send(command with { applicationId = applicationId}, cancellationToken).ConfigureAwait(false);
 
 			return result switch
@@ -111,6 +113,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPut("{applicationId}/form-trust", Name = "SetFormTrustDetails")]
 		public async Task<ActionResult> SetFormTrustDetails(int applicationId, [FromBody] SetFormTrustDetailsCommand command, CancellationToken cancellationToken)
 		{
+			_logger.LogInformation($"Setting form trust information for application: {applicationId} with details: {command.ToString()}");
 			var result = await _mediator.Send(command with { applicationId = applicationId }, cancellationToken).ConfigureAwait(false);
 
 			return result switch
@@ -125,6 +128,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("{applicationId}/form-trust/key-person", Name = "AddKeyPerson")]
 		public async Task<ActionResult> AddKeyPerson(int applicationId, [FromBody] CreateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
+			_logger.LogInformation($"Adding key people to application: {applicationId} with details: {command.ToString()}");
 			var result = await _mediator.Send(command with { ApplicationId = applicationId }, cancellationToken).ConfigureAwait(false);
 
 			return result switch
@@ -139,6 +143,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPut("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "UpdateKeyPerson")]
 		public async Task<ActionResult> UpdateKeyPerson(int applicationId, int keyPersonId, [FromBody] UpdateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
+			_logger.LogInformation($"Updating key people to application: {applicationId} with details: {command.ToString()}");
 			var result = await _mediator.Send(command with { ApplicationId = applicationId, KeyPersonId = keyPersonId }, cancellationToken).ConfigureAwait(false);
 
 			return result switch
@@ -153,6 +158,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpDelete("{applicationId}/form-trust/key-person/{keyPersonId}", Name = "DeleteKeyPerson")]
 		public async Task<ActionResult> DeleteKeyPerson(int applicationId, int keyPersonId, CancellationToken cancellationToken)
 		{
+			_logger.LogInformation($"Deleting key person: {keyPersonId} in application: {applicationId}");
 			var result = await _mediator.Send(new DeleteTrustKeyPersonCommand(applicationId, keyPersonId), cancellationToken).ConfigureAwait(false);
 
 			return result switch
@@ -167,6 +173,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpDelete("{applicationId}/form-trust/school/{urn}", Name = "DeleteSchool")]
 		public async Task<ActionResult> DeleteSchool(int applicationId, int urn, CancellationToken cancellationToken)
 		{
+			_logger.LogInformation($"Deleting school: {urn} in application: {applicationId}");
 			var result = await _mediator.Send(new DeleteSchoolCommand(applicationId, urn), cancellationToken).ConfigureAwait(false);
 
 			return result switch
@@ -195,6 +202,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("{applicationId:int}/submit", Name = "Submit")]
 		public async Task<ActionResult> Submit(int applicationId)
 		{
+			_logger.LogInformation($"Submitting application: {applicationId}");
 			var result = await _mediator.Send(new SubmitApplicationCommand(applicationId)).ConfigureAwait(false);
 
 			return result switch

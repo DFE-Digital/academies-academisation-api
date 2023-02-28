@@ -26,4 +26,9 @@ public class UpdateLeaseCommand : IRequest<CommandResult>
 	public string ValueOfAssets { get; set; }
 	[DataMember]
 	public string ResponsibleForAssets { get; set; }
+	
+	public override string ToString()
+	{
+		return $"Application ID: {ApplicationId}\n School ID: {SchoolId}\n Lease ID: {LeaseId}";
+	}
 }
