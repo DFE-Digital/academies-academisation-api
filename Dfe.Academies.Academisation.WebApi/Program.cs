@@ -42,6 +42,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
@@ -167,6 +168,7 @@ builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 builder.Services.AddMediatR(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!);
 builder.Services.AddMediatR(typeof(CreateLoanCommandHandler).GetTypeInfo().Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
