@@ -216,11 +216,16 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 				WHEN 907660000 THEN 1
 				WHEN 907660001 THEN 0
 			END as 'SchoolConversionChangeName',
-			0 as 'ConfirmPaySupportGrantToSchool', -- BIT TODO:- ????
+
+			CASE 
+				WHEN ASS.SchoolSupportGrantFundsPaidTo = 907660000 AND APP.ApplicationType = 'FormAMat' THEN 1
+				ELSE 0
+			END as 'ConfirmPaySupportGrantToSchool',
+
 			--ASS.[SchoolSupportGrantFundsPaidTo] as 'SupportGrantFundsPaidTo', MR:- need mapper - string -> int !
 			CASE ASS.SchoolSupportGrantFundsPaidTo
 				WHEN 907660000 THEN 1
-				WHEN 907660001 THEN 0
+				WHEN 907660001 THEN 2
 			END as 'SupportGrantFundsPaidTo',
 			--**** additional info ****
 			--ASS.[SchoolFaithSchool] - not in v1.5 schema ??
