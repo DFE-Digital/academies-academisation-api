@@ -115,16 +115,20 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 			app.[TrustName], -- TODO:- to confirm - service support team !!
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			--[ChangesToTrust], -- convert bit -> enum value. god knows what happens to 'unknown in dynamics'!!
+			--app.[ChangesToTrust], -- convert bit -> enum value. god knows what happens to 'unknown in dynamics'!!
+			
 			CASE app.ChangesToTrust
 				WHEN 907660001 THEN 2
 				WHEN 907660000 THEN 1
+				WHEN 907660002 THEN 3
 			END as 'ChangesToTrust',
 			app.[ChangesToTrustExplained],
+
 			CASE app.ChangesToLaGovernance
 				WHEN 907660001 THEN 0
 				WHEN 907660000 THEN 1
 			END as 'ChangesToLaGovernance',
+			
 			app.[ChangesToLaGovernanceExplained],
 			app.[DynamicsApplicationId]
 	FROM [a2b].[stg_Application] app
