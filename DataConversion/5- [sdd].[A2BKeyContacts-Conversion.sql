@@ -60,11 +60,12 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 	([DynamicsKeyPersonId] uniqueidentifier, 
 	 KeyPersonRole nvarchar(50),
 	 TrueFalse BIT,
-	 NewRoleId INT
+	 NewRoleId INT,
+	 TimeInRole nvarchar(50)
 	)	
 	
 	INSERT INTO @KeyPersonRoles
-	([DynamicsKeyPersonId],KeyPersonRole, TrueFalse, NewRoleId)
+	([DynamicsKeyPersonId],KeyPersonRole, TrueFalse, NewRoleId, TimeInRole)
 
 	SELECT [DynamicsKeyPersonId], Roles, TrueFalse, 
 	CASE Roles 
@@ -74,10 +75,14 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 		WHEN 'KeyPersonTrustee' THEN 4
 		WHEN 'KeyPersonOther' THEN 5
 		WHEN 'KeyPersonMember' THEN 6
-	END as NewRoleId
+	END as NewRoleId,
+	CASE 		
+		WHEN Roles = 'KeyPersonFinancialDirector' AND [KeyPersonFinancialDirectorTime] IS NOT NULL THEN [KeyPersonFinancialDirectorTime]
+		ELSE ''
+	END as KeyPersonFinancialDirectorTime
 	FROM   
 		(SELECT [DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
-	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee]
+	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee], [KeyPersonFinancialDirectorTime]
 		FROM [a2b].[stg_KeyPerson] ) p  
 	UNPIVOT  
 		(TrueFalse FOR Roles IN   
@@ -97,7 +102,7 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 			   ,[LastModifiedOn])
 	 SELECT AKPNEW.[Id] as [ApplicationFormTrustKeyPersonRoleId],
 			NewRoleId as 'Role',
-			'' as [TimeInRole],
+			AKP.[TimeInRole],
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn'
 	 FROM [academisation].[ApplicationFormTrustKeyPerson] AKPNEW
