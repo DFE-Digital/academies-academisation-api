@@ -2,6 +2,7 @@
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Data.Academies;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -38,8 +39,10 @@ using Dfe.Academies.Academisation.WebApi.Swagger;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
@@ -50,6 +53,7 @@ builder.Services
 	{
 		options.SerializerSettings.Converters.Add(new StringEnumConverter(typeof(CamelCaseNamingStrategy)));
 		options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+		options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 	});
 
 // logging
@@ -149,6 +153,14 @@ builder.Services.AddDbContext<AcademisationContext>(options =>
 	}
 );
 
+builder.Services.AddDbContext<AcademiesContext>(options =>
+	{
+		options.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"]);
+	}
+);
+
+
+
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -156,6 +168,7 @@ builder.Services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
 builder.Services.AddMediatR(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!);
 builder.Services.AddMediatR(typeof(CreateLoanCommandHandler).GetTypeInfo().Assembly);
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));

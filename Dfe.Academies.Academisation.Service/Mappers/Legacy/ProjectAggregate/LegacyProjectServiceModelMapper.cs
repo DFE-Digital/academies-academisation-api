@@ -13,6 +13,7 @@ internal static class LegacyProjectServiceModelMapper
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
+			CreatedOn = project.Details.CreatedOn,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,
@@ -35,6 +36,7 @@ internal static class LegacyProjectServiceModelMapper
 			Version = project.Details.Version,
 			ClearedBy = project.Details.ClearedBy,
 			AcademyOrderRequired = project.Details.AcademyOrderRequired,
+			DaoPackSentDate = project.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = project.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = project.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = project.Details.PreviousHeadTeacherBoardLink,
@@ -43,6 +45,8 @@ internal static class LegacyProjectServiceModelMapper
 			SponsorReferenceNumber = project.Details.SponsorReferenceNumber,
 			SponsorName = project.Details.SponsorName,
 			AcademyTypeAndRoute = project.Details.AcademyTypeAndRoute,
+			Form7Received = project.Details.Form7Received,
+			Form7ReceivedDate = project.Details.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = project.Details.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,  // had to make this nullable or move it to the top
