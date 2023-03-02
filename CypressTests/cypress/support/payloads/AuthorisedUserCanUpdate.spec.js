@@ -4,7 +4,7 @@ const AuthorisedUserCanUpdatePayload = {
     "applicationStatus": "inProgress",
     "contributors": [
         {
-            "contributorId": 27,
+            "contributorId": 599,
             "firstName": "Dan",
             "lastName": "Good",
             "emailAddress": "Dan.GOOD@education.gov.uk",
@@ -13,7 +13,7 @@ const AuthorisedUserCanUpdatePayload = {
     ],
     "schools": [
         {
-            "id": 21,
+            "id": 316,
             "urn": 113538,
             "schoolName": "Coombe Dean School",
             "landAndBuildings": {
@@ -26,10 +26,6 @@ const AuthorisedUserCanUpdatePayload = {
                 "partOfPrioritySchoolsBuildingProgramme": false,
                 "partOfBuildingSchoolsForFutureProgramme": false
             },
-            "performance": {},
-            "localAuthority": {},
-            "partnershipsAndAffliations": {},
-            "religiousEducation": {},
             "previousFinancialYear": {
                 "financialYearEndDate": "2021-04-05T00:00:00",
                 "revenue": 500000.00,
@@ -54,34 +50,14 @@ const AuthorisedUserCanUpdatePayload = {
                 "financialYearEndDate": "2023-01-12T00:00:00",
                 "revenue": 1.00,
                 "revenueStatus": "deficit",
-                "revenueStatusExplained": "rjrjrtjtjrt",
+                "revenueStatusExplained": "Lorem Ipsum",
                 "capitalCarryForward": 1.00,
                 "capitalCarryForwardStatus": "deficit",
                 "capitalCarryForwardExplained": "sdfbdsfbdb",
                 "capitalCarryForwardFileLink": "string"
             },
-            "loans": [
-                {
-                    "loanId": 41,
-                    "amount": 30000.00,
-                    "purpose": "string",
-                    "provider": "string",
-                    "interestRate": 10.00,
-                    "schedule": "string"
-                }
-            ],
-            "leases": [
-                {
-                    "leaseId": 10,
-                    "leaseTerm": "3 years",
-                    "repaymentAmount": 50000.00,
-                    "interestRate": 10.00,
-                    "paymentsToDate": 10000.00,
-                    "purpose": "To build new science labs",
-                    "valueOfAssets": "100000",
-                    "responsibleForAssets": "Andrew Parsons"
-                }
-            ],
+            "loans": [],
+            "leases": [],
             "schoolConversionContactHeadName": "Andrew Parsons",
             "schoolConversionContactHeadEmail": "aparsons@plymstock.sch.uk",
             "schoolConversionContactHeadTel": "01752600500",
@@ -105,8 +81,11 @@ const AuthorisedUserCanUpdatePayload = {
             "confirmPaySupportGrantToSchool": false,
             "financeOngoingInvestigations": false,
             "declarationBodyAgree": true,
-            "declarationIAmTheChairOrHeadteacher": true
+            "declarationIAmTheChairOrHeadteacher": true,
+            "entityId": "367b0a30-e5e7-466c-aaa3-887dcd4553aa"
         }
-    ]
+    ],
+    "applicationReference": "A2B_27",
+    "entityId": "00000000-0000-0000-0000-000000000000"
 }
 module.exports = {AuthorisedUserCanUpdatePayload}
