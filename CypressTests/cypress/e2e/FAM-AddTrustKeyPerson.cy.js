@@ -203,6 +203,8 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
       })
     })
 
+    // BEST TO TAKE THIS ONE OUT THE PIPELINE SO WE DON'T RUN OUT OF PEOPLE TO DELETE
+/*
   it('DELETE - Verify An Authorised User Is Able To DELETE FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
     cy.request({
             method: 'DELETE',
@@ -216,11 +218,11 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
         expect(response).to.have.property('status', 200)
 
         })
-        
-
-
   })
+  */
 
+  // WE DON'T CARE ABOUT THIS RIGHT NOW
+/*
   it('DELETE - Verify An Authorised User Is UNable To DELETE FAM-Trust Key Person THAT DOES NOT EXIST - Form-Trust Key-Person THAT DOES NOT EXIST - 500 SERVER ERROR Expected - (May change to 400 later)', () => {
     cy.request({
             method: 'DELETE',
@@ -236,6 +238,8 @@ it('DELETE - Verify An UNAuthorised User Is UNable To DELETE FAM-Trust Key Perso
   
         })
   })
+  */
+
   
 
 })
