@@ -212,6 +212,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				CommandSuccessResult => Ok(),
 				CreateValidationErrorResult createValidationErrorResult => BadRequest(createValidationErrorResult.ValidationErrors),
 				CreateSuccessResult<LegacyProjectServiceModel> createSuccessResult => CreatedAtRoute("GetLegacyProject", new { id = createSuccessResult.Payload.Id }, createSuccessResult.Payload),
+				CreateSuccessResult<IEnumerable<LegacyProjectServiceModel>> createSuccessResult => CreatedAtRoute("GetLegacyProjects", null, createSuccessResult.Payload),
 				_ => throw new NotImplementedException()
 			};
 		}
