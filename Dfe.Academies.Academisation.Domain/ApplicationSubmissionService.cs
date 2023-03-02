@@ -26,18 +26,9 @@ public class ApplicationSubmissionService : IApplicationSubmissionService
 	{
 		var submitResult = application.Submit(_dateTimeProvider.Now);
 
-		if (submitResult is not CommandSuccessResult)
-		{
-			return submitResult;
-		}
+		if (submitResult is not CommandSuccessResult) return submitResult;
+		if (application.ApplicationType is not (ApplicationType.JoinAMat or ApplicationType.FormAMat)) return submitResult;
 
-		if (application.ApplicationType != ApplicationType.JoinAMat)
-		{
-			return submitResult;
-		}
-
-		var createResult = _projectFactory.Create(application);
-
-		return createResult;
+		return application.ApplicationType is ApplicationType.FormAMat ? _projectFactory.CreateFormAMat(application) : _projectFactory.Create(application);
 	}
 }

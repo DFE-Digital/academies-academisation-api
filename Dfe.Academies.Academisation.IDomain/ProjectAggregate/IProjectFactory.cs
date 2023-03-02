@@ -7,4 +7,5 @@ namespace Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 public interface IProjectFactory
 {
 	CreateResult Create(IApplication application);
+	CreateResult CreateFormAMat(IApplication application);
 }
