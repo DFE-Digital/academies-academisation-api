@@ -1,9 +1,11 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Collections;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Application;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 using MediatR;
 
@@ -52,7 +54,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 					{
 						await _projectCreateDataCommand.Execute(project);
 					}
-					await _projectCreateDataCommand.Execute(createSuccessResult.Payload);
 					break;
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
@@ -69,6 +70,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 					return createValidationErrorResult.MapToPayloadType();
 				case CreateSuccessResult<IProject> createSuccessResult:
 					return createSuccessResult.MapToPayloadType(p => p.MapToServiceModel());
+				case CreateSuccessResult<IEnumerable<IProject>> createSuccessResult:
+					var projects = createSuccessResult.Payload.Select(p => p.MapToServiceModel());
+					return new CreateSuccessResult<IEnumerable<LegacyProjectServiceModel>>(projects);
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}
