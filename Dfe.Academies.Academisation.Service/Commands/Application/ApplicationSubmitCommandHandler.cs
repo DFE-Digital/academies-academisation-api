@@ -47,6 +47,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				case CreateSuccessResult<IProject> createSuccessResult:
 					await _projectCreateDataCommand.Execute(createSuccessResult.Payload);
 					break;
+				case CreateSuccessResult<IEnumerable<IProject>> createSuccessResult:
+					foreach (var project in createSuccessResult.Payload)
+					{
+						await _projectCreateDataCommand.Execute(project);
+					}
+					await _projectCreateDataCommand.Execute(createSuccessResult.Payload);
+					break;
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}
