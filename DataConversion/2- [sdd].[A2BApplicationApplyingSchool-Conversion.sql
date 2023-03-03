@@ -165,9 +165,9 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			ASS.[SchoolConversionContactHeadTel],
 			--ASS.[SchoolConversionContactRole], -- MR:- need mapper - string -> int !
 			CASE ASS.[SchoolConversionContactRole]
-				WHEN 907660000 THEN 1
-				WHEN 907660001 THEN 2
-				WHEN 907660002 THEN 3
+				WHEN 907660000 THEN 'HeadTeacher'
+				WHEN 907660001 THEN 'ChairOfGoverningBody'
+				WHEN 907660002 THEN 'Other'
 			END as 'ContactRole',
 			ASS.[SchoolConversionTargetDateExplained],
 			ASS.[SchoolConversionReasonsForJoining] as 'JoinTrustReason',
@@ -326,9 +326,10 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 				WHEN 907660001 THEN 0
 			END as 'SchoolPartOfFederation',
 			--ASS.SchoolAdEqualitiesImpactAssessmentDetails as 'ProtectedCharacteristics', -- MR:- need mapper - string -> int !
-			CASE ASS.SchoolAdEqualitiesImpactAssessmentDetails
+			CASE ASS.SchoolAdEqualitiesImpactAssessment
 				WHEN 907660000 THEN 1
 				WHEN 907660001 THEN 0
+				ELSE NULL
 			END as 'ProtectedCharacteristics',
 			ASS.[DynamicsApplyingSchoolId]
 			--MR:- below not in v1.5

@@ -96,7 +96,9 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 	SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
 
 	/*** reseed the table so all new applications can be identified from imported ones ***/
-  DBCC CHECKIDENT ('[academisation].[ConversionApplication]', RESEED, 10000);
+
+IF (SELECT MAX(ID) FROM academisation.[ConversionApplication]) < 10000
+ DBCC CHECKIDENT ('[academisation].[ConversionApplication]', RESEED, 10000);
 
 	/*** STEP 2 - populate [academisation].[ApplicationJoinTrust] ***/
 	INSERT INTO [academisation].[ApplicationJoinTrust]
