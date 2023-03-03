@@ -45,7 +45,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			ProjectState updatedProject = await _context.Projects.SingleAsync(p => p.Id == project.Id);
 
 			// assert
-			Assert.Equivalent(projectDetails, updatedProject.MapToDomain().Details);
+			Assert.True(projectDetails.Equals(updatedProject.MapToDomain().Details));
 		}
 	}
 }

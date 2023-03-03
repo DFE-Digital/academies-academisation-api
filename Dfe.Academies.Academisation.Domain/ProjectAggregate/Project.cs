@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -27,6 +26,7 @@ public class Project : IProject
 	public int Id { get; }
 
 	public ProjectDetails Details { get; private set; }
+
 
 	public static CreateResult Create(IApplication application)
 	{
@@ -142,6 +142,7 @@ public class Project : IProject
 			Version = detailsToUpdate.Version,
 			ClearedBy = detailsToUpdate.ClearedBy,
 			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired,
+			DaoPackSentDate = detailsToUpdate.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = detailsToUpdate.PreviousHeadTeacherBoardLink,
@@ -150,6 +151,8 @@ public class Project : IProject
 			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber,
 			SponsorName = detailsToUpdate.SponsorName,
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute,
+			Form7Received = detailsToUpdate.Form7Received,
+			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,

@@ -26,7 +26,7 @@ public class ProjectUpdateTests
 		// Assert
 		Assert.Multiple(
 			() => Assert.IsType<CommandSuccessResult>(result),
-			() => Assert.Equivalent(updatedProject, sut.Details)
+			() => Assert.True(updatedProject.Equals(sut.Details))
 		);
 	}
 
