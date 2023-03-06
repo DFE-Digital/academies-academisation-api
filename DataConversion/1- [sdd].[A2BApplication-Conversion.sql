@@ -69,8 +69,8 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 	SELECT	
 	CAST(value AS int) as Id,
 	CASE app.[ApplicationType] 
-				WHEN 'JoinMat' THEN 'JoinAMat'
-				WHEN 'FormMat' THEN 'FormAMat'
+				WHEN 100000001 THEN 'JoinAMat'
+				WHEN 907660000 THEN 'FormAMat'
 			END as 'AppType',
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
@@ -81,21 +81,24 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 			NULL as 'FormTrustId',
 			NULL as 'JoinTrustId',
 	CASE app.[ApplicationSubmitted]
-		WHEN 1 THEN stg.ApplicationSubmittedOn -- the submitted dated is not in sdd so giving it date of now
+		WHEN 1 THEN app.ApplicationSubmittedOn -- the submitted dated is not in sdd so giving it date of now
 		WHEN 0 THEN NULL
 	END as 'ApplicationSubmittedDate',
 			app.[DynamicsApplicationId]
-	FROM [sdd].[A2BApplication] app
+	FROM [a2b].[stg_Application] app
 	CROSS APPLY STRING_SPLIT([Name], '_')
-	INNER JOIN [a2b].[stg_Application] stg ON app.DynamicsApplicationId = stg.DynamicsApplicationId
-	WHERE app.[ApplicationType] IN ('JoinMat','FormMat') 
+	LEFT OUTER JOIN [academisation].[ConversionApplication] newApp on newApp.DynamicsApplicationId = app.DynamicsApplicationId
+	WHERE app.[ApplicationType] IN (100000001,907660000) 
 	AND app.[Name] LIKE 'A2B_%' 
 	AND value <> 'A2B'
+	AND newApp.DynamicsApplicationId is null
 
 	SET IDENTITY_INSERT [academisation].[ConversionApplication] OFF;
 
 	/*** reseed the table so all new applications can be identified from imported ones ***/
-  DBCC CHECKIDENT ('[academisation].[ConversionApplication]', RESEED, 10000);
+
+IF (SELECT MAX(ID) FROM academisation.[ConversionApplication]) < 10000
+ DBCC CHECKIDENT ('[academisation].[ConversionApplication]', RESEED, 10000);
 
 	/*** STEP 2 - populate [academisation].[ApplicationJoinTrust] ***/
 	INSERT INTO [academisation].[ApplicationJoinTrust]
@@ -111,21 +114,30 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
 			   ,[DynamicsApplicationId])
 	SELECT 	[grp].[UKPRN],
 			[TrustId], -- INT in v1.5, string in as-is !! TODO:- to confirm => Live data = 'TR00751'
-			[TrustName], -- TODO:- to confirm - service support team !!
+			app.[TrustName], -- TODO:- to confirm - service support team !!
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			--[ChangesToTrust], -- convert bit -> enum value. god knows what happens to 'unknown in dynamics'!!
-			CASE ChangesToTrust
-				WHEN 0 THEN 2
-				WHEN 1 THEN 1
+			--app.[ChangesToTrust], -- convert bit -> enum value. god knows what happens to 'unknown in dynamics'!!
+			
+			CASE app.ChangesToTrust
+				WHEN 907660001 THEN 2
+				WHEN 907660000 THEN 1
+				WHEN 907660002 THEN 3
 			END as 'ChangesToTrust',
-			[ChangesToTrustExplained],
-			[ChangesToLaGovernance],
-			[ChangesToLaGovernanceExplained],
-			[DynamicsApplicationId]
-	FROM [sdd].[A2BApplication] app
-	INNER JOIN [gias].[Group] grp ON app.TrustId = grp.[Group ID]
-	WHERE ApplicationType = 'JoinMat';
+			app.[ChangesToTrustExplained],
+
+			CASE app.ChangesToLaGovernance
+				WHEN 907660001 THEN 0
+				WHEN 907660000 THEN 1
+			END as 'ChangesToLaGovernance',
+			
+			app.[ChangesToLaGovernanceExplained],
+			app.[DynamicsApplicationId]
+	FROM [a2b].[stg_Application] app
+	INNER JOIN [gias].[Group] grp ON app.TrustId = grp.[Group ID] and grp.[UKPRN] IS NOT NULL
+    LEFT OUTER JOIN [academisation].[ApplicationJoinTrust] newApp on newApp.DynamicsApplicationId = app.DynamicsApplicationId
+	WHERE ApplicationType = 100000001 
+	AND newApp.DynamicsApplicationId is null;
 	
 	/*** STEP 3 - populate [academisation].[ApplicationFormTrust] ***/
 	INSERT INTO [academisation].[ApplicationFormTrust]
@@ -149,28 +161,36 @@ SET IDENTITY_INSERT [academisation].[ConversionApplication] ON;
            ,[FormTrustReasonVision]
            ,[TrustApproverEmail]
 		   ,[DynamicsApplicationId])
-	SELECT 	[TrustApproverName],
+	SELECT 	app.[TrustApproverName],
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn',
-			[FormTrustGrowthPlansYesNo],
-			[FormTrustImprovementApprovedSponsor],
-			[FormTrustImprovementStrategy],
-			[FormTrustImprovementSupport],
-			[FormTrustOpeningDate],
-			[FormTrustPlanForGrowth],
-			[FormTrustPlansForNoGrowth],
-			[FormTrustProposedNameOfTrust],
-			[FormTrustReasonApprovalToConvertAsSat],
-			[FormTrustReasonApprovedPerson],
-			[FormTrustReasonForming],
-			[FormTrustReasonFreedom],
-			[FormTrustReasonGeoAreas],
-			[FormTrustReasonImproveTeaching],
-			[FormTrustReasonVision],
-			[TrustApproverEmail],
-			[DynamicsApplicationId]
-	FROM [sdd].[A2BApplication]
-	WHERE ApplicationType = 'FormMat';
+			CASE app.[FormTrustGrowthPlansYesNo]
+				WHEN 907660001 THEN 0
+				WHEN 907660000 THEN 1
+			END as 'FormTrustGrowthPlansYesNo',
+			app.[FormTrustImprovementApprovedSponsor],
+			app.[FormTrustImprovementStrategy],
+			app.[FormTrustImprovementSupport],
+			app.[FormTrustOpeningDate],
+			app.[FormTrustPlanForGrowth],
+			app.[FormTrustPlansForNoGrowth],
+			app.[FormTrustProposedNameOfTrust],
+			CASE app.[FormTrustReasonApprovalToConvertAsSat]
+				WHEN 907660001 THEN 0
+				WHEN 907660000 THEN 1
+			END as 'FormTrustReasonApprovalToConvertAsSat',
+			app.[FormTrustReasonApprovedPerson],
+			app.[FormTrustReasonForming],
+			app.[FormTrustReasonFreedom],
+			app.[FormTrustReasonGeoAreas],
+			app.[FormTrustReasonImproveTeaching],
+			app.[FormTrustReasonVision],
+			app.[TrustApproverEmail],
+			app.[DynamicsApplicationId]
+	FROM [a2b].[stg_Application] app
+	LEFT OUTER JOIN [academisation].[ApplicationFormTrust] newApp on newApp.DynamicsApplicationId = app.DynamicsApplicationId
+	WHERE ApplicationType = 907660000
+	AND newApp.DynamicsApplicationId is null;
 
 	/*** STEP 4 - backfill (FormTrustId, int) from ***/
 	UPDATE CA
