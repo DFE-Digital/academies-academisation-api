@@ -4,7 +4,7 @@
 	{
 		public GetAcademyConversionSearchModel(int page, int count, string? titleFilter,
 			IEnumerable<string>? deliveryOfficerQueryString, IEnumerable<string>? regionQueryString,
-			IEnumerable<string>? statusQueryString, IEnumerable<string>? applicationIds)
+			IEnumerable<string>? statusQueryString, IEnumerable<string>? applicationReferences)
 		{
 			Page = page;
 			Count = count;
@@ -12,7 +12,7 @@
 			DeliveryOfficerQueryString = deliveryOfficerQueryString;
 			RegionQueryString = regionQueryString;
 			StatusQueryString = statusQueryString;
-			ApplicationIds = applicationIds;
+			ApplicationReferences = applicationReferences;
 		}
 
 		public int Page { get; set; }
@@ -21,6 +21,6 @@
 		public IEnumerable<string>? DeliveryOfficerQueryString { get; set; }
 		public IEnumerable<string>? RegionQueryString { get; set; }
 		public IEnumerable<string>? StatusQueryString { get; set; }
-		public IEnumerable<string>? ApplicationIds { get; set; }
+		public IEnumerable<string>? ApplicationReferences { get; set; }
 	}
 }

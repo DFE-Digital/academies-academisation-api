@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_context = context;
 		}
 
-		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationIds = default)
+		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default)
 		{
 			IQueryable<ProjectState> queryable = _context.Projects;
 
@@ -22,7 +22,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			queryable = FilterByUrn(urn, queryable);
 			queryable = FilterBySchool(title, queryable);
 			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
-			queryable = FilterByApplicationIds(applicationIds, queryable);
+			queryable = FilterByApplicationIds(applicationReferences, queryable);
 
 			var totalProjects = queryable.Count();
 			var projects = await queryable
