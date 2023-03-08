@@ -93,7 +93,7 @@ public class Project : IProject
 				OpeningDate = DateTime.Today.AddMonths(6),
 				TrustReferenceNumber = application.JoinTrust?.TrustReference,
 				NameOfTrust = application.JoinTrust?.TrustName,
-				AcademyTypeAndRoute = "Converter",
+				AcademyTypeAndRoute = "Form a Mat",
 				ProposedAcademyOpeningDate = school.Details.ConversionTargetDate,
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
