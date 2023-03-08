@@ -39,6 +39,8 @@ public class ApplicationSubmitTests
 	private readonly Fixture _fixture = new();
 	private readonly Faker _faker = new();
 	private readonly AcademisationContext _context;
+	private const string FormAMat = "Form a Mat";
+	private const string Converter = "Converter";
 
 	private readonly IProjectFactory _projectFactory = new ProjectFactory();
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
@@ -142,7 +144,7 @@ public class ApplicationSubmitTests
 
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
 
-		AssertProject(school, project);
+		AssertProject(school, project, Converter);
 	}
 
 	[Fact]
@@ -197,17 +199,17 @@ public class ApplicationSubmitTests
 
 		(_, LegacyApiResponse<LegacyProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
 
-		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!);
-		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!);
-		AssertProject(thirdSchool, projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!);
+		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!, FormAMat);
+		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!, FormAMat);
+		AssertProject(thirdSchool, projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!, FormAMat);
 	}
 
-	private static void AssertProject(ApplicationSchoolServiceModel school, LegacyProjectServiceModel project)
+	private static void AssertProject(ApplicationSchoolServiceModel school, LegacyProjectServiceModel project, string type)
 	{
 		Assert.Multiple(
 		() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
 		() => Assert.Equal(DateTime.Today.AddMonths(6), project.OpeningDate),
-		() => Assert.Equal("Converter", project.AcademyTypeAndRoute),
+		() => Assert.Equal(type, project.AcademyTypeAndRoute),
 		() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
 		() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
 		() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
