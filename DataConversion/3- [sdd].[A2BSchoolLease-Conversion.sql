@@ -33,10 +33,11 @@ BEGIN TRANSACTION PortDynamicsSchoolLeaseData
 			GETDATE() as 'LastModifiedOn',
 			ASL.DynamicsSchoolLeaseId
 			--ASS.[DynamicsApplyingSchoolId] -- other
-	FROM [sdd].[A2BApplicationApplyingSchool] As ASS	
-	INNER JOIN [sdd].[A2BSchoolLease] as ASL ON ASL.ApplyingSchoolId = ASS.ApplyingSchoolId
+	FROM [a2b].[stg_ApplyingSchool] As ASS	
+	INNER JOIN [a2b].[stg_SchoolLease] as ASL ON ASL.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
 	INNER JOIN [academisation].[ApplicationSchool] as SCH on SCH.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
-	   
+	LEFT OUTER JOIN [academisation].[ApplicationSchoolLease] newLease on newLease.DynamicsSchoolLeaseId = ASL.DynamicsSchoolLeaseId
+	WHERE newLease.DynamicsSchoolLeaseId is null
 	/* STEP 2 - backfill [academisation].[ApplicationSchool].HasLeases */
 	-- MR:- below are nullable - backfill afterwards - as part of leases && loans conversion
 	--,[HasLeases]
@@ -67,3 +68,4 @@ BEGIN CATCH
       COMMIT TRANSACTION
 END CATCH;
 GO
+

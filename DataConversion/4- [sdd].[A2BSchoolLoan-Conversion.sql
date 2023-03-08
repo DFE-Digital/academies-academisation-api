@@ -1,5 +1,6 @@
 Use [<database_name, sysname, sip>]
 
+
 BEGIN TRY
 BEGIN TRANSACTION PortDynamicsSchoolLoansData
 
@@ -29,10 +30,12 @@ BEGIN TRANSACTION PortDynamicsSchoolLoansData
 			GETDATE() as 'LastModifiedOn',
 			ASL.DynamicsSchoolLoanId
 			--ASS.[DynamicsApplyingSchoolId] -- other
-	FROM [sdd].[A2BApplicationApplyingSchool] As ASS	
-	INNER JOIN [sdd].[A2BSchoolLoan] as ASL ON ASL.ApplyingSchoolId = ASS.ApplyingSchoolId
+	FROM [a2b].[stg_ApplyingSchool] As ASS	
+	INNER JOIN [a2b].[stg_SchoolLoan] as ASL ON ASL.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
 	INNER JOIN [academisation].[ApplicationSchool] as SCH on SCH.DynamicsApplyingSchoolId = ASS.DynamicsApplyingSchoolId
-	   
+	LEFT OUTER JOIN [academisation].[ApplicationSchoolLoan] newLoan on newLoan.DynamicsSchoolLoanId = ASL.DynamicsSchoolLoanId
+	WHERE newLoan.DynamicsSchoolLoanId is null
+	
 	/* STEP 2 - backfill [academisation].[ApplicationSchool].HasLoans */
 	-- MR:- below are nullable - backfill afterwards - as part of leases && loans conversion
 	--,[HasLoans]
