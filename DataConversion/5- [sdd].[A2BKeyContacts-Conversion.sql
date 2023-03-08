@@ -47,25 +47,27 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 		--,[KeyPersonTrustee] = BIT = NULL
 		GETDATE() as 'CreatedOn',
 		GETDATE() as 'LastModifiedOn',
-		[DynamicsKeyPersonId]
-	FROM [sdd].[A2BApplicationKeyPersons] AKP
-	INNER JOIN [sdd].[A2BApplication] as APP on APP.[ApplicationId] = AKP.ApplicationId
+		AKP.[DynamicsKeyPersonId]
+	FROM [a2b].[stg_KeyPerson] AKP
+	INNER JOIN [a2b].[stg_Application] as APP on APP.[DynamicsApplicationId] = AKP.DynamicsApplicationId
 	INNER JOIN [academisation].[ConversionApplication] as NewApp on NewApp.[DynamicsApplicationId] = APP.[DynamicsApplicationId]
+	LEFT OUTER JOIN [academisation].[ApplicationFormTrustKeyPerson] newKeyPerson on newKeyPerson.DynamicsKeyPersonId = AKP.DynamicsKeyPersonId
 	WHERE NewApp.[FormTrustId] IS NOT NULL
+	AND newKeyPerson.DynamicsKeyPersonId IS NULL
 	
 	-- MR:- need to un-pivot role data. hard code roleId's as part of pivot?
 	DECLARE @KeyPersonRoles TABLE
-	(KeyPersonId INT, 
-	 [DynamicsKeyPersonId] uniqueidentifier, 
+	([DynamicsKeyPersonId] uniqueidentifier, 
 	 KeyPersonRole nvarchar(50),
 	 TrueFalse BIT,
-	 NewRoleId INT
+	 NewRoleId INT,
+	 TimeInRole nvarchar(50)
 	)	
 	
 	INSERT INTO @KeyPersonRoles
-	(KeyPersonId,[DynamicsKeyPersonId],KeyPersonRole, TrueFalse, NewRoleId)
+	([DynamicsKeyPersonId],KeyPersonRole, TrueFalse, NewRoleId, TimeInRole)
 
-	SELECT [KeyPersonId],[DynamicsKeyPersonId], Roles, TrueFalse, 
+	SELECT [DynamicsKeyPersonId], Roles, TrueFalse, 
 	CASE Roles 
 		WHEN 'KeyPersonCeoExecutive' THEN 1
 		WHEN 'KeyPersonChairOfTrust' THEN 2
@@ -73,16 +75,20 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 		WHEN 'KeyPersonTrustee' THEN 4
 		WHEN 'KeyPersonOther' THEN 5
 		WHEN 'KeyPersonMember' THEN 6
-	END as NewRoleId
+	END as NewRoleId,
+	CASE 		
+		WHEN Roles = 'KeyPersonFinancialDirector' AND [KeyPersonFinancialDirectorTime] IS NOT NULL THEN [KeyPersonFinancialDirectorTime]
+		ELSE ''
+	END as KeyPersonFinancialDirectorTime
 	FROM   
-		(SELECT [KeyPersonId],[DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
-	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee]
-		FROM [sdd].[A2BApplicationKeyPersons]) p  
+		(SELECT [DynamicsKeyPersonId], [KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
+	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee], [KeyPersonFinancialDirectorTime]
+		FROM [a2b].[stg_KeyPerson] ) p  
 	UNPIVOT  
 		(TrueFalse FOR Roles IN   
 			([KeyPersonCeoExecutive],[KeyPersonChairOfTrust],
 	[KeyPersonFinancialDirector], [KeyPersonMember],[KeyPersonOther],[KeyPersonTrustee])  
-	)AS unpvt;  
+	)AS unpvt; 
 
 	--SELECT *
 	--FROM @KeyPersonRoles 
@@ -96,11 +102,13 @@ BEGIN TRANSACTION PortDynamicsKeyContactsData
 			   ,[LastModifiedOn])
 	 SELECT AKPNEW.[Id] as [ApplicationFormTrustKeyPersonRoleId],
 			NewRoleId as 'Role',
-			'' as [TimeInRole],
+			AKP.[TimeInRole],
 			GETDATE() as 'CreatedOn',
 			GETDATE() as 'LastModifiedOn'
 	 FROM [academisation].[ApplicationFormTrustKeyPerson] AKPNEW
-	 INNER JOIN @KeyPersonRoles AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId]
+	 INNER JOIN @KeyPersonRoles AKP ON AKP.[DynamicsKeyPersonId] = AKPNEW.[DynamicsKeyPersonId] and akp.TrueFalse = 1
+	 LEFT OUTER JOIN [academisation].[ApplicationFormTrustKeyPersonRole] newRole on newRole.[Role] = AKP.NewRoleId and newRole.ApplicationFormTrustKeyPersonRoleId = AKPNEW.Id
+	 WHERE newRole.[Role] is null
 	 
 	COMMIT TRAN PortDynamicsKeyContactsData
 	--ROLLBACK TRAN PortDynamicsKeyContactsData
