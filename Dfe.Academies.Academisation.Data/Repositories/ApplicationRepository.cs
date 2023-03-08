@@ -65,15 +65,16 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		private IQueryable<Application> DefaultIncludes()
 		{
 			var x =  _context.Applications
-				.Include(x => x.Contributors)
-				.Include(x => x.Schools)
-				.ThenInclude(x => x.Loans)
-				.Include(x => x.Schools)
-				.ThenInclude(x => x.Leases)
-				.Include(x => x.JoinTrust)
-				.Include(x => x.FormTrust)
-				.ThenInclude(x => x.KeyPeople)
-				.ThenInclude(x => x.Roles).AsQueryable();
+				//.Include(x => x.Contributors)
+				//.Include(x => x.Schools)
+				//.ThenInclude(x => x.Loans)
+				//.Include(x => x.Schools)
+				//.ThenInclude(x => x.Leases)
+				//.Include(x => x.JoinTrust)
+				//.Include(x => x.FormTrust)
+				//.ThenInclude(x => x.KeyPeople)
+				//.ThenInclude(x => x.Roles)
+				.AsQueryable();
 
 			return x;
 		}

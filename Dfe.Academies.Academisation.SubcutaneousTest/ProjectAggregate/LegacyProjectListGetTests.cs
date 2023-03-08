@@ -42,7 +42,7 @@ public class LegacyProjectListGetTests
 		await _context.Projects.AddAsync(project3);
 		await _context.SaveChangesAsync();
 
-		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, null, null);
+		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, null, null, null);
 		// act
 		var result = await _subject.GetProjects(searchModel);
 
@@ -65,7 +65,7 @@ public class LegacyProjectListGetTests
 		await _context.SaveChangesAsync();
 
 		string[] regions =  { project1.Region!.ToLower(), project2.Region!.ToLower() };
-		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, regions, null);
+		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, regions, null, null);
 		// act
 		var result = await _subject.GetProjects(searchModel);
 

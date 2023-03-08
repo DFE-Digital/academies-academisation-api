@@ -27,6 +27,12 @@ public class UpdateApplicationValidator
 			.WithMessage("Cannot add more than one school when joining a multi academy trust.")
 			.OverridePropertyName(nameof(Application.ApplicationType));
 
+		RuleFor(x => x.existing.ApplicationType)
+			.Must(x => false)
+			.When(x => x.type == ApplicationType.FormAMat && x.schools.Count() <= 1)
+			.WithMessage("Must add more than one school when forming a multi academy trust.")
+			.OverridePropertyName(nameof(Application.ApplicationType));
+
 		RuleFor(x => x.status)
 			.Must(x => false)
 			.When(x => x.status != x.existing.ApplicationStatus)

@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_context = context;
 		}
 
-		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default)
+		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationIds = default)
 		{
 			IQueryable<ProjectState> queryable = _context.Projects;
 
@@ -22,6 +22,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			queryable = FilterByUrn(urn, queryable);
 			queryable = FilterBySchool(title, queryable);
 			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
+			queryable = FilterByApplicationIds(applicationIds, queryable);
 
 			var totalProjects = queryable.Count();
 			var projects = await queryable
@@ -49,6 +50,15 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			if (states != null && states!.Any())
 			{
 				queryable = queryable.Where(p => states.Contains(p.ProjectStatus!.ToLower()));
+			}
+
+			return queryable;
+		}
+		private static IQueryable<ProjectState> FilterByApplicationIds(IEnumerable<string>? applicationIds, IQueryable<ProjectState> queryable)
+		{
+			if (applicationIds != null && applicationIds!.Any())
+			{
+				queryable = queryable.Where(p => applicationIds.Contains(p.ApplicationReferenceNumber!));
 			}
 
 			return queryable;
