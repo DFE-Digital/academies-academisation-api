@@ -11,4 +11,8 @@ public class ProjectFactory : IProjectFactory
 	{
 		return Project.Create(application);
 	}
+	public CreateResult CreateFormAMat(IApplication application)
+	{
+		return Project.CreateFormAMat(application);
+	}
 }

@@ -73,7 +73,8 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.Include(x => x.JoinTrust)
 				.Include(x => x.FormTrust)
 				.ThenInclude(x => x.KeyPeople)
-				.ThenInclude(x => x.Roles).AsQueryable();
+				.ThenInclude(x => x.Roles)
+				.AsQueryable();
 
 			return x;
 		}

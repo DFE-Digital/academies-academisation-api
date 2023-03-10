@@ -72,6 +72,49 @@ public class Project : IProject
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
 
+	public static CreateResult CreateFormAMat(IApplication application)
+	{
+		if (application.ApplicationType != ApplicationType.FormAMat)
+		{
+			return new CreateValidationErrorResult(
+				new List<ValidationError>
+				{
+					new("ApplicationStatus", "Only projects of type FormAMat are supported")
+				});
+		}
+
+		var projectDetailsList = application.Schools.Select(school => new ProjectDetails
+			{
+				Urn = school.Details.Urn,
+				SchoolName = school.Details.SchoolName,
+				ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
+				ProjectStatus = "Converter Pre-AO (C)",
+				ApplicationReceivedDate = application.ApplicationSubmittedDate,
+				OpeningDate = DateTime.Today.AddMonths(6),
+				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
+				AcademyTypeAndRoute = "Form a Mat",
+				ProposedAcademyOpeningDate = school.Details.ConversionTargetDate,
+				ConversionSupportGrantAmount = 25000,
+				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
+				PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
+				FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+				RationaleForTrust = school.Details.SchoolConversionReasonsForJoining,
+				EndOfCurrentFinancialYear = school.Details.CurrentFinancialYear?.FinancialYearEndDate,
+				EndOfNextFinancialYear = school.Details.NextFinancialYear?.FinancialYearEndDate,
+				RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.Revenue, school.Details.CurrentFinancialYear?.RevenueStatus),
+				ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.Revenue, school.Details.NextFinancialYear?.RevenueStatus),
+				CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.CapitalCarryForward, school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus),
+				CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.CapitalCarryForward, school.Details.NextFinancialYear?.CapitalCarryForwardStatus),
+				YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
+				YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
+				YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3
+			})
+			.ToList();
+
+		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails)).ToList();
+		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
+	}
+
 	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
 	{
 		if (project.Trust == null)

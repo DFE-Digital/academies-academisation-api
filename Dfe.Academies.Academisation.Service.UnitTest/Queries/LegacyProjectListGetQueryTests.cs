@@ -26,11 +26,11 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(), 
-				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<IEnumerable<string>?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		List<string> status = new List<string>() { "complete", "active"};
 		// Act
-		var result = await _subject.GetProjects(status, null, null,  1, 1, 1234, default);
+		var result = await _subject.GetProjects(status, null, null,  1, 1, 1234, default, null);
 	
 		// Assert
 		Assert.Multiple(
@@ -45,15 +45,15 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(),
-				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<IEnumerable<string>?>()))
 				.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		(int page, int count, int? urn) = (1, 1, 123);
 		List<string>? status = new List<string>() {"complete", "active"};
 		// Act
-		var result = await _subject.GetProjects(status, null, null, page, count, urn, null);
+		var result = await _subject.GetProjects(status, null, null, page, count, urn, null, null);
 	
 		// Assert
-		_query.Verify(m => m.SearchProjects(status, null, null, page, count, urn, null),
+		_query.Verify(m => m.SearchProjects(status, null, null, page, count, urn, null, null),
 			Times.Once);
 	}
 	
@@ -63,12 +63,12 @@ public class LegacyProjectListGetQueryTests
 		// Arrange
 		var expectedProjects = _fixture.Create<List<Project>>();
 		_query.Setup(m => m.SearchProjects(It.IsAny<IEnumerable<string>?>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<int>(),
-				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>()))
+				It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<IEnumerable<string>?>(), It.IsAny<IEnumerable<string>?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 		(int page, int count, int? urn) = (1, 1, 123);
 		List<string> status = new List<string>() { "complete", "active" };
 		// Act
-		var result = await _subject.GetProjects(status, null, null, page, count, urn, null);
+		var result = await _subject.GetProjects(status, null, null, page, count, urn, null, null);
 	
 		// Assert
 		Assert.Multiple(

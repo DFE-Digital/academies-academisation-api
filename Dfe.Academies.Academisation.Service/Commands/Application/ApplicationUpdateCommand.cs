@@ -22,7 +22,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 		{
 			return new CommandValidationErrorResult(
 				new List<ValidationError>() {
-					new ValidationError("Id", "Ids must be the same")
+					new("Id", "Ids must be the same")
 				});
 		}
 
@@ -58,6 +58,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 					new List<KeyValuePair<int, LeaseDetails>>(s.Leases.Select(l => new KeyValuePair<int, LeaseDetails>(l.LeaseId, l.ToDomain()))),
 					s.HasLoans,
 					s.HasLeases)));
+
 		if (result is CommandValidationErrorResult)
 		{
 			return result;

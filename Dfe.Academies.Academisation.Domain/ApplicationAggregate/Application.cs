@@ -99,7 +99,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		}
 
 		// Update Contributors
-		for (int i = _contributors.Count -1; i >= 0; i--)
+		for (int i = _contributors.Count - 1; i >= 0; i--)
 		{
 			var contributor = _contributors[i];
 
@@ -147,27 +147,27 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 
 		// add ones that are new
 		var schoolsToAdd = schools.Where(x => _schools.All(c => c.Id != x.Id));
-		_schools.AddRange(schoolsToAdd.Select(school =>
-			new School(0,
-				school.TrustBenefitDetails,
-				school.OfstedInspectionDetails,
-				school.SafeguardingDetails,
-				school.LocalAuthorityReorganisationDetails,
-				school.LocalAuthorityClosurePlanDetails,
-				school.DioceseName,
-				school.DioceseFolderIdentifier,
-				school.PartOfFederation,
-				school.FoundationTrustOrBodyName,
-				school.FoundationConsentFolderIdentifier,
-				school.ExemptionEndDate,
-				school.MainFeederSchools,
-				school.ResolutionConsentFolderIdentifier,
-				school.ProtectedCharacteristics,
-				school.FurtherInformation,
-				school.SchoolDetails,
-				school.Loans.Select(l => new Loan(0, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
-				school.Leases.Select(l => new Lease(0, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
-				school.HasLoans, school.HasLeases)));
+		var schoolList = schoolsToAdd.Select(school => new School(0, school.TrustBenefitDetails, 
+			school.OfstedInspectionDetails, 
+			school.SafeguardingDetails, 
+			school.LocalAuthorityReorganisationDetails, 
+			school.LocalAuthorityClosurePlanDetails, 
+			school.DioceseName, 
+			school.DioceseFolderIdentifier, 
+			school.PartOfFederation, 
+			school.FoundationTrustOrBodyName, 
+			school.FoundationConsentFolderIdentifier, 
+			school.ExemptionEndDate, 
+			school.MainFeederSchools, 
+			school.ResolutionConsentFolderIdentifier, 
+			school.ProtectedCharacteristics, 
+			school.FurtherInformation, 
+			school.SchoolDetails, 
+			school.Loans.Select(l => new Loan(0, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)), 
+			school.Leases.Select(l => new Lease(0, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)), 
+			school.HasLoans, 
+			school.HasLeases)).ToList();
+		_schools.AddRange(schoolList);
 
 		return new CommandSuccessResult();
 	}
@@ -219,8 +219,9 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 			JoinTrust.Update(UKPRN, trustName, trustReference, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 
 		}
-		else { 
-			JoinTrust = JoinTrust.Create(UKPRN, trustName, trustReference, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained); 
+		else
+		{
+			JoinTrust = JoinTrust.Create(UKPRN, trustName, trustReference, changesToTrust, changesToTrustExplained, changesToLaGovernance, changesToLaGovernanceExplained);
 		}
 
 		return new CommandSuccessResult();
@@ -230,8 +231,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		string schedule)
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
-		if(school == null) return new NotFoundCommandResult();
-		
+		if (school == null) return new NotFoundCommandResult();
+
 		school.AddLoan(amount, purpose, provider, interestRate, schedule);
 		return new CommandSuccessResult();
 	}
@@ -241,8 +242,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
 		var loan = school?.Loans.FirstOrDefault(x => x.Id == loanId);
-		if(school == null || loan == null) return new NotFoundCommandResult();
-		
+		if (school == null || loan == null) return new NotFoundCommandResult();
+
 		school.UpdateLoan(loanId, amount, purpose, provider, interestRate, schedule);
 		return new CommandSuccessResult();
 	}
@@ -251,8 +252,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
 		var loan = school?.Loans.FirstOrDefault(x => x.Id == loanId);
-		if(school == null || loan == null) return new NotFoundCommandResult();
-		
+		if (school == null || loan == null) return new NotFoundCommandResult();
+
 		school.DeleteLoan(loanId);
 		return new CommandSuccessResult();
 	}
@@ -261,8 +262,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets)
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
-		if(school == null) return new NotFoundCommandResult();
-		
+		if (school == null) return new NotFoundCommandResult();
+
 		school.AddLease(leaseTerm, repaymentAmount, interestRate, paymentsToDate, purpose, valueOfAssets, responsibleForAssets);
 		return new CommandSuccessResult();
 	}
@@ -272,8 +273,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
 		var lease = school?.Leases.FirstOrDefault(x => x.Id == leaseId);
-		if(school == null || lease == null) return new NotFoundCommandResult();
-		
+		if (school == null || lease == null) return new NotFoundCommandResult();
+
 		school.UpdateLease(leaseId, leaseTerm, repaymentAmount, interestRate, paymentsToDate, purpose, valueOfAssets, responsibleForAssets);
 		return new CommandSuccessResult();
 	}
@@ -282,8 +283,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 	{
 		var school = _schools.FirstOrDefault(x => x.Id == schoolId);
 		var lease = school?.Leases.FirstOrDefault(x => x.Id == leaseId);
-		if(school == null || lease == null) return new NotFoundCommandResult();
-		
+		if (school == null || lease == null) return new NotFoundCommandResult();
+
 		school.DeleteLease(leaseId);
 		return new CommandSuccessResult();
 	}
@@ -352,7 +353,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 	public CommandResult DeleteSchool(int urn)
 	{
 		var school = _schools.FirstOrDefault(x => x.Details.Urn == urn);
-		if (school == null)  return new NotFoundCommandResult();
+		if (school == null) return new NotFoundCommandResult();
 		_schools.Remove(school);
 
 		return new CommandSuccessResult();
@@ -360,9 +361,9 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 
 	public CommandResult SetAdditionalDetails(
 		int schoolId,
-		string trustBenefitDetails, 
-		string? ofstedInspectionDetails, 
-		string? safeguardingDetails, 
+		string trustBenefitDetails,
+		string? ofstedInspectionDetails,
+		string? safeguardingDetails,
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,
@@ -394,7 +395,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 			resolutionConsentFolderIdentifier,
 			protectedCharacteristics,
 			furtherInformation);
-		
+
 		return new CommandSuccessResult();
 	}
 }

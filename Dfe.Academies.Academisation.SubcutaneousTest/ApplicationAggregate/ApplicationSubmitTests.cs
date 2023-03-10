@@ -39,6 +39,8 @@ public class ApplicationSubmitTests
 	private readonly Fixture _fixture = new();
 	private readonly Faker _faker = new();
 	private readonly AcademisationContext _context;
+	private const string FormAMat = "Form a Mat";
+	private const string Converter = "Converter";
 
 	private readonly IProjectFactory _projectFactory = new ProjectFactory();
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
@@ -51,8 +53,8 @@ public class ApplicationSubmitTests
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 	private readonly IApplicationRepository _repo;
 	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
-	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new Mock<IDateTimeProvider>();
+	private readonly Mock<IMapper> _mapper = new();
+	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
 	private readonly Mock<IMediator> _mediator;
 	public ApplicationSubmitTests()
 	{
@@ -142,18 +144,79 @@ public class ApplicationSubmitTests
 
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
 
+		AssertProject(school, project, Converter);
+	}
+
+	[Fact]
+	public async Task FormAMatApplicationExists___ApplicationIsSubmitted_And_ProjectsAreCreated()
+	{
+		// Arrange
+		var applicationController = new ApplicationController(
+			_applicationCreateCommand,
+			_applicationQueryService,
+			_applicationUpdateCommand,
+			_trustQueryService,
+			_mediator.Object,
+			_applicationLogger);
+
+		ApplicationCreateRequestModel applicationCreateRequestModel =  new(
+			ApplicationType.FormAMat,
+			_fixture.Create<ContributorRequestModel>());
+		var createResult = await applicationController.Post(applicationCreateRequestModel);
+
+		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
+
+		var firstSchool = _fixture.Create<ApplicationSchoolServiceModel>();
+		var secondSchool = _fixture.Create<ApplicationSchoolServiceModel>();
+		var thirdSchool = _fixture.Create<ApplicationSchoolServiceModel>();
+
+		var updateRequest = new ApplicationUpdateRequestModel(
+			createdPayload.ApplicationId,
+			createdPayload.ApplicationType,
+			createdPayload.ApplicationStatus,
+			createdPayload.Contributors,
+			new List<ApplicationSchoolServiceModel> 
+				{ firstSchool, secondSchool, thirdSchool });
+
+		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
+		DfeAssert.OkResult(updateResult);
+
+		// Act
+		var submissionResult = await applicationController.Submit(createdPayload.ApplicationId);
+
+		// Assert
+		Assert.IsType<CreatedAtRouteResult>(submissionResult);
+
+		var applicationGetResultUsingId = await applicationController.Get(createdPayload.ApplicationId!);
+		(_, ApplicationServiceModel getPayload) = DfeAssert.OkObjectResult(applicationGetResultUsingId);
+
+		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
+
+		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), new LegacyProjectListGetQuery(new ProjectListGetDataQuery(_context)),
+			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
+			Mock.Of<ICreateInvoluntaryProjectCommand>());
+		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
+
+		(_, LegacyApiResponse<LegacyProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
+
+		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!, FormAMat);
+		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!, FormAMat);
+		AssertProject(thirdSchool, projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!, FormAMat);
+	}
+
+	private static void AssertProject(ApplicationSchoolServiceModel school, LegacyProjectServiceModel project, string type)
+	{
 		Assert.Multiple(
-			() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
-			() => Assert.Equal(DateTime.Today.AddMonths(6), project.OpeningDate),
-			() => Assert.Equal("Converter", project.AcademyTypeAndRoute),
-			() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
-			() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
-			() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
-			() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
-			() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),
-			() => Assert.Equal(school.ProjectedPupilNumbersYear2, project.YearTwoProjectedPupilNumbers),
-			() => Assert.Equal(school.ProjectedPupilNumbersYear3, project.YearThreeProjectedPupilNumbers)
-		);
+		() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
+		() => Assert.Equal(DateTime.Today.AddMonths(6), project.OpeningDate),
+		() => Assert.Equal(type, project.AcademyTypeAndRoute),
+		() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
+		() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
+		() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
+		() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
+		() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),
+		() => Assert.Equal(school.ProjectedPupilNumbersYear2, project.YearTwoProjectedPupilNumbers),
+		() => Assert.Equal(school.ProjectedPupilNumbersYear3, project.YearThreeProjectedPupilNumbers));
 	}
 
 	private static string ToYesNoString(bool? value)
