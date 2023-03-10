@@ -316,5 +316,17 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			//Assert
 			result.Result.Should().BeOfType<NotFoundResult>();
 		}
+
+		[Fact]
+		public async Task GetAllApplications__ReturnsList()
+		{
+			_getQueryMock.Setup(x => x.GetAllApplications())
+				.ReturnsAsync(new List<ApplicationSchoolSharepointServiceModel>());
+
+			var result = await _subject.GetAll();
+
+			result.Result.Should().BeOfType<OkObjectResult>();
+			(result.Result as OkObjectResult).Value.Should().NotBeNull();
+		}
 	}
 }
