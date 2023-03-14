@@ -84,6 +84,11 @@ variable "cdn_frontdoor_host_add_response_headers" {
   type        = list(map(string))
 }
 
+variable "enable_event_hub" {
+  description = "Send Azure Container App logs to an Event Hub sink"
+  type        = bool
+}
+
 variable "enable_monitoring" {
   description = "Create an App Insights instance and notification group for the Container App"
   type        = bool
