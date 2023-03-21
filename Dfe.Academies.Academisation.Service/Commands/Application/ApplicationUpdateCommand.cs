@@ -40,7 +40,7 @@ public class ApplicationUpdateCommand : IApplicationUpdateCommand
 				new UpdateSchoolParameter(s.Id, 
 					s.TrustBenefitDetails,
 					s.OfstedInspectionDetails,
-					s.SafeguardingDetails,
+					s.Safeguarding,
 					s.LocalAuthorityReorganisationDetails,
 					s.LocalAuthorityClosurePlanDetails,
 					s.DioceseName,

@@ -61,7 +61,7 @@ public interface IApplication
 		int schoolId,
 		string trustBenefitDetails,
 		string? ofstedInspectionDetails,
-		string? safeguardingDetails,
+		bool safeguarding,
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,
