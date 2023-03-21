@@ -23,7 +23,7 @@ public class SetAdditionalDetailsCommandHandler : IRequestHandler<SetAdditionalD
 			request.SchoolId,
 			request.TrustBenefitDetails,
 			request.OfstedInspectionDetails,
-			request.SafeguardingDetails,
+			request.Safeguarding,
 			request.LocalAuthorityReorganisationDetails,
 			request.LocalAuthorityClosurePlanDetails,
 			request.DioceseName,

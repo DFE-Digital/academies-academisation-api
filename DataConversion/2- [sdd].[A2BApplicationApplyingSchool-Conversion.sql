@@ -101,7 +101,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			   ,[LocalAuthorityClosurePlanDetails]
 			   ,[LocalAuthorityReorganisationDetails]
 			   ,[OfstedInspectionDetails]
-			   ,[SafeguardingDetails]
+			   ,[Safeguarding]
 			   ,[TrustBenefitDetails]
 			   ,[CurrentFinancialYearCapitalCarryForward]
 			   ,[CurrentFinancialYearCapitalCarryForwardExplained]
@@ -239,7 +239,7 @@ BEGIN TRANSACTION PortDynamicsSchoolData
 			--ASS.[SchoolAdInspectedButReportNotPublished], BIT - not in v1.5 schema
 			ASS.[SchoolAdInspectedReportNotPublishedExplain],
 			--ASS.[SchoolAdSafeguarding], BIT - not in v1.5 schema
-			ASS.[SchoolAdSafeguardingExplained] as 'SafeguardingDetails',
+			ASS.[SchoolAdSafeguarding] as 'Safeguarding',
 			ASS.[SchoolAdSchoolContributionToTrust] as 'TrustBenefitDetails',
 			-- **** CFY / NFY / PFY details ****
 			ASS.[SchoolCFYCapitalForward],
