@@ -124,6 +124,11 @@ variable "cdn_frontdoor_health_probe_path" {
   type        = string
 }
 
+variable "cdn_frontdoor_custom_domains" {
+  description = "Azure CDN Front Door custom domains. If they are within the DNS zone (optionally created), the Validation TXT records and ALIAS/CNAME records will be created"
+  type        = list(string)
+}
+
 variable "monitor_endpoint_healthcheck" {
   description = "Specify a route that should be monitored for a 200 OK status"
   type        = string
