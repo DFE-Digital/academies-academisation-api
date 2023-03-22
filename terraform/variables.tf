@@ -153,3 +153,23 @@ variable "dns_zone_domain_name" {
   description = "DNS zone domain name. If created, records will automatically be created to point to the CDN."
   type        = string
 }
+
+variable "dns_ns_records" {
+  description = "DNS NS records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(string)
+    })
+  )
+}
+
+variable "dns_txt_records" {
+  description = "DNS TXT records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(string)
+    })
+  )
+}
