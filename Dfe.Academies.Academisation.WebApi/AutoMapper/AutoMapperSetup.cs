@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
+using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.AutoMapper;
@@ -80,5 +81,9 @@ public static class AutoMapperSetup
 			.ReverseMap();
 
 		profile.CreateMap<TrustKeyPersonRoleServiceModel, ITrustKeyPersonRole>().ReverseMap();
+		
+		profile.CreateMap<IApplication, ApplicationSchoolSharepointServiceModel>()
+			.ConvertUsing((wrapper, destination, context) =>
+			new ApplicationSchoolSharepointServiceModel(wrapper.Id, wrapper.ApplicationReference!, wrapper.Schools.Select(x => new SchoolSharepointServiceModel(x.Id, x.Details.SchoolName, x.EntityId)).ToList()));
 	}
 }

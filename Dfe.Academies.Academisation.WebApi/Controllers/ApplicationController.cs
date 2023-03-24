@@ -216,5 +216,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpGet("all", Name = "All")]
+		public async Task<ActionResult<List<ApplicationSchoolSharepointServiceModel>>> GetAll()
+		{
+			var result = await _applicationQueryService.GetAllApplications();
+			return Ok(result);
+		}
 	}
 }

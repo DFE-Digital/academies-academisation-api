@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.14.3"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.16.0"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -16,11 +16,17 @@ module "azure_container_apps_hosting" {
 
   enable_mssql_database = local.enable_mssql_database
 
+  enable_event_hub = local.enable_event_hub
+
+  enable_dns_zone      = local.enable_dns_zone
+  dns_zone_domain_name = local.dns_zone_domain_name
+
   enable_cdn_frontdoor                            = local.enable_cdn_frontdoor
   cdn_frontdoor_enable_rate_limiting              = local.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_duration_in_minutes = local.cdn_frontdoor_rate_limiting_duration_in_minutes
   cdn_frontdoor_rate_limiting_threshold           = local.cdn_frontdoor_rate_limiting_threshold
   cdn_frontdoor_host_add_response_headers         = local.cdn_frontdoor_host_add_response_headers
+  cdn_frontdoor_custom_domains                    = local.cdn_frontdoor_custom_domains
 
   enable_monitoring               = local.enable_monitoring
   monitor_email_receivers         = local.monitor_email_receivers
