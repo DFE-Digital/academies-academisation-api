@@ -44,7 +44,7 @@ public class TestApplicationContext : TestAcademisationContext
 		{
 			var ms = _fixture.Create<School>();
 
-			schools.Add(new School(ms.Id, ms.TrustBenefitDetails, ms.OfstedInspectionDetails, ms.SafeguardingDetails,
+			schools.Add(new School(ms.Id, ms.TrustBenefitDetails, ms.OfstedInspectionDetails, ms.Safeguarding,
 				ms.LocalAuthorityReorganisationDetails, ms.LocalAuthorityClosurePlanDetails, ms.DioceseName,
 				ms.DioceseFolderIdentifier, ms.PartOfFederation, ms.FoundationTrustOrBodyName,
 				ms.FoundationConsentFolderIdentifier, ms.ExemptionEndDate, ms.MainFeederSchools, ms.ResolutionConsentFolderIdentifier, ms.ProtectedCharacteristics, ms.FurtherInformation, 

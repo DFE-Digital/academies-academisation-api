@@ -15,9 +15,9 @@ public class SetAdditionalDetailsCommandValidator : AbstractValidator<SetAdditio
 			.NotEmpty()
 			.When(x => x.OfstedInspectionDetails != null)
 			.WithMessage("Ofsted Inspection Details must not be empty");
-		RuleFor(x => x.SafeguardingDetails)
+		RuleFor(x => x.Safeguarding)
 			.NotEmpty()
-			.When(x => x.SafeguardingDetails != null)
+			.When(x => x.Safeguarding != null)
 			.WithMessage("Safeguarding Details must not be empty");
 		RuleFor(x => x.LocalAuthorityReorganisationDetails)
 			.NotEmpty()

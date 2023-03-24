@@ -15,7 +15,7 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.LandAndBuildings.ToServiceModel(),
 			school.TrustBenefitDetails,
 			school.OfstedInspectionDetails,
-			school.SafeguardingDetails,
+			school.Safeguarding,
 			school.LocalAuthorityReorganisationDetails,
 			school.LocalAuthorityClosurePlanDetails,
 			school.DioceseName,

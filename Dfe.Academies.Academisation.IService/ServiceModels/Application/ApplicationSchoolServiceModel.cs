@@ -9,11 +9,9 @@ public record ApplicationSchoolServiceModel(
 	string SchoolName,
 	LandAndBuildingsServiceModel? LandAndBuildings,
 	// additional information - split up
-	
-	
 	string? TrustBenefitDetails, 
 	string? OfstedInspectionDetails, 
-	string? SafeguardingDetails, 
+	bool Safeguarding, 
 	string? LocalAuthorityReorganisationDetails,
 	string? LocalAuthorityClosurePlanDetails,
 	string? DioceseName,

@@ -84,6 +84,11 @@ variable "cdn_frontdoor_host_add_response_headers" {
   type        = list(map(string))
 }
 
+variable "enable_event_hub" {
+  description = "Send Azure Container App logs to an Event Hub sink"
+  type        = bool
+}
+
 variable "enable_monitoring" {
   description = "Create an App Insights instance and notification group for the Container App"
   type        = bool
@@ -119,6 +124,11 @@ variable "cdn_frontdoor_health_probe_path" {
   type        = string
 }
 
+variable "cdn_frontdoor_custom_domains" {
+  description = "Azure CDN Front Door custom domains. If they are within the DNS zone (optionally created), the Validation TXT records and ALIAS/CNAME records will be created"
+  type        = list(string)
+}
+
 variable "monitor_endpoint_healthcheck" {
   description = "Specify a route that should be monitored for a 200 OK status"
   type        = string
@@ -131,5 +141,15 @@ variable "existing_network_watcher_name" {
 
 variable "existing_network_watcher_resource_group_name" {
   description = "Existing network watcher resource group."
+  type        = string
+}
+
+variable "enable_dns_zone" {
+  description = "Conditionally create a DNS zone"
+  type        = bool
+}
+
+variable "dns_zone_domain_name" {
+  description = "DNS zone domain name. If created, records will automatically be created to point to the CDN."
   type        = string
 }
