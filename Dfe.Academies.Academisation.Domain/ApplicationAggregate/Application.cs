@@ -149,7 +149,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		var schoolsToAdd = schools.Where(x => _schools.All(c => c.Id != x.Id));
 		var schoolList = schoolsToAdd.Select(school => new School(0, school.TrustBenefitDetails, 
 			school.OfstedInspectionDetails, 
-			school.SafeguardingDetails, 
+			school.Safeguarding, 
 			school.LocalAuthorityReorganisationDetails, 
 			school.LocalAuthorityClosurePlanDetails, 
 			school.DioceseName, 
@@ -363,7 +363,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		int schoolId,
 		string trustBenefitDetails,
 		string? ofstedInspectionDetails,
-		string? safeguardingDetails,
+		bool safeguarding,
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,
@@ -382,7 +382,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		school.SetAdditionalDetails(
 			trustBenefitDetails,
 			ofstedInspectionDetails,
-			safeguardingDetails,
+			safeguarding,
 			localAuthorityReorganisationDetails,
 			localAuthorityClosurePlanDetails,
 			dioceseName,

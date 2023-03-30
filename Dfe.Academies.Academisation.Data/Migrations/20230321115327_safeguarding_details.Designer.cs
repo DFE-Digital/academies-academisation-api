@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20230321115327_safeguarding_details")]
+    partial class safeguarding_details
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,12 +175,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AgeRange")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("AnnexBFormReceived")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AnnexBFormUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ApplicationReceivedDate")

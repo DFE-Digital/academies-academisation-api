@@ -31,7 +31,7 @@ public class School : DynamicsSchoolEntity, ISchool
 	
 	public string? OfstedInspectionDetails { get; private set; }
 
-	public string? SafeguardingDetails { get; private set; }
+	public bool Safeguarding { get; private set; }
 
 	public string? LocalAuthorityReorganisationDetails { get; private set; }
 
@@ -76,7 +76,7 @@ public class School : DynamicsSchoolEntity, ISchool
 	public School(int id, 	
 		string? trustBenefitDetails, 
 		string? ofstedInspectionDetails, 
-		string? safeguardingDetails, 
+		bool safeguarding, 
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,
@@ -97,7 +97,7 @@ public class School : DynamicsSchoolEntity, ISchool
 		Id = id;
 		TrustBenefitDetails = trustBenefitDetails;
 		OfstedInspectionDetails = ofstedInspectionDetails;
-		SafeguardingDetails = safeguardingDetails;
+		Safeguarding = safeguarding;
 		LocalAuthorityReorganisationDetails = localAuthorityReorganisationDetails;
 		LocalAuthorityClosurePlanDetails = localAuthorityClosurePlanDetails;
 		DioceseName = dioceseName;
@@ -159,7 +159,7 @@ public class School : DynamicsSchoolEntity, ISchool
 	public void SetAdditionalDetails(
 		string trustBenefitDetails, 
 		string? ofstedInspectionDetails, 
-		string? safeguardingDetails, 
+		bool safeguarding, 
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,
@@ -175,7 +175,7 @@ public class School : DynamicsSchoolEntity, ISchool
 	{
 		TrustBenefitDetails = trustBenefitDetails;
 		OfstedInspectionDetails = ofstedInspectionDetails;
-		SafeguardingDetails = safeguardingDetails;
+		Safeguarding = safeguarding;
 		LocalAuthorityReorganisationDetails = localAuthorityReorganisationDetails;
 		LocalAuthorityClosurePlanDetails = localAuthorityClosurePlanDetails;
 		DioceseName = dioceseName;
@@ -198,7 +198,7 @@ public class School : DynamicsSchoolEntity, ISchool
 		// this update is to handle any legacy updates that are updating the entore application using the put
 		TrustBenefitDetails = schoolUpdate.TrustBenefitDetails;
 		OfstedInspectionDetails = schoolUpdate.OfstedInspectionDetails;
-		SafeguardingDetails = schoolUpdate.SafeguardingDetails;
+		Safeguarding = schoolUpdate.Safeguarding;
 		LocalAuthorityReorganisationDetails = schoolUpdate.LocalAuthorityReorganisationDetails;
 		LocalAuthorityClosurePlanDetails = schoolUpdate.LocalAuthorityClosurePlanDetails;
 		DioceseName = schoolUpdate.DioceseName;

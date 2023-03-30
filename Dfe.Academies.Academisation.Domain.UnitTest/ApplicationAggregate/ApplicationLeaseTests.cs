@@ -83,7 +83,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					new School(2, 			"",
 						"",
-						"",
+						false,
 						"",
 						"",
 						"",
@@ -122,7 +122,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					new School(1, 			"",
 						"",
-						"",
+						false,
 						"",
 						"",
 						"",
@@ -161,7 +161,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					new School(1, 			"",
 						"",
-						"",
+						false,
 						"",
 						"",
 						"",
@@ -200,7 +200,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate
 				{
 					new School(1, 			"",
 						"",
-						"",
+						false,
 						"",
 						"",
 						"",

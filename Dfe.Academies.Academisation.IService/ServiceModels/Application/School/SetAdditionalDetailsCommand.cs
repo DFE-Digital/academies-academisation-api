@@ -20,7 +20,7 @@ public class SetAdditionalDetailsCommand : IRequest<CommandResult>
 	public string? OfstedInspectionDetails  { get; set; }
 	
 	[DataMember]
-	public string? SafeguardingDetails  { get; set; }
+	public bool Safeguarding  { get; set; }
 	
 	[DataMember]
 	public string? LocalAuthorityReorganisationDetails  { get; set; }

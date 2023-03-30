@@ -18,6 +18,8 @@ namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
 		[Description("Trustee")]
 		Trustee = 4,
 		[Description("Other")]
-		Other = 5
+		Other = 5,
+		[Description("Member")]
+		Member = 6,
 	}
 }
