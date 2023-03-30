@@ -202,6 +202,10 @@ public class Project : IProject
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
 			Region	= detailsToUpdate.Region,
 
+			// Annex B
+			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived,
+			AnnexBFormUrl = detailsToUpdate.AnnexBFormUrl,
+
 			// general info
 			SchoolPhase = detailsToUpdate.SchoolPhase,
 			AgeRange = detailsToUpdate.AgeRange,

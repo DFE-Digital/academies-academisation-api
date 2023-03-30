@@ -54,6 +54,13 @@ internal static class LegacyProjectDetailsMapper
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? existingProject.Details.ConversionSupportGrantChangeReason,
 			Region = detailsToUpdate.Region ?? existingProject.Details.Region,
 
+			// Annex B
+			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived ?? existingProject.Details.AnnexBFormReceived,
+			AnnexBFormUrl = detailsToUpdate.AnnexBFormReceived.HasValue
+				? detailsToUpdate.AnnexBFormReceived is true ? detailsToUpdate.AnnexBFormUrl : string.Empty
+				: existingProject.Details.AnnexBFormUrl,
+
+
 			// general info
 			SchoolPhase = detailsToUpdate.SchoolPhase ?? existingProject.Details.SchoolPhase,
 			AgeRange = detailsToUpdate.AgeRange ?? existingProject.Details.AgeRange,

@@ -71,6 +71,10 @@ public class ProjectState : BaseEntity
 
 	public bool? GeneralInformationSectionComplete { get; set; }
 
+	// Annex B
+	public bool? AnnexBFormReceived { get; set; }
+	public string? AnnexBFormUrl { get; set; }
+
 	//school performance ofsted information
 	public string? SchoolPerformanceAdditionalInformation { get; set; }
 
@@ -310,6 +314,10 @@ public class ProjectState : BaseEntity
 			MemberOfParliamentName = project.Details.MemberOfParliamentName,
 
 			GeneralInformationSectionComplete = project.Details.GeneralInformationSectionComplete,
+
+			// Annex B
+			AnnexBFormReceived = project.Details.AnnexBFormReceived,
+			AnnexBFormUrl = project.Details.AnnexBFormUrl,
 
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = project.Details.SchoolPerformanceAdditionalInformation,

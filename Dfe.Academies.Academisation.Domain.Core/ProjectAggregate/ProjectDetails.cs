@@ -32,6 +32,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? ClearedBy { get; init; }
 	public string? AcademyOrderRequired { get; init; }
 	public DateTime? DaoPackSentDate { get; init; }
+	public bool? AnnexBFormReceived { get; init; }
+	public string AnnexBFormUrl { get; init; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; init; }
 	public string? PreviousHeadTeacherBoardLink { get; init; }
