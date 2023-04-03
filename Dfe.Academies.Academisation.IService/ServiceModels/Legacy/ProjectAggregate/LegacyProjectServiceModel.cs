@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? Form7Received { get; init; }
 		public DateTime? Form7ReceivedDate { get; init; }
 		public bool? AnnexBFormReceived { get; init; }
-		public string AnnexBFormUrl { get; init; }
+		public string? AnnexBFormUrl { get; init; }
 		public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 		public DateTime? PreviousHeadTeacherBoardDate { get; init; }
 		public string? PreviousHeadTeacherBoardLink { get; init; }
