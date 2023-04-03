@@ -192,6 +192,10 @@ public class ProjectState : BaseEntity
 
 			GeneralInformationSectionComplete = GeneralInformationSectionComplete,
 
+			// Annex B
+			AnnexBFormReceived = AnnexBFormReceived,
+			AnnexBFormUrl = AnnexBFormUrl,
+
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = SchoolPerformanceAdditionalInformation,
 

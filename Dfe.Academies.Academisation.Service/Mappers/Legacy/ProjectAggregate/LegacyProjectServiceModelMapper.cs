@@ -72,6 +72,10 @@ internal static class LegacyProjectServiceModelMapper
 			MemberOfParliamentName = project.Details.MemberOfParliamentName,
 			GeneralInformationSectionComplete = project.Details.GeneralInformationSectionComplete,
 
+			// Annex B
+			AnnexBFormReceived = project.Details.AnnexBFormReceived,
+			AnnexBFormUrl = project.Details.AnnexBFormUrl,
+
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = project.Details.SchoolPerformanceAdditionalInformation,
 
