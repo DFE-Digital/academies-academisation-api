@@ -56,10 +56,7 @@ internal static class LegacyProjectDetailsMapper
 
 			// Annex B
 			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived ?? existingProject.Details.AnnexBFormReceived,
-			AnnexBFormUrl = detailsToUpdate.AnnexBFormReceived.HasValue
-				? detailsToUpdate.AnnexBFormReceived is true ? detailsToUpdate.AnnexBFormUrl : string.Empty
-				: existingProject.Details.AnnexBFormUrl,
-
+			AnnexBFormUrl = detailsToUpdate.AnnexBFormReceived is true ? detailsToUpdate.AnnexBFormUrl : string.Empty,
 
 			// general info
 			SchoolPhase = detailsToUpdate.SchoolPhase ?? existingProject.Details.SchoolPhase,
