@@ -73,3 +73,26 @@ jobs:
               --resource-group ${{ secrets.TEST_ACA_RESOURCE_GROUP }} \
               --image ${{ secrets.TEST_ACR_URL }}/aca-app:${{ steps.prepare-tags.outputs.deploy-version }} \
               --output none
+
+  cypress-tests:
+    needs: build-and-push-image-test
+    environment: test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: CypressTests
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Npm install
+        run: npm install
+      - name: Run cypress
+        run: npm run cy:run
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+           name: screenshots
+           path: CypressTests/cypress/screenshots
