@@ -90,7 +90,7 @@ jobs:
       - name: Npm install
         run: npm install
       - name: Run cypress
-        run: npm run cy:run
+        run: npm run cy:run -- --env apiKey=${{ secrets.API_KEY }},url={{ secrets.URL }}
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
