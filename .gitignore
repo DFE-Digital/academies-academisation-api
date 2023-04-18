@@ -387,3 +387,7 @@ backend.vars
 
 # Stackify
 Stackify.json
+
+# OWASP ZAP
+
+ZAP-Report.html
