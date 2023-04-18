@@ -6,7 +6,7 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore"
+    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx"
   },
   "keywords": [],
   "author": "Dan Good",

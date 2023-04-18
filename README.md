@@ -136,7 +136,7 @@ To execute the tests in headless mode, run the following (the output will log to
 
 ### Useful tips
 #### Linting
-We make use of [eslint](https://eslint.org/) for the Cypress tests to ensure code quality. You can explicitly check for issues by running
+We make use of [eslint](https://eslint.org/) for the Cypress tests to ensure code quality. You can explicitly check for issues by running the following from the CypressTests directory:
 
 `npm run lint`
 
