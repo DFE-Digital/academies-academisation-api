@@ -5,12 +5,17 @@
   "main": "index.js",
   "scripts": {
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
   "keywords": [],
   "author": "Dan Good",
   "license": "ISC",
   "dependencies": {
     "cypress": "^10.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.38.0",
+    "eslint-plugin-cypress": "^2.13.2"
   }
 }
