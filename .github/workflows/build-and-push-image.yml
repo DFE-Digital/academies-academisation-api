@@ -59,7 +59,7 @@ jobs:
         with:
           username: ${{ secrets.AZURE_ACR_CLIENTID }}
           password: ${{ secrets.AZURE_ACR_SECRET }}
-          registry: ${{ secrets.ACR_URL }}
+          registry: ${{ secrets.AZURE_ACR_URL }}
 
       - name: Build and push docker image
         uses: docker/build-push-action@v3
@@ -73,7 +73,7 @@ jobs:
             ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:sha-${{ needs.set-env.outputs.checked-out-sha }}
             ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:latest
           push: true
-  
+
   create-tag:
     name: Tag and release
     needs: build-and-push-image
@@ -108,7 +108,7 @@ jobs:
             }
 
   deploy-image:
-    name: Deploy to ${{ needs.set-env.outputs.environment }}
+    name: Deploy to ${{ needs.set-env.outputs.environment }} (${{ needs.set-env.outputs.release }}")
     needs: [ build-and-push-image, set-env, create-tag ]
     runs-on: ubuntu-22.04
     environment: ${{ needs.set-env.outputs.environment }}
