@@ -142,9 +142,9 @@ jobs:
         working-directory: CypressTests
     steps:
       - name: Checkout code
-          uses: actions/checkout@v3
-          with:
-            ref: ${{ github.ref }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
 
       - name: Setup node.js
         uses: actions/setup-node@v3
