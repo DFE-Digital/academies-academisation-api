@@ -155,7 +155,7 @@ jobs:
         run: npm install
 
       - name: Run cypress
-        run: npm run cy:run -- --env apiKey=${{ secrets.API_KEY }},url={{ secrets.URL }}
+        run: npm run cy:run -- --env apiKey=${{ secrets.API_KEY }},url=${{ secrets.URL }}
 
       - name: Upload artifacts
         if: ${{ failure() }}
