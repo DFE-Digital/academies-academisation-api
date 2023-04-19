@@ -8,6 +8,11 @@ variable "key_vault_access_users" {
   type        = list(string)
 }
 
+variable "key_vault_access_ipv4" {
+  description = "List of IPv4 Addresses that are permitted to access the Key Vault"
+  type        = list(string)
+}
+
 variable "tfvars_filename" {
   description = "tfvars filename. This ensures that tfvars are kept up to date in Key Vault."
   type        = string

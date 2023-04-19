@@ -21,6 +21,7 @@ locals {
   cdn_frontdoor_host_add_response_headers         = var.cdn_frontdoor_host_add_response_headers
   cdn_frontdoor_custom_domains                    = var.cdn_frontdoor_custom_domains
   key_vault_access_users                          = toset(var.key_vault_access_users)
+  key_vault_access_ipv4                           = var.key_vault_access_ipv4
   tfvars_filename                                 = var.tfvars_filename
   enable_monitoring                               = var.enable_monitoring
   monitor_email_receivers                         = var.monitor_email_receivers
