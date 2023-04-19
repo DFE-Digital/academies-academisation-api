@@ -76,7 +76,7 @@ jobs:
 
   create-tag:
     name: Tag and release
-    needs: build-and-push-image
+    needs: set-env
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -109,7 +109,7 @@ jobs:
 
   deploy-image:
     name: Deploy to ${{ needs.set-env.outputs.environment }} (${{ needs.set-env.outputs.release }}")
-    needs: [ build-and-push-image, set-env, create-tag ]
+    needs: [ build-and-push-image, set-env ]
     runs-on: ubuntu-22.04
     environment: ${{ needs.set-env.outputs.environment }}
     steps:
