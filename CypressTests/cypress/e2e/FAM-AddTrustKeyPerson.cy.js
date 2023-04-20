@@ -1,15 +1,16 @@
 /// <reference types="Cypress" />
 import { AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCanCreateNewFAMTrustKeyPerson.spec'
-import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson.spec'
+
 import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCanUpdateNewFAMTrustKeyPerson.spec'
 import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB.spec'
+import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson.spec'
 describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
 
     let apiKey = Cypress.env('apiKey');
     let url = Cypress.env('url');
-    let applicationNumber = 177;
-    let trustKeyPersonNumber = 199;
+    let applicationNumber = 10038;
+    let trustKeyPersonNumber = 0;
 
 
     it('POST - Verify An UnAuthorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', () => {
