@@ -1,112 +1,80 @@
-const AuthorisedUserCanUpdatePayload = {
-    "applicationId": 27,
+const AuthorisedUserCanUpdatePayload = 
+{
+    "applicationId": 10002,
     "applicationType": "joinAMat",
     "applicationStatus": "inProgress",
     "contributors": [
         {
-            "contributorId": 27,
+            "contributorId": 0,
             "firstName": "Dan",
             "lastName": "Good",
             "emailAddress": "Dan.GOOD@education.gov.uk",
-            "role": "other"
+            "role": "chairOfGovernors"
         }
     ],
     "schools": [
         {
-            "id": 21,
-            "urn": 113538,
-            "schoolName": "Coombe Dean School",
-            "landAndBuildings": {
-                "ownerExplained": "Parsons",
-                "worksPlanned": false,
-                "facilitiesShared": false,
-                "grants": false,
-                "grantsAwardingBodies": "Sport England",
-                "partOfPfiScheme": false,
-                "partOfPrioritySchoolsBuildingProgramme": false,
-                "partOfBuildingSchoolsForFutureProgramme": false
-            },
-            "performance": {},
-            "localAuthority": {},
-            "partnershipsAndAffliations": {},
-            "religiousEducation": {},
+            "id": 0,
+            "urn": 136568,
+            "schoolName": "Plymstock School",
+            "landAndBuildings": {},
+            "safeguarding": false,
+            "partOfFederation": false,
             "previousFinancialYear": {
-                "financialYearEndDate": "2021-04-05T00:00:00",
-                "revenue": 500000.00,
-                "revenueStatus": "deficit",
-                "revenueStatusExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ip",
-                "capitalCarryForward": 400000.00,
-                "capitalCarryForwardStatus": "deficit",
-                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ip",
-                "capitalCarryForwardFileLink": "string"
+                "financialYearEndDate": "2022-03-31T00:00:00",
+                "revenue": 4999.99,
+                "revenueStatus": "surplus",
+                "capitalCarryForward": 4998.98,
+                "capitalCarryForwardStatus": "surplus"
             },
             "currentFinancialYear": {
-                "financialYearEndDate": "2022-05-04T00:00:00",
-                "revenue": 45510.50,
+                "financialYearEndDate": "2023-03-31T00:00:00",
+                "revenue": 5999.99,
                 "revenueStatus": "deficit",
-                "revenueStatusExplained": "Andrew Parsons is in the process of selling off some land to build some new science labs for the school.  Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsu",
-                "capitalCarryForward": 45510.50,
+                "revenueStatusExplained": "Explain the reason for the deficit, how the school plan to deal with it, and the recovery plan.\r\nProvide details of the financial forecast and/or the deficit recovery plan agreed with the local authori",
+                "capitalCarryForward": 5998.98,
                 "capitalCarryForwardStatus": "deficit",
-                "capitalCarryForwardExplained": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem IpsuLorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum ",
-                "capitalCarryForwardFileLink": "string"
+                "capitalCarryForwardExplained": "Explain the reason for the deficit, how the school plan to deal with it, and the recovery plan.\r\nProvide details of the financial forecast and/or the deficit recovery plan agreed with the local authori"
             },
             "nextFinancialYear": {
-                "financialYearEndDate": "2023-01-12T00:00:00",
-                "revenue": 1.00,
+                "financialYearEndDate": "2024-03-31T00:00:00",
+                "revenue": 99999.99,
                 "revenueStatus": "deficit",
-                "revenueStatusExplained": "rjrjrtjtjrt",
-                "capitalCarryForward": 1.00,
+                "revenueStatusExplained": "Explain the reason for the deficit, how the school plan to deal with it, and the recovery plan.\r\nProvide details of the financial forecast and/or the deficit recovery plan agreed with the local authori",
+                "capitalCarryForward": 99999.98,
                 "capitalCarryForwardStatus": "deficit",
-                "capitalCarryForwardExplained": "sdfbdsfbdb",
-                "capitalCarryForwardFileLink": "string"
+                "capitalCarryForwardExplained": "Explain the reason for the deficit, how the school plan to deal with it, and the recovery plan.\r\nProvide details of the financial forecast and/or the deficit recovery plan agreed with the local authori"
             },
-            "loans": [
-                {
-                    "loanId": 41,
-                    "amount": 30000.00,
-                    "purpose": "string",
-                    "provider": "string",
-                    "interestRate": 10.00,
-                    "schedule": "string"
-                }
-            ],
-            "leases": [
-                {
-                    "leaseId": 10,
-                    "leaseTerm": "3 years",
-                    "repaymentAmount": 50000.00,
-                    "interestRate": 10.00,
-                    "paymentsToDate": 10000.00,
-                    "purpose": "To build new science labs",
-                    "valueOfAssets": "100000",
-                    "responsibleForAssets": "Andrew Parsons"
-                }
-            ],
-            "schoolConversionContactHeadName": "Andrew Parsons",
-            "schoolConversionContactHeadEmail": "aparsons@plymstock.sch.uk",
-            "schoolConversionContactHeadTel": "01752600500",
-            "schoolConversionContactChairName": "Lee Fisher",
-            "schoolConversionContactChairEmail": "lee.fisher@plymstock.sch.uk",
-            "schoolConversionContactChairTel": "01752484000",
+            "loans": [],
+            "leases": [],
+            "schoolConversionContactHeadName": "Paul Lockwood",
+            "schoolConversionContactHeadEmail": "paul.lockwood@education.gov.uk",
+            "schoolConversionContactHeadTel": "01752404930",
+            "schoolConversionContactChairName": "Dan Good",
+            "schoolConversionContactChairEmail": "dan.good@education.gov.uk",
+            "schoolConversionContactChairTel": "01752404000",
             "schoolConversionContactRole": "ChairOfGoverningBody",
-            "schoolConversionApproverContactName": "Lee Fisher",
-            "schoolConversionApproverContactEmail": "lee.fisher@plymstock.sch.uk",
-            "schoolConversionTargetDateSpecified": true,
-            "schoolConversionTargetDate": "2023-02-28T00:00:00",
-            "schoolConversionTargetDateExplained": "This date suits us at the moment.",
+            "schoolConversionApproverContactName": "Nicky Price",
+            "schoolConversionApproverContactEmail": "nicky.price@aol.com",
+            "schoolConversionTargetDateSpecified": false,
             "conversionChangeNamePlanned": false,
-            "proposedNewSchoolName": "The Ridgeway Academy",
-            "projectedPupilNumbersYear1": 1000,
-            "projectedPupilNumbersYear2": 1250,
-            "projectedPupilNumbersYear3": 1500,
-            "schoolCapacityAssumptions": "School Capacity Assumptions",
-            "schoolCapacityPublishedAdmissionsNumber": 1000,
-            "schoolSupportGrantFundsPaidTo": "trust",
-            "confirmPaySupportGrantToSchool": false,
+            "applicationJoinTrustReason": "Why does the school want to join this trust in particular? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "financeOngoingInvestigations": false,
-            "declarationBodyAgree": true,
-            "declarationIAmTheChairOrHeadteacher": true
+            "hasLoans": false,
+            "hasLeases": false,
+            "entityId": "2540a351-0ef6-4ced-ae62-2485c9a4d6db"
         }
-    ]
+    ],
+    "joinTrustDetails": {
+        "id": 67,
+        "ukprn": 10060481,
+        "trustName": "THE MINERVA LEARNING TRUST",
+        "trustReference": "TR03169",
+        "changesToTrust": "unknown",
+        "changesToLaGovernance": false
+    },
+    "applicationSubmittedDate": "2023-03-10T11:09:22.5191374",
+    "applicationReference": "A2B_10002",
+    "entityId": "e6ffff6e-e785-4c4f-a920-0fd32ead237e"
 }
 module.exports = {AuthorisedUserCanUpdatePayload}
