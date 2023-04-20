@@ -5,7 +5,7 @@ const AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload =
        "biography": "Wonderful Deputy Head",
        "roles": [
         {
-        "id": 151,
+        "id": Cypress.env('responseIDForRequest'),
         "role": 0,
         "timeInRole": "4 years"
         }
