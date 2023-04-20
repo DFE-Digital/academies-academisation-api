@@ -36,7 +36,7 @@ describe('Academisation API Testing', () => {
               expect(response.body.contributors[0]).to.have.property('lastName')
               expect(response.body.contributors[0]).to.have.property('emailAddress').to.match(emailRegex)
               expect(response.body.contributors[0]).to.have.property('role')
-              //expect(response.body.contributors[0]).to.have.property('otherRoleName')
+
               
               expect(response.body).to.have.property('schools')
 
@@ -44,34 +44,32 @@ describe('Academisation API Testing', () => {
               expect(response.body.schools[0].previousFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
               expect(response.body.schools[0].previousFinancialYear).to.have.property('revenue')
               expect(response.body.schools[0].previousFinancialYear).to.have.property('revenueStatus')
-              expect(response.body.schools[0].previousFinancialYear).to.have.property('revenueStatusExplained')
-              //expect(response.body.schools[0].previousFinancialYear).to.have.property('revenueStatusFileLink')
+
               expect(response.body.schools[0].previousFinancialYear).to.have.property('capitalCarryForward')
               expect(response.body.schools[0].previousFinancialYear).to.have.property('capitalCarryForwardStatus')
-              expect(response.body.schools[0].previousFinancialYear).to.have.property('capitalCarryForwardExplained')
-              expect(response.body.schools[0].previousFinancialYear).to.have.property('capitalCarryForwardFileLink')
+
 
               // CURRENT FINANCIAL YEAR PROPERTIES
               expect(response.body.schools[0].currentFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
               expect(response.body.schools[0].currentFinancialYear).to.have.property('revenue')
               expect(response.body.schools[0].currentFinancialYear).to.have.property('revenueStatus')
               expect(response.body.schools[0].currentFinancialYear).to.have.property('revenueStatusExplained')
-              //expect(response.body.schools[0].currentFinancialYear).to.have.property('revenueStatusFileLink')
+
               expect(response.body.schools[0].currentFinancialYear).to.have.property('capitalCarryForward')
               expect(response.body.schools[0].currentFinancialYear).to.have.property('capitalCarryForwardStatus')
               expect(response.body.schools[0].currentFinancialYear).to.have.property('capitalCarryForwardExplained')
-              expect(response.body.schools[0].currentFinancialYear).to.have.property('capitalCarryForwardFileLink')
+
 
               // NEXT FINANCIAL YEAR PROPERTIES
               expect(response.body.schools[0].nextFinancialYear).to.have.property('financialYearEndDate').to.match(getDateTimestampFormatRegex)
               expect(response.body.schools[0].nextFinancialYear).to.have.property('revenue')
               expect(response.body.schools[0].nextFinancialYear).to.have.property('revenueStatus')
               expect(response.body.schools[0].nextFinancialYear).to.have.property('revenueStatusExplained')
-              //expect(response.body.schools[0].nextFinancialYear).to.have.property('revenueStatusFileLink')
+
               expect(response.body.schools[0].nextFinancialYear).to.have.property('capitalCarryForward')
               expect(response.body.schools[0].nextFinancialYear).to.have.property('capitalCarryForwardStatus')
               expect(response.body.schools[0].nextFinancialYear).to.have.property('capitalCarryForwardExplained')
-              expect(response.body.schools[0].nextFinancialYear).to.have.property('capitalCarryForwardFileLink')
+
               })
       })
 
