@@ -23,3 +23,15 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+/**
+ * Adds a skip capability based on an expression for tests.
+ * NOTE: You will need to use es5 syntax to be able to access context e.g.
+ *
+ * it('does a thing', function () { //do something })
+ */
+Cypress.Commands.add('skipWhen', (expr, context) => {
+    if(expr) {
+        context.skip.bind(context)();
+    }
+})
