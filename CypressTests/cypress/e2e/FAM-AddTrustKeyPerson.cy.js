@@ -167,7 +167,7 @@ cy.request({
   it('PUT - Verify An Authorised User Is Able To UPDATE a FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
 
 
-   cy.log(JSON.stringify("Id = " + Cypress.env('responseIDForRequest')))
+
     cy.request({
             method: 'PUT',
             url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 19,
