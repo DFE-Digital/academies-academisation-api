@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -11,6 +10,7 @@ using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,16 +23,16 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 	{
 		private readonly Fixture _fixture = new();
 		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
-		private readonly Mock<IApplicationGetQuery> _getQueryMock = new();
-		private readonly Mock<IApplicationListByUserQuery> _listByUserMock = new();
+		private readonly Mock<IApplicationQueryService> _getQueryMock = new();
 		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly Mock<ILogger<ApplicationController>> _applicationLogger = new ();
 		private readonly Mock<IMediator> _mockMediator = new();
 		private readonly ApplicationController _subject;
+		private readonly Mock<ITrustQueryService>_trustQueryService = new();
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _listByUserMock.Object, _mockMediator.Object, _applicationLogger.Object);
+			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _trustQueryService.Object, _mockMediator.Object, _applicationLogger.Object);
 		}
 
 		[Fact]
@@ -62,7 +62,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var requestModel = _fixture.Create<ApplicationCreateRequestModel>();
 			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
 			_createCommandMock.Setup(x => x.Execute(requestModel))
-				.ReturnsAsync(new CreateValidationErrorResult<ApplicationServiceModel>(expectedValidationError));
+				.ReturnsAsync(new CreateValidationErrorResult(expectedValidationError));
 
 			// act
 			var result = await _subject.Post(requestModel);
@@ -133,7 +133,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 			List<ValidationError> expectedValidationError = new();
 			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new CreateValidationErrorResult<LegacyProjectServiceModel>(expectedValidationError));
+				.ReturnsAsync(new CreateValidationErrorResult(expectedValidationError));
 
 			// act
 			var result = await _subject.Submit(applicationId);
@@ -150,7 +150,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1);
+			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1, 1);
 			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CreateSuccessResult<LegacyProjectServiceModel>(projectServiceModel));
 
@@ -182,7 +182,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 			var applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
 
-			_getQueryMock.Setup(x => x.Execute(applicationId)).ReturnsAsync(applicationServiceModel);
+			_getQueryMock.Setup(x => x.GetById(applicationId)).ReturnsAsync(applicationServiceModel);
 
 			// act
 			var result = await _subject.Get(applicationId);
@@ -252,7 +252,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			string userEmail = _fixture.Create<string>();
 
-			_listByUserMock.Setup(x => x.Execute(userEmail))
+			_getQueryMock.Setup(x => x.GetByUserEmail(userEmail))
 				.ReturnsAsync(new List<ApplicationServiceModel>());
 
 			// act
@@ -274,7 +274,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				_fixture.Create<ApplicationServiceModel>()
 			};
 
-			_listByUserMock.Setup(x => x.Execute(userEmail))
+			_getQueryMock.Setup(x => x.GetByUserEmail(userEmail))
 				.ReturnsAsync(applications);
 
 			// act
@@ -283,6 +283,50 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// assert
 			var listResult = Assert.IsType<OkObjectResult>(result.Result);
 			Assert.Equal(applications, listResult.Value);
+		}
+
+		[Fact]
+		public async Task GetByApplicationReference_ReferenceExists_ReturnsOkWithApplication()
+		{
+			//Arrange
+			var applicationReference = "A2B_001";
+			_getQueryMock.Setup(x => x.GetByApplicationReference(applicationReference))
+				.ReturnsAsync(_fixture.Build<ApplicationServiceModel>().With(x => x.ApplicationReference, applicationReference).Create());
+			
+			//Act
+			var result = await _subject.Get(applicationReference);
+			
+			//Assert
+			result.Should().NotBeNull();
+			((result.Result as OkObjectResult).Value as ApplicationServiceModel).ApplicationReference.Should()
+				.Be(applicationReference);
+		}
+
+		[Fact]
+		public async Task GetByApplicationReference_ReferenceNotValid_Returns404()
+		{
+			//Arrange
+			var applicationReference = "A2B_000";
+			_getQueryMock.Setup(x => x.GetByApplicationReference(applicationReference))
+				.ReturnsAsync((ApplicationServiceModel)null!);
+			
+			//Act
+			var result = await _subject.Get(applicationReference);
+
+			//Assert
+			result.Result.Should().BeOfType<NotFoundResult>();
+		}
+
+		[Fact]
+		public async Task GetAllApplications__ReturnsList()
+		{
+			_getQueryMock.Setup(x => x.GetAllApplications())
+				.ReturnsAsync(new List<ApplicationSchoolSharepointServiceModel>());
+
+			var result = await _subject.GetAll();
+
+			result.Result.Should().BeOfType<OkObjectResult>();
+			(result.Result as OkObjectResult).Value.Should().NotBeNull();
 		}
 	}
 }

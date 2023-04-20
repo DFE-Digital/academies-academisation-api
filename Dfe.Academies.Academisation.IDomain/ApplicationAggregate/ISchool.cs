@@ -6,10 +6,11 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 public interface ISchool
 {
 	public int Id { get; }
+	Guid EntityId { get; }
 	public SchoolDetails Details { get; }
 	public string? TrustBenefitDetails { get; } 
 	public string? OfstedInspectionDetails{ get; }
-	public string? SafeguardingDetails{ get; }
+	public bool Safeguarding{ get; }
 	public string? LocalAuthorityReorganisationDetails{ get; }
 	public string? LocalAuthorityClosurePlanDetails{ get; }
 	public string? DioceseName{ get; }
@@ -27,5 +28,7 @@ public interface ISchool
 
 	public bool? HasLeases { get; }
 	public IReadOnlyCollection<ILease> Leases { get; }
+
+	void Update(UpdateSchoolParameter schoolUpdate);
 
 }

@@ -1,5 +1,7 @@
-﻿using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using User = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
@@ -7,13 +9,11 @@ internal static class LegacyProjectServiceModelMapper
 {
 	internal static LegacyProjectServiceModel MapToServiceModel(this IProject project)
 	{
-		LegacyProjectServiceModel serviceModel = new(
-			project.Id,
-			project.Details.Urn
-			)
+		LegacyProjectServiceModel serviceModel = new(project.Id, project.Details.Urn)
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
+			CreatedOn = project.Details.CreatedOn,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,
@@ -36,6 +36,7 @@ internal static class LegacyProjectServiceModelMapper
 			Version = project.Details.Version,
 			ClearedBy = project.Details.ClearedBy,
 			AcademyOrderRequired = project.Details.AcademyOrderRequired,
+			DaoPackSentDate = project.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = project.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = project.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = project.Details.PreviousHeadTeacherBoardLink,
@@ -44,10 +45,13 @@ internal static class LegacyProjectServiceModelMapper
 			SponsorReferenceNumber = project.Details.SponsorReferenceNumber,
 			SponsorName = project.Details.SponsorName,
 			AcademyTypeAndRoute = project.Details.AcademyTypeAndRoute,
+			Form7Received = project.Details.Form7Received,
+			Form7ReceivedDate = project.Details.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = project.Details.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,  // had to make this nullable or move it to the top
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
+			Region = project.Details.Region,
 
 			// general info
 			SchoolPhase = project.Details.SchoolPhase,
@@ -68,6 +72,10 @@ internal static class LegacyProjectServiceModelMapper
 			MemberOfParliamentName = project.Details.MemberOfParliamentName,
 			GeneralInformationSectionComplete = project.Details.GeneralInformationSectionComplete,
 
+			// Annex B
+			AnnexBFormReceived = project.Details.AnnexBFormReceived,
+			AnnexBFormUrl = project.Details.AnnexBFormUrl,
+
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = project.Details.SchoolPerformanceAdditionalInformation,
 
@@ -87,7 +95,7 @@ internal static class LegacyProjectServiceModelMapper
 			DiocesanConsent = project.Details.DiocesanConsent,
 			FoundationConsent = project.Details.FoundationConsent,
 			LegalRequirementsSectionComplete = project.Details.LegalRequirementsSectionComplete,
-			
+
 			// school budget info
 			EndOfCurrentFinancialYear = project.Details.EndOfCurrentFinancialYear,
 			EndOfNextFinancialYear = project.Details.EndOfNextFinancialYear,
@@ -98,7 +106,7 @@ internal static class LegacyProjectServiceModelMapper
 			SchoolBudgetInformationAdditionalInformation = project.Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = project.Details.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast					
+			// pupil schools forecast
 			YearOneProjectedCapacity = project.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = project.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = project.Details.YearTwoProjectedCapacity,
@@ -111,12 +119,24 @@ internal static class LegacyProjectServiceModelMapper
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
-			
+
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null
-				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress)
+				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress),
+
+			Notes = project.Details.Notes.ToProjectNoteServiceModels().ToList()
 		};
 
 		return serviceModel;
+	}
+
+	private static IEnumerable<ProjectNoteServiceModel> ToProjectNoteServiceModels(this IEnumerable<ProjectNote>? notes)
+	{
+		if (notes is null) return Enumerable.Empty<ProjectNoteServiceModel>();
+
+		return notes.Select(note => new ProjectNoteServiceModel
+		{
+			Author = note.Author, Note = note.Note, Subject = note.Subject, Date = note.Date
+		});
 	}
 }

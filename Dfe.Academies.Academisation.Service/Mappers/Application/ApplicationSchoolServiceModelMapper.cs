@@ -15,7 +15,7 @@ internal static class ApplicationSchoolServiceModelMapper
 			school.Details.LandAndBuildings.ToServiceModel(),
 			school.TrustBenefitDetails,
 			school.OfstedInspectionDetails,
-			school.SafeguardingDetails,
+			school.Safeguarding,
 			school.LocalAuthorityReorganisationDetails,
 			school.LocalAuthorityClosurePlanDetails,
 			school.DioceseName,
@@ -71,7 +71,8 @@ internal static class ApplicationSchoolServiceModelMapper
 			DeclarationSignedByName = school.Details.DeclarationSignedByName,
 			SchoolConversionReasonsForJoining = school.Details.SchoolConversionReasonsForJoining,
 			HasLoans = school.HasLoans,
-			HasLeases = school.HasLeases
+			HasLeases = school.HasLeases,
+			EntityId = school.EntityId
 		};
 	}
 

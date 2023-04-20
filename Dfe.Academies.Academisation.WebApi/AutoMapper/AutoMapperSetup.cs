@@ -1,11 +1,11 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
-using Dfe.Academies.Academisation.Data.ApplicationAggregate;
+using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
-using Dfe.Academies.Academisation.WebApi.AutoMapper;
+using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.AutoMapper;
 
@@ -16,23 +16,29 @@ public static class AutoMapperSetup
 		Guard.Against.NullOrEmpty(nameof(profile));
 
 		// Trust mappings
-		profile.CreateMap<IJoinTrust, JoinTrustState>()
-			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
-			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore());
-		profile.CreateMap<JoinTrustState, JoinTrust>();
+		//profile.CreateMap<IJoinTrust, JoinTrustState>()
+		//	.ForMember(x => x.CreatedOn, opt => opt.Ignore())
+		//	.ForMember(x => x.LastModifiedOn, opt => opt.Ignore())
+		//	.ForMember(x => x.DynamicsApplicationId, opt => opt.Ignore());
+		//profile.CreateMap<JoinTrustState, JoinTrust>();
 		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
+		profile.CreateMap<InvoluntaryProjectServiceModel, InvoluntaryProject>();
+		profile.CreateMap<InvoluntaryProjectTrustServiceModel, InvoluntaryProjectTrust>();
+		profile.CreateMap<InvoluntaryProjectSchoolServiceModel, InvoluntaryProjectSchool>();
 
 		// the mapping for this object is awkward because of the use of records, may have to re-think someof this but this is the best for now
-		profile.CreateMap<FormTrustState, FormTrustDetails>().ReverseMap();
+		//profile.CreateMap<FormTrustState, FormTrustDetails>().ReverseMap();
 
-		profile.CreateMap<FormTrustState, IFormTrust>()
-			.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
-			.ReverseMap();
+		//profile.CreateMap<FormTrustState, IFormTrust>()
+		//	.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
+		//	.ForMember(dest => dest.KeyPeople, opt => opt.Ignore())
+		//	.ReverseMap().ForMember(x => x.KeyPeople, opt => opt.Ignore());
 
-		profile.CreateMap<FormTrustState, FormTrust>()
-			.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
-			.ForCtorParam(nameof(FormTrust.TrustDetails), opt => opt.MapFrom(src => src))
-			.ReverseMap();
+		//profile.CreateMap<FormTrustState, FormTrust>()
+		//	.ForMember(dest => dest.TrustDetails, opt => opt.MapFrom(src => src))
+		//	.ForCtorParam(nameof(FormTrust.TrustDetails), opt => opt.MapFrom(src => src))
+		//	.ForCtorParam(nameof(FormTrust.KeyPeople), (opt) => opt.MapFrom(x => x.KeyPeople))
+		//	.ReverseMap();//.ForMember(x => x.KeyPeople, opt => opt.Ignore());
 
 		profile.CreateMap<IFormTrust, ApplicationFormTrustServiceModel>()
 			.ConvertUsing((wrapper, destination, context) => new ApplicationFormTrustServiceModel(
@@ -53,6 +59,31 @@ public static class AutoMapperSetup
 				wrapper.TrustDetails.FormTrustGrowthPlansYesNo,
 				wrapper.TrustDetails.FormTrustImprovementSupport,
 				wrapper.TrustDetails.FormTrustImprovementStrategy,
-				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor));
+				wrapper.TrustDetails.FormTrustImprovementApprovedSponsor,
+				wrapper.KeyPeople.Select(x => new TrustKeyPersonServiceModel(x.Id, x.Name, x.DateOfBirth, x.Biography, context.Mapper.Map<IEnumerable<TrustKeyPersonRoleServiceModel>>(x.Roles))).ToList()));
+
+		//profile.CreateMap<TrustKeyPersonState, ITrustKeyPerson>().ReverseMap();
+		//profile.CreateMap<TrustKeyPersonState, TrustKeyPerson>()
+		//	.ForCtorParam(nameof(TrustKeyPerson.Roles), (opt) => opt.MapFrom(x => x.Roles))
+		//	.ReverseMap();
+
+		profile.CreateMap<TrustKeyPersonServiceModel, TrustKeyPerson>()
+			.ForMember(x => x.DynamicsKeyPersonId, opt => opt.Ignore())
+			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
+			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore())
+			.ReverseMap();
+
+		//profile.CreateMap<TrustKeyPersonRoleState, ITrustKeyPersonRole>().ReverseMap();
+		//profile.CreateMap<TrustKeyPersonRoleState, TrustKeyPersonRole>().ReverseMap();
+		profile.CreateMap<TrustKeyPersonRoleServiceModel, TrustKeyPersonRole>()
+			.ForMember(x => x.CreatedOn, opt => opt.Ignore())
+			.ForMember(x => x.LastModifiedOn, opt => opt.Ignore())
+			.ReverseMap();
+
+		profile.CreateMap<TrustKeyPersonRoleServiceModel, ITrustKeyPersonRole>().ReverseMap();
+		
+		profile.CreateMap<IApplication, ApplicationSchoolSharepointServiceModel>()
+			.ConvertUsing((wrapper, destination, context) =>
+			new ApplicationSchoolSharepointServiceModel(wrapper.Id, wrapper.ApplicationReference!, wrapper.Schools.Select(x => new SchoolSharepointServiceModel(x.Id, x.Details.SchoolName, x.EntityId)).ToList()));
 	}
 }

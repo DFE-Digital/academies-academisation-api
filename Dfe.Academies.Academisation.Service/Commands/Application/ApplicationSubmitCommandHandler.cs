@@ -1,5 +1,6 @@
-﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IData.ApplicationAggregate;
+﻿using System.Collections;
+using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
@@ -12,26 +13,23 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
 	public class ApplicationSubmitCommandHandler : IRequestHandler<SubmitApplicationCommand, CommandOrCreateResult>
 	{
-		private readonly IApplicationGetDataQuery _dataQuery;
-		private readonly IApplicationUpdateDataCommand _dataCommand;
+		private readonly IApplicationRepository _applicationRepository;
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 		private readonly IApplicationSubmissionService _applicationSubmissionService;
 
 		public ApplicationSubmitCommandHandler(
-			IApplicationGetDataQuery dataQuery,
-			IApplicationUpdateDataCommand dataCommand,
+			IApplicationRepository applicationRepository,
 			IProjectCreateDataCommand projectCreateDataCommand,
 			IApplicationSubmissionService applicationSubmissionService)
 		{
-			_dataQuery = dataQuery;
-			_dataCommand = dataCommand;
+			_applicationRepository = applicationRepository;
 			_projectCreateDataCommand = projectCreateDataCommand;
 			_applicationSubmissionService = applicationSubmissionService;
 		}
 
 		public async Task<CommandOrCreateResult> Handle(SubmitApplicationCommand command, CancellationToken cancellationToken)
 		{
-			var application = await _dataQuery.Execute(command.applicationId);
+			var application = await _applicationRepository.GetByIdAsync(command.applicationId);
 
 			if (application is null)
 			{
@@ -44,27 +42,37 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				case CommandValidationErrorResult:
 					return domainServiceResult;
-				case CreateValidationErrorResult<IProject> createValidationErrorResult:
+				case CreateValidationErrorResult:
 					return domainServiceResult;
 				case CommandSuccessResult:
 					break;
 				case CreateSuccessResult<IProject> createSuccessResult:
 					await _projectCreateDataCommand.Execute(createSuccessResult.Payload);
 					break;
+				case CreateSuccessResult<IEnumerable<IProject>> createSuccessResult:
+					foreach (var project in createSuccessResult.Payload)
+					{
+						await _projectCreateDataCommand.Execute(project);
+					}
+					break;
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}
 			
-			await _dataCommand.Execute(application);
+			_applicationRepository.Update(application);
+			await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			switch (domainServiceResult)
 			{
 				case CommandResult:
 					return domainServiceResult;
-				case CreateValidationErrorResult<IProject> createValidationErrorResult:
-					return createValidationErrorResult.MapToPayloadType<LegacyProjectServiceModel>();
+				case CreateValidationErrorResult createValidationErrorResult:
+					return createValidationErrorResult.MapToPayloadType();
 				case CreateSuccessResult<IProject> createSuccessResult:
 					return createSuccessResult.MapToPayloadType(p => p.MapToServiceModel());
+				case CreateSuccessResult<IEnumerable<IProject>> createSuccessResult:
+					var projects = createSuccessResult.Payload.Select(p => p.MapToServiceModel());
+					return new CreateSuccessResult<IEnumerable<LegacyProjectServiceModel>>(projects);
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}

@@ -26,7 +26,8 @@ public class LegacyProjectListGetTests
 		ILegacyProjectListGetQuery legacyProjectGetQuery = new LegacyProjectListGetQuery(projectGetDataQuery);
 
 		_subject = new LegacyProjectController(Mock.Of<ILegacyProjectGetQuery>(), legacyProjectGetQuery,
-			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>());
+			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(),
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateInvoluntaryProjectCommand>());
 	}
 
 	[Fact]
@@ -41,12 +42,59 @@ public class LegacyProjectListGetTests
 		await _context.Projects.AddAsync(project3);
 		await _context.SaveChangesAsync();
 
+		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, null, null, null);
 		// act
-		var result = await _subject.GetProjects(null, null, null, 1, 3);
+		var result = await _subject.GetProjects(searchModel);
 
 		// assert
 		var (_, getProjects) = DfeAssert.OkObjectResult(result);
 		
 		Assert.Equal(3, getProjects.Data.Count());
+	}
+	[Fact]
+	public async Task ProjectsExists_ProjectListReturned_WithRegionFilter()
+	{
+		// arrange 
+		var project1 = _fixture.Create<ProjectState>();
+		var project2 = _fixture.Create<ProjectState>();
+		var project3 = _fixture.Create<ProjectState>();
+
+		await _context.Projects.AddAsync(project1);
+		await _context.Projects.AddAsync(project2);
+		await _context.Projects.AddAsync(project3);
+		await _context.SaveChangesAsync();
+
+		string[] regions =  { project1.Region!.ToLower(), project2.Region!.ToLower() };
+		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, regions, null, null);
+		// act
+		var result = await _subject.GetProjects(searchModel);
+
+		// assert
+		var (_, getProjects) = DfeAssert.OkObjectResult(result);
+
+		Assert.Equal(2, getProjects.Data.Count());
+	}
+	[Fact]
+	public async Task ProjectsExists_ProjectListReturned_WithApplicationIdFilter()
+	{
+		// arrange 
+		var project1 = _fixture.Create<ProjectState>();
+		var project2 = _fixture.Create<ProjectState>();
+		var project3 = _fixture.Create<ProjectState>();
+
+		await _context.Projects.AddAsync(project1);
+		await _context.Projects.AddAsync(project2);
+		await _context.Projects.AddAsync(project3);
+		await _context.SaveChangesAsync();
+
+		string[] applicationReferences = { project1.ApplicationReferenceNumber!, project2.ApplicationReferenceNumber! };
+		GetAcademyConversionSearchModel searchModel = new GetAcademyConversionSearchModel(1, 3, null, null, null, null, applicationReferences);
+		// act
+		var result = await _subject.GetProjects(searchModel);
+
+		// assert
+		var (_, getProjects) = DfeAssert.OkObjectResult(result);
+
+		Assert.Equal(2, getProjects.Data.Count());
 	}
 }

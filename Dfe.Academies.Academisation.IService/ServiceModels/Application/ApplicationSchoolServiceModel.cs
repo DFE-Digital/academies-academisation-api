@@ -9,11 +9,9 @@ public record ApplicationSchoolServiceModel(
 	string SchoolName,
 	LandAndBuildingsServiceModel? LandAndBuildings,
 	// additional information - split up
-	
-	
 	string? TrustBenefitDetails, 
 	string? OfstedInspectionDetails, 
-	string? SafeguardingDetails, 
+	bool Safeguarding, 
 	string? LocalAuthorityReorganisationDetails,
 	string? LocalAuthorityClosurePlanDetails,
 	string? DioceseName,
@@ -83,5 +81,6 @@ public record ApplicationSchoolServiceModel(
 	string? DeclarationSignedByName = null,
 	string? SchoolConversionReasonsForJoining = null, 
 	bool? HasLoans = null,
-	bool? HasLeases = null
+	bool? HasLeases = null,
+	Guid? EntityId = null
 );

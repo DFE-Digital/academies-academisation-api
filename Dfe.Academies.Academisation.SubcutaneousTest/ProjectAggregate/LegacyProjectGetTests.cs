@@ -5,8 +5,10 @@ using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -26,7 +28,8 @@ public class ProjectGetTests
 		ILegacyProjectGetQuery legacyProjectGetQuery = new LegacyProjectGetQuery(projectGetDataQuery);
 
 		_legacyProjectController = new LegacyProjectController(legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>());
+			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(),
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
 	}
 
 	[Fact]
@@ -37,9 +40,17 @@ public class ProjectGetTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var result = await _legacyProjectController.Get(existingProject.Id);
+		ActionResult<LegacyProjectServiceModel> result = await _legacyProjectController.Get(existingProject.Id);
 
 		// assert
-		Assert.IsType<OkObjectResult>(result.Result);
+		result.Result.Should().BeOfType<OkObjectResult>();
+
+		result.Result.As<OkObjectResult>().Value.Should()
+			.BeEquivalentTo(existingProject, options =>
+				options.Excluding(x => x.Notes)
+					.Excluding(x => x.LastModifiedOn)
+					.Excluding(x => x.AssignedUserId)
+					.Excluding(x => x.AssignedUserEmailAddress)
+					.Excluding(x => x.AssignedUserFullName));
 	}	
 }

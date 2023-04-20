@@ -23,6 +23,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("loan/update", Name = "UpdateLoan")]
 		public async Task<IActionResult> UpdateLoan([FromBody] UpdateLoanCommand command)
 		{
+			_logger.LogInformation($"Updating loan with details: {command}");
 			try
 			{
 				var result = await _mediator.Send(command);
@@ -42,6 +43,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPut("loan/create", Name = "CreateLoan")]
 		public async Task<IActionResult> CreateLoan([FromBody] CreateLoanCommand command)
 		{
+			_logger.LogInformation($"Creating loan with details: {command}");
 			var result = await _mediator.Send(command);
 			
 			return result switch
@@ -55,6 +57,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpDelete("loan/delete", Name = "DeleteLoan")]
 		public async Task<IActionResult> DeleteLoan([FromBody] DeleteLoanCommand command)
 		{
+			_logger.LogInformation($"Deleting loan: {command}");
 			var result = await _mediator.Send(command);
 			
 			return result switch
@@ -68,6 +71,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("lease/update", Name = "UpdateLease")]
 		public async Task<IActionResult> UpdateLease([FromBody] UpdateLeaseCommand command)
 		{
+			_logger.LogInformation($"Updating lease with details: {command}");
 			var result = await _mediator.Send(command);
 			
 			return result switch
@@ -81,6 +85,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPut("lease/create", Name = "CreateLease")]
 		public async Task<IActionResult> CreateLease([FromBody] CreateLeaseCommand command)
 		{
+			_logger.LogInformation($"Creating lease with details: {command}");
 			var result = await _mediator.Send(command);
 			
 			return result switch
@@ -94,6 +99,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpDelete("lease/delete", Name = "DeleteLease")]
 		public async Task<IActionResult> DeleteLease([FromBody] DeleteLeaseCommand command)
 		{
+			_logger.LogInformation($"Deleting lease: {command}");
 			var result = await _mediator.Send(command);
 			
 			return result switch
@@ -108,6 +114,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPut("additional-details", Name = "SetAdditionalDetails")]
 		public async Task<IActionResult> SetAdditionalDetails([FromBody] SetAdditionalDetailsCommand command)
 		{
+			_logger.LogInformation($"Setting additional details for application: {command.ApplicationId} on school: {command.SchoolId}");
 			var result = await _mediator.Send(command);
 			
 			return result switch

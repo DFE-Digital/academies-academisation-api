@@ -387,3 +387,11 @@ terraform.rc*
 !terraform.tfvars.example
 .terraform/
 backend.vars
+
+# Stackify
+Stackify.json
+
+# Cypress
+
+*/cypress/screenshots
+*/cypress/videos

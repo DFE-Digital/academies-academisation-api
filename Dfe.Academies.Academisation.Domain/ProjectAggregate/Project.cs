@@ -1,4 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -25,51 +27,122 @@ public class Project : IProject
 
 	public ProjectDetails Details { get; private set; }
 
-	public static CreateResult<IProject> Create(IApplication application)
+
+	public static CreateResult Create(IApplication application)
 	{
-		if (application.ApplicationType != Core.ApplicationAggregate.ApplicationType.JoinAMat)
+		if (application.ApplicationType != ApplicationType.JoinAMat)
 		{
-			return new CreateValidationErrorResult<IProject>(
+			return new CreateValidationErrorResult(
 				new List<ValidationError>
 				{
-					new ValidationError("ApplicationStatus", "Only projects of type JoinAMat are supported")
+					new("ApplicationStatus", "Only projects of type JoinAMat are supported")
 				});
 		}
 
 		var school = application.Schools.Single().Details;
 
-		var projectDetails = new ProjectDetails(
-			school.Urn
-		)
+		var projectDetails = new ProjectDetails
 		{
-			// TODO: map additional fields as they become available
-			//LocalAuthority = school.LocalAuthority.LocalAuthorityName,
-			//ApplicationReferenceNumber = application.ApplicationId
+			Urn = school.Urn,
+			SchoolName = school.SchoolName,
+			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 			ProjectStatus = "Converter Pre-AO (C)",
-			//ApplicationReceivedDate = application.ApplicationSubmittedOn
+			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			OpeningDate = DateTime.Today.AddMonths(6),
-			//TrustReferenceNumber = application.ExistingTrust.ReferenceNumber
-			//NameOfTrust = application.ExistingTrust.TrustName
+			TrustReferenceNumber = application.JoinTrust?.TrustReference,
+			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
 			ProposedAcademyOpeningDate = school.ConversionTargetDate,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
-			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme),
-			//FinancialDeficit = ToYesNoString(school.SchoolCFYCapitalIsDeficit),
-			//RationaleForTrust = school.SchoolConversionReasonsForJoining,
-			
-			
-			//SponsorName = application.SponsorName,
-			//SponsorReferenceNumber = application.SponsorReferenceNumber,
-			//EndOfCurrentFinancialYear = school.CurrentFinancialYear,
-			//EndOfNextFinancialYear = school.NextFinancialYear,
-			//RevenueCarryForwardAtEndMarchCurrentYear = school.SchoolCFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolCFYRevenueIsDeficit),
-			//ProjectedRevenueBalanceAtEndMarchNextYear = school.SchoolNFYRevenue.ConvertDeficitAmountToNegativeValue(school.SchoolNFYRevenueIsDeficit),
-			//CapitalCarryForwardAtEndMarchCurrentYear = school.SchoolCFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolCFYCapitalIsDeficit),
-			//CapitalCarryForwardAtEndMarchNextYear = school.SchoolNFYCapitalForward.ConvertDeficitAmountToNegativeValue(school.SchoolNFYCapitalIsDeficit),
+			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
+			FinancialDeficit = ToYesNoString(IsDeficit(school.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+			RationaleForTrust = school.SchoolConversionReasonsForJoining,
+			EndOfCurrentFinancialYear = school.CurrentFinancialYear?.FinancialYearEndDate,
+			EndOfNextFinancialYear = school.NextFinancialYear?.FinancialYearEndDate,
+			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.Revenue, school.CurrentFinancialYear?.RevenueStatus),
+			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.Revenue, school.NextFinancialYear?.RevenueStatus),
+			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.CapitalCarryForward, school.CurrentFinancialYear?.CapitalCarryForwardStatus),
+			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.CapitalCarryForward, school.NextFinancialYear?.CapitalCarryForwardStatus),
 			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
 			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
+		};
+
+		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
+	public static CreateResult CreateFormAMat(IApplication application)
+	{
+		if (application.ApplicationType != ApplicationType.FormAMat)
+		{
+			return new CreateValidationErrorResult(
+				new List<ValidationError>
+				{
+					new("ApplicationStatus", "Only projects of type FormAMat are supported")
+				});
+		}
+
+		var projectDetailsList = application.Schools.Select(school => new ProjectDetails
+			{
+				Urn = school.Details.Urn,
+				SchoolName = school.Details.SchoolName,
+				ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
+				ProjectStatus = "Converter Pre-AO (C)",
+				ApplicationReceivedDate = application.ApplicationSubmittedDate,
+				OpeningDate = DateTime.Today.AddMonths(6),
+				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
+				AcademyTypeAndRoute = "Form a Mat",
+				ProposedAcademyOpeningDate = school.Details.ConversionTargetDate,
+				ConversionSupportGrantAmount = 25000,
+				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
+				PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
+				FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+				RationaleForTrust = school.Details.SchoolConversionReasonsForJoining,
+				EndOfCurrentFinancialYear = school.Details.CurrentFinancialYear?.FinancialYearEndDate,
+				EndOfNextFinancialYear = school.Details.NextFinancialYear?.FinancialYearEndDate,
+				RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.Revenue, school.Details.CurrentFinancialYear?.RevenueStatus),
+				ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.Revenue, school.Details.NextFinancialYear?.RevenueStatus),
+				CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.CapitalCarryForward, school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus),
+				CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.CapitalCarryForward, school.Details.NextFinancialYear?.CapitalCarryForwardStatus),
+				YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
+				YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
+				YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3
+			})
+			.ToList();
+
+		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails)).ToList();
+		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
+	}
+
+	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
+	{
+		if (project.Trust == null)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("Trust", "Trust in the model must not be null")
+			});
+		}
+		if (project.School == null)
+		{
+			return new CreateValidationErrorResult(new List<ValidationError>
+			{
+				new("School", "School in the model must not be null")
+			});
+		}
+
+		var projectDetails = new ProjectDetails
+		{
+			Urn = project.School.Urn,
+			SchoolName = project.School?.Name,
+			ProjectStatus = "Converter Pre-AO (C)",
+			OpeningDate = DateTime.Today.AddMonths(6),
+			TrustReferenceNumber = project.Trust?.ReferenceNumber,
+			NameOfTrust = project.Trust?.Name,
+			AcademyTypeAndRoute = "Sponsored",
+			ConversionSupportGrantAmount = 25000,
+			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme)
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
@@ -79,13 +152,13 @@ public class Project : IProject
 	{
 		if (Details.Urn != detailsToUpdate.Urn)
 		{
-			return new CommandValidationErrorResult(new List<ValidationError> 
-			{ 
-				new ValidationError("Urn", "Urn in update model must match existing record") 
+			return new CommandValidationErrorResult(new List<ValidationError>
+			{
+				new("Urn", "Urn in update model must match existing record")
 			});
 		}
 
-		Details = new ProjectDetails(detailsToUpdate.Urn)
+		Details = new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId,
@@ -112,6 +185,7 @@ public class Project : IProject
 			Version = detailsToUpdate.Version,
 			ClearedBy = detailsToUpdate.ClearedBy,
 			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired,
+			DaoPackSentDate = detailsToUpdate.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = detailsToUpdate.PreviousHeadTeacherBoardLink,
@@ -120,10 +194,17 @@ public class Project : IProject
 			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber,
 			SponsorName = detailsToUpdate.SponsorName,
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute,
+			Form7Received = detailsToUpdate.Form7Received,
+			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
+			Region	= detailsToUpdate.Region,
+
+			// Annex B
+			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived,
+			AnnexBFormUrl = detailsToUpdate.AnnexBFormUrl,
 
 			// general info
 			SchoolPhase = detailsToUpdate.SchoolPhase,
@@ -164,7 +245,7 @@ public class Project : IProject
 			DiocesanConsent = detailsToUpdate.DiocesanConsent,
 			FoundationConsent = detailsToUpdate.FoundationConsent,
 			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete,
-			
+
 			// school budget info
 			EndOfCurrentFinancialYear = detailsToUpdate.EndOfCurrentFinancialYear,
 			EndOfNextFinancialYear = detailsToUpdate.EndOfNextFinancialYear,
@@ -175,7 +256,7 @@ public class Project : IProject
 			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast			
+			// pupil schools forecast
 			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = detailsToUpdate.YearTwoProjectedCapacity,
@@ -188,7 +269,7 @@ public class Project : IProject
 			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
-			
+
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
@@ -196,14 +277,31 @@ public class Project : IProject
 		return new CommandSuccessResult();
 	}
 
+	private static bool? IsDeficit(RevenueType? revenueType)
+	{
+		return revenueType.HasValue
+			? revenueType == RevenueType.Deficit
+			: null;
+	}
+
+	private static decimal? ConvertDeficitAmountToNegative(decimal? amount, RevenueType? revenueType)
+	{
+		if (revenueType.HasValue)
+		{
+			return IsDeficit(revenueType)!.Value ? amount * -1.0M : amount;
+		}
+		return null;
+	}
+
 	private static string? ToYesNoString(bool? value)
 	{
 		if (!value.HasValue) return null;
 		return value == true ? "Yes" : "No";
 	}
+
 	private static User? MapUser(User? user)
 	{
-		if(user == null) return null;
+		if (user == null) return null;
 		return new User(user.Id, user.FullName, user.EmailAddress);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -6,6 +7,8 @@ namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 public interface IApplication
 {
 	int ApplicationId { get; }
+	int Id { get; }
+	Guid EntityId { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
 
@@ -19,7 +22,12 @@ public interface IApplication
 	IJoinTrust? JoinTrust { get; }
 
 	DateTime? ApplicationSubmittedDate { get;  }
-	void SetIdsOnCreate(int applicationId, int conversionId);
+
+	/// <summary>
+	/// This is in the format $"A2B_{ApplicationId}"
+	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
+	/// </summary>
+	string? ApplicationReference { get; set; }
 
 	CommandResult Update(
 		ApplicationType applicationType,
@@ -42,6 +50,28 @@ public interface IApplication
 	CommandResult CreateLease(int schoolId, string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets);
 	CommandResult UpdateLease(int schoolId, int leaseId, string leaseTerm, decimal repaymentAmount, decimal interestRate, decimal paymentsToDate, string purpose, string valueOfAssets, string responsibleForAssets);
 	CommandResult DeleteLease(int schoolId, int leaseId);
-	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
+	CommandResult SetJoinTrustDetails(int UKPRN, string trustName, string trustReference, ChangesToTrust? changesToTrust, string? changesToTrustExplained, bool? changesToLaGovernance, string? changesToLaGovernanceExplained);
 	CommandResult SetFormTrustDetails(FormTrustDetails formTrustDetails);
+	CommandResult AddTrustKeyPerson(string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
+	CommandResult UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
+	CommandResult DeleteTrustKeyPerson(int keyPersonId);
+	CommandResult DeleteSchool(int urn);
+
+	CommandResult SetAdditionalDetails(
+		int schoolId,
+		string trustBenefitDetails,
+		string? ofstedInspectionDetails,
+		bool safeguarding,
+		string? localAuthorityReorganisationDetails,
+		string? localAuthorityClosurePlanDetails,
+		string? dioceseName,
+		string dioceseFolderIdentifier,
+		bool partOfFederation,
+		string? foundationTrustOrBodyName,
+		string foundationConsentFolderIdentifier,
+		DateTimeOffset? exemptionEndDate,
+		string mainFeederSchools,
+		string resolutionConsentFolderIdentifier,
+		SchoolEqualitiesProtectedCharacteristics? protectedCharacteristics,
+		string? furtherInformation);
 }

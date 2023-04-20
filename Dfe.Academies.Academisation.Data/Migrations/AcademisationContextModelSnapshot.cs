@@ -17,596 +17,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("academisation")
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApproverContactEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApproverContactName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CapacityAssumptions")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CapacityPublishedAdmissionsNumber")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("ConfirmPaySupportGrantToSchool")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ContactChairEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactChairName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactChairTel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactHeadEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactHeadName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactHeadTel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactRole")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ConversionApplicationId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("ConversionChangeNamePlanned")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ConversionTargetDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ConversionTargetDateExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("ConversionTargetDateSpecified")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("CurrentFinancialYearCapitalCarryForward")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("CurrentFinancialYearCapitalCarryForwardExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentFinancialYearCapitalCarryForwardFileLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CurrentFinancialYearCapitalCarryForwardStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CurrentFinancialYearEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("CurrentFinancialYearRevenue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("CurrentFinancialYearRevenueStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CurrentFinancialYearRevenueStatusExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentFinancialYearRevenueStatusFileLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("DeclarationBodyAgree")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("DeclarationIAmTheChairOrHeadteacher")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("DeclarationSignedByName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DioceseFolderIdentifier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DioceseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("ExemptionEndDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool?>("FacilitiesShared")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FacilitiesSharedExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("FinanceOngoingInvestigations")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FinancialInvestigationsExplain")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("FinancialInvestigationsTrustAware")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FoundationConsentFolderIdentifier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FoundationTrustOrBodyName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FurtherInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("Grants")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("GrantsAwardingBodies")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("HasLeases")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("HasLoans")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("JoinTrustReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocalAuthorityClosurePlanDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocalAuthorityReoganisationDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainContactOtherEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainContactOtherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainContactOtherRole")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainContactOtherTelephone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MainFeederSchools")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("NextFinancialYearCapitalCarryForward")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("NextFinancialYearCapitalCarryForwardExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NextFinancialYearCapitalCarryForwardFileLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("NextFinancialYearCapitalCarryForwardStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("NextFinancialYearEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("NextFinancialYearRevenue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("NextFinancialYearRevenueStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NextFinancialYearRevenueStatusExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NextFinancialYearRevenueStatusFileLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OfstedInspectionDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("PartOfBuildingSchoolsForFutureProgramme")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("PartOfFederation")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("PartOfPfiScheme")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PartOfPfiSchemeType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("PartOfPrioritySchoolsBuildingProgramme")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("PreviousFinancialYearCapitalCarryForward")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("PreviousFinancialYearCapitalCarryForwardExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreviousFinancialYearCapitalCarryForwardFileLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PreviousFinancialYearCapitalCarryForwardStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("PreviousFinancialYearEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("PreviousFinancialYearRevenue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("PreviousFinancialYearRevenueStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PreviousFinancialYearRevenueStatusExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreviousFinancialYearRevenueStatusFileLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProjectedPupilNumbersYear1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProjectedPupilNumbersYear2")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProjectedPupilNumbersYear3")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProposedNewSchoolName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProtectedCharacteristics")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ResolutionConsentFolderIdentifier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SafeguardingDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SchoolConversionReasonsForJoining")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("SchoolHasConsultedStakeholders")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SchoolName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SchoolPlanToConsultStakeholders")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SupportGrantFundsPaidTo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TrustBenefitDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Urn")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("WorksPlanned")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("WorksPlannedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("WorksPlannedExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConversionApplicationId");
-
-                    b.ToTable("ApplicationSchool", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ApplicationSubmittedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ApplicationType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("FormTrustId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("JoinTrustId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FormTrustId");
-
-                    b.HasIndex("JoinTrustId");
-
-                    b.ToTable("ConversionApplication", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ContributorState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ConversionApplicationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OtherRoleName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConversionApplicationId");
-
-                    b.ToTable("ConversionApplicationContributor", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("FormTrustGrowthPlansYesNo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FormTrustImprovementApprovedSponsor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustImprovementStrategy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustImprovementSupport")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("FormTrustOpeningDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FormTrustPlanForGrowth")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustPlansForNoGrowth")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustProposedNameOfTrust")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("FormTrustReasonApprovaltoConvertasSAT")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FormTrustReasonApprovedPerson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustReasonForming")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustReasonFreedom")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustReasonGeoAreas")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustReasonImproveTeaching")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FormTrustReasonVision")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TrustApproverEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TrustApproverName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ApplicationFormTrust", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.JoinTrustState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool?>("ChangesToLaGovernance")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ChangesToLaGovernanceExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ChangesToTrust")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ChangesToTrustExplained")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TrustName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UKPRN")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ApplicationJoinTrust", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LeaseState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ApplicationSchoolId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LeaseTerm")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("PaymentsToDate")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("RepaymentAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ResponsibleForAssets")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ValueOfAssets")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationSchoolId");
-
-                    b.ToTable("ApplicationSchoolLease", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LoanState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ApplicationSchoolId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Provider")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Schedule")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationSchoolId");
-
-                    b.ToTable("ApplicationSchoolLoan", "academisation");
-                });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
@@ -711,6 +125,36 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectNoteState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectNotes", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", b =>
                 {
                     b.Property<int>("Id")
@@ -729,6 +173,12 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AgeRange")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("AnnexBFormReceived")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AnnexBFormUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ApplicationReceivedDate")
@@ -779,6 +229,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DaoPackSentDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DiocesanConsent")
                         .HasColumnType("nvarchar(max)");
 
@@ -802,6 +255,12 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("FinancialDeficit")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Form7Received")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Form7ReceivedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FoundationConsent")
                         .HasColumnType("nvarchar(max)");
@@ -905,6 +364,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("RecommendationForProject")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("RevenueCarryForwardAtEndMarchCurrentYear")
                         .HasColumnType("decimal(18,2)");
 
@@ -979,47 +441,394 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("Project", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", null)
-                        .WithMany("Schools")
-                        .HasForeignKey("ConversionApplicationId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationReference")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComputedColumnSql("'A2B_' + CAST([Id] AS NVARCHAR(255))", true);
+
+                    b.Property<string>("ApplicationStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ApplicationSubmittedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApplicationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DynamicsApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("FormTrustId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JoinTrustId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FormTrustId")
+                        .IsUnique()
+                        .HasFilter("[FormTrustId] IS NOT NULL");
+
+                    b.HasIndex("JoinTrustId")
+                        .IsUnique()
+                        .HasFilter("[JoinTrustId] IS NOT NULL");
+
+                    b.ToTable("ConversionApplication", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Contributor", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.FormTrustState", "FormTrust")
-                        .WithMany()
-                        .HasForeignKey("FormTrustId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.JoinTrustState", "JoinTrust")
-                        .WithMany()
-                        .HasForeignKey("JoinTrustId");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Navigation("FormTrust");
+                    b.Property<int?>("ConversionApplicationId")
+                        .HasColumnType("int");
 
-                    b.Navigation("JoinTrust");
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DynamicsApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversionApplicationId");
+
+                    b.ToTable("ConversionApplicationContributor", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ContributorState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.Lease", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", null)
-                        .WithMany("Contributors")
-                        .HasForeignKey("ConversionApplicationId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ApplicationSchoolId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DynamicsSchoolLeaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("InterestRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LeaseTerm")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PaymentsToDate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("RepaymentAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ResponsibleForAssets")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ValueOfAssets")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationSchoolId");
+
+                    b.ToTable("ApplicationSchoolLease", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LeaseState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.Loan", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", null)
-                        .WithMany("Leases")
-                        .HasForeignKey("ApplicationSchoolId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ApplicationSchoolId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DynamicsSchoolLoanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("InterestRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Schedule")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationSchoolId");
+
+                    b.ToTable("ApplicationSchoolLoan", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.LoanState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", null)
-                        .WithMany("Loans")
-                        .HasForeignKey("ApplicationSchoolId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ConversionApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DioceseFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DioceseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DynamicsApplyingSchoolId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ExemptionEndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FoundationConsentFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FoundationTrustOrBodyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FurtherInformation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("HasLeases")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("HasLoans")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LocalAuthorityClosurePlanDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LocalAuthorityReorganisationDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MainFeederSchools")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfstedInspectionDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PartOfFederation")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ProtectedCharacteristics")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResolutionConsentFolderIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Safeguarding")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TrustBenefitDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversionApplicationId");
+
+                    b.ToTable("ApplicationSchool", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.FormTrust", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DynamicsApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationFormTrust", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.JoinTrust", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool?>("ChangesToLaGovernance")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ChangesToLaGovernanceExplained")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ChangesToTrust")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ChangesToTrustExplained")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DynamicsApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrustName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrustReference")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UKPRN")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationJoinTrust", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ApplicationFormTrustId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DynamicsKeyPersonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationFormTrustId");
+
+                    b.ToTable("ApplicationFormTrustKeyPerson", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPersonRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ApplicationFormTrustKeyPersonRoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimeInRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationFormTrustKeyPersonRoleId");
+
+                    b.ToTable("ApplicationFormTrustKeyPersonRole", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
@@ -1040,18 +849,589 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationSchoolState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectNoteState", b =>
                 {
-                    b.Navigation("Leases");
-
-                    b.Navigation("Loans");
+                    b.HasOne("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", null)
+                        .WithMany("Notes")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ApplicationAggregate.ApplicationState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>
                 {
-                    b.Navigation("Contributors");
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.FormTrust", "FormTrust")
+                        .WithOne()
+                        .HasForeignKey("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", "FormTrustId");
 
-                    b.Navigation("Schools");
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.JoinTrust", "JoinTrust")
+                        .WithOne()
+                        .HasForeignKey("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", "JoinTrustId");
+
+                    b.Navigation("FormTrust");
+
+                    b.Navigation("JoinTrust");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Contributor", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", null)
+                        .WithMany("Contributors")
+                        .HasForeignKey("ConversionApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.ContributorDetails", "Details", b1 =>
+                        {
+                            b1.Property<int>("ContributorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("EmailAddress")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EmailAddress");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FirstName");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LastName");
+
+                            b1.Property<string>("OtherRoleName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("OtherRoleName");
+
+                            b1.Property<int>("Role")
+                                .HasColumnType("int")
+                                .HasColumnName("Role");
+
+                            b1.HasKey("ContributorId");
+
+                            b1.ToTable("ConversionApplicationContributor", "academisation");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContributorId");
+                        });
+
+                    b.Navigation("Details")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.Lease", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School", null)
+                        .WithMany("Leases")
+                        .HasForeignKey("ApplicationSchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.Loan", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School", null)
+                        .WithMany("Loans")
+                        .HasForeignKey("ApplicationSchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", null)
+                        .WithMany("Schools")
+                        .HasForeignKey("ConversionApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.SchoolDetails", "Details", b1 =>
+                        {
+                            b1.Property<int>("SchoolId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("ApplicationJoinTrustReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("JoinTrustReason");
+
+                            b1.Property<string>("ApproverContactEmail")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ApproverContactEmail");
+
+                            b1.Property<string>("ApproverContactName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ApproverContactName");
+
+                            b1.Property<string>("CapacityAssumptions")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("CapacityAssumptions");
+
+                            b1.Property<int?>("CapacityPublishedAdmissionsNumber")
+                                .HasColumnType("int")
+                                .HasColumnName("CapacityPublishedAdmissionsNumber");
+
+                            b1.Property<bool?>("ConfirmPaySupportGrantToSchool")
+                                .HasColumnType("bit")
+                                .HasColumnName("ConfirmPaySupportGrantToSchool");
+
+                            b1.Property<string>("ContactChairEmail")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContactChairEmail");
+
+                            b1.Property<string>("ContactChairName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContactChairName");
+
+                            b1.Property<string>("ContactChairTel")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContactChairTel");
+
+                            b1.Property<string>("ContactHeadEmail")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContactHeadEmail");
+
+                            b1.Property<string>("ContactHeadName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContactHeadName");
+
+                            b1.Property<string>("ContactHeadTel")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContactHeadTel");
+
+                            b1.Property<string>("ContactRole")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ContactRole");
+
+                            b1.Property<bool?>("ConversionChangeNamePlanned")
+                                .HasColumnType("bit")
+                                .HasColumnName("ConversionChangeNamePlanned");
+
+                            b1.Property<DateTime?>("ConversionTargetDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("ConversionTargetDate");
+
+                            b1.Property<string>("ConversionTargetDateExplained")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ConversionTargetDateExplained");
+
+                            b1.Property<bool?>("ConversionTargetDateSpecified")
+                                .HasColumnType("bit")
+                                .HasColumnName("ConversionTargetDateSpecified");
+
+                            b1.Property<bool?>("DeclarationBodyAgree")
+                                .HasColumnType("bit")
+                                .HasColumnName("DeclarationBodyAgree");
+
+                            b1.Property<bool?>("DeclarationIAmTheChairOrHeadteacher")
+                                .HasColumnType("bit")
+                                .HasColumnName("DeclarationIAmTheChairOrHeadteacher");
+
+                            b1.Property<string>("DeclarationSignedByName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("DeclarationSignedByName");
+
+                            b1.Property<bool?>("FinanceOngoingInvestigations")
+                                .HasColumnType("bit")
+                                .HasColumnName("FinanceOngoingInvestigations");
+
+                            b1.Property<string>("FinancialInvestigationsExplain")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FinancialInvestigationsExplain");
+
+                            b1.Property<bool?>("FinancialInvestigationsTrustAware")
+                                .HasColumnType("bit")
+                                .HasColumnName("FinancialInvestigationsTrustAware");
+
+                            b1.Property<string>("MainContactOtherEmail")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainContactOtherEmail");
+
+                            b1.Property<string>("MainContactOtherName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainContactOtherName");
+
+                            b1.Property<string>("MainContactOtherRole")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainContactOtherRole");
+
+                            b1.Property<string>("MainContactOtherTelephone")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainContactOtherTelephone");
+
+                            b1.Property<int?>("ProjectedPupilNumbersYear1")
+                                .HasColumnType("int")
+                                .HasColumnName("ProjectedPupilNumbersYear1");
+
+                            b1.Property<int?>("ProjectedPupilNumbersYear2")
+                                .HasColumnType("int")
+                                .HasColumnName("ProjectedPupilNumbersYear2");
+
+                            b1.Property<int?>("ProjectedPupilNumbersYear3")
+                                .HasColumnType("int")
+                                .HasColumnName("ProjectedPupilNumbersYear3");
+
+                            b1.Property<string>("ProposedNewSchoolName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ProposedNewSchoolName");
+
+                            b1.Property<string>("SchoolConversionReasonsForJoining")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("SchoolConversionReasonsForJoining");
+
+                            b1.Property<bool?>("SchoolHasConsultedStakeholders")
+                                .HasColumnType("bit")
+                                .HasColumnName("SchoolHasConsultedStakeholders");
+
+                            b1.Property<string>("SchoolName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("SchoolName");
+
+                            b1.Property<string>("SchoolPlanToConsultStakeholders")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("SchoolPlanToConsultStakeholders");
+
+                            b1.Property<int?>("SchoolSupportGrantFundsPaidTo")
+                                .HasColumnType("int")
+                                .HasColumnName("SupportGrantFundsPaidTo");
+
+                            b1.Property<int>("Urn")
+                                .HasColumnType("int")
+                                .HasColumnName("Urn");
+
+                            b1.HasKey("SchoolId");
+
+                            b1.ToTable("ApplicationSchool", "academisation");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SchoolId");
+
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.LandAndBuildings", "LandAndBuildings", b2 =>
+                                {
+                                    b2.Property<int>("SchoolDetailsSchoolId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<bool?>("FacilitiesShared")
+                                        .HasColumnType("bit")
+                                        .HasColumnName("FacilitiesShared");
+
+                                    b2.Property<string>("FacilitiesSharedExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("FacilitiesSharedExplained");
+
+                                    b2.Property<bool?>("Grants")
+                                        .HasColumnType("bit")
+                                        .HasColumnName("Grants");
+
+                                    b2.Property<string>("GrantsAwardingBodies")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("GrantsAwardingBodies");
+
+                                    b2.Property<string>("OwnerExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("OwnerExplained");
+
+                                    b2.Property<bool?>("PartOfBuildingSchoolsForFutureProgramme")
+                                        .HasColumnType("bit")
+                                        .HasColumnName("PartOfBuildingSchoolsForFutureProgramme");
+
+                                    b2.Property<bool?>("PartOfPfiScheme")
+                                        .HasColumnType("bit")
+                                        .HasColumnName("PartOfPfiScheme");
+
+                                    b2.Property<string>("PartOfPfiSchemeType")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("PartOfPfiSchemeType");
+
+                                    b2.Property<bool?>("PartOfPrioritySchoolsBuildingProgramme")
+                                        .HasColumnType("bit")
+                                        .HasColumnName("PartOfPrioritySchoolsBuildingProgramme");
+
+                                    b2.Property<bool?>("WorksPlanned")
+                                        .HasColumnType("bit")
+                                        .HasColumnName("WorksPlanned");
+
+                                    b2.Property<DateTime?>("WorksPlannedDate")
+                                        .HasColumnType("datetime2")
+                                        .HasColumnName("WorksPlannedDate");
+
+                                    b2.Property<string>("WorksPlannedExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("WorksPlannedExplained");
+
+                                    b2.HasKey("SchoolDetailsSchoolId");
+
+                                    b2.ToTable("ApplicationSchool", "academisation");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SchoolDetailsSchoolId");
+                                });
+
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "CurrentFinancialYear", b2 =>
+                                {
+                                    b2.Property<int>("SchoolDetailsSchoolId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<decimal?>("CapitalCarryForward")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForward");
+
+                                    b2.Property<string>("CapitalCarryForwardExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardExplained");
+
+                                    b2.Property<string>("CapitalCarryForwardFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardFileLink");
+
+                                    b2.Property<int?>("CapitalCarryForwardStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardStatus");
+
+                                    b2.Property<DateTime?>("FinancialYearEndDate")
+                                        .HasColumnType("datetime2")
+                                        .HasColumnName("CurrentFinancialYearEndDate");
+
+                                    b2.Property<decimal?>("Revenue")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("CurrentFinancialYearRevenue");
+
+                                    b2.Property<int?>("RevenueStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("CurrentFinancialYearRevenueStatus");
+
+                                    b2.Property<string>("RevenueStatusExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearRevenueStatusExplained");
+
+                                    b2.Property<string>("RevenueStatusFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearRevenueStatusFileLink");
+
+                                    b2.HasKey("SchoolDetailsSchoolId");
+
+                                    b2.ToTable("ApplicationSchool", "academisation");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SchoolDetailsSchoolId");
+                                });
+
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "NextFinancialYear", b2 =>
+                                {
+                                    b2.Property<int>("SchoolDetailsSchoolId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<decimal?>("CapitalCarryForward")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("NextFinancialYearCapitalCarryForward");
+
+                                    b2.Property<string>("CapitalCarryForwardExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("NextFinancialYearCapitalCarryForwardExplained");
+
+                                    b2.Property<string>("CapitalCarryForwardFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("NextFinancialYearCapitalCarryForwardFileLink");
+
+                                    b2.Property<int?>("CapitalCarryForwardStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("NextFinancialYearCapitalCarryForwardStatus");
+
+                                    b2.Property<DateTime?>("FinancialYearEndDate")
+                                        .HasColumnType("datetime2")
+                                        .HasColumnName("NextFinancialYearEndDate");
+
+                                    b2.Property<decimal?>("Revenue")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("NextFinancialYearRevenue");
+
+                                    b2.Property<int?>("RevenueStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("NextFinancialYearRevenueStatus");
+
+                                    b2.Property<string>("RevenueStatusExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("NextFinancialYearRevenueStatusExplained");
+
+                                    b2.Property<string>("RevenueStatusFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("NextFinancialYearRevenueStatusFileLink");
+
+                                    b2.HasKey("SchoolDetailsSchoolId");
+
+                                    b2.ToTable("ApplicationSchool", "academisation");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SchoolDetailsSchoolId");
+                                });
+
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "PreviousFinancialYear", b2 =>
+                                {
+                                    b2.Property<int>("SchoolDetailsSchoolId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<decimal?>("CapitalCarryForward")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("PreviousFinancialYearCapitalCarryForward");
+
+                                    b2.Property<string>("CapitalCarryForwardExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("PreviousFinancialYearCapitalCarryForwardExplained");
+
+                                    b2.Property<string>("CapitalCarryForwardFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("PreviousFinancialYearCapitalCarryForwardFileLink");
+
+                                    b2.Property<int?>("CapitalCarryForwardStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("PreviousFinancialYearCapitalCarryForwardStatus");
+
+                                    b2.Property<DateTime?>("FinancialYearEndDate")
+                                        .HasColumnType("datetime2")
+                                        .HasColumnName("PreviousFinancialYearEndDate");
+
+                                    b2.Property<decimal?>("Revenue")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("PreviousFinancialYearRevenue");
+
+                                    b2.Property<int?>("RevenueStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("PreviousFinancialYearRevenueStatus");
+
+                                    b2.Property<string>("RevenueStatusExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("PreviousFinancialYearRevenueStatusExplained");
+
+                                    b2.Property<string>("RevenueStatusFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("PreviousFinancialYearRevenueStatusFileLink");
+
+                                    b2.HasKey("SchoolDetailsSchoolId");
+
+                                    b2.ToTable("ApplicationSchool", "academisation");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SchoolDetailsSchoolId");
+                                });
+
+                            b1.Navigation("CurrentFinancialYear");
+
+                            b1.Navigation("LandAndBuildings");
+
+                            b1.Navigation("NextFinancialYear");
+
+                            b1.Navigation("PreviousFinancialYear");
+                        });
+
+                    b.Navigation("Details")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.FormTrust", b =>
+                {
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FormTrustDetails", "TrustDetails", b1 =>
+                        {
+                            b1.Property<int>("FormTrustId")
+                                .HasColumnType("int");
+
+                            b1.Property<bool?>("FormTrustGrowthPlansYesNo")
+                                .HasColumnType("bit")
+                                .HasColumnName("FormTrustGrowthPlansYesNo");
+
+                            b1.Property<string>("FormTrustImprovementApprovedSponsor")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustImprovementApprovedSponsor");
+
+                            b1.Property<string>("FormTrustImprovementStrategy")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustImprovementStrategy");
+
+                            b1.Property<string>("FormTrustImprovementSupport")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustImprovementSupport");
+
+                            b1.Property<DateTime?>("FormTrustOpeningDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("FormTrustOpeningDate");
+
+                            b1.Property<string>("FormTrustPlanForGrowth")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustPlanForGrowth");
+
+                            b1.Property<string>("FormTrustPlansForNoGrowth")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustPlansForNoGrowth");
+
+                            b1.Property<string>("FormTrustProposedNameOfTrust")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustProposedNameOfTrust");
+
+                            b1.Property<bool?>("FormTrustReasonApprovaltoConvertasSAT")
+                                .HasColumnType("bit")
+                                .HasColumnName("FormTrustReasonApprovaltoConvertasSAT");
+
+                            b1.Property<string>("FormTrustReasonApprovedPerson")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustReasonApprovedPerson");
+
+                            b1.Property<string>("FormTrustReasonForming")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustReasonForming");
+
+                            b1.Property<string>("FormTrustReasonFreedom")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustReasonFreedom");
+
+                            b1.Property<string>("FormTrustReasonGeoAreas")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustReasonGeoAreas");
+
+                            b1.Property<string>("FormTrustReasonImproveTeaching")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustReasonImproveTeaching");
+
+                            b1.Property<string>("FormTrustReasonVision")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FormTrustReasonVision");
+
+                            b1.Property<string>("TrustApproverEmail")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustApproverEmail");
+
+                            b1.Property<string>("TrustApproverName")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustApproverName");
+
+                            b1.HasKey("FormTrustId");
+
+                            b1.ToTable("ApplicationFormTrust", "academisation");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FormTrustId");
+                        });
+
+                    b.Navigation("TrustDetails")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.FormTrust", null)
+                        .WithMany("KeyPeople")
+                        .HasForeignKey("ApplicationFormTrustId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPersonRole", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("ApplicationFormTrustKeyPersonRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>
@@ -1059,6 +1439,35 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Navigation("DeclinedReasons");
 
                     b.Navigation("DeferredReasons");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ProjectAggregate.ProjectState", b =>
+                {
+                    b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>
+                {
+                    b.Navigation("Contributors");
+
+                    b.Navigation("Schools");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School", b =>
+                {
+                    b.Navigation("Leases");
+
+                    b.Navigation("Loans");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.FormTrust", b =>
+                {
+                    b.Navigation("KeyPeople");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson", b =>
+                {
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

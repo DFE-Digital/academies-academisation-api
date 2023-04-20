@@ -5,5 +5,5 @@ namespace Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAgg
 
 public interface IConversionAdvisoryBoardDecisionFactory
 {
-	CreateResult<IConversionAdvisoryBoardDecision> Create(AdvisoryBoardDecisionDetails details);
+	CreateResult Create(AdvisoryBoardDecisionDetails details);
 }

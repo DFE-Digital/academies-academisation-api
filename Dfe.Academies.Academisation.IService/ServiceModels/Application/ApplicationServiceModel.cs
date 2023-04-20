@@ -10,4 +10,6 @@ public record ApplicationServiceModel(
 	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools, 
 	ApplicationJoinTrustServiceModel? joinTrustDetails,
 	ApplicationFormTrustServiceModel? formTrustDetails,
-	DateTime? ApplicationSubmittedDate);
+	DateTime? ApplicationSubmittedDate,
+	string? ApplicationReference,
+	Guid EntityId);

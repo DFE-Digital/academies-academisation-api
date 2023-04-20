@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate;
 
 public class ProjectUpdateTests
 {
-	private readonly Fixture _fixture = new Fixture();
+	private readonly Fixture _fixture = new();
 
 	[Fact]
 	public void Update___ReturnsUpdateSuccessResult_AndSetsProjectDetails()
@@ -18,6 +18,7 @@ public class ProjectUpdateTests
 		var initialProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, initialProject);
 		var updatedProject = _fixture.Build<ProjectDetails>().With(p => p.Urn, initialProject.Urn).Create();
+		updatedProject.Notes.Clear();
 
 		// Act
 		var result = sut.Update(updatedProject);
@@ -25,7 +26,7 @@ public class ProjectUpdateTests
 		// Assert
 		Assert.Multiple(
 			() => Assert.IsType<CommandSuccessResult>(result),
-			() => Assert.Equivalent(updatedProject, sut.Details)
+			() => Assert.True(updatedProject.Equals(sut.Details))
 		);
 	}
 
@@ -35,7 +36,7 @@ public class ProjectUpdateTests
 		// Arrange
 		var existingProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, existingProject);
-		var updatedProject = new ProjectDetails(1);
+		var updatedProject = new ProjectDetails { Urn = 1 };
 
 		// Act
 		var result = sut.Update(updatedProject);

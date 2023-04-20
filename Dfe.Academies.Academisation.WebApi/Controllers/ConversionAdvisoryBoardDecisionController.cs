@@ -37,7 +37,7 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
 					GetRouteName,
 					new { projectId = successResult.Payload.AdvisoryBoardDecisionId },
 					successResult.Payload),
-			CreateValidationErrorResult<ConversionAdvisoryBoardDecisionServiceModel> validationErrorResult =>
+			CreateValidationErrorResult validationErrorResult =>
 				new BadRequestObjectResult(validationErrorResult.ValidationErrors),
 			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
 		};

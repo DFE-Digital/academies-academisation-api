@@ -12,6 +12,7 @@ namespace Dfe.Academies.Academisation.IService.Commands.Application
 	public record SetJoinTrustDetailsCommand(
 		int applicationId,
 		string trustName,
+		string trustReference,
 		int UKPRN,
 		ChangesToTrust? changesToTrust,
 		string? changesToTrustExplained,

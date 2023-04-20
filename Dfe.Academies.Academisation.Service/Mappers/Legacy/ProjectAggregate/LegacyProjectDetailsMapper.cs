@@ -10,7 +10,7 @@ internal static class LegacyProjectDetailsMapper
 {
 	internal static ProjectDetails MapNonEmptyFields(this LegacyProjectServiceModel detailsToUpdate, IProject existingProject)
 	{
-		return new(detailsToUpdate.Urn ?? existingProject.Details.Urn)
+		return new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn ?? existingProject.Details.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId ?? existingProject.Details.IfdPipelineId,
@@ -37,6 +37,7 @@ internal static class LegacyProjectDetailsMapper
 			Version = detailsToUpdate.Version ?? existingProject.Details.Version,
 			ClearedBy = detailsToUpdate.ClearedBy ?? existingProject.Details.ClearedBy,
 			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired ?? existingProject.Details.AcademyOrderRequired,
+			DaoPackSentDate = detailsToUpdate.DaoPackSentDate ?? existingProject.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion ?? existingProject.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate ?? existingProject.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = detailsToUpdate.PreviousHeadTeacherBoardLink ?? existingProject.Details.PreviousHeadTeacherBoardLink,
@@ -45,10 +46,17 @@ internal static class LegacyProjectDetailsMapper
 			SponsorReferenceNumber = detailsToUpdate.SponsorReferenceNumber ?? existingProject.Details.SponsorReferenceNumber,
 			SponsorName = detailsToUpdate.SponsorName ?? existingProject.Details.SponsorName,
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute ?? existingProject.Details.AcademyTypeAndRoute,
+			Form7Received = detailsToUpdate.Form7Received ?? existingProject.Details.Form7Received,
+			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate ?? existingProject.Details.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate ?? existingProject.Details.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? existingProject.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? existingProject.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? existingProject.Details.ConversionSupportGrantChangeReason,
+			Region = detailsToUpdate.Region ?? existingProject.Details.Region,
+
+			// Annex B
+			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived ?? existingProject.Details.AnnexBFormReceived,
+			AnnexBFormUrl = detailsToUpdate.AnnexBFormReceived is true ? detailsToUpdate.AnnexBFormUrl : string.Empty,
 
 			// general info
 			SchoolPhase = detailsToUpdate.SchoolPhase ?? existingProject.Details.SchoolPhase,
@@ -78,7 +86,7 @@ internal static class LegacyProjectDetailsMapper
 			RationaleForTrust = detailsToUpdate.RationaleForTrust ?? existingProject.Details.RationaleForTrust,
 			RationaleSectionComplete = detailsToUpdate.RationaleSectionComplete ?? existingProject.Details.RationaleSectionComplete,
 
-			// risk and issues 
+			// risk and issues
 			RisksAndIssues = detailsToUpdate.RisksAndIssues ?? existingProject.Details.RisksAndIssues,
 			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered ?? existingProject.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete ?? existingProject.Details.RisksAndIssuesSectionComplete,
@@ -89,7 +97,7 @@ internal static class LegacyProjectDetailsMapper
 			DiocesanConsent = detailsToUpdate.DiocesanConsent ?? existingProject.Details.DiocesanConsent,
 			FoundationConsent = detailsToUpdate.FoundationConsent ?? existingProject.Details.FoundationConsent,
 			LegalRequirementsSectionComplete = detailsToUpdate.LegalRequirementsSectionComplete ?? existingProject.Details.LegalRequirementsSectionComplete,
-			
+
 			// school budget info
 			EndOfCurrentFinancialYear = detailsToUpdate.EndOfCurrentFinancialYear ?? existingProject.Details.EndOfCurrentFinancialYear,
 			EndOfNextFinancialYear = detailsToUpdate.EndOfNextFinancialYear ?? existingProject.Details.EndOfNextFinancialYear,
@@ -100,7 +108,7 @@ internal static class LegacyProjectDetailsMapper
 			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation ?? existingProject.Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete ?? existingProject.Details.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast			
+			// pupil schools forecast
 			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity ?? existingProject.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers ?? existingProject.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = detailsToUpdate.YearTwoProjectedCapacity ?? existingProject.Details.YearTwoProjectedCapacity,
@@ -113,9 +121,9 @@ internal static class LegacyProjectDetailsMapper
 			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation ?? existingProject.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation ?? existingProject.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation ?? existingProject.Details.KeyStage5PerformanceAdditionalInformation,
-			
+
 			// assigned user
-			AssignedUser = detailsToUpdate.AssignedUser != null 
+			AssignedUser = detailsToUpdate.AssignedUser != null
 				? MapServiceUser(detailsToUpdate.AssignedUser)
 				: MapDomainUser(existingProject.Details.AssignedUser)
 		};

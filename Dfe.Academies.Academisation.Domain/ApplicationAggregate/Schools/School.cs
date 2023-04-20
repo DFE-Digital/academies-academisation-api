@@ -1,20 +1,24 @@
-﻿using System.Collections.ObjectModel;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 
-public class School : ISchool
+public class School : DynamicsSchoolEntity, ISchool
 {
+	protected School() { }
 	public int Id { get;  set; }
-
+	public Guid EntityId { get => DynamicsApplyingSchoolId ?? Guid.Empty; }
 	public SchoolDetails Details { get; set; }
 
 	#region Leases and Loans
+	public IEnumerable<Loan> Loans => _loans.AsReadOnly();
+	public IEnumerable<Lease> Leases => _leases.AsReadOnly();
 	public bool? HasLoans { get; private set; }
-	public IReadOnlyCollection<ILoan> Loans => _loans.AsReadOnly();
+	IReadOnlyCollection<ILoan> ISchool.Loans => _loans.AsReadOnly();
 	public bool? HasLeases { get; private set; }
-	public IReadOnlyCollection<ILease> Leases => _leases.AsReadOnly();
+	IReadOnlyCollection<ILease> ISchool.Leases => _leases.AsReadOnly();
 
 	private readonly List<Loan> _loans;
 	private readonly List<Lease> _leases;
@@ -23,68 +27,56 @@ public class School : ISchool
 
 	#region Additional Details
 
-	private string? _trustBenefitDetails { get; set; }
-	public string? TrustBenefitDetails => _trustBenefitDetails;
+	public string? TrustBenefitDetails { get; private set; }
 	
-	private string? _ofstedInspectionDetails { get; set; }
-	public string? OfstedInspectionDetails => _ofstedInspectionDetails;
+	public string? OfstedInspectionDetails { get; private set; }
 
-	private string? _safeguardingDetails { get; set; }
-	public string? SafeguardingDetails => _safeguardingDetails;
-	
-	private string? _localAuthorityReoganisationDetails { get; set; }
-	public string? LocalAuthorityReorganisationDetails => _localAuthorityReoganisationDetails;
-	
-	private string? _localAuthorityClosurePlanDetails { get; set; }
-	public string? LocalAuthorityClosurePlanDetails => _localAuthorityClosurePlanDetails;
-	
-	private string? _dioceseName { get; set; }
-	public string? DioceseName => _dioceseName;
+	public bool Safeguarding { get; private set; }
 
-	private string? _dioceseFolderIdentifier;
-	public string? DioceseFolderIdentifier => _dioceseFolderIdentifier;
-	
-	private bool? _partOfFederation { get; set; }
-	public bool? PartOfFederation => _partOfFederation;
-	
-	private string? _foundationTrustOrBodyName { get; set; }
-	public string? FoundationTrustOrBodyName => _foundationTrustOrBodyName;
+	public string? LocalAuthorityReorganisationDetails { get; private set; }
 
-	private string? _foundationConsentFolderIdentifier;
-	public string? FoundationConsentFolderIdentifier => _foundationConsentFolderIdentifier;
+	public string? LocalAuthorityClosurePlanDetails { get; private set; }
 
-	private DateTimeOffset? _exemptionEndDate { get; set; }
-	public DateTimeOffset? ExemptionEndDate => _exemptionEndDate;
-	
-	private string? _mainFeederSchools { get; set; }
-	public string? MainFeederSchools => _mainFeederSchools;
-	
-	private string? _resolutionConsentFolderIdentifier;
-	public string? ResolutionConsentFolderIdentifier => _resolutionConsentFolderIdentifier;
+	public string? DioceseName { get; set; }
 
-	private SchoolEqualitiesProtectedCharacteristics? _protectedCharacteristics { get; set; }
-	public SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics => _protectedCharacteristics;
-	
-	private string? _furtherInformation { get; set; }
-	public string? FurtherInformation => _furtherInformation;
+	public string? DioceseFolderIdentifier { get; private set; }
+
+	public bool? PartOfFederation { get; private set; }
+
+	public string? FoundationTrustOrBodyName { get; private set; }
+
+	public string? FoundationConsentFolderIdentifier { get; private set; }
+
+	public DateTimeOffset? ExemptionEndDate { get; private set; }
+
+	public string? MainFeederSchools { get; private set; }
+
+	public string? ResolutionConsentFolderIdentifier { get; private set; }
+
+	public SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics { get; private set; }
+
+	public string? FurtherInformation { get; private set; }
 
 
 	#endregion
 
-	
-	
-	
+
+
+
 	private School(SchoolDetails details)
 	{
 		Details = details;
 		_loans = new();
 		_leases = new();
+		// We need to reuse the DynamicsId to generate a guid to publish unique sharepoint paths
+		// Once moved over from Dynamics this will be renamed to entityId and mapped through in the usual way
+		DynamicsApplyingSchoolId = Guid.NewGuid();
 	}
 
 	public School(int id, 	
 		string? trustBenefitDetails, 
 		string? ofstedInspectionDetails, 
-		string? safeguardingDetails, 
+		bool safeguarding, 
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,
@@ -103,21 +95,21 @@ public class School : ISchool
 		bool? hasLoans, bool? hasLeases) : this(details)
 	{
 		Id = id;
-		_trustBenefitDetails = trustBenefitDetails;
-		_ofstedInspectionDetails = ofstedInspectionDetails;
-		_safeguardingDetails = safeguardingDetails;
-		_localAuthorityReoganisationDetails = localAuthorityReorganisationDetails;
-		_localAuthorityClosurePlanDetails = localAuthorityClosurePlanDetails;
-		_dioceseName = dioceseName;
-		_dioceseFolderIdentifier = dioceseFolderIdentifier;
-		_partOfFederation = partOfFederation;
-		_foundationTrustOrBodyName = foundationTrustOrBodyName;
-		_foundationConsentFolderIdentifier = foundationConsentFolderIdentifier;
-		_exemptionEndDate = exemptionEndDate;
-		_mainFeederSchools = mainFeederSchools;
-		_resolutionConsentFolderIdentifier = resolutionConsentFolderIdentifier;
-		_protectedCharacteristics = protectedCharacteristics;
-		_furtherInformation = furtherInformation;
+		TrustBenefitDetails = trustBenefitDetails;
+		OfstedInspectionDetails = ofstedInspectionDetails;
+		Safeguarding = safeguarding;
+		LocalAuthorityReorganisationDetails = localAuthorityReorganisationDetails;
+		LocalAuthorityClosurePlanDetails = localAuthorityClosurePlanDetails;
+		DioceseName = dioceseName;
+		DioceseFolderIdentifier = dioceseFolderIdentifier;
+		PartOfFederation = partOfFederation;
+		FoundationTrustOrBodyName = foundationTrustOrBodyName;
+		FoundationConsentFolderIdentifier = foundationConsentFolderIdentifier;
+		ExemptionEndDate = exemptionEndDate;
+		MainFeederSchools = mainFeederSchools;
+		ResolutionConsentFolderIdentifier = resolutionConsentFolderIdentifier;
+		ProtectedCharacteristics = protectedCharacteristics;
+		FurtherInformation = furtherInformation;
 		_loans = loans.ToList();
 		_leases = leases.ToList();
 		HasLoans = hasLoans;
@@ -167,7 +159,7 @@ public class School : ISchool
 	public void SetAdditionalDetails(
 		string trustBenefitDetails, 
 		string? ofstedInspectionDetails, 
-		string? safeguardingDetails, 
+		bool safeguarding, 
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,
@@ -181,20 +173,48 @@ public class School : ISchool
 		SchoolEqualitiesProtectedCharacteristics? protectedCharacteristics,
 		string? furtherInformation)
 	{
-		_trustBenefitDetails = trustBenefitDetails;
-		_ofstedInspectionDetails = ofstedInspectionDetails;
-		_safeguardingDetails = safeguardingDetails;
-		_localAuthorityReoganisationDetails = localAuthorityReorganisationDetails;
-		_localAuthorityClosurePlanDetails = localAuthorityClosurePlanDetails;
-		_dioceseName = dioceseName;
-		_dioceseFolderIdentifier = dioceseFolderIdentifier;
-		_partOfFederation = partOfFederation;
-		_foundationTrustOrBodyName = foundationTrustOrBodyName;
-		_foundationConsentFolderIdentifier = foundationConsentFolderIdentifier;
-		_exemptionEndDate = exemptionEndDate;
-		_mainFeederSchools = mainFeederSchools;
-		_resolutionConsentFolderIdentifier = resolutionConsentFolderIdentifier;
-		_protectedCharacteristics = protectedCharacteristics;
-		_furtherInformation = furtherInformation;
+		TrustBenefitDetails = trustBenefitDetails;
+		OfstedInspectionDetails = ofstedInspectionDetails;
+		Safeguarding = safeguarding;
+		LocalAuthorityReorganisationDetails = localAuthorityReorganisationDetails;
+		LocalAuthorityClosurePlanDetails = localAuthorityClosurePlanDetails;
+		DioceseName = dioceseName;
+		DioceseFolderIdentifier = dioceseFolderIdentifier;
+		PartOfFederation = partOfFederation;
+		FoundationTrustOrBodyName = foundationTrustOrBodyName;
+		FoundationConsentFolderIdentifier = foundationConsentFolderIdentifier;
+		ExemptionEndDate = exemptionEndDate;
+		MainFeederSchools = mainFeederSchools;
+		ResolutionConsentFolderIdentifier = resolutionConsentFolderIdentifier;
+		ProtectedCharacteristics = protectedCharacteristics;
+		FurtherInformation = furtherInformation;
+	}
+
+	public void Update(UpdateSchoolParameter schoolUpdate)
+	{
+		//school.Loans.Select(l => new Loan(l.Key, l.Value.Amount!.Value, l.Value.Purpose!, l.Value.Provider!, l.Value.InterestRate!.Value, l.Value.Schedule!)),
+		//school.Leases.Select(l => new Lease(l.Key, l.Value.leaseTerm, l.Value.repaymentAmount, l.Value.interestRate, l.Value.paymentsToDate, l.Value.purpose, l.Value.valueOfAssets, l.Value.responsibleForAssets)),
+
+		// this update is to handle any legacy updates that are updating the entore application using the put
+		TrustBenefitDetails = schoolUpdate.TrustBenefitDetails;
+		OfstedInspectionDetails = schoolUpdate.OfstedInspectionDetails;
+		Safeguarding = schoolUpdate.Safeguarding;
+		LocalAuthorityReorganisationDetails = schoolUpdate.LocalAuthorityReorganisationDetails;
+		LocalAuthorityClosurePlanDetails = schoolUpdate.LocalAuthorityClosurePlanDetails;
+		DioceseName = schoolUpdate.DioceseName;
+		DioceseFolderIdentifier = schoolUpdate.DioceseFolderIdentifier;
+		PartOfFederation = schoolUpdate.PartOfFederation;
+		FoundationTrustOrBodyName = schoolUpdate.FoundationTrustOrBodyName;
+		FoundationConsentFolderIdentifier = schoolUpdate.FoundationConsentFolderIdentifier;
+		ExemptionEndDate = schoolUpdate.ExemptionEndDate;
+		MainFeederSchools = schoolUpdate.MainFeederSchools;
+		ResolutionConsentFolderIdentifier = schoolUpdate.ResolutionConsentFolderIdentifier;
+		ProtectedCharacteristics = schoolUpdate.ProtectedCharacteristics;
+		FurtherInformation = schoolUpdate.FurtherInformation;
+		Details = schoolUpdate.SchoolDetails;
+		//_loans = loans.ToList();
+		//_leases = leases.ToList();
+		HasLoans = schoolUpdate.HasLoans;
+		HasLeases = schoolUpdate.HasLeases;
 	}
 }

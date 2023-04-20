@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Dfe.Academies.Academisation.Data.Extensions;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -33,8 +34,11 @@ public class ProjectState : BaseEntity
 	public string? Version { get; set; }
 	public string? ClearedBy { get; set; }
 	public string? AcademyOrderRequired { get; set; }
+	public DateTime? DaoPackSentDate { get; set; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; set; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; set; }
+	public DateTime? Form7ReceivedDate { get; set; }
+	public string? Form7Received { get; set; }
 	public string? PreviousHeadTeacherBoardLink { get; set; }
 	public string? TrustReferenceNumber { get; set; }
 	public string? NameOfTrust { get; set; }
@@ -45,6 +49,7 @@ public class ProjectState : BaseEntity
 	public bool? SchoolAndTrustInformationSectionComplete { get; set; }
 	public decimal? ConversionSupportGrantAmount { get; set; }
 	public string? ConversionSupportGrantChangeReason { get; set; }
+	public string? Region { get; set; }
 
 	//general info
 	public string? SchoolPhase { get; set; }
@@ -57,7 +62,7 @@ public class ProjectState : BaseEntity
 	public string? PartOfPfiScheme { get; set; }
 	public string? ViabilityIssues { get; set; }
 	public string? FinancialDeficit { get; set; }
-	public string? DiocesanTrust { get; set; }	
+	public string? DiocesanTrust { get; set; }
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; set; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }
 	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; set; }
@@ -65,6 +70,10 @@ public class ProjectState : BaseEntity
 	public string? MemberOfParliamentName { get; set; }
 
 	public bool? GeneralInformationSectionComplete { get; set; }
+
+	// Annex B
+	public bool? AnnexBFormReceived { get; set; }
+	public string? AnnexBFormUrl { get; set; }
 
 	//school performance ofsted information
 	public string? SchoolPerformanceAdditionalInformation { get; set; }
@@ -108,17 +117,20 @@ public class ProjectState : BaseEntity
 	// key stage performance tables
 	public string? KeyStage2PerformanceAdditionalInformation { get; set; }
 	public string? KeyStage4PerformanceAdditionalInformation { get; set; }
-	public string? KeyStage5PerformanceAdditionalInformation { get; set; }	
-	
+	public string? KeyStage5PerformanceAdditionalInformation { get; set; }
+
 	// assigned user
 	public Guid? AssignedUserId { get; set; }
 	public string? AssignedUserEmailAddress { get; set; }
 	public string? AssignedUserFullName { get; set; }
 
-	internal Project MapToDomain()
+	public ICollection<ProjectNoteState>? Notes { get; set; }
+
+	public Project MapToDomain()
 	{
-		ProjectDetails projectDetails = new(Urn)
-		{		
+		ProjectDetails projectDetails = new()
+		{
+			Urn = Urn,
 			IfdPipelineId = IfdPipelineId,
 			SchoolName = SchoolName,
 			LocalAuthority = LocalAuthority,
@@ -143,8 +155,11 @@ public class ProjectState : BaseEntity
 			Version = Version,
 			ClearedBy = ClearedBy,
 			AcademyOrderRequired = AcademyOrderRequired,
+			DaoPackSentDate = DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = PreviousHeadTeacherBoardDate,
+			Form7Received = Form7Received,
+			Form7ReceivedDate = Form7ReceivedDate,
 			PreviousHeadTeacherBoardLink = PreviousHeadTeacherBoardLink,
 			TrustReferenceNumber = TrustReferenceNumber,
 			NameOfTrust = NameOfTrust,
@@ -155,6 +170,7 @@ public class ProjectState : BaseEntity
 			SchoolAndTrustInformationSectionComplete = SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = ConversionSupportGrantChangeReason,
+			Region = Region,
 
 			// general info
 			SchoolPhase = SchoolPhase,
@@ -176,6 +192,10 @@ public class ProjectState : BaseEntity
 
 			GeneralInformationSectionComplete = GeneralInformationSectionComplete,
 
+			// Annex B
+			AnnexBFormReceived = AnnexBFormReceived,
+			AnnexBFormUrl = AnnexBFormUrl,
+
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = SchoolPerformanceAdditionalInformation,
 
@@ -195,7 +215,7 @@ public class ProjectState : BaseEntity
 			DiocesanConsent = DiocesanConsent,
 			FoundationConsent = FoundationConsent,
 			LegalRequirementsSectionComplete = LegalRequirementsSectionComplete,
-			
+
 			// school budget info
 			EndOfCurrentFinancialYear = EndOfCurrentFinancialYear,
 			EndOfNextFinancialYear = EndOfNextFinancialYear,
@@ -206,7 +226,7 @@ public class ProjectState : BaseEntity
 			SchoolBudgetInformationAdditionalInformation = SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast			
+			// pupil schools forecast
 			YearOneProjectedCapacity = YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = YearTwoProjectedCapacity,
@@ -219,17 +239,20 @@ public class ProjectState : BaseEntity
 			KeyStage2PerformanceAdditionalInformation = KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = KeyStage5PerformanceAdditionalInformation,
-			
+
 			// assigned user
-			AssignedUser = AssignedUserId == null 
-				? null 
-				: new User(AssignedUserId.Value, AssignedUserFullName ?? "", AssignedUserEmailAddress ?? "")
+			AssignedUser = AssignedUserId == null
+				? null
+				: new User(AssignedUserId.Value, AssignedUserFullName ?? "", AssignedUserEmailAddress ?? ""),
+
+			Notes = Notes.ToProjectNotes().ToList(),
+			CreatedOn = CreatedOn,
 		};
 
 		return new Project(Id, projectDetails);
 	}
 
-	internal static ProjectState MapFromDomain(IProject project)
+	public static ProjectState MapFromDomain(IProject project)
 	{
 		return new ProjectState
 		{
@@ -259,9 +282,12 @@ public class ProjectState : BaseEntity
 			Version = project.Details.Version,
 			ClearedBy = project.Details.ClearedBy,
 			AcademyOrderRequired = project.Details.AcademyOrderRequired,
+			DaoPackSentDate = project.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = project.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = project.Details.PreviousHeadTeacherBoardDate,
 			PreviousHeadTeacherBoardLink = project.Details.PreviousHeadTeacherBoardLink,
+			Form7Received = project.Details.Form7Received,
+			Form7ReceivedDate = project.Details.Form7ReceivedDate,
 			TrustReferenceNumber = project.Details.TrustReferenceNumber,
 			NameOfTrust = project.Details.NameOfTrust,
 			SponsorReferenceNumber = project.Details.SponsorReferenceNumber,
@@ -271,6 +297,7 @@ public class ProjectState : BaseEntity
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
+			Region = project.Details.Region,
 
 			// general info
 			SchoolPhase = project.Details.SchoolPhase,
@@ -292,6 +319,10 @@ public class ProjectState : BaseEntity
 
 			GeneralInformationSectionComplete = project.Details.GeneralInformationSectionComplete,
 
+			// Annex B
+			AnnexBFormReceived = project.Details.AnnexBFormReceived,
+			AnnexBFormUrl = project.Details.AnnexBFormUrl,
+
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = project.Details.SchoolPerformanceAdditionalInformation,
 
@@ -304,7 +335,7 @@ public class ProjectState : BaseEntity
 			RisksAndIssues = project.Details.RisksAndIssues,
 			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
-			
+
 			// legal requirements
 			GoverningBodyResolution = project.Details.GoverningBodyResolution,
 			Consultation = project.Details.Consultation,
@@ -322,7 +353,7 @@ public class ProjectState : BaseEntity
 			SchoolBudgetInformationAdditionalInformation = project.Details.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = project.Details.SchoolBudgetInformationSectionComplete,
 
-			// pupil schools forecast			
+			// pupil schools forecast
 			YearOneProjectedCapacity = project.Details.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = project.Details.YearOneProjectedPupilNumbers,
 			YearTwoProjectedCapacity = project.Details.YearTwoProjectedCapacity,
@@ -335,11 +366,14 @@ public class ProjectState : BaseEntity
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
-			
+
 			// assigned user
 			AssignedUserId = project.Details.AssignedUser?.Id,
 			AssignedUserFullName = project.Details.AssignedUser?.FullName,
-			AssignedUserEmailAddress = project.Details.AssignedUser?.EmailAddress
+			AssignedUserEmailAddress = project.Details.AssignedUser?.EmailAddress,
+
+			// Notes
+			Notes = project.Details.Notes.ToProjectNoteStates().ToList()
 		};
 	}
 }
