@@ -134,7 +134,6 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
             expect(response).to.have.property('status', 200)
             expect(response.body).to.have.property('id')
-            Cypress.env('responseIDForRequest',response.body.id)
 
 
 })
