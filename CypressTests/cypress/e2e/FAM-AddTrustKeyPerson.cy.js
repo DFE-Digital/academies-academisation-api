@@ -96,7 +96,7 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
 
                 expect(response).to.have.property('status', 200)
                 expect(response.body[0]).to.have.property('id')
-                
+                trustKeyPersonNumber = response.body[0].id;
 
 
     })
