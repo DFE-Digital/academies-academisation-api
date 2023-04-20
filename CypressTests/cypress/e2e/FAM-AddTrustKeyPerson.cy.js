@@ -170,7 +170,7 @@ cy.request({
 
     cy.request({
             method: 'PUT',
-            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 19,
+            url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + trustKeyPersonNumber,
             headers: 
             {
               'x-api-key' : apiKey
