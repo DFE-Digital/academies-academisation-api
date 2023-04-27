@@ -8,6 +8,11 @@ variable "key_vault_access_users" {
   type        = list(string)
 }
 
+variable "key_vault_access_ipv4" {
+  description = "List of IPv4 Addresses that are permitted to access the Key Vault"
+  type        = list(string)
+}
+
 variable "tfvars_filename" {
   description = "tfvars filename. This ensures that tfvars are kept up to date in Key Vault."
   type        = string
@@ -62,6 +67,12 @@ variable "enable_mssql_database" {
 variable "enable_cdn_frontdoor" {
   description = "Enable Azure CDN FrontDoor. This will use the Container Apps endpoint as the origin."
   type        = bool
+}
+
+variable "cdn_frontdoor_origin_fqdn_override" {
+  description = "Manually specify the hostname that the CDN Front Door should target. Defaults to the Container App FQDN"
+  type        = string
+  default     = ""
 }
 
 variable "cdn_frontdoor_enable_rate_limiting" {
@@ -152,4 +163,24 @@ variable "enable_dns_zone" {
 variable "dns_zone_domain_name" {
   description = "DNS zone domain name. If created, records will automatically be created to point to the CDN."
   type        = string
+}
+
+variable "dns_ns_records" {
+  description = "DNS NS records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(string)
+    })
+  )
+}
+
+variable "dns_txt_records" {
+  description = "DNS TXT records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(string)
+    })
+  )
 }

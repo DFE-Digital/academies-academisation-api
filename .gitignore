@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#Mac OS Finder Filesystem files
+*.DS_Store
+
 # User-specific files
 *.rsuser
 *.suo
@@ -389,5 +392,8 @@ backend.vars
 Stackify.json
 
 # OWASP ZAP
-
 ZAP-Report.html
+
+# Cypress
+*/cypress/screenshots
+*/cypress/videos

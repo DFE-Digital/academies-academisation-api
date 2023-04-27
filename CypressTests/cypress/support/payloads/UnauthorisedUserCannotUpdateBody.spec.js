@@ -91,6 +91,8 @@ const UnauthorisedUserCannotUpdatePayload =
                  "capitalCarryForwardExplained": "capitalCarryForwardExplained string next Financial Year",
                  "capitalCarryForwardFileLink": "capitalCarryForwardFileLink string"
              },
+             "loans": [],
+             "leases": [],
              "schoolContributionToTrust": "string",
              "governingBodyConsentEvidenceDocumentLink": "string",
              "additionalInformationAdded": false,
