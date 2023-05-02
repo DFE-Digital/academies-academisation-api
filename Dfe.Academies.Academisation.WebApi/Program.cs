@@ -210,10 +210,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
-if (!app.Environment.IsDevelopment())
-{
-	app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
-}
+app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
 app.UseMiddleware<AddCorrelationIdMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 
