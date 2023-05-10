@@ -17,14 +17,11 @@ public class SchoolDetails
 		// contact details
 		string? ContactHeadName = null,
 		string? ContactHeadEmail = null,
-		string? ContactHeadTel = null,
 		string? ContactChairName = null,
 		string? ContactChairEmail = null,
-		string? ContactChairTel = null,
 		string? ContactRole = null, // "headteacher", "chair of governing body", "someone else"
 		string? MainContactOtherName = null,
 		string? MainContactOtherEmail = null,
-		string? MainContactOtherTelephone = null,
 		string? MainContactOtherRole = null,
 		string? ApproverContactName = null,
 		string? ApproverContactEmail = null,
@@ -66,14 +63,11 @@ public class SchoolDetails
 		this.NextFinancialYear = NextFinancialYear;
 		this.ContactHeadName = ContactHeadName;
 		this.ContactHeadEmail = ContactHeadEmail;
-		this.ContactHeadTel = ContactHeadTel;
 		this.ContactChairName = ContactChairName;
 		this.ContactChairEmail = ContactChairEmail;
-		this.ContactChairTel = ContactChairTel;
 		this.ContactRole = ContactRole;
 		this.MainContactOtherName = MainContactOtherName;
 		this.MainContactOtherEmail = MainContactOtherEmail;
-		this.MainContactOtherTelephone = MainContactOtherTelephone;
 		this.MainContactOtherRole = MainContactOtherRole;
 		this.ApproverContactName = ApproverContactName;
 		this.ApproverContactEmail = ApproverContactEmail;
@@ -109,14 +103,11 @@ public class SchoolDetails
 	public FinancialYear? NextFinancialYear { get; init; } = new();
 	public string? ContactHeadName { get; init; }
 	public string? ContactHeadEmail { get; init; }
-	public string? ContactHeadTel { get; init; }
 	public string? ContactChairName { get; init; }
 	public string? ContactChairEmail { get; init; }
-	public string? ContactChairTel { get; init; }
 	public string? ContactRole { get; init; }
 	public string? MainContactOtherName { get; init; }
 	public string? MainContactOtherEmail { get; init; }
-	public string? MainContactOtherTelephone { get; init; }
 	public string? MainContactOtherRole { get; init; }
 	public string? ApproverContactName { get; init; }
 	public string? ApproverContactEmail { get; init; }
@@ -148,8 +139,8 @@ public class SchoolDetails
 		// finances
 		out FinancialYear? PreviousFinancialYear, out FinancialYear? CurrentFinancialYear, out FinancialYear? NextFinancialYear,
 		// contact details
-		out string? ContactHeadName, out string? ContactHeadEmail, out string? ContactHeadTel, out string? ContactChairName, out string? ContactChairEmail, out string? ContactChairTel, out string? ContactRole, // "headteacher", "chair of governing body", "someone else"
-		out string? MainContactOtherName, out string? MainContactOtherEmail, out string? MainContactOtherTelephone, out string? MainContactOtherRole, out string? ApproverContactName, out string? ApproverContactEmail,
+		out string? ContactHeadName, out string? ContactHeadEmail, out string? ContactChairName, out string? ContactChairEmail, out string? ContactRole, // "headteacher", "chair of governing body", "someone else"
+		out string? MainContactOtherName, out string? MainContactOtherEmail, out string? MainContactOtherRole, out string? ApproverContactName, out string? ApproverContactEmail,
 		// conversion details
 		out bool? ConversionTargetDateSpecified, out DateTime? ConversionTargetDate, out string? ConversionTargetDateExplained, out bool? ConversionChangeNamePlanned, out string? ProposedNewSchoolName, out string? ApplicationJoinTrustReason,
 		// future pupil numbers
@@ -173,14 +164,11 @@ public class SchoolDetails
 		NextFinancialYear = this.NextFinancialYear;
 		ContactHeadName = this.ContactHeadName;
 		ContactHeadEmail = this.ContactHeadEmail;
-		ContactHeadTel = this.ContactHeadTel;
 		ContactChairName = this.ContactChairName;
 		ContactChairEmail = this.ContactChairEmail;
-		ContactChairTel = this.ContactChairTel;
 		ContactRole = this.ContactRole;
 		MainContactOtherName = this.MainContactOtherName;
 		MainContactOtherEmail = this.MainContactOtherEmail;
-		MainContactOtherTelephone = this.MainContactOtherTelephone;
 		MainContactOtherRole = this.MainContactOtherRole;
 		ApproverContactName = this.ApproverContactName;
 		ApproverContactEmail = this.ApproverContactEmail;
