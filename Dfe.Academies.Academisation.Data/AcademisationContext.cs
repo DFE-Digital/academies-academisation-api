@@ -262,10 +262,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			sd.Property(d => d.ConfirmPaySupportGrantToSchool).HasColumnName("ConfirmPaySupportGrantToSchool");
 			sd.Property(d => d.ContactChairEmail).HasColumnName("ContactChairEmail");
 			sd.Property(d => d.ContactChairName).HasColumnName("ContactChairName");
-			sd.Property(d => d.ContactChairTel).HasColumnName("ContactChairTel");
 			sd.Property(d => d.ContactHeadEmail).HasColumnName("ContactHeadEmail");
 			sd.Property(d => d.ContactHeadName).HasColumnName("ContactHeadName");
-			sd.Property(d => d.ContactHeadTel).HasColumnName("ContactHeadTel");
 			sd.Property(d => d.ContactRole).HasColumnName("ContactRole");
 			sd.Property(d => d.ConversionChangeNamePlanned).HasColumnName("ConversionChangeNamePlanned");
 			sd.Property(d => d.ConversionTargetDate).HasColumnName("ConversionTargetDate");
@@ -287,7 +285,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			sd.Property(d => d.MainContactOtherEmail).HasColumnName("MainContactOtherEmail");
 			sd.Property(d => d.MainContactOtherName).HasColumnName("MainContactOtherName");
 			sd.Property(d => d.MainContactOtherRole).HasColumnName("MainContactOtherRole");
-			sd.Property(d => d.MainContactOtherTelephone).HasColumnName("MainContactOtherTelephone");
 
 			sd.Property(d => d.ProjectedPupilNumbersYear1).HasColumnName("ProjectedPupilNumbersYear1");
 			sd.Property(d => d.ProjectedPupilNumbersYear2).HasColumnName("ProjectedPupilNumbersYear2");
