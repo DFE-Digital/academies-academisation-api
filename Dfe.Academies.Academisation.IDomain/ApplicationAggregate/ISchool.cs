@@ -10,7 +10,7 @@ public interface ISchool
 	public SchoolDetails Details { get; }
 	public string? TrustBenefitDetails { get; } 
 	public string? OfstedInspectionDetails{ get; }
-	public bool Safeguarding{ get; }
+	public bool? Safeguarding{ get; }
 	public string? LocalAuthorityReorganisationDetails{ get; }
 	public string? LocalAuthorityClosurePlanDetails{ get; }
 	public string? DioceseName{ get; }

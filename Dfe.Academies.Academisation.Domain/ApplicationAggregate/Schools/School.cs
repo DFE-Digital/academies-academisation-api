@@ -31,7 +31,7 @@ public class School : DynamicsSchoolEntity, ISchool
 	
 	public string? OfstedInspectionDetails { get; private set; }
 
-	public bool Safeguarding { get; private set; }
+	public bool? Safeguarding { get; private set; }
 
 	public string? LocalAuthorityReorganisationDetails { get; private set; }
 
@@ -76,7 +76,7 @@ public class School : DynamicsSchoolEntity, ISchool
 	public School(int id, 	
 		string? trustBenefitDetails, 
 		string? ofstedInspectionDetails, 
-		bool safeguarding, 
+		bool? safeguarding, 
 		string? localAuthorityReorganisationDetails,
 		string? localAuthorityClosurePlanDetails,
 		string? dioceseName,

@@ -11,7 +11,7 @@ public record ApplicationSchoolServiceModel(
 	// additional information - split up
 	string? TrustBenefitDetails, 
 	string? OfstedInspectionDetails, 
-	bool Safeguarding, 
+	bool? Safeguarding, 
 	string? LocalAuthorityReorganisationDetails,
 	string? LocalAuthorityClosurePlanDetails,
 	string? DioceseName,
