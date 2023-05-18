@@ -391,7 +391,9 @@ backend.vars
 # Stackify
 Stackify.json
 
-# Cypress
+# OWASP ZAP
+ZAP-Report.html
 
+# Cypress
 */cypress/screenshots
 */cypress/videos
