@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate
 		int Id,
 		string? TrustBenefitDetails, 
 		string? OfstedInspectionDetails, 
-		bool Safeguarding, 
+		bool? Safeguarding, 
 		string? LocalAuthorityReorganisationDetails,
 		string? LocalAuthorityClosurePlanDetails,
 		string? DioceseName,
