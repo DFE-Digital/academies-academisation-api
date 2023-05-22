@@ -4,7 +4,7 @@
 	{
 		public static string[] Statuses { get; } =
 		{
-			"Active", "Pre advisory board", "APPROVED WITH CONDITIONS", "Declined", "Deferred", "Approved",
+			"Active", "Pre advisory board", "Approved with Conditions", "Declined", "Deferred", "Approved",
 			"Converter Pre-AO (C)",
 		};
 
