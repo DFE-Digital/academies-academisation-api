@@ -10,6 +10,10 @@ internal static class LegacyProjectDetailsMapper
 {
 	internal static ProjectDetails MapNonEmptyFields(this LegacyProjectServiceModel detailsToUpdate, IProject existingProject)
 	{
+		// this needs to be done for all dates
+		// detailsToUpdate.HeadTeacherBoardDate.Equals(default(DateTime)) ? null : detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
+		// otherwise they wouldn't ever be able to be set back to null
+		// not the best solution but without rewriting the update funtionality this is the only option
 		return new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn ?? existingProject.Details.Urn,
@@ -20,7 +24,7 @@ internal static class LegacyProjectDetailsMapper
 			ProjectStatus = detailsToUpdate.ProjectStatus ?? existingProject.Details.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate ?? existingProject.Details.ApplicationReceivedDate,
 			AssignedDate = detailsToUpdate.AssignedDate ?? existingProject.Details.AssignedDate,
-			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
+			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate.Equals(default(DateTime)) ? null : detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
 			OpeningDate = detailsToUpdate.OpeningDate ?? existingProject.Details.OpeningDate,
 			BaselineDate = detailsToUpdate.BaselineDate ?? existingProject.Details.BaselineDate,
 
