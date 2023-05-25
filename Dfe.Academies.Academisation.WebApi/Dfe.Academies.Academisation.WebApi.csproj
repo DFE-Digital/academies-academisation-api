@@ -37,6 +37,7 @@
     <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Service\Dfe.Academies.Academisation.Service.csproj" />
+    <ProjectReference Include="..\Dfe.Academies.Academisation.WebApi.Contracts\Dfe.Academies.Academisation.WebApi.Contracts.csproj" />
   </ItemGroup>
 	
 	<ItemGroup>

@@ -1,10 +1,9 @@
-﻿namespace Dfe.Academies.Academisation.WebApi.Contracts.FromDomain
+﻿namespace Dfe.Academies.Academisation.WebApi.Contracts.FromDomain;
+
+public enum AdvisoryBoardDeferredReason
 {
-	public enum AdvisoryBoardDeferredReason
-	{
-		AdditionalInformationNeeded = 0,
-		AwaitingNextOfstedReport = 1,
-		PerformanceConcerns = 2,
-		Other = 3
-	}
+	AdditionalInformationNeeded = 0,
+	AwaitingNextOfstedReport = 1,
+	PerformanceConcerns = 2,
+	Other = 3
 }
