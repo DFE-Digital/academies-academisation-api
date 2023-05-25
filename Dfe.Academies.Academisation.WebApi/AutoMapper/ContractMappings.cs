@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.WebApi.AutoMapper
 	/// </summary>
 	public static class ContractMappings
 	{
-		public static void AddMappings(AutoMapperProfile profile)
+		public static void AddMappings(Profile profile)
 		{
 			Guard.Against.NullOrEmpty(nameof(profile));
 
