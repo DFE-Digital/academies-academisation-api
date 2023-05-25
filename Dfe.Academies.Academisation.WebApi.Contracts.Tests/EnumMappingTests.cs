@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.WebApi.Contracts.Tests
 		public void AdvisoryBoardDecision_Should_Map_To_DomainCore(int enumValue)
 		{
 			var contract = (FromDomain.AdvisoryBoardDecision)enumValue;
-			Assert_ContractEnum_MapsTo_DomainCoreEnum<FromDomain.AdvisoryBoardDecision, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision>(contract, enumValue);
+			ContractEnum_Should_MapTo_DomainEnum_AndReverse<FromDomain.AdvisoryBoardDecision, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision>(contract, enumValue);
 		}
 
 
@@ -32,7 +32,7 @@ namespace Dfe.Academies.Academisation.WebApi.Contracts.Tests
 		public void AdvisoryBoardDeclinedReason_Should_Map_To_DomainCore(int enumValue)
 		{
 			var contract = (FromDomain.AdvisoryBoardDeclinedReason)enumValue;
-			Assert_ContractEnum_MapsTo_DomainCoreEnum<FromDomain.AdvisoryBoardDeclinedReason, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeclinedReason>(contract, enumValue);
+			ContractEnum_Should_MapTo_DomainEnum_AndReverse<FromDomain.AdvisoryBoardDeclinedReason, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeclinedReason>(contract, enumValue);
 		}
 
 		[Theory]
@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.WebApi.Contracts.Tests
 		public void AdvisoryBoardDeferredReason_Should_Map_To_DomainCore(int enumValue)
 		{
 			var contract = (FromDomain.AdvisoryBoardDeferredReason)enumValue;
-			Assert_ContractEnum_MapsTo_DomainCoreEnum<FromDomain.AdvisoryBoardDeferredReason, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeferredReason>(contract, enumValue);
+			ContractEnum_Should_MapTo_DomainEnum_AndReverse<FromDomain.AdvisoryBoardDeferredReason, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeferredReason>(contract, enumValue);
 		}
 
 		[Theory]
@@ -48,7 +48,7 @@ namespace Dfe.Academies.Academisation.WebApi.Contracts.Tests
 		public void ApplicationType_Should_Map_To_DomainCore(int enumValue)
 		{
 			var contract = (FromDomain.ApplicationType)enumValue;
-			Assert_ContractEnum_MapsTo_DomainCoreEnum<FromDomain.ApplicationType, Domain.Core.ApplicationAggregate.ApplicationType>(contract, enumValue);
+			ContractEnum_Should_MapTo_DomainEnum_AndReverse<FromDomain.ApplicationType, Domain.Core.ApplicationAggregate.ApplicationType>(contract, enumValue);
 		}
 
 		[Theory]
@@ -56,7 +56,7 @@ namespace Dfe.Academies.Academisation.WebApi.Contracts.Tests
 		public void ContributorRole_Should_Map_To_DomainCore(int enumValue)
 		{
 			var contract = (FromDomain.ContributorRole)enumValue;
-			Assert_ContractEnum_MapsTo_DomainCoreEnum<FromDomain.ContributorRole, Domain.Core.ApplicationAggregate.ContributorRole>(contract, enumValue);
+			ContractEnum_Should_MapTo_DomainEnum_AndReverse<FromDomain.ContributorRole, Domain.Core.ApplicationAggregate.ContributorRole>(contract, enumValue);
 		}
 
 		[Theory]
@@ -64,7 +64,7 @@ namespace Dfe.Academies.Academisation.WebApi.Contracts.Tests
 		public void DecisionMadeBy_Should_Map_To_DomainCore(int enumValue)
 		{
 			var contract = (FromDomain.DecisionMadeBy)enumValue;
-			Assert_ContractEnum_MapsTo_DomainCoreEnum<FromDomain.DecisionMadeBy, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy>(contract, enumValue);
+			ContractEnum_Should_MapTo_DomainEnum_AndReverse<FromDomain.DecisionMadeBy, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy>(contract, enumValue);
 		}
 
 		public static IEnumerable<object[]> YieldEnumValues(Type enumType)
@@ -75,19 +75,23 @@ namespace Dfe.Academies.Academisation.WebApi.Contracts.Tests
 			}
 		}
 
-		private void Assert_ContractEnum_MapsTo_DomainCoreEnum<TContract, TDomain>(TContract contractEnumVal, int enumValue)
-			where TContract : Enum
-			where TDomain : Enum
+		private void ContractEnum_Should_MapTo_DomainEnum_AndReverse<TSourceEnum, TTargetEnum>(TSourceEnum sourceEnumVal, int enumValue)
+			where TSourceEnum : Enum
+			where TTargetEnum : Enum
 		{
 			using var scope = new AssertionScope();
-			scope.AddReportable("inputs", $"Contract Enum type: {typeof(TContract).Name}, Domain Enum type: {typeof(TDomain).Name}, int value: {enumValue}");
+			scope.AddReportable("inputs", $"Source Enum type: {typeof(TSourceEnum).Name}, Target Enum type: {typeof(TTargetEnum).Name}, int value: {enumValue}");
 
-			Enum.IsDefined(typeof(TContract), enumValue).Should().BeTrue();
-			Enum.IsDefined(typeof(TDomain), enumValue).Should().BeTrue();
+			Enum.IsDefined(typeof(TSourceEnum), enumValue).Should().BeTrue();
+			Enum.IsDefined(typeof(TTargetEnum), enumValue).Should().BeTrue();
 
-			var domainVal = _mapper.Map<TDomain>(contractEnumVal);
+			var targetEnumVal = _mapper.Map<TTargetEnum>(sourceEnumVal);
+			targetEnumVal.ToString().Should().Be(sourceEnumVal.ToString());
 
-			domainVal.ToString().Should().Be(contractEnumVal.ToString());
+			// assert reverse map
+			var reversedVal = _mapper.Map<TSourceEnum>(targetEnumVal);
+			reversedVal.ToString().Should().Be(targetEnumVal.ToString());
+
 		}
 	}
 }
