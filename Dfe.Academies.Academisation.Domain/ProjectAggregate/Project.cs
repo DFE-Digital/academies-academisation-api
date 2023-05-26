@@ -142,7 +142,7 @@ public class Project : IProject
 			NameOfTrust = project.Trust?.Name,
 			AcademyTypeAndRoute = "Sponsored",
 			ConversionSupportGrantAmount = 25000,
-			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme)
+			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No"
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
@@ -295,7 +295,7 @@ public class Project : IProject
 
 	private static string? ToYesNoString(bool? value)
 	{
-		if (!value.HasValue) return null;
+		if (value.HasValue is false) return null;
 		return value == true ? "Yes" : "No";
 	}
 
