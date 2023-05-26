@@ -218,6 +218,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpGet("all", Name = "All")]
+		[ProducesResponseType(typeof(List<ApplicationSchoolSharepointServiceModel>), 200)] // added to make endpoint describe the return value
 		public async Task<ActionResult<List<ApplicationSchoolSharepointServiceModel>>> GetAll()
 		{
 			var result = await _applicationQueryService.GetAllApplications();
