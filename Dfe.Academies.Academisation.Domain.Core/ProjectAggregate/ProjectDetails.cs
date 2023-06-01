@@ -55,6 +55,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? PublishedAdmissionNumber { get; init; }
 	public decimal? PercentageFreeSchoolMeals { get; init; }
 	public string? PartOfPfiScheme { get; init; }
+	public string? PfiSchemeDetails { get; init; }
 	public string? ViabilityIssues { get; init; }
 	public string? FinancialDeficit { get; init; }
 	public string? DiocesanTrust { get; init; }
