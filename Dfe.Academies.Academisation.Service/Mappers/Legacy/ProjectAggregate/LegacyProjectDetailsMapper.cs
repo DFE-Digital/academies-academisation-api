@@ -71,6 +71,7 @@ internal static class LegacyProjectDetailsMapper
 			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber ?? existingProject.Details.PublishedAdmissionNumber,
 			PercentageFreeSchoolMeals = detailsToUpdate.PercentageFreeSchoolMeals ?? existingProject.Details.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = detailsToUpdate.PartOfPfiScheme ?? existingProject.Details.PartOfPfiScheme,
+			PfiSchemeDetails = detailsToUpdate.PfiSchemeDetails ?? existingProject.Details.PfiSchemeDetails,
 			ViabilityIssues = detailsToUpdate.ViabilityIssues ?? existingProject.Details.ViabilityIssues,
 			FinancialDeficit = detailsToUpdate.FinancialDeficit ?? existingProject.Details.FinancialDeficit,
 			DiocesanTrust = detailsToUpdate.DiocesanTrust ?? existingProject.Details.DiocesanTrust,

@@ -62,6 +62,7 @@ internal static class LegacyProjectServiceModelMapper
 			PublishedAdmissionNumber = project.Details.PublishedAdmissionNumber,
 			PercentageFreeSchoolMeals = project.Details.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = project.Details.PartOfPfiScheme,
+			PfiSchemeDetails = project.Details.PfiSchemeDetails,
 			ViabilityIssues = project.Details.ViabilityIssues,
 			FinancialDeficit = project.Details.FinancialDeficit,
 			DiocesanTrust = project.Details.DiocesanTrust,

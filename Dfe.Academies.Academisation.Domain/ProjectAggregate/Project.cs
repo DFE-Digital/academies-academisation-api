@@ -215,6 +215,7 @@ public class Project : IProject
 			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber,
 			PercentageFreeSchoolMeals = detailsToUpdate.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = detailsToUpdate.PartOfPfiScheme,
+			PfiSchemeDetails = detailsToUpdate.PfiSchemeDetails,
 			ViabilityIssues = detailsToUpdate.ViabilityIssues,
 			FinancialDeficit = detailsToUpdate.FinancialDeficit,
 			DiocesanTrust = detailsToUpdate.DiocesanTrust,

@@ -59,6 +59,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? PublishedAdmissionNumber { get; init; }
 		[JsonIgnore] public decimal? PercentageFreeSchoolMeals { get; init; }
 		public string? PartOfPfiScheme { get; init; }
+		public string? PfiSchemeDetails { get; init; }
 		public string? ViabilityIssues { get; init; }
 		public string? FinancialDeficit { get; init; }
 		[JsonIgnore] public string? DiocesanTrust { get; init; }

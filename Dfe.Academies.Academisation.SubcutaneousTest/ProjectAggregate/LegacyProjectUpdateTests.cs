@@ -124,13 +124,15 @@ public class ProjectUpdateTests
 
 		var getResult = await legacyProjectController.Get(updatedProject.Id);
 
-		(_, var getProject) = DfeAssert.OkObjectResult(getResult);
+		(_, LegacyProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
 
 		existingProject.ProjectStatus = updatedProject.ProjectStatus;
 		existingProject.EqualitiesImpactAssessmentConsidered = updatedProject.EqualitiesImpactAssessmentConsidered;
 
 		Assert.Multiple(
 					() => Assert.Equal(existingProject.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),
+					() => Assert.Equal(existingProject.PartOfPfiScheme, getProject.PartOfPfiScheme),
+					() => Assert.Equal(existingProject.PfiSchemeDetails, getProject.PfiSchemeDetails),
 					() => Assert.Equal(existingProject.Author, getProject.Author),
 					() => Assert.Equal(existingProject.ClearedBy, getProject.ClearedBy),
 					() => Assert.Equal(existingProject.ProposedAcademyOpeningDate, getProject.ProposedAcademyOpeningDate),
