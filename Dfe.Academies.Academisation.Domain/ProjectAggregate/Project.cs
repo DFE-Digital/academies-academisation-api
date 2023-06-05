@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -115,7 +114,7 @@ public class Project : IProject
 		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
 	}
 
-	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
+	public static CreateResult CreateSponsoredProject(SponsoredProject project)
 	{
 		if (project.Trust == null)
 		{

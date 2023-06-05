@@ -1,28 +1,28 @@
 ﻿using AutoMapper;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 {
-	public class CreateInvoluntaryProjectCommand : ICreateInvoluntaryProjectCommand
+	public class CreateSponsoredProjectCommand : ICreateSponsoredProjectCommand
 	{
 		private readonly IMapper _mapper;
-		private readonly ICreateInvoluntaryProjectDataCommand _createInvoluntaryProjectDataCommand;
+		private readonly ICreateSponsoredProjectDataCommand _createSponsoredProjectDataCommand;
 
-		public CreateInvoluntaryProjectCommand(
+		public CreateSponsoredProjectCommand(
 			IMapper mapper,
-			ICreateInvoluntaryProjectDataCommand createInvoluntaryProjectDataCommand)
+			ICreateSponsoredProjectDataCommand createSponsoredProjectDataCommand)
 		{
 			_mapper = mapper;
-			_createInvoluntaryProjectDataCommand = createInvoluntaryProjectDataCommand;
+			_createSponsoredProjectDataCommand = createSponsoredProjectDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(InvoluntaryProjectServiceModel model)
+		public async Task<CommandResult> Execute(SponsoredProjectServiceModel model)
 		{
-			var result = await _createInvoluntaryProjectDataCommand.Execute(_mapper.Map<InvoluntaryProject>(model));
+			var result = await _createSponsoredProjectDataCommand.Execute(_mapper.Map<SponsoredProject>(model));
 
 			if (result is CommandValidationErrorResult)
 			{
