@@ -21,7 +21,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
 		private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
 		private readonly IProjectGetStatusesQuery _projectGetStatusesQuery;
-		private readonly ICreateInvoluntaryProjectCommand _createInvoluntaryProjectCommand;
+		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 
 		public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery,
 									   ILegacyProjectListGetQuery legacyProjectListGetQuery,
@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 									   ILegacyProjectUpdateCommand legacyProjectUpdateCommand,
 									   ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
 									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand, 
-									   ICreateInvoluntaryProjectCommand createInvoluntaryProjectCommand)
+									   ICreateSponsoredProjectCommand createSponsoredProjectCommand)
 		{
 			_legacyProjectGetQuery = legacyProjectGetQuery;
 			_legacyProjectListGetQuery = legacyProjectListGetQuery;
@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 			_legacyProjectAddNoteCommand = legacyProjectAddNoteCommand;
 			_legacyProjectDeleteNoteCommand = legacyProjectDeleteNoteCommand;
-			_createInvoluntaryProjectCommand = createInvoluntaryProjectCommand;
+			_createSponsoredProjectCommand = createSponsoredProjectCommand;
 		}
 
 		/// <summary>
@@ -150,17 +150,17 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		/// <summary>
-		///     Adds a involuntary conversion project
+		///     Adds a sponsored conversion project
 		/// </summary>
-		/// <param name="project">The model holding the data required to create an Involuntary conversion</param>
+		/// <param name="project">The model holding the data required to create a sponsored conversion</param>
 		/// <response code="201">The project has been added</response>
-		[HttpPost("project/involuntary-conversion-project")]
+		[HttpPost("project/sponsored-conversion-project")]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
-		public async Task<ActionResult> AddInvoluntaryConversion(InvoluntaryProjectServiceModel project)
+		public async Task<ActionResult> AddSponsoredConversion(SponsoredProjectServiceModel project)
 		{
-			CommandResult result = await _createInvoluntaryProjectCommand.Execute(project);
+			CommandResult result = await _createSponsoredProjectCommand.Execute(project);
 
 			return result switch
 			{

@@ -4,8 +4,8 @@ using Dfe.Academies.Academisation.Core.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.IData.ProjectAggregate
 {
-	public interface ICreateInvoluntaryProjectDataCommand
+	public interface ICreateSponsoredProjectDataCommand
 	{
-		Task<CommandResult> Execute(InvoluntaryProject project);
+		Task<CommandResult> Execute(SponsoredProject project);
 	}
 }

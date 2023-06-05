@@ -139,7 +139,7 @@ public class ApplicationSubmitTests
 
 		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
-			Mock.Of<ICreateInvoluntaryProjectCommand>());
+			Mock.Of<ICreateSponsoredProjectCommand>());
 		var projectResult = await projectController.Get(1);
 
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
@@ -194,7 +194,7 @@ public class ApplicationSubmitTests
 
 		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), new LegacyProjectListGetQuery(new ProjectListGetDataQuery(_context)),
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
-			Mock.Of<ICreateInvoluntaryProjectCommand>());
+			Mock.Of<ICreateSponsoredProjectCommand>());
 		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
 
 		(_, LegacyApiResponse<LegacyProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);

@@ -11,14 +11,14 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 {
-	public class CreateInvoluntaryProjectCommandTests
+	public class CreateSponsoredProjectCommandTests
 	{
-		private readonly InvoluntaryProject _newProject;
+		private readonly SponsoredProject _newProject;
 		private readonly AcademisationContext _context;
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 		private readonly Fixture _fixture;
 
-		public CreateInvoluntaryProjectCommandTests()
+		public CreateSponsoredProjectCommandTests()
 		{
 			_fixture = new Fixture();
 			ProjectState projectState = _fixture.Create<ProjectState>();
@@ -29,18 +29,18 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			_context.Projects.Add(projectState);
 			_context.SaveChanges();
 
-			_newProject = _fixture.Create<InvoluntaryProject>();
+			_newProject = _fixture.Create<SponsoredProject>();
 		}
 
-		private CreateInvoluntaryProjectDataCommand System_under_test()
+		private CreateSponsoredProjectDataCommand System_under_test()
 		{
-			return new CreateInvoluntaryProjectDataCommand(_projectCreateDataCommand);
+			return new CreateSponsoredProjectDataCommand(_projectCreateDataCommand);
 		}
 
 		[Fact]
-		public async Task Should_add_the_new_involuntary_project()
+		public async Task Should_add_the_new_sponsored_project()
 		{
-			CreateInvoluntaryProjectDataCommand command = System_under_test();
+			CreateSponsoredProjectDataCommand command = System_under_test();
 
 			await command.Execute(_newProject);
 
@@ -50,18 +50,18 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		[Fact]
 		public async Task Should_return_error_if_school_is_null()
 		{
-			CreateInvoluntaryProjectDataCommand command = System_under_test();
+			CreateSponsoredProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new InvoluntaryProject(null, _fixture.Create<InvoluntaryProjectTrust>()));
+			var result = await command.Execute(new SponsoredProject(null, _fixture.Create<SponsoredProjectTrust>()));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
 		[Fact]
 		public async Task Should_return_error_if_join_trust_is_null()
 		{
-			CreateInvoluntaryProjectDataCommand command = System_under_test();
+			CreateSponsoredProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new InvoluntaryProject(_fixture.Create<InvoluntaryProjectSchool>(), null));
+			var result = await command.Execute(new SponsoredProject(_fixture.Create<SponsoredProjectSchool>(), null));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}

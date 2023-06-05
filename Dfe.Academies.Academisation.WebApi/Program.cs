@@ -104,8 +104,8 @@ builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
 builder.Services.AddScoped<ILegacyProjectAddNoteCommand, LegacyProjectAddNoteCommand>();
 builder.Services.AddScoped<ILegacyProjectDeleteNoteCommand, LegacyProjectDeleteNoteCommand>();
-builder.Services.AddScoped<ICreateInvoluntaryProjectCommand, CreateInvoluntaryProjectCommand>();
-builder.Services.AddScoped<ICreateInvoluntaryProjectDataCommand, CreateInvoluntaryProjectDataCommand>();
+builder.Services.AddScoped<ICreateSponsoredProjectCommand, CreateSponsoredProjectCommand>();
+builder.Services.AddScoped<ICreateSponsoredProjectDataCommand, CreateSponsoredProjectDataCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();

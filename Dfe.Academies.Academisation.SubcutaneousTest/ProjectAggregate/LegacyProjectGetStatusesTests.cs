@@ -24,7 +24,7 @@ public class LegacyProjectGetStatusesTests
 		IProjectGetStatusesQuery query = new ProjectGetStatusesQuery(dataQuery);
 
 		_legacyProjectController = new LegacyProjectController(Mock.Of<ILegacyProjectGetQuery>(), Mock.Of<ILegacyProjectListGetQuery>(),
-			query, Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateInvoluntaryProjectCommand>());
+			query, Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
 	}
 
 	[Fact]

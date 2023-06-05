@@ -115,7 +115,7 @@ public class Project : IProject
 		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
 	}
 
-	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
+	public static CreateResult CreateSponsoredProject(SponsoredProject project)
 	{
 		if (project.Trust == null)
 		{
