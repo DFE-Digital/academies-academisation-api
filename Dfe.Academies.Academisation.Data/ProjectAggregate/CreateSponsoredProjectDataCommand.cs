@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -13,7 +14,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_projectCreateDataCommand = projectCreateDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(Core.ProjectAggregate.SponsoredProject project)
+		public async Task<CommandResult> Execute(SponsoredProject project)
 		{
 			var domainServiceResult = Project.CreateSponsoredProject(project);
 

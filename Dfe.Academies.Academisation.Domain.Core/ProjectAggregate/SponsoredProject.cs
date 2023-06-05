@@ -1,4 +1,4 @@
-﻿namespace Dfe.Academies.Academisation.Core.ProjectAggregate
+﻿namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate
 {
 	public record SponsoredProject(SponsoredProjectSchool? School, SponsoredProjectTrust? Trust);
 	public record SponsoredProjectTrust(string Name, string ReferenceNumber);

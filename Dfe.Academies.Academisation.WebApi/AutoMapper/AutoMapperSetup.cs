@@ -1,7 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
-using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;

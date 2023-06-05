@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using FluentAssertions;
 using Xunit;
