@@ -85,7 +85,6 @@ public class ProjectState : BaseEntity
 
 	// risk and issues
 	public string? RisksAndIssues { get; set; }
-	public string? EqualitiesImpactAssessmentConsidered { get; set; }
 	public bool? RisksAndIssuesSectionComplete { get; set; }
 
 	// legal requirements
@@ -206,7 +205,6 @@ public class ProjectState : BaseEntity
 
 			// risk and issues
 			RisksAndIssues = RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = RisksAndIssuesSectionComplete,
 
 			// legal requirements
@@ -333,7 +331,6 @@ public class ProjectState : BaseEntity
 
 			// risk and issues
 			RisksAndIssues = project.Details.RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
 
 			// legal requirements

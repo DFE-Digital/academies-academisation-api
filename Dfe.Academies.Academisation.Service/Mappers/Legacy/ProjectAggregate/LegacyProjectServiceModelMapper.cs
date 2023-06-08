@@ -86,7 +86,6 @@ internal static class LegacyProjectServiceModelMapper
 
 			// risk and issues
 			RisksAndIssues = project.Details.RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
 
 			// legal requirements

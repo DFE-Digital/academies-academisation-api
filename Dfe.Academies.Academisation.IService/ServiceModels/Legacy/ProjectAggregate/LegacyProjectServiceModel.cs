@@ -73,7 +73,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? RationaleForTrust { get; init; }
 		public bool? RationaleSectionComplete { get; init; }
 		public string? RisksAndIssues { get; init; }
-		public string? EqualitiesImpactAssessmentConsidered { get; init; }
 		public bool? RisksAndIssuesSectionComplete { get; init; }
 		public YesNoNotApplicable? GoverningBodyResolution { get; init; }
 		public YesNoNotApplicable? Consultation { get; init; }
@@ -195,8 +194,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 					   StringComparison.InvariantCultureIgnoreCase) &&
 				   RationaleSectionComplete == other.RationaleSectionComplete &&
 				   string.Equals(RisksAndIssues, other.RisksAndIssues, StringComparison.InvariantCultureIgnoreCase) &&
-				   string.Equals(EqualitiesImpactAssessmentConsidered, other.EqualitiesImpactAssessmentConsidered,
-					   StringComparison.InvariantCultureIgnoreCase) &&
 				   RisksAndIssuesSectionComplete == other.RisksAndIssuesSectionComplete &&
 				   GoverningBodyResolution == other.GoverningBodyResolution && Consultation == other.Consultation &&
 				   DiocesanConsent == other.DiocesanConsent && FoundationConsent == other.FoundationConsent &&
@@ -312,7 +309,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(RationaleForTrust, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(RationaleSectionComplete);
 			hashCode.Add(RisksAndIssues, StringComparer.InvariantCultureIgnoreCase);
-			hashCode.Add(EqualitiesImpactAssessmentConsidered, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(RisksAndIssuesSectionComplete);
 			hashCode.Add(GoverningBodyResolution);
 			hashCode.Add(Consultation);
