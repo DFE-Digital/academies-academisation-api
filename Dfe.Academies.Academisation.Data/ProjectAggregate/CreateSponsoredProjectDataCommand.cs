@@ -1,21 +1,22 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 {
-	public class CreateInvoluntaryProjectDataCommand : ICreateInvoluntaryProjectDataCommand
+	public class CreateSponsoredProjectDataCommand : ICreateSponsoredProjectDataCommand
 	{
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-		public CreateInvoluntaryProjectDataCommand(IProjectCreateDataCommand projectCreateDataCommand)
+		public CreateSponsoredProjectDataCommand(IProjectCreateDataCommand projectCreateDataCommand)
 		{
 			_projectCreateDataCommand = projectCreateDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(Core.ProjectAggregate.InvoluntaryProject project)
+		public async Task<CommandResult> Execute(SponsoredProject project)
 		{
-			var domainServiceResult = Project.CreateInvoluntaryProject(project);
+			var domainServiceResult = Project.CreateSponsoredProject(project);
 
 			switch (domainServiceResult)
 			{

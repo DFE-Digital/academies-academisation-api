@@ -1,18 +1,18 @@
 ﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 {
-	public class InvoluntaryProjectServiceModel
+	public class SponsoredProjectServiceModel
 	{
-		public InvoluntaryProjectSchoolServiceModel? School { get; init; }
-		public InvoluntaryProjectTrustServiceModel? Trust { get; init; }
+		public SponsoredProjectSchoolServiceModel? School { get; init; }
+		public SponsoredProjectTrustServiceModel? Trust { get; init; }
 	}
 
-	public class InvoluntaryProjectTrustServiceModel
+	public class SponsoredProjectTrustServiceModel
 	{
 		public string? Name { get; init; }
 		public string? ReferenceNumber { get; init; }
 	}
 
-	public class InvoluntaryProjectSchoolServiceModel
+	public class SponsoredProjectSchoolServiceModel
 	{
 		public string? Name { get; init; }
 		public int Urn { get; init; }

@@ -60,6 +60,7 @@ public class ProjectState : BaseEntity
 	public string? PublishedAdmissionNumber { get; set; }
 	public decimal? PercentageFreeSchoolMeals { get; set; }
 	public string? PartOfPfiScheme { get; set; }
+	public string? PfiSchemeDetails { get; set; }
 	public string? ViabilityIssues { get; set; }
 	public string? FinancialDeficit { get; set; }
 	public string? DiocesanTrust { get; set; }
@@ -180,6 +181,7 @@ public class ProjectState : BaseEntity
 			PublishedAdmissionNumber = PublishedAdmissionNumber,
 			PercentageFreeSchoolMeals = PercentageFreeSchoolMeals,
 			PartOfPfiScheme = PartOfPfiScheme,
+			PfiSchemeDetails = PfiSchemeDetails,
 			ViabilityIssues = ViabilityIssues,
 			FinancialDeficit = FinancialDeficit,
 			DiocesanTrust = DiocesanTrust,
@@ -306,6 +308,7 @@ public class ProjectState : BaseEntity
 			PublishedAdmissionNumber = project.Details.PublishedAdmissionNumber,
 			PercentageFreeSchoolMeals = project.Details.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = project.Details.PartOfPfiScheme,
+			PfiSchemeDetails = project.Details.PfiSchemeDetails,
 			ViabilityIssues = project.Details.ViabilityIssues,
 			FinancialDeficit = project.Details.FinancialDeficit,
 			DiocesanTrust = project.Details.DiocesanTrust,

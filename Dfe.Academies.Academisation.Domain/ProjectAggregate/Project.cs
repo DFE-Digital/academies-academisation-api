@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -115,7 +114,7 @@ public class Project : IProject
 		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
 	}
 
-	public static CreateResult CreateInvoluntaryProject(InvoluntaryProject project)
+	public static CreateResult CreateSponsoredProject(SponsoredProject project)
 	{
 		if (project.Trust == null)
 		{
@@ -142,7 +141,7 @@ public class Project : IProject
 			NameOfTrust = project.Trust?.Name,
 			AcademyTypeAndRoute = "Sponsored",
 			ConversionSupportGrantAmount = 25000,
-			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme)
+			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No"
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
@@ -215,6 +214,7 @@ public class Project : IProject
 			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber,
 			PercentageFreeSchoolMeals = detailsToUpdate.PercentageFreeSchoolMeals,
 			PartOfPfiScheme = detailsToUpdate.PartOfPfiScheme,
+			PfiSchemeDetails = detailsToUpdate.PfiSchemeDetails,
 			ViabilityIssues = detailsToUpdate.ViabilityIssues,
 			FinancialDeficit = detailsToUpdate.FinancialDeficit,
 			DiocesanTrust = detailsToUpdate.DiocesanTrust,
@@ -294,7 +294,7 @@ public class Project : IProject
 
 	private static string? ToYesNoString(bool? value)
 	{
-		if (!value.HasValue) return null;
+		if (value.HasValue is false) return null;
 		return value == true ? "Yes" : "No";
 	}
 

@@ -27,7 +27,7 @@ public class LegacyProjectListGetTests
 
 		_subject = new LegacyProjectController(Mock.Of<ILegacyProjectGetQuery>(), legacyProjectGetQuery,
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateInvoluntaryProjectCommand>());
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateSponsoredProjectCommand>());
 	}
 
 	[Fact]
