@@ -113,7 +113,7 @@ public class ProjectUpdateTests
 
 		var updatedProject = new LegacyProjectServiceModel(existingProject.Id, existingProject.Urn)
 		{
-			ProjectStatus = "TestStatus", EqualitiesImpactAssessmentConsidered = "Yes sir"
+			ProjectStatus = "TestStatus"
 		};
 
 		// Act
@@ -127,7 +127,6 @@ public class ProjectUpdateTests
 		(_, LegacyProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
 
 		existingProject.ProjectStatus = updatedProject.ProjectStatus;
-		existingProject.EqualitiesImpactAssessmentConsidered = updatedProject.EqualitiesImpactAssessmentConsidered;
 
 		Assert.Multiple(
 					() => Assert.Equal(existingProject.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),

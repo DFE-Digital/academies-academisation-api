@@ -236,7 +236,6 @@ public class Project : IProject
 
 			// risk and issues
 			RisksAndIssues = detailsToUpdate.RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete,
 
 			// legal requirements
