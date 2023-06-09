@@ -137,7 +137,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
+		var projectController = new ProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
 			Mock.Of<ICreateSponsoredProjectCommand>());
 		var projectResult = await projectController.Get(1);
@@ -192,7 +192,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), new LegacyProjectListGetQuery(new ProjectListGetDataQuery(_context)),
+		var projectController = new ProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), new LegacyProjectListGetQuery(new ProjectListGetDataQuery(_context)),
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
 			Mock.Of<ICreateSponsoredProjectCommand>());
 		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
