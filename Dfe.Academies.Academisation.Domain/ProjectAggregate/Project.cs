@@ -116,6 +116,8 @@ public class Project : IProject
 
 	public static CreateResult CreateSponsoredProject(SponsoredProject project)
 	{
+		ArgumentNullException.ThrowIfNull(project);
+
 		if (project.Trust == null)
 		{
 			return new CreateValidationErrorResult(new List<ValidationError>
@@ -141,7 +143,9 @@ public class Project : IProject
 			NameOfTrust = project.Trust?.Name,
 			AcademyTypeAndRoute = "Sponsored",
 			ConversionSupportGrantAmount = 25000,
-			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No"
+			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
+			LocalAuthority = project.School?.LocalAuthorityName,
+			Region = project.School?.Region
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
