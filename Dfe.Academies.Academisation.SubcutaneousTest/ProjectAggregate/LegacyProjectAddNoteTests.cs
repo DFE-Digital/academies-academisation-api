@@ -31,9 +31,9 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 			_createSponsoredProjectCommand = Mock.Of<ICreateSponsoredProjectCommand>();
 		}
 
-		private LegacyProjectController System_under_test()
+		private ProjectController System_under_test()
 		{
-			return new LegacyProjectController(
+			return new ProjectController(
 				_projectGetQuery,
 				_projectListGetQuery,
 				_getStatusesQuery,
@@ -50,7 +50,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 				.Setup(x => x.Execute(It.IsAny<LegacyProjectAddNoteModel>()))
 				.Returns(Task.FromResult(new CommandSuccessResult() as CommandResult));
 
-			LegacyProjectController controller = System_under_test();
+			ProjectController controller = System_under_test();
 
 			ActionResult result =
 				await controller.AddNote(1234, new AddNoteRequest("Subject", "Note", "Author", DateTime.Today));
@@ -65,7 +65,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 				.Setup(x => x.Execute(It.IsAny<LegacyProjectAddNoteModel>()))
 				.Returns(Task.FromResult(new NotFoundCommandResult() as CommandResult));
 
-			LegacyProjectController controller = System_under_test();
+			ProjectController controller = System_under_test();
 
 			ActionResult result =
 				await controller.AddNote(1234, new AddNoteRequest("Subject", "Note", "Author", DateTime.UtcNow));

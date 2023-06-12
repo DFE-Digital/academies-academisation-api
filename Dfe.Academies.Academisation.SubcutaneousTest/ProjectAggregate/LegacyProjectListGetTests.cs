@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
 public class LegacyProjectListGetTests
 {
-	private readonly LegacyProjectController _subject;
+	private readonly ProjectController _subject;
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new();
 
@@ -25,7 +25,7 @@ public class LegacyProjectListGetTests
 		IProjectListGetDataQuery projectGetDataQuery = new ProjectListGetDataQuery(_context);
 		ILegacyProjectListGetQuery legacyProjectGetQuery = new LegacyProjectListGetQuery(projectGetDataQuery);
 
-		_subject = new LegacyProjectController(Mock.Of<ILegacyProjectGetQuery>(), legacyProjectGetQuery,
+		_subject = new ProjectController(Mock.Of<ILegacyProjectGetQuery>(), legacyProjectGetQuery,
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(),
 			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateSponsoredProjectCommand>());
 	}

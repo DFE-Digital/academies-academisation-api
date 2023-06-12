@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
 public class LegacyProjectGetStatusesTests
 {
-	private readonly LegacyProjectController _legacyProjectController;
+	private readonly ProjectController _projectController;
 	private readonly AcademisationContext _context;
 
 	public LegacyProjectGetStatusesTests()
@@ -23,7 +23,7 @@ public class LegacyProjectGetStatusesTests
 		IProjectStatusesDataQuery dataQuery = new ProjectStatusesDataQuery(_context);
 		IProjectGetStatusesQuery query = new ProjectGetStatusesQuery(dataQuery);
 
-		_legacyProjectController = new LegacyProjectController(Mock.Of<ILegacyProjectGetQuery>(), Mock.Of<ILegacyProjectListGetQuery>(),
+		_projectController = new ProjectController(Mock.Of<ILegacyProjectGetQuery>(), Mock.Of<ILegacyProjectListGetQuery>(),
 			query, Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
 	}
 
@@ -35,7 +35,7 @@ public class LegacyProjectGetStatusesTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var result = await _legacyProjectController.GetFilterParameters();
+		var result = await _projectController.GetFilterParameters();
 
 		// assert
 		var response = DfeAssert.OkObjectResult(result);
