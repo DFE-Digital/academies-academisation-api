@@ -1,35 +1,32 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Application;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using MediatR;
 
-namespace Dfe.Academies.Academisation.Service.Commands.Application
+namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {
-	public class DeleteSchoolCommandHandler : IRequestHandler<DeleteSchoolCommand, CommandResult>
+	public class UpdateTrustKeyPersonCommandHandler : IRequestHandler<UpdateTrustKeyPersonCommand, CommandResult>
 	{
 		private readonly IApplicationRepository _applicationRepository;
 
-		public DeleteSchoolCommandHandler(IApplicationRepository applicationRepository)
+		public UpdateTrustKeyPersonCommandHandler(IApplicationRepository applicationRepository)
 		{
 			_applicationRepository = applicationRepository;
 		}
 
-		public async Task<CommandResult> Handle(DeleteSchoolCommand command, CancellationToken cancellationToken)
+		public async Task<CommandResult> Handle(UpdateTrustKeyPersonCommand command, CancellationToken cancellationToken)
 		{
 			// cancellation token will be passed down to the database requests when the repository pattern is brought in
 			// shouldn't be anything that is long running just found it a good habit with async
 
 			var existingApplication = await _applicationRepository.GetByIdAsync(command.ApplicationId);
-
 			if (existingApplication is null)
 			{
 				return new NotFoundCommandResult();
 			}
 
-			var schoolToDelete = existingApplication.Schools.SingleOrDefault(x => x.Details.Urn == command.Urn);
+			var result = existingApplication.UpdateTrustKeyPerson(command.KeyPersonId, command.Name, command.DateOfBirth, command.Biography, command.Roles.Select(x => TrustKeyPersonRole.Create(x.Id, x.Role, x.TimeInRole)));
 
-			var result = existingApplication.DeleteSchool(command.Urn);
-			
 			if (result is CommandValidationErrorResult)
 			{
 				return result;
@@ -40,9 +37,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			}
 
 			_applicationRepository.Update(existingApplication);
-
-			//TODO: This can be removed when there is no longer a disconnect between domain and persistence entities
-			//await _applicationRepository.DeleteChildObjectById<ApplicationSchoolState>(schoolToDelete.Id);
 
 			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
 				? new CommandSuccessResult()
