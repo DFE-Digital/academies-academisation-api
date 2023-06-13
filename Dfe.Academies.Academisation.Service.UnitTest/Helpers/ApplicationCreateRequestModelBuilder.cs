@@ -12,9 +12,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 		private static readonly Faker _faker = new();
 
 
-		public ApplicationCreateRequestModel Build()
+		public ApplicationCreateCommand Build()
 		{
-			return new ApplicationCreateRequestModel(_applicationType, _contributorRequestModel);
+			return new ApplicationCreateCommand(_applicationType, _contributorRequestModel);
 		}
 
 		public ApplicationCreateRequestModelBuilder WithApplicationType(ApplicationType applicationType)

@@ -11,7 +11,7 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
-	public class ApplicationSubmitCommandHandler : IRequestHandler<SubmitApplicationCommand, CommandOrCreateResult>
+	public class ApplicationSubmitCommandHandler : IRequestHandler<ApplicationSubmitCommand, CommandOrCreateResult>
 	{
 		private readonly IApplicationRepository _applicationRepository;
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
@@ -27,7 +27,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			_applicationSubmissionService = applicationSubmissionService;
 		}
 
-		public async Task<CommandOrCreateResult> Handle(SubmitApplicationCommand command, CancellationToken cancellationToken)
+		public async Task<CommandOrCreateResult> Handle(ApplicationSubmitCommand command, CancellationToken cancellationToken)
 		{
 			var application = await _applicationRepository.GetByIdAsync(command.applicationId);
 
