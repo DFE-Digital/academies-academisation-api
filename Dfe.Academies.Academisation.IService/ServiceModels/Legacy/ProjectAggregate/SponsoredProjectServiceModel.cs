@@ -18,5 +18,7 @@
 		public int Urn { get; init; }
 		public DateTime OpeningDate { get; init; }
 		public bool PartOfPfiScheme { get; init; }
+		public string? LocalAuthorityName { get; init; }
+		public string? Region{ get; init; }
 	}
 }

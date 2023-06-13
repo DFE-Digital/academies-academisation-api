@@ -1,9 +1,8 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Application;
 using MediatR;
 
-namespace Dfe.Academies.Academisation.Service.Commands.Application
+namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {
 	public class JoinTrustCommandHandler : IRequestHandler<SetJoinTrustDetailsCommand, CommandResult>
 	{

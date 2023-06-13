@@ -44,7 +44,6 @@ public class ApplicationSubmitTests
 
 	private readonly IProjectFactory _projectFactory = new ProjectFactory();
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
-	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly ITrustQueryService _trustQueryService;
@@ -68,16 +67,24 @@ public class ApplicationSubmitTests
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_repo);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _repo, _mapper.Object);
 		_mediator = new Mock<IMediator>();
 
 		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_repo, _projectCreateDataCommand, _applicationSubmissionService);
 
-		_mediator.Setup(x => x.Send(It.IsAny<SubmitApplicationCommand>(), It.IsAny<CancellationToken>()))
+		_mediator.Setup(x => x.Send(It.IsAny<ApplicationSubmitCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) =>
 			{
 
-				return await submitApplicationHandler.Handle((SubmitApplicationCommand)cmd, ct);
+				return await submitApplicationHandler.Handle((ApplicationSubmitCommand)cmd, ct);
+			});
+
+		var applicationCreateCommandHandler = new ApplicationCreateCommandHandler(_applicationFactory, _repo, _mapper.Object);
+
+		_mediator.Setup(x => x.Send(It.IsAny<ApplicationCreateCommand>(), It.IsAny<CancellationToken>()))
+			.Returns<IRequest<CreateResult>, CancellationToken>(async (cmd, ct) =>
+			{
+
+				return await applicationCreateCommandHandler.Handle((ApplicationCreateCommand)cmd, ct);
 			});
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
@@ -104,17 +111,16 @@ public class ApplicationSubmitTests
 	{
 		// Arrange
 		var applicationController = new ApplicationController(
-			_applicationCreateCommand,
 			_applicationQueryService,
 			_applicationUpdateCommand,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);
 
-		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
-			.Create<ApplicationCreateRequestModel>();
+		ApplicationCreateCommand applicationCreateRequestModel = _fixture
+			.Create<ApplicationCreateCommand>();
 
-		var createResult = await applicationController.Post(applicationCreateRequestModel);
+		var createResult = await applicationController.Post(applicationCreateRequestModel, default);
 
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
@@ -137,7 +143,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
+		var projectController = new ProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
 			Mock.Of<ICreateSponsoredProjectCommand>());
 		var projectResult = await projectController.Get(1);
@@ -152,17 +158,16 @@ public class ApplicationSubmitTests
 	{
 		// Arrange
 		var applicationController = new ApplicationController(
-			_applicationCreateCommand,
 			_applicationQueryService,
 			_applicationUpdateCommand,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);
 
-		ApplicationCreateRequestModel applicationCreateRequestModel =  new(
+		ApplicationCreateCommand applicationCreateRequestModel =  new(
 			ApplicationType.FormAMat,
 			_fixture.Create<ContributorRequestModel>());
-		var createResult = await applicationController.Post(applicationCreateRequestModel);
+		var createResult = await applicationController.Post(applicationCreateRequestModel, default);
 
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
@@ -192,7 +197,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new LegacyProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), new LegacyProjectListGetQuery(new ProjectListGetDataQuery(_context)),
+		var projectController = new ProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), new LegacyProjectListGetQuery(new ProjectListGetDataQuery(_context)),
 			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
 			Mock.Of<ICreateSponsoredProjectCommand>());
 		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));

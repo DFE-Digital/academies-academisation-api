@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[Route("legacy/")]
 	[ApiController]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-	public class LegacyProjectController : ControllerBase
+	public class ProjectController : ControllerBase
 	{
 		private readonly ILegacyProjectAddNoteCommand _legacyProjectAddNoteCommand;
 		private readonly ILegacyProjectDeleteNoteCommand _legacyProjectDeleteNoteCommand;
@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IProjectGetStatusesQuery _projectGetStatusesQuery;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 
-		public LegacyProjectController(ILegacyProjectGetQuery legacyProjectGetQuery,
+		public ProjectController(ILegacyProjectGetQuery legacyProjectGetQuery,
 									   ILegacyProjectListGetQuery legacyProjectListGetQuery,
 									   IProjectGetStatusesQuery projectGetStatusesQuery,
 									   ILegacyProjectUpdateCommand legacyProjectUpdateCommand,
@@ -167,7 +167,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				CommandSuccessResult => Created(new Uri("/legacy/project/", UriKind.Relative), null),
 				NotFoundCommandResult => NotFound(),
 				_ => throw new NotImplementedException()
-			};
+			}; 
 		}
 
 		/// <summary>
