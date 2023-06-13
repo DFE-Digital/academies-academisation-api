@@ -29,8 +29,8 @@ internal static class LegacyProjectDetailsMapper
 			BaselineDate = detailsToUpdate.BaselineDate ?? existingProject.Details.BaselineDate,
 
 			// la summary page
-			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate ?? existingProject.Details.LocalAuthorityInformationTemplateSentDate,
-			LocalAuthorityInformationTemplateReturnedDate = detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate ?? existingProject.Details.LocalAuthorityInformationTemplateReturnedDate,
+			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate.Equals(default(DateTime)) ? null : detailsToUpdate.LocalAuthorityInformationTemplateSentDate ?? existingProject.Details.LocalAuthorityInformationTemplateSentDate,
+			LocalAuthorityInformationTemplateReturnedDate = detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate.Equals(default(DateTime)) ? null : detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate ?? existingProject.Details.LocalAuthorityInformationTemplateReturnedDate,
 			LocalAuthorityInformationTemplateComments = detailsToUpdate.LocalAuthorityInformationTemplateComments ?? existingProject.Details.LocalAuthorityInformationTemplateComments,
 			LocalAuthorityInformationTemplateLink = detailsToUpdate.LocalAuthorityInformationTemplateLink ?? existingProject.Details.LocalAuthorityInformationTemplateLink,
 			LocalAuthorityInformationTemplateSectionComplete = detailsToUpdate.LocalAuthorityInformationTemplateSectionComplete ?? existingProject.Details.LocalAuthorityInformationTemplateSectionComplete,
