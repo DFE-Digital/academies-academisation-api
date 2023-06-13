@@ -8,6 +8,6 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.IService.Commands.Application
 {
-	public record SubmitApplicationCommand(
+	public record ApplicationSubmitCommand(
 		int applicationId) : IRequest<CommandOrCreateResult>;
 }

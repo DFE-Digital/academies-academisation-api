@@ -1,12 +1,16 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Threading;
+using System;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -16,14 +20,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	public class ApplicationController : ControllerBase
 	{
 		private const string GetRouteName = "GetApplication";
-		private readonly IApplicationCreateCommand _applicationCreateCommand;
 		private readonly IApplicationQueryService _applicationQueryService;
 		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly ITrustQueryService _trustQueryService;
 		private readonly IMediator _mediator;
 		private readonly ILogger<ApplicationController> _logger;
 
-		public ApplicationController(IApplicationCreateCommand applicationCreateCommand,
+		public ApplicationController(
 			IApplicationQueryService applicationQueryService,
 			IApplicationUpdateCommand applicationUpdateCommand,
 			ITrustQueryService trustQueryService,
@@ -32,7 +35,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			)
 		{
 			// need guard clauses on these check for null
-			_applicationCreateCommand = applicationCreateCommand;
 			_applicationQueryService = applicationQueryService;
 			_applicationUpdateCommand = applicationUpdateCommand;
 			_trustQueryService = trustQueryService;
@@ -43,10 +45,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[HttpPost]
-		public async Task<ActionResult<ApplicationServiceModel>> Post([FromBody] ApplicationCreateRequestModel request)
+		public async Task<ActionResult<ApplicationServiceModel>> Post([FromBody] ApplicationCreateCommand command, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Creating application using post endpoint with contributor: {request?.Contributor?.EmailAddress}");
-			var result = await _applicationCreateCommand.Execute(request);
+			_logger.LogInformation($"Creating application using post endpoint with contributor: {command?.Contributor?.EmailAddress}");
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
@@ -203,7 +205,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult> Submit(int applicationId)
 		{
 			_logger.LogInformation($"Submitting application: {applicationId}");
-			var result = await _mediator.Send(new SubmitApplicationCommand(applicationId)).ConfigureAwait(false);
+			var result = await _mediator.Send(new ApplicationSubmitCommand(applicationId)).ConfigureAwait(false);
 
 			return result switch
 			{

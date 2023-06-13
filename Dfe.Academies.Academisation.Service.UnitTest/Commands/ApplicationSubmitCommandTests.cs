@@ -47,7 +47,7 @@ public class ApplicationSubmitCommandTests
 		_repo.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync((Application?)null);
 
 		// act
-		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
+		var result = await _subject.Handle(new ApplicationSubmitCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<NotFoundCommandResult>(result);
@@ -64,7 +64,7 @@ public class ApplicationSubmitCommandTests
 		_applicationSubmissionServiceMock.Setup(x => x.SubmitApplication(_applicationMock.Object)).Returns(commandValidationErrorResult);
 
 		// act
-		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
+		var result = await _subject.Handle(new ApplicationSubmitCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CommandValidationErrorResult>(result);
@@ -84,7 +84,7 @@ public class ApplicationSubmitCommandTests
 			.Returns(new CommandSuccessResult());
 
 		// act
-		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
+		var result = await _subject.Handle(new ApplicationSubmitCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CommandSuccessResult>(result);
@@ -105,7 +105,7 @@ public class ApplicationSubmitCommandTests
 			.Returns(new CreateSuccessResult<IProject>(_projectMock.Object));
 
 		// act
-		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
+		var result = await _subject.Handle(new ApplicationSubmitCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CreateSuccessResult<LegacyProjectServiceModel>>(result);
@@ -126,7 +126,7 @@ public class ApplicationSubmitCommandTests
 			.Returns(createValidationErrorResult);
 
 		// act
-		var result = await _subject.Handle(new SubmitApplicationCommand(_applicationId), default(CancellationToken));
+		var result = await _subject.Handle(new ApplicationSubmitCommand(_applicationId), default(CancellationToken));
 
 		// assert
 		Assert.IsType<CreateValidationErrorResult>(result);

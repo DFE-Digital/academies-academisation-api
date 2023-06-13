@@ -29,7 +29,6 @@ public class ApplicationUpdateTests
 	private readonly Fixture _fixture = new();
 	private readonly Faker _faker = new();
 
-	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
@@ -48,7 +47,6 @@ public class ApplicationUpdateTests
 		_context = new TestApplicationContext().CreateContext();
 		_repo = new ApplicationRepository(_context, _mapper.Object);
 		_applicationUpdateCommand = new ApplicationUpdateCommand(_repo);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _repo, _mapper.Object);
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
@@ -56,7 +54,6 @@ public class ApplicationUpdateTests
 		_mediator = new Mock<IMediator>().Object;
 
 		_applicationController = new(
-			_applicationCreateCommand,
 			_applicationQueryService,
 			_applicationUpdateCommand,
 			_trustQueryService,
@@ -185,9 +182,9 @@ public class ApplicationUpdateTests
 
 	private async Task<ApplicationServiceModel?> CreateExistingApplication()
 	{
-		ApplicationCreateRequestModel applicationForCreate = new(ApplicationType.FormAMat, _fixture.Create<ContributorRequestModel>());// with { ApplicationType = ApplicationType.FormAMat } ;
+		ApplicationCreateCommand applicationForCreate = new(ApplicationType.FormAMat, _fixture.Create<ContributorRequestModel>());// with { ApplicationType = ApplicationType.FormAMat } ;
 
-		var createResult = await _applicationCreateCommand.Execute(applicationForCreate);
+		var createResult = await new ApplicationCreateCommandHandler(_applicationFactory, _repo, _mapper.Object).Handle(applicationForCreate, default);
 		var createSuccessResult = Assert.IsType<CreateSuccessResult<ApplicationServiceModel>>(createResult);
 		int id = createSuccessResult.Payload.ApplicationId;
 		var schools = new List<ApplicationSchoolServiceModel>();
