@@ -9,7 +9,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: -- --env url="${url}",apiKey=${API_KEY},zapReport=true,zapApiKey=${ZAP_API_KEY},zapUrl="${HTTP_PROXY}"
+    command: -- --env url="${URL}",apiKey=${API_KEY},zapReport=true,zapApiKey=${ZAP_API_KEY},zapUrl="${HTTP_PROXY}"
     depends_on:
       zap:
         condition: service_healthy
@@ -17,4 +17,4 @@ services:
       - HTTP_PROXY=${HTTP_PROXY}
       - NO_PROXY=${NO_PROXY}
     volumes:
-      - ./:/reports:rw
+      - ./reports:/reports:rw
