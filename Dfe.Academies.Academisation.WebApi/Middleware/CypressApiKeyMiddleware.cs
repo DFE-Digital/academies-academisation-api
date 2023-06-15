@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Dfe.Academies.Academisation.WebApi.Controllers.Cypress;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.Extensions.Options;
 
@@ -30,7 +29,7 @@ namespace Dfe.Academies.Academisation.WebApi.Middleware
 		{
 			// If the controller being invoked is not the cypress endpoints controller, then this
 			// middleware does not apply. Otherwise the key must match and be valid.
-			if (context.Request.Path.StartsWithSegments(new PathString("cypress")))
+			if (context.Request.Path.StartsWithSegments(new PathString("/cypress-data")))
 			{
 
 				if (!context.Request.Headers.TryGetValue(ApiKeyHeader, out var requestApiKey))
@@ -43,7 +42,7 @@ namespace Dfe.Academies.Academisation.WebApi.Middleware
 				if (!_cypressKeyValidator.IsKeyValid(requestApiKey[0]!))
 				{
 					context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-					await context.Response.WriteAsJsonAsync(ApiKeyMissingResponse);
+					await context.Response.WriteAsJsonAsync(UnauthorisedResponse);
 					return;
 				}
 			}

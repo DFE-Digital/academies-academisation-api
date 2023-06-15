@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Dfe.Academies.Academisation.WebApi.Controllers.Cypress
+namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
-	[Route("cypress")]
+	[Route("/cypress-data")]
 	[ApiController]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-	public class CypressController : ControllerBase
+	public class CypressDataController : ControllerBase
 	{
-		public CypressController()
+		public CypressDataController()
 		{
 		}
 
+		[HttpPost]
 		[Route("add-form-a-mat-project.cy")]
 		public IActionResult Add_form_a_mat_project()
 		{

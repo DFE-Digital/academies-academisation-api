@@ -1,4 +1,4 @@
-﻿namespace Dfe.Academies.Academisation.WebApi.Controllers.Cypress
+﻿namespace Dfe.Academies.Academisation.WebApi.Middleware
 {
 	public interface ICypressKeyValidator
 	{

@@ -31,7 +31,6 @@ using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
-using Dfe.Academies.Academisation.WebApi.Controllers.Cypress;
 using Dfe.Academies.Academisation.WebApi.Filters;
 using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
