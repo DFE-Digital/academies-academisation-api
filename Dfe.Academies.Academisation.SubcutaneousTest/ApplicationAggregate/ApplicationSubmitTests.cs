@@ -45,7 +45,6 @@ public class ApplicationSubmitTests
 	private readonly IProjectFactory _projectFactory = new ProjectFactory();
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
 	private readonly IApplicationQueryService _applicationQueryService;
-	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly ITrustQueryService _trustQueryService;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
@@ -66,7 +65,6 @@ public class ApplicationSubmitTests
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_applicationUpdateCommand = new ApplicationUpdateCommand(_repo);
 		_mediator = new Mock<IMediator>();
 
 		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_repo, _projectCreateDataCommand, _applicationSubmissionService);
@@ -85,6 +83,15 @@ public class ApplicationSubmitTests
 			{
 
 				return await applicationCreateCommandHandler.Handle((ApplicationCreateCommand)cmd, ct);
+			});
+
+		var applicationUpdateCommandHandler = new ApplicationUpdateCommandHandler(_repo);
+
+		_mediator.Setup(x => x.Send(It.IsAny<ApplicationUpdateCommand>(), It.IsAny<CancellationToken>()))
+			.Returns<IRequest<CommandResult>, CancellationToken>(async (cmd, ct) =>
+			{
+
+				return await applicationUpdateCommandHandler.Handle((ApplicationUpdateCommand)cmd, ct);
 			});
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
@@ -112,7 +119,6 @@ public class ApplicationSubmitTests
 		// Arrange
 		var applicationController = new ApplicationController(
 			_applicationQueryService,
-			_applicationUpdateCommand,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);
@@ -126,10 +132,10 @@ public class ApplicationSubmitTests
 
 		var school = _fixture.Create<ApplicationSchoolServiceModel>();
 
-		var updateRequest = new ApplicationUpdateRequestModel(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors,
+		var updateRequest = new ApplicationUpdateCommand(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors,
 			new List<ApplicationSchoolServiceModel> { school });
 
-		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
+		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest, default);
 		DfeAssert.OkResult(updateResult);
 
 		// Act
@@ -159,7 +165,6 @@ public class ApplicationSubmitTests
 		// Arrange
 		var applicationController = new ApplicationController(
 			_applicationQueryService,
-			_applicationUpdateCommand,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);
@@ -175,15 +180,15 @@ public class ApplicationSubmitTests
 		var secondSchool = _fixture.Create<ApplicationSchoolServiceModel>();
 		var thirdSchool = _fixture.Create<ApplicationSchoolServiceModel>();
 
-		var updateRequest = new ApplicationUpdateRequestModel(
+		var updateRequest = new ApplicationUpdateCommand(
 			createdPayload.ApplicationId,
 			createdPayload.ApplicationType,
 			createdPayload.ApplicationStatus,
 			createdPayload.Contributors,
-			new List<ApplicationSchoolServiceModel> 
+			new List<ApplicationSchoolServiceModel>
 				{ firstSchool, secondSchool, thirdSchool });
 
-		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest);
+		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest, default);
 		DfeAssert.OkResult(updateResult);
 
 		// Act

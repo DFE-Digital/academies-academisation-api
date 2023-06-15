@@ -1,6 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
-namespace Dfe.Academies.Academisation.IService.RequestModels
+namespace Dfe.Academies.Academisation.Service.Commands.Application
 {
 	public record ContributorRequestModel(
 		string FirstName,

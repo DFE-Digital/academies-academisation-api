@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System;
-using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
@@ -10,7 +7,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -21,14 +18,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	{
 		private const string GetRouteName = "GetApplication";
 		private readonly IApplicationQueryService _applicationQueryService;
-		private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 		private readonly ITrustQueryService _trustQueryService;
 		private readonly IMediator _mediator;
 		private readonly ILogger<ApplicationController> _logger;
 
 		public ApplicationController(
 			IApplicationQueryService applicationQueryService,
-			IApplicationUpdateCommand applicationUpdateCommand,
 			ITrustQueryService trustQueryService,
 			IMediator mediator, 
 			ILogger<ApplicationController> logger
@@ -36,7 +31,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			// need guard clauses on these check for null
 			_applicationQueryService = applicationQueryService;
-			_applicationUpdateCommand = applicationUpdateCommand;
 			_trustQueryService = trustQueryService;
 			_mediator = mediator;
 			_logger = logger;
@@ -82,10 +76,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut("{id}", Name = "Update")]
-		public async Task<ActionResult> Update(int id, [FromBody] ApplicationUpdateRequestModel serviceModel)
+		public async Task<ActionResult> Update(int id, [FromBody] ApplicationUpdateCommand command, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Updating application: {serviceModel.ApplicationId} with values: {serviceModel.ToString()}");
-			var result = await _applicationUpdateCommand.Execute(id, serviceModel);
+			_logger.LogInformation($"Updating application: {command.ApplicationId} with values: {command.ToString()}");
+			CommandResult? result = null;
+
+			// this should probably be a pipeline validator
+			if (id != command.ApplicationId)
+			{
+				result = new CommandValidationErrorResult(
+					new List<ValidationError>() {
+						new("Id", "Ids must be the same")
+					});
+			}
+			else { 
+				result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			}
 
 			return result switch
 			{
