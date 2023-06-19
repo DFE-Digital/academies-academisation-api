@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.RequestModels;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Helpers
 {

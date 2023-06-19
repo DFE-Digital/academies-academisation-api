@@ -29,7 +29,6 @@ public class ApplicationCreateTests
 	private readonly Faker _faker = new();
 
 	private readonly IApplicationQueryService _applicationQueryService;
-	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
@@ -46,8 +45,6 @@ public class ApplicationCreateTests
 
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
-
-		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		
 
@@ -70,7 +67,6 @@ public class ApplicationCreateTests
 		// arrange
 		var applicationController = new ApplicationController(
 			_applicationQueryService,
-			_applicationUpdateCommand,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);
@@ -116,7 +112,6 @@ public class ApplicationCreateTests
 		// arrange
 		var applicationController = new ApplicationController(
 			_applicationQueryService,
-			_applicationUpdateCommand,
 			_trustQueryService,
 			_mediator.Object,
 			_applicationLogger);
