@@ -1,5 +1,5 @@
 ﻿using System;
-using Dfe.Academies.Academisation.WebApi.Controllers.Cypress;
+using Dfe.Academies.Academisation.WebApi.Middleware;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -9,12 +9,12 @@ using Xunit;
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller.Cypress
 {
 	/// <summary>
-	/// The cypress key validator tests.
+	///     The cypress key validator tests.
 	/// </summary>
 	public class CypressKeyValidatorTests
 	{
 		/// <summary>
-		/// Are the key valid_ when_ empty cypress key_ and_ other_ args_ valid_ returns_ false.
+		///     Are the key valid_ when_ empty cypress key_ and_ other_ args_ valid_ returns_ false.
 		/// </summary>
 		/// <param name="environmentName">The environment name.</param>
 		/// <param name="cypressKey">The cypress key.</param>
@@ -27,10 +27,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller.Cypress
 		[InlineData("Staging", "not-a-guid")]
 		public void IsKeyValid_When_EmptyCypressKey_And_Other_Args_Valid_Returns_False(string environmentName, string cypressKey)
 		{
-			var env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == environmentName);
+			IHostEnvironment? env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == environmentName);
 
-			var fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == cypressKey);
-			var config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
+			IConfigurationSection? fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == cypressKey);
+			IConfiguration? config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
 
 			var sut = new CypressKeyValidator(config, env);
 			bool result = sut.IsKeyValid(Guid.NewGuid().ToString());
@@ -39,16 +39,16 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller.Cypress
 		}
 
 		/// <summary>
-		/// Are the key valid_ when_ keys_ valid_ but_ production_ returns_ false.
+		///     Are the key valid_ when_ keys_ valid_ but_ production_ returns_ false.
 		/// </summary>
 		[Fact]
 		public void IsKeyValid_When_Keys_Valid_But_Production_Returns_False()
 		{
 			string cypressKeyString = "de59ad71-1a50-4c07-a50f-ef14519977d2";
-			var env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == "Production");
+			IHostEnvironment? env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == "Production");
 
-			var fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == cypressKeyString);
-			var config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
+			IConfigurationSection? fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == cypressKeyString);
+			IConfiguration? config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
 
 			var sut = new CypressKeyValidator(config, env);
 			bool result = sut.IsKeyValid(Guid.Parse(cypressKeyString).ToString());
@@ -57,7 +57,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller.Cypress
 		}
 
 		/// <summary>
-		/// Are the key valid_ when_ keys_ valid_ and_ not_ production_ returns_ true.
+		///     Are the key valid_ when_ keys_ valid_ and_ not_ production_ returns_ true.
 		/// </summary>
 		/// <param name="environmentName">The environment name.</param>
 		[Theory]
@@ -66,10 +66,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller.Cypress
 		public void IsKeyValid_When_Keys_Valid_And_Not_Production_Returns_True(string environmentName)
 		{
 			string cypressKeyString = "de59ad71-1a50-4c07-a50f-ef14519977d2";
-			var env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == environmentName);
+			IHostEnvironment? env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == environmentName);
 
-			var fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == cypressKeyString);
-			var config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
+			IConfigurationSection? fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == cypressKeyString);
+			IConfiguration? config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
 
 			var sut = new CypressKeyValidator(config, env);
 			bool result = sut.IsKeyValid(Guid.Parse(cypressKeyString).ToString());
@@ -82,10 +82,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller.Cypress
 		[InlineData("Staging", "de59ad71-1a50-4c07-a50f-ef14519977d2")]
 		public void IsKeyValid_When_UserKeyDoesNotMatch_Returns_False(string environmentName, string userKey)
 		{
-			var env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == environmentName);
+			IHostEnvironment? env = Mock.Of<IHostEnvironment>(x => x.EnvironmentName == environmentName);
 
-			var fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == Guid.NewGuid().ToString());
-			var config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
+			IConfigurationSection? fakeConfigSection = Mock.Of<IConfigurationSection>(x => x.Key == "CypressEndpointsKey" && x.Value == Guid.NewGuid().ToString());
+			IConfiguration? config = Mock.Of<IConfiguration>(x => x.GetSection("CypressEndpointsKey") == fakeConfigSection);
 
 			var sut = new CypressKeyValidator(config, env);
 			bool result = sut.IsKeyValid(userKey);

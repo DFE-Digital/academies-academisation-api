@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Castle.Core.Configuration;
-using Dfe.Academies.Academisation.WebApi.Controllers;
-using Dfe.Academies.Academisation.WebApi.Controllers.Cypress;
+﻿using Dfe.Academies.Academisation.WebApi.Controllers;
 using FluentAssertions;
-using Microsoft.Extensions.Hosting;
+using MediatR;
 using Moq;
 using Xunit;
 
@@ -15,6 +8,13 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller.Cypress
 {
 	public class CypressControllerTests
 	{
+		[Fact]
+		public void CanConstructCypressController()
+		{
+			var mockMediatr = Mock.Of<IMediator>();
+			var sut = new CypressDataController(mockMediatr);
+			sut.Should().NotBeNull();
+		}
 
 	}
 }
