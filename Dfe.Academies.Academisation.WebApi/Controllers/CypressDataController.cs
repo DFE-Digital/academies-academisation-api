@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Dfe.Academies.Academisation.Service.Commands.CypressData;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -16,65 +17,66 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 		[HttpPost]
 		[Route("add-form-a-mat-project.cy")]
-		public IActionResult AddFormAMatProject()
+		public async Task<IActionResult> AddFormAMatProject()
 		{
+			var result = _mediator.Send(new CyAddFormAMatProjectCommand());
 			return Ok();
 		}
 		
 		[HttpPost]
 		[Route("advisory-board-urls.cy")]
-		public IActionResult AdvisoryBoardUrls()
+		public async Task<IActionResult> AdvisoryBoardUrls()
 		{
 			return Ok();
 		}
 		
 		[HttpPost]
 		[Route("comments-updated-correctly.cy")]
-		public IActionResult CommentsUpdatedCorrectly()
+		public async Task<IActionResult> CommentsUpdatedCorrectly()
 		{
 			return Ok();
 		}
 		
 		[HttpPost]
 		[Route("create-approved-decision.cy")]
-		public IActionResult CreateApprovedDecision()
+		public async Task<IActionResult> CreateApprovedDecision()
 		{
 			return Ok();
 		}
 		[HttpPost]
 		[Route("create-declined-decision.cy")]
-		public IActionResult CreatedDeclinedDecision()
+		public async Task<IActionResult> CreatedDeclinedDecision()
 		{
 			return Ok();
 		}
 		
 		[HttpPost]
 		[Route("create-deferred-decision.cy")]
-		public IActionResult CreateDeferredDecision()
+		public async Task<IActionResult> CreateDeferredDecision()
 		{
 			return Ok();
 		}
 		[HttpPost]
 		[Route("error-handling.cy")]
-		public IActionResult ErrorHandling()
+		public async Task<IActionResult> ErrorHandling()
 		{
 			return Ok();
 		}
 		[HttpPost]
 		[Route("new-plus-edit-approved-decision.cy")]
-		public IActionResult NewPlusEditApprovedDecision()
+		public async Task<IActionResult> NewPlusEditApprovedDecision()
 		{
 			return Ok();
 		}
 		[HttpPost]
 		[Route("new-plus-edit-declined-decision.cy")]
-		public IActionResult NewPlusEditDeclinedDecision()
+		public async Task<IActionResult> NewPlusEditDeclinedDecision()
 		{
 			return Ok();
 		}
 		[HttpPost]
 		[Route("new-plus-edit-deferred-decision.cy")]
-		public IActionResult NewPlusEditDeferredDecision()
+		public async Task<IActionResult> NewPlusEditDeferredDecision()
 		{
 			return Ok();
 		}

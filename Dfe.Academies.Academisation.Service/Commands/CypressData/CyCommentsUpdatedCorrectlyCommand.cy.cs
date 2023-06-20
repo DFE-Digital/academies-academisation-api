@@ -22,11 +22,21 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		/// <summary>
 		///     Gets a value indicating whether has valid arguments.
 		/// </summary>
-		public override bool HasValidArguments => !string.IsNullOrWhiteSpace(Id);
+		public sealed override bool HasValidArguments => !string.IsNullOrWhiteSpace(Id);
 
 		/// <summary>
 		///     Gets or sets the id.
 		/// </summary>
 		public string? Id { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CyCommentsUpdatedCorrectly"/> class.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		public CyCommentsUpdatedCorrectly(string id)
+		{
+			Id = id;
+			if (!HasValidArguments) throw new ArgumentException();
+		}
 	}
 }

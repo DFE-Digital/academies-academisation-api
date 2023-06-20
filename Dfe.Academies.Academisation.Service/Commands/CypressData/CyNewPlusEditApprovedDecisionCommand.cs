@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		/// <summary>
 		///     Gets a value indicating whether has valid arguments.
 		/// </summary>
-		public override bool HasValidArguments => !string.IsNullOrWhiteSpace(Id) && Date != default;
+		public sealed override bool HasValidArguments => !string.IsNullOrWhiteSpace(Id) && Date != default;
 
 		/// <summary>
 		///     Gets or sets the id.
@@ -34,5 +34,17 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		///     Gets or sets the date.
 		/// </summary>
 		public DateTime Date { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CyNewPlusEditApprovedDecisionCommand"/> class.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <param name="date">The date.</param>
+		public CyNewPlusEditApprovedDecisionCommand(string id, DateTime date)
+		{
+			Id = id;
+			Date = date;
+			if (!HasValidArguments) throw new ArgumentException();
+		}
 	}
 }

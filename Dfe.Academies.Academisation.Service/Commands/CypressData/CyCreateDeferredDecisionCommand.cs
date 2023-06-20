@@ -20,11 +20,21 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		/// <summary>
 		///     Gets a value indicating whether has valid arguments.
 		/// </summary>
-		public override bool HasValidArguments => !string.IsNullOrEmpty(Id);
+		public sealed override bool HasValidArguments => !string.IsNullOrEmpty(Id);
 
 		/// <summary>
 		///     Gets or sets the id.
 		/// </summary>
 		public string? Id { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CyCreateDeferredDecisionCommand"/> class.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		public CyCreateDeferredDecisionCommand(string id)
+		{
+			Id = id;
+			if (!HasValidArguments) throw new ArgumentException();
+		}
 	}
 }
