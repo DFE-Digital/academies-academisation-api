@@ -1,4 +1,6 @@
-﻿using Dfe.Academies.Academisation.Service.Commands.CypressData;
+﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Service.Commands.CypressData;
+using Dfe.Academies.Academisation.Service.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +21,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[Route("add-form-a-mat-project.cy")]
 		public async Task<IActionResult> AddFormAMatProject()
 		{
-			var result = _mediator.Send(new CyAddFormAMatProjectCommand());
 			return Ok();
 		}
 		
