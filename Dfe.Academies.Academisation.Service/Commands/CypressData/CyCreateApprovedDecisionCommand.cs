@@ -4,20 +4,19 @@ using MediatR;
 namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 {
 	/// <summary>
-	///     The cy comments updated correctly.
+	///     The cy create approved decision command.
 	/// </summary>
-	public class CyCommentsUpdatedCorrectly : CypressDataCommandAbstractBase, IRequest<CommandResult>
+	public class CyCreateApprovedDecisionCommand : CypressDataCommandAbstractBase, IRequest<CommandResult>
 	{
 		/// <summary>
 		///     Gets the sql statements.
 		/// </summary>
 		public override IEnumerable<(string, object[])> SqlStatements => new[]
 		{
-			(@"update academisation.Project set 
-			LocalAuthorityInformationTemplateReturnedDate = '2023-01-01', 
-			LocalAuthorityInformationTemplateSentDate = '2023-01-01'                             
-			where Id = {0}", new object[] { Id! })
+			(@"DELETE FROM [academisation].[ConversionAdvisoryBoardDecision] WHERE ConversionProjectId = {0}",
+				new object[] { Id! })
 		};
+
 
 		/// <summary>
 		///     Gets a value indicating whether has valid arguments.
@@ -25,7 +24,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		public override bool HasValidArguments => !string.IsNullOrWhiteSpace(Id);
 
 		/// <summary>
-		///     Gets or sets the id.
+		///     Gets the id.
 		/// </summary>
 		public string? Id { get; set; }
 	}

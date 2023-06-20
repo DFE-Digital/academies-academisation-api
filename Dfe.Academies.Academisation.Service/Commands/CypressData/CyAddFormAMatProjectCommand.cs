@@ -1,16 +1,18 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Data;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 {
 	/// <summary>
-	/// The cy add form a mat project.
+	///     The cy add form a mat project.
 	/// </summary>
-	public class CyAddFormAMatProject : CypressDataCommandAbstractBase, IRequest<CommandResult>
+	public class CyAddFormAMatProjectCommand : CypressDataCommandAbstractBase, IRequest<CommandResult>
 	{
+		/// <summary>
+		///     Gets the sql statements.
+		/// </summary>
 		public override IEnumerable<(string, object[])> SqlStatements =>
-			new (string, object[])[]
+			new[]
 			{
 				(@"UPDATE [academisation].[ConversionApplication]
 				SET [academisation].[ConversionApplication].ApplicationStatus = 'InProgress'
@@ -25,18 +27,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 					  ,[DynamicsApplicationId]
 					  ,[ApplicationReference]
 				  FROM [academisation].[ConversionApplication]
-				  WHERE [academisation].[ConversionApplication].ApplicationReference = 'A2B_31'", Array.Empty<object>())
+				  WHERE [academisation].[ConversionApplication].ApplicationReference = 'A2B_31'",
+					Array.Empty<object>())
 			};
 
+		/// <summary>
+		///     Gets a value indicating whether has valid arguments.
+		/// </summary>
 		public override bool HasValidArguments => true;
-	}
-
-	public class CyAddFormAMatProjectCommandHandler : CypressDataBaseCommandHandlerAbstractBase, IRequestHandler<CyAddFormAMatProject, CommandResult>
-	{
-		public Task<CommandResult> Handle(CyAddFormAMatProject request, CancellationToken cancellationToken) => Handle(request as CypressDataCommandAbstractBase, cancellationToken);
-
-		public CyAddFormAMatProjectCommandHandler(AcademisationContext dbContext) : base(dbContext)
-		{
-		}
 	}
 }

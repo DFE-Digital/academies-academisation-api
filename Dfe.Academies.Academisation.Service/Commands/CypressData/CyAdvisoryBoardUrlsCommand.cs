@@ -4,22 +4,14 @@ using MediatR;
 namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 {
 	/// <summary>
-	/// The cy advisory board urls.
+	///     The cy advisory board urls.
 	/// </summary>
-	public class CyAdvisoryBoardUrls : CypressDataCommandAbstractBase, IRequest<CommandResult>
+	public class CyAdvisoryBoardUrlsCommand : CypressDataCommandAbstractBase, IRequest<CommandResult>
 	{
 		/// <summary>
-		/// xes the.
+		///     Gets the sql statements.
 		/// </summary>
-		private void x()
-		{
-
-		}
-
-		/// <summary>
-		/// Gets the sql statements.
-		/// </summary>
-		public override IEnumerable<(string, object[])> SqlStatements => new (string, object[])[]
+		public override IEnumerable<(string, object[])> SqlStatements => new[]
 		{
 			(@"update academisation.Project 
 			set LocalAuthorityInformationTemplateReturnedDate = '2023-01-01',
@@ -30,12 +22,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 
 
 		/// <summary>
-		/// Gets a value indicating whether command has valid arguments.
+		///     Gets a value indicating whether command has valid arguments.
 		/// </summary>
 		public override bool HasValidArguments => !string.IsNullOrWhiteSpace(Id);
 
 		/// <summary>
-		/// Gets or sets the id.
+		///     Gets or sets the id.
 		/// </summary>
 		public string? Id { get; set; }
 	}
