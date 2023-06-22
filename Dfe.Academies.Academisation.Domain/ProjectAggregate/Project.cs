@@ -136,7 +136,6 @@ public class Project : IProject
 			Urn = project.School.Urn,
 			SchoolName = project.School?.Name,
 			ProjectStatus = "Converter Pre-AO (C)",
-			//ProposedAcademyOpeningDate = project.School.OpeningDate,
 			TrustReferenceNumber = project.Trust?.ReferenceNumber,
 			NameOfTrust = project.Trust?.Name,
 			AcademyTypeAndRoute = "Sponsored",
