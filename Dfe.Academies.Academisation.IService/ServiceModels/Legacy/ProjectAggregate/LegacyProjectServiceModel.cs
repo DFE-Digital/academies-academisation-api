@@ -21,7 +21,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public DateTime? ApplicationReceivedDate { get; init; }
 		public DateTime? AssignedDate { get; init; }
 		public DateTime? HeadTeacherBoardDate { get; init; }
-		public DateTime? OpeningDate { get; init; }
 		public DateTime? BaselineDate { get; init; }
 		public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
 		public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
@@ -123,7 +122,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				   Nullable.Equals(ApplicationReceivedDate, other.ApplicationReceivedDate) &&
 				   Nullable.Equals(AssignedDate, other.AssignedDate) &&
 				   Nullable.Equals(HeadTeacherBoardDate, other.HeadTeacherBoardDate) &&
-				   Nullable.Equals(OpeningDate, other.OpeningDate) &&
 				   Nullable.Equals(BaselineDate, other.BaselineDate) &&
 				   Nullable.Equals(LocalAuthorityInformationTemplateSentDate,
 					   other.LocalAuthorityInformationTemplateSentDate) &&
@@ -259,7 +257,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(ApplicationReceivedDate);
 			hashCode.Add(AssignedDate);
 			hashCode.Add(HeadTeacherBoardDate);
-			hashCode.Add(OpeningDate);
 			hashCode.Add(BaselineDate);
 			hashCode.Add(LocalAuthorityInformationTemplateSentDate);
 			hashCode.Add(LocalAuthorityInformationTemplateReturnedDate);

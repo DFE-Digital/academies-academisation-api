@@ -219,6 +219,7 @@ public class ApplicationSubmitTests
 		Assert.Multiple(
 		() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
 		() => Assert.Equal(type, project.AcademyTypeAndRoute),
+		() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
 		() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
 		() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
 		() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
