@@ -17,7 +17,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public DateTime? ApplicationReceivedDate { get; init; }
 	public DateTime? AssignedDate { get; init; }
 	public DateTime? HeadTeacherBoardDate { get; init; }
-	public DateTime? OpeningDate { get; init; }
 	public DateTime? BaselineDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
@@ -119,7 +118,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   Nullable.Equals(ApplicationReceivedDate, other.ApplicationReceivedDate) &&
 			   Nullable.Equals(AssignedDate, other.AssignedDate) &&
 			   Nullable.Equals(HeadTeacherBoardDate, other.HeadTeacherBoardDate) &&
-			   Nullable.Equals(OpeningDate, other.OpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
+			   Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateSentDate,
 				   other.LocalAuthorityInformationTemplateSentDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateReturnedDate,
@@ -249,7 +248,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(ApplicationReceivedDate);
 		hashCode.Add(AssignedDate);
 		hashCode.Add(HeadTeacherBoardDate);
-		hashCode.Add(OpeningDate);
+		hashCode.Add(ProposedAcademyOpeningDate);
 		hashCode.Add(BaselineDate);
 		hashCode.Add(LocalAuthorityInformationTemplateSentDate);
 		hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);

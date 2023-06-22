@@ -25,7 +25,6 @@ internal static class LegacyProjectDetailsMapper
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate ?? existingProject.Details.ApplicationReceivedDate,
 			AssignedDate = detailsToUpdate.AssignedDate ?? existingProject.Details.AssignedDate,
 			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate.Equals(default(DateTime)) ? null : detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
-			OpeningDate = detailsToUpdate.OpeningDate ?? existingProject.Details.OpeningDate,
 			BaselineDate = detailsToUpdate.BaselineDate ?? existingProject.Details.BaselineDate,
 
 			// la summary page
