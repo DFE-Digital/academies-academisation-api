@@ -1,3 +1,7 @@
+## 9.0.1
+* Added migration to change projects with status of "APPROVED WITH CONDITIONS" to "Approved with conditions"
+
+---
 ## 9.0.0
 * Refactoring the command/command handlers to be consistent
 
