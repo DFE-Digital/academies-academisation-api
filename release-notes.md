@@ -1,4 +1,5 @@
 ## 9.0.1
+* Bug 132060 Added migration to move OpeningDate field from projects
 * Added migration to change projects with status of "APPROVED WITH CONDITIONS" to "Approved with conditions"
 
 ---
