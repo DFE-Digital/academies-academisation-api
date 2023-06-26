@@ -57,6 +57,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 
 			// Assert
 			Assert.NotNull(result);
+
 			result.Should().BeEquivalentTo(joinTrustDomainObj);
 		}
 

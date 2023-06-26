@@ -218,7 +218,6 @@ public class ApplicationSubmitTests
 	{
 		Assert.Multiple(
 		() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
-		() => Assert.Equal(DateTime.Today.AddMonths(6), project.OpeningDate),
 		() => Assert.Equal(type, project.AcademyTypeAndRoute),
 		() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedAcademyOpeningDate),
 		() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),

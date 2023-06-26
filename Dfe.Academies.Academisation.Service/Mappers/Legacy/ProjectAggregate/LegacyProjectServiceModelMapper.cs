@@ -20,7 +20,6 @@ internal static class LegacyProjectServiceModelMapper
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
 			AssignedDate = project.Details.AssignedDate,
 			HeadTeacherBoardDate = project.Details.HeadTeacherBoardDate,
-			OpeningDate = project.Details.OpeningDate,
 			BaselineDate = project.Details.BaselineDate,
 
 			// la summary page
