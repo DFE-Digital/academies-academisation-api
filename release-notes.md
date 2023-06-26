@@ -1,5 +1,5 @@
 ## 9.0.1
-* Fixed Bug 132060 : The 'proposed academy opening date' field will be populated with the 'ProposedAcademyOpeningDate' value to match changes made in the academisation API. On creation of a sponsored project the proposed opening date will no longer be populated with a six month arbitrary date.
+* Fixed Bug 132060 : Added Migration to remove the 'Opening Date' field from projects. The 'ProposedAcademyOpeningDate' field will now be used throughout the api.
 * Added migration to change projects with status of "APPROVED WITH CONDITIONS" to "Approved with conditions"
 
 ---
