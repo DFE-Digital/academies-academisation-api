@@ -1,5 +1,5 @@
 ## 9.0.1
-* Bug 132060 Added migration to remove OpeningDate field from projects
+* Fixed Bug 132060 :Added migration to remove 'OpeningDate' field from Projects. The 'ProposedAcadamyOpeningDate' field will be used throughout the api.
 * Added migration to change projects with status of "APPROVED WITH CONDITIONS" to "Approved with conditions"
 
 ---
