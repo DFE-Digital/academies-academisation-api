@@ -16,6 +16,7 @@ COPY ./Dfe.Academies.Academisation.Service/ ./Dfe.Academies.Academisation.Servic
 COPY ./Dfe.Academies.Academisation.WebApi/ ./Dfe.Academies.Academisation.WebApi/
 COPY ./Dfe.Academies.Academisation.sln/ ./Dfe.Academies.Academisation.sln
 
+RUN --mount=type=secret,id=github_token dotnet nuget add source --username USERNAME --password $(cat /run/secrets/github_token) --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DFE-Digital/index.json"
 RUN dotnet restore Dfe.Academies.Academisation.WebApi
 RUN dotnet build Dfe.Academies.Academisation.WebApi
 
