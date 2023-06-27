@@ -147,7 +147,20 @@ public class Project : IProject
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
 	}
+	public CreateResult CreateTestProject()
+	{
 
+		var projectDetails = new ProjectDetails
+		{
+			Urn = 10,
+			SchoolName = "Cypress Project",
+			ProjectStatus = "Converter Pre-AO (C)",
+			AcademyTypeAndRoute = "Sponsored",
+			ConversionSupportGrantAmount = 25000,
+			
+		};
+		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
 	public CommandResult Update(ProjectDetails detailsToUpdate)
 	{
 		if (Details.Urn != detailsToUpdate.Urn)

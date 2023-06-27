@@ -10,4 +10,5 @@ public interface IProject
 	public ProjectDetails Details { get; }
 
 	public CommandResult Update(ProjectDetails detailsToUpdate);
+	public CreateResult CreateTestProject();
 }

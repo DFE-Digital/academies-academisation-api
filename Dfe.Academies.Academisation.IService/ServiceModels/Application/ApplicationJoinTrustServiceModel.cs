@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Application
 {
