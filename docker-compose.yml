@@ -3,6 +3,8 @@ services:
   webapi:
     build:
       context: .
+      secrets:
+        - github_token
     command: /bin/bash -c "./docker-entrypoint.sh dotnet Dfe.Academies.Academisation.WebApi.dll"
     ports:
       - 80:80/tcp
