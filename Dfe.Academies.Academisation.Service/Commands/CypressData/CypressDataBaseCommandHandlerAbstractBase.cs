@@ -11,7 +11,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 	/// </summary>
 	public abstract class CypressDataBaseCommandHandlerAbstractBase
 	{
-		private readonly AcademisationContext _dbContext;
+		protected AcademisationContext DbContext { get; }
 
 		/// <summary>
 		///     Initializes a new instance of the <see cref="CypressDataBaseCommandHandlerAbstractBase" /> class.
@@ -19,7 +19,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		/// <param name="dbContext">The db context.</param>
 		protected CypressDataBaseCommandHandlerAbstractBase(AcademisationContext dbContext)
 		{
-			_dbContext = dbContext;
+			DbContext = dbContext;
 		}
 
 		/// <summary>
@@ -36,12 +36,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			if (!request.HasValidArguments)
 			{
 				return new BadRequestCommandResult();
-			}
-
-			await using IDbContextTransaction txn = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-			foreach ((string statement, object[] parameters) in request.SqlStatements)
-			{
-				await _dbContext.Database.ExecuteSqlRawAsync(statement, parameters, cancellationToken);
 			}
 
 			return new CommandSuccessResult();
