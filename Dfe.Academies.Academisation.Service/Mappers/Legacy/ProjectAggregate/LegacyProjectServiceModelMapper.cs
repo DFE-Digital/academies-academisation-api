@@ -20,7 +20,6 @@ internal static class LegacyProjectServiceModelMapper
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
 			AssignedDate = project.Details.AssignedDate,
 			HeadTeacherBoardDate = project.Details.HeadTeacherBoardDate,
-			OpeningDate = project.Details.OpeningDate,
 			BaselineDate = project.Details.BaselineDate,
 
 			// la summary page
@@ -87,7 +86,6 @@ internal static class LegacyProjectServiceModelMapper
 
 			// risk and issues
 			RisksAndIssues = project.Details.RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
 
 			// legal requirements

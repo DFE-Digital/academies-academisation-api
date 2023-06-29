@@ -46,8 +46,7 @@ public class Project : IProject
 			SchoolName = school.SchoolName,
 			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 			ProjectStatus = "Converter Pre-AO (C)",
-			ApplicationReceivedDate = application.ApplicationSubmittedDate,
-			OpeningDate = DateTime.Today.AddMonths(6),
+			ApplicationReceivedDate = application.ApplicationSubmittedDate,			
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
@@ -88,8 +87,7 @@ public class Project : IProject
 				SchoolName = school.Details.SchoolName,
 				ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 				ProjectStatus = "Converter Pre-AO (C)",
-				ApplicationReceivedDate = application.ApplicationSubmittedDate,
-				OpeningDate = DateTime.Today.AddMonths(6),
+				ApplicationReceivedDate = application.ApplicationSubmittedDate,				
 				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
 				AcademyTypeAndRoute = "Form a Mat",
 				ProposedAcademyOpeningDate = school.Details.ConversionTargetDate,
@@ -116,6 +114,8 @@ public class Project : IProject
 
 	public static CreateResult CreateSponsoredProject(SponsoredProject project)
 	{
+		ArgumentNullException.ThrowIfNull(project);
+
 		if (project.Trust == null)
 		{
 			return new CreateValidationErrorResult(new List<ValidationError>
@@ -136,12 +136,13 @@ public class Project : IProject
 			Urn = project.School.Urn,
 			SchoolName = project.School?.Name,
 			ProjectStatus = "Converter Pre-AO (C)",
-			OpeningDate = DateTime.Today.AddMonths(6),
 			TrustReferenceNumber = project.Trust?.ReferenceNumber,
 			NameOfTrust = project.Trust?.Name,
 			AcademyTypeAndRoute = "Sponsored",
 			ConversionSupportGrantAmount = 25000,
-			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No"
+			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
+			LocalAuthority = project.School?.LocalAuthorityName,
+			Region = project.School?.Region
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
@@ -167,8 +168,7 @@ public class Project : IProject
 			ProjectStatus = detailsToUpdate.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
 			AssignedDate = detailsToUpdate.AssignedDate,
-			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,
-			OpeningDate = detailsToUpdate.OpeningDate,
+			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,			
 			BaselineDate = detailsToUpdate.BaselineDate,
 
 			// la summary page
@@ -236,7 +236,6 @@ public class Project : IProject
 
 			// risk and issues
 			RisksAndIssues = detailsToUpdate.RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete,
 
 			// legal requirements

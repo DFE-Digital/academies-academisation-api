@@ -3,7 +3,7 @@ using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using MediatR;
 
-namespace Dfe.Academies.Academisation.IService.Commands.Application
+namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {
 	public record UpdateTrustKeyPersonCommand(
 		int ApplicationId,

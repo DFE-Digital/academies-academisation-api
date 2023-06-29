@@ -18,7 +18,6 @@ public class ProjectState : BaseEntity
 	public DateTime? ApplicationReceivedDate { get; set; }
 	public DateTime? AssignedDate { get; set; }
 	public DateTime? HeadTeacherBoardDate { get; set; }
-	public DateTime? OpeningDate { get; set; }
 	public DateTime? BaselineDate { get; set; }
 
 	//la summary page
@@ -86,7 +85,6 @@ public class ProjectState : BaseEntity
 
 	// risk and issues
 	public string? RisksAndIssues { get; set; }
-	public string? EqualitiesImpactAssessmentConsidered { get; set; }
 	public bool? RisksAndIssuesSectionComplete { get; set; }
 
 	// legal requirements
@@ -139,8 +137,7 @@ public class ProjectState : BaseEntity
 			ProjectStatus = ProjectStatus,
 			ApplicationReceivedDate = ApplicationReceivedDate,
 			AssignedDate = AssignedDate,
-			HeadTeacherBoardDate = HeadTeacherBoardDate,
-			OpeningDate = OpeningDate,
+			HeadTeacherBoardDate = HeadTeacherBoardDate,			
 			BaselineDate = BaselineDate,
 
 			// la summary page
@@ -208,7 +205,6 @@ public class ProjectState : BaseEntity
 
 			// risk and issues
 			RisksAndIssues = RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = RisksAndIssuesSectionComplete,
 
 			// legal requirements
@@ -268,7 +264,6 @@ public class ProjectState : BaseEntity
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
 			AssignedDate = project.Details.AssignedDate,
 			HeadTeacherBoardDate = project.Details.HeadTeacherBoardDate,
-			OpeningDate = project.Details.OpeningDate,
 			BaselineDate = project.Details.BaselineDate,
 
 			// la summary page
@@ -336,7 +331,6 @@ public class ProjectState : BaseEntity
 
 			// risk and issues
 			RisksAndIssues = project.Details.RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = project.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = project.Details.RisksAndIssuesSectionComplete,
 
 			// legal requirements

@@ -5,7 +5,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Application
 {
 	internal static class ApplicationCreateRequestModelMapper
 	{
-		internal static (ApplicationType, ContributorDetails) AsDomain(this ApplicationCreateRequestModel requestModel)
+		internal static (ApplicationType, ContributorDetails) AsDomain(this ApplicationCreateCommand requestModel)
 		{
 			ContributorDetails contributorDetails = new(
 				requestModel.Contributor.FirstName,

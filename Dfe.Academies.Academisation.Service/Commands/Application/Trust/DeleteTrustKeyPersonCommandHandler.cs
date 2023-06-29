@@ -1,10 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Application;
 using MediatR;
 using TrustKeyPerson = Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson;
 
-namespace Dfe.Academies.Academisation.Service.Commands.Application
+namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {
 	public class DeleteTrustKeyPersonCommandHandler : IRequestHandler<DeleteTrustKeyPersonCommand, CommandResult>
 	{
@@ -28,7 +27,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			}
 
 			var result = existingApplication.DeleteTrustKeyPerson(command.KeyPersonId);
-			
+
 			if (result is CommandValidationErrorResult)
 			{
 				return result;

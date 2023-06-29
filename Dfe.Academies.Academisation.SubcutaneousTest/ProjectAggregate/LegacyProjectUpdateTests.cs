@@ -45,7 +45,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
 			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
@@ -73,7 +73,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
 	{
 		// Arrange
-		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
 			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
@@ -103,7 +103,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new LegacyProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
 			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
 			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
 		var existingProject = _fixture.Create<ProjectState>();
@@ -113,7 +113,7 @@ public class ProjectUpdateTests
 
 		var updatedProject = new LegacyProjectServiceModel(existingProject.Id, existingProject.Urn)
 		{
-			ProjectStatus = "TestStatus", EqualitiesImpactAssessmentConsidered = "Yes sir"
+			ProjectStatus = "TestStatus"
 		};
 
 		// Act
@@ -127,7 +127,6 @@ public class ProjectUpdateTests
 		(_, LegacyProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
 
 		existingProject.ProjectStatus = updatedProject.ProjectStatus;
-		existingProject.EqualitiesImpactAssessmentConsidered = updatedProject.EqualitiesImpactAssessmentConsidered;
 
 		Assert.Multiple(
 					() => Assert.Equal(existingProject.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),

@@ -1,10 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Application;
 using MediatR;
 
-namespace Dfe.Academies.Academisation.Service.Commands.Application
+namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {
 	public class FormTrustCommandHandler : IRequestHandler<SetFormTrustDetailsCommand, CommandResult>
 	{

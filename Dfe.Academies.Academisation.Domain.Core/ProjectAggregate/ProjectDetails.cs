@@ -17,7 +17,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public DateTime? ApplicationReceivedDate { get; init; }
 	public DateTime? AssignedDate { get; init; }
 	public DateTime? HeadTeacherBoardDate { get; init; }
-	public DateTime? OpeningDate { get; init; }
 	public DateTime? BaselineDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
@@ -70,7 +69,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? RationaleForTrust { get; init; }
 	public bool? RationaleSectionComplete { get; init; }
 	public string? RisksAndIssues { get; init; }
-	public string? EqualitiesImpactAssessmentConsidered { get; init; }
 	public bool? RisksAndIssuesSectionComplete { get; init; }
 	public YesNoNotApplicable? GoverningBodyResolution { get; init; }
 	public YesNoNotApplicable? Consultation { get; init; }
@@ -120,7 +118,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   Nullable.Equals(ApplicationReceivedDate, other.ApplicationReceivedDate) &&
 			   Nullable.Equals(AssignedDate, other.AssignedDate) &&
 			   Nullable.Equals(HeadTeacherBoardDate, other.HeadTeacherBoardDate) &&
-			   Nullable.Equals(OpeningDate, other.OpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
+			   Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateSentDate,
 				   other.LocalAuthorityInformationTemplateSentDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateReturnedDate,
@@ -189,8 +187,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(RationaleForTrust, other.RationaleForTrust, StringComparison.InvariantCultureIgnoreCase) &&
 			   RationaleSectionComplete == other.RationaleSectionComplete &&
 			   string.Equals(RisksAndIssues, other.RisksAndIssues, StringComparison.InvariantCultureIgnoreCase) &&
-			   string.Equals(EqualitiesImpactAssessmentConsidered, other.EqualitiesImpactAssessmentConsidered,
-				   StringComparison.InvariantCultureIgnoreCase) &&
 			   RisksAndIssuesSectionComplete == other.RisksAndIssuesSectionComplete &&
 			   GoverningBodyResolution == other.GoverningBodyResolution && Consultation == other.Consultation &&
 			   DiocesanConsent == other.DiocesanConsent && FoundationConsent == other.FoundationConsent &&
@@ -252,7 +248,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(ApplicationReceivedDate);
 		hashCode.Add(AssignedDate);
 		hashCode.Add(HeadTeacherBoardDate);
-		hashCode.Add(OpeningDate);
+		hashCode.Add(ProposedAcademyOpeningDate);
 		hashCode.Add(BaselineDate);
 		hashCode.Add(LocalAuthorityInformationTemplateSentDate);
 		hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
@@ -302,7 +298,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(RationaleForTrust, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(RationaleSectionComplete);
 		hashCode.Add(RisksAndIssues, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(EqualitiesImpactAssessmentConsidered, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(RisksAndIssuesSectionComplete);
 		hashCode.Add(GoverningBodyResolution);
 		hashCode.Add(Consultation);

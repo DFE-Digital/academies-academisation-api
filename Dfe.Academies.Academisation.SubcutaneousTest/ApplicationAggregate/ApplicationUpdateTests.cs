@@ -29,12 +29,10 @@ public class ApplicationUpdateTests
 	private readonly Fixture _fixture = new();
 	private readonly Faker _faker = new();
 
-	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationQueryService _applicationQueryService;
-	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
 	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
-	private readonly IMediator _mediator;
+	private readonly Mock<IMediator> _mediator;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
@@ -47,20 +45,16 @@ public class ApplicationUpdateTests
 	{
 		_context = new TestApplicationContext().CreateContext();
 		_repo = new ApplicationRepository(_context, _mapper.Object);
-		_applicationUpdateCommand = new ApplicationUpdateCommand(_repo);
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _repo, _mapper.Object);
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_mediator = new Mock<IMediator>().Object;
+		_mediator = new Mock<IMediator>();
 
 		_applicationController = new(
-			_applicationCreateCommand,
 			_applicationQueryService,
-			_applicationUpdateCommand,
 			_trustQueryService,
-			_mediator,
+			_mediator.Object,
 			_applicationLogger);
 
 		_fixture.Customize<ApplicationContributorServiceModel>(composer =>
@@ -88,6 +82,15 @@ public class ApplicationUpdateTests
 		_fixture.Customize<LeaseServiceModel>(composer =>
 			composer
 				.With(s => s.LeaseId, 0));
+
+		var applicationUpdateCommandHandler = new ApplicationUpdateCommandHandler(_repo);
+
+		_mediator.Setup(x => x.Send(It.IsAny<ApplicationUpdateCommand>(), It.IsAny<CancellationToken>()))
+			.Returns<IRequest<CommandResult>, CancellationToken>(async (cmd, ct) =>
+			{
+
+				return await applicationUpdateCommandHandler.Handle((ApplicationUpdateCommand)cmd, ct);
+			});
 	}
 
 	[Fact(Skip = "Flaky test that's too volatile to be reliable")]
@@ -102,7 +105,7 @@ public class ApplicationUpdateTests
 		var applicationContributorServiceModel = _fixture.Create<ApplicationContributorServiceModel>();
 		var applicationSchoolServiceModel = _fixture.Create<ApplicationSchoolServiceModel>();
 
-		var applicationToUpdate = new ApplicationUpdateRequestModel(
+		var applicationToUpdate = new ApplicationUpdateCommand(
 			existingApplication.ApplicationId,
 			existingApplication.ApplicationType,
 			existingApplication.ApplicationStatus,
@@ -118,7 +121,7 @@ public class ApplicationUpdateTests
 				existingApplication.Schools.ToArray()[2] });
 
 		// act
-		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
+		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate, default);
 
 		// assert
 		DfeAssert.OkResult(updateResult);
@@ -169,7 +172,7 @@ public class ApplicationUpdateTests
 		var existingApplication = await CreateExistingApplication();
 		Assert.NotNull(existingApplication);
 
-		var applicationToUpdate = new ApplicationUpdateRequestModel(
+		var applicationToUpdate = new ApplicationUpdateCommand(
 			existingApplication.ApplicationId,
 			existingApplication.ApplicationType,
 			ApplicationStatus.Submitted,
@@ -177,7 +180,7 @@ public class ApplicationUpdateTests
 			existingApplication.Schools);
 
 		// act
-		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate);
+		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate, default);
 
 		// assert
 		DfeAssert.BadRequestObjectResult(updateResult, "ApplicationStatus");
@@ -185,9 +188,9 @@ public class ApplicationUpdateTests
 
 	private async Task<ApplicationServiceModel?> CreateExistingApplication()
 	{
-		ApplicationCreateRequestModel applicationForCreate = new(ApplicationType.FormAMat, _fixture.Create<ContributorRequestModel>());// with { ApplicationType = ApplicationType.FormAMat } ;
+		ApplicationCreateCommand applicationForCreate = new(ApplicationType.FormAMat, _fixture.Create<ContributorRequestModel>());// with { ApplicationType = ApplicationType.FormAMat } ;
 
-		var createResult = await _applicationCreateCommand.Execute(applicationForCreate);
+		var createResult = await new ApplicationCreateCommandHandler(_applicationFactory, _repo, _mapper.Object).Handle(applicationForCreate, default);
 		var createSuccessResult = Assert.IsType<CreateSuccessResult<ApplicationServiceModel>>(createResult);
 		int id = createSuccessResult.Payload.ApplicationId;
 		var schools = new List<ApplicationSchoolServiceModel>();
@@ -195,7 +198,7 @@ public class ApplicationUpdateTests
 		schools.Add(_fixture.Create<ApplicationSchoolServiceModel>());
 		schools.Add(_fixture.Create<ApplicationSchoolServiceModel>());
 
-		var applicationToUpdate = _fixture.Create<ApplicationUpdateRequestModel>() with
+		var applicationToUpdate = _fixture.Create<ApplicationUpdateCommand>() with
 		{
 			ApplicationId = createSuccessResult.Payload.ApplicationId,
 			ApplicationType = createSuccessResult.Payload.ApplicationType,
@@ -203,7 +206,7 @@ public class ApplicationUpdateTests
 			Schools = schools
 		};
 
-		await _applicationController.Update(createSuccessResult.Payload.ApplicationId, applicationToUpdate);
+		await _applicationController.Update(createSuccessResult.Payload.ApplicationId, applicationToUpdate, default);
 
 		return await _applicationQueryService.GetById(id);
 	}

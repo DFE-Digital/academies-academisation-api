@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoMapper;
 using Bogus;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.Repositories;
@@ -8,7 +9,6 @@ using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
@@ -28,12 +28,10 @@ public class ApplicationCreateTests
 	private readonly Fixture _fixture = new();
 	private readonly Faker _faker = new();
 
-	private readonly IApplicationCreateCommand _applicationCreateCommand;
 	private readonly IApplicationQueryService _applicationQueryService;
-	private readonly IApplicationUpdateCommand _applicationUpdateCommand;
-	private readonly ILogger<ApplicationController> _applicationLogger;
-	private readonly IMediator _mediator;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
+	private readonly ILogger<ApplicationController> _applicationLogger;
+	private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
 
 	private readonly AcademisationContext _context;
 	private readonly IApplicationRepository _repo;
@@ -45,13 +43,19 @@ public class ApplicationCreateTests
 		_context = new TestApplicationContext().CreateContext();
 		_repo = new ApplicationRepository(_context, _mapper.Object);
 
-		_applicationCreateCommand = new ApplicationCreateCommand(_applicationFactory, _repo, _mapper.Object);
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
-
-		_applicationUpdateCommand = new Mock<IApplicationUpdateCommand>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		_mediator = new Mock<IMediator>().Object;
+		
+
+		var applicationCreateCommandHandler = new ApplicationCreateCommandHandler(_applicationFactory, _repo, _mapper.Object);
+
+		_mediator.Setup(x => x.Send(It.IsAny<ApplicationCreateCommand>(), It.IsAny<CancellationToken>()))
+			.Returns<IRequest<CreateResult>, CancellationToken>(async (cmd, ct) =>
+			{
+
+				return await applicationCreateCommandHandler.Handle((ApplicationCreateCommand)cmd, ct);
+			});
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Internet.Email()));
@@ -62,18 +66,16 @@ public class ApplicationCreateTests
 	{
 		// arrange
 		var applicationController = new ApplicationController(
-			_applicationCreateCommand,
 			_applicationQueryService,
-			_applicationUpdateCommand,
 			_trustQueryService,
-			_mediator,
+			_mediator.Object,
 			_applicationLogger);
 
-		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
-			.Create<ApplicationCreateRequestModel>();
+		ApplicationCreateCommand applicationCreateRequestModel = _fixture
+			.Create<ApplicationCreateCommand>();
 
 		// act
-		var result = await applicationController.Post(applicationCreateRequestModel);
+		var result = await applicationController.Post(applicationCreateRequestModel, default);
 
 		// assert
 		(CreatedAtRouteResult createdAtRouteResult, _) = DfeAssert.CreatedAtRoute(result, "GetApplication");
@@ -109,21 +111,19 @@ public class ApplicationCreateTests
 	{
 		// arrange
 		var applicationController = new ApplicationController(
-			_applicationCreateCommand,
 			_applicationQueryService,
-			_applicationUpdateCommand,
 			_trustQueryService,
-			_mediator,
+			_mediator.Object,
 			_applicationLogger);
 
 		_fixture.Customize<ContributorRequestModel>(composer =>
 			composer.With(c => c.EmailAddress, _faker.Name.FullName()));
 
-		ApplicationCreateRequestModel applicationCreateRequestModel = _fixture
-			.Create<ApplicationCreateRequestModel>();
+		ApplicationCreateCommand applicationCreateRequestModel = _fixture
+			.Create<ApplicationCreateCommand>();
 
 		// act
-		var result = await applicationController.Post(applicationCreateRequestModel);
+		var result = await applicationController.Post(applicationCreateRequestModel, default);
 
 		// assert
 		Assert.IsType<BadRequestObjectResult>(result.Result);

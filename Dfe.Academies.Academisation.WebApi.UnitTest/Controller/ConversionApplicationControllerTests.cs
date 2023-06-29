@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -9,6 +10,7 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using FluentAssertions;
 using MediatR;
@@ -22,9 +24,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 	public class ApplicationControllerTests
 	{
 		private readonly Fixture _fixture = new();
-		private readonly Mock<IApplicationCreateCommand> _createCommandMock = new();
 		private readonly Mock<IApplicationQueryService> _getQueryMock = new();
-		private readonly Mock<IApplicationUpdateCommand> _updateCommandMock = new();
 		private readonly Mock<ILogger<ApplicationController>> _applicationLogger = new ();
 		private readonly Mock<IMediator> _mockMediator = new();
 		private readonly ApplicationController _subject;
@@ -32,21 +32,22 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 		public ApplicationControllerTests()
 		{
-			_subject = new ApplicationController(_createCommandMock.Object, _getQueryMock.Object, _updateCommandMock.Object, _trustQueryService.Object, _mockMediator.Object, _applicationLogger.Object);
+			_subject = new ApplicationController(_getQueryMock.Object, _trustQueryService.Object, _mockMediator.Object, _applicationLogger.Object);
 		}
 
 		[Fact]
 		public async Task Post___ServiceReturnsSuccess___SuccessResponseReturned()
 		{
 			// arrange
-			var requestModel = _fixture.Create<ApplicationCreateRequestModel>();
-
+			var requestModel = _fixture.Create<ApplicationCreateCommand>();
 			var applicationServiceModel = _fixture.Create<ApplicationServiceModel>();
-			_createCommandMock.Setup(x => x.Execute(requestModel))
+
+			var cancelationToken = default(CancellationToken);
+			_mockMediator.Setup(x => x.Send(requestModel, cancelationToken))
 				.ReturnsAsync(new CreateSuccessResult<ApplicationServiceModel>(applicationServiceModel));
 
 			// act
-			var result = await _subject.Post(requestModel);
+			var result = await _subject.Post(requestModel, cancelationToken);
 
 			// assert
 			var createdResult = Assert.IsType<CreatedAtRouteResult>(result.Result);
@@ -59,13 +60,15 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task Post___ServiceReturnsValidationError___BadRequestResponseReturned()
 		{
 			// arrange
-			var requestModel = _fixture.Create<ApplicationCreateRequestModel>();
+			var requestModel = _fixture.Create<ApplicationCreateCommand>();
 			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
-			_createCommandMock.Setup(x => x.Execute(requestModel))
+			
+			var cancelationToken = default(CancellationToken);
+			_mockMediator.Setup(x => x.Send(requestModel, cancelationToken))
 				.ReturnsAsync(new CreateValidationErrorResult(expectedValidationError));
 
 			// act
-			var result = await _subject.Post(requestModel);
+			var result = await _subject.Post(requestModel, cancelationToken);
 
 			// assert
 			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -79,7 +82,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationSubmitCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new NotFoundCommandResult());
 
 			// act
@@ -97,7 +100,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 			List<ValidationError> expectedValidationError = new();
 
-			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationSubmitCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationError));
 
 			// act
@@ -115,7 +118,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationSubmitCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CommandSuccessResult());
 
 			// act
@@ -132,7 +135,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 
 			List<ValidationError> expectedValidationError = new();
-			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationSubmitCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CreateValidationErrorResult(expectedValidationError));
 
 			// act
@@ -151,7 +154,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			int applicationId = _fixture.Create<int>();
 
 			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1, 1);
-			_mockMediator.Setup(x => x.Send(It.Is<SubmitApplicationCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationSubmitCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CreateSuccessResult<LegacyProjectServiceModel>(projectServiceModel));
 
 			// act
@@ -197,16 +200,37 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
-			var applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
+			var applicationServiceModel = _fixture.Create<ApplicationUpdateCommand>() with { ApplicationId = applicationId };
 
-			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
-				.ReturnsAsync(new CommandSuccessResult());
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationUpdateCommand>(cmd => cmd == applicationServiceModel), It.IsAny<CancellationToken>()))
+	.ReturnsAsync(new CommandSuccessResult());
 
 			// act
-			var result = await _subject.Update(applicationId, applicationServiceModel);
+			var result = await _subject.Update(applicationId, applicationServiceModel, default);
 
 			// assert
 			Assert.IsType<OkResult>(result);
+		}
+
+		[Fact]
+		public async Task IdsDoNotMatch___ValidationErrorResultReturned()
+		{
+			// arrange
+			int applicationId = _fixture.Create<int>();
+			var applicationServiceModel = _fixture.Create<ApplicationUpdateCommand>() with { ApplicationId = applicationId + 1 };
+
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationUpdateCommand>(cmd => cmd == applicationServiceModel), It.IsAny<CancellationToken>()))
+	.ReturnsAsync(new CommandSuccessResult());
+
+			// act
+			var result = await _subject.Update(applicationId, applicationServiceModel, default);
+
+			// Assert
+			Assert.IsType<BadRequestObjectResult>(result);
+			var errors = ((BadRequestObjectResult)result).Value as ReadOnlyCollection<ValidationError>;
+
+			Assert.True(errors?[0].ErrorMessage == "Ids must be the same");
+			Assert.True(errors?[0].PropertyName == "Id");
 		}
 
 		[Fact]
@@ -214,13 +238,13 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
-			var applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
+			var applicationServiceModel = _fixture.Create<ApplicationUpdateCommand>() with { ApplicationId = applicationId };
 
-			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
-				.ReturnsAsync(new NotFoundCommandResult());
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationUpdateCommand>(cmd => cmd == applicationServiceModel), It.IsAny<CancellationToken>()))
+	.ReturnsAsync(new NotFoundCommandResult());
 
 			// act
-			var result = await _subject.Update(applicationId, applicationServiceModel);
+			var result = await _subject.Update(applicationId, applicationServiceModel, default);
 
 			// assert
 			Assert.IsType<NotFoundResult>(result);
@@ -231,14 +255,14 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// arrange
 			int applicationId = _fixture.Create<int>();
-			var applicationServiceModel = _fixture.Create<ApplicationUpdateRequestModel>();
+			var applicationServiceModel = _fixture.Create<ApplicationUpdateCommand>() with { ApplicationId = applicationId };
 
 			var expectedValidationError = new List<ValidationError>() { new ValidationError("PropertyName", "Error message") };
-			_updateCommandMock.Setup(x => x.Execute(applicationId, applicationServiceModel))
+			_mockMediator.Setup(x => x.Send(It.Is<ApplicationUpdateCommand>(cmd => cmd == applicationServiceModel), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationError));
 
 			// act
-			var result = await _subject.Update(applicationId, applicationServiceModel);
+			var result = await _subject.Update(applicationId, applicationServiceModel, default);
 
 			// assert
 			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);

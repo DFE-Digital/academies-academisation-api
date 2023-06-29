@@ -42,10 +42,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
 				.Returns(new CreateSuccessResult<Application>(app));
 
-			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _repo.Object, _mockMapper.Object);
+			ApplicationCreateCommandHandler subject = new(_applicationFactoryMock.Object, _repo.Object, _mockMapper.Object);
 
 			// act
-			var result = await subject.Execute(applicationCreateRequestModel);
+			var result = await subject.Handle(applicationCreateRequestModel, default);
 
 			// assert
 			_repo.Verify(x => x.Insert(It.Is<Application>(y => y == app)), Times.Once());
@@ -68,10 +68,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				.Setup(x => x.Create(It.IsAny<ApplicationType>(), It.IsAny<ContributorDetails>()))
 				.Returns(new CreateValidationErrorResult(new List<ValidationError>()));
 
-			ApplicationCreateCommand subject = new(_applicationFactoryMock.Object, _repo.Object, _mockMapper.Object);
+			ApplicationCreateCommandHandler subject = new(_applicationFactoryMock.Object, _repo.Object, _mockMapper.Object);
 
 			// act
-			var result = await subject.Execute(applicationCreateRequestModel);
+			var result = await subject.Handle(applicationCreateRequestModel, default);
 
 			// assert
 			_repo

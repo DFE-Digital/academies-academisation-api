@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Core;
 using MediatR;
 
-namespace Dfe.Academies.Academisation.IService.Commands.Application
+namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {
 	public record SetFormTrustDetailsCommand(
 		int applicationId,

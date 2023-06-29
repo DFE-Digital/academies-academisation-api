@@ -25,12 +25,11 @@ internal static class LegacyProjectDetailsMapper
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate ?? existingProject.Details.ApplicationReceivedDate,
 			AssignedDate = detailsToUpdate.AssignedDate ?? existingProject.Details.AssignedDate,
 			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate.Equals(default(DateTime)) ? null : detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
-			OpeningDate = detailsToUpdate.OpeningDate ?? existingProject.Details.OpeningDate,
 			BaselineDate = detailsToUpdate.BaselineDate ?? existingProject.Details.BaselineDate,
 
 			// la summary page
-			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate ?? existingProject.Details.LocalAuthorityInformationTemplateSentDate,
-			LocalAuthorityInformationTemplateReturnedDate = detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate ?? existingProject.Details.LocalAuthorityInformationTemplateReturnedDate,
+			LocalAuthorityInformationTemplateSentDate = detailsToUpdate.LocalAuthorityInformationTemplateSentDate.Equals(default(DateTime)) ? null : detailsToUpdate.LocalAuthorityInformationTemplateSentDate ?? existingProject.Details.LocalAuthorityInformationTemplateSentDate,
+			LocalAuthorityInformationTemplateReturnedDate = detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate.Equals(default(DateTime)) ? null : detailsToUpdate.LocalAuthorityInformationTemplateReturnedDate ?? existingProject.Details.LocalAuthorityInformationTemplateReturnedDate,
 			LocalAuthorityInformationTemplateComments = detailsToUpdate.LocalAuthorityInformationTemplateComments ?? existingProject.Details.LocalAuthorityInformationTemplateComments,
 			LocalAuthorityInformationTemplateLink = detailsToUpdate.LocalAuthorityInformationTemplateLink ?? existingProject.Details.LocalAuthorityInformationTemplateLink,
 			LocalAuthorityInformationTemplateSectionComplete = detailsToUpdate.LocalAuthorityInformationTemplateSectionComplete ?? existingProject.Details.LocalAuthorityInformationTemplateSectionComplete,
@@ -93,7 +92,6 @@ internal static class LegacyProjectDetailsMapper
 
 			// risk and issues
 			RisksAndIssues = detailsToUpdate.RisksAndIssues ?? existingProject.Details.RisksAndIssues,
-			EqualitiesImpactAssessmentConsidered = detailsToUpdate.EqualitiesImpactAssessmentConsidered ?? existingProject.Details.EqualitiesImpactAssessmentConsidered,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete ?? existingProject.Details.RisksAndIssuesSectionComplete,
 
 			// legal requirements
