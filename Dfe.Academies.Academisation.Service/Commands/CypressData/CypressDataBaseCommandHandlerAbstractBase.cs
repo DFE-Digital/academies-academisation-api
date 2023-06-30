@@ -22,23 +22,5 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			DbContext = dbContext;
 		}
 
-		/// <summary>
-		///     Handles the command by executing each sql statement within a transaction, if the command has valid arguments
-		/// </summary>
-		/// <param name="request">The request.</param>
-		/// <param name="cancellationToken">The cancellation token.</param>
-		/// <returns>A Task.</returns>
-		public async Task<CommandResult> Handle(CypressDataCommandAbstractBase request,
-			CancellationToken cancellationToken)
-		{
-			_ = Guard.Against.Null(request);
-
-			if (!request.HasValidArguments)
-			{
-				return new BadRequestCommandResult();
-			}
-
-			return new CommandSuccessResult();
-		}
 	}
 }
