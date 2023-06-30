@@ -6,26 +6,27 @@ namespace Dfe.Academies.Academisation.WebApi.Middleware
 	public class CypressKeyValidator : ICypressKeyValidator
 	{
 		private readonly IHostEnvironment _environment;
-		private Guid _cypressKey;
+		private readonly Guid _cypressKey;
 
 		public CypressKeyValidator(IConfiguration config, IHostEnvironment environment)
 		{
 			_environment = environment;
 
-			var configValue = config.GetValue<string>("CypressEndpointsKey");
-			if (configValue != null)
+			string? configValue = config.GetValue<string>("CypressEndpointsKey");
+			if (configValue == null)
 			{
-				if (Guid.TryParse(configValue, out _cypressKey) == false)
-				{
-					_cypressKey = Guid.Empty;
-				}
+				return;
+			}
+
+			if (Guid.TryParse(configValue, out _cypressKey) == false)
+			{
+				_cypressKey = Guid.Empty;
 			}
 		}
 
 		/// <summary>
 		/// Returns true if all conditions of using the cypress key to gain access to this controllers functionality, passes
 		/// </summary>
-		/// <param name="cypressKey">The cypress key.</param>
 		/// <param name="userKey">The user key.</param>
 		/// <returns>A bool.</returns>
 		public bool IsKeyValid(string userKey)
