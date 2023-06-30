@@ -134,6 +134,8 @@ builder.Services.AddScoped<IEstablishmentGetDataQuery, EstablishmentGetDataQuery
 builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 
+
+
 //utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
@@ -141,6 +143,7 @@ builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 
 //Validators
+builder.Services.AddSingleton<ICypressKeyValidator, CypressKeyValidator>();
 
 builder.Services.AddDbContext<AcademisationContext>(options =>
 	{
@@ -175,6 +178,7 @@ builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateL
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
+
 
 builder.Services.AddHostedService<EnrichProjectService>();
 
@@ -213,6 +217,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
+app.UseMiddleware<CypressApiKeyMiddleware>();
 app.UseMiddleware<AddCorrelationIdMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 
