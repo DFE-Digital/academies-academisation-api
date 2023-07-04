@@ -106,7 +106,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			};
 
 			// Add the new project to the Projects DbSet
-			DbContext.Projects.Add(newProject);
+			DbContext.Projects.Add(newProjectOne);
+			DbContext.Projects.Add(newProjectTwo);
 
 			// Save changes to the database
 			await DbContext.SaveChangesAsync(cancellationToken);
