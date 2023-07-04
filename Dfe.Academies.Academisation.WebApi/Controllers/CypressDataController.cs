@@ -22,6 +22,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
 			return Ok(result);
 		}
-		
+		[HttpPost]
+		[Route("add-sponsored-project.cy")]
+		public async Task<IActionResult> AddSponsoredProject([FromBody] CyAddVoluntaryProjectCommand command, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			return Ok(result);
+		}
+		[HttpPost]
+		[Route("add-form-a-mat-project.cy")]
+		public async Task<IActionResult> AddFormAMatProject([FromBody] CyAddVoluntaryProjectCommand command, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			return Ok(result);
+		}
+
 	}
 }
