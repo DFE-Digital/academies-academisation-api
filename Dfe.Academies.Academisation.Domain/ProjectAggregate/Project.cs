@@ -49,7 +49,8 @@ public class Project : IProject
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
-			ProposedAcademyOpeningDate = NearestFirstOfMonth(school.ConversionTargetDate),
+			// Temp hotfix
+			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
@@ -89,7 +90,8 @@ public class Project : IProject
 				ApplicationReceivedDate = application.ApplicationSubmittedDate,				
 				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
 				AcademyTypeAndRoute = "Form a Mat",
-				ProposedAcademyOpeningDate = NearestFirstOfMonth(school.Details.ConversionTargetDate),
+				// Temp hotfix
+				ProposedAcademyOpeningDate = null,
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 				PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
@@ -301,19 +303,6 @@ public class Project : IProject
 	{
 		if (user == null) return null;
 		return new User(user.Id, user.FullName, user.EmailAddress);
-	}
-	// Temporary hotfix to flatten date 
-	public static DateTime? NearestFirstOfMonth(DateTime? date)
-	{
-		if (!date.HasValue)
-		{
-			return null;
-		}
-
-		// If the day is 15 or later, return the first day of the next month.
-		// Otherwise, return the first day of the current month.
-		return date.Value.Day >= 15 ? new DateTime(date.Value.Year, date.Value.Month, 1).AddMonths(1)
-			: new DateTime(date.Value.Year, date.Value.Month, 1);
 	}
 }
 
