@@ -1,10 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-public interface IApplication
+public interface IApplication : IAggregateRoot
 {
 	int ApplicationId { get; }
 	int Id { get; }

@@ -10,4 +10,5 @@ public record ApplicationUpdateCommand(
 	ApplicationType ApplicationType,
 	ApplicationStatus ApplicationStatus,
 	IReadOnlyCollection<ApplicationContributorServiceModel> Contributors,
-	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools) : IRequest<CommandResult>;
+	IReadOnlyCollection<ApplicationSchoolServiceModel> Schools,
+	Guid Version) : IRequest<CommandResult>;

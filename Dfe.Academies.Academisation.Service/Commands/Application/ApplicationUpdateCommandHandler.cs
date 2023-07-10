@@ -58,7 +58,7 @@ public class ApplicationUpdateCommandHandler : IRequestHandler<ApplicationUpdate
 		{
 			throw new NotImplementedException();
 		}
-		_applicationRepository.Update(existingApplication);
+		_applicationRepository.ConcurrencySafeUpdate(existingApplication, request.Version);
 		await _applicationRepository.UnitOfWork.SaveChangesAsync();
 		return result;
 	}

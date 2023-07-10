@@ -84,6 +84,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 
 	public Guid EntityId { get => DynamicsApplicationId ?? Guid.Empty; }
 
+	public Guid Version { get; private set; }
+
 	public CommandResult Update(
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,

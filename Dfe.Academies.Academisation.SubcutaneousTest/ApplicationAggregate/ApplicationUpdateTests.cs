@@ -118,7 +118,7 @@ public class ApplicationUpdateTests
 			new List<ApplicationSchoolServiceModel> {          
 				existingApplication.Schools.ToArray()[0],
 				applicationSchoolServiceModel,
-				existingApplication.Schools.ToArray()[2] });
+				existingApplication.Schools.ToArray()[2] }, Guid.NewGuid());
 
 		// act
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate, default);
@@ -177,7 +177,7 @@ public class ApplicationUpdateTests
 			existingApplication.ApplicationType,
 			ApplicationStatus.Submitted,
 			existingApplication.Contributors,
-			existingApplication.Schools);
+			existingApplication.Schools, Guid.NewGuid());
 
 		// act
 		var updateResult = await _applicationController.Update(existingApplication.ApplicationId, applicationToUpdate, default);

@@ -9,6 +9,8 @@ public interface IApplicationRepository : IRepository<Application>
 	public Task<IApplication?> GetByIdAsync(object id);
 	public Task Insert(IApplication obj);
 	public void Update(IApplication obj);
+
+	public void ConcurrencySafeUpdate(IApplication obj, Guid concurrencyToken);
 	public Task Delete(object id);
 	public Task<List<IApplication>> GetByUserEmail(string userEmail);
 	public Task<Application?> GetByApplicationReference(string applicationReference);

@@ -133,7 +133,7 @@ public class ApplicationSubmitTests
 		var school = _fixture.Create<ApplicationSchoolServiceModel>();
 
 		var updateRequest = new ApplicationUpdateCommand(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors,
-			new List<ApplicationSchoolServiceModel> { school });
+			new List<ApplicationSchoolServiceModel> { school }, Guid.NewGuid());
 
 		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest, default);
 		DfeAssert.OkResult(updateResult);
@@ -186,7 +186,7 @@ public class ApplicationSubmitTests
 			createdPayload.ApplicationStatus,
 			createdPayload.Contributors,
 			new List<ApplicationSchoolServiceModel>
-				{ firstSchool, secondSchool, thirdSchool });
+				{ firstSchool, secondSchool, thirdSchool }, Guid.NewGuid());
 
 		var updateResult = await applicationController.Update(updateRequest.ApplicationId, updateRequest, default);
 		DfeAssert.OkResult(updateResult);

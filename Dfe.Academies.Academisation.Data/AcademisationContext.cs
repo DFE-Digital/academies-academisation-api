@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dfe.Academies.Academisation.Data;
@@ -191,6 +192,11 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	void ConfigureApplication(EntityTypeBuilder<Application> applicationConfiguration)
 	{
 		applicationConfiguration.ToTable("ConversionApplication", DEFAULT_SCHEMA);
+
+		applicationConfiguration
+			.Property(e => e.Version)
+			.IsConcurrencyToken();
+
 		applicationConfiguration
 		.Property(e => e.ApplicationType)
 			.HasConversion<string>();

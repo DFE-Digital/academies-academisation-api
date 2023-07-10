@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
@@ -77,6 +78,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.AsQueryable();
 
 			return x;
+		}
+
+		public void ConcurrencySafeUpdate(IApplication obj, Guid concurrencyToken)
+		{
+			_context.Entry(obj).Property("Version").OriginalValue = concurrencyToken;
+			_context.Entry(obj).Property("Version").CurrentValue = Guid.NewGuid();
+
+			this.Update(obj);
 		}
 	}
 }
