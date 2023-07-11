@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Json;
 using Dfe.Academies.Academisation.IData.Establishment;
+using Dfe.Academies.Academisation.IData.Http;
+using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Data.Establishment
@@ -7,18 +9,20 @@ namespace Dfe.Academies.Academisation.Data.Establishment
 	public class EstablishmentGetDataQuery : IEstablishmentGetDataQuery
 	{
 		private readonly ILogger<EstablishmentGetDataQuery> _logger;
-		private readonly IHttpClientFactory _httpClientFactory;
+		private readonly IAcademiesApiClientFactory _academiesApiClientFactory;
+		private readonly ICorrelationContext _correlationContext;
 
-		public EstablishmentGetDataQuery(ILogger<EstablishmentGetDataQuery> logger, IHttpClientFactory httpClientFactory)
+		public EstablishmentGetDataQuery(ILogger<EstablishmentGetDataQuery> logger, IAcademiesApiClientFactory academiesApiClientFactory, ICorrelationContext correlationContext)
 		{
 			_logger = logger;
-			_httpClientFactory = httpClientFactory;
+			_academiesApiClientFactory = academiesApiClientFactory;
+			_correlationContext = correlationContext;
 		}
 
 		public async Task<IData.Establishment.Establishment?> GetEstablishment(int urn)
 		{
-			var httpClient = _httpClientFactory.CreateClient("AcademiesApi");
-			var response = await httpClient.GetAsync($"/establishment/urn/{urn}");
+			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var response = await client.GetAsync($"/establishment/urn/{urn}");
 
 			if (!response.IsSuccessStatusCode)
 			{
