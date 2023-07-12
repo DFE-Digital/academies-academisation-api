@@ -5,9 +5,10 @@ using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.IData.Establishment;
+using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
@@ -19,6 +20,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 	{
 		private readonly AcademisationContext _context;
 		private readonly Mock<IHttpClientFactory> _httpClientFactory;
+		private readonly Mock<IAcademiesApiClientFactory> _academiesApiClientFactory;
 		private readonly MockHttpMessageHandler _mockHttpMessageHandler = new MockHttpMessageHandler();
 		private readonly EnrichProjectCommand _subject;
 
@@ -38,11 +40,18 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			httpClient.BaseAddress = new Uri("http://localhost");
 			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
 
+			var correlationContext = new CorrelationContext();
+			correlationContext.SetContext(Guid.NewGuid());
+
+			_academiesApiClientFactory = new Mock<IAcademiesApiClientFactory>();
+			_academiesApiClientFactory.Setup(x => x.Create(correlationContext)).Returns(httpClient);
+
+
 			// create command
 			_subject = new EnrichProjectCommand(
 				Mock.Of<ILogger<EnrichProjectCommand>>(),
 				new IncompleteProjectsGetDataQuery(_context),
-				new EstablishmentGetDataQuery(Mock.Of<ILogger<EstablishmentGetDataQuery>>(), _httpClientFactory.Object),
+				new EstablishmentGetDataQuery(Mock.Of<ILogger<EstablishmentGetDataQuery>>(), _academiesApiClientFactory.Object, correlationContext),
 				new ProjectUpdateDataCommand(_context));
 		}
 
