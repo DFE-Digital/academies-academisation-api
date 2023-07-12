@@ -30,12 +30,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		public async Task<CommandResult> Handle(CyAddFormAMatProjectCommand request, CancellationToken cancellationToken)
 		{
 			// Define the project name
-			const string projectOneName = "Cypress Project One";
+			const string projectOneName = "Cypress Project";
 			const string projectTwoName = "Cypress Project Two";
 
 			// Find the project
 			var existingFirstProject = await DbContext.Projects
-				.FirstOrDefaultAsync(p => p.SchoolName == projectOneName, cancellationToken)
+				.FirstOrDefaultAsync(p => p.SchoolName == projectOneName, cancellationToken);
 			var existingSecondProject = await DbContext.Projects
 				.FirstOrDefaultAsync(p => p.SchoolName == projectTwoName, cancellationToken);
 
@@ -50,12 +50,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				SchoolName = projectOneName,
 				Urn = 139292,
 				ProjectStatus = "Approved with conditions",
+				ApplicationReferenceNumber = "A2B_10001",
 				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
 				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
 				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
 				RecommendationForProject = "Approve",
 				AcademyOrderRequired = "Yes",
-				AcademyTypeAndRoute = "FormAMat",
+				AcademyTypeAndRoute = "Form a Mat",
 				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = "60673",
@@ -80,12 +81,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				SchoolName = projectTwoName,
 				Urn = 139292,
 				ProjectStatus = "Approved with conditions",
+				ApplicationReferenceNumber = "A2B_10001",
 				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
 				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
 				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
 				RecommendationForProject = "Approve",
 				AcademyOrderRequired = "Yes",
-				AcademyTypeAndRoute = "FormAMat",
+				AcademyTypeAndRoute = "Form a Mat",
 				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = "60673",
