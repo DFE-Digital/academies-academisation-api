@@ -159,9 +159,21 @@ variable "existing_network_watcher_resource_group_name" {
   type        = string
 }
 
+variable "container_apps_allow_ips_inbound" {
+  description = "Restricts access to the Container Apps by creating a network security group rule that only allow inbound traffic from the provided list of IPs"
+  type        = list(string)
+  default     = []
+}
+
 variable "enable_dns_zone" {
   description = "Conditionally create a DNS zone"
   type        = bool
+}
+
+variable "cdn_frontdoor_forwarding_protocol" {
+  description = "Azure CDN Front Door forwarding protocol"
+  type        = string
+  default     = "HttpsOnly"
 }
 
 variable "dns_zone_domain_name" {
