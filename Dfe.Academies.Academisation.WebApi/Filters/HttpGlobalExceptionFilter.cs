@@ -1,10 +1,12 @@
-﻿using System.Net;
+﻿using System.Data;
+using System.Net;
 using Dfe.Academies.Academisation.Domain.Exceptions;
 using Dfe.Academies.Academisation.WebApi.ActionResults;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.Extensions.Hosting.IHostingEnvironment;
 
 namespace Dfe.Academies.Academisation.WebApi.Filters
@@ -27,7 +29,7 @@ namespace Dfe.Academies.Academisation.WebApi.Filters
 				context.Exception.Message);
 
 			if (context.Exception.GetType() == typeof(ApplicationDomainException)
-			    && context.Exception.InnerException?.GetType() == typeof(ValidationException) )
+				&& context.Exception.InnerException?.GetType() == typeof(ValidationException))
 			{
 				var problemDetails = new ValidationProblemDetails()
 				{
@@ -35,12 +37,17 @@ namespace Dfe.Academies.Academisation.WebApi.Filters
 					Status = StatusCodes.Status400BadRequest,
 					Detail = "Please refer to the errors property for additional details."
 				};
-				
-				problemDetails.Errors.Add("DomainValidations", ((context.Exception.InnerException as ValidationException)!).Errors.Select(x => x.ErrorMessage.ToString()).ToArray());	
-				
+
+				problemDetails.Errors.Add("DomainValidations", ((context.Exception.InnerException as ValidationException)!).Errors.Select(x => x.ErrorMessage.ToString()).ToArray());
+
 
 				context.Result = new BadRequestObjectResult(problemDetails);
 				context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+			}
+			else if (context.Exception.GetType() == typeof(DbUpdateConcurrencyException))
+			{
+				context.Result = new BadRequestObjectResult(context.Exception.Message);
+				context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
 			}
 			else
 			{
