@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.WebApi.Filters
 			}
 			else if (context.Exception.GetType() == typeof(DbUpdateConcurrencyException))
 			{
-				context.Result = new BadRequestObjectResult(context.Exception.Message);
+				context.Result = new ConflictObjectResult(context.Exception.Message);
 				context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
 			}
 			else
