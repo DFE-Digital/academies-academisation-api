@@ -26,7 +26,6 @@ public class Project : IProject
 
 	public ProjectDetails Details { get; private set; }
 
-
 	public static CreateResult Create(IApplication application)
 	{
 		if (application.ApplicationType != ApplicationType.JoinAMat)
@@ -50,7 +49,8 @@ public class Project : IProject
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
-			ProposedAcademyOpeningDate = school.ConversionTargetDate,
+			// Temp hotfix
+			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
@@ -90,7 +90,8 @@ public class Project : IProject
 				ApplicationReceivedDate = application.ApplicationSubmittedDate,				
 				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
 				AcademyTypeAndRoute = "Form a Mat",
-				ProposedAcademyOpeningDate = school.Details.ConversionTargetDate,
+				// Temp hotfix
+				ProposedAcademyOpeningDate = null,
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 				PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
@@ -304,3 +305,5 @@ public class Project : IProject
 		return new User(user.Id, user.FullName, user.EmailAddress);
 	}
 }
+
+
