@@ -3,7 +3,6 @@ using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using ApplicationAggregate = Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using CoreApplicationAggregate = Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 	public class CyAddVoluntaryProjectCommandHandler : CypressDataBaseCommandHandlerAbstractBase,
 		IRequestHandler<CyAddVoluntaryProjectCommand, CommandResult>
 	{
-
 		private readonly IApplicationFactory _domainFactory;
 
 		/// <summary>
@@ -35,9 +33,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		/// <param name="cancellationToken">The cancellation token.</param>
 		/// <returns>A Task.</returns>
 		public async Task<CommandResult> Handle(CyAddVoluntaryProjectCommand request, CancellationToken cancellationToken)
-		{
-
-			 var contributor = new CoreApplicationAggregate.ContributorDetails
+		{		
+			//create test contributor	 
+			var contributor = new CoreApplicationAggregate.ContributorDetails
 			(
             "FirstName",
             "LastName",
@@ -46,18 +44,19 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
              null
 			);
 
+			//create new application using the application factory
 			var result = _domainFactory.Create(CoreApplicationAggregate.ApplicationType.JoinAMat, contributor);
 
 			if (result is not CreateSuccessResult<Domain.ApplicationAggregate.Application> domainSuccessResult)
 			{
 			    throw new NotImplementedException("Other CreateResult types not expected when creating cypress application data");
-		     }
+		    }
 
-		    // Find the project
+		    // Find the application
 			var existingApplication = await DbContext.Applications 
 				.FirstOrDefaultAsync(a => a.EntityId == domainSuccessResult.Payload.EntityId, cancellationToken);
 
-				// If the project exists, remove it
+			// If the applicationa exists, remove it
 			if (existingApplication != null)
 			{
 				DbContext.Applications.Remove(existingApplication);

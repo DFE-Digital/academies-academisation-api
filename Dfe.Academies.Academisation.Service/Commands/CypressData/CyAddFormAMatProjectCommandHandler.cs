@@ -1,6 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using CoreApplicationAggregate = Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +16,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		IRequestHandler<CyAddFormAMatProjectCommand, CommandResult>
 	{
 
+		private readonly IApplicationFactory _domainFactory;
 		/// <summary>
 		///     Initializes a new instance of the <see cref="CyAddFormAMatProjectCommandHandler" /> class.
 		/// </summary>
 		/// <param name="dbContext">The db context.</param>
-		public CyAddFormAMatProjectCommandHandler(AcademisationContext dbContext) : base(dbContext)
+		public CyAddFormAMatProjectCommandHandler(IApplicationFactory domainFactory, AcademisationContext dbContext) : base(dbContext)
 		{
+			_domainFactory = domainFactory;
 		}
 
 		/// <summary>
@@ -29,6 +34,34 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		/// <returns>A Task.</returns>
 		public async Task<CommandResult> Handle(CyAddFormAMatProjectCommand request, CancellationToken cancellationToken)
 		{
+			//create test contributor
+			var contributor = new CoreApplicationAggregate.ContributorDetails
+			(
+            "FirstName",
+            "LastName",
+            "email@address.com", 
+             CoreApplicationAggregate.ContributorRole.ChairOfGovernors, 
+             null
+			);
+
+			//create new application using the application factory
+			var result = _domainFactory.Create(CoreApplicationAggregate.ApplicationType.FormAMat, contributor);
+
+			if (result is not CreateSuccessResult<Domain.ApplicationAggregate.Application> domainSuccessResult)
+			{
+			    throw new NotImplementedException("Other CreateResult types not expected when creating cypress application data");
+		    }
+
+		    // Find the application
+			var existingApplication = await DbContext.Applications 
+				.FirstOrDefaultAsync(a => a.EntityId == domainSuccessResult.Payload.EntityId, cancellationToken);
+
+			// If the applicationa exists, remove it
+			if (existingApplication != null)
+			{
+				DbContext.Applications.Remove(existingApplication);
+			}
+
 			// Define the project name
 			const string projectOneName = "Cypress Project";
 			const string projectTwoName = "Cypress Project Two";
