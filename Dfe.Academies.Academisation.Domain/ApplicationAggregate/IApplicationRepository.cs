@@ -12,4 +12,5 @@ public interface IApplicationRepository : IRepository<Application>
 	public Task Delete(object id);
 	public Task<List<IApplication>> GetByUserEmail(string userEmail);
 	public Task<Application?> GetByApplicationReference(string applicationReference);
+	public Task SoftDelete(int id);
 }

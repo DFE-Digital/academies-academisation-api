@@ -20,6 +20,7 @@ internal static class ApplicationServiceModelMapper
 			mapper.Map<ApplicationFormTrustServiceModel>(application.FormTrust),
 			application.ApplicationSubmittedDate,
 			application.ApplicationReference,
-			application.EntityId);
+			application.EntityId,
+			application.DeletedAt);
 	}
 }
