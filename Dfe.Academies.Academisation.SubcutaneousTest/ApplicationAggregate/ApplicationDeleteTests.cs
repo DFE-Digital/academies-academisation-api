@@ -122,7 +122,7 @@ public class ApplicationDeleteTests
 	}
 
 	[Fact]
-	public async Task JoinAMatApplicationExists___ApplicationIsSubmitted_And_ProjectIsCreated()
+	public async Task JoinAMatApplicationExists___ApplicationIsDeleted()
 	{
 		// Arrange
 		var applicationController = new ApplicationController(
@@ -146,7 +146,7 @@ public class ApplicationDeleteTests
 	}
 
 	[Fact]
-	public async Task FormAMatApplicationExists___ApplicationIsSubmitted_And_ProjectsAreCreated()
+	public async Task FormAMatApplicationExists___ApplicationIsDeleted()
 	{
 		// Arrange
 		var applicationController = new ApplicationController(
