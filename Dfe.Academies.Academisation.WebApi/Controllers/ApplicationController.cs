@@ -231,5 +231,23 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var result = await _applicationQueryService.GetAllApplications();
 			return Ok(result);
 		}
+
+		[HttpPut("{applicationId}/delete-application", Name = "DeleteApplication")]
+		public async Task<ActionResult> DeleteApplication(int applicationId)
+		{
+			_logger.LogInformation($"Deleting application: {applicationId}");
+			
+			var result = await _mediator.Send(new ApplicationDeleteCommand(applicationId)).ConfigureAwait(false);
+
+				return result switch
+			{
+				CommandSuccessResult => Ok($"Application:{applicationId} successfully deleted"),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
+
+		
 }

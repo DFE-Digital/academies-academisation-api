@@ -29,6 +29,8 @@ public interface IApplication
 	/// </summary>
 	string? ApplicationReference { get; set; }
 
+	DateTime? DeletedAt  { get; set; }
+
 	CommandResult Update(
 		ApplicationType applicationType,
 		ApplicationStatus applicationStatus,
@@ -56,6 +58,7 @@ public interface IApplication
 	CommandResult UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 	CommandResult DeleteTrustKeyPerson(int keyPersonId);
 	CommandResult DeleteSchool(int urn);
+	CommandResult Delete(int applicationId);
 
 	CommandResult SetAdditionalDetails(
 		int schoolId,
