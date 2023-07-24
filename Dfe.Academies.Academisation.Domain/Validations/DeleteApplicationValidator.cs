@@ -10,7 +10,5 @@ internal class DeleteApplicationValidator : AbstractValidator<int>
 		RuleFor(x => x).
 		NotEmpty().WithMessage("Application Id cannot be empty")
 		.OverridePropertyName("Appliction Id");
-		
-
 	}
 }

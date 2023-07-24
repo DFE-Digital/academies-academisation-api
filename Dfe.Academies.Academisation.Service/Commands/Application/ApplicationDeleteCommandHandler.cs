@@ -31,7 +31,7 @@ public class ApplicationDeleteCommandHandler : IRequestHandler<ApplicationDelete
 			return new NotFoundCommandResult();
 		}
 
-		var result = existingApplication.Delete(existingApplication.ApplicationId);
+		var result = existingApplication.ValidateSoftDelete(existingApplication.ApplicationId);
 			
         if (result is CommandValidationErrorResult)
 		{

@@ -19,10 +19,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 		private readonly Fixture _fixture = new();
 
 		private readonly Mock<IApplication> _applicationMock = new();
-		private readonly Mock<IApplication> _applicationMock1 = new();
-
-		private readonly Mock<IProject> _projectMock = new();
-		private readonly Mock<IProjectCreateDataCommand> _projectCreateDataCommand = new();
 
 
 		private readonly int _applicationId;
@@ -46,7 +42,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			int notFoundApplicationId = _fixture.Create<int>();
 			_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
 			_repo.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
-			_applicationMock.Setup(m => m.Delete(notFoundApplicationId))
+			_applicationMock.Setup(m => m.ValidateSoftDelete(notFoundApplicationId))
 				.Returns(new NotFoundCommandResult());
 
 			// act
@@ -63,7 +59,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 			// arrange
 			_applicationMock.SetupGet(a => a.ApplicationType).Returns(ApplicationType.JoinAMat);
 			_repo.Setup(x => x.GetByIdAsync(_applicationId)).ReturnsAsync(_applicationMock.Object);
-			_applicationMock.Setup(m => m.Delete(_applicationMock.Object.ApplicationId))
+			_applicationMock.Setup(m => m.ValidateSoftDelete(_applicationMock.Object.ApplicationId))
 				.Returns(new CommandSuccessResult());
 
 			// act

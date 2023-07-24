@@ -232,7 +232,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return Ok(result);
 		}
 
-		[HttpPut("{applicationId}/delete-application", Name = "DeleteApplication")]
+		[HttpDelete("{applicationId}/delete-application", Name = "DeleteApplication")]
 		public async Task<ActionResult> DeleteApplication(int applicationId)
 		{
 			_logger.LogInformation($"Deleting application: {applicationId}");

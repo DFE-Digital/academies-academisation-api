@@ -58,7 +58,7 @@ public interface IApplication
 	CommandResult UpdateTrustKeyPerson(int keyPersonId, string name, DateTime dateOfBirth, string biography, IEnumerable<ITrustKeyPersonRole> roles);
 	CommandResult DeleteTrustKeyPerson(int keyPersonId);
 	CommandResult DeleteSchool(int urn);
-	CommandResult Delete(int applicationId);
+	CommandResult ValidateSoftDelete(int applicationId);
 
 	CommandResult SetAdditionalDetails(
 		int schoolId,

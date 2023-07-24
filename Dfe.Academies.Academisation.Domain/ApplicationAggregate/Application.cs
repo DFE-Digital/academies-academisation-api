@@ -408,7 +408,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		return new CommandSuccessResult();
 	}
 
-	public CommandResult Delete(int applicationId)
+	public CommandResult ValidateSoftDelete( int applicationId)
 	{
 		var validationResult = new DeleteApplicationValidator().Validate(applicationId);
 
@@ -417,7 +417,6 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 			return new CommandValidationErrorResult(
 				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
 		}
-
 
 		return new CommandSuccessResult();
 	}
