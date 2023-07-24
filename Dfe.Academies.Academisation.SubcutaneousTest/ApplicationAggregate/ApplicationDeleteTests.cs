@@ -171,7 +171,7 @@ public class ApplicationDeleteTests
 	}
 
     [Fact]
-	public async Task ApplicatinNotFound()
+	public async Task ApplicationNotFound()
 	{
 		// Arrange
 		var applicationController = new ApplicationController(
