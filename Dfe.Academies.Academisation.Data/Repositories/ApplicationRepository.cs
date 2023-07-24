@@ -83,7 +83,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			var entity = await _context.Applications.FindAsync(applicationId);
 			if(entity != null){
-				 entity.DeletedAt = DateTime.Now;
+				 entity.DeletedAt = DateTime.UtcNow;
 			    _context.Applications.Update(entity);		
 		    }
 

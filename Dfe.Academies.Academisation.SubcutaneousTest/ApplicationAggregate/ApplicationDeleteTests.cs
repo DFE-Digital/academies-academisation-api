@@ -195,5 +195,41 @@ public class ApplicationDeleteTests
         Assert.IsAssignableFrom<NotFoundResult>(deleteResult);	;
 	}
 
+	[Fact]
+	public async Task FilterQueryNotReturningDeletedItem()
+	{
+		// Arrange
+		var applicationController = new ApplicationController(
+			_applicationQueryService,
+			_trustQueryService,
+			_mediator.Object,
+			_applicationLogger);
+
+		ApplicationCreateCommand applicationCreateRequestModel = _fixture
+			.Create<ApplicationCreateCommand>();
+
+		var createResult = await applicationController.Post(applicationCreateRequestModel, default);
+
+		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
+
+		var gotApplication = await _applicationQueryService.GetById(createdPayload.ApplicationId);
+
+		Assert.NotNull(gotApplication);
+		// Act
+		var deleteResult = await applicationController.DeleteApplication(createdPayload.ApplicationId);
+		
+		 Assert.IsAssignableFrom<OkObjectResult>(deleteResult);	;
+
+		var deletedApplication = await _applicationQueryService.GetById(createdPayload.ApplicationId);
+
+        //Assert
+
+		Assert.Null(deletedApplication);
+        
+	}
+
         
 }
+
+
+
