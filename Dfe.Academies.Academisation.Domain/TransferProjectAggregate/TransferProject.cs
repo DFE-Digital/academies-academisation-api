@@ -4,19 +4,22 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
-
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferProject : IAggregateRoot
 	{
-		private TransferProject()
+		private TransferProject(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns)
 		{
 			_intendedTransferBenefits =
 				new List<IntendedTransferBenefit>();
 			_transferringAcademies = new List<TransferringAcademy>();
+
+			OutgoingTrustUkprn = outgoingTrustUkprn;
+			
+			foreach (var academyUkprn in academyUkprns)
+			{
+				_transferringAcademies.Add(new TransferringAcademy( { IncomingTrustUkprn = incomingTrustUkprn, OutgoingAcademyUkprn = academyUkprn });
+			}
 		}
 
 		public int Id { get; private set; }
@@ -76,60 +79,16 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public DateTime? CreatedOn { get; private set; }
 
-		public static TransferProject Create(AcademyTransferProjectRequest request)
-		{
-			var transferFirstDiscussed = ParseDate(request?.Dates?.TransferFirstDiscussed);
-			var targetDateForTransfer = ParseDate(request?.Dates?.TargetDateForTransfer);
-			var htbDate = ParseDate(request?.Dates?.HtbDate);
+		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns)
+		{ 
 
-			return new TransferProject
+			return new TransferProject(outgoingTrustUkprn, incomingTrustUkprn, academyUkprns)
 			{
-				ProjectReference = request?.ProjectReference,
-				OutgoingTrustUkprn = request.OutgoingTrustUkprn,
-				WhoInitiatedTheTransfer = request.Features?.WhoInitiatedTheTransfer,
-				RddOrEsfaIntervention = request.Features?.RddOrEsfaIntervention,
-				RddOrEsfaInterventionDetail = request.Features?.RddOrEsfaInterventionDetail,
-				TypeOfTransfer = request.Features?.TypeOfTransfer,
-				OtherTransferTypeDescription = request.Features?.OtherTransferTypeDescription,
-				TransferFirstDiscussed = transferFirstDiscussed,
-				TargetDateForTransfer = targetDateForTransfer,
-				HtbDate = htbDate,
-				ProjectRationale = request.Rationale?.ProjectRationale,
-				TrustSponsorRationale = request.Rationale?.TrustSponsorRationale,
-				State = request.State,
-				Status = request.Status,
-				Author = request.GeneralInformation?.Author,
-				Recommendation = request.GeneralInformation?.Recommendation,
-				AnyRisks = request.Benefits?.AnyRisks,
-				HighProfileShouldBeConsidered = request.Benefits?.OtherFactorsToConsider?.HighProfile?.ShouldBeConsidered,
-				HighProfileFurtherSpecification = request.Benefits?.OtherFactorsToConsider?.HighProfile?.FurtherSpecification,
-				ComplexLandAndBuildingShouldBeConsidered = request.Benefits?.OtherFactorsToConsider?.ComplexLandAndBuilding?.ShouldBeConsidered,
-				ComplexLandAndBuildingFurtherSpecification = request.Benefits?.OtherFactorsToConsider?.ComplexLandAndBuilding?.FurtherSpecification,
-				FinanceAndDebtShouldBeConsidered = request.Benefits?.OtherFactorsToConsider?.FinanceAndDebt?.ShouldBeConsidered,
-				FinanceAndDebtFurtherSpecification = request.Benefits?.OtherFactorsToConsider?.FinanceAndDebt?.FurtherSpecification,
-				OtherRisksShouldBeConsidered = request.Benefits?.OtherFactorsToConsider?.OtherRisks?.ShouldBeConsidered,
-				OtherRisksFurtherSpecification = request.Benefits?.OtherFactorsToConsider?.OtherRisks?.FurtherSpecification,
-				OtherBenefitValue = request.Benefits?.IntendedTransferBenefits.OtherBenefitValue,
-				EqualitiesImpactAssessmentConsidered = request.Benefits?.EqualitiesImpactAssessmentConsidered,
-				IncomingTrustAgreement = request.LegalRequirements?.IncomingTrustAgreement,
-				DiocesanConsent = request.LegalRequirements?.DiocesanConsent,
-				OutgoingTrustConsent = request.LegalRequirements?.OutgoingTrustConsent,
-				AcademyTransferProjectIntendedTransferBenefits = ConvertAcademyTransferProjectIntendedTransferBenefits(request.Benefits?.IntendedTransferBenefits?.SelectedBenefits),
-				TransferringAcademies = ConvertTransferringAcademiesList(request.TransferringAcademies),
-				FeatureSectionIsCompleted = request.Features?.IsCompleted,
-				BenefitsSectionIsCompleted = request.Benefits?.IsCompleted,
-				LegalRequirementsSectionIsCompleted = request.LegalRequirements?.IsCompleted,
-				RationaleSectionIsCompleted = request.Rationale?.IsCompleted,
-				HasHtbDate = request.Dates?.HasHtbDate,
-				HasTransferFirstDiscussedDate = request.Dates?.HasTransferFirstDiscussedDate,
-				HasTargetDateForTransfer = request.Dates?.HasTargetDateForTransfer,
-				AssignedUserEmailAddress = request.AssignedUser?.EmailAddress,
-				AssignedUserFullName = request.AssignedUser?.FullName,
-				AssignedUserId = request.AssignedUser?.Id,
 				CreatedOn = DateTimeSource.UtcNow()
 			};
 		}
 	}
+
 
 
 }
