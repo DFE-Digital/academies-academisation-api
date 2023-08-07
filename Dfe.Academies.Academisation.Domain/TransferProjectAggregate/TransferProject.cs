@@ -1,6 +1,8 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Exceptions;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
@@ -18,9 +20,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			
 			foreach (var academyUkprn in academyUkprns)
 			{
-				_transferringAcademies.Add(new TransferringAcademy( { IncomingTrustUkprn = incomingTrustUkprn, OutgoingAcademyUkprn = academyUkprn });
+				_transferringAcademies.Add(new TransferringAcademy(incomingTrustUkprn, academyUkprn));
 			}
 		}
+
+		protected TransferProject() { }
 
 		public int Id { get; private set; }
 		public int Urn { get; private set; }
@@ -79,12 +83,21 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public DateTime? CreatedOn { get; private set; }
 
-		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns)
-		{ 
+		public void GenerateUrn() {
+			string referenceNumber = "SAT";
+			if (TransferringAcademies.Count > 1)
+			{
+				referenceNumber = "MAT";
+			}
 
+			ProjectReference = $"{referenceNumber}-{Urn}";
+		}
+
+		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
+		{
 			return new TransferProject(outgoingTrustUkprn, incomingTrustUkprn, academyUkprns)
 			{
-				CreatedOn = DateTimeSource.UtcNow()
+				CreatedOn = createdOn
 			};
 		}
 	}

@@ -9,6 +9,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferringAcademy
 	{
+		public TransferringAcademy(string outgoingAcademyUkprn, string incomingTrustUkprn) {
+			IncomingTrustUkprn = incomingTrustUkprn;
+			OutgoingAcademyUkprn = outgoingAcademyUkprn;
+		}
+
 		public int Id { get; private set; }
 		public int TransferProjectId { get; private set; }
 		public string OutgoingAcademyUkprn { get; private set; }
