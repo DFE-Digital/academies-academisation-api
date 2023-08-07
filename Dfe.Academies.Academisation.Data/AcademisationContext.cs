@@ -156,7 +156,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		transferProject.ToTable("TransferProject", DEFAULT_SCHEMA);
 		transferProject.HasKey(x => x.Id);
-		transferProject.Property(e => e.Urn).HasDefaultValueSql("NEXT VALUE FOR sdd.sequence_TransferProjectUrn");
+		transferProject.Property(e => e.Urn).HasDefaultValueSql($"NEXT VALUE FOR {DEFAULT_SCHEMA}.sequence_TransferProjectUrn");
 
 		transferProject
 		.HasMany(a => a.IntendedTransferBenefits)

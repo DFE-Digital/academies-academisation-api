@@ -19,11 +19,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string OutgoingAcademyUkprn { get; private set; }
 		public string IncomingTrustUkprn { get; private set; }
 
-		public string PupilNumbersAdditionalInformation { get; private set; }
-		public string LatestOfstedReportAdditionalInformation { get; private set; }
-		public string KeyStage2PerformanceAdditionalInformation { get; private set; }
-		public string KeyStage4PerformanceAdditionalInformation { get; private set; }
-		public string KeyStage5PerformanceAdditionalInformation { get; set; }
+		public string? PupilNumbersAdditionalInformation { get; private set; }
+		public string? LatestOfstedReportAdditionalInformation { get; private set; }
+		public string? KeyStage2PerformanceAdditionalInformation { get; private set; }
+		public string? KeyStage4PerformanceAdditionalInformation { get; private set; }
+		public string? KeyStage5PerformanceAdditionalInformation { get; private set; }
 
 	}
 }

@@ -11,6 +11,12 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence<int>(
+                name: "sequence_TransferProjectUrn",
+                schema: "academisation",
+                startValue: 10003000L,
+                minValue: 10003000L);
+
             migrationBuilder.CreateTable(
                 name: "TransferProject",
                 schema: "academisation",
@@ -18,46 +24,46 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Urn = table.Column<int>(type: "int", nullable: false),
-                    ProjectReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Urn = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR academisation.sequence_TransferProjectUrn"),
+                    ProjectReference = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OutgoingTrustUkprn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WhoInitiatedTheTransfer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WhoInitiatedTheTransfer = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RddOrEsfaIntervention = table.Column<bool>(type: "bit", nullable: true),
-                    RddOrEsfaInterventionDetail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeOfTransfer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OtherTransferTypeDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RddOrEsfaInterventionDetail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeOfTransfer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OtherTransferTypeDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TransferFirstDiscussed = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TargetDateForTransfer = table.Column<DateTime>(type: "datetime2", nullable: true),
                     HtbDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     HasTransferFirstDiscussedDate = table.Column<bool>(type: "bit", nullable: true),
                     HasTargetDateForTransfer = table.Column<bool>(type: "bit", nullable: true),
                     HasHtbDate = table.Column<bool>(type: "bit", nullable: true),
-                    ProjectRationale = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TrustSponsorRationale = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProjectRationale = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrustSponsorRationale = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AnyRisks = table.Column<bool>(type: "bit", nullable: true),
                     HighProfileShouldBeConsidered = table.Column<bool>(type: "bit", nullable: true),
-                    HighProfileFurtherSpecification = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HighProfileFurtherSpecification = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ComplexLandAndBuildingShouldBeConsidered = table.Column<bool>(type: "bit", nullable: true),
-                    ComplexLandAndBuildingFurtherSpecification = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ComplexLandAndBuildingFurtherSpecification = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FinanceAndDebtShouldBeConsidered = table.Column<bool>(type: "bit", nullable: true),
-                    FinanceAndDebtFurtherSpecification = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FinanceAndDebtFurtherSpecification = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OtherRisksShouldBeConsidered = table.Column<bool>(type: "bit", nullable: true),
                     EqualitiesImpactAssessmentConsidered = table.Column<bool>(type: "bit", nullable: true),
-                    OtherRisksFurtherSpecification = table.Column<string>(type: "nvarchar(max)", maxLength: 20000, nullable: false),
-                    OtherBenefitValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Recommendation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IncomingTrustAgreement = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiocesanConsent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OutgoingTrustConsent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OtherRisksFurtherSpecification = table.Column<string>(type: "nvarchar(max)", maxLength: 20000, nullable: true),
+                    OtherBenefitValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Recommendation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IncomingTrustAgreement = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DiocesanConsent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OutgoingTrustConsent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LegalRequirementsSectionIsCompleted = table.Column<bool>(type: "bit", nullable: true),
                     FeatureSectionIsCompleted = table.Column<bool>(type: "bit", nullable: true),
                     BenefitsSectionIsCompleted = table.Column<bool>(type: "bit", nullable: true),
                     RationaleSectionIsCompleted = table.Column<bool>(type: "bit", nullable: true),
-                    AssignedUserFullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AssignedUserEmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AssignedUserFullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AssignedUserEmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AssignedUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -98,11 +104,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     TransferProjectId = table.Column<int>(type: "int", nullable: false),
                     OutgoingAcademyUkprn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IncomingTrustUkprn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PupilNumbersAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LatestOfstedReportAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KeyStage2PerformanceAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KeyStage4PerformanceAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KeyStage5PerformanceAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PupilNumbersAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LatestOfstedReportAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KeyStage2PerformanceAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KeyStage4PerformanceAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KeyStage5PerformanceAdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -142,6 +148,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TransferProject",
+                schema: "academisation");
+
+            migrationBuilder.DropSequence(
+                name: "sequence_TransferProjectUrn",
                 schema: "academisation");
         }
     }

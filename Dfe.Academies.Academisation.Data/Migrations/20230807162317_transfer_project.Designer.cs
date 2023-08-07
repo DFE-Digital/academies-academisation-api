@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20230804155008_transfer_project")]
+    [Migration("20230807162317_transfer_project")]
     partial class transfer_project
     {
         /// <inheritdoc />
@@ -24,6 +24,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.HasSequence<int>("sequence_TransferProjectUrn", "academisation")
+                .StartsAt(10003000L)
+                .HasMin(10003000L);
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
@@ -868,25 +872,21 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("AssignedUserEmailAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AssignedUserFullName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("AssignedUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Author")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("BenefitsSectionIsCompleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("ComplexLandAndBuildingFurtherSpecification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("ComplexLandAndBuildingShouldBeConsidered")
@@ -896,7 +896,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DiocesanConsent")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("EqualitiesImpactAssessmentConsidered")
@@ -906,7 +905,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FinanceAndDebtFurtherSpecification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("FinanceAndDebtShouldBeConsidered")
@@ -922,7 +920,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("HighProfileFurtherSpecification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("HighProfileShouldBeConsidered")
@@ -932,18 +929,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IncomingTrustAgreement")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("LegalRequirementsSectionIsCompleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("OtherBenefitValue")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherRisksFurtherSpecification")
-                        .IsRequired()
                         .HasMaxLength(20000)
                         .HasColumnType("nvarchar(max)");
 
@@ -951,11 +945,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("OtherTransferTypeDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OutgoingTrustConsent")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OutgoingTrustUkprn")
@@ -963,11 +955,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectRationale")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectReference")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("RationaleSectionIsCompleted")
@@ -977,19 +967,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RddOrEsfaInterventionDetail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Recommendation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("TargetDateForTransfer")
@@ -999,18 +985,17 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TrustSponsorRationale")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeOfTransfer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Urn")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR academisation.sequence_TransferProjectUrn");
 
                     b.Property<string>("WhoInitiatedTheTransfer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -1031,19 +1016,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KeyStage2PerformanceAdditionalInformation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KeyStage4PerformanceAdditionalInformation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KeyStage5PerformanceAdditionalInformation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LatestOfstedReportAdditionalInformation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OutgoingAcademyUkprn")
@@ -1051,11 +1032,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PupilNumbersAdditionalInformation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TransferProjectId")
-                        .IsRequired()
+                    b.Property<int>("TransferProjectId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
