@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20230808122220_SchoolOverview")]
+    partial class SchoolOverview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -828,210 +831,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ApplicationFormTrustKeyPersonRole", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("SelectedBenefit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TransferProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TransferProjectId");
-
-                    b.ToTable("IntendedTransferBenefit", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 10003000L);
-
-                    b.Property<bool?>("AnyRisks")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AssignedUserEmailAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AssignedUserFullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("AssignedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("BenefitsSectionIsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ComplexLandAndBuildingFurtherSpecification")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("ComplexLandAndBuildingShouldBeConsidered")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DiocesanConsent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("EqualitiesImpactAssessmentConsidered")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("FeatureSectionIsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FinanceAndDebtFurtherSpecification")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("FinanceAndDebtShouldBeConsidered")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("HasHtbDate")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("HasTargetDateForTransfer")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("HasTransferFirstDiscussedDate")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("HighProfileFurtherSpecification")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("HighProfileShouldBeConsidered")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("HtbDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IncomingTrustAgreement")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("LegalRequirementsSectionIsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OtherBenefitValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OtherRisksFurtherSpecification")
-                        .HasMaxLength(20000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("OtherRisksShouldBeConsidered")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OtherTransferTypeDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OutgoingTrustConsent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OutgoingTrustUkprn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectRationale")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectReference")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("RationaleSectionIsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("RddOrEsfaIntervention")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("RddOrEsfaInterventionDetail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Recommendation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("TargetDateForTransfer")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("TransferFirstDiscussed")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TrustSponsorRationale")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeOfTransfer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Urn")
-                        .HasColumnType("int");
-
-                    b.Property<string>("WhoInitiatedTheTransfer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TransferProject", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferringAcademy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("IncomingTrustUkprn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KeyStage2PerformanceAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KeyStage4PerformanceAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KeyStage5PerformanceAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LatestOfstedReportAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OutgoingAcademyUkprn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PupilNumbersAdditionalInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TransferProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TransferProjectId");
-
-                    b.ToTable("TransferringAcademy", "academisation");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
                     b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", null)
@@ -1623,24 +1422,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
-                {
-                    b.HasOne("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", null)
-                        .WithMany("IntendedTransferBenefits")
-                        .HasForeignKey("TransferProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferringAcademy", b =>
-                {
-                    b.HasOne("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", null)
-                        .WithMany("TransferringAcademies")
-                        .HasForeignKey("TransferProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>
                 {
                     b.Navigation("DeclinedReasons");
@@ -1675,13 +1456,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson", b =>
                 {
                     b.Navigation("Roles");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", b =>
-                {
-                    b.Navigation("IntendedTransferBenefits");
-
-                    b.Navigation("TransferringAcademies");
                 });
 #pragma warning restore 612, 618
         }

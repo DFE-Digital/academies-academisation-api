@@ -206,7 +206,7 @@ public class Project : IProject
 			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived,
 			AnnexBFormUrl = detailsToUpdate.AnnexBFormUrl,
 
-			// general info
+			// School Overview
 			SchoolPhase = detailsToUpdate.SchoolPhase,
 			AgeRange = detailsToUpdate.AgeRange,
 			SchoolType = detailsToUpdate.SchoolType,
@@ -222,10 +222,9 @@ public class Project : IProject
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = detailsToUpdate.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty,
-			MemberOfParliamentName = detailsToUpdate.MemberOfParliamentName,
+			MemberOfParliamentNameAndParty = detailsToUpdate.MemberOfParliamentNameAndParty,
 
-			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete,
+			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete,
 
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation,
