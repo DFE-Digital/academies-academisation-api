@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_logger.LogInformation($"Creating transfer project");
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
-			return result is null ? NotFound() : Ok(result);
+			return result is null ? BadRequest() : Ok(result);
 		}
 
 

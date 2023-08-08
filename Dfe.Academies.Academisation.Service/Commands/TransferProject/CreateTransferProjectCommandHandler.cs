@@ -12,6 +12,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application;
 public class CreateTransferProjectCommandHandler : IRequestHandler<CreateTransferProjectCommand, CreateResult>
 {
 	private readonly ITransferProjectRepository _transferProjectRepository;
+	// need to use this in place of the AcademyTransferProjectResponseFactory but for now use this to reduce chance of introducing bugs
 	private readonly IMapper _mapper;
 	private readonly IDateTimeProvider _dateTimeProvider;
 
