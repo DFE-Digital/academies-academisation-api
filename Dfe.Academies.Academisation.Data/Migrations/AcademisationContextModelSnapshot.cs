@@ -262,6 +262,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("FoundationConsent")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("GeneralInformationSectionComplete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("GoverningBodyResolution")
                         .HasColumnType("nvarchar(max)");
 
@@ -304,7 +307,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime?>("LocalAuthorityInformationTemplateSentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("MemberOfParliamentNameAndParty")
+                    b.Property<string>("MemberOfParliamentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberOfParliamentParty")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameOfTrust")
@@ -378,9 +384,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("SchoolName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("SchoolOverviewSectionComplete")
-                        .HasColumnType("bit");
 
                     b.Property<string>("SchoolPerformanceAdditionalInformation")
                         .HasColumnType("nvarchar(max)");
