@@ -1,9 +1,10 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static System.String;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 {
@@ -43,12 +44,22 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				DbContext.Projects.Remove(existingProject);
 			}
 
+			// Find the Application
+			var existingApplication = await DbContext.Applications
+				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == "Cypress", cancellationToken);
+
+			// If the Application exists, remove it
+			if (existingApplication != null)
+			{
+				DbContext.Applications.Remove(existingApplication);
+			}
+
 			// Create a new project
 			var newProject = new ProjectState
 			{
 				SchoolName = projectName,
 				Urn = 139292,
-				ApplicationReferenceNumber = "A2B_1357",
+				ApplicationReferenceNumber = "placeholder",
 				ProjectStatus = "Approved with conditions",
 				ApplicationReceivedDate = new DateTime(2022, 3, 17),
 				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
@@ -76,7 +87,50 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				LocalAuthority = "Coventry"
 			};
 
-			// Add the new project to the Projects DbSet
+			// Create Application
+			var contributor = new ContributorDetails("Cypress", "Project", "Cypress@Project.com",
+				ContributorRole.ChairOfGovernors, "N/A");
+			var createResult = new Domain.ApplicationAggregate.ApplicationFactory().Create(
+				ApplicationType.JoinAMat, contributor
+				);
+
+			if (createResult is CreateSuccessResult<Domain.ApplicationAggregate.Application> successResult)
+			{
+				var newApplication = successResult.Payload;
+				// Set Join Trust Details
+				newApplication.SetJoinTrustDetails(10059766, "Cypress Trust", Empty, ChangesToTrust.No, null,
+					false, null);
+				// Set Additional Details
+				newApplication.SetAdditionalDetails(113537, "Benefits", null, false, null, null, null, "N/A", false,
+					null, "N/A", null, Empty, Empty, null, null);
+				// Create School List
+				var newSchoolList = new List<UpdateSchoolParameter>
+				{
+					new(0, Empty, Empty, false, Empty, Empty, Empty, Empty, false, Empty, Empty, null, Empty, Empty, null, Empty,
+						new SchoolDetails(113537, "Plymstock School", null, null, null, null),
+						new List<KeyValuePair<int, LoanDetails>>(),
+						new List<KeyValuePair<int, LeaseDetails>>(), false, false)
+				};
+				// Use general update to add schools
+				newApplication.Update(newApplication.ApplicationType, ApplicationStatus.InProgress,
+					new List<KeyValuePair<int, ContributorDetails>>() { new(0, contributor) },
+					newSchoolList);
+
+				DbContext.Applications.Add(newApplication);
+			}
+			else
+			{
+				throw new Exception("Unable to Add application to DbContext");
+			}
+
+			// Save changes to the database
+			await DbContext.SaveChangesAsync(cancellationToken);
+
+
+			// Add the new project to the Projects DbSet with applicationId
+			var createdApplication = await DbContext.Applications
+				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == "Cypress", cancellationToken);
+			newProject.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
 			DbContext.Projects.Add(newProject);
 
 			// Save changes to the database
