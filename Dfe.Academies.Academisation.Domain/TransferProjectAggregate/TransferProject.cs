@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Exceptions;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -83,7 +84,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public DateTime? CreatedOn { get; private set; }
 
-		public void GenerateUrn() {
+		public void GenerateUrn(int? urnOverride = null) {
+			//urn override proably not usefull, but as it is database generated allows us to set it for unit testing the generate logic
+			if (urnOverride.HasValue) {
+				Urn = urnOverride.Value;
+			}
 			string referenceNumber = "SAT";
 			if (TransferringAcademies.Count > 1)
 			{
@@ -95,6 +100,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
 		{
+			Guard.Against.NullOrEmpty(outgoingTrustUkprn);
+			Guard.Against.NullOrEmpty(incomingTrustUkprn);
+			Guard.Against.NullOrEmpty(academyUkprns);
+			Guard.Against.OutOfSQLDateRange(createdOn);
+
 			return new TransferProject(outgoingTrustUkprn, incomingTrustUkprn, academyUkprns)
 			{
 				CreatedOn = createdOn
