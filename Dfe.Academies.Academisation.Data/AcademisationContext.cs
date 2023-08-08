@@ -1,4 +1,7 @@
-﻿using System.Reflection.Emit;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Metrics;
+using System.Reflection.Emit;
+using System.Security.Cryptography.X509Certificates;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -130,13 +133,12 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
-		modelBuilder.HasSequence<int>("sequence_TransferProjectUrn", DEFAULT_SCHEMA).HasMin(10003000).StartsAt(10003000);
 		modelBuilder.Entity<TransferProject>(ConfigureTransferProject);
 		modelBuilder.Entity<IntendedTransferBenefit>(ConfigureTransferProjectIntendedTransferBenefit);
 		modelBuilder.Entity<TransferringAcademy>(ConfigureTransferringAcademy);
 
 		base.OnModelCreating(modelBuilder);
-	}
+}
 
 	private void ConfigureTransferringAcademy(EntityTypeBuilder<TransferringAcademy> transferringAcademy)
 	{
@@ -151,12 +153,10 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	}
 
 	void ConfigureTransferProject(EntityTypeBuilder<TransferProject> transferProject)
-	{
-		
-
+	{		
 		transferProject.ToTable("TransferProject", DEFAULT_SCHEMA);
 		transferProject.HasKey(x => x.Id);
-		transferProject.Property(e => e.Urn).HasDefaultValueSql($"NEXT VALUE FOR {DEFAULT_SCHEMA}.sequence_TransferProjectUrn");
+		transferProject.Property(p => p.Id).UseIdentityColumn(10003000, 1);
 
 		transferProject
 		.HasMany(a => a.IntendedTransferBenefits)

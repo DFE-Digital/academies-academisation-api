@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			_transferringAcademies = new List<TransferringAcademy>();
 
 			OutgoingTrustUkprn = outgoingTrustUkprn;
-			
+
 			foreach (var academyUkprn in academyUkprns)
 			{
 				_transferringAcademies.Add(new TransferringAcademy(incomingTrustUkprn, academyUkprn));
@@ -84,11 +84,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public DateTime? CreatedOn { get; private set; }
 
-		public void GenerateUrn(int? urnOverride = null) {
+		public void GenerateUrn(int? urnOverride = null)
+		{
 			//urn override proably not usefull, but as it is database generated allows us to set it for unit testing the generate logic
-			if (urnOverride.HasValue) {
-				Urn = urnOverride.Value;
-			}
+			if (urnOverride.HasValue) { Urn = urnOverride.Value; }
+			else { Urn = Id; }
+
 			string referenceNumber = "SAT";
 			if (TransferringAcademies.Count > 1)
 			{

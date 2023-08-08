@@ -11,20 +11,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateSequence<int>(
-                name: "sequence_TransferProjectUrn",
-                schema: "academisation",
-                startValue: 10003000L,
-                minValue: 10003000L);
-
             migrationBuilder.CreateTable(
                 name: "TransferProject",
                 schema: "academisation",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Urn = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR academisation.sequence_TransferProjectUrn"),
+                        .Annotation("SqlServer:Identity", "10003000, 1"),
+                    Urn = table.Column<int>(type: "int", nullable: false),
                     ProjectReference = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OutgoingTrustUkprn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoInitiatedTheTransfer = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -148,10 +142,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TransferProject",
-                schema: "academisation");
-
-            migrationBuilder.DropSequence(
-                name: "sequence_TransferProjectUrn",
                 schema: "academisation");
         }
     }

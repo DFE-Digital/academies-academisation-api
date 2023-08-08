@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20230807162317_transfer_project")]
+    [Migration("20230808161013_transfer_project")]
     partial class transfer_project
     {
         /// <inheritdoc />
@@ -24,10 +24,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.HasSequence<int>("sequence_TransferProjectUrn", "academisation")
-                .StartsAt(10003000L)
-                .HasMin(10003000L);
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
@@ -866,7 +862,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 10003000L);
 
                     b.Property<bool?>("AnyRisks")
                         .HasColumnType("bit");
@@ -991,9 +987,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Urn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("NEXT VALUE FOR academisation.sequence_TransferProjectUrn");
+                        .HasColumnType("int");
 
                     b.Property<string>("WhoInitiatedTheTransfer")
                         .HasColumnType("nvarchar(max)");
