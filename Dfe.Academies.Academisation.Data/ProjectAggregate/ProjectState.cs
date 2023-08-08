@@ -50,7 +50,7 @@ public class ProjectState : BaseEntity
 	public string? ConversionSupportGrantChangeReason { get; set; }
 	public string? Region { get; set; }
 
-	//general info
+	// School Overview
 	public string? SchoolPhase { get; set; }
 	public string? AgeRange { get; set; }
 	public string? SchoolType { get; set; }
@@ -66,10 +66,9 @@ public class ProjectState : BaseEntity
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; set; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }
 	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; set; }
-	public string? MemberOfParliamentParty { get; set; }
-	public string? MemberOfParliamentName { get; set; }
+	public string? MemberOfParliamentNameAndParty { get; set; }
 
-	public bool? GeneralInformationSectionComplete { get; set; }
+	public bool? SchoolOverviewSectionComplete { get; set; }
 
 	// Annex B
 	public bool? AnnexBFormReceived { get; set; }
@@ -170,7 +169,7 @@ public class ProjectState : BaseEntity
 			ConversionSupportGrantChangeReason = ConversionSupportGrantChangeReason,
 			Region = Region,
 
-			// general info
+			// School Overview
 			SchoolPhase = SchoolPhase,
 			AgeRange = AgeRange,
 			SchoolType = SchoolType,
@@ -186,10 +185,9 @@ public class ProjectState : BaseEntity
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-			MemberOfParliamentParty = MemberOfParliamentParty,
-			MemberOfParliamentName = MemberOfParliamentName,
+			MemberOfParliamentNameAndParty = MemberOfParliamentNameAndParty,
 
-			GeneralInformationSectionComplete = GeneralInformationSectionComplete,
+			SchoolOverviewSectionComplete = SchoolOverviewSectionComplete,
 
 			// Annex B
 			AnnexBFormReceived = AnnexBFormReceived,
@@ -296,7 +294,7 @@ public class ProjectState : BaseEntity
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
 			Region = project.Details.Region,
 
-			// general info
+			// School Overview
 			SchoolPhase = project.Details.SchoolPhase,
 			AgeRange = project.Details.AgeRange,
 			SchoolType = project.Details.SchoolType,
@@ -312,10 +310,9 @@ public class ProjectState : BaseEntity
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = project.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = project.Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = project.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-			MemberOfParliamentParty = project.Details.MemberOfParliamentParty,
-			MemberOfParliamentName = project.Details.MemberOfParliamentName,
+			MemberOfParliamentNameAndParty = project.Details.MemberOfParliamentNameAndParty,
 
-			GeneralInformationSectionComplete = project.Details.GeneralInformationSectionComplete,
+			SchoolOverviewSectionComplete = project.Details.SchoolOverviewSectionComplete,
 
 			// Annex B
 			AnnexBFormReceived = project.Details.AnnexBFormReceived,
