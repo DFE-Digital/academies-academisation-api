@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+using Dfe.Academisation.CorrelationIdMiddleware;
 
 namespace Dfe.Academies.Academisation.WebApi.Services
 {
@@ -22,19 +23,28 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 			{
 				using (var scope = _factory.CreateScope())
 				{
-					_logger.LogInformation("Enrich Project Service running at: {time}", DateTimeOffset.Now);
-					var enrichProjectCommand = scope.ServiceProvider.GetRequiredService<IEnrichProjectCommand>();
+					// CorrelationId middleware isn't able to handle making sure a correlation context is available for outgoing http requests. So resolve the context and set the correlation Id scope manually.
+					// Use the same correlation id for each execution of the command.
+					// Also use the correlation in a logger scope to make sure it's output.
+					var correlationContext = scope.ServiceProvider.GetRequiredService<ICorrelationContext>();
+					correlationContext.SetContext(Guid.NewGuid());
 
-					try
+					using (_logger.BeginScope("x-correlationId: {x-correlationId}", correlationContext.CorrelationId.ToString()))
 					{
-						await enrichProjectCommand.Execute();
-					}
-					catch (Exception ex)
-					{
-						_logger.LogError("Error enriching project", ex);
-					}
+						_logger.LogInformation("Enrich Project Service running at: {time}", DateTimeOffset.Now);
+						var enrichProjectCommand = scope.ServiceProvider.GetRequiredService<IEnrichProjectCommand>();
 
-					await Task.Delay(_delayInMilliseconds, stoppingToken);
+						try
+						{
+							await enrichProjectCommand.Execute();
+						}
+						catch (Exception ex)
+						{
+							_logger.LogError("Error enriching project", ex);
+						}
+
+						await Task.Delay(_delayInMilliseconds, stoppingToken);
+					}
 				}
 			}
 		}

@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.Academies;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Establishment;
+using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Domain;
@@ -13,6 +14,7 @@ using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregat
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.Establishment;
+using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -37,6 +39,7 @@ using Dfe.Academies.Academisation.WebApi.Middleware;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Academisation.WebApi.Services;
 using Dfe.Academies.Academisation.WebApi.Swagger;
+using Dfe.Academisation.CorrelationIdMiddleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -134,10 +137,10 @@ builder.Services.AddScoped<IEstablishmentGetDataQuery, EstablishmentGetDataQuery
 builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 
-
-
 //utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+builder.Services.AddScoped<ICorrelationContext, CorrelationContext>();
+builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
@@ -179,7 +182,6 @@ builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateL
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
 
-
 builder.Services.AddHostedService<EnrichProjectService>();
 
 builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
@@ -216,9 +218,9 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
+app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
 app.UseMiddleware<CypressApiKeyMiddleware>();
-app.UseMiddleware<AddCorrelationIdMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.MapHealthChecks("/healthcheck");
