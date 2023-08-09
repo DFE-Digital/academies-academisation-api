@@ -99,6 +99,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ProjectReference = $"{referenceNumber}-{Urn}";
 		}
 
+		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted) {
+			ProjectRationale = projectRationale;
+			TrustSponsorRationale = trustSponsorRationale;
+			RationaleSectionIsCompleted = isCompleted;
+		}
+
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
 		{
 			Guard.Against.NullOrEmpty(outgoingTrustUkprn);

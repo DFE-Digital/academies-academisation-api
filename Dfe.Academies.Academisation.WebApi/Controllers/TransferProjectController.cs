@@ -1,7 +1,9 @@
-﻿using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
+﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TramsDataApi.RequestModels.AcademyTransferProject;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -31,6 +33,24 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
 			return result is null ? BadRequest() : Ok(result);
+		}
+
+		[HttpPut(Name = "SetTransferProjectRationale")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> SetTransferProjectRationale(
+			[FromBody] SetTransferProjectRationaleCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation($"Setting transfer project rationale");
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
 		}
 
 
