@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TramsDataApi.RequestModels.AcademyTransferProject;
+using Dfe.Academies.Academisation.IService.Query;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -14,11 +15,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	{
 		private readonly IMediator _mediator;
 		private readonly ILogger<TransferProjectController> _logger;
+		private readonly ITransferProjectQueryService _transferProjectQueryService;
 
-		public TransferProjectController(IMediator mediator,
+		public TransferProjectController(IMediator mediator,ITransferProjectQueryService transferProjectQueryService,
 			ILogger<TransferProjectController> logger)
 		{ 
 			_mediator = mediator;
+			_transferProjectQueryService = transferProjectQueryService;
 			_logger = logger;
 		}
 
@@ -51,6 +54,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
+		}
+
+		[HttpGet("{urn}", Name = "GetByUrn")]
+		public async Task<ActionResult<AcademyTransferProjectResponse>> GetByUrn(int urn)
+		{
+			_logger.LogInformation($"Getting transfer project, urn: {urn}");
+
+			var result = await _transferProjectQueryService.GetByUrn(urn);
+			
+			return result is null ? NotFound() : Ok(result);
 		}
 
 

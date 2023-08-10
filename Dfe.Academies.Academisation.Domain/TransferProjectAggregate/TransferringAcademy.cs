@@ -7,9 +7,10 @@ using System.Collections.Generic;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
-	public class TransferringAcademy
+	public class TransferringAcademy 
 	{
-		public TransferringAcademy(string incomingTrustUkprn, string outgoingAcademyUkprn) {
+		public TransferringAcademy(string incomingTrustUkprn, string outgoingAcademyUkprn)
+		{
 			IncomingTrustUkprn = incomingTrustUkprn;
 			OutgoingAcademyUkprn = outgoingAcademyUkprn;
 		}

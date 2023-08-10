@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
-	public class IntendedTransferBenefit
+	public class IntendedTransferBenefit 
 	{
 		public int Id { get; private set; }
 		public int TransferProjectId { get; private set; }

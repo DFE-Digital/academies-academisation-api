@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
@@ -18,5 +20,23 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		}
 
 		public IUnitOfWork UnitOfWork => _context;
+
+		public async Task<ITransferProject?> GetByUrn(int urn)
+		{
+			return (await DefaultIncludes().FirstOrDefaultAsync(x => x.Urn == (int)urn));
+		}
+
+		private IQueryable<TransferProject> DefaultIncludes()
+		{
+			var x = this.dbSet
+				.Include(x => x.TransferringAcademies)
+				.Include(x => x.IntendedTransferBenefits)
+				.AsQueryable();
+
+			return x;
+		}
+
+
+
 	}
 }

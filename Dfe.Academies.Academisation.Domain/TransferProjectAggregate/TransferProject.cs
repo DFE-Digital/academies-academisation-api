@@ -99,7 +99,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ProjectReference = $"{referenceNumber}-{Urn}";
 		}
 
-		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted) {
+		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted)
+		{
 			ProjectRationale = projectRationale;
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
