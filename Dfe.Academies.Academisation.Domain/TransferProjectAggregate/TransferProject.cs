@@ -1,11 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Exceptions;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
@@ -103,6 +99,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ProjectRationale = projectRationale;
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
+		}
+
+		public void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted)
+		{
+			TypeOfTransfer = transferType;
+			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
+			FeatureSectionIsCompleted = isCompleted;
 		}
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
