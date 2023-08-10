@@ -13,13 +13,11 @@ public class CreateTransferProjectCommandHandler : IRequestHandler<CreateTransfe
 {
 	private readonly ITransferProjectRepository _transferProjectRepository;
 	// need to use this in place of the AcademyTransferProjectResponseFactory but for now use this to reduce chance of introducing bugs
-	private readonly IMapper _mapper;
 	private readonly IDateTimeProvider _dateTimeProvider;
 
-	public CreateTransferProjectCommandHandler(ITransferProjectRepository transferProjectRepository, IMapper mapper, IDateTimeProvider dateTimeProvider)
+	public CreateTransferProjectCommandHandler(ITransferProjectRepository transferProjectRepository, IDateTimeProvider dateTimeProvider)
 	{
 		_transferProjectRepository = transferProjectRepository;
-		_mapper = mapper;
 		_dateTimeProvider = dateTimeProvider;
 	}
 

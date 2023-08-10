@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoFixture;
+using AutoMapper;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using FluentAssertions;
 using Moq;
@@ -14,6 +15,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 	{
 		public TransferProjectTests()
 		{
+
 		}
 
 		[Fact]
@@ -98,11 +100,47 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			DateTime createdOn = DateTime.Now;
 
 			// Act
-			 Assert.Throws<ArgumentNullException>(() => TransferProject.Create(
-				null,
+			Assert.Throws<ArgumentNullException>(() => TransferProject.Create(
+			   null,
+			   incomingTrustUkprn,
+			   academyUkprns,
+			   createdOn));
+		}
+
+		[Fact]
+		public void SetTransferProjectRationale_WithValidParameters_SetsCorrectProperties()
+		{
+			Fixture fixture = new Fixture();
+
+			// Arrange      
+			TransferProject result = CreateValidTransferProject();
+			var rationaleSectionIsCompleted = fixture.Create<bool>();
+			var projectRationale = fixture.Create<string>();
+			var trustSponsorRationale = fixture.Create<string>();
+
+			//Act
+			result.SetRationale(projectRationale, trustSponsorRationale, rationaleSectionIsCompleted);
+
+			//Assert
+			result.RationaleSectionIsCompleted.Should().Be(rationaleSectionIsCompleted);
+			result.ProjectRationale.Should().Be(projectRationale);
+			result.TrustSponsorRationale.Should().Be(trustSponsorRationale);
+		}
+
+		private static TransferProject CreateValidTransferProject()
+		{
+			string outgoingTrustUkprn = "11112222";
+			string incomingTrustUkprn = "11110000";
+			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			DateTime createdOn = DateTime.Now;
+
+			// Act
+			var result = TransferProject.Create(
+				outgoingTrustUkprn,
 				incomingTrustUkprn,
 				academyUkprns,
-				createdOn));
+				createdOn);
+			return result;
 		}
 
 		[Theory]
@@ -144,8 +182,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		{
 			public IEnumerator<object[]> GetEnumerator()
 			{
-				yield return new object[] { null, "11110000", new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentNullException)};
-				yield return new object[] { string.Empty, "11110000", new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentException)};
+				yield return new object[] { null, "11110000", new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentNullException) };
+				yield return new object[] { string.Empty, "11110000", new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentException) };
 
 				yield return new object[] { "11112222", null, new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentNullException) };
 				yield return new object[] { "11112222", string.Empty, new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentException) };
