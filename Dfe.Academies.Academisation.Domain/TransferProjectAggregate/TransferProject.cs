@@ -107,6 +107,19 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
 			FeatureSectionIsCompleted = isCompleted;
 		}
+		public void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted)
+		{
+			OutgoingTrustConsent = outgoingTrustResolution;
+			IncomingTrustAgreement = incomingTrustAgreement;
+			DiocesanConsent = diocesanConsent;
+			LegalRequirementsSectionIsCompleted = isCompleted;
+		}
+		public void SetTransferDates(DateTime advisoryBoardDate, DateTime expectedDateForTransfer)
+		{
+			// HtbDate maps from the front-end would be good to move this to more business focused language
+			HtbDate = advisoryBoardDate;
+			TargetDateForTransfer = expectedDateForTransfer;
+		}
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
 		{
