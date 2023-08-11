@@ -158,7 +158,37 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.TypeOfTransfer.Should().Be(transferType);
 			transferProject.FeatureSectionIsCompleted.Should().Be(isCompleted);
 		}
+		[Theory]
+		[InlineData("Test outgoing trust resolution", "Test incoming trust resolution","diocese", true)]
+		[InlineData("Test 123", "Test 345","diocese 123", false)]
+		public void SetLegalRequirements_WithValidParameters_SetsPropertiesCorrectly(string outgoingTrustResolution, string incomingTrustAgreement,string diocesanConsent, bool isCompleted)
+		{
+			// Arrange
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _incomingTrustUkprn, _academyUkprns, _createdOn);
 
+			// Act
+			transferProject.SetLegalRequirements(outgoingTrustResolution, incomingTrustAgreement,diocesanConsent, isCompleted);
+
+			// Assert
+			transferProject.OutgoingTrustConsent.Should().Be(outgoingTrustResolution);
+			transferProject.IncomingTrustAgreement.Should().Be(incomingTrustAgreement);
+			transferProject.DiocesanConsent.Should().Be(diocesanConsent);
+			transferProject.LegalRequirementsSectionIsCompleted.Should().Be(isCompleted);
+		}
+		[Fact]
+		public void SetTransferDates_WithValidParameters_SetsPropertiesCorrectly()
+		{
+			// Arrange
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _incomingTrustUkprn, _academyUkprns, _createdOn);
+			var advisoryBoardDate = DateTime.UtcNow;
+			var expectedDateForTransfer = DateTime.UtcNow.AddMonths(1);
+			// Act
+			transferProject.SetTransferDates(advisoryBoardDate, expectedDateForTransfer);
+
+			// Assert
+			transferProject.HtbDate.Should().Be(advisoryBoardDate);
+			transferProject.TargetDateForTransfer.Should().Be(expectedDateForTransfer);
+		}
 
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
