@@ -1,10 +1,5 @@
-﻿using AutoMapper;
-using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Core.Utils;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
-using Dfe.Academies.Academisation.Service.Commands.TransferProject;
-using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using TramsDataApi.RequestModels.AcademyTransferProject;
