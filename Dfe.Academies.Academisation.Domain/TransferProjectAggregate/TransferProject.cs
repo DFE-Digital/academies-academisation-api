@@ -6,10 +6,11 @@ using Dfe.Academies.Academisation.Domain.Exceptions;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
-	public class TransferProject : IAggregateRoot
+	public class TransferProject : ITransferProject, IAggregateRoot
 	{
 		private TransferProject(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns)
 		{
@@ -77,10 +78,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public Guid? AssignedUserId { get; private set; }
 
 		private readonly List<IntendedTransferBenefit> _intendedTransferBenefits;
-		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
+		public IReadOnlyCollection<IIntendedTransferBenefit> IntendedTransferBenefits => (IReadOnlyCollection<IIntendedTransferBenefit>)_intendedTransferBenefits;
 
 		private readonly List<TransferringAcademy> _transferringAcademies;
-		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
+		public IReadOnlyCollection<ITransferringAcademy> TransferringAcademies => (IReadOnlyCollection<ITransferringAcademy>)_transferringAcademies;
 
 		public DateTime? CreatedOn { get; private set; }
 
