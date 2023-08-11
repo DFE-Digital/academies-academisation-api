@@ -55,6 +55,41 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+		[HttpPut(Name = "SetTransferProjectTransferDates")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> SetTransferProjectTransferDates(
+			[FromBody] SetTransferProjectTransferDatesCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation($"Setting transfer project transfer dates");
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut(Name = "SetTransferProjectLegalRequirements")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> SetTransferProjectLegalRequirements(
+			[FromBody] SetTransferProjectLegalRequirementsCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation($"Setting transfer project legal requirements");
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 
 		[HttpPut("set-features" , Name = "SetTransferProjectFeatures")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
