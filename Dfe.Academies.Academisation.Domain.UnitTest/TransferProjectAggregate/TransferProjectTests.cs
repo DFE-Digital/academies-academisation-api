@@ -1,8 +1,7 @@
-﻿using AutoFixture;
+using AutoFixture;
 using AutoMapper;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using FluentAssertions;
-using Moq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +12,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 {
 	public class TransferProjectTests
 	{
+		private readonly string _outgoingTrustUkprn = "12345678";
+		private readonly string _incomingTrustUkprn = "23456789";
+		private readonly List<string> _academyUkprns = new() { "academy1", "academy2" };
+		private readonly DateTime _createdOn = DateTime.Now;
 		public TransferProjectTests()
 		{
 
@@ -177,6 +180,24 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				   createdOn));
 			}
 		}
+
+		[Theory]
+		[InlineData("Test Initiation", "Test Type", true)]
+		[InlineData("Another Initiation", "Another Type", false)]
+		public void SetFeatures_WithValidParameters_SetsPropertiesCorrectly(string whoInitiated, string transferType, bool isCompleted)
+		{
+			// Arrange
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _incomingTrustUkprn, _academyUkprns, _createdOn);
+
+			// Act
+			transferProject.SetFeatures(whoInitiated, transferType, isCompleted);
+
+			// Assert
+			transferProject.WhoInitiatedTheTransfer.Should().Be(whoInitiated);
+			transferProject.TypeOfTransfer.Should().Be(transferType);
+			transferProject.FeatureSectionIsCompleted.Should().Be(isCompleted);
+		}
+
 
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{

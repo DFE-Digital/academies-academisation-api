@@ -1,9 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Exceptions;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
@@ -78,10 +75,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public Guid? AssignedUserId { get; private set; }
 
 		private readonly List<IntendedTransferBenefit> _intendedTransferBenefits;
-		public IReadOnlyCollection<IIntendedTransferBenefit> IntendedTransferBenefits => (IReadOnlyCollection<IIntendedTransferBenefit>)_intendedTransferBenefits;
+		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
 
 		private readonly List<TransferringAcademy> _transferringAcademies;
-		public IReadOnlyCollection<ITransferringAcademy> TransferringAcademies => (IReadOnlyCollection<ITransferringAcademy>)_transferringAcademies;
+		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
+
+		IReadOnlyCollection<IIntendedTransferBenefit> ITransferProject.IntendedTransferBenefits => _intendedTransferBenefits;
+		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies => _transferringAcademies;
 
 		public DateTime? CreatedOn { get; private set; }
 
@@ -105,6 +105,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ProjectRationale = projectRationale;
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
+		}
+
+		public void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted)
+		{
+			TypeOfTransfer = transferType;
+			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
+			FeatureSectionIsCompleted = isCompleted;
 		}
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
