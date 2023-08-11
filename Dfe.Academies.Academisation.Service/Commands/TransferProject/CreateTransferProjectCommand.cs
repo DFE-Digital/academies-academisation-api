@@ -15,5 +15,5 @@ public class CreateTransferProjectCommand : IRequest<CreateResult>
 	
 	public List<string> TransferringAcademyUkprns { get; set; }
 	public string OutgoingTrustUkprn { get; set; }
-	public string IncomingTrustUkprn { get; }
+	public string IncomingTrustUkprn { get; set; }
 }

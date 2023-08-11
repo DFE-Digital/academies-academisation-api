@@ -1,4 +1,6 @@
-﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using AutoFixture;
+using AutoMapper;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using FluentAssertions;
 using System;
 using System.Collections;
@@ -16,6 +18,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		private readonly DateTime _createdOn = DateTime.Now;
 		public TransferProjectTests()
 		{
+
 		}
 
 		[Fact]
@@ -105,6 +108,42 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			   incomingTrustUkprn,
 			   academyUkprns,
 			   createdOn));
+		}
+
+		[Fact]
+		public void SetTransferProjectRationale_WithValidParameters_SetsCorrectProperties()
+		{
+			Fixture fixture = new Fixture();
+
+			// Arrange      
+			TransferProject result = CreateValidTransferProject();
+			var rationaleSectionIsCompleted = fixture.Create<bool>();
+			var projectRationale = fixture.Create<string>();
+			var trustSponsorRationale = fixture.Create<string>();
+
+			//Act
+			result.SetRationale(projectRationale, trustSponsorRationale, rationaleSectionIsCompleted);
+
+			//Assert
+			result.RationaleSectionIsCompleted.Should().Be(rationaleSectionIsCompleted);
+			result.ProjectRationale.Should().Be(projectRationale);
+			result.TrustSponsorRationale.Should().Be(trustSponsorRationale);
+		}
+
+		private static TransferProject CreateValidTransferProject()
+		{
+			string outgoingTrustUkprn = "11112222";
+			string incomingTrustUkprn = "11110000";
+			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			DateTime createdOn = DateTime.Now;
+
+			// Act
+			var result = TransferProject.Create(
+				outgoingTrustUkprn,
+				incomingTrustUkprn,
+				academyUkprns,
+				createdOn);
+			return result;
 		}
 
 		[Theory]
