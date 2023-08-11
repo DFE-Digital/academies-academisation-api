@@ -30,7 +30,7 @@ public class SetTransferProjectRationaleCommandHandler : IRequestHandler<SetTran
 		 _transferProjectRepository.Update(transferProject);
 		await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-		// returnin this, client will have to retrieve the updated transfer pproject to refresh data
+		// returning 'CommandSuccessResult', client will have to retrieve the updated transfer project to refresh data
 		return new CommandSuccessResult();
 	}
 }
