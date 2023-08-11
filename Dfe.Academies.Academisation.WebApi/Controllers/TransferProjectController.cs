@@ -55,7 +55,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
-		[HttpPut(Name = "SetTransferProjectTransferDates")]
+		[HttpPut("set-transfer-dates", Name = "SetTransferProjectTransferDates")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectTransferDates(
@@ -73,7 +73,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut(Name = "SetTransferProjectLegalRequirements")]
+		[HttpPut("set-legal-requirements", Name = "SetTransferProjectLegalRequirements")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectLegalRequirements(
