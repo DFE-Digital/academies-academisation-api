@@ -2,10 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
-	public class TransferProject : IAggregateRoot
+	public class TransferProject : ITransferProject, IAggregateRoot
 	{
 		private TransferProject(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns)
 		{
@@ -78,6 +80,9 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		private List<TransferringAcademy> _transferringAcademies;
 		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
 
+		IReadOnlyCollection<IIntendedTransferBenefit> ITransferProject.IntendedTransferBenefits => _intendedTransferBenefits;
+		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies => _transferringAcademies;
+
 		public DateTime? CreatedOn { get; private set; }
 
 		public void GenerateUrn(int? urnOverride = null)
@@ -95,7 +100,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ProjectReference = $"{referenceNumber}-{Urn}";
 		}
 
-		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted) {
+		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted)
+		{
 			ProjectRationale = projectRationale;
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;

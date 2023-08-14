@@ -139,6 +139,7 @@ builder.Services.AddScoped<IProjectGetStatusesQuery, ProjectGetStatusesQuery>();
 builder.Services.AddScoped<IEstablishmentGetDataQuery, EstablishmentGetDataQuery>();
 builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
+builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 
 //utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

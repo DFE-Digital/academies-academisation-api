@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TramsDataApi.RequestModels.AcademyTransferProject;
+using Dfe.Academies.Academisation.IService.Query;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -14,11 +15,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	{
 		private readonly IMediator _mediator;
 		private readonly ILogger<TransferProjectController> _logger;
+		private readonly ITransferProjectQueryService _transferProjectQueryService;
 
-		public TransferProjectController(IMediator mediator,
+		public TransferProjectController(IMediator mediator, ITransferProjectQueryService transferProjectQueryService,
 			ILogger<TransferProjectController> logger)
-		{ 
+		{
 			_mediator = mediator;
+			_transferProjectQueryService = transferProjectQueryService;
 			_logger = logger;
 		}
 
@@ -27,7 +30,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> CreateTransferProject(
-			[FromBody]CreateTransferProjectCommand command, CancellationToken cancellationToken)
+			[FromBody] CreateTransferProjectCommand command, CancellationToken cancellationToken)
 		{
 			_logger.LogInformation($"Creating transfer project");
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
@@ -35,8 +38,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result is null ? BadRequest() : Ok(result);
 		}
 
-		[HttpPut(Name = "SetTransferProjectRationale")]
-		[ProducesResponseType(StatusCodes.Status201Created)]
+		[HttpPut("set-rationale", Name = "SetTransferProjectRationale")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectRationale(
 			[FromBody] SetTransferProjectRationaleCommand command, CancellationToken cancellationToken)
@@ -52,7 +55,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
-		[HttpPut(Name = "SetTransferProjectTransferDates")]
+		[HttpPut("set-transfer-dates", Name = "SetTransferProjectTransferDates")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectTransferDates(
@@ -70,7 +73,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut(Name = "SetTransferProjectLegalRequirements")]
+		[HttpPut("set-legal-requirements", Name = "SetTransferProjectLegalRequirements")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectLegalRequirements(
@@ -88,8 +91,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut(Name = "SetTransferProjectFeatures")]
-		[ProducesResponseType(StatusCodes.Status201Created)]
+		[HttpPut("set-features" , Name = "SetTransferProjectFeatures")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectFeatures(
 			[FromBody] SetTransferProjectFeaturesCommand command, CancellationToken cancellationToken)
@@ -115,6 +118,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_logger.LogInformation("Setting transfer project benefits");
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
+
+
 			return result switch
 			{
 				CommandSuccessResult => Ok(),
@@ -122,6 +127,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
+		}		
+		
+		[HttpGet("{urn}", Name = "GetByUrn")]
+		public async Task<ActionResult<AcademyTransferProjectResponse>> GetByUrn(int urn)
+		{
+			_logger.LogInformation($"Getting transfer project, urn: {urn}");
+
+			var result = await _transferProjectQueryService.GetByUrn(urn).ConfigureAwait(false);
+
+			return result is null ? NotFound() : Ok(result);
 		}
 	}
 }
