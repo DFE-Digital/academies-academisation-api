@@ -1,4 +1,4 @@
-using AutoFixture;
+﻿using AutoFixture;
 using AutoMapper;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using FluentAssertions;
@@ -128,6 +128,59 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			result.RationaleSectionIsCompleted.Should().Be(rationaleSectionIsCompleted);
 			result.ProjectRationale.Should().Be(projectRationale);
 			result.TrustSponsorRationale.Should().Be(trustSponsorRationale);
+		}
+
+		[Fact]
+		public void SetTransferProjectBenefits_WithValidParameters_SetsCorrectProperties()
+		{
+			Fixture fixture = new Fixture();
+
+			// Arrange      
+			TransferProject result = CreateValidTransferProject();
+			var anyRisks = fixture.Create<bool>();
+			bool? equalitiesImpactAssessmentConsidered = fixture.Create<bool>();
+			List<string> selectedBenefits = fixture.Create<List<string>>();
+			string? otherBenefitValue = fixture.Create<string>();
+			bool? highProfileShouldBeConsidered = fixture.Create<bool>();
+			string? highProfileFurtherSpecification = fixture.Create<string>();
+			bool? complexLandAndBuildingShouldBeConsidered = fixture.Create<bool>(); 
+			string? complexLandAndBuildingFurtherSpecification = fixture.Create<string>();
+			bool? financeAndDebtShouldBeConsidered = fixture.Create<bool>();
+			string? financeAndDebtFurtherSpecification = fixture.Create<string>();
+			bool? otherRisksShouldBeConsidered = fixture.Create<bool>();
+			string? otherRisksFurtherSpecification = fixture.Create<string>();
+			bool? isCompleted = fixture.Create<bool>();
+
+			//Act
+			result.SetBenefitsAndRisks(
+				anyRisks,
+				equalitiesImpactAssessmentConsidered,
+				selectedBenefits,
+				otherBenefitValue,
+				highProfileShouldBeConsidered,
+				highProfileFurtherSpecification,
+				complexLandAndBuildingShouldBeConsidered,
+				complexLandAndBuildingFurtherSpecification,
+				financeAndDebtShouldBeConsidered,
+				financeAndDebtFurtherSpecification,
+				otherRisksShouldBeConsidered,
+				otherRisksFurtherSpecification,
+				isCompleted);
+
+			//Assert
+			result.AnyRisks.Should().Be(anyRisks);
+			result.EqualitiesImpactAssessmentConsidered.Should().Be(equalitiesImpactAssessmentConsidered);
+			result.IntendedTransferBenefits.All(x => selectedBenefits.Contains(x.SelectedBenefit)).Should().BeTrue();
+			result.OtherBenefitValue.Should().Be(otherBenefitValue);
+			result.HighProfileShouldBeConsidered.Should().Be(highProfileShouldBeConsidered);
+			result.HighProfileFurtherSpecification.Should().Be(highProfileFurtherSpecification);
+			result.ComplexLandAndBuildingShouldBeConsidered.Should().Be(complexLandAndBuildingShouldBeConsidered);
+			result.ComplexLandAndBuildingFurtherSpecification.Should().Be(complexLandAndBuildingFurtherSpecification);
+			result.FinanceAndDebtShouldBeConsidered.Should().Be(financeAndDebtShouldBeConsidered);
+			result.FinanceAndDebtFurtherSpecification.Should().Be(financeAndDebtFurtherSpecification);
+			result.OtherRisksShouldBeConsidered.Should().Be(otherRisksShouldBeConsidered);
+			result.OtherRisksFurtherSpecification.Should().Be(otherRisksFurtherSpecification);
+			result.BenefitsSectionIsCompleted.Should().Be(isCompleted); 
 		}
 
 		private static TransferProject CreateValidTransferProject()

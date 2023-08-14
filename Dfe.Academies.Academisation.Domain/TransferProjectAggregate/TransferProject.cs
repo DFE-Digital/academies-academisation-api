@@ -72,10 +72,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? AssignedUserEmailAddress { get; private set; }
 		public Guid? AssignedUserId { get; private set; }
 
-		private readonly List<IntendedTransferBenefit> _intendedTransferBenefits;
+		private List<IntendedTransferBenefit> _intendedTransferBenefits;
 		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
 
-		private readonly List<TransferringAcademy> _transferringAcademies;
+		private List<TransferringAcademy> _transferringAcademies;
 		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
 
 		public DateTime? CreatedOn { get; private set; }
@@ -119,6 +119,30 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			// HtbDate maps from the front-end would be good to move this to more business focused language
 			HtbDate = advisoryBoardDate;
 			TargetDateForTransfer = expectedDateForTransfer;
+		}
+		public void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered, 
+			List<string> selectedBenefits, string? otherBenefitValue, 
+			bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification, 
+			bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification, 
+			bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification, 
+			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification, 
+			bool? isCompleted)
+		{
+			AnyRisks = anyRisks;
+			EqualitiesImpactAssessmentConsidered = equalitiesImpactAssessmentConsidered;
+			BenefitsSectionIsCompleted = isCompleted;
+
+			_intendedTransferBenefits = selectedBenefits.Select(b => new IntendedTransferBenefit(b)).ToList();
+			OtherBenefitValue = otherBenefitValue;
+
+			HighProfileShouldBeConsidered = highProfileShouldBeConsidered;
+            HighProfileFurtherSpecification = highProfileFurtherSpecification;
+			ComplexLandAndBuildingShouldBeConsidered = complexLandAndBuildingShouldBeConsidered;
+			ComplexLandAndBuildingFurtherSpecification = complexLandAndBuildingFurtherSpecification;
+			FinanceAndDebtShouldBeConsidered = financeAndDebtShouldBeConsidered;
+			FinanceAndDebtFurtherSpecification = financeAndDebtFurtherSpecification;
+			OtherRisksShouldBeConsidered = otherRisksShouldBeConsidered;
+			OtherRisksFurtherSpecification = otherRisksFurtherSpecification;
 		}
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)

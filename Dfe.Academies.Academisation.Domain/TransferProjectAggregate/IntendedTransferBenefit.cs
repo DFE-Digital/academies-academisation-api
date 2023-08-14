@@ -9,6 +9,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class IntendedTransferBenefit
 	{
+		public IntendedTransferBenefit(string selectedBenefit)
+		{
+			SelectedBenefit = selectedBenefit;
+		}
+
 		public int Id { get; private set; }
 		public int TransferProjectId { get; private set; }
 		public string SelectedBenefit { get; private set; }
