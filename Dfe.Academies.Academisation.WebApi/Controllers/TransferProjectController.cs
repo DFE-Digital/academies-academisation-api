@@ -109,6 +109,26 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("set-benefits", Name = "SetTransferProjectBenefits")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> SetTransferProjectBenefits(
+	[FromBody] SetTransferProjectBenefitsCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Setting transfer project benefits");
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}		
+		
 		[HttpGet("{urn}", Name = "GetByUrn")]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetByUrn(int urn)
 		{
@@ -118,7 +138,5 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result is null ? NotFound() : Ok(result);
 		}
-
-
 	}
 }
