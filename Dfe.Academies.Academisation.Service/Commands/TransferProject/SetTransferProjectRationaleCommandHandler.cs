@@ -6,28 +6,33 @@ using TramsDataApi.RequestModels.AcademyTransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application;
 
-public class SetTransferProjectRationaleCommandHandler : IRequestHandler<SetTransferProjectRationaleCommand, CommandResult>
+public class
+	SetTransferProjectRationaleCommandHandler : IRequestHandler<SetTransferProjectRationaleCommand, CommandResult>
 {
 	private readonly ITransferProjectRepository _transferProjectRepository;
 	private readonly ILogger<SetTransferProjectRationaleCommandHandler> _logger;
 
-	public SetTransferProjectRationaleCommandHandler(ITransferProjectRepository transferProjectRepository, ILogger<SetTransferProjectRationaleCommandHandler> logger)
+	public SetTransferProjectRationaleCommandHandler(ITransferProjectRepository transferProjectRepository,
+		ILogger<SetTransferProjectRationaleCommandHandler> logger)
 	{
 		_transferProjectRepository = transferProjectRepository;
 		_logger = logger;
 	}
 
-	public async Task<CommandResult> Handle(SetTransferProjectRationaleCommand request, CancellationToken cancellationToken)
+	public async Task<CommandResult> Handle(SetTransferProjectRationaleCommand request,
+		CancellationToken cancellationToken)
 	{
 		var transferProject = await _transferProjectRepository.GetById(request.Id).ConfigureAwait(false);
 
-		if (transferProject == null) {
+		if (transferProject == null)
+		{
 			_logger.LogError($"transfer project not found with id:{request.Id}");
 			return new NotFoundCommandResult();
 		}
+
 		transferProject.SetRationale(request.ProjectRationale, request.TrustSponsorRationale, request.IsCompleted);
 
-		 _transferProjectRepository.Update(transferProject);
+		_transferProjectRepository.Update(transferProject);
 		await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 		// returning 'CommandSuccessResult', client will have to retrieve the updated transfer project to refresh data

@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TramsDataApi.RequestModels.AcademyTransferProject;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -91,7 +92,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("set-features" , Name = "SetTransferProjectFeatures")]
+		[HttpPut("set-features", Name = "SetTransferProjectFeatures")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectFeatures(
@@ -113,12 +114,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectBenefits(
-	[FromBody] SetTransferProjectBenefitsCommand command, CancellationToken cancellationToken)
+		[FromBody] SetTransferProjectBenefitsCommand command, CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Setting transfer project benefits");
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
-
-
 
 			return result switch
 			{
@@ -127,8 +126,42 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
-		}		
-		
+		}
+		[HttpPut("set-school-additional-data", Name = "SetSchoolAdditionalData")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> SetSchoolAdditionalData(
+			[FromBody] SetTransferringAcademySchoolAdditionalDataCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Setting transferring academy school additional data");
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+		[HttpPut("assign-user", Name = "AssignUser")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> AssignUser(
+			[FromBody] AssignTransferProjectUserCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Assigning user to transfer project");
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpGet("{urn}", Name = "GetByUrn")]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetByUrn(int urn)
 		{

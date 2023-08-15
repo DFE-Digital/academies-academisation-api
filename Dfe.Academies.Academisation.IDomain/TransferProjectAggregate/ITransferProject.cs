@@ -52,5 +52,24 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
+		void AssignUser(Guid userId, string userEmail, string userFullName);
+		void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted);
+		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement,
+			string diocesanConsent, bool? isCompleted);
+
+		void SetTransferDates(DateTime advisoryBoardDate, DateTime expectedDateForTransfer);
+
+		void SetTransferringAcademiesSchoolData(int transferringAcademyId,
+			string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation,
+			string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation,
+			string keyStage5PerformanceAdditionalInformation);
+
+		void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered,
+			List<string> selectedBenefits, string? otherBenefitValue,
+			bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification,
+			bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification,
+			bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification,
+			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification,
+			bool? isCompleted);
 	}
 }

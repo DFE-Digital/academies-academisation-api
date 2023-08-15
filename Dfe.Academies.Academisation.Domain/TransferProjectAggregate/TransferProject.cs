@@ -106,6 +106,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
 		}
+		public void AssignUser(Guid userId, string userEmail, string userFullName)
+		{
+			AssignedUserId = userId;
+			AssignedUserEmailAddress = userEmail;
+			AssignedUserFullName = userFullName;
+		}
 
 		public void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted)
 		{
@@ -130,8 +136,6 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		{
 			var transferringAcademy =
 				TransferringAcademies.Single(x => x.Id == transferringAcademyId);
-
-
 
 			transferringAcademy.SetSchoolAdditionalData(
 				latestOfstedReportAdditionalInformation,

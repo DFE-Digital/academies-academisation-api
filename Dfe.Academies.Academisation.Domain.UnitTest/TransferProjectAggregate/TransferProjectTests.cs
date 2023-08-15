@@ -131,6 +131,26 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		}
 
 		[Fact]
+		public void AssignTransferProjectUser_WithValidParameters_SetsCorrectProperties()
+		{
+			Fixture fixture = new Fixture();
+
+			// Arrange      
+			TransferProject result = CreateValidTransferProject();
+			var userId = fixture.Create<Guid>();
+			var userEmail = fixture.Create<string>();
+			var userFullName = fixture.Create<string>();
+
+			//Act
+			result.AssignUser(userId, userEmail, userFullName);
+
+			//Assert
+			result.AssignedUserId.Should().Be(userId);
+			result.AssignedUserEmailAddress.Should().Be(userEmail);
+			result.AssignedUserFullName.Should().Be(userFullName);
+		}
+
+		[Fact]
 		public void SetTransferProjectBenefits_WithValidParameters_SetsCorrectProperties()
 		{
 			Fixture fixture = new Fixture();
