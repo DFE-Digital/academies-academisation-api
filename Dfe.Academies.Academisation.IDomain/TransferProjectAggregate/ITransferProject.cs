@@ -71,5 +71,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 			bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification,
 			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification,
 			bool? isCompleted);
+
+		void SetTrustInformationAndProjectDates(string recommendation, string author);
 	}
 }

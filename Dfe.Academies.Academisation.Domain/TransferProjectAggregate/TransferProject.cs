@@ -106,6 +106,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
 		}
+		public void SetTrustInformationAndProjectDates(string recommendation, string author)
+		{
+			Recommendation = recommendation;
+			Author = author;
+		}
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
 			AssignedUserId = userId;

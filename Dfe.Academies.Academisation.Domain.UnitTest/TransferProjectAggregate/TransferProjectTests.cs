@@ -129,7 +129,23 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			result.ProjectRationale.Should().Be(projectRationale);
 			result.TrustSponsorRationale.Should().Be(trustSponsorRationale);
 		}
+		[Fact]
+		public void SetTransferProjectTrustInformationAndProjectDates_WithValidParameters_SetsCorrectProperties()
+		{
+			Fixture fixture = new Fixture();
 
+			// Arrange      
+			TransferProject result = CreateValidTransferProject();
+			var recommendation = fixture.Create<string>();
+			var author = fixture.Create<string>();
+
+			//Act
+			result.SetTrustInformationAndProjectDates(recommendation, author);
+
+			//Assert
+			result.Recommendation.Should().Be(recommendation);
+			result.Author.Should().Be(author);
+		}
 		[Fact]
 		public void AssignTransferProjectUser_WithValidParameters_SetsCorrectProperties()
 		{
