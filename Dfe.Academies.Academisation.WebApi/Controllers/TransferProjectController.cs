@@ -36,7 +36,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut(Name = "SetTransferProjectRationale")]
-		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectRationale(
 			[FromBody] SetTransferProjectRationaleCommand command, CancellationToken cancellationToken)
@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 		[HttpPut(Name = "SetTransferProjectTransferDates")]
-		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectTransferDates(
 			[FromBody] SetTransferProjectTransferDatesCommand command, CancellationToken cancellationToken)
@@ -71,7 +71,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut(Name = "SetTransferProjectLegalRequirements")]
-		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectLegalRequirements(
 			[FromBody] SetTransferProjectLegalRequirementsCommand command, CancellationToken cancellationToken)
@@ -89,7 +89,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpPut(Name = "SetTransferProjectFeatures")]
-		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferProjectFeatures(
 			[FromBody] SetTransferProjectFeaturesCommand command, CancellationToken cancellationToken)

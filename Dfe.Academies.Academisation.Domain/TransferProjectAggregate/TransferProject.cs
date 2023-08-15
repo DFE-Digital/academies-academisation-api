@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
@@ -120,6 +121,22 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			HtbDate = advisoryBoardDate;
 			TargetDateForTransfer = expectedDateForTransfer;
 		}
+		public void SetTransferringAcademiesSchoolData(int transferringAcademyId, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
+		{
+			var transferringAcademy =
+				TransferringAcademies.Single(x => x.Id == transferringAcademyId);
+
+
+
+			transferringAcademy.SetSchoolAdditionalData(
+				latestOfstedReportAdditionalInformation,
+				pupilNumbersAdditionalInformation,
+				keyStage2PerformanceAdditionalInformation,
+				keyStage4PerformanceAdditionalInformation,
+				keyStage5PerformanceAdditionalInformation
+			);
+		}
+
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
 		{
