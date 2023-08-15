@@ -189,5 +189,14 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result is null ? NotFound() : Ok(result);
 		}
+		[HttpGet("{id}", Name = "GetById")]
+		public async Task<ActionResult<AcademyTransferProjectResponse>> GetById(int id)
+		{
+			_logger.LogInformation($"Getting transfer project, id: {id}");
+
+			var result = await _transferProjectQueryService.GetById(id).ConfigureAwait(false);
+
+			return result is null ? NotFound() : Ok(result);
+		}
 	}
 }

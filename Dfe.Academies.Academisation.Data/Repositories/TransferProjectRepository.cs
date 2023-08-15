@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<ITransferProject?> GetByUrn(int urn)
 		{
-			return (ITransferProject?)await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
+			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
 		}
 
 		private IQueryable<TransferProject> DefaultIncludes()
