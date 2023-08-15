@@ -27,6 +27,13 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return  AcademyTransferProjectResponseFactory.Create(transferProject);
 		}
 
-		
+		public async Task<AcademyTransferProjectResponse?> GetById(int id)
+		{
+			var transferProject = await _transferProjectRepository.GetById(id);
+
+			return AcademyTransferProjectResponseFactory.Create(transferProject);
+		}
+
+
 	}
 }
