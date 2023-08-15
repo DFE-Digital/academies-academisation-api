@@ -1,11 +1,12 @@
 ﻿using System.Globalization;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 {
 	public static class AcademyTransferProjectResponseFactory
 	{
-		public static AcademyTransferProjectResponse Create(Domain.TransferProjectAggregate.TransferProject model)
+		public static AcademyTransferProjectResponse Create(ITransferProject model)
 		{
 			if (model == null)
 			{

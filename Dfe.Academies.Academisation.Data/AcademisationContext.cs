@@ -36,6 +36,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
+	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
+
 	public override int SaveChanges()
 	{
 		SetModifiedAndCreatedDates();

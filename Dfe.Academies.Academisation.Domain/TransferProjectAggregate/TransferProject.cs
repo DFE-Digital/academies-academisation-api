@@ -2,11 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Domain.SeedWork.Dynamics;
+using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
-	public class TransferProject : IAggregateRoot
+	public class TransferProject : ITransferProject, IAggregateRoot
 	{
 		private TransferProject(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns)
 		{
@@ -73,11 +74,14 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? AssignedUserEmailAddress { get; private set; }
 		public Guid? AssignedUserId { get; private set; }
 
-		private readonly List<IntendedTransferBenefit> _intendedTransferBenefits;
+		private List<IntendedTransferBenefit> _intendedTransferBenefits;
 		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
 
-		private readonly List<TransferringAcademy> _transferringAcademies;
+		private List<TransferringAcademy> _transferringAcademies;
 		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
+
+		IReadOnlyCollection<IIntendedTransferBenefit> ITransferProject.IntendedTransferBenefits => _intendedTransferBenefits;
+		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies => _transferringAcademies;
 
 		public DateTime? CreatedOn { get; private set; }
 
@@ -96,7 +100,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ProjectReference = $"{referenceNumber}-{Urn}";
 		}
 
-		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted) {
+		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted)
+		{
 			ProjectRationale = projectRationale;
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
@@ -137,6 +142,30 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			);
 		}
 
+		public void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered, 
+			List<string> selectedBenefits, string? otherBenefitValue, 
+			bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification, 
+			bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification, 
+			bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification, 
+			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification, 
+			bool? isCompleted)
+		{
+			AnyRisks = anyRisks;
+			EqualitiesImpactAssessmentConsidered = equalitiesImpactAssessmentConsidered;
+			BenefitsSectionIsCompleted = isCompleted;
+
+			_intendedTransferBenefits = selectedBenefits.Select(b => new IntendedTransferBenefit(b)).ToList();
+			OtherBenefitValue = otherBenefitValue;
+
+			HighProfileShouldBeConsidered = highProfileShouldBeConsidered;
+            HighProfileFurtherSpecification = highProfileFurtherSpecification;
+			ComplexLandAndBuildingShouldBeConsidered = complexLandAndBuildingShouldBeConsidered;
+			ComplexLandAndBuildingFurtherSpecification = complexLandAndBuildingFurtherSpecification;
+			FinanceAndDebtShouldBeConsidered = financeAndDebtShouldBeConsidered;
+			FinanceAndDebtFurtherSpecification = financeAndDebtFurtherSpecification;
+			OtherRisksShouldBeConsidered = otherRisksShouldBeConsidered;
+			OtherRisksFurtherSpecification = otherRisksFurtherSpecification;
+		}
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
 		{
