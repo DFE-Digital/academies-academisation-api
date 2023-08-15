@@ -27,5 +27,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? KeyStage4PerformanceAdditionalInformation { get; private set; }
 		public string? KeyStage5PerformanceAdditionalInformation { get; private set; }
 
+		public void SetSchoolAdditionalData(string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
+		{
+			LatestOfstedReportAdditionalInformation = latestOfstedReportAdditionalInformation;
+			PupilNumbersAdditionalInformation = pupilNumbersAdditionalInformation;
+			KeyStage2PerformanceAdditionalInformation = keyStage2PerformanceAdditionalInformation;
+			KeyStage4PerformanceAdditionalInformation = keyStage4PerformanceAdditionalInformation;
+			KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
+		}
 	}
 }

@@ -106,6 +106,17 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
 		}
+		public void SetTrustInformationAndProjectDates(string recommendation, string author)
+		{
+			Recommendation = recommendation;
+			Author = author;
+		}
+		public void AssignUser(Guid userId, string userEmail, string userFullName)
+		{
+			AssignedUserId = userId;
+			AssignedUserEmailAddress = userEmail;
+			AssignedUserFullName = userFullName;
+		}
 
 		public void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted)
 		{
@@ -126,6 +137,20 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			HtbDate = advisoryBoardDate;
 			TargetDateForTransfer = expectedDateForTransfer;
 		}
+		public void SetTransferringAcademiesSchoolData(int transferringAcademyId, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
+		{
+			var transferringAcademy =
+				TransferringAcademies.Single(x => x.Id == transferringAcademyId);
+
+			transferringAcademy.SetSchoolAdditionalData(
+				latestOfstedReportAdditionalInformation,
+				pupilNumbersAdditionalInformation,
+				keyStage2PerformanceAdditionalInformation,
+				keyStage4PerformanceAdditionalInformation,
+				keyStage5PerformanceAdditionalInformation
+			);
+		}
+
 		public void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered, 
 			List<string> selectedBenefits, string? otherBenefitValue, 
 			bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification, 
