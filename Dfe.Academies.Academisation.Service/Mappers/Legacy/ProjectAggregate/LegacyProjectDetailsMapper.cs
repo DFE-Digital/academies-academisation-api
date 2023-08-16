@@ -61,7 +61,7 @@ internal static class LegacyProjectDetailsMapper
 			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived ?? existingProject.Details.AnnexBFormReceived,
 			AnnexBFormUrl = detailsToUpdate.AnnexBFormReceived is true ? detailsToUpdate.AnnexBFormUrl : string.Empty,
 
-			// general info
+			// School Overview
 			SchoolPhase = detailsToUpdate.SchoolPhase ?? existingProject.Details.SchoolPhase,
 			AgeRange = detailsToUpdate.AgeRange ?? existingProject.Details.AgeRange,
 			SchoolType = detailsToUpdate.SchoolType ?? existingProject.Details.SchoolType,
@@ -77,10 +77,9 @@ internal static class LegacyProjectDetailsMapper
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = detailsToUpdate.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust ?? existingProject.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters ?? existingProject.Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation ?? existingProject.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty ?? existingProject.Details.MemberOfParliamentParty,
-			MemberOfParliamentName = detailsToUpdate.MemberOfParliamentName ?? existingProject.Details.MemberOfParliamentName,
+			MemberOfParliamentNameAndParty = detailsToUpdate.MemberOfParliamentNameAndParty ?? existingProject.Details.MemberOfParliamentNameAndParty,
 
-			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete ?? existingProject.Details.GeneralInformationSectionComplete,
+			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete ?? existingProject.Details.SchoolOverviewSectionComplete,
 
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation ?? existingProject.Details.SchoolPerformanceAdditionalInformation,

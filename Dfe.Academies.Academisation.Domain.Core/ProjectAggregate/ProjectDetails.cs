@@ -61,9 +61,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; init; }
 	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; init; }
-	public string? MemberOfParliamentParty { get; init; }
-	public string? MemberOfParliamentName { get; init; }
-	public bool? GeneralInformationSectionComplete { get; init; }
+	public string? MemberOfParliamentNameAndParty { get; init; }
+	public bool? SchoolOverviewSectionComplete { get; init; }
 	public string? SchoolPerformanceAdditionalInformation { get; init; }
 	public string? RationaleForProject { get; init; }
 	public string? RationaleForTrust { get; init; }
@@ -175,11 +174,9 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 				   other.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-			   string.Equals(MemberOfParliamentParty, other.MemberOfParliamentParty,
+			   string.Equals(MemberOfParliamentNameAndParty, other.MemberOfParliamentNameAndParty,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-			   string.Equals(MemberOfParliamentName, other.MemberOfParliamentName,
-				   StringComparison.InvariantCultureIgnoreCase) &&
-			   GeneralInformationSectionComplete == other.GeneralInformationSectionComplete &&
+			   SchoolOverviewSectionComplete == other.SchoolOverviewSectionComplete &&
 			   string.Equals(SchoolPerformanceAdditionalInformation, other.SchoolPerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(RationaleForProject, other.RationaleForProject,
@@ -290,9 +287,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust);
 		hashCode.Add(DistanceFromSchoolToTrustHeadquarters);
 		hashCode.Add(DistanceFromSchoolToTrustHeadquartersAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(MemberOfParliamentParty, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(MemberOfParliamentName, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(GeneralInformationSectionComplete);
+		hashCode.Add(MemberOfParliamentNameAndParty, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(SchoolOverviewSectionComplete);
 		hashCode.Add(SchoolPerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(RationaleForProject, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(RationaleForTrust, StringComparer.InvariantCultureIgnoreCase);

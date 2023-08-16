@@ -81,7 +81,7 @@ public class TestApplicationContext : TestAcademisationContext
 			schools,
 			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<string>(),_fixture.Create<ChangesToTrust>(),
 				_fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
-			null, null, applicationRef);
+			null, null, applicationRef,null);
 
 		return application;
 	}

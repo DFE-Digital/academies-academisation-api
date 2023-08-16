@@ -107,6 +107,18 @@ variable "enable_event_hub" {
   type        = bool
 }
 
+variable "enable_logstash_consumer" {
+  description = "Create an Event Hub consumer group for Logstash"
+  type        = bool
+  default     = false
+}
+
+variable "eventhub_export_log_analytics_table_names" {
+  description = "List of Log Analytics table names that you want to export to Event Hub. See https://learn.microsoft.com/en-gb/azure/azure-monitor/logs/logs-data-export?tabs=portal#supported-tables for a list of supported tables"
+  type        = list(string)
+  default     = []
+}
+
 variable "enable_monitoring" {
   description = "Create an App Insights instance and notification group for the Container App"
   type        = bool
@@ -159,9 +171,21 @@ variable "existing_network_watcher_resource_group_name" {
   type        = string
 }
 
+variable "container_apps_allow_ips_inbound" {
+  description = "Restricts access to the Container Apps by creating a network security group rule that only allow inbound traffic from the provided list of IPs"
+  type        = list(string)
+  default     = []
+}
+
 variable "enable_dns_zone" {
   description = "Conditionally create a DNS zone"
   type        = bool
+}
+
+variable "cdn_frontdoor_forwarding_protocol" {
+  description = "Azure CDN Front Door forwarding protocol"
+  type        = string
+  default     = "HttpsOnly"
 }
 
 variable "dns_zone_domain_name" {

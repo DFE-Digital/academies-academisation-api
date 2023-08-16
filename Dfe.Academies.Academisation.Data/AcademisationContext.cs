@@ -228,6 +228,11 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.WithOne()
 			.HasForeignKey("ConversionApplicationId")
 			.IsRequired();
+		
+		applicationConfiguration
+			.HasQueryFilter(p => p.DeletedAt == null);
+
+
 
 		var schoolNavigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Schools));
 		// DDD Patterns comment:
