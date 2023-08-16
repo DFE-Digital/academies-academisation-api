@@ -35,6 +35,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			// Define the project name
 			const string projectOneName = "Cypress Project One";
 			const string projectTwoName = "Cypress Project Two";
+			const string applicationFirstName = "FormAMAT";
 
 			// Find the project
 			var existingFirstProject = await DbContext.Projects
@@ -48,7 +49,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 
 			// Find the Application
 			var existingApplication = await DbContext.Applications
-				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == "Cypress", cancellationToken);
+				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == applicationFirstName, cancellationToken);
 
 			// If the Application exists, remove it
 			if (existingApplication != null)
@@ -120,7 +121,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			};
 
 			// Create Application
-			var contributor = new ContributorDetails("Cypress", "Project", "Cypress@Project.com",
+			var contributor = new ContributorDetails(applicationFirstName, "Project", "Cypress@Project.com",
 				ContributorRole.ChairOfGovernors, "N/A");
 			var createResult = new Domain.ApplicationAggregate.ApplicationFactory().Create(
 				ApplicationType.FormAMat, contributor
@@ -165,7 +166,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 
 			// Add the new project to the Projects DbSet
 			var createdApplication = await DbContext.Applications
-				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == "Cypress", cancellationToken);
+				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == applicationFirstName, cancellationToken);
 			newProjectOne.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
 			newProjectTwo.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
 			DbContext.Projects.Add(newProjectOne);
