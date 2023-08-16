@@ -61,7 +61,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			var newProjectOne = new ProjectState
 			{
 				SchoolName = projectOneName,
-				Urn = 139292,
+				Urn = 113537,
 				ProjectStatus = "Approved with conditions",
 				ApplicationReferenceNumber = "A2B_123456",
 				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
@@ -92,7 +92,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			var newProjectTwo = new ProjectState
 			{
 				SchoolName = projectTwoName,
-				Urn = 139292,
+				Urn = 100608,
 				ProjectStatus = "Approved with conditions",
 				ApplicationReferenceNumber = "A2B_123456",
 				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
@@ -141,7 +141,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				var newSchoolList = new List<UpdateSchoolParameter>
 				{
 					new(0, Empty, Empty, false, Empty, Empty, Empty, Empty, false, Empty, Empty, null, Empty, Empty, null, Empty,
-						new SchoolDetails(113537, projectOneName, null, null, null, null),
+						new SchoolDetails(100608, projectOneName, null, null, null, null),
 						new List<KeyValuePair<int, LoanDetails>>(),
 						new List<KeyValuePair<int, LeaseDetails>>(), false, false),
 					new(0, Empty, Empty, false, Empty, Empty, Empty, Empty, false, Empty, Empty, null, Empty, Empty, null, Empty,
