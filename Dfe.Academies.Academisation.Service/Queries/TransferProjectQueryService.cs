@@ -1,6 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Data.Common;
+using System.Runtime.Intrinsics.Arm;
+using AutoMapper;
+using Dfe.Academies.Academisation.Data.Migrations;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
@@ -33,7 +37,29 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			return AcademyTransferProjectResponseFactory.Create(transferProject);
 		}
+ 
+		public async Task<PagedResultResponse<AcademyTransferProjectSummaryResponse>> GetTransferProjects(int page, int count, int? urn,
+        string title)
+        {
+			IEnumerable<ITransferProject> transferProjects = FilterByUrn(
+            await _transferProjectRepository.GetAllTransferProjects(), urn).ToList();
+	
+			//the logic retrieving the trust data goes here
+			IEnumerable<AcademyTransferProjectSummaryResponse> projects = null;
+            //this is placeholder code
+            var recordTotal = projects.Count();
+			
+			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(null, recordTotal));
+		}
+			
+		private static IEnumerable<ITransferProject> FilterByUrn(IEnumerable<ITransferProject> queryable,
+        int? urn)
+        {
+         if (urn.HasValue) queryable = queryable.Where(p => p.Urn == urn);
 
-
+         return queryable;
+        
+		}
 	}
+
 }

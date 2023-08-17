@@ -17,6 +17,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IMediator _mediator;
 		private readonly ILogger<TransferProjectController> _logger;
 		private readonly ITransferProjectQueryService _transferProjectQueryService;
+		
 
 		public TransferProjectController(IMediator mediator, ITransferProjectQueryService transferProjectQueryService,
 			ILogger<TransferProjectController> logger)
@@ -180,7 +181,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpGet("{urn}", Name = "GetByUrn")]
+		[HttpGet("{urn}/urn", Name = "GetByUrn")]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetByUrn(int urn)
 		{
 			_logger.LogInformation($"Getting transfer project, urn: {urn}");
@@ -189,7 +190,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result is null ? NotFound() : Ok(result);
 		}
-		[HttpGet("{id}", Name = "GetById")]
+
+		[HttpGet("{id}/id", Name = "GetById")]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetById(int id)
 		{
 			_logger.LogInformation($"Getting transfer project, id: {id}");
@@ -198,5 +200,27 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result is null ? NotFound() : Ok(result);
 		}
+
+		[HttpGet("GetTransferProjects", Name = "GetTransferProjects")]
+		public async Task<ActionResult<AcademyTransferProjectResponse>> GetTransferProjects(
+	    [FromQuery] string title,
+	    [FromQuery] int page = 1,
+	    [FromQuery] int count = 50,
+	    [FromQuery] int? urn = null)
+		{
+			
+		   _logger.LogInformation($"Attempting to retrieve {count} Academy Transfer Projects filtered by: urn: {urn} title: {title}", count, urn, title);
+
+           PagedResultResponse<AcademyTransferProjectSummaryResponse> result =
+              await _transferProjectQueryService.GetTransferProjects(page, count, urn,title);
+
+           if (result.Results.Any())
+           {
+              IEnumerable<string> projectIds = result.Results.Select(p => p.ProjectUrn);
+              _logger.LogInformation($"Returning {count} Academy Transfer Projects with Id(s): {projectIds}", result.Results.Count(), string.Join(',', projectIds));
+           }
+
+           return Ok(result);
+	    }
 	}
 }
