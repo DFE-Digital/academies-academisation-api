@@ -262,9 +262,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("FoundationConsent")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("GeneralInformationSectionComplete")
-                        .HasColumnType("bit");
-
                     b.Property<string>("GoverningBodyResolution")
                         .HasColumnType("nvarchar(max)");
 
@@ -307,17 +304,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime?>("LocalAuthorityInformationTemplateSentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("MemberOfParliamentName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemberOfParliamentParty")
+                    b.Property<string>("MemberOfParliamentNameAndParty")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameOfTrust")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("OpeningDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("PartOfPfiScheme")
                         .HasColumnType("nvarchar(max)");
@@ -387,6 +378,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("SchoolName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("SchoolOverviewSectionComplete")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SchoolPerformanceAdditionalInformation")
                         .HasColumnType("nvarchar(max)");
@@ -466,6 +460,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("DynamicsApplicationId")

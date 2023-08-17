@@ -26,7 +26,6 @@ public class Project : IProject
 
 	public ProjectDetails Details { get; private set; }
 
-
 	public static CreateResult Create(IApplication application)
 	{
 		if (application.ApplicationType != ApplicationType.JoinAMat)
@@ -46,12 +45,12 @@ public class Project : IProject
 			SchoolName = school.SchoolName,
 			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 			ProjectStatus = "Converter Pre-AO (C)",
-			ApplicationReceivedDate = application.ApplicationSubmittedDate,
-			OpeningDate = DateTime.Today.AddMonths(6),
+			ApplicationReceivedDate = application.ApplicationSubmittedDate,			
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
-			ProposedAcademyOpeningDate = school.ConversionTargetDate,
+			// Temp hotfix
+			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
@@ -88,11 +87,11 @@ public class Project : IProject
 				SchoolName = school.Details.SchoolName,
 				ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 				ProjectStatus = "Converter Pre-AO (C)",
-				ApplicationReceivedDate = application.ApplicationSubmittedDate,
-				OpeningDate = DateTime.Today.AddMonths(6),
+				ApplicationReceivedDate = application.ApplicationSubmittedDate,				
 				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
 				AcademyTypeAndRoute = "Form a Mat",
-				ProposedAcademyOpeningDate = school.Details.ConversionTargetDate,
+				// Temp hotfix
+				ProposedAcademyOpeningDate = null,
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 				PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
@@ -138,7 +137,6 @@ public class Project : IProject
 			Urn = project.School.Urn,
 			SchoolName = project.School?.Name,
 			ProjectStatus = "Converter Pre-AO (C)",
-			OpeningDate = DateTime.Today.AddMonths(6),
 			TrustReferenceNumber = project.Trust?.ReferenceNumber,
 			NameOfTrust = project.Trust?.Name,
 			AcademyTypeAndRoute = "Sponsored",
@@ -171,8 +169,7 @@ public class Project : IProject
 			ProjectStatus = detailsToUpdate.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
 			AssignedDate = detailsToUpdate.AssignedDate,
-			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,
-			OpeningDate = detailsToUpdate.OpeningDate,
+			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,			
 			BaselineDate = detailsToUpdate.BaselineDate,
 
 			// la summary page
@@ -209,7 +206,7 @@ public class Project : IProject
 			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived,
 			AnnexBFormUrl = detailsToUpdate.AnnexBFormUrl,
 
-			// general info
+			// School Overview
 			SchoolPhase = detailsToUpdate.SchoolPhase,
 			AgeRange = detailsToUpdate.AgeRange,
 			SchoolType = detailsToUpdate.SchoolType,
@@ -225,10 +222,9 @@ public class Project : IProject
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = detailsToUpdate.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-			MemberOfParliamentParty = detailsToUpdate.MemberOfParliamentParty,
-			MemberOfParliamentName = detailsToUpdate.MemberOfParliamentName,
+			MemberOfParliamentNameAndParty = detailsToUpdate.MemberOfParliamentNameAndParty,
 
-			GeneralInformationSectionComplete = detailsToUpdate.GeneralInformationSectionComplete,
+			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete,
 
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = detailsToUpdate.SchoolPerformanceAdditionalInformation,
@@ -308,3 +304,5 @@ public class Project : IProject
 		return new User(user.Id, user.FullName, user.EmailAddress);
 	}
 }
+
+

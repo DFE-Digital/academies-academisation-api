@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.WebApi.Middleware
+﻿using Dfe.Academisation.CorrelationIdMiddleware;
+
+namespace Dfe.Academies.Academisation.WebApi.Middleware
 {
 	public class RequestLoggingMiddleware
 	{
@@ -15,8 +17,7 @@
 		{
 			string? correlationId = null;
 
-			if (context.Request.Headers.TryGetValue(
-			AddCorrelationIdMiddleware.CorrelationIdHeaderKey, out var headerCorrelationId))
+			if (context.Request.Headers.TryGetValue(Keys.HeaderKey, out var headerCorrelationId))
 			{
 				correlationId = headerCorrelationId;
 			}

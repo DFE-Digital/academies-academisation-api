@@ -78,5 +78,16 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return x;
 		}
+
+		public async Task SoftDelete(int applicationId)
+		{
+			var entity = await _context.Applications.FindAsync(applicationId);
+			if(entity != null){
+				 entity.DeletedAt = DateTime.UtcNow;
+			    _context.Applications.Update(entity);		
+		    }
+
+		
+		}
 	}
 }

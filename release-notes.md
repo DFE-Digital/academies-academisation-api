@@ -1,3 +1,11 @@
+## 9.1.0
+* Added correlation id middleware package. Logs and outgoing http requsts will now provide correlation id to make debugging easier.
+
+## 9.0.1
+* Fixed Bug 132060 : Added Migration to remove the 'Opening Date' field from projects. The 'ProposedAcademyOpeningDate' field will now be used throughout the api.
+* Added migration to change projects with status of "APPROVED WITH CONDITIONS" to "Approved with conditions"
+
+---
 ## 9.0.0
 * Refactoring the command/command handlers to be consistent
 

@@ -20,7 +20,6 @@ internal static class LegacyProjectServiceModelMapper
 			ApplicationReceivedDate = project.Details.ApplicationReceivedDate,
 			AssignedDate = project.Details.AssignedDate,
 			HeadTeacherBoardDate = project.Details.HeadTeacherBoardDate,
-			OpeningDate = project.Details.OpeningDate,
 			BaselineDate = project.Details.BaselineDate,
 
 			// la summary page
@@ -53,7 +52,7 @@ internal static class LegacyProjectServiceModelMapper
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
 			Region = project.Details.Region,
 
-			// general info
+			// School Overview
 			SchoolPhase = project.Details.SchoolPhase,
 			AgeRange = project.Details.AgeRange,
 			SchoolType = project.Details.SchoolType,
@@ -69,9 +68,8 @@ internal static class LegacyProjectServiceModelMapper
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = project.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = project.Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = project.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-			MemberOfParliamentParty = project.Details.MemberOfParliamentParty,
-			MemberOfParliamentName = project.Details.MemberOfParliamentName,
-			GeneralInformationSectionComplete = project.Details.GeneralInformationSectionComplete,
+			MemberOfParliamentNameAndParty = project.Details.MemberOfParliamentNameAndParty,
+			SchoolOverviewSectionComplete = project.Details.SchoolOverviewSectionComplete,
 
 			// Annex B
 			AnnexBFormReceived = project.Details.AnnexBFormReceived,

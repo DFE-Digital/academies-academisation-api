@@ -12,4 +12,5 @@ public record ApplicationServiceModel(
 	ApplicationFormTrustServiceModel? formTrustDetails,
 	DateTime? ApplicationSubmittedDate,
 	string? ApplicationReference,
-	Guid EntityId);
+	Guid EntityId,
+	DateTime? DeletedAt);

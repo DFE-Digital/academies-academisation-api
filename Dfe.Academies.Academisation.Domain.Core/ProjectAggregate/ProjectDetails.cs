@@ -17,7 +17,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public DateTime? ApplicationReceivedDate { get; init; }
 	public DateTime? AssignedDate { get; init; }
 	public DateTime? HeadTeacherBoardDate { get; init; }
-	public DateTime? OpeningDate { get; init; }
 	public DateTime? BaselineDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
@@ -62,9 +61,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; init; }
 	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; init; }
-	public string? MemberOfParliamentParty { get; init; }
-	public string? MemberOfParliamentName { get; init; }
-	public bool? GeneralInformationSectionComplete { get; init; }
+	public string? MemberOfParliamentNameAndParty { get; init; }
+	public bool? SchoolOverviewSectionComplete { get; init; }
 	public string? SchoolPerformanceAdditionalInformation { get; init; }
 	public string? RationaleForProject { get; init; }
 	public string? RationaleForTrust { get; init; }
@@ -119,7 +117,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   Nullable.Equals(ApplicationReceivedDate, other.ApplicationReceivedDate) &&
 			   Nullable.Equals(AssignedDate, other.AssignedDate) &&
 			   Nullable.Equals(HeadTeacherBoardDate, other.HeadTeacherBoardDate) &&
-			   Nullable.Equals(OpeningDate, other.OpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
+			   Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateSentDate,
 				   other.LocalAuthorityInformationTemplateSentDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateReturnedDate,
@@ -176,11 +174,9 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 				   other.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-			   string.Equals(MemberOfParliamentParty, other.MemberOfParliamentParty,
+			   string.Equals(MemberOfParliamentNameAndParty, other.MemberOfParliamentNameAndParty,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-			   string.Equals(MemberOfParliamentName, other.MemberOfParliamentName,
-				   StringComparison.InvariantCultureIgnoreCase) &&
-			   GeneralInformationSectionComplete == other.GeneralInformationSectionComplete &&
+			   SchoolOverviewSectionComplete == other.SchoolOverviewSectionComplete &&
 			   string.Equals(SchoolPerformanceAdditionalInformation, other.SchoolPerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(RationaleForProject, other.RationaleForProject,
@@ -249,7 +245,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(ApplicationReceivedDate);
 		hashCode.Add(AssignedDate);
 		hashCode.Add(HeadTeacherBoardDate);
-		hashCode.Add(OpeningDate);
+		hashCode.Add(ProposedAcademyOpeningDate);
 		hashCode.Add(BaselineDate);
 		hashCode.Add(LocalAuthorityInformationTemplateSentDate);
 		hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
@@ -291,9 +287,8 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust);
 		hashCode.Add(DistanceFromSchoolToTrustHeadquarters);
 		hashCode.Add(DistanceFromSchoolToTrustHeadquartersAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(MemberOfParliamentParty, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(MemberOfParliamentName, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(GeneralInformationSectionComplete);
+		hashCode.Add(MemberOfParliamentNameAndParty, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(SchoolOverviewSectionComplete);
 		hashCode.Add(SchoolPerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(RationaleForProject, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(RationaleForTrust, StringComparer.InvariantCultureIgnoreCase);

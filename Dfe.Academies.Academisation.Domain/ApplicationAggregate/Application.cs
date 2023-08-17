@@ -31,6 +31,11 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		DynamicsApplicationId = Guid.NewGuid();
 	}
 
+	private Application(int applicationId)
+	{		
+		DeletedAt = DateTime.Now;
+	}
+
 	public Application(
 		int applicationId,
 		DateTime createdOn,
@@ -42,7 +47,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		JoinTrust? joinTrust,
 		FormTrust? formTrust,
 		DateTime? applicationSubmittedOn = null,
-		string? applicationReference = null)
+		string? applicationReference = null,
+		DateTime? deletedAt = null)
 	{
 		Id = applicationId;
 		CreatedOn = createdOn;
@@ -55,6 +61,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 		FormTrust = formTrust;
 		ApplicationSubmittedDate = applicationSubmittedOn;
 		ApplicationReference = applicationReference;
+		DeletedAt = deletedAt;
 	}
 
 	public int ApplicationId { get { return Id; } }
@@ -81,6 +88,8 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 	/// Currently calculated by new UI but we need somewhere to store existing data from dynamics
 	/// </summary>
 	public string? ApplicationReference { get; set; }
+
+	public DateTime? DeletedAt { get; set; }
 
 	public Guid EntityId { get => DynamicsApplicationId ?? Guid.Empty; }
 
@@ -398,5 +407,20 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 
 		return new CommandSuccessResult();
 	}
+
+	public CommandResult ValidateSoftDelete( int applicationId)
+	{
+		var validationResult = new DeleteApplicationValidator().Validate(applicationId);
+
+		if (!validationResult.IsValid)
+		{
+			return new CommandValidationErrorResult(
+				validationResult.Errors.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage)));
+		}
+
+		return new CommandSuccessResult();
+	}
+
+	
 }
 
