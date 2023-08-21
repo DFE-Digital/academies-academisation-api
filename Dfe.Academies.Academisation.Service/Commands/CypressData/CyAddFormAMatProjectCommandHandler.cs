@@ -9,17 +9,17 @@ using static System.String;
 namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 {
 	/// <summary>
-	///     The cy voluntary project command handler.
+	///     The cy add form a mat project command handler.
 	/// </summary>
-	public class CyAddVoluntaryProjectCommandHandler : CypressDataBaseCommandHandlerAbstractBase,
-		IRequestHandler<CyAddVoluntaryProjectCommand, CommandResult>
+	public class CyAddFormAMatProjectCommandHandler : CypressDataBaseCommandHandlerAbstractBase,
+		IRequestHandler<CyAddFormAMatProjectCommand, CommandResult>
 	{
 
 		/// <summary>
-		///     Initializes a new instance of the <see cref="CyAddVoluntaryProjectCommandHandler" /> class.
+		///     Initializes a new instance of the <see cref="CyAddFormAMatProjectCommandHandler" /> class.
 		/// </summary>
 		/// <param name="dbContext">The db context.</param>
-		public CyAddVoluntaryProjectCommandHandler(AcademisationContext dbContext) : base(dbContext)
+		public CyAddFormAMatProjectCommandHandler(AcademisationContext dbContext) : base(dbContext)
 		{
 		}
 
@@ -29,21 +29,23 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		/// <param name="request">The request.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
 		/// <returns>A Task.</returns>
-		public async Task<CommandResult> Handle(CyAddVoluntaryProjectCommand request, CancellationToken cancellationToken)
+		public async Task<CommandResult> Handle(CyAddFormAMatProjectCommand request,
+			CancellationToken cancellationToken)
 		{
 			// Define the project name
-			const string projectName = "Voluntary Cypress Project";
-			const string applicationFirstName = "Voluntary";
+			const string projectOneName = "Cypress Project One";
+			const string projectTwoName = "Cypress Project Two";
+			const string applicationFirstName = "FormAMAT";
 
 			// Find the project
-			var existingProject = await DbContext.Projects
-				.FirstOrDefaultAsync(p => p.SchoolName == projectName, cancellationToken);
+			var existingFirstProject = await DbContext.Projects
+				.FirstOrDefaultAsync(p => p.SchoolName == projectOneName, cancellationToken);
+			var existingSecondProject = await DbContext.Projects
+				.FirstOrDefaultAsync(p => p.SchoolName == projectTwoName, cancellationToken);
 
 			// If the project exists, remove it
-			if (existingProject != null)
-			{
-				DbContext.Projects.Remove(existingProject);
-			}
+			if (existingFirstProject != null) DbContext.Projects.Remove(existingFirstProject);
+			if (existingSecondProject != null) DbContext.Projects.Remove(existingSecondProject);
 
 			// Find the Application
 			var existingApplication = await DbContext.Applications
@@ -55,20 +57,50 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				DbContext.Applications.Remove(existingApplication);
 			}
 
-			// Create a new project
-			var newProject = new ProjectState
+			// Create two new projects
+			var newProjectOne = new ProjectState
 			{
-				SchoolName = projectName,
-				Urn = 139292,
-				ApplicationReferenceNumber = "placeholder",
+				SchoolName = projectOneName,
+				Urn = 113537,
 				ProjectStatus = "Approved with conditions",
-				ApplicationReceivedDate = new DateTime(2022, 3, 17),
+				ApplicationReferenceNumber = "A2B_123456",
 				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
 				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
 				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
 				RecommendationForProject = "Approve",
 				AcademyOrderRequired = "Yes",
-				AcademyTypeAndRoute = "Converter",
+				AcademyTypeAndRoute = "Form a Mat",
+				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
+				ConversionSupportGrantAmount = 25000,
+				PublishedAdmissionNumber = "60673",
+				ViabilityIssues = "No",
+				FinancialDeficit = "No",
+				DistanceFromSchoolToTrustHeadquarters = 10,
+				RevenueCarryForwardAtEndMarchCurrentYear = -10,
+				ProjectedRevenueBalanceAtEndMarchNextYear = -10,
+				CapitalCarryForwardAtEndMarchCurrentYear = -10,
+				CapitalCarryForwardAtEndMarchNextYear = -10,
+				IfdPipelineId = 0,
+				YearOneProjectedPupilNumbers = 104,
+				YearTwoProjectedPupilNumbers = 239,
+				YearThreeProjectedPupilNumbers = 370,
+				CreatedOn = DateTime.Now,
+				Region = "West Midlands",
+				LocalAuthority = "Coventry"
+			};
+			// Create two new projects
+			var newProjectTwo = new ProjectState
+			{
+				SchoolName = projectTwoName,
+				Urn = 100608,
+				ProjectStatus = "Approved with conditions",
+				ApplicationReferenceNumber = "A2B_123456",
+				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
+				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
+				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
+				RecommendationForProject = "Approve",
+				AcademyOrderRequired = "Yes",
+				AcademyTypeAndRoute = "Form a Mat",
 				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = "60673",
@@ -92,15 +124,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			var contributor = new ContributorDetails(applicationFirstName, "Project", "Cypress@Project.com",
 				ContributorRole.ChairOfGovernors, "N/A");
 			var createResult = new Domain.ApplicationAggregate.ApplicationFactory().Create(
-				ApplicationType.JoinAMat, contributor
-				);
+				ApplicationType.FormAMat, contributor
+			);
 
 			if (createResult is CreateSuccessResult<Domain.ApplicationAggregate.Application> successResult)
 			{
 				var newApplication = successResult.Payload;
 				// Set Join Trust Details
-				newApplication.SetJoinTrustDetails(10059766, "Cypress Trust", Empty, ChangesToTrust.No, null,
-					false, null);
+				newApplication.SetFormTrustDetails(new FormTrustDetails(DateTime.UtcNow, "Cypress Trust",
+					"Cypress Person", "Cy@press.ui", false, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+					false, Empty, Empty, Empty));
 				// Set Additional Details
 				newApplication.SetAdditionalDetails(113537, "Benefits", null, false, null, null, null, "N/A", false,
 					null, "N/A", null, Empty, Empty, null, null);
@@ -108,12 +141,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				var newSchoolList = new List<UpdateSchoolParameter>
 				{
 					new(0, Empty, Empty, false, Empty, Empty, Empty, Empty, false, Empty, Empty, null, Empty, Empty, null, Empty,
-						new SchoolDetails(113537, "Plymstock School", null, null, null, null),
+						new SchoolDetails(100608, projectOneName, null, null, null, null),
+						new List<KeyValuePair<int, LoanDetails>>(),
+						new List<KeyValuePair<int, LeaseDetails>>(), false, false),
+					new(0, Empty, Empty, false, Empty, Empty, Empty, Empty, false, Empty, Empty, null, Empty, Empty, null, Empty,
+						new SchoolDetails(113537, projectTwoName, null, null, null, null),
 						new List<KeyValuePair<int, LoanDetails>>(),
 						new List<KeyValuePair<int, LeaseDetails>>(), false, false)
 				};
 				// Use general update to add schools
-				newApplication.Update(newApplication.ApplicationType, ApplicationStatus.InProgress,
+				newApplication.Update(ApplicationType.FormAMat, ApplicationStatus.InProgress,
 					new List<KeyValuePair<int, ContributorDetails>>() { new(0, contributor) },
 					newSchoolList);
 
@@ -127,12 +164,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			// Save changes to the database
 			await DbContext.SaveChangesAsync(cancellationToken);
 
-
-			// Add the new project to the Projects DbSet with applicationId
+			// Add the new project to the Projects DbSet
 			var createdApplication = await DbContext.Applications
 				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == applicationFirstName, cancellationToken);
-			newProject.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
-			DbContext.Projects.Add(newProject);
+			newProjectOne.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
+			newProjectTwo.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
+			DbContext.Projects.Add(newProjectOne);
+			DbContext.Projects.Add(newProjectTwo);
 
 			// Save changes to the database
 			await DbContext.SaveChangesAsync(cancellationToken);
