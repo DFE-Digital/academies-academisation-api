@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20230808161013_transfer_project")]
+    partial class transfer_project
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,6 +265,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("FoundationConsent")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("GeneralInformationSectionComplete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("GoverningBodyResolution")
                         .HasColumnType("nvarchar(max)");
 
@@ -304,7 +310,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime?>("LocalAuthorityInformationTemplateSentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("MemberOfParliamentNameAndParty")
+                    b.Property<string>("MemberOfParliamentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberOfParliamentParty")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameOfTrust")
@@ -378,9 +387,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("SchoolName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("SchoolOverviewSectionComplete")
-                        .HasColumnType("bit");
 
                     b.Property<string>("SchoolPerformanceAdditionalInformation")
                         .HasColumnType("nvarchar(max)");
