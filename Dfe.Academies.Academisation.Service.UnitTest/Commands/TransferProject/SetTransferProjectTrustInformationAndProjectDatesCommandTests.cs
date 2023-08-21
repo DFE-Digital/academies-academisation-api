@@ -8,20 +8,20 @@ public class SetTransferProjectTrustInformationAndProjectDatesCommandTests
 	public void CommandProperties_AreSetCorrectly()
 	{
 		// Arrange
-		var id = 123;
+		var urn = 123;
 		var recommendation = "Recommendation";
 		var author = "Author";
 
 		// Act
 		var command = new SetTransferProjectTrustInformationAndProjectDatesCommand
 		{
-			Id = id,
+			Urn = urn,
 			Recommendation = recommendation,
 			Author = author
 		};
 
 		// Assert
-		Assert.Equal(id, command.Id);
+		Assert.Equal(urn, command.Urn);
 		Assert.Equal(recommendation, command.Recommendation);
 		Assert.Equal(author, command.Author);
 	}

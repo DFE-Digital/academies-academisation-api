@@ -1,11 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using MediatR;
+using TramsDataApi.RequestModels.AcademyTransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 {
-	public class SetTransferProjectLegalRequirementsCommand : IRequest<CommandResult>
+	public class SetTransferProjectLegalRequirementsCommand : SetTransferProjectCommand
 	{
-		public int Id { get; set; }
 		public string OutgoingTrustConsent { get; set; }
 		public string IncomingTrustAgreement { get; set; }
 		public string DiocesanConsent { get; set; }

@@ -28,7 +28,7 @@ public class SetTransferProjectTrustInformationAndProjectDatesCommandHandlerTest
 		// Arrange
 		var command = new SetTransferProjectTrustInformationAndProjectDatesCommand
 		{
-			Id = 1,
+			Urn = 1,
 			Recommendation = "Recommendation",
 			Author = "Author"
 		};
@@ -57,7 +57,7 @@ public class SetTransferProjectTrustInformationAndProjectDatesCommandHandlerTest
 		// Arrange
 		var command = new SetTransferProjectTrustInformationAndProjectDatesCommand
 		{
-			Id = 1,
+			Urn = 1,
 			Recommendation = "Recommendation",
 			Author = "Author"
 		};
@@ -71,7 +71,7 @@ public class SetTransferProjectTrustInformationAndProjectDatesCommandHandlerTest
 			.Returns(unitOfWorkMock.Object);
 
 		// Mock GetById to use our Transfer Project from above
-		_transferProjectRepositoryMock.Setup(x => x.GetById(It.IsAny<int>())).ReturnsAsync(transferProject);
+		_transferProjectRepositoryMock.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
 
 		// Act

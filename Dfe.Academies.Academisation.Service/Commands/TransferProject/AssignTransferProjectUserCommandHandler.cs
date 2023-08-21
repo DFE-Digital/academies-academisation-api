@@ -20,17 +20,17 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 		public async Task<CommandResult> Handle(AssignTransferProjectUserCommand request,
 			CancellationToken cancellationToken)
 		{
-			var transferProject = await _transferProjectRepository.GetById(request.Id).ConfigureAwait(false);
+			var transferProject = await _transferProjectRepository.GetByUrn(request.Urn).ConfigureAwait(false);
 
 			if (transferProject == null)
 			{
-				_logger.LogError($"transfer project not found with id:{request.Id}");
+				_logger.LogError($"transfer project not found with urn:{request.Urn}");
 				return new NotFoundCommandResult();
 			}
 
 			transferProject.AssignUser(request.UserId, request.UserEmail, request.UserFullName);
 
-			_transferProjectRepository.Update(transferProject);
+			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			// returning 'CommandSuccessResult', client will have to retrieve the updated transfer project to refresh data

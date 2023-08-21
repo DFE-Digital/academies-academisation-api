@@ -16,7 +16,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			Fixture fixture = new Fixture();
 
 			// Arrange
-			var id = fixture.Create<int>();
+			var urn = fixture.Create<int>();
 			var anyRisks = fixture.Create<bool>();
 			bool? equalitiesImpactAssessmentConsidered = fixture.Create<bool>();
 			List<string> selectedBenefits = fixture.Create<List<string>>();
@@ -34,7 +34,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Act
 			var command = new SetTransferProjectBenefitsCommand
 			{
-				Id = id,
+				Urn = urn,
 				AnyRisks = anyRisks,
 				EqualitiesImpactAssessmentConsidered = equalitiesImpactAssessmentConsidered,
 				IsCompleted = isCompleted,

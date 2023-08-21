@@ -28,7 +28,7 @@ public class AssignTransferProjectUserCommandHandlerTests
 		// Arrange
 		var command = new AssignTransferProjectUserCommand
 		{
-			Id = 1,
+			Urn = 1,
 			UserId = new Guid(),
 			UserEmail = "Email",
 			UserFullName = "UserFullName"
@@ -58,7 +58,7 @@ public class AssignTransferProjectUserCommandHandlerTests
 		// Arrange
 		var command = new AssignTransferProjectUserCommand
 		{
-			Id = 1,
+			Urn = 1,
 			UserId = new Guid(),
 			UserEmail = "Email",
 			UserFullName = "UserFullName"
@@ -73,7 +73,7 @@ public class AssignTransferProjectUserCommandHandlerTests
 			.Returns(unitOfWorkMock.Object);
 
 		// Mock GetById to use our Transfer Project from above
-		_transferProjectRepositoryMock.Setup(x => x.GetById(It.IsAny<int>())).ReturnsAsync(transferProject);
+		_transferProjectRepositoryMock.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
 
 		// Act

@@ -9,7 +9,7 @@ public class AssignTransferProjectUserCommandTests
 	public void CommandProperties_AreSetCorrectly()
 	{
 		// Arrange
-		var id = 123;
+		var urn = 123;
 		var userId = new Guid();
 		var userEmail = "Email";
 		var userFullName = "Full Name";
@@ -18,14 +18,14 @@ public class AssignTransferProjectUserCommandTests
 		// Act
 		var command = new AssignTransferProjectUserCommand
 		{
-			Id = id,
+			Urn = urn,
 			UserId = userId,
 			UserEmail = userEmail,
 			UserFullName = userFullName
 		};
 
 		// Assert
-		Assert.Equal(id, command.Id);
+		Assert.Equal(urn, command.Urn);
 		Assert.Equal(userId, command.UserId);
 		Assert.Equal(userEmail, command.UserEmail);
 		Assert.Equal(userFullName, command.UserFullName);

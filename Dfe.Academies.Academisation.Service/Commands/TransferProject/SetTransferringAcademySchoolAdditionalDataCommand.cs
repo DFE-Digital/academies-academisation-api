@@ -1,11 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using MediatR;
+using TramsDataApi.RequestModels.AcademyTransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 {
-	public class SetTransferringAcademySchoolAdditionalDataCommand : IRequest<CommandResult>
+	public class SetTransferringAcademySchoolAdditionalDataCommand : SetTransferProjectCommand
 	{
-		public int Id { get; set; }
 		public int TransferringAcademyId { get; set; }
 		public string LatestOfstedReportAdditionalInformation { get; set; }
 		public string PupilNumbersAdditionalInformation { get; set; }
