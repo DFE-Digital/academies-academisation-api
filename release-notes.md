@@ -1,3 +1,5 @@
+## NEXT
+* Conversions: GeneralInformationSectionComplete and MPName & MPParty being changed to SchoolOverviewSectionComplete and MPNameAndParty
 ## 9.1.0
 * Added correlation id middleware package. Logs and outgoing http requsts will now provide correlation id to make debugging easier.
 
