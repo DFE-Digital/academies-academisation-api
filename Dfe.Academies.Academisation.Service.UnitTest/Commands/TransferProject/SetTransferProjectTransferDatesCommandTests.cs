@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public void CommandProperties_AreSetCorrectly()
 		{
 			// Arrange
-			var id = 123;
+			var urn = 123;
 			var advisoryBoardDate = DateTime.UtcNow;
 			var targetDateForTransfer = DateTime.UtcNow.AddMonths(1);
 			
@@ -17,13 +17,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Act
 			var command = new SetTransferProjectTransferDatesCommand
 			{
-				Id = id,
+				Urn = urn,
 				HtbDate = advisoryBoardDate,
 				TargetDateForTransfer = targetDateForTransfer
 			};
 
 			// Assert
-			Assert.Equal(id, command.Id);
+			Assert.Equal(urn, command.Urn);
 			Assert.Equal(advisoryBoardDate, command.HtbDate);
 			Assert.Equal(targetDateForTransfer, command.TargetDateForTransfer);
 			

@@ -3,9 +3,8 @@ using MediatR;
 
 namespace TramsDataApi.RequestModels.AcademyTransferProject
 {
-    public class SetTransferProjectBenefitsCommand : IRequest<CommandResult>
+    public class SetTransferProjectBenefitsCommand : SetTransferProjectCommand
 	{
-		public int Id { get; set; }
         public IntendedTransferBenefitDto IntendedTransferBenefits { get; set; }
         public OtherFactorsToConsiderDto OtherFactorsToConsider { get; set; }
         public bool? EqualitiesImpactAssessmentConsidered { get; set; }

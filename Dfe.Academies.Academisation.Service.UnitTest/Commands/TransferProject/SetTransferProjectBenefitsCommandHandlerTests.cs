@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 
 			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "23456789", new List<string> { "34567890" }, DateTime.Now);
 			// Mock GetById to use our Transfer Project from above
-			_mockTransferProjectRepository.Setup(x => x.GetById(It.IsAny<int>())).ReturnsAsync(transferProject);
+			_mockTransferProjectRepository.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
 			// Arrange
 			var createTransferProjectCommandHandler = this.CreateHandler();
@@ -93,7 +93,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			this._mockTransferProjectRepository.Setup(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));
 			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "23456789", new List<string> { "34567890" }, DateTime.Now);
 			// Mock GetById to use our Transfer Project from above
-			_mockTransferProjectRepository.Setup(x => x.GetById(It.IsAny<int>())).ReturnsAsync(transferProject);
+			_mockTransferProjectRepository.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
 			// Arrange
 			var createTransferProjectCommandHandler = this.CreateHandler();
@@ -115,7 +115,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Arrange
 			SetTransferProjectBenefitsCommand request = CreateCommand();
 			var createTransferProjectCommandHandler = this.CreateHandler();
-			_mockTransferProjectRepository.Setup(x => x.GetById(It.IsAny<int>()))
+			_mockTransferProjectRepository.Setup(x => x.GetByUrn(It.IsAny<int>()))
 										 .ReturnsAsync((Domain.TransferProjectAggregate.TransferProject)null);
 			CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
 
@@ -138,7 +138,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		{
 			Fixture fixture = new Fixture();
 
-			var id = fixture.Create<int>();
+			var urn = fixture.Create<int>();
 			var anyRisks = fixture.Create<bool>();
 			bool? equalitiesImpactAssessmentConsidered = fixture.Create<bool>();
 			List<string> selectedBenefits = fixture.Create<List<string>>();
@@ -156,7 +156,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Act
 			return new SetTransferProjectBenefitsCommand
 			{
-				Id = id,
+				Urn = urn,
 				AnyRisks = anyRisks,
 				EqualitiesImpactAssessmentConsidered = equalitiesImpactAssessmentConsidered,
 				IsCompleted = isCompleted,

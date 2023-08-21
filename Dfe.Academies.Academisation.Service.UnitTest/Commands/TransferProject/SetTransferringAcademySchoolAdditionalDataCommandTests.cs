@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public void CommandProperties_AreSetCorrectly()
 		{
 			// Arrange
-			var id = 123;
+			var urn = 123;
 			var latestOfsteadReportAdditionalInformation = "Ofsted";
 			var pupilNumbersAdditionalInformation = "Pupil";
 			var keyStage2PerformanceAdditionalInformation = "KS2";
@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Act
 			var command = new SetTransferringAcademySchoolAdditionalDataCommand
 			{
-				Id = id,
+				Urn = urn,
 				LatestOfstedReportAdditionalInformation = latestOfsteadReportAdditionalInformation,
 				PupilNumbersAdditionalInformation = pupilNumbersAdditionalInformation,
 				KeyStage2PerformanceAdditionalInformation = keyStage2PerformanceAdditionalInformation,
@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			};
 
 			// Assert
-			Assert.Equal(id, command.Id);
+			Assert.Equal(urn, command.Urn);
 			Assert.Equal(latestOfsteadReportAdditionalInformation, command.LatestOfstedReportAdditionalInformation);
 			Assert.Equal(pupilNumbersAdditionalInformation, command.PupilNumbersAdditionalInformation);
 			Assert.Equal(keyStage2PerformanceAdditionalInformation, command.KeyStage2PerformanceAdditionalInformation);

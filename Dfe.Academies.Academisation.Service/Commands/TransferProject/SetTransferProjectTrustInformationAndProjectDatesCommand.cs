@@ -1,9 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using MediatR;
+using TramsDataApi.RequestModels.AcademyTransferProject;
 
-public class SetTransferProjectTrustInformationAndProjectDatesCommand : IRequest<CommandResult>
+public class SetTransferProjectTrustInformationAndProjectDatesCommand : SetTransferProjectCommand
 {
-	public int Id { get; set; }
 	public string Recommendation { get; set; }
 	public string Author { get; set; }
 }

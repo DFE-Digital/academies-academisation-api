@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public void CommandProperties_AreSetCorrectly()
 		{
 			// Arrange
-			var id = 123;
+			var urn = 123;
 			var incomingTrustAgreement = "trust 1 yes";
 			var outgoingrustAgreement = "trust 2 yes";
 			var diocesanConsent = "diocese yes";
@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Act
 			var command = new SetTransferProjectLegalRequirementsCommand
 			{
-				Id = id,
+				Urn = urn,
 				IncomingTrustAgreement = incomingTrustAgreement,
 				DiocesanConsent = diocesanConsent,
 				IsCompleted = isCompleted,
@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			};
 
 			// Assert
-			Assert.Equal(id, command.Id);
+			Assert.Equal(urn, command.Urn);
 			Assert.Equal(incomingTrustAgreement, command.IncomingTrustAgreement);
 			Assert.Equal(outgoingrustAgreement, command.OutgoingTrustConsent);
 			Assert.Equal(diocesanConsent, command.DiocesanConsent);
