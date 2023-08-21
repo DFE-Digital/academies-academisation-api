@@ -26,6 +26,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
 		}
 
+		public async Task<IEnumerable<ITransferProject?>> GetAllTransferProjects()
+		{
+			return await DefaultIncludes().ToListAsync();
+		}
+
 		private IQueryable<TransferProject> DefaultIncludes()
 		{
 			var x = this.dbSet
