@@ -1,9 +1,14 @@
-﻿using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Metrics;
+using System.Reflection.Emit;
+using System.Security.Cryptography.X509Certificates;
+using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -30,6 +35,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<ProjectState> Projects { get; set; } = null!;
 	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
+
+	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
@@ -127,7 +134,53 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 
+		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
+		modelBuilder.Entity<TransferProject>(ConfigureTransferProject);
+		modelBuilder.Entity<IntendedTransferBenefit>(ConfigureTransferProjectIntendedTransferBenefit);
+		modelBuilder.Entity<TransferringAcademy>(ConfigureTransferringAcademy);
+
 		base.OnModelCreating(modelBuilder);
+}
+
+	private void ConfigureTransferringAcademy(EntityTypeBuilder<TransferringAcademy> transferringAcademy)
+	{
+		transferringAcademy.ToTable("TransferringAcademy", DEFAULT_SCHEMA);
+		transferringAcademy.HasKey(x => x.Id);
+	}
+
+	private void ConfigureTransferProjectIntendedTransferBenefit(EntityTypeBuilder<IntendedTransferBenefit> transferProjectIntendedTransferBenefit)
+	{
+		transferProjectIntendedTransferBenefit.ToTable("IntendedTransferBenefit", DEFAULT_SCHEMA);
+		transferProjectIntendedTransferBenefit.HasKey(x => x.Id);
+	}
+
+	void ConfigureTransferProject(EntityTypeBuilder<TransferProject> transferProject)
+	{		
+		transferProject.ToTable("TransferProject", DEFAULT_SCHEMA);
+		transferProject.HasKey(x => x.Id);
+		transferProject.Property(p => p.Id).UseIdentityColumn(10003000, 1);
+
+		transferProject
+		.HasMany(a => a.IntendedTransferBenefits)
+		.WithOne()
+		.HasForeignKey(x => x.TransferProjectId)
+		.IsRequired();
+
+		transferProject
+		.HasMany(a => a.TransferringAcademies)
+		.WithOne()
+		.HasForeignKey(x => x.TransferProjectId)
+		.IsRequired();
+
+		var intendedTransferBenefitsNavigation = transferProject.Metadata.FindNavigation(nameof(TransferProject.IntendedTransferBenefits));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the TransferProjectIntendedTransferBenefits collection property through its field
+		intendedTransferBenefitsNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		var transferringAcademiesNavigation = transferProject.Metadata.FindNavigation(nameof(TransferProject.TransferringAcademies));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the TransferProjectIntendedTransferBenefits collection property through its field
+		transferringAcademiesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	private static void ConfigureProject(EntityTypeBuilder<ProjectState> projectConfiguration)
@@ -228,7 +281,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.WithOne()
 			.HasForeignKey("ConversionApplicationId")
 			.IsRequired();
-		
+
 		applicationConfiguration
 			.HasQueryFilter(p => p.DeletedAt == null);
 
