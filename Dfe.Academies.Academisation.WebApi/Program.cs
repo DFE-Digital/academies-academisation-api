@@ -12,6 +12,7 @@ using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.Http;
@@ -31,6 +32,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
@@ -111,6 +113,7 @@ builder.Services.AddScoped<ICreateSponsoredProjectDataCommand, CreateSponsoredPr
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository>();
 
 builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
 builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
@@ -136,6 +139,7 @@ builder.Services.AddScoped<IProjectGetStatusesQuery, ProjectGetStatusesQuery>();
 builder.Services.AddScoped<IEstablishmentGetDataQuery, EstablishmentGetDataQuery>();
 builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
+builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 
 //utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -181,6 +185,7 @@ builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateL
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typeof(CreateTransferProjectCommandValidator));
 
 builder.Services.AddHostedService<EnrichProjectService>();
 
