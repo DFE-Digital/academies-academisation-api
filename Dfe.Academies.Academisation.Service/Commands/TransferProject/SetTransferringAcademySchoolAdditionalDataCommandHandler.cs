@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 				_logger.LogError($"transfer project not found with id:{request.Urn}");
 				return new NotFoundCommandResult();
 			}
-			transferProject.SetTransferringAcademiesSchoolData(request.TransferringAcademyId, request.LatestOfstedReportAdditionalInformation, request.PupilNumbersAdditionalInformation, request.KeyStage2PerformanceAdditionalInformation, request.KeyStage4PerformanceAdditionalInformation, request.KeyStage5PerformanceAdditionalInformation);
+			transferProject.SetTransferringAcademiesSchoolData(request.TransferringAcademyUkprn, request.LatestOfstedReportAdditionalInformation, request.PupilNumbersAdditionalInformation, request.KeyStage2PerformanceAdditionalInformation, request.KeyStage4PerformanceAdditionalInformation, request.KeyStage5PerformanceAdditionalInformation);
 			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject); 
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

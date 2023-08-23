@@ -137,10 +137,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			HtbDate = advisoryBoardDate;
 			TargetDateForTransfer = expectedDateForTransfer;
 		}
-		public void SetTransferringAcademiesSchoolData(int transferringAcademyId, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
+		public void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
 		{
 			var transferringAcademy =
-				TransferringAcademies.Single(x => x.Id == transferringAcademyId);
+				TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn);
 
 			transferringAcademy.SetSchoolAdditionalData(
 				latestOfstedReportAdditionalInformation,

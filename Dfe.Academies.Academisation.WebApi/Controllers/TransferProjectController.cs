@@ -7,6 +7,7 @@ using TramsDataApi.RequestModels.AcademyTransferProject;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using System;
+using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -15,6 +16,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class TransferProjectController : ControllerBase
 	{
+		private const string GET_BY_URN_ROUTE_NAME = "GetByUrn";
 		private readonly IMediator _mediator;
 		private readonly ILogger<TransferProjectController> _logger;
 		private readonly ITransferProjectQueryService _transferProjectQueryService;
@@ -38,7 +40,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_logger.LogInformation($"Creating transfer project");
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
-			return result is null ? BadRequest() : Ok(result);
+			return result switch
+			{
+				CreateSuccessResult<AcademyTransferProjectResponse> successResult => CreatedAtRoute(GET_BY_URN_ROUTE_NAME, new { urn = successResult.Payload.ProjectUrn }, successResult.Payload),
+				null => BadRequest(),
+				_ => throw new NotImplementedException()
+			};
 		}
 
 		[HttpPut("{urn}/set-rationale", Name = "SetTransferProjectRationale")]
@@ -198,7 +205,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpGet("{urn}/urn", Name = "GetByUrn")]
+		[HttpGet("{urn}", Name = GET_BY_URN_ROUTE_NAME)]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetByUrn(int urn)
 		{
 			_logger.LogInformation($"Getting transfer project, urn: {urn}");
