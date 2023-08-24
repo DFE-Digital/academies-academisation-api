@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Arrange
 			var command = new SetTransferProjectFeaturesCommand
 			{
-				Id = 1,
+				Urn = 1,
 				TypeOfTransfer = "TestType",
 				WhoInitiatedTheTransfer = "TestInitiator",
 				IsCompleted = true
@@ -58,7 +58,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Arrange
 			var command = new SetTransferProjectFeaturesCommand
 			{
-				Id = 1,
+				Urn = 1,
 				TypeOfTransfer = "TestType",
 				WhoInitiatedTheTransfer = "TestInitiator",
 				IsCompleted = true
@@ -73,7 +73,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 				.Returns(unitOfWorkMock.Object);
 
 			// Mock GetById to use our Transfer Project from above
-			_transferProjectRepositoryMock.Setup(x => x.GetById(It.IsAny<int>())).ReturnsAsync(transferProject);
+			_transferProjectRepositoryMock.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
 
 			// Act

@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public void CommandProperties_AreSetCorrectly()
 		{
 			// Arrange
-			var id = 123;
+			var urn = 123;
 			var typeOfTransfer = "TransferTypeTest";
 			var whoInitiated = "TestInitiator";
 			var isCompleted = true;
@@ -17,14 +17,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Act
 			var command = new SetTransferProjectFeaturesCommand
 			{
-				Id = id,
+				Urn = urn,
 				TypeOfTransfer = typeOfTransfer,
 				WhoInitiatedTheTransfer = whoInitiated,
 				IsCompleted = isCompleted
 			};
 
 			// Assert
-			Assert.Equal(id, command.Id);
+			Assert.Equal(urn, command.Urn);
 			Assert.Equal(typeOfTransfer, command.TypeOfTransfer);
 			Assert.Equal(whoInitiated, command.WhoInitiatedTheTransfer);
 			Assert.Equal(isCompleted, command.IsCompleted);

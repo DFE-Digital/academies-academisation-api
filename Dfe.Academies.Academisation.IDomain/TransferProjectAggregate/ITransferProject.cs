@@ -59,7 +59,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 
 		void SetTransferDates(DateTime advisoryBoardDate, DateTime expectedDateForTransfer);
 
-		void SetTransferringAcademiesSchoolData(int transferringAcademyId,
+		void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn,
 			string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation,
 			string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation,
 			string keyStage5PerformanceAdditionalInformation);

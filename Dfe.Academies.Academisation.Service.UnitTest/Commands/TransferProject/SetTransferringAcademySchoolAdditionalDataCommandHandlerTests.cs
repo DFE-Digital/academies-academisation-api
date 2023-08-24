@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			var command = new SetTransferringAcademySchoolAdditionalDataCommand
 			{
 				Urn = 1,
-				TransferringAcademyId = 0,
+				TransferringAcademyUkprn = "0",
 				LatestOfstedReportAdditionalInformation = "Ofsted",
 				PupilNumbersAdditionalInformation = "Pupil",
 				KeyStage2PerformanceAdditionalInformation= "KS2",
@@ -63,7 +63,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			var command = new SetTransferringAcademySchoolAdditionalDataCommand
 			{
 				Urn = 1,
-				TransferringAcademyId = 0,
+				TransferringAcademyUkprn = "34567890",
 				LatestOfstedReportAdditionalInformation = "Ofsted",
 				PupilNumbersAdditionalInformation = "Pupil",
 				KeyStage2PerformanceAdditionalInformation = "KS2",
@@ -91,7 +91,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Assert
 			result.Should().BeOfType<CommandSuccessResult>();
 
-			var updatedAcademy = transferProject.TransferringAcademies.FirstOrDefault(academy => academy.Id == command.TransferringAcademyId);
+			var updatedAcademy = transferProject.TransferringAcademies.FirstOrDefault(academy => academy.OutgoingAcademyUkprn == command.TransferringAcademyUkprn);
 
 			updatedAcademy.Should().NotBeNull("The academy with the given ID should exist.");
 
