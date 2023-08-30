@@ -217,7 +217,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 		[HttpGet("GetTransferProjects", Name = "GetTransferProjects")]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetTransferProjects(
-	    [FromQuery] string title,
+	    [FromQuery] string? title,
 	    [FromQuery] int page = 1,
 	    [FromQuery] int count = 50,
 	    [FromQuery] int? urn = null)
