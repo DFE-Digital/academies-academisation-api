@@ -200,6 +200,8 @@ public class Project : IProject
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
+			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
+			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
 			Region	= detailsToUpdate.Region,
 
 			// Annex B
