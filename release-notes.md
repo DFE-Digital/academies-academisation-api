@@ -1,5 +1,6 @@
 ## 9.2.0
 * Added transfer projects
+* Added fields required to a Conversion Project to allow for sponsored grants
 
 ## 9.1.0
 * Added correlation id middleware package. Logs and outgoing http requsts will now provide correlation id to make debugging easier.
