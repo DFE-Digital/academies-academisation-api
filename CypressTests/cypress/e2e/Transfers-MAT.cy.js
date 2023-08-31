@@ -11,13 +11,9 @@ import { AuthorisedUserCanAssignUserDataPayload } from "../support/payloads/Tran
 
 describe('Academisation API Testing - Transfers MAT Projects', () => {
   // DEV API KEY AND URL
-  let apiKey = '***REMOVED***' //Cypress.env('apiKey');
-  let url = Cypress.config('baseUrl', '***REMOVED***')//Cypress.env('url')
+  let apiKey = Cypress.env('apiKey')
+  let url = Cypress.env('url')
   let URN = Cypress.env('URN')
-
-    // STAGING API KEY AND URL
-   // let apiKey = '***REMOVED***' //Cypress.env('apiKey');
-   // let url = Cypress.config('baseUrl', '***REMOVED***')
 
   let getTransferDateTimeFormatRegex = /^\d{2}\/\d{2}\/\d{4}$/
 
