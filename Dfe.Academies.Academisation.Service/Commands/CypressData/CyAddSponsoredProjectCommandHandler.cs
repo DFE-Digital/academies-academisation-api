@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 		public async Task<CommandResult> Handle(CyAddSponsoredProjectCommand request, CancellationToken cancellationToken)
 		{
 			// Define the project name
-			const string projectName = "Cypress Project";
+			const string projectName = "Sponsored Cypress Project";
 
 			// Find the project
 			var existingProject = await DbContext.Projects
