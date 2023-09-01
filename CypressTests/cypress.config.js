@@ -1,5 +1,5 @@
 const { defineConfig } = require('cypress')
-import * as dotenv from "dotenv";
+const dotenv = require('dotenv')
 const { generateZapReport } = require('./cypress/plugins/generateZapReport')
 
 dotenv.config();
