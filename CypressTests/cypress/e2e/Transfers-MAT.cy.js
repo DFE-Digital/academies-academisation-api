@@ -17,6 +17,42 @@ describe('Academisation API Testing - Transfers MAT Projects', () => {
 
   let getTransferDateTimeFormatRegex = /^\d{2}\/\d{2}\/\d{4}$/
 
+    // VERIFY AN UNAUTH USER CANNOT GET ALL TRANSFERPROJECTS REGARDLESS OF MAT OR SAT TYPE
+    it('GET - Verify An UNAuthorised User CANNOT GET ALL MAT AND SAT Transfer Projects - 401 UNAUTH EXPECTED', () => {
+      cy.request({
+        url: url + '/transfer-project/GetTransferProjects',
+        failOnStatusCode: false,
+        method: 'GET',
+        headers:
+        {
+          'x-api-key': 'INCORRECT API-KEY LOOKING FOR 401 RESPONSE'
+        },
+      }).then((response) => {
+        cy.log(JSON.stringify(response))
+        expect(response).to.have.property('status', 401)
+      })
+    })
+
+  // GET ALL TRANSFER PROJECTS REGARDLESS OF MAT OR SAT TYPE
+
+  it('GET - Verify An Authorised User Can GET ALL MAT AND SAT Transfer Projects - 200 OK EXPECTED', () => {
+    cy.request({
+      url: url + '/transfer-project/GetTransferProjects',
+      method: 'GET',
+      headers:
+      {
+        'x-api-key': apiKey
+      },
+    }).then((response) => {
+      cy.log(JSON.stringify(response))
+      expect(response).to.have.property('status', 200)
+      const totalCount = response.body.totalCount
+      const resultsArray = response.body.results
+
+      expect(totalCount).to.equal(resultsArray.length)
+    })
+  })
+
   // TRY TO CREATE A NEW TRANSFER AS AN UNAUTH USER AND HOPE FOR 401 UNAUTH
   it('POST - Verify An UN-Authorised User CANNOT Create A New MAT Transfer - 401 UNAUTHORISED EXPECTED', () => {
     cy.request({
