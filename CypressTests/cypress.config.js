@@ -1,5 +1,8 @@
 const { defineConfig } = require('cypress')
+import * as dotenv from "dotenv";
 const { generateZapReport } = require('./cypress/plugins/generateZapReport')
+
+dotenv.config();
 
 module.exports = defineConfig({
   video: false,
