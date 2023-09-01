@@ -52,10 +52,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			//the logic retrieving the trust data goes here
 			IEnumerable<AcademyTransferProjectSummaryResponse> projects =
-				FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
-
-			//this is placeholder code
-			var recordTotal = projects.Count();
+				FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));			
 
 			projects = projects
 			// remove any projects without an incoming or outgoing trust.
@@ -65,6 +62,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			.OrderByDescending(atp => atp.ProjectUrn)
 			.Skip((page - 1) * count).Take(count).ToList();
 
+			var recordTotal = projects.Count();
 
 			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(projects, recordTotal));
 		}
