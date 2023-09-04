@@ -57,6 +57,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = "60673",
+				PartOfPfiScheme = "No",
 				ViabilityIssues = "No",
 				FinancialDeficit = "No",
 				DistanceFromSchoolToTrustHeadquarters = 10,
