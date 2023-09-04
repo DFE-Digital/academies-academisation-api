@@ -51,6 +51,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? ConversionSupportGrantChangeReason { get; init; }
 		public string? ConversionSupportGrantType { get; init; }
 		public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; init; }
+		public bool? ConversionSupportGrantAmountChanged { get; init; }
 		public string? Region { get; init; }
 		[JsonIgnore] public string? SchoolPhase { get; init; }
 		[JsonIgnore] public string? AgeRange { get; init; }

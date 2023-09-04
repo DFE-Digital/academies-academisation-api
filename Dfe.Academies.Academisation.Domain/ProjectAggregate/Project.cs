@@ -202,6 +202,7 @@ public class Project : IProject
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
 			Region	= detailsToUpdate.Region,
 
 			// Annex B
