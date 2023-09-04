@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 					LocalAuthority = school.LocalAuthorityName, Region = school.Gor.Name
 				};
 
-				project.Update(LegacyProjectDetailsMapper.MapNonEmptyFields(projectChanges, project));
+				project.Update(LegacyProjectDetailsMapper.MapNonEmptyFields(projectChanges, project, projectChanges.ConversionSupportGrantAmount));
 
 				await _projectUpdateDataCommand.Execute(project);
 

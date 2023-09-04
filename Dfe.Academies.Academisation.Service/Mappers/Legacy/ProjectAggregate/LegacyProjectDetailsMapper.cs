@@ -8,7 +8,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
 internal static class LegacyProjectDetailsMapper
 {
-	internal static ProjectDetails MapNonEmptyFields(this LegacyProjectServiceModel detailsToUpdate, IProject existingProject)
+	internal static ProjectDetails MapNonEmptyFields(this LegacyProjectServiceModel detailsToUpdate, IProject existingProject, Decimal? grantAmount)
 	{
 		// this needs to be done for all dates
 		// detailsToUpdate.HeadTeacherBoardDate.Equals(default(DateTime)) ? null : detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
@@ -53,7 +53,7 @@ internal static class LegacyProjectDetailsMapper
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate ?? existingProject.Details.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate ?? existingProject.Details.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? existingProject.Details.SchoolAndTrustInformationSectionComplete,
-			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? existingProject.Details.ConversionSupportGrantAmount,
+			ConversionSupportGrantAmount = grantAmount ?? existingProject.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? existingProject.Details.ConversionSupportGrantChangeReason,
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType ?? existingProject.Details.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant ?? existingProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant,

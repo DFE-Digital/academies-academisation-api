@@ -1,8 +1,10 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 
@@ -25,8 +27,13 @@ public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
 		{
 			return new NotFoundCommandResult();
 		}
+		
+		// Sponsored Grant defaults
+		string? existingConversionSupportGrantType = existingProject.Details?.ConversionSupportGrantType ?? null;
+		string? newConversionSupportGrantType = legacyProjectServiceModel.ConversionSupportGrantType;
+		decimal? grantAmount = ProjectSponsoredGrantDomainService.CalculateDefaultSponsoredGrant(existingConversionSupportGrantType, newConversionSupportGrantType, legacyProjectServiceModel.ConversionSupportGrantAmount);
 
-		var result = existingProject.Update(legacyProjectServiceModel.MapNonEmptyFields(existingProject));
+		var result = existingProject.Update(legacyProjectServiceModel.MapNonEmptyFields(existingProject, grantAmount));
 
 		if (result is CommandValidationErrorResult)
 		{
@@ -41,4 +48,5 @@ public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
 
 		return result;
 	}
+
 }
