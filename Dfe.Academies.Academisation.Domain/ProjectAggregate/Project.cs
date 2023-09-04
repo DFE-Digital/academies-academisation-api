@@ -199,7 +199,7 @@ public class Project : IProject
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount),
-			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason,
+			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason),
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
 			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
@@ -346,6 +346,14 @@ public class Project : IProject
 			IntermediateGrantType => IntermediateDefault,
 			FullGrantType => FullDefault,
 			_ => currentAmount
+		};
+	}
+	protected string? NullifyGrantChangeReasonIfNeeded(bool? grantAmountChanged, string? reason)
+	{
+		return grantAmountChanged switch
+		{
+			true => reason,
+			false => null
 		};
 	}
 }
