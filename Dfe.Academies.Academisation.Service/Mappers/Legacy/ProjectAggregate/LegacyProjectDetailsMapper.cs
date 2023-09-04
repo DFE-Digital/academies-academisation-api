@@ -57,6 +57,7 @@ internal static class LegacyProjectDetailsMapper
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? existingProject.Details.ConversionSupportGrantChangeReason,
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType ?? existingProject.Details.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant ?? existingProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged ?? existingProject.Details.ConversionSupportGrantAmountChanged,
 			Region = detailsToUpdate.Region ?? existingProject.Details.Region,
 
 			// Annex B
