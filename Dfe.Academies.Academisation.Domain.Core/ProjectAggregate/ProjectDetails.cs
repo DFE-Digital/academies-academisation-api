@@ -47,6 +47,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? ConversionSupportGrantChangeReason { get; init; }
 	public string? ConversionSupportGrantType { get; init; }
 	public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; init; }
+	public bool? ConversionSupportGrantAmountChanged { get; init; }
 	public string? Region { get; init; }
 	public string? SchoolPhase { get; init; }
 	public string? AgeRange { get; init; }
@@ -97,6 +98,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public User? AssignedUser { get; init; }
 	public ICollection<ProjectNote> Notes { get; init; } = new List<ProjectNote>();
 	public DateTime CreatedOn { get; set; }
+	
 
 	public bool Equals(ProjectDetails? other)
 	{
@@ -162,6 +164,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(ConversionSupportGrantEnvironmentalImprovementGrant, other.ConversionSupportGrantEnvironmentalImprovementGrant,
 				   StringComparison.InvariantCultureIgnoreCase) &&
+			   ConversionSupportGrantAmountChanged == other.ConversionSupportGrantAmountChanged &&
 			   string.Equals(Region, other.Region, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(SchoolPhase, other.SchoolPhase, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(AgeRange, other.AgeRange, StringComparison.InvariantCultureIgnoreCase) &&
@@ -280,6 +283,7 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(ConversionSupportGrantChangeReason, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ConversionSupportGrantType, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ConversionSupportGrantEnvironmentalImprovementGrant, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(ConversionSupportGrantAmountChanged);
 		hashCode.Add(Region, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(SchoolPhase, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AgeRange, StringComparer.InvariantCultureIgnoreCase);

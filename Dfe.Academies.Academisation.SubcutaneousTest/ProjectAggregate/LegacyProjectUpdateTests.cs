@@ -184,6 +184,7 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.ConversionSupportGrantChangeReason, getProject.ConversionSupportGrantChangeReason),
 					() => Assert.Equal(existingProject.ConversionSupportGrantType, getProject.ConversionSupportGrantType),
 					() => Assert.Equal(existingProject.ConversionSupportGrantEnvironmentalImprovementGrant, getProject.ConversionSupportGrantEnvironmentalImprovementGrant),
+					() => Assert.Equal(existingProject.ConversionSupportGrantAmountChanged, getProject.ConversionSupportGrantAmountChanged),
 					() => Assert.Equal(existingProject.ProjectStatus, getProject.ProjectStatus)
 		);
 	}
