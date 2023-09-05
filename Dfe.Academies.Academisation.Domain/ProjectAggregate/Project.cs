@@ -358,8 +358,8 @@ public class Project : IProject
 	{
 		return grantAmountChanged switch
 		{
-			true => reason,
-			false => null,
+			true => null,
+			false => reason,
 			_ => reason
 		};
 	}
