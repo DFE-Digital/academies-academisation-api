@@ -19,7 +19,8 @@ public class ProjectUpdateTests
 		// Arrange
 		var initialProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, initialProject);
-		var updatedProject = _fixture.Build<ProjectDetails>().With(p => p.Urn, initialProject.Urn).Create();
+		var updatedProject = _fixture.Build<ProjectDetails>()
+			.With(p => p.Urn, initialProject.Urn).Without(x => x.ConversionSupportGrantChangeReason).Create();
 		updatedProject.Notes.Clear();
 
 		// Act
