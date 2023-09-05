@@ -319,7 +319,7 @@ public class Project : IProject
 		bool? detailsConversionSupportGrantAmountChanged)
 	{
 		// if the amount has been flagged as "keeping default" reset any previous changes to ensure default value
-		if (detailsConversionSupportGrantAmountChanged is false)
+		if (detailsConversionSupportGrantAmountChanged is true)
 		{
 			return DetermineValueFromType(newConversionSupportGrantType, currentGrantAmount);
 		}

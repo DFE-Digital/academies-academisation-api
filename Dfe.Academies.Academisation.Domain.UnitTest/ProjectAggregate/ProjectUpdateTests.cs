@@ -81,6 +81,20 @@ public class ProjectUpdateTests
 		var result = Project.CalculateDefaultSponsoredGrant(existingType, newType, currentAmount, amountChangedFromDefault);
 		result.Should().Be(expected);
 	}
+	public static IEnumerable<object[]> DefaultWantedCheckedData => new List<object[]>
+	{
+		new object[] { "fast track", "fast track", 80000m, 70000m , true },
+		new object[] { "intermediate", "intermediate", 70000m, 90000m, true },
+		new object[] { "full", "full", 100000m, 110000m, true }
+	};
+
+	[Theory]
+	[MemberData(nameof(DefaultWantedCheckedData))]
+	public void CalculateDefaultSponsoredGrant_DefaultWantedChecked_ReturnsDefaults(string existingType, string newType, decimal? currentAmount, decimal? expected, bool amountChangedFromDefault)
+	{
+		var result = Project.CalculateDefaultSponsoredGrant(existingType, newType, currentAmount, amountChangedFromDefault);
+		result.Should().Be(expected);
+	}
 
 	public static IEnumerable<object[]> EmptyExistingTypeData => new List<object[]>
 		{
