@@ -198,7 +198,7 @@ public class Project : IProject
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
-			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount),
+			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, Details.ConversionSupportGrantAmountChanged),
 			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason),
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
@@ -315,8 +315,14 @@ public class Project : IProject
 	const decimal IntermediateDefault = 90000;
 	const decimal FullDefault = 110000;
 	public static decimal? CalculateDefaultSponsoredGrant(string? existingConversionSupportGrantType,
-		string? newConversionSupportGrantType, decimal? currentGrantAmount)
+		string? newConversionSupportGrantType, decimal? currentGrantAmount,
+		bool? detailsConversionSupportGrantAmountChanged)
 	{
+		// if the amount has been flagged as "keeping default" reset any previous changes to ensure default value
+		if (detailsConversionSupportGrantAmountChanged is true)
+		{
+			return DetermineValueFromType(newConversionSupportGrantType, currentGrantAmount);
+		}
 		// if it's empty and now becoming a type, set the default
 		if (string.IsNullOrEmpty(existingConversionSupportGrantType))
 		{
@@ -352,8 +358,8 @@ public class Project : IProject
 	{
 		return grantAmountChanged switch
 		{
-			true => reason,
-			false => null,
+			true => null,
+			false => reason,
 			_ => reason
 		};
 	}
