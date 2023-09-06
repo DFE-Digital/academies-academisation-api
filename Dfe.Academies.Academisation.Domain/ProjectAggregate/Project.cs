@@ -198,7 +198,7 @@ public class Project : IProject
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
-			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, Details.ConversionSupportGrantAmountChanged),
+			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged),
 			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason),
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
