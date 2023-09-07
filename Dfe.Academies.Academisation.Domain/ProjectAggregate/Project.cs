@@ -199,7 +199,7 @@ public class Project : IProject
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged),
-			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason),
+			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute),
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
 			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
@@ -354,13 +354,18 @@ public class Project : IProject
 			_ => currentAmount
 		};
 	}
-	protected string? NullifyGrantChangeReasonIfNeeded(bool? grantAmountChanged, string? reason)
+	protected string? NullifyGrantChangeReasonIfNeeded(bool? grantAmountChanged, string? reason, string? route)
 	{
-		return grantAmountChanged switch
+		if (route == "Sponsored")
 		{
-			true => null,
-			false => reason,
-			_ => reason
-		};
+			return grantAmountChanged switch
+			{
+				true => null,
+				false => reason,
+				_ => reason
+			};
+		}
+
+		return reason;
 	}
 }
