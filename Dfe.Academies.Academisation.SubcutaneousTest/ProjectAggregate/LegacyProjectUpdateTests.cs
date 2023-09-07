@@ -55,7 +55,6 @@ public class ProjectUpdateTests
 		var updatedProject = _fixture.Build<LegacyProjectServiceModel>()
 			.With(p => p.Id, existingProject.Id)
 			.With(p => p.Urn, existingProject.Urn)
-			.Without(p => p.ConversionSupportGrantChangeReason)
 			.Create();
 
 		updatedProject.Notes?.Clear();
@@ -182,7 +181,7 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.KeyStage5PerformanceAdditionalInformation, getProject.KeyStage5PerformanceAdditionalInformation),
 					() => Assert.Equal(existingProject.PreviousHeadTeacherBoardDateQuestion, getProject.PreviousHeadTeacherBoardDateQuestion),
 					() => Assert.Equal(existingProject.ConversionSupportGrantAmount, getProject.ConversionSupportGrantAmount),
-					() => Assert.Equal(null, getProject.ConversionSupportGrantChangeReason),
+					() => Assert.Equal(existingProject.ConversionSupportGrantChangeReason, getProject.ConversionSupportGrantChangeReason),
 					() => Assert.Equal(existingProject.ConversionSupportGrantType, getProject.ConversionSupportGrantType),
 					() => Assert.Equal(existingProject.ConversionSupportGrantEnvironmentalImprovementGrant, getProject.ConversionSupportGrantEnvironmentalImprovementGrant),
 					() => Assert.Equal(existingProject.ConversionSupportGrantAmountChanged, getProject.ConversionSupportGrantAmountChanged),
