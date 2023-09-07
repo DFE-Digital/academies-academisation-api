@@ -55,6 +55,9 @@ internal static class LegacyProjectDetailsMapper
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? existingProject.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? existingProject.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? existingProject.Details.ConversionSupportGrantChangeReason,
+			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType ?? existingProject.Details.ConversionSupportGrantType,
+			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant ?? existingProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged ?? existingProject.Details.ConversionSupportGrantAmountChanged,
 			Region = detailsToUpdate.Region ?? existingProject.Details.Region,
 
 			// Annex B

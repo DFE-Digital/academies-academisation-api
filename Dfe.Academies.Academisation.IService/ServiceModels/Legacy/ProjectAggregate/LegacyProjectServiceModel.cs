@@ -49,6 +49,9 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public bool? SchoolAndTrustInformationSectionComplete { get; init; }
 		public decimal? ConversionSupportGrantAmount { get; init; }
 		public string? ConversionSupportGrantChangeReason { get; init; }
+		public string? ConversionSupportGrantType { get; init; }
+		public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; init; }
+		public bool? ConversionSupportGrantAmountChanged { get; init; }
 		public string? Region { get; init; }
 		[JsonIgnore] public string? SchoolPhase { get; init; }
 		[JsonIgnore] public string? AgeRange { get; init; }
@@ -140,8 +143,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
 					   StringComparison.InvariantCultureIgnoreCase) &&
 				   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
-               string.Equals(Form7Received, other.Form7Received, StringComparison.InvariantCultureIgnoreCase) &&
-               Nullable.Equals(Form7ReceivedDate, other.Form7ReceivedDate) &&
+			   string.Equals(Form7Received, other.Form7Received, StringComparison.InvariantCultureIgnoreCase) &&
+			   Nullable.Equals(Form7ReceivedDate, other.Form7ReceivedDate) &&
 				   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
 					   StringComparison.InvariantCultureIgnoreCase) &&
 				   Nullable.Equals(PreviousHeadTeacherBoardDate, other.PreviousHeadTeacherBoardDate) &&
@@ -159,6 +162,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				   SchoolAndTrustInformationSectionComplete == other.SchoolAndTrustInformationSectionComplete &&
 				   ConversionSupportGrantAmount == other.ConversionSupportGrantAmount &&
 				   string.Equals(ConversionSupportGrantChangeReason, other.ConversionSupportGrantChangeReason,
+					   StringComparison.InvariantCultureIgnoreCase) &&
+				   string.Equals(ConversionSupportGrantType, other.ConversionSupportGrantType,
+					   StringComparison.InvariantCultureIgnoreCase) &&
+				   string.Equals(ConversionSupportGrantEnvironmentalImprovementGrant, other.ConversionSupportGrantEnvironmentalImprovementGrant,
 					   StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(Region, other.Region, StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(SchoolPhase, other.SchoolPhase, StringComparison.InvariantCultureIgnoreCase) &&
@@ -266,8 +273,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(ClearedBy, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(AcademyOrderRequired, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(DaoPackSentDate);
-         hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
-         hashCode.Add(Form7ReceivedDate);
+			hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
+			hashCode.Add(Form7ReceivedDate);
 			hashCode.Add(PreviousHeadTeacherBoardDateQuestion, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(PreviousHeadTeacherBoardDate);
 			hashCode.Add(PreviousHeadTeacherBoardLink, StringComparer.InvariantCultureIgnoreCase);
@@ -280,6 +287,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(SchoolAndTrustInformationSectionComplete);
 			hashCode.Add(ConversionSupportGrantAmount);
 			hashCode.Add(ConversionSupportGrantChangeReason, StringComparer.InvariantCultureIgnoreCase);
+			hashCode.Add(ConversionSupportGrantType, StringComparer.InvariantCultureIgnoreCase);
+			hashCode.Add(ConversionSupportGrantEnvironmentalImprovementGrant, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(Region, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(SchoolPhase, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(AgeRange, StringComparer.InvariantCultureIgnoreCase);

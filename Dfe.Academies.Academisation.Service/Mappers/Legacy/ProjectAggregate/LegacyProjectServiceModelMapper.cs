@@ -50,6 +50,9 @@ internal static class LegacyProjectServiceModelMapper
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,  // had to make this nullable or move it to the top
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
+			ConversionSupportGrantType = project.Details.ConversionSupportGrantType,
+			ConversionSupportGrantEnvironmentalImprovementGrant = project.Details.ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = project.Details.ConversionSupportGrantAmountChanged,
 			Region = project.Details.Region,
 
 			// School Overview

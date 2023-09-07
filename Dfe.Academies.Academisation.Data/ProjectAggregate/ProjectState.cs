@@ -48,6 +48,9 @@ public class ProjectState : BaseEntity
 	public bool? SchoolAndTrustInformationSectionComplete { get; set; }
 	public decimal? ConversionSupportGrantAmount { get; set; }
 	public string? ConversionSupportGrantChangeReason { get; set; }
+	public string? ConversionSupportGrantType { get; set; }
+	public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; set; }
+	public bool? ConversionSupportGrantAmountChanged { get; set; }
 	public string? Region { get; set; }
 
 	// School Overview
@@ -167,6 +170,9 @@ public class ProjectState : BaseEntity
 			SchoolAndTrustInformationSectionComplete = SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = ConversionSupportGrantChangeReason,
+			ConversionSupportGrantType = ConversionSupportGrantType,
+			ConversionSupportGrantEnvironmentalImprovementGrant = ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = ConversionSupportGrantAmountChanged,
 			Region = Region,
 
 			// School Overview
@@ -248,6 +254,7 @@ public class ProjectState : BaseEntity
 		return new Project(Id, projectDetails);
 	}
 
+
 	public static ProjectState MapFromDomain(IProject project)
 	{
 		return new ProjectState
@@ -292,6 +299,9 @@ public class ProjectState : BaseEntity
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
+			ConversionSupportGrantType = project.Details.ConversionSupportGrantType,
+			ConversionSupportGrantEnvironmentalImprovementGrant = project.Details.ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = project.Details.ConversionSupportGrantAmountChanged,
 			Region = project.Details.Region,
 
 			// School Overview
