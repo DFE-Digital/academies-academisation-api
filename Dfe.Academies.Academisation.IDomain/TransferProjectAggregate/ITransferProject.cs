@@ -72,6 +72,6 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification,
 			bool? isCompleted);
 
-		void SetTrustInformationAndProjectDates(string recommendation, string author);
+		void SetGeneralInformation(string recommendation, string author);
 	}
 }
