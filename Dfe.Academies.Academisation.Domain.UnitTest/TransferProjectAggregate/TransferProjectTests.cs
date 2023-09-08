@@ -140,7 +140,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var author = fixture.Create<string>();
 
 			//Act
-			result.SetTrustInformationAndProjectDates(recommendation, author);
+			result.SetGeneralInformation(recommendation, author);
 
 			//Assert
 			result.Recommendation.Should().Be(recommendation);

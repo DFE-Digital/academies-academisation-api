@@ -52,6 +52,7 @@ internal static class LegacyProjectServiceModelMapper
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
 			ConversionSupportGrantType = project.Details.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = project.Details.ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = project.Details.ConversionSupportGrantAmountChanged,
 			Region = project.Details.Region,
 
 			// School Overview
