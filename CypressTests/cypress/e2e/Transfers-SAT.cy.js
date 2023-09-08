@@ -580,8 +580,8 @@ describe('Academisation API Testing - Transfers SAT Projects', () => {
     
 })
 
-  // AN UNAUTH USER TRIES TO SET TRUST INFO AND PROJECT DATES
-    // TRY TO SET TRUST INFO AND PROJECT DATES
+  // AN UNAUTH USER TRIES TO SET TRUST GENERAL INFO
+    // TRY TO SET TRUST GENERAL INFO
     it('PUT - Verify An Authorised User Can SET-SCHOOL-TRUST-GENERAL-INFORMATION On New SAT Transfer We Created - 401 UNAUTHORISED EXPECTED', () => {
       cy.request({
         url: url + '/transfer-project/' + URN + '/set-general-information',
@@ -598,7 +598,7 @@ describe('Academisation API Testing - Transfers SAT Projects', () => {
         cy.log(URN)
       })
     })
-  // TRY TO SET TRUST INFO AND PROJECT DATES
+  // TRY TO SET TRUST GENERAL INFO
   it('PUT - Verify An Authorised User Can SET-SCHOOL-TRUST-GENERAL-INFORMATION On New SAT Transfer We Created - 200 OK EXPECTED', () => {
     cy.request({
       url: url + '/transfer-project/' + URN + '/set-general-information',
