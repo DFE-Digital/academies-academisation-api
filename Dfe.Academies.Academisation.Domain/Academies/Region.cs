@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Dfe.Academies.Academisation.Domain.Academies;
 
@@ -6,6 +6,5 @@ public class Region
 {
 	public long Id { get; set; }
 	public string Name { get; set; }
-	[JsonIgnore]
-	public ICollection<Trust> Trusts { get; set; }
+
 }
