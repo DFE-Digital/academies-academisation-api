@@ -15,10 +15,6 @@ describe('Academisation API Testing - Transfers SAT Projects', () => {
   let url = Cypress.env('url')
   let URN = Cypress.env('URN')
 
-    // STAGING API KEY AND URL
-   // let apiKey = 'XowatEEOGXqLKnsgmhIlfOfcybDLepJT' //Cypress.env('apiKey');
-   // let url = Cypress.config('baseUrl', 'https://s184t01-acacdnendpoint-fhgrc9hybfffezck.z01.azurefd.net')
-
   let getTransferDateTimeFormatRegex = /^\d{2}\/\d{2}\/\d{4}$/
 
   // TRY TO CREATE A NEW TRANSFER AS AN UNAUTH USER AND HOPE FOR 401 UNAUTH
