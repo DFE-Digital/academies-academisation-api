@@ -10,7 +10,7 @@ import { AuthorisedUserCanSetTrustInfoAndProjectDatesPayload } from "../support/
 import { AuthorisedUserCanAssignUserDataPayload } from "../support/payloads/Transfers/AuthorisedUserCanAssignUser.spec";
 
 describe('Academisation API Testing - Transfers SAT Projects', () => {
-  // DEV API KEY AND URL
+
   let apiKey = Cypress.env('apiKey');
   let url = Cypress.env('url')
   let URN = Cypress.env('URN')
