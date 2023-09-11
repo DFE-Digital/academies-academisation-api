@@ -55,10 +55,12 @@ public class AcademiesContext : DbContext, IUnitOfWork
 
 		trustConfiguration.Property(i => i.RegionId)
 			.HasColumnName("FK_Region");
+
 		trustConfiguration
-			.HasOne<Region>(x => x.Region)
-			.WithMany(x => x.Trusts)
-			.HasForeignKey(s => s.RegionId);
+			.HasOne(x => x.Region)
+			.WithOne()
+			.HasForeignKey<Trust>(x => x.RegionId);
+
 	}
 
 	void ConfigureRegion(EntityTypeBuilder<Region> regionConfiguration)
