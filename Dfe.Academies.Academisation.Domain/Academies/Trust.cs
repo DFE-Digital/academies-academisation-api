@@ -1,4 +1,4 @@
-namespace Dfe.Academies.Academisation.Domain.Academies;
+﻿namespace Dfe.Academies.Academisation.Domain.Academies;
 
 public class Trust
 {
@@ -10,6 +10,6 @@ public class Trust
 	public string? CompaniesHouseNumber { get; set; }
 	public string? UKPRN { get; set; }
 	
-	public virtual Region Region { get; set; }
-	public long RegionId { get; set; }
+	public virtual Region? Region { get; set; }
+	public long? RegionId { get; set; }
 }

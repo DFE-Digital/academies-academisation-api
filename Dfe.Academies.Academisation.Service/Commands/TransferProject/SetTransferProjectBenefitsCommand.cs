@@ -16,7 +16,7 @@ namespace TramsDataApi.RequestModels.AcademyTransferProject
 	public class IntendedTransferBenefitDto
 	{
 		public List<string> SelectedBenefits { get; set; }
-		public string OtherBenefitValue { get; set; }
+		public string? OtherBenefitValue { get; set; }
 	}
 
 	public class OtherFactorsToConsiderDto
@@ -29,7 +29,7 @@ namespace TramsDataApi.RequestModels.AcademyTransferProject
 
 	public class BenefitConsideredFactorDto
 	{
-		public bool ShouldBeConsidered { get; set; }
-		public string FurtherSpecification { get; set; }
+		public bool? ShouldBeConsidered { get; set; }
+		public string? FurtherSpecification { get; set; }
 	}
 }
