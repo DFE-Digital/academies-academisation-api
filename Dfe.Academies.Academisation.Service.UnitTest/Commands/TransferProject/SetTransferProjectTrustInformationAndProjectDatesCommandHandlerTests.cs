@@ -12,21 +12,21 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject;
 public class SetTransferProjectTrustInformationAndProjectDatesCommandHandlerTests
 {
 	private readonly Mock<ITransferProjectRepository> _transferProjectRepositoryMock;
-	private readonly Mock<ILogger<SetTransferProjectTrustInformationAndProjectDatesCommandHandler>> _loggerMock;
-	private readonly SetTransferProjectTrustInformationAndProjectDatesCommandHandler _handler;
+	private readonly Mock<ILogger<SetTransferProjectGeneralInformationCommandHandler>> _loggerMock;
+	private readonly SetTransferProjectGeneralInformationCommandHandler _handler;
 
 	public SetTransferProjectTrustInformationAndProjectDatesCommandHandlerTests()
 	{
 		_transferProjectRepositoryMock = new Mock<ITransferProjectRepository>();
-		_loggerMock = new Mock<ILogger<SetTransferProjectTrustInformationAndProjectDatesCommandHandler>>();
-		_handler = new SetTransferProjectTrustInformationAndProjectDatesCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
+		_loggerMock = new Mock<ILogger<SetTransferProjectGeneralInformationCommandHandler>>();
+		_handler = new SetTransferProjectGeneralInformationCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
 	}
 
 	[Fact]
 	public async Task Handle_TransferProjectNotFound_ReturnsNotFoundCommandResult()
 	{
 		// Arrange
-		var command = new SetTransferProjectTrustInformationAndProjectDatesCommand
+		var command = new SetTransferProjectGeneralInformationCommand
 		{
 			Urn = 1,
 			Recommendation = "Recommendation",
@@ -55,7 +55,7 @@ public class SetTransferProjectTrustInformationAndProjectDatesCommandHandlerTest
 	public async Task Handle_TransferProjectFound_ReturnsCommandSuccessResult()
 	{
 		// Arrange
-		var command = new SetTransferProjectTrustInformationAndProjectDatesCommand
+		var command = new SetTransferProjectGeneralInformationCommand
 		{
 			Urn = 1,
 			Recommendation = "Recommendation",

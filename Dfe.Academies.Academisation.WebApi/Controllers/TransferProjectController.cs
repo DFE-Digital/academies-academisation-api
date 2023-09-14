@@ -166,11 +166,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("{urn}/set-trust-information-and-project-dates", Name = "SetTransferProjectTrustInformationAndProjectDates")]
+		[HttpPut("{urn}/set-general-information", Name = "SetTransferProjectGeneralInformation")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<ActionResult> SetTransferProjectTrustInformationAndProjectDates(int urn,
-			[FromBody] SetTransferProjectTrustInformationAndProjectDatesCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> SetTransferProjectGeneralInformation(int urn,
+			[FromBody] SetTransferProjectGeneralInformationCommand command, CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Setting transfer project trust information and project dates");
 
