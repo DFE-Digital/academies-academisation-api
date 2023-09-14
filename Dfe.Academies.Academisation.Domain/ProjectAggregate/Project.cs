@@ -198,7 +198,7 @@ public class Project : IProject
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
-			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged),
+			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase),
 			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute),
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
@@ -311,28 +311,29 @@ public class Project : IProject
 	private const string FastTrackGrantType = "fast track";
 	private const string IntermediateGrantType = "intermediate";
 	private const string FullGrantType = "full";
-	const decimal FastTrackDefault = 70000;
-	const decimal IntermediateDefault = 90000;
-	const decimal FullDefault = 110000;
+	const decimal FastTrackDefaultPrimary = 70000;
+	const decimal FastTrackDefaultSecondary= 80000;
+	const decimal IntermediateDefaultPrimary = 90000;
+	const decimal IntermediateDefaultSecondary = 115000;
+	const decimal FullDefaultPrimary = 110000;
+	const decimal FullDefaultSecondary = 150000;
 	public static decimal? CalculateDefaultSponsoredGrant(string? existingConversionSupportGrantType,
-		string? newConversionSupportGrantType, decimal? currentGrantAmount,
-		bool? detailsConversionSupportGrantAmountChanged)
+		string? newConversionSupportGrantType, 
+		decimal? currentGrantAmount,
+		bool? detailsConversionSupportGrantAmountChanged,
+		string? schoolPhase)
 	{
-		// if the amount has been flagged as "keeping default" reset any previous changes to ensure default value
-		if (detailsConversionSupportGrantAmountChanged is true)
+		if (schoolPhase != null)
 		{
-			return DetermineValueFromType(newConversionSupportGrantType, currentGrantAmount);
-		}
-		// if it's empty and now becoming a type, set the default
-		if (string.IsNullOrEmpty(existingConversionSupportGrantType))
-		{
-			return DetermineValueFromType(newConversionSupportGrantType, currentGrantAmount);
-		}
-
-		// if it's changed type set the new default
-		if (existingConversionSupportGrantType != newConversionSupportGrantType)
-		{
-			return DetermineValueFromType(newConversionSupportGrantType, currentGrantAmount);
+			switch (schoolPhase.ToLower())
+			{
+				case "secondary":
+					return CalculateDefaultSponsoredGrantForSecondary(existingConversionSupportGrantType,
+						newConversionSupportGrantType, currentGrantAmount, detailsConversionSupportGrantAmountChanged);
+				case "primary":
+					return CalculateDefaultSponsoredGrantForPrimary(existingConversionSupportGrantType,
+						newConversionSupportGrantType, currentGrantAmount, detailsConversionSupportGrantAmountChanged);
+			}
 		}
 
 		// if it's the same type remain unchanged
@@ -344,13 +345,72 @@ public class Project : IProject
 		return currentGrantAmount;
 	}
 
-	private static decimal? DetermineValueFromType(string? grantType, decimal? currentAmount)
+	private static decimal? CalculateDefaultSponsoredGrantForPrimary(string? existingConversionSupportGrantType,
+		string? newConversionSupportGrantType, decimal? currentGrantAmount,
+		bool? detailsConversionSupportGrantAmountChanged)
+	{
+		// if the amount has been flagged as "keeping default" reset any previous changes to ensure default value
+		if (detailsConversionSupportGrantAmountChanged is true)
+		{
+			return DetermineValueFromTypePrimary(newConversionSupportGrantType, currentGrantAmount);
+		}
+
+		// if it's empty and now becoming a type, set the default
+		if (string.IsNullOrEmpty(existingConversionSupportGrantType))
+		{
+			return DetermineValueFromTypePrimary(newConversionSupportGrantType, currentGrantAmount);
+		}
+
+		// if it's changed type set the new default
+		if (existingConversionSupportGrantType != newConversionSupportGrantType)
+		{
+			return DetermineValueFromTypePrimary(newConversionSupportGrantType, currentGrantAmount);
+		}
+
+		return currentGrantAmount;
+	}
+	private static decimal? CalculateDefaultSponsoredGrantForSecondary(string? existingConversionSupportGrantType,
+		string? newConversionSupportGrantType, decimal? currentGrantAmount,
+		bool? detailsConversionSupportGrantAmountChanged)
+	{
+		// if the amount has been flagged as "keeping default" reset any previous changes to ensure default value
+		if (detailsConversionSupportGrantAmountChanged is true)
+		{
+			return DetermineValueFromTypeSecondary(newConversionSupportGrantType, currentGrantAmount);
+		}
+
+		// if it's empty and now becoming a type, set the default
+		if (string.IsNullOrEmpty(existingConversionSupportGrantType))
+		{
+			return DetermineValueFromTypeSecondary(newConversionSupportGrantType, currentGrantAmount);
+		}
+
+		// if it's changed type set the new default
+		if (existingConversionSupportGrantType != newConversionSupportGrantType)
+		{
+			return DetermineValueFromTypeSecondary(newConversionSupportGrantType, currentGrantAmount);
+		}
+
+		return currentGrantAmount;
+	}
+
+	private static decimal? DetermineValueFromTypePrimary(string? grantType, decimal? currentAmount)
 	{
 		return grantType?.ToLower() switch
 		{
-			FastTrackGrantType => FastTrackDefault,
-			IntermediateGrantType => IntermediateDefault,
-			FullGrantType => FullDefault,
+			FastTrackGrantType => FastTrackDefaultPrimary,
+			IntermediateGrantType => IntermediateDefaultPrimary,
+			FullGrantType => FullDefaultPrimary,
+			_ => currentAmount
+		};
+	}
+	private static decimal? DetermineValueFromTypeSecondary(string? grantType, decimal? currentAmount)
+	{
+		return grantType?.ToLower() switch
+		{
+			FastTrackGrantType => FastTrackDefaultSecondary,
+			IntermediateGrantType => IntermediateDefaultSecondary,
+			FullGrantType => FullDefaultSecondary,
 			_ => currentAmount
 		};
 	}
