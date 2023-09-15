@@ -1,7 +1,15 @@
 const { defineConfig } = require('cypress')
+const dotenv = require('dotenv')
 const { generateZapReport } = require('./cypress/plugins/generateZapReport')
 
+dotenv.config();
+
 module.exports = defineConfig({
+  env: {
+    url: process.env.url,
+    apiKey: process.env.apiKey,
+    URN: process.env.URN
+  },
   video: false,
   e2e: {
     setupNodeEvents(on, config) {
