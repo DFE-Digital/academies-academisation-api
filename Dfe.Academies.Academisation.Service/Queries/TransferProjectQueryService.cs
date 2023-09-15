@@ -58,11 +58,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			// remove any projects without an incoming or outgoing trust.
 			.Where(p =>
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName)))
-			.OrderByDescending(atp => atp.ProjectUrn)
-			.Skip((page - 1) * count).Take(count).ToList();
-
+				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+			
 			var recordTotal = projects.Count();
+
+			projects = projects.OrderByDescending(atp => atp.ProjectUrn)
+			.Skip((page - 1) * count).Take(count).ToList();
 
 			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(projects, recordTotal));
 		}
