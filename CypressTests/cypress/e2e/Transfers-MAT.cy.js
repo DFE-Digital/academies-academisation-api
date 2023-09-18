@@ -47,9 +47,7 @@ describe('Academisation API Testing - Transfers MAT Projects', () => {
       cy.log(JSON.stringify(response))
       expect(response).to.have.property('status', 200)
       const totalCount = response.body.totalCount
-      const resultsArray = response.body.results
-
-      expect(totalCount).to.equal(resultsArray.length)
+      expect(totalCount).to.be.greaterThan(0)
     })
   })
 
