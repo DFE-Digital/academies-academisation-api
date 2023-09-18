@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; // done
 	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
 
-	public DbSet<ProjectState> Projects { get; set; } = null!;
+	public DbSet<Project> Projects { get; set; } = null!;
 	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
@@ -128,7 +129,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<TrustKeyPerson>(ConfigureTrustKeyPerson);
 		modelBuilder.Entity<TrustKeyPersonRole>(ConfigureTrustKeyPersonRole);
 
-		modelBuilder.Entity<ProjectState>(ConfigureProject);
+		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNoteState>(ConfigureProjectNotes);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
@@ -183,24 +184,29 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		transferringAcademiesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
-	private static void ConfigureProject(EntityTypeBuilder<ProjectState> projectConfiguration)
+	private static void ConfigureProject(EntityTypeBuilder<Project> projectConfiguration)
 	{
 		projectConfiguration.ToTable("Project", DEFAULT_SCHEMA);
 
-		projectConfiguration
-			.HasMany(x => x.Notes)
+		projectConfiguration.OwnsOne(x => x.Details, pd =>
+		{ 
+			pd.
+		});
+
+			projectConfiguration
+			.HasMany(x => x.Details.Notes)
 			.WithOne()
 			.HasForeignKey("ProjectId");
 
 
 		projectConfiguration
-			.Property(e => e.GoverningBodyResolution).HasConversion<string>();
+			.Property(e => e.Details.GoverningBodyResolution).HasConversion<string>();
 		projectConfiguration
-			.Property(e => e.Consultation).HasConversion<string>();
+			.Property(e => e.Details.Consultation).HasConversion<string>();
 		projectConfiguration
-			.Property(e => e.DiocesanConsent).HasConversion<string>();
+			.Property(e => e.Details.DiocesanConsent).HasConversion<string>();
 		projectConfiguration
-			.Property(e => e.FoundationConsent).HasConversion<string>();
+			.Property(e => e.Details.FoundationConsent).HasConversion<string>();
 	}
 
 	private static void ConfigureProjectNotes(EntityTypeBuilder<ProjectNoteState> projectNoteConfiguration)

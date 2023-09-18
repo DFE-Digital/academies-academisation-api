@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,20 +33,20 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 
 			return (projects.Select(p => p.MapToDomain()), totalProjects);
 		}
-		private static IQueryable<ProjectState> FilterByRegion(IEnumerable<string>? regions, IQueryable<ProjectState> queryable)
+		private static IQueryable<Project> FilterByRegion(IEnumerable<string>? regions, IQueryable<Project> queryable)
 		{
 
 			if (regions != null && regions.Any())
 			{
 				var lowerCaseRegions = regions.Select(region => region.ToLower());
 				queryable = queryable.Where(p =>
-					!string.IsNullOrEmpty(p.Region) && lowerCaseRegions.Contains(p.Region.ToLower()));
+					!string.IsNullOrEmpty(p.Details.Region) && lowerCaseRegions.Contains(p.Details.Region.ToLower()));
 			}
 
 			return queryable;
 		}
 
-		private static IQueryable<ProjectState> FilterByStatus(IEnumerable<string>? states, IQueryable<ProjectState> queryable)
+		private static IQueryable<Project> FilterByStatus(IEnumerable<string>? states, IQueryable<Project> queryable)
 		{
 			if (states != null && states!.Any())
 			{
