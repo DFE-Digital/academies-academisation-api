@@ -5,19 +5,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 {
-	public class SetTransferProjectTrustInformationAndProjectDatesCommandHandler : IRequestHandler<SetTransferProjectTrustInformationAndProjectDatesCommand, CommandResult>
+	public class SetTransferProjectGeneralInformationCommandHandler : IRequestHandler<SetTransferProjectGeneralInformationCommand, CommandResult>
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
-		private readonly ILogger<SetTransferProjectTrustInformationAndProjectDatesCommandHandler> _logger;
+		private readonly ILogger<SetTransferProjectGeneralInformationCommandHandler> _logger;
 
-		public SetTransferProjectTrustInformationAndProjectDatesCommandHandler(ITransferProjectRepository transferProjectRepository,
-			ILogger<SetTransferProjectTrustInformationAndProjectDatesCommandHandler> logger)
+		public SetTransferProjectGeneralInformationCommandHandler(ITransferProjectRepository transferProjectRepository,
+			ILogger<SetTransferProjectGeneralInformationCommandHandler> logger)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(SetTransferProjectTrustInformationAndProjectDatesCommand request,
+		public async Task<CommandResult> Handle(SetTransferProjectGeneralInformationCommand request,
 			CancellationToken cancellationToken)
 		{
 			var transferProject = await _transferProjectRepository.GetByUrn(request.Urn).ConfigureAwait(false);
@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 				return new NotFoundCommandResult();
 			}
 
-			transferProject.SetTrustInformationAndProjectDates(request.Recommendation, request.Author);
+			transferProject.SetGeneralInformation(request.Recommendation, request.Author);
 
 			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

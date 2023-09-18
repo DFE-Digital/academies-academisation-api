@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Dfe.Academies.Academisation.Service.Commands.TransferProject;
+using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject;
 
@@ -13,7 +14,7 @@ public class SetTransferProjectTrustInformationAndProjectDatesCommandTests
 		var author = "Author";
 
 		// Act
-		var command = new SetTransferProjectTrustInformationAndProjectDatesCommand
+		var command = new SetTransferProjectGeneralInformationCommand
 		{
 			Urn = urn,
 			Recommendation = recommendation,

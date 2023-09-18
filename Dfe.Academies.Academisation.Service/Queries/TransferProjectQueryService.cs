@@ -91,12 +91,14 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public IEnumerable<AcademyTransferProjectSummaryResponse> AcademyTransferProjectSummaryResponse(
  IEnumerable<ITransferProject> atp)
 		{
+			var outgoingTrustUkprns = atp.Select(x => x.OutgoingTrustUkprn).ToList();
+
 			var outgoingGroups =
-			   _academiesContext.Trusts.Where(trust => atp.Select(x => x.OutgoingTrustUkprn).Any(x => x == trust.UKPRN)).ToList();
+			   _academiesContext.Trusts.Where(trust => outgoingTrustUkprns.Contains(trust.UKPRN)).ToList();
 
 			var transferingAcademiesUrns = atp.SelectMany(x => x.TransferringAcademies.Select(ta => ta.IncomingTrustUkprn));
 
-			var incomingGroups = _academiesContext.Trusts.Where(trust => transferingAcademiesUrns.Any(x => x == trust.UKPRN)).ToList();
+			var incomingGroups = _academiesContext.Trusts.Where(trust => transferingAcademiesUrns.Contains(trust.UKPRN)).ToList();
 
 			return atp.Select(x =>
 			{
