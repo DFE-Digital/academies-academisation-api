@@ -7,6 +7,8 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
@@ -34,8 +36,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
 
 	public DbSet<Project> Projects { get; set; } = null!;
-	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
-	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
+	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
+	public DbSet<ConversionAdvisoryBoardDecision> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 
@@ -130,8 +132,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<TrustKeyPersonRole>(ConfigureTrustKeyPersonRole);
 
 		modelBuilder.Entity<Project>(ConfigureProject);
-		modelBuilder.Entity<ProjectNoteState>(ConfigureProjectNotes);
-		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
+		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
+		modelBuilder.Entity<ConversionAdvisoryBoardDecision>(ConfigureConversionAdvisoryBoardDecision);
+		
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 
