@@ -22,7 +22,7 @@ namespace Dfe.Academies.Academisation.Data.Establishment
 		public async Task<IData.Establishment.Establishment?> GetEstablishment(int urn)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);
-			var response = await client.GetAsync($"/establishment/urn/{urn}");
+			 var response = await client.GetAsync($"/establishment/urn/{urn}");
 
 			if (!response.IsSuccessStatusCode)
 			{
