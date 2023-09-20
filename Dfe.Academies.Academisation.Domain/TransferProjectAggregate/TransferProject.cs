@@ -30,6 +30,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public string? ProjectReference { get; private set; }
 		public string OutgoingTrustUkprn { get; private set; }
+		public string? OutgoingTrustName{ get; private set; }
 		public string? WhoInitiatedTheTransfer { get; private set; }
 		public bool? RddOrEsfaIntervention { get; private set; }
 		public string? RddOrEsfaInterventionDetail { get; private set; }
@@ -187,6 +188,23 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			{
 				CreatedOn = createdOn
 			};
+		}
+
+		public void SetOutgoingTrustName(string outgoingTrustName)
+		{
+			OutgoingTrustName = outgoingTrustName;
+		}
+
+		public void SetAcademyIncomingTrustName(int academyId, string incomingTrustName)
+		{
+			var transferringAcademy =
+						TransferringAcademies.SingleOrDefault(x => x.Id == academyId);
+
+			if (transferringAcademy != null) {
+
+				transferringAcademy.SetIncomingTrustName(incomingTrustName);
+
+			}
 		}
 	}
 

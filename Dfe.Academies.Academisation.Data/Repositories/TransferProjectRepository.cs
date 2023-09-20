@@ -41,7 +41,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return x;
 		}
 
-
-
+		public async Task<IEnumerable<ITransferProject?>> GetAllTransferProjectsWhereTrustNameIsNull()
+		{
+			return await DefaultIncludes().Where(x => x.OutgoingTrustName == null || x.TransferringAcademies.Any(ta => ta.IncomingTrustName == null)).ToListAsync();
+		}
 	}
 }

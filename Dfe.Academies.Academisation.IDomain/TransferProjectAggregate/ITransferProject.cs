@@ -34,6 +34,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		string? OtherTransferTypeDescription { get; }
 		string? OutgoingTrustConsent { get; }
 		string OutgoingTrustUkprn { get; }
+		string? OutgoingTrustName { get; }
 		string? ProjectRationale { get; }
 		string? ProjectReference { get; }
 		bool? RationaleSectionIsCompleted { get; }
@@ -73,5 +74,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 			bool? isCompleted);
 
 		void SetGeneralInformation(string recommendation, string author);
+		void SetOutgoingTrustName(string outgoingTrustName);
+		void SetAcademyIncomingTrustName(int academyId, string incomingTrustName);
 	}
 }

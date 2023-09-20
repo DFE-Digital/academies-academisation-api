@@ -2,9 +2,7 @@
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.Academies;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
@@ -14,7 +12,6 @@ using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregat
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -136,7 +133,7 @@ builder.Services.AddScoped<ILegacyProjectListGetQuery, LegacyProjectListGetQuery
 builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
 builder.Services.AddScoped<IProjectStatusesDataQuery, ProjectStatusesDataQuery>();
 builder.Services.AddScoped<IProjectGetStatusesQuery, ProjectGetStatusesQuery>();
-builder.Services.AddScoped<IEstablishmentGetDataQuery, EstablishmentGetDataQuery>();
+builder.Services.AddScoped<IAcademiesQueryService, AcademiesQueryService>();
 builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
@@ -161,14 +158,6 @@ builder.Services.AddDbContext<AcademisationContext>(options =>
 #endif
 	}
 );
-
-builder.Services.AddDbContext<AcademiesContext>(options =>
-	{
-		options.UseSqlServer(builder.Configuration["AcademiesDatabaseConnectionString"]);
-	}
-);
-
-
 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
