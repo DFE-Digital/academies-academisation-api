@@ -26,9 +26,9 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public async Task ProjectExists___GetProject()
 		{
 			// arrange
-			(ProjectDetails incompleteProjectDetails1, ProjectState incompleteProjectState1) = CreateTestProject(region: "region1");
-			(ProjectDetails incompleteProjectDetails2, ProjectState incompleteProjectState2) = CreateTestProject("localAuth2");
-			(_, ProjectState completeProjectState3) = CreateTestProject("localAuth3", "region3");
+			(ProjectDetails incompleteProjectDetails1, Project incompleteProjectState1) = CreateTestProject(region: "region1");
+			(ProjectDetails incompleteProjectDetails2, Project incompleteProjectState2) = CreateTestProject("localAuth2");
+			(_, Project completeProjectState3) = CreateTestProject("localAuth3", "region3");
 
 			_context.Projects.Add(incompleteProjectState1);
 			_context.Projects.Add(incompleteProjectState2);
@@ -47,16 +47,16 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			);
 		}
 
-		private (ProjectDetails, ProjectState) CreateTestProject(string? localAuthority = null, string? region = null)
+		private (ProjectDetails, Project) CreateTestProject(string? localAuthority = null, string? region = null)
 		{
 			var projectDetails = _fixture.Build<ProjectDetails>()
 				.With(p => p.LocalAuthority, localAuthority)
 				.With(p => p.Region, region)
 				.Create();
 			var newProject = new Project(0, projectDetails);
-			var mappedProject = ProjectState.MapFromDomain(newProject);
+			//var mappedProject = ProjectState.MapFromDomain(newProject);
 
-			return (projectDetails, mappedProject);
+			return (projectDetails, newProject);
 		}
 	}
 }

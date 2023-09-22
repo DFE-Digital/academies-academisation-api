@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +16,8 @@ public class ProjectGetDataQuery : IProjectGetDataQuery
 
 	public async Task<IProject?> Execute(int id)
 	{
-		ProjectState? createdProjectState = await _context.Projects.Include(x => x.Notes).SingleOrDefaultAsync(a => a.Id == id);
+		Project? createdProjectState = await _context.Projects.Include(x => x.Details.Notes).SingleOrDefaultAsync(a => a.Id == id);
 
-		return createdProjectState?.MapToDomain();
+		return createdProjectState;
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 
 		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default)
 		{
-			IQueryable<ProjectState> queryable = _context.Projects;
+			IQueryable<Project> queryable = _context.Projects;
 
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
@@ -27,11 +28,11 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 
 			var totalProjects = queryable.Count();
 			var projects = await queryable
-				.OrderByDescending(acp => acp.CreatedOn)
+				.OrderByDescending(acp => acp.Details.CreatedOn)
 				.Skip((page - 1) * count)
 				.Take(count).ToListAsync();
 
-			return (projects.Select(p => p.MapToDomain()), totalProjects);
+			return (projects,totalProjects);
 		}
 		private static IQueryable<Project> FilterByRegion(IEnumerable<string>? regions, IQueryable<Project> queryable)
 		{
@@ -50,36 +51,36 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 		{
 			if (states != null && states!.Any())
 			{
-				queryable = queryable.Where(p => states.Contains(p.ProjectStatus!.ToLower()));
+				queryable = queryable.Where(p => states.Contains(p.Details.ProjectStatus!.ToLower()));
 			}
 
 			return queryable;
 		}
-		private static IQueryable<ProjectState> FilterByApplicationIds(IEnumerable<string>? applicationIds, IQueryable<ProjectState> queryable)
+		private static IQueryable<Project> FilterByApplicationIds(IEnumerable<string>? applicationIds, IQueryable<Project> queryable)
 		{
 			if (applicationIds != null && applicationIds!.Any())
 			{
-				queryable = queryable.Where(p => applicationIds.Contains(p.ApplicationReferenceNumber!));
+				queryable = queryable.Where(p => applicationIds.Contains(p.Details.ApplicationReferenceNumber!));
 			}
 
 			return queryable;
 		}
 
-		private static IQueryable<ProjectState> FilterByUrn(int? urn, IQueryable<ProjectState> queryable)
+		private static IQueryable<Project> FilterByUrn(int? urn, IQueryable<Project> queryable)
 		{
-			if (urn.HasValue) queryable = queryable.Where(p => p.Urn == urn);
+			if (urn.HasValue) queryable = queryable.Where(p => p.Details.Urn == urn);
 
 			return queryable;
 		}
 
-		private static IQueryable<ProjectState> FilterBySchool(string? title, IQueryable<ProjectState> queryable)
+		private static IQueryable<Project> FilterBySchool(string? title, IQueryable<Project> queryable)
 		{
-			if (!string.IsNullOrWhiteSpace(title)) queryable = queryable.Where(p => p.SchoolName!.ToLower().Contains(title!.ToLower()));
+			if (!string.IsNullOrWhiteSpace(title)) queryable = queryable.Where(p => p.Details.SchoolName!.ToLower().Contains(title!.ToLower()));
 
 			return queryable;
 		}
 
-		private static IQueryable<ProjectState> FilterByDeliveryOfficer(IEnumerable<string>? deliveryOfficers, IQueryable<ProjectState> queryable)
+		private static IQueryable<Project> FilterByDeliveryOfficer(IEnumerable<string>? deliveryOfficers, IQueryable<Project> queryable)
 		{
 			if (deliveryOfficers != null && deliveryOfficers.Any())
 			{
@@ -89,14 +90,14 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 				{
 					// Query by unassigned or assigned delivery officer
 					queryable = queryable.Where(p =>
-								(!string.IsNullOrEmpty(p.AssignedUserFullName) && lowerCaseDeliveryOfficers.Contains(p.AssignedUserFullName.ToLower()))
-								|| string.IsNullOrEmpty(p.AssignedUserFullName));
+								(!string.IsNullOrEmpty(p.Details.AssignedUser.FullName) && lowerCaseDeliveryOfficers.Contains(p.Details.AssignedUser.FullName.ToLower()))
+								|| string.IsNullOrEmpty(p.Details.AssignedUser.FullName));
 				}
 				else
 				{
 					// Query by assigned delivery officer only
 					queryable = queryable.Where(p =>
-						!string.IsNullOrEmpty(p.AssignedUserFullName) && lowerCaseDeliveryOfficers.Contains(p.AssignedUserFullName.ToLower()));
+						!string.IsNullOrEmpty(p.Details.AssignedUser.FullName) && lowerCaseDeliveryOfficers.Contains(p.Details.AssignedUser.FullName.ToLower()));
 				}
 			}
 

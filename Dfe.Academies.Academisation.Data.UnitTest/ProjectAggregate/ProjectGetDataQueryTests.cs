@@ -27,17 +27,16 @@ public class ProjectGetDataQueryTests
 		// arrange
 		var projectDetails = _fixture.Create<ProjectDetails>();
 		var newProject = new Project(0, projectDetails);
-		var mappedProject = ProjectState.MapFromDomain(newProject);
 
-		_context.Projects.Add(mappedProject);
+		_context.Projects.Add(newProject);
 		await _context.SaveChangesAsync();
 
 		// act
-		var result = await _subject.Execute(mappedProject.Id);
+		var result = await _subject.Execute(newProject.Id);
 
 		// assert
 		Assert.NotNull(result);
-		Assert.Equal(mappedProject.Id, result.Id);
+		Assert.Equal(newProject.Id, result.Id);
 		Assert.Equal(projectDetails, result.Details);
 	}
 }

@@ -36,8 +36,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
 
 	public DbSet<Project> Projects { get; set; } = null!;
-	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
-	public DbSet<ConversionAdvisoryBoardDecision> ConversionAdvisoryBoardDecisions { get; set; } = null!;
+	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
+	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 
@@ -132,8 +132,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<TrustKeyPersonRole>(ConfigureTrustKeyPersonRole);
 
 		modelBuilder.Entity<Project>(ConfigureProject);
-		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
-		modelBuilder.Entity<ConversionAdvisoryBoardDecision>(ConfigureConversionAdvisoryBoardDecision);
+		modelBuilder.Entity<ProjectNoteState>(ConfigureProjectNotes);
+		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
 		
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
@@ -192,9 +192,191 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		projectConfiguration.ToTable("Project", DEFAULT_SCHEMA);
 
 		projectConfiguration.OwnsOne(x => x.Details, pd =>
-		{ 
-			pd.
-		});
+		{
+			pd.Property(d => d.AgeRange).HasColumnName("AgeRange");
+		    pd.Property(d => d.RisksAndIssuesSectionComplete).HasColumnName("RisksAndIssuesSectionComplete");
+		    pd.Property(d => d.RisksAndIssues).HasColumnName("RisksAndIssues");
+		    pd.Property(d => d.RationaleSectionComplete).HasColumnName("RationaleSectionComplete");
+		    pd.Property(d => d.RationaleForTrust).HasColumnName("RationaleForTrust");
+		    pd.Property(d => d.RationaleForProject).HasColumnName("RationaleForProject");
+		    pd.Property(d => d.SchoolPerformanceAdditionalInformation).HasColumnName("SchoolPerformanceAdditionalInformation");
+		    pd.Property(d => d.SchoolOverviewSectionComplete).HasColumnName("SchoolOverviewSectionComplete");
+		    pd.Property(d => d.MemberOfParliamentNameAndParty).HasColumnName("MemberOfParliamentNameAndParty");
+		    pd.Property(d => d.DistanceFromSchoolToTrustHeadquartersAdditionalInformation).HasColumnName("DistanceFromSchoolToTrustHeadquartersAdditionalInformation");
+		    pd.Property(d => d.DistanceFromSchoolToTrustHeadquarters).HasColumnName("DistanceFromSchoolToTrustHeadquarters");
+		    pd.Property(d => d.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust).HasColumnName("PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust");
+		    pd.Property(d => d.DiocesanTrust).HasColumnName("DiocesanTrust");
+		    pd.Property(d => d.FinancialDeficit).HasColumnName("FinancialDeficit");
+		    pd.Property(d => d.PfiSchemeDetails).HasColumnName("PfiSchemeDetails");
+		    pd.Property(d => d.PercentageFreeSchoolMeals).HasColumnName("PercentageFreeSchoolMeals");
+		    pd.Property(d => d.PublishedAdmissionNumber).HasColumnName("PublishedAdmissionNumber");
+		    pd.Property(d => d.Capacity).HasColumnName("Capacity");
+		    pd.Property(d => d.GoverningBodyResolution).HasColumnName("GoverningBodyResolution");
+		    pd.Property(d => d.Consultation).HasColumnName("Consultation");
+		    pd.Property(d => d.DiocesanConsent).HasColumnName("DiocesanConsent");
+		    pd.Property(d => d.FoundationConsent).HasColumnName("FoundationConsent");
+			pd.OwnsOne(a => a.AssignedUser, a =>
+			{
+				a.Property(p => p.Id).HasColumnName("AssignedId");
+				a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
+				a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+			});
+			pd.Property(d => d.KeyStage5PerformanceAdditionalInformation).HasColumnName("KeyStage5PerformanceAdditionalInformation");
+		    pd.Property(d => d.KeyStage4PerformanceAdditionalInformation).HasColumnName("KeyStage4PerformanceAdditionalInformation");
+		    pd.Property(d => d.KeyStage2PerformanceAdditionalInformation).HasColumnName("KeyStage2PerformanceAdditionalInformation");
+		    pd.Property(d => d.SchoolPupilForecastsAdditionalInformation).HasColumnName("SchoolPupilForecastsAdditionalInformation");
+		    pd.Property(d => d.YearThreeProjectedPupilNumbers).HasColumnName("YearThreeProjectedPupilNumbers");
+		    pd.Property(d => d.YearThreeProjectedCapacity).HasColumnName("YearThreeProjectedCapacity");
+		    pd.Property(d => d.YearTwoProjectedPupilNumbers).HasColumnName("YearTwoProjectedPupilNumbers");
+		    pd.Property(d => d.YearTwoProjectedCapacity).HasColumnName("YearTwoProjectedCapacity");
+		    pd.Property(d => d.ActualPupilNumbers).HasColumnName("ActualPupilNumbers");
+		    pd.Property(d => d.YearOneProjectedPupilNumbers).HasColumnName("YearOneProjectedPupilNumbers");
+		    pd.Property(d => d.SchoolBudgetInformationSectionComplete).HasColumnName("SchoolBudgetInformationSectionComplete");
+		    pd.Property(d => d.SchoolBudgetInformationAdditionalInformation).HasColumnName("SchoolBudgetInformationAdditionalInformation");
+		    pd.Property(d => d.CapitalCarryForwardAtEndMarchNextYear).HasColumnName("CapitalCarryForwardAtEndMarchNextYear");
+		    pd.Property(d => d.CapitalCarryForwardAtEndMarchCurrentYear).HasColumnName("CapitalCarryForwardAtEndMarchCurrentYear");
+		    pd.Property(d => d.ProjectedRevenueBalanceAtEndMarchNextYear).HasColumnName("ProjectedRevenueBalanceAtEndMarchNextYear");
+		    pd.Property(d => d.RevenueCarryForwardAtEndMarchCurrentYear).HasColumnName("RevenueCarryForwardAtEndMarchCurrentYear");
+		    pd.Property(d => d.EndOfNextFinancialYear).HasColumnName("EndOfNextFinancialYear");
+		    pd.Property(d => d.EndOfCurrentFinancialYear).HasColumnName("EndOfCurrentFinancialYear");
+		    pd.Property(d => d.LegalRequirementsSectionComplete).HasColumnName("LegalRequirementsSectionComplete");
+		    pd.Property(d => d.YearOneProjectedCapacity).HasColumnName("YearOneProjectedCapacity");
+		    pd.Property(d => d.SchoolType).HasColumnName("SchoolType");
+		    pd.Property(d => d.CreatedOn).HasColumnName("CreatedOn");
+		    pd.Property(d => d.SchoolPhase).HasColumnName("SchoolPhase");
+		    pd.Property(d => d.RecommendationForProject).HasColumnName("RecommendationForProject");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateLink).HasColumnName("LocalAuthorityInformationTemplateLink");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateComments).HasColumnName("LocalAuthorityInformationTemplateComments");
+		    pd.Property(d => d.Form7Received).HasColumnName("Form7Received");
+		    pd.Property(d => d.Form7ReceivedDate).HasColumnName("Form7ReceivedDate");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateReturnedDate).HasColumnName("LocalAuthorityInformationTemplateReturnedDate");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateSentDate).HasColumnName("LocalAuthorityInformationTemplateSentDate");
+		    pd.Property(d => d.Author).HasColumnName("Author");
+		    pd.Property(d => d.BaselineDate).HasColumnName("BaselineDate");
+		    pd.Property(d => d.AssignedDate).HasColumnName("AssignedDate");
+		    pd.Property(d => d.ApplicationReceivedDate).HasColumnName("ApplicationReceivedDate");
+		    pd.Property(d => d.ProjectStatus).HasColumnName("ProjectStatus");
+		    pd.Property(d => d.ApplicationReferenceNumber).HasColumnName("ApplicationReferenceNumber");
+		    pd.Property(d => d.LocalAuthority).HasColumnName("LocalAuthority");
+		    pd.Property(d => d.SchoolName).HasColumnName("SchoolName");
+		    pd.Property(d => d.IfdPipelineId).HasColumnName("IfdPipelineId");
+		    pd.Property(d => d.Urn).HasColumnName("Urn");
+		    pd.Property(d => d.HeadTeacherBoardDate).HasColumnName("HeadTeacherBoardDate");
+         	pd.Property(d => d.Notes).HasColumnName("Notes");
+		    pd.Property(d => d.Version).HasColumnName("Version");
+		    pd.Property(d => d.AcademyOrderRequired).HasColumnName("AcademyOrderRequired");
+		    pd.Property(d => d.Region).HasColumnName("Region");
+		    pd.Property(d => d.ConversionSupportGrantAmountChanged).HasColumnName("ConversionSupportGrantAmountChanged");
+		    pd.Property(d => d.ConversionSupportGrantEnvironmentalImprovementGrant).HasColumnName("ConversionSupportGrantEnvironmentalImprovementGrant");
+		    pd.Property(d => d.ConversionSupportGrantType).HasColumnName("ConversionSupportGrantType");
+	     	pd.Property(d => d.ConversionSupportGrantChangeReason).HasColumnName("ConversionSupportGrantChangeReason");
+		    pd.Property(d => d.ConversionSupportGrantAmount).HasColumnName("ConversionSupportGrantAmount");
+		    pd.Property(d => d.SchoolAndTrustInformationSectionComplete).HasColumnName("SchoolAndTrustInformationSectionComplete");
+		    pd.Property(d => d.ProposedAcademyOpeningDate).HasColumnName("ProposedAcademyOpeningDate");
+		    pd.Property(d => d.ClearedBy).HasColumnName("ClearedBy");
+		    pd.Property(d => d.AcademyTypeAndRoute).HasColumnName("AcademyTypeAndRoute");
+		    pd.Property(d => d.SponsorReferenceNumber).HasColumnName("SponsorReferenceNumber");
+		    pd.Property(d => d.NameOfTrust).HasColumnName("NameOfTrust");
+		    pd.Property(d => d.TrustReferenceNumber).HasColumnName("TrustReferenceNumber");
+		    pd.Property(d => d.PreviousHeadTeacherBoardLink).HasColumnName("PreviousHeadTeacherBoardLink");
+		    pd.Property(d => d.PreviousHeadTeacherBoardDate).HasColumnName("PreviousHeadTeacherBoardDate");
+     		pd.Property(d => d.AnnexBFormUrl).HasColumnName("AnnexBFormUrl");
+	    	pd.Property(d => d.AnnexBFormReceived).HasColumnName("AnnexBFormReceived");
+		    pd.Property(d => d.DaoPackSentDate).HasColumnName("DaoPackSentDate");
+	        pd.Property(d => d.SponsorName).HasColumnName("SponsorName");
+			
+
+	//public string? AgeRange { get; init; }
+	//public bool? RisksAndIssuesSectionComplete { get; init; }
+	//public string? RisksAndIssues { get; init; }
+	//public bool? RationaleSectionComplete { get; init; }
+	//public string? RationaleForTrust { get; init; }
+	//public string? RationaleForProject { get; init; }
+	//public string? SchoolPerformanceAdditionalInformation { get; init; }
+	//public bool? SchoolOverviewSectionComplete { get; init; }
+	//public string? MemberOfParliamentNameAndParty { get; init; }
+	//public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; init; }
+	//public decimal? DistanceFromSchoolToTrustHeadquarters { get; init; }
+	//public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
+	//public string? DiocesanTrust { get; init; }
+	//public string? FinancialDeficit { get; init; }
+	//public string? ViabilityIssues { get; init; }
+	//public string? PfiSchemeDetails { get; init; }
+	//public string? PartOfPfiScheme { get; init; }
+	//public decimal? PercentageFreeSchoolMeals { get; init; }
+	//public string? PublishedAdmissionNumber { get; init; }
+	//public int? Capacity { get; init; }
+	//public YesNoNotApplicable? GoverningBodyResolution { get; init; }
+	//public YesNoNotApplicable? Consultation { get; init; }
+	//public YesNoNotApplicable? DiocesanConsent { get; init; }
+	//public YesNoNotApplicable? FoundationConsent { get; init; }
+	//public User? AssignedUser { get; init; }
+	//public string? KeyStage5PerformanceAdditionalInformation { get; init; }
+	//public string? KeyStage4PerformanceAdditionalInformation { get; init; }
+	//public string? KeyStage2PerformanceAdditionalInformation { get; init; }
+	//public string? SchoolPupilForecastsAdditionalInformation { get; init; }
+	//public int? YearThreeProjectedPupilNumbers { get; init; }
+	//public int? YearThreeProjectedCapacity { get; init; }
+	//public int? YearTwoProjectedPupilNumbers { get; init; }
+	//public int? YearTwoProjectedCapacity { get; init; }
+	//public int? ActualPupilNumbers { get; init; }
+	//public int? YearOneProjectedPupilNumbers { get; init; }
+	//public bool? SchoolBudgetInformationSectionComplete { get; init; }
+	//public string? SchoolBudgetInformationAdditionalInformation { get; init; }
+	//public decimal? CapitalCarryForwardAtEndMarchNextYear { get; init; }
+	//public decimal? CapitalCarryForwardAtEndMarchCurrentYear { get; init; }
+	//public decimal? ProjectedRevenueBalanceAtEndMarchNextYear { get; init; }
+	//public decimal? RevenueCarryForwardAtEndMarchCurrentYear { get; init; }
+	//public DateTime? EndOfNextFinancialYear { get; init; }
+	//public DateTime? EndOfCurrentFinancialYear { get; init; }
+	//public bool? LegalRequirementsSectionComplete { get; init; }
+	//public int? YearOneProjectedCapacity { get; init; }
+	//public string? SchoolType { get; init; }
+	//public DateTime CreatedOn { get; set; }
+	//public string? SchoolPhase { get; init; }
+	//public string? RecommendationForProject { get; init; }
+	//public bool? LocalAuthorityInformationTemplateSectionComplete { get; init; }
+	//public string? LocalAuthorityInformationTemplateLink { get; init; }
+	//public string? LocalAuthorityInformationTemplateComments { get; init; }
+	//public string? Form7Received { get; init; }
+	//public DateTime? Form7ReceivedDate { get; init; }
+	//public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
+	//public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
+	//public string? Author { get; init; }
+	//public DateTime? BaselineDate { get; init; }
+	//public DateTime? AssignedDate { get; init; }
+	//public DateTime? ApplicationReceivedDate { get; init; }
+	//public string? ProjectStatus { get; init; }
+	//public string? ApplicationReferenceNumber { get; init; }
+	//public string? LocalAuthority { get; init; }
+	//public string? SchoolName { get; init; }
+	//public int? IfdPipelineId { get; init; }
+	//public int Urn { get; init; }
+	//public DateTime? HeadTeacherBoardDate { get; init; }
+	//public ICollection<ProjectNote> Notes { get; init; }
+	//public string? Version { get; init; }
+	//public string? AcademyOrderRequired { get; init; }
+	//public string? Region { get; init; }
+	//public bool? ConversionSupportGrantAmountChanged { get; init; }
+	//public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; init; }
+	//public string? ConversionSupportGrantType { get; init; }
+	//public string? ConversionSupportGrantChangeReason { get; init; }
+	//public decimal? ConversionSupportGrantAmount { get; init; }
+	//public bool? SchoolAndTrustInformationSectionComplete { get; init; }
+	//public DateTime? ProposedAcademyOpeningDate { get; init; }
+	//public string? ClearedBy { get; init; }
+	//public string? AcademyTypeAndRoute { get; init; }
+	//public string? SponsorReferenceNumber { get; init; }
+	//public string? NameOfTrust { get; init; }
+	//public string? TrustReferenceNumber { get; init; }
+	//public string? PreviousHeadTeacherBoardLink { get; init; }
+	//public DateTime? PreviousHeadTeacherBoardDate { get; init; }
+	//public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
+	//public string? AnnexBFormUrl { get; init; }
+	//public bool? AnnexBFormReceived { get; init; }
+	//public DateTime? DaoPackSentDate { get; init; }
+	//public string? SponsorName { get; init; }
+});
 
 			projectConfiguration
 			.HasMany(x => x.Details.Notes)

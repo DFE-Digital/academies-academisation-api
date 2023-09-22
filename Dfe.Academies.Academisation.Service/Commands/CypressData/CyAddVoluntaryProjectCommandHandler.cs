@@ -85,7 +85,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				YearThreeProjectedPupilNumbers = 370,
 				CreatedOn = DateTime.Now,
 				Region = "West Midlands",
-				LocalAuthority = "Coventry"
+				LocalAuthority = "Coventry",
 			};
 
 			// Create Application
