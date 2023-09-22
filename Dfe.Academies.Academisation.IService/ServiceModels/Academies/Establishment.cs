@@ -1,4 +1,4 @@
-﻿namespace Dfe.Academies.Academisation.IData.Establishment
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Academies
 {
 	public class Establishment
 	{

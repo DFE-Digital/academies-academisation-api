@@ -20,6 +20,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public int TransferProjectId { get; private set; }
 		public string OutgoingAcademyUkprn { get; private set; }
 		public string IncomingTrustUkprn { get; private set; }
+		public string? IncomingTrustName { get; private set; }
 
 		public string? PupilNumbersAdditionalInformation { get; private set; }
 		public string? LatestOfstedReportAdditionalInformation { get; private set; }
@@ -34,6 +35,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			KeyStage2PerformanceAdditionalInformation = keyStage2PerformanceAdditionalInformation;
 			KeyStage4PerformanceAdditionalInformation = keyStage4PerformanceAdditionalInformation;
 			KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
+		}
+
+		public void SetIncomingTrustName(string incomingTrustName)
+		{
+			IncomingTrustName = incomingTrustName;
 		}
 	}
 }
