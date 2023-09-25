@@ -132,7 +132,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			DiocesanConsent = diocesanConsent;
 			LegalRequirementsSectionIsCompleted = isCompleted;
 		}
-		public void SetTransferDates(DateTime advisoryBoardDate, DateTime expectedDateForTransfer)
+		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer)
 		{
 			// HtbDate maps from the front-end would be good to move this to more business focused language
 			HtbDate = advisoryBoardDate;

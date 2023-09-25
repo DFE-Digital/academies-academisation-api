@@ -58,7 +58,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement,
 			string diocesanConsent, bool? isCompleted);
 
-		void SetTransferDates(DateTime advisoryBoardDate, DateTime expectedDateForTransfer);
+		void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer);
 
 		void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn,
 			string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation,
