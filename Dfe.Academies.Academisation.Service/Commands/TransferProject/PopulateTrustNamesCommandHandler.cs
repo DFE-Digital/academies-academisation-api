@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				var outgoingTrust = await _academiesQueryService.GetTrust(transferProject.OutgoingTrustUkprn).ConfigureAwait(false);
 
-				transferProject.SetOutgoingTrustName(outgoingTrust?.GroupName ?? string.Empty);
+				if (outgoingTrust != null) { transferProject.SetOutgoingTrustName(outgoingTrust?.GroupName);  }
 
 				IService.ServiceModels.Academies.Trust? incomingTrust = null;
 
@@ -48,7 +48,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 						incomingTrust = await _academiesQueryService.GetTrust(academy.IncomingTrustUkprn).ConfigureAwait(false);
 					}
 
-					transferProject.SetAcademyIncomingTrustName(academy.Id, incomingTrust?.GroupName ?? string.Empty);
+					if (incomingTrust != null) { transferProject.SetAcademyIncomingTrustName(academy.Id, incomingTrust?.GroupName); }
 				}
 				_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			}
