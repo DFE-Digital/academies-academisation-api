@@ -132,7 +132,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<TrustKeyPersonRole>(ConfigureTrustKeyPersonRole);
 
 		modelBuilder.Entity<Project>(ConfigureProject);
-		modelBuilder.Entity<ProjectNoteState>(ConfigureProjectNotes);
+		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
 		
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
@@ -262,8 +262,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		    pd.Property(d => d.IfdPipelineId).HasColumnName("IfdPipelineId");
 		    pd.Property(d => d.Urn).HasColumnName("Urn");
 		    pd.Property(d => d.HeadTeacherBoardDate).HasColumnName("HeadTeacherBoardDate");
-			pd.Property(d => d.Notes);
-
 			pd.Property(d => d.Version).HasColumnName("Version");
 		    pd.Property(d => d.AcademyOrderRequired).HasColumnName("AcademyOrderRequired");
 		    pd.Property(d => d.Region).HasColumnName("Region");
@@ -380,24 +378,23 @@ public class AcademisationContext : DbContext, IUnitOfWork
 });
 
 		projectConfiguration
-			.HasMany(x => x.Details.Notes)
+			.HasMany(a => a.Notes)
 			.WithOne()
-			.HasForeignKey("ProjectId");
+			.HasForeignKey("ProjectId")
+			.IsRequired();
 
+		var notesNavigation = projectConfiguration.Metadata.FindNavigation(nameof(Project.Notes));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		notesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-		projectConfiguration
-			.Property(e => e.Details.GoverningBodyResolution).HasConversion<string>();
-		projectConfiguration
-			.Property(e => e.Details.Consultation).HasConversion<string>();
-		projectConfiguration
-			.Property(e => e.Details.DiocesanConsent).HasConversion<string>();
-		projectConfiguration
-			.Property(e => e.Details.FoundationConsent).HasConversion<string>();
 	}
 
-	private static void ConfigureProjectNotes(EntityTypeBuilder<ProjectNoteState> projectNoteConfiguration)
+	private static void ConfigureProjectNotes(EntityTypeBuilder<ProjectNote> projectNoteConfiguration)
 	{
 		projectNoteConfiguration.ToTable("ProjectNotes", DEFAULT_SCHEMA);
+		projectNoteConfiguration.HasKey(a => a.Id);
+		//projectNoteConfiguration.Property<int?>("ProjectId").IsRequired(false);
 	}
 
 	private static void ConfigureConversionAdvisoryBoardDecision(EntityTypeBuilder<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionConfiguration)

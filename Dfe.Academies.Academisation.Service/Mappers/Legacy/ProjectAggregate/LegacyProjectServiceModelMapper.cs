@@ -125,7 +125,7 @@ internal static class LegacyProjectServiceModelMapper
 				? null
 				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress),
 
-			Notes = project.Details.Notes.ToProjectNoteServiceModels().ToList()
+			Notes = project.Notes.ToProjectNoteServiceModels().ToList()
 		};
 
 		return serviceModel;

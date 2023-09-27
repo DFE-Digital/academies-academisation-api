@@ -32,7 +32,6 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			await _context.SaveChangesAsync();
 
 			ProjectDetails projectDetails = _fixture.Create<ProjectDetails>();
-			projectDetails.Notes.Clear();
 
 			IProject project = new Project(existingProject.Id, projectDetails);
 			await _context.Projects.LoadAsync();

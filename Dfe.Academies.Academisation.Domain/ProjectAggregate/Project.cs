@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -12,6 +13,10 @@ public class Project : IProject
 	{
 		Details = projectDetails;
 	}
+
+	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
+	IReadOnlyCollection<ProjectNote> IProject.Notes => _notes.AsReadOnly();
+	private readonly List<ProjectNote> _notes;
 
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer

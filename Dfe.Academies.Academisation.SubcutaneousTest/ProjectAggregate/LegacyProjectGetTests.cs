@@ -48,7 +48,7 @@ public class ProjectGetTests
 
 		result.Result.As<OkObjectResult>().Value.Should()
 			.BeEquivalentTo(existingProject, options =>
-				options.Excluding(x => x.Details.Notes)
+				options.Excluding(x => x.Notes)
 					.Excluding(x => x.Details.AssignedDate)
 					.Excluding(x => x.Details.AssignedUser.Id)
 					.Excluding(x => x.Details.AssignedUser.EmailAddress)

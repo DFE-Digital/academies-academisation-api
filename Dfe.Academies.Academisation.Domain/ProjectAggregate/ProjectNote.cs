@@ -12,7 +12,8 @@
 			Author = author;
 			Date = date;
 		}
-
+		public int ProjectId { get; set; }
+		public int Id { get; set; }
 		public string? Subject { get; init; }
 		public string? Note { get; init; }
 		public string? Author { get; init; }

@@ -16,7 +16,7 @@ public class ProjectGetDataQuery : IProjectGetDataQuery
 
 	public async Task<IProject?> Execute(int id)
 	{
-		Project? createdProjectState = await _context.Projects.Include(x => x.Details.Notes).SingleOrDefaultAsync(a => a.Id == id);
+		Project? createdProjectState = await _context.Projects.Include(x => x.Notes).SingleOrDefaultAsync(a => a.Id == id);
 
 		return createdProjectState;
 	}
