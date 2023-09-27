@@ -49,9 +49,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				_logger.LogError("Request for trust failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
 				return null;
 			}
-			var trusts = await response.Content.ReadFromJsonAsync<List<Trust>>();
+			var trusts = await response.Content.ReadFromJsonAsync<AcademiesTrustsResponce>();
 
-			return trusts?.FirstOrDefault();
+			return trusts?.Data.FirstOrDefault();
 		}
 	}
 }

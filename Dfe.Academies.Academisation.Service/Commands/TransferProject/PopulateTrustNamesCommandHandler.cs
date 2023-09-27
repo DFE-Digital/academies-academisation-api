@@ -43,7 +43,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 
 				foreach (var academy in transferProject.TransferringAcademies)
 				{
-					if (incomingTrust == null || incomingTrust.UkPrn != academy.IncomingTrustUkprn)
+					if (incomingTrust == null || incomingTrust.Ukprn != academy.IncomingTrustUkprn)
 					{
 						incomingTrust = await _academiesQueryService.GetTrust(academy.IncomingTrustUkprn).ConfigureAwait(false);
 					}
