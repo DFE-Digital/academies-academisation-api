@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Academies
 {
-	public record AcademiesTrustsResponce
+	public record AcademiesTrustsResponse
 	{
 		public List<Trust> Data { get; set; }
 	}
