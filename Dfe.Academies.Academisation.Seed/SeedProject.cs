@@ -12,7 +12,7 @@ public static class SeedProject
 	public static async Task CreateProject(AcademisationContext academisationContext, int numberOfProjects)
 	{
 		var fixture = new Fixture();
-		var newProjectStates = new List<ProjectState>();
+		var newProjects = new List<Project>();
 		var projectNotes = new List<ProjectNoteState>();
 		for (int i = 1; i <= numberOfProjects; i++)
 		{
@@ -21,17 +21,16 @@ public static class SeedProject
 			try
 			{
 				// Create and add project
-				var newProjectState = ProjectState.MapFromDomain(newAcademyConversionProject);
-				newProjectState.Id = default;
-				newProjectStates.Add(newProjectState);
+				var newProject = new Project(default, new ProjectDetails());
+				newProjects.Add(newProject);
 
 				// Batch save for every 80 project (If over 80)
-				if (newProjectStates.Count % 80 == 0 || numberOfProjects < 80)
+				if (newProjects.Count % 80 == 0 || numberOfProjects < 80)
 				{
-					academisationContext.Projects.AddRange(newProjectStates);
+					academisationContext.Projects.AddRange(newProjects);
 					await academisationContext.SaveChangesAsync();
 
-					foreach (var projectState in newProjectStates)
+					foreach (var projectState in newProjects)
 					{
 						var newProjectNote = fixture.Create<ProjectNoteState>();
 						newProjectNote.Id = default;
@@ -42,7 +41,7 @@ public static class SeedProject
 
 					academisationContext.ProjectNotes.AddRange(projectNotes);
 					await academisationContext.SaveChangesAsync();
-					newProjectStates.Clear();
+					newProjects.Clear();
 					projectNotes.Clear();
 				}
 

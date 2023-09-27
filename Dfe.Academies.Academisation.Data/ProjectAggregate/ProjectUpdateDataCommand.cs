@@ -16,13 +16,9 @@ public class ProjectUpdateDataCommand : IProjectUpdateDataCommand
 
 	public async Task Execute(IProject project)
 	{
-		//var projectState = Project.MapFromDomain(project);
 
-		var projectInDb = await _context.Projects.SingleAsync(p => p.Id == project.Id);
-		project.Details.CreatedOn = projectInDb.Details.CreatedOn;
-
-		_context.ReplaceTracked(project as Project)
-			.Collection(x => x.Details.Notes!).IsModified = false;
+		_context.Entry(project as Project).State = EntityState.Modified;
+		_context.Update(project as Project);
 
 		await _context.SaveChangesAsync();
 	}

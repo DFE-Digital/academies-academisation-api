@@ -19,14 +19,14 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			{
 				Statuses = (await _context.Projects
 					.AsNoTracking()
-					.Select(p => p.ProjectStatus)
+					.Select(p => p.Details.ProjectStatus)
 					.Distinct()
 					.OrderBy(p => p)
 					.ToListAsync())!,
 				AssignedUsers = (await _context.Projects
-					.OrderByDescending(p => p.AssignedUserFullName)
+					.OrderByDescending(p => p.Details.AssignedUser.FullName)
 					.AsNoTracking()
-					.Select(p => p.AssignedUserFullName)
+					.Select(p => p.Details.AssignedUser.FullName)
 					.Where(p => !string.IsNullOrEmpty(p))
 					.Distinct()
 					.ToListAsync())!

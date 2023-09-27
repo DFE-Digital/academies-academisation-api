@@ -7,6 +7,7 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using System;
 using Xunit;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 {
@@ -19,12 +20,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public ProjectNoteAddCommandTests()
 		{
 			_fixture = new Fixture();
-			ProjectState projectState = _fixture.Create<ProjectState>();
+			Project project = _fixture.Create<Project>();
 
 			var testProjectContext = new TestProjectContext();
 			_context = testProjectContext.CreateContext();
 
-			_context.Projects.Add(projectState);
+			_context.Projects.Add(project);
 			_context.SaveChanges();
 
 			_newNote = new ProjectNoteState
@@ -33,7 +34,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				Note = "Note",
 				Author = "Author",
 				Date = DateTime.Today,
-				ProjectId = projectState.Id
+				ProjectId = project.Id
 			};
 		}
 

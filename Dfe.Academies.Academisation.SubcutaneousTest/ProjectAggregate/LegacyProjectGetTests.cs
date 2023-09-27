@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
@@ -35,7 +36,7 @@ public class ProjectGetTests
 	[Fact]
 	public async Task ProjectExists___ProjectReturned()
 	{
-		var existingProject = _fixture.Create<ProjectState>();
+		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
@@ -47,10 +48,10 @@ public class ProjectGetTests
 
 		result.Result.As<OkObjectResult>().Value.Should()
 			.BeEquivalentTo(existingProject, options =>
-				options.Excluding(x => x.Notes)
-					.Excluding(x => x.LastModifiedOn)
-					.Excluding(x => x.AssignedUserId)
-					.Excluding(x => x.AssignedUserEmailAddress)
-					.Excluding(x => x.AssignedUserFullName));
+				options.Excluding(x => x.Details.Notes)
+					.Excluding(x => x.Details.AssignedDate)
+					.Excluding(x => x.Details.AssignedUser.Id)
+					.Excluding(x => x.Details.AssignedUser.EmailAddress)
+					.Excluding(x => x.Details.AssignedUser.FullName)); ;
 	}	
 }

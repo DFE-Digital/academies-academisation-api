@@ -2,6 +2,8 @@
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using static System.String;
@@ -39,9 +41,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 
 			// Find the project
 			var existingFirstProject = await DbContext.Projects
-				.FirstOrDefaultAsync(p => p.SchoolName == projectOneName, cancellationToken);
+				.FirstOrDefaultAsync(p => p.Details.SchoolName == projectOneName, cancellationToken);
 			var existingSecondProject = await DbContext.Projects
-				.FirstOrDefaultAsync(p => p.SchoolName == projectTwoName, cancellationToken);
+				.FirstOrDefaultAsync(p => p.Details.SchoolName == projectTwoName, cancellationToken);
 
 			// If the project exists, remove it
 			if (existingFirstProject != null) DbContext.Projects.Remove(existingFirstProject);
@@ -57,69 +59,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				DbContext.Applications.Remove(existingApplication);
 			}
 
-			// Create two new projects
-			var newProjectOne = new ProjectState
-			{
-				SchoolName = projectOneName,
-				Urn = 113537,
-				ProjectStatus = "Approved with conditions",
-				ApplicationReferenceNumber = "A2B_123456",
-				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
-				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
-				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
-				RecommendationForProject = "Approve",
-				AcademyOrderRequired = "Yes",
-				AcademyTypeAndRoute = "Form a Mat",
-				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
-				ConversionSupportGrantAmount = 25000,
-				PublishedAdmissionNumber = "60673",
-				ViabilityIssues = "No",
-				FinancialDeficit = "No",
-				DistanceFromSchoolToTrustHeadquarters = 10,
-				RevenueCarryForwardAtEndMarchCurrentYear = -10,
-				ProjectedRevenueBalanceAtEndMarchNextYear = -10,
-				CapitalCarryForwardAtEndMarchCurrentYear = -10,
-				CapitalCarryForwardAtEndMarchNextYear = -10,
-				IfdPipelineId = 0,
-				YearOneProjectedPupilNumbers = 104,
-				YearTwoProjectedPupilNumbers = 239,
-				YearThreeProjectedPupilNumbers = 370,
-				CreatedOn = DateTime.Now,
-				Region = "West Midlands",
-				LocalAuthority = "Coventry"
-			};
-			// Create two new projects
-			var newProjectTwo = new ProjectState
-			{
-				SchoolName = projectTwoName,
-				Urn = 100608,
-				ProjectStatus = "Approved with conditions",
-				ApplicationReferenceNumber = "A2B_123456",
-				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
-				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
-				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
-				RecommendationForProject = "Approve",
-				AcademyOrderRequired = "Yes",
-				AcademyTypeAndRoute = "Form a Mat",
-				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
-				ConversionSupportGrantAmount = 25000,
-				PublishedAdmissionNumber = "60673",
-				ViabilityIssues = "No",
-				FinancialDeficit = "No",
-				DistanceFromSchoolToTrustHeadquarters = 10,
-				RevenueCarryForwardAtEndMarchCurrentYear = -10,
-				ProjectedRevenueBalanceAtEndMarchNextYear = -10,
-				CapitalCarryForwardAtEndMarchCurrentYear = -10,
-				CapitalCarryForwardAtEndMarchNextYear = -10,
-				IfdPipelineId = 0,
-				YearOneProjectedPupilNumbers = 104,
-				YearTwoProjectedPupilNumbers = 239,
-				YearThreeProjectedPupilNumbers = 370,
-				CreatedOn = DateTime.Now,
-				Region = "West Midlands",
-				LocalAuthority = "Coventry"
-			};
-
+			
 			// Create Application
 			var contributor = new ContributorDetails(applicationFirstName, "Project", "Cypress@Project.com",
 				ContributorRole.ChairOfGovernors, "N/A");
@@ -167,10 +107,80 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			// Add the new project to the Projects DbSet
 			var createdApplication = await DbContext.Applications
 				.FirstOrDefaultAsync(p => p.Contributors.Single().Details.FirstName == applicationFirstName, cancellationToken);
-			newProjectOne.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
-			newProjectTwo.ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}";
-			DbContext.Projects.Add(newProjectOne);
-			DbContext.Projects.Add(newProjectTwo);
+
+
+			// Create two new projects
+			var newProjectOneDetails = new ProjectDetails
+			{
+
+				SchoolName = projectOneName,
+				Urn = 113537,
+				ProjectStatus = "Approved with conditions",
+				ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}",
+				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
+				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
+				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
+				RecommendationForProject = "Approve",
+				AcademyOrderRequired = "Yes",
+				AcademyTypeAndRoute = "Form a Mat",
+				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
+				ConversionSupportGrantAmount = 25000,
+				PublishedAdmissionNumber = "60673",
+				ViabilityIssues = "No",
+				FinancialDeficit = "No",
+				DistanceFromSchoolToTrustHeadquarters = 10,
+				RevenueCarryForwardAtEndMarchCurrentYear = -10,
+				ProjectedRevenueBalanceAtEndMarchNextYear = -10,
+				CapitalCarryForwardAtEndMarchCurrentYear = -10,
+				CapitalCarryForwardAtEndMarchNextYear = -10,
+				IfdPipelineId = 0,
+				YearOneProjectedPupilNumbers = 104,
+				YearTwoProjectedPupilNumbers = 239,
+				YearThreeProjectedPupilNumbers = 370,
+				CreatedOn = DateTime.Now,
+				Region = "West Midlands",
+				LocalAuthority = "Coventry"
+
+
+			};
+
+
+			// Create two new projects
+			var newProjectTwoDetails = new ProjectDetails
+			{
+
+
+				SchoolName = projectTwoName,
+				Urn = 100608,
+				ProjectStatus = "Approved with conditions",
+				ApplicationReferenceNumber = $"A2B_{createdApplication!.ApplicationId}",
+				HeadTeacherBoardDate = new DateTime(2023, 1, 1),
+				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
+				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
+				RecommendationForProject = "Approve",
+				AcademyOrderRequired = "Yes",
+				AcademyTypeAndRoute = "Form a Mat",
+				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
+				ConversionSupportGrantAmount = 25000,
+				PublishedAdmissionNumber = "60673",
+				ViabilityIssues = "No",
+				FinancialDeficit = "No",
+				DistanceFromSchoolToTrustHeadquarters = 10,
+				RevenueCarryForwardAtEndMarchCurrentYear = -10,
+				ProjectedRevenueBalanceAtEndMarchNextYear = -10,
+				CapitalCarryForwardAtEndMarchCurrentYear = -10,
+				CapitalCarryForwardAtEndMarchNextYear = -10,
+				IfdPipelineId = 0,
+				YearOneProjectedPupilNumbers = 104,
+				YearTwoProjectedPupilNumbers = 239,
+				YearThreeProjectedPupilNumbers = 370,
+				CreatedOn = DateTime.Now,
+				Region = "West Midlands",
+				LocalAuthority = "Coventry"
+			};
+
+			DbContext.Projects.Add(new Project(3, newProjectTwoDetails));
+			DbContext.Projects.Add(new Project(4, newProjectTwoDetails));
 
 			// Save changes to the database
 			await DbContext.SaveChangesAsync(cancellationToken);

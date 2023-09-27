@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.Establishment;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
@@ -64,7 +65,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 
 			await _context.SaveChangesAsync();
 
-			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/{project1.Urn}")
+			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/{project1.Details.Urn}")
 					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
 			httpClient.BaseAddress = new Uri("http://localhost");
@@ -79,12 +80,11 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 
 			//Assert
 			Assert.Multiple(
-				() => Assert.Equal(_establishment.LocalAuthorityName, updatedProject1.LocalAuthority),
-				() => Assert.Equal(_establishment.Gor.Name, updatedProject1.Region),
-				() => Assert.Equal(_establishment.LocalAuthorityName, updatedProject2.LocalAuthority),
-				() => Assert.Equal(_establishment.Gor.Name, updatedProject2.Region),
-				() => Assert.Equal("Bristol", updatedProject3.LocalAuthority),
-				() => Assert.Equal("South West", updatedProject3.Region)
+				() => Assert.Equal(_establishment.LocalAuthorityName, updatedProject1.Details.LocalAuthority),
+				() => Assert.Equal(_establishment.Gor.Name, updatedProject1.Details.Region),
+				() => Assert.Equal(_establishment.LocalAuthorityName, updatedProject2.Details.LocalAuthority),
+				() => Assert.Equal(_establishment.Gor.Name, updatedProject2.Details.Region),
+				() => Assert.Equal("Bristol", updatedProject3.Details.Region)
 			);
 		}
 
@@ -109,19 +109,19 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 
 			// Assert
 			Assert.Multiple(
-				() => Assert.Null(updatedProject1.LocalAuthority),
-				() => Assert.Null(updatedProject1.Region),
-				() => Assert.Equal(string.Empty, updatedProject2.LocalAuthority),
-				() => Assert.Equal(string.Empty, updatedProject2.Region)
+				() => Assert.Null(updatedProject1.Details.LocalAuthority),
+				() => Assert.Null(updatedProject1.Details.Region),
+				() => Assert.Equal(string.Empty, updatedProject2.Details.LocalAuthority),
+				() => Assert.Equal(string.Empty, updatedProject2.Details.Region)
 			);
 		}
 
-		private ProjectState CreateProject(int? urn = 0, string? la = null, string? region = null)
+		private Project CreateProject(int? urn = 0, string? la = null, string? region = null)
 		{
-			return _fixture.Build<ProjectState>()
-							.With(p => p.LocalAuthority, la)
-							.With(p => p.Urn, urn)
-							.With(p => p.Region, region)
+			return _fixture.Build<Project>()
+							.With(p => p.Details.LocalAuthority, la)
+							.With(p => p.Details.Urn, urn)
+							.With(p => p.Details.Region, region)
 							.Create();
 		}
 	}

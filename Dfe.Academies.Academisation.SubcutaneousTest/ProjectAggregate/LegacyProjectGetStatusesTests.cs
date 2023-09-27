@@ -1,7 +1,10 @@
-﻿using Dfe.Academies.Academisation.Core.Test;
+﻿using AutoFixture;
+using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
@@ -15,6 +18,7 @@ public class LegacyProjectGetStatusesTests
 {
 	private readonly ProjectController _projectController;
 	private readonly AcademisationContext _context;
+	private readonly Fixture _fixture = new();
 
 	public LegacyProjectGetStatusesTests()
 	{
@@ -30,8 +34,14 @@ public class LegacyProjectGetStatusesTests
 	[Fact]
 	public async Task ProjectExists___ProjectReturned()
 	{
-		_context.Add(new ProjectState { ProjectStatus = "Active" });
-		_context.Add(new ProjectState { ProjectStatus = "Closed" });
+		var projectDetails1 = _fixture.Build<ProjectDetails>()
+			.With(p => p.ProjectStatus, "Active").Create();
+		
+		var projectDetails2 = _fixture.Build<ProjectDetails>()
+			.With(p => p.ProjectStatus, "Closed").Create();
+
+		_context.Add(new Project(1,projectDetails1));
+		_context.Add(new Project(2,projectDetails2));
 		await _context.SaveChangesAsync();
 
 		// act

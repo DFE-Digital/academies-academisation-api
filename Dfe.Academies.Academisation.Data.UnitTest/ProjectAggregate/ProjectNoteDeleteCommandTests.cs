@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using FluentAssertions;
 using Xunit;
 
@@ -25,7 +26,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			_fixture = new Fixture();
 
-			IList<ProjectState> projects = _fixture.CreateMany<ProjectState>(3).ToList();
+			IList<Project> projects = _fixture.CreateMany<Project>(3).ToList();
 
 			_notes = _fixture.CreateMany<ProjectNoteState>()
 				.Select(x =>

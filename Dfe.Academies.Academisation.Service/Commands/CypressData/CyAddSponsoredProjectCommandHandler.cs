@@ -45,7 +45,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			}
 
 			// Create a new project
-			var newProject = new ProjectState
+			var projectDetails = new ProjectDetails
 
 			{   
 				SchoolName = projectName,
@@ -78,6 +78,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				
 				
 			};
+
+			var newProject = new Project(1, projectDetails);
 
 			// Add the new project to the Projects DbSet
 			DbContext.Projects.Add(newProject);

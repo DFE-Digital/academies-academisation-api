@@ -211,10 +211,10 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		    pd.Property(d => d.PercentageFreeSchoolMeals).HasColumnName("PercentageFreeSchoolMeals");
 		    pd.Property(d => d.PublishedAdmissionNumber).HasColumnName("PublishedAdmissionNumber");
 		    pd.Property(d => d.Capacity).HasColumnName("Capacity");
-		    pd.Property(d => d.GoverningBodyResolution).HasColumnName("GoverningBodyResolution");
-		    pd.Property(d => d.Consultation).HasColumnName("Consultation");
-		    pd.Property(d => d.DiocesanConsent).HasColumnName("DiocesanConsent");
-		    pd.Property(d => d.FoundationConsent).HasColumnName("FoundationConsent");
+		    pd.Property(d => d.GoverningBodyResolution).HasColumnName("GoverningBodyResolution").HasConversion<string>(); ;
+		    pd.Property(d => d.Consultation).HasColumnName("Consultation").HasConversion<string>();
+		    pd.Property(d => d.DiocesanConsent).HasColumnName("DiocesanConsent").HasConversion<string>(); ;
+		    pd.Property(d => d.FoundationConsent).HasColumnName("FoundationConsent").HasConversion<string>(); ;
 			pd.OwnsOne(a => a.AssignedUser, a =>
 			{
 				a.Property(p => p.Id).HasColumnName("AssignedId");
@@ -262,8 +262,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		    pd.Property(d => d.IfdPipelineId).HasColumnName("IfdPipelineId");
 		    pd.Property(d => d.Urn).HasColumnName("Urn");
 		    pd.Property(d => d.HeadTeacherBoardDate).HasColumnName("HeadTeacherBoardDate");
-         	pd.Property(d => d.Notes).HasColumnName("Notes");
-		    pd.Property(d => d.Version).HasColumnName("Version");
+			pd.Property(d => d.Notes);
+
+			pd.Property(d => d.Version).HasColumnName("Version");
 		    pd.Property(d => d.AcademyOrderRequired).HasColumnName("AcademyOrderRequired");
 		    pd.Property(d => d.Region).HasColumnName("Region");
 		    pd.Property(d => d.ConversionSupportGrantAmountChanged).HasColumnName("ConversionSupportGrantAmountChanged");
@@ -378,7 +379,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	//public string? SponsorName { get; init; }
 });
 
-			projectConfiguration
+		projectConfiguration
 			.HasMany(x => x.Details.Notes)
 			.WithOne()
 			.HasForeignKey("ProjectId");

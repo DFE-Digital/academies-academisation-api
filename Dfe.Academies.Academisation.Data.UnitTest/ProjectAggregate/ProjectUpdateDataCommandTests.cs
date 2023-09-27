@@ -27,7 +27,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public async Task ProjectExists___ProjectUpdated()
 		{
 			// arrange
-			ProjectState? existingProject = _fixture.Build<ProjectState>().Create();
+			Project? existingProject = _fixture.Build<Project>().Create();
 			await _context.Projects.AddAsync(existingProject);
 			await _context.SaveChangesAsync();
 
@@ -42,10 +42,10 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			_context.ChangeTracker.Clear();
 
-			ProjectState updatedProject = await _context.Projects.SingleAsync(p => p.Id == project.Id);
+			Project updatedProject = await _context.Projects.SingleAsync(p => p.Id == project.Id);
 
 			// assert
-			Assert.True(projectDetails.Equals(updatedProject.MapToDomain().Details));
+			Assert.True(projectDetails.Equals(updatedProject));
 		}
 	}
 }
