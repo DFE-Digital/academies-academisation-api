@@ -14,21 +14,10 @@ public record Trust
 		TrustAddress = new Address();
 	}
 
-	/// <summary>
-	/// Unique identifier for a trust. urn is null on trust search
-	/// </summary>
-	public string UkPrn { get; set; }
-
-	/// <summary>
-	/// Unique identifier for a school.
-	/// </summary>
+	public string Ukprn { get; set; }
 	public string Urn { get; set; }
-
 	public string GroupName { get; set; }
-
-	public string GroupId { get; set; }
-
 	public string CompaniesHouseNumber { get; set; }
-
+	public string TrustType { get; set; }
 	public Address TrustAddress { get; set; }
 }
