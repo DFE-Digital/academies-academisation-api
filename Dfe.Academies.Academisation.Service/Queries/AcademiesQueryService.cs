@@ -42,7 +42,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public async Task<Trust?> GetTrust(string ukprn)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);
-			var response = await client.GetAsync($"/trusts?ukprn={ukprn}&api-version=V1");
+			var response = await client.GetAsync($"/v3/trusts?ukprn={ukprn}&includeEstablishments=false");
 
 			if (!response.IsSuccessStatusCode)
 			{
