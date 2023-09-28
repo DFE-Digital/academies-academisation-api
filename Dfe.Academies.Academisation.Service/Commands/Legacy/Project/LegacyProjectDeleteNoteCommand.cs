@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 					note.Subject,
 					note.Note,
 					note.Author,
-					note.Date)
+					note.Date, projectId)
 			);
 		}
 	}

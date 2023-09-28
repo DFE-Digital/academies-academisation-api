@@ -36,7 +36,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
 
 	public DbSet<Project> Projects { get; set; } = null!;
-	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
+	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
@@ -133,6 +133,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
+
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
 		
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
@@ -190,6 +191,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	private static void ConfigureProject(EntityTypeBuilder<Project> projectConfiguration)
 	{
 		projectConfiguration.ToTable("Project", DEFAULT_SCHEMA);
+		projectConfiguration.HasKey(x => x.Id);
 
 		projectConfiguration.OwnsOne(x => x.Details, pd =>
 		{
@@ -282,99 +284,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
      		pd.Property(d => d.AnnexBFormUrl).HasColumnName("AnnexBFormUrl");
 	    	pd.Property(d => d.AnnexBFormReceived).HasColumnName("AnnexBFormReceived");
 		    pd.Property(d => d.DaoPackSentDate).HasColumnName("DaoPackSentDate");
-	        pd.Property(d => d.SponsorName).HasColumnName("SponsorName");
-			
-
-	//public string? AgeRange { get; init; }
-	//public bool? RisksAndIssuesSectionComplete { get; init; }
-	//public string? RisksAndIssues { get; init; }
-	//public bool? RationaleSectionComplete { get; init; }
-	//public string? RationaleForTrust { get; init; }
-	//public string? RationaleForProject { get; init; }
-	//public string? SchoolPerformanceAdditionalInformation { get; init; }
-	//public bool? SchoolOverviewSectionComplete { get; init; }
-	//public string? MemberOfParliamentNameAndParty { get; init; }
-	//public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; init; }
-	//public decimal? DistanceFromSchoolToTrustHeadquarters { get; init; }
-	//public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
-	//public string? DiocesanTrust { get; init; }
-	//public string? FinancialDeficit { get; init; }
-	//public string? ViabilityIssues { get; init; }
-	//public string? PfiSchemeDetails { get; init; }
-	//public string? PartOfPfiScheme { get; init; }
-	//public decimal? PercentageFreeSchoolMeals { get; init; }
-	//public string? PublishedAdmissionNumber { get; init; }
-	//public int? Capacity { get; init; }
-	//public YesNoNotApplicable? GoverningBodyResolution { get; init; }
-	//public YesNoNotApplicable? Consultation { get; init; }
-	//public YesNoNotApplicable? DiocesanConsent { get; init; }
-	//public YesNoNotApplicable? FoundationConsent { get; init; }
-	//public User? AssignedUser { get; init; }
-	//public string? KeyStage5PerformanceAdditionalInformation { get; init; }
-	//public string? KeyStage4PerformanceAdditionalInformation { get; init; }
-	//public string? KeyStage2PerformanceAdditionalInformation { get; init; }
-	//public string? SchoolPupilForecastsAdditionalInformation { get; init; }
-	//public int? YearThreeProjectedPupilNumbers { get; init; }
-	//public int? YearThreeProjectedCapacity { get; init; }
-	//public int? YearTwoProjectedPupilNumbers { get; init; }
-	//public int? YearTwoProjectedCapacity { get; init; }
-	//public int? ActualPupilNumbers { get; init; }
-	//public int? YearOneProjectedPupilNumbers { get; init; }
-	//public bool? SchoolBudgetInformationSectionComplete { get; init; }
-	//public string? SchoolBudgetInformationAdditionalInformation { get; init; }
-	//public decimal? CapitalCarryForwardAtEndMarchNextYear { get; init; }
-	//public decimal? CapitalCarryForwardAtEndMarchCurrentYear { get; init; }
-	//public decimal? ProjectedRevenueBalanceAtEndMarchNextYear { get; init; }
-	//public decimal? RevenueCarryForwardAtEndMarchCurrentYear { get; init; }
-	//public DateTime? EndOfNextFinancialYear { get; init; }
-	//public DateTime? EndOfCurrentFinancialYear { get; init; }
-	//public bool? LegalRequirementsSectionComplete { get; init; }
-	//public int? YearOneProjectedCapacity { get; init; }
-	//public string? SchoolType { get; init; }
-	//public DateTime CreatedOn { get; set; }
-	//public string? SchoolPhase { get; init; }
-	//public string? RecommendationForProject { get; init; }
-	//public bool? LocalAuthorityInformationTemplateSectionComplete { get; init; }
-	//public string? LocalAuthorityInformationTemplateLink { get; init; }
-	//public string? LocalAuthorityInformationTemplateComments { get; init; }
-	//public string? Form7Received { get; init; }
-	//public DateTime? Form7ReceivedDate { get; init; }
-	//public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
-	//public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
-	//public string? Author { get; init; }
-	//public DateTime? BaselineDate { get; init; }
-	//public DateTime? AssignedDate { get; init; }
-	//public DateTime? ApplicationReceivedDate { get; init; }
-	//public string? ProjectStatus { get; init; }
-	//public string? ApplicationReferenceNumber { get; init; }
-	//public string? LocalAuthority { get; init; }
-	//public string? SchoolName { get; init; }
-	//public int? IfdPipelineId { get; init; }
-	//public int Urn { get; init; }
-	//public DateTime? HeadTeacherBoardDate { get; init; }
-	//public ICollection<ProjectNote> Notes { get; init; }
-	//public string? Version { get; init; }
-	//public string? AcademyOrderRequired { get; init; }
-	//public string? Region { get; init; }
-	//public bool? ConversionSupportGrantAmountChanged { get; init; }
-	//public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; init; }
-	//public string? ConversionSupportGrantType { get; init; }
-	//public string? ConversionSupportGrantChangeReason { get; init; }
-	//public decimal? ConversionSupportGrantAmount { get; init; }
-	//public bool? SchoolAndTrustInformationSectionComplete { get; init; }
-	//public DateTime? ProposedAcademyOpeningDate { get; init; }
-	//public string? ClearedBy { get; init; }
-	//public string? AcademyTypeAndRoute { get; init; }
-	//public string? SponsorReferenceNumber { get; init; }
-	//public string? NameOfTrust { get; init; }
-	//public string? TrustReferenceNumber { get; init; }
-	//public string? PreviousHeadTeacherBoardLink { get; init; }
-	//public DateTime? PreviousHeadTeacherBoardDate { get; init; }
-	//public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
-	//public string? AnnexBFormUrl { get; init; }
-	//public bool? AnnexBFormReceived { get; init; }
-	//public DateTime? DaoPackSentDate { get; init; }
-	//public string? SponsorName { get; init; }
+	        pd.Property(d => d.SponsorName).HasColumnName("SponsorName");			
 });
 
 		projectConfiguration

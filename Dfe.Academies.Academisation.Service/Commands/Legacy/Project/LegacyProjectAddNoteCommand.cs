@@ -35,7 +35,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 					model.Subject,
 					model.Note,
 					model.Author,
-					model.Date)
+					model.Date, model.ProjectId)
 			);
 		}
 	}

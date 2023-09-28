@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			CommandResult result = await command.Execute(
 				unknownNote.ProjectId,
-				new ProjectNote(unknownNote.Subject, unknownNote.Note, unknownNote.Author, unknownNote.Date)
+				new ProjectNote(unknownNote.Subject, unknownNote.Note, unknownNote.Author, unknownNote.Date, unknownNote.ProjectId)
 			);
 
 			result.Should().BeOfType<NotFoundCommandResult>();
@@ -75,7 +75,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			await command.Execute(
 				_newNote.ProjectId,
-				new ProjectNote(_newNote.Subject, _newNote.Note, _newNote.Author, _newNote.Date)
+				new ProjectNote(_newNote.Subject, _newNote.Note, _newNote.Author, _newNote.Date, _newNote.ProjectId)
 			);
 
 			_context.ProjectNotes.Should().ContainEquivalentOf(
@@ -96,7 +96,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			CommandResult result = await command.Execute(
 				_newNote.ProjectId,
-				new ProjectNote(_newNote.Subject, _newNote.Note, _newNote.Author, _newNote.Date)
+				new ProjectNote(_newNote.Subject, _newNote.Note, _newNote.Author, _newNote.Date, _newNote.ProjectId)
 			);
 
 			result.Should().BeOfType<CommandSuccessResult>();

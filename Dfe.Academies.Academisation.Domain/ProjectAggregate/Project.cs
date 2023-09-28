@@ -9,6 +9,8 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
 public class Project : IProject
 {
+	protected Project() { }
+
 	private Project(ProjectDetails projectDetails)
 	{
 		Details = projectDetails;

@@ -13,7 +13,7 @@ public static class SeedProject
 	{
 		var fixture = new Fixture();
 		var newProjects = new List<Project>();
-		var projectNotes = new List<ProjectNoteState>();
+		var projectNotes = new List<ProjectNote>();
 		for (int i = 1; i <= numberOfProjects; i++)
 		{
 			var newAcademyConversionProject = NewAcademyConversionProject();
@@ -32,10 +32,8 @@ public static class SeedProject
 
 					foreach (var projectState in newProjects)
 					{
-						var newProjectNote = fixture.Create<ProjectNoteState>();
-						newProjectNote.Id = default;
-						newProjectNote.ProjectId = projectState.Id;
-						newProjectNote.Date = DateTime.Now;
+						var newProjectNote = new ProjectNote(string.Empty, string.Empty, string.Empty, DateTime.Now, projectState.Id);
+
 						projectNotes.Add(newProjectNote);
 					}
 

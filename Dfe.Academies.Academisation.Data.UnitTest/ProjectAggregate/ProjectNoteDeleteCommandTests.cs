@@ -8,6 +8,7 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using FluentAssertions;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 	{
 		private readonly AcademisationContext _context;
 		private readonly Fixture _fixture;
-		private readonly IList<ProjectNoteState> _notes;
+		private readonly IList<ProjectNote> _notes;
 
 		public ProjectNoteDeleteCommandTests()
 		{
@@ -28,12 +29,9 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			IList<Project> projects = _fixture.CreateMany<Project>(3).ToList();
 
-			_notes = _fixture.CreateMany<ProjectNoteState>()
-				.Select(x =>
-				{
-					x.ProjectId = projects[Random.Shared.Next(projects.Count)].Id;
-					return x;
-				})
+			_notes = _fixture.CreateMany<ProjectNote>().ToList();
+
+			_notes = _notes.Select(x => new ProjectNote(x.Subject, x.Note, x.Author, x.Date, projects[Random.Shared.Next(projects.Count)].Id))
 				.ToList();
 
 			_context.Projects.AddRangeAsync(projects);
@@ -41,29 +39,23 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			_context.SaveChanges();
 		}
 
-		private ProjectNoteState RandomNote => _notes[Random.Shared.Next(_notes.Count)];
+		private ProjectNote RandomNote => _notes[Random.Shared.Next(_notes.Count)];
 
 		private ProjectNoteDeleteCommand System_under_test()
 		{
 			return new ProjectNoteDeleteCommand(_context);
 		}
 
-		private static ProjectNote NoteModelFrom(ProjectNoteState noteState)
-		{
-			return new ProjectNote(noteState.Subject, noteState.Note, noteState.Author, noteState.Date);
-		}
-
 		[Fact]
 		public async Task Should_return_not_found_result_if_the_note_does_not_exist()
 		{
-			ProjectNoteState noteToDelete = _fixture.Create<ProjectNoteState>();
-			ProjectNote noteModel = NoteModelFrom(noteToDelete);
+			ProjectNote noteToDelete = _fixture.Create<ProjectNote>();
 
 			ProjectNoteDeleteCommand command = System_under_test();
 
 			_context.ProjectNotes.Should().NotContain(noteToDelete);
 
-			CommandResult result = await command.Execute(noteToDelete.ProjectId, noteModel);
+			CommandResult result = await command.Execute(noteToDelete.ProjectId, noteToDelete);
 
 			result.Should().BeOfType<NotFoundCommandResult>();
 		}
@@ -71,14 +63,13 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		[Fact]
 		public async Task Should_remove_the_note()
 		{
-			ProjectNoteState noteToDelete = RandomNote;
-			ProjectNote noteModel = NoteModelFrom(noteToDelete);
+			ProjectNote noteToDelete = RandomNote;
 
 			ProjectNoteDeleteCommand command = System_under_test();
 
 			_context.ProjectNotes.Should().Contain(noteToDelete);
 
-			CommandResult result = await command.Execute(noteToDelete.ProjectId, noteModel);
+			CommandResult result = await command.Execute(noteToDelete.ProjectId, noteToDelete);
 
 			result.Should().BeOfType<CommandSuccessResult>();
 
