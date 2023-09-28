@@ -131,7 +131,7 @@ internal static class LegacyProjectServiceModelMapper
 		return serviceModel;
 	}
 
-	private static IEnumerable<ProjectNoteServiceModel> ToProjectNoteServiceModels(this IEnumerable<ProjectNote>? notes)
+	private static IEnumerable<ProjectNoteServiceModel> ToProjectNoteServiceModels(this IEnumerable<IProjectNote>? notes)
 	{
 		if (notes is null) return Enumerable.Empty<ProjectNoteServiceModel>();
 

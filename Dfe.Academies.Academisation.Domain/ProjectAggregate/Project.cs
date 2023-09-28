@@ -15,7 +15,8 @@ public class Project : IProject
 	}
 
 	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
-	IReadOnlyCollection<ProjectNote> IProject.Notes => _notes.AsReadOnly();
+	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
+
 	private readonly List<ProjectNote> _notes;
 
 	/// <summary>

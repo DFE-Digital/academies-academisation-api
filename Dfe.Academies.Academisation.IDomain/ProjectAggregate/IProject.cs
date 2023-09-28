@@ -8,7 +8,7 @@ public interface IProject
 {
 	public int Id { get; }
 
-	public IReadOnlyCollection<ProjectNote> Notes { get; }
+	public IReadOnlyCollection<IProjectNote> Notes { get; }
 
 	public ProjectDetails Details { get; }
 

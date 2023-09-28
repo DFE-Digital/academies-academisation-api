@@ -1,6 +1,8 @@
-﻿namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate
+﻿using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+
+namespace Dfe.Academies.Academisation.Domain.Core.ProjectAggregate
 {
-	public class ProjectNote
+	public class ProjectNote : IProjectNote
 	{
 		public ProjectNote(string? subject,
 						   string? note,
