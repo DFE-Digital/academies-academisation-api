@@ -28,9 +28,20 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchProjectsByStatus__ReturnsProjects()
 	{
 		// arrange
-		(ProjectDetails projectDetails1, Project project1) = CreateTestProject(DateTime.Now);
-		(ProjectDetails projectDetails2, Project project2) = CreateTestProject(DateTime.Now.AddDays(-1));
+		(_, Project project1) = CreateTestProject(null);
+		(_, Project project2) = CreateTestProject(null);
 		(_, Project project3) = CreateTestProject();
+
+		var projectDetails1 = _fixture.Build<ProjectDetails>()
+		.With(p => p.CreatedOn, DateTime.Now.AddDays(-1)).Create();
+		var projectDetails2 = _fixture.Build<ProjectDetails>()
+		.With(p => p.CreatedOn, DateTime.Now.AddDays(-2)).Create();
+
+
+
+		project1 = AddProjectDetailToProject(projectDetails1);
+		project2 = AddProjectDetailToProject(projectDetails2);
+
 
 		_context.Projects.Add(project1);
 		_context.Projects.Add(project2);
@@ -65,11 +76,13 @@ public class ProjectsListGetDataQueryTests
 		string searchTerm = "Bristol";
 		for (int i = 0; i < 6; i++)
 		{
-			(_, Project project) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject(null);
 			if (i % 2 == 0)
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.SchoolName,$"{searchTerm} {i}" ).Create();
+			.With(p => p.SchoolName,$"{searchTerm} {i}" )
+			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
+			.Create();
 
 
 				project = AddProjectDetailToProject(projectDetails);
@@ -99,10 +112,12 @@ public class ProjectsListGetDataQueryTests
 		for (int i = 0; i < 6; i++)
 		{
 			(_, Project project) = CreateTestProject(DateTime.Now.AddDays(-i));
+
+			User user = new User(Guid.NewGuid(), deliveryOfficer, "dave@dave.com");
 			if (i % 2 == 0) 
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser.FullName, deliveryOfficer).Create();
+			.With(p => p.AssignedUser, user).Create();
 
 				project = AddProjectDetailToProject(projectDetails);
 			}
@@ -130,11 +145,15 @@ public class ProjectsListGetDataQueryTests
 		string[] deliveryOfficers = new[] { "Dave", "Bob" };
 		for (int i = 0; i < 6; i++)
 		{
-			(_, Project project) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject(null);
 			if (i < 2) 
 			{
-					var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser.FullName, deliveryOfficers[i]).Create();
+
+			User user = new User(Guid.NewGuid(), deliveryOfficers[i], "dave@dave.com");
+			
+				var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
+			.With(p => p.AssignedUser, user).Create();
 
 			project = AddProjectDetailToProject(projectDetails);	
 			}
@@ -161,11 +180,13 @@ public class ProjectsListGetDataQueryTests
 		string[] regions = { "east", "west"};
 		for (int i = 0; i < 6; i++)
 		{
-			(_, Project project) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject(null);
 			if (i < 2)
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.Region, regions[i]).Create();
+			.With(p => p.Region, regions[i])
+			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
+			.Create();
 
 			project = AddProjectDetailToProject(projectDetails);	 
 			}
@@ -190,13 +211,20 @@ public class ProjectsListGetDataQueryTests
 	{
 		// arrange
 		var ( deliveryOfficer, status, title, urn ) = ( "Dave", "active", "school", 1234 );
+
+		User user = new User(Guid.NewGuid(), deliveryOfficer,"dave@dave.com");
+
 		for (int i = 0; i < 3; i++)
 		{
-			(_, Project project) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject(null);
+
+
+
 			if (i == 0)
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser.FullName, deliveryOfficer)
+			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
+			.With(p => p.AssignedUser, user)
 			.With(p => p.ProjectStatus, status)
 			.With(p => p.SchoolName, title)
 			.With(p => p.Urn, urn)
@@ -217,7 +245,7 @@ public class ProjectsListGetDataQueryTests
 		// assert		
 		Assert.Multiple(
 			() => Assert.Single(projects),
-			() => Assert.Equal(projects[0].Details.AssignedUser.FullName, deliveryOfficer),
+			() => Assert.Equal(projects[0].Details.AssignedUser, user),
 			() => Assert.Equal(projects[0].Details.ProjectStatus, status),
 			() => Assert.Equal(projects[0].Details.SchoolName, title),
 			() => Assert.Equal(projects[0].Details.Urn, urn)
@@ -228,26 +256,35 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchUnassignedProjects__ReturnsProjects()
 	{
 		// arrange
+		User user = new User(Guid.NewGuid(), "Dave", "dave@dave.com");
+		User emptyUser1 = new User(Guid.NewGuid(),"", "dave@dave1.com");
+		User emptyUser2 = new User(Guid.NewGuid(), "", "dave@dave2.com");
 		string[] deliveryOfficers = new[] { "Dave", "Not assigned" };
 		
-		(_, Project project1) = CreateTestProject(DateTime.Now);
-			var projectDetails1 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser.FullName, "Dave").Create();
+		(_, Project project1) = CreateTestProject(null);
+		var projectDetails1 = _fixture.Build<ProjectDetails>()
+		.With(p => p.AssignedUser, user)
+		.With(p => p.CreatedOn, DateTime.Now).Create();
 			project1 = AddProjectDetailToProject(projectDetails1);
 		
-		//project1.Details.AssignedUser.FullName = "Dave";
-		(_, Project project2) = CreateTestProject(DateTime.Now.AddDays(-1));
-		     var projectDetails2 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser.FullName, "").Create();
-			project2 = AddProjectDetailToProject(projectDetails2);
-
-		(_, Project project3) = CreateTestProject(DateTime.Now.AddDays(-2));
-	        var projectDetails3 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser.FullName, "").Create();
-			project3 = AddProjectDetailToProject(projectDetails3);
-
-		(_, Project project4) = CreateTestProject(DateTime.Now.AddDays(-3));
 		
+		(_, Project project2) = CreateTestProject(null);
+		     var projectDetails2 = _fixture.Build<ProjectDetails>()
+			.With(p => p.AssignedUser,emptyUser1)
+			.With(p => p.CreatedOn, DateTime.Now.AddDays(-1)).Create();
+		project2 = AddProjectDetailToProject(projectDetails2);
+
+		(_, Project project3) = CreateTestProject(null);
+	        var projectDetails3 = _fixture.Build<ProjectDetails>()
+			.With(p => p.AssignedUser, emptyUser2)
+			.With(p => p.CreatedOn, DateTime.Now.AddDays(-2)).Create();
+		project3 = AddProjectDetailToProject(projectDetails3);
+
+		(_, Project project4) = CreateTestProject(null);
+		var projectDetails4 = _fixture.Build<ProjectDetails>()
+		.With(p => p.CreatedOn, DateTime.Now.AddDays(-3)).Create();
+		project4 = AddProjectDetailToProject(projectDetails4);
+
 		await _context.Projects.AddRangeAsync(project1, project2, project3, project4);	
 		await _context.SaveChangesAsync();
 
@@ -258,8 +295,8 @@ public class ProjectsListGetDataQueryTests
 		Assert.Multiple(
 			() => Assert.Equal(3, projects.Count),
 			() => Assert.Equal(deliveryOfficers[0], projects[0].Details.AssignedUser!.FullName),
-			() => Assert.Equal(string.Empty, projects[1].Details.AssignedUser?.FullName),
-			() => Assert.Equal(string.Empty, projects[2].Details.AssignedUser?.FullName)
+			() => Assert.Equal("", projects[1].Details.AssignedUser?.FullName),
+			() => Assert.Equal("", projects[2].Details.AssignedUser?.FullName)
 		);
 	}
 
@@ -346,9 +383,15 @@ public class ProjectsListGetDataQueryTests
 		List<ProjectDetails> createdProjects = new List<ProjectDetails>();
 		for (int i = 0; i < 6; i++)
 		{
-			(ProjectDetails projectDetails, Project projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject(null);
+
+			var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i)).Create();
+
 			createdProjects.Add(projectDetails);
-			_context.Projects.Add(projectState);
+
+			project = AddProjectDetailToProject(projectDetails);
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
@@ -26,25 +27,32 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		[Fact]
 		public async Task ProjectExists___ProjectUpdated()
 		{
+			_context.ChangeTracker.AutoDetectChangesEnabled = false;
 			// arrange
 			Project? existingProject = _fixture.Build<Project>().Create();
+
 			await _context.Projects.AddAsync(existingProject);
+			
 			await _context.SaveChangesAsync();
 
-			ProjectDetails projectDetails = _fixture.Create<ProjectDetails>();
+			IProject updatedProject = await _context.Projects.SingleAsync(p => p.Id == existingProject.Id);
 
-			IProject project = new Project(existingProject.Id, projectDetails);
+
+			ProjectDetails projectDetails = _fixture.Build<ProjectDetails>()
+				.With(p =>p.Urn,updatedProject.Details.Urn)
+				.Create();
+		
+
+			updatedProject.Update(projectDetails);
+
+		
 			await _context.Projects.LoadAsync();
 
 			// act
-			await _subject.Execute(project);
-
-			_context.ChangeTracker.Clear();
-
-			Project updatedProject = await _context.Projects.SingleAsync(p => p.Id == project.Id);
+			await _subject.Execute(updatedProject);
 
 			// assert
-			Assert.True(projectDetails.Equals(updatedProject));
+			Assert.True(projectDetails.Equals(updatedProject.Details));
 		}
 	}
 }

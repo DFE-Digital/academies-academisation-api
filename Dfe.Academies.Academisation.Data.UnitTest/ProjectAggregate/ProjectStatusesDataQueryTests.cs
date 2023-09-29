@@ -30,12 +30,18 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			var status = "Active";
 
-			var projectDetails = _fixture.Build<ProjectDetails>()
+			var projectDetails1 = _fixture.Build<ProjectDetails>()
 			.With(p => p.ProjectStatus, status).Create();
 
-			_context.Projects.Add(new Project(1,projectDetails));
-			_context.Projects.Add(new Project(2,projectDetails));
-			_context.Projects.Add(new Project(3,projectDetails));
+			var projectDetails2 = _fixture.Build<ProjectDetails>()
+			.With(p => p.ProjectStatus, status).Create();
+
+			var projectDetails3 = _fixture.Build<ProjectDetails>()
+			.With(p => p.ProjectStatus, status).Create();
+
+			_context.Projects.Add(new Project(1,projectDetails1));
+			_context.Projects.Add(new Project(2,projectDetails2));
+			_context.Projects.Add(new Project(3,projectDetails3));
 
 			await _context.SaveChangesAsync();
 
