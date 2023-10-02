@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -8,18 +9,18 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 
 public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
 {
-	private readonly IProjectGetDataQuery _projectGetDataQuery;
+	private readonly IConversionProjectRepository _conversionProjectRepository;
 	private readonly IProjectUpdateDataCommand _projectUpdateDataCommand;
 
-	public LegacyProjectUpdateCommand(IProjectGetDataQuery projectGetDataQuery, IProjectUpdateDataCommand projectUpdateDataCommand)
+	public LegacyProjectUpdateCommand(IConversionProjectRepository conversionProjectRepository, IProjectUpdateDataCommand projectUpdateDataCommand)
 	{
-		_projectGetDataQuery = projectGetDataQuery;
+		_conversionProjectRepository = conversionProjectRepository;
 		_projectUpdateDataCommand = projectUpdateDataCommand;
 	}
 
 	public async Task<CommandResult> Execute(int id, LegacyProjectServiceModel legacyProjectServiceModel)
 	{
-		var existingProject = await _projectGetDataQuery.Execute(id);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(id);
 
 		if (existingProject is null)
 		{

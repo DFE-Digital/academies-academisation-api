@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -15,13 +16,13 @@ public class ProjectsListGetDataQueryTests
 {
 	private readonly Fixture _fixture = new();
 
-	private readonly ProjectListGetDataQuery _subject;
+	private readonly ConversionProjectRepository _subject;
 	private readonly AcademisationContext _context;
 
 	public ProjectsListGetDataQueryTests()
 	{
 		_context = new TestProjectContext().CreateContext();
-		_subject = new ProjectListGetDataQuery(_context);
+		_subject = new ConversionProjectRepository(_context, null);
 	}
 
 	[Fact]

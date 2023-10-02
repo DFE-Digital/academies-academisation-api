@@ -1,23 +1,28 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+﻿using AutoMapper;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dfe.Academies.Academisation.Data.ProjectAggregate
+namespace Dfe.Academies.Academisation.Data.Repositories
 {
-	public class ProjectListGetDataQuery : IProjectListGetDataQuery
+	public class ConversionProjectRepository : GenericRepository<Project>, IConversionProjectRepository
 	{
+		private readonly IMapper _mapper;
 		private readonly AcademisationContext _context;
 
-		public ProjectListGetDataQuery(AcademisationContext context)
+		public ConversionProjectRepository(AcademisationContext context, IMapper mapper) : base(context)
 		{
-			_context = context;
+			_context = context ?? throw new ArgumentNullException(nameof(context));
+			_mapper = mapper;
 		}
 
+		public IUnitOfWork UnitOfWork => _context;
 		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default)
 		{
-			IQueryable<Project> queryable = _context.Projects;
+			IQueryable<Project> queryable = this.dbSet;
 
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
@@ -32,7 +37,29 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 				.Skip((page - 1) * count)
 				.Take(count).ToListAsync();
 
-			return (projects,totalProjects);
+			return (projects, totalProjects);
+		}
+
+		public async Task<ProjectFilterParameters> GetFilterParameters()
+		{
+			ProjectFilterParameters filterParameters = new ProjectFilterParameters
+			{
+				Statuses = (await this.dbSet
+					.AsNoTracking()
+					.Select(p => p.Details.ProjectStatus)
+					.Distinct()
+					.OrderBy(p => p)
+					.ToListAsync())!,
+				AssignedUsers = (await this.dbSet
+					.OrderByDescending(p => p.Details.AssignedUser.FullName)
+					.AsNoTracking()
+					.Select(p => p.Details.AssignedUser.FullName)
+					.Where(p => !string.IsNullOrEmpty(p))
+					.Distinct()
+					.ToListAsync())!
+			};
+
+			return filterParameters;
 		}
 		private static IQueryable<Project> FilterByRegion(IEnumerable<string>? regions, IQueryable<Project> queryable)
 		{
@@ -102,6 +129,20 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			}
 
 			return queryable;
+		}
+
+		public async Task<IProject?> GetConversionProject(int id)
+		{
+			return await this.DefaultIncludes().SingleOrDefaultAsync(x => x.Id == id);
+		}
+
+		private IQueryable<Project> DefaultIncludes()
+		{
+			var x = _context.Projects
+				.Include(x => x.Notes)
+				.AsQueryable();
+
+			return x;
 		}
 	}
 }

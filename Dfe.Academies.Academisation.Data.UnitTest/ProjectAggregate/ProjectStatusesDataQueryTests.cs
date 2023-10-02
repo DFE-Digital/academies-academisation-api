@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -16,13 +17,13 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 	{
 		private readonly Fixture _fixture = new();
 
-		private readonly ProjectStatusesDataQuery _subject;
+		private readonly ConversionProjectRepository _subject;
 		private readonly AcademisationContext _context;
 
 		public ProjectStatusesDataQueryTests()
 		{
 			_context = new TestProjectContext().CreateContext();
-			_subject = new ProjectStatusesDataQuery(_context);
+			_subject = new ConversionProjectRepository(_context, null);
 		}
 
 		[Fact]
@@ -45,7 +46,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			await _context.SaveChangesAsync();
 
-			var results = await _subject.Execute();
+			var results = await _subject.GetFilterParameters();
 
 			Assert.Multiple(
 				() => Assert.Equal(status, results.Statuses!.First()),
@@ -56,7 +57,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		[Fact]
 		public async Task NoProjects__ReturnsEmpty()
 		{
-			var results = await _subject.Execute();
+			var results = await _subject.GetFilterParameters();
 
 			Assert.Empty(results.Statuses!);
 		}
@@ -80,7 +81,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			await _context.SaveChangesAsync();
 
-			var results = await _subject.Execute();
+			var results = await _subject.GetFilterParameters();
 
 			Assert.Multiple(
 				() => Assert.Equal(3, results.Statuses!.Count),

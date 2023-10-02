@@ -4,7 +4,6 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,27 +16,26 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	{
 		private readonly ILegacyProjectAddNoteCommand _legacyProjectAddNoteCommand;
 		private readonly ILegacyProjectDeleteNoteCommand _legacyProjectDeleteNoteCommand;
-		private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
-		private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
 		private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
-		private readonly IProjectGetStatusesQuery _projectGetStatusesQuery;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 
-		public ProjectController(ILegacyProjectGetQuery legacyProjectGetQuery,
-									   ILegacyProjectListGetQuery legacyProjectListGetQuery,
-									   IProjectGetStatusesQuery projectGetStatusesQuery,
+		private readonly IConversionProjectQueryService _conversionProjectQueryService;
+
+		public ProjectController(
 									   ILegacyProjectUpdateCommand legacyProjectUpdateCommand,
 									   ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
 									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand, 
-									   ICreateSponsoredProjectCommand createSponsoredProjectCommand)
+									   ICreateSponsoredProjectCommand createSponsoredProjectCommand,
+									   
+									   IConversionProjectQueryService conversionProjectQueryService)
 		{
-			_legacyProjectGetQuery = legacyProjectGetQuery;
-			_legacyProjectListGetQuery = legacyProjectListGetQuery;
-			_projectGetStatusesQuery = projectGetStatusesQuery;
+
 			_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 			_legacyProjectAddNoteCommand = legacyProjectAddNoteCommand;
 			_legacyProjectDeleteNoteCommand = legacyProjectDeleteNoteCommand;
 			_createSponsoredProjectCommand = createSponsoredProjectCommand;
+
+			_conversionProjectQueryService = conversionProjectQueryService;
 		}
 
 		/// <summary>
@@ -59,7 +57,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			[FromQuery] int? urn = null)
 		{
 			LegacyApiResponse<LegacyProjectServiceModel>? result =
-				await _legacyProjectListGetQuery.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
+				await _conversionProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn,
 					searchModel.RegionQueryString, searchModel.ApplicationReferences);
 			return result is null ? NotFound() : Ok(result);
@@ -76,7 +74,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<ActionResult<ProjectFilterParameters>> GetFilterParameters()
 		{
-			ProjectFilterParameters result = await _projectGetStatusesQuery.Execute();
+			ProjectFilterParameters result = await _conversionProjectQueryService.GetFilterParameters();
 			return Ok(result);
 		}
 
@@ -92,7 +90,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
 		{
-			LegacyProjectServiceModel? result = await _legacyProjectGetQuery.Execute(id);
+			LegacyProjectServiceModel? result = await _conversionProjectQueryService.GetConversionProject(id);
 			return result is null ? NotFound() : Ok(result);
 		}
 
@@ -118,7 +116,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result switch
 			{
-				CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(id)),
+				CommandSuccessResult => Ok(await _conversionProjectQueryService.GetConversionProject(id)),
 				NotFoundCommandResult => NotFound(),
 				CommandValidationErrorResult validationErrorResult =>
 					BadRequest(validationErrorResult.ValidationErrors),

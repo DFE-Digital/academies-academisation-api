@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
@@ -23,12 +24,8 @@ public class LegacyProjectListGetTests
 	{
 		_context = new TestProjectContext().CreateContext();
 
-		IProjectListGetDataQuery projectGetDataQuery = new ProjectListGetDataQuery(_context);
-		ILegacyProjectListGetQuery legacyProjectGetQuery = new LegacyProjectListGetQuery(projectGetDataQuery);
-
-		_subject = new ProjectController(Mock.Of<ILegacyProjectGetQuery>(), legacyProjectGetQuery,
-			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateSponsoredProjectCommand>());
+		_subject = new ProjectController( Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(),
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)));
 	}
 
 	[Fact]

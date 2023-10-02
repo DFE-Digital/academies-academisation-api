@@ -2,7 +2,9 @@
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
@@ -24,7 +26,7 @@ public class ProjectUpdateTests
 	// data
 
 	// service
-	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
+	private readonly IConversionProjectQueryService _legacyProjectGetQuery;
 	private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
 
 
@@ -32,13 +34,14 @@ public class ProjectUpdateTests
 	{
 		_context = new TestProjectContext().CreateContext();
 
+
 		// data
-		IProjectGetDataQuery projectGetDataQuery = new ProjectGetDataQuery(_context);
+		IConversionProjectRepository conversionProjectRepository = new ConversionProjectRepository(_context, null);
 		IProjectUpdateDataCommand projectUpdateDataCommand = new ProjectUpdateDataCommand(_context);
 
 		// service
-		_legacyProjectGetQuery = new LegacyProjectGetQuery(projectGetDataQuery);
-		_legacyProjectUpdateCommand = new LegacyProjectUpdateCommand(projectGetDataQuery, projectUpdateDataCommand);
+		_legacyProjectGetQuery = new ConversionProjectQueryService(conversionProjectRepository);
+		_legacyProjectUpdateCommand = new LegacyProjectUpdateCommand(conversionProjectRepository, projectUpdateDataCommand);
 	}
 
 
@@ -46,9 +49,8 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
+		var legacyProjectController = new ProjectController(_legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery);
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -74,9 +76,8 @@ public class ProjectUpdateTests
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
+		var legacyProjectController = new ProjectController( _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery);
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -104,9 +105,8 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
+		var legacyProjectController = new ProjectController(_legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
+			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery);
 		var existingProject = _fixture.Create<Project>();
 
 		await _context.Projects.AddAsync(existingProject);

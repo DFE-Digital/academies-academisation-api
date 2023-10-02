@@ -12,19 +12,16 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 {
 	public class LegacyProjectAddNoteTests
 	{
-		private readonly IProjectGetStatusesQuery _getStatusesQuery;
 		private readonly Mock<ILegacyProjectAddNoteCommand> _projectAddNoteCommand;
-		private readonly ILegacyProjectGetQuery _projectGetQuery;
-		private readonly ILegacyProjectListGetQuery _projectListGetQuery;
+		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly ILegacyProjectUpdateCommand _projectUpdateCommand;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 		private ILegacyProjectDeleteNoteCommand _projectDeleteNoteCommand;
 
 		public LegacyProjectAddNoteTests()
 		{
-			_projectGetQuery = Mock.Of<ILegacyProjectGetQuery>();
-			_projectListGetQuery = Mock.Of<ILegacyProjectListGetQuery>();
-			_getStatusesQuery = Mock.Of<IProjectGetStatusesQuery>();
+
+			_conversionProjectQueryService = Mock.Of<IConversionProjectQueryService>();
 			_projectUpdateCommand = Mock.Of<ILegacyProjectUpdateCommand>();
 			_projectAddNoteCommand = new Mock<ILegacyProjectAddNoteCommand>();
 			_projectDeleteNoteCommand = Mock.Of<ILegacyProjectDeleteNoteCommand>();
@@ -34,13 +31,11 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		private ProjectController System_under_test()
 		{
 			return new ProjectController(
-				_projectGetQuery,
-				_projectListGetQuery,
-				_getStatusesQuery,
 				_projectUpdateCommand,
 				_projectAddNoteCommand.Object,
 				_projectDeleteNoteCommand,
-				_createSponsoredProjectCommand);
+				_createSponsoredProjectCommand,
+				_conversionProjectQueryService);
 		}
 
 		[Fact]

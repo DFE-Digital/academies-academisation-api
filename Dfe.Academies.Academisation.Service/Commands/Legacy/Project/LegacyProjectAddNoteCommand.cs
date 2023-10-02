@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -10,19 +11,19 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 	public class LegacyProjectAddNoteCommand : ILegacyProjectAddNoteCommand
 	{
 		private readonly IProjectNoteAddCommand _addNoteCommand;
-		private readonly IProjectGetDataQuery _projectGetDataQuery;
+		private readonly IConversionProjectRepository _conversionProjectRepository;
 
 
-		public LegacyProjectAddNoteCommand(IProjectGetDataQuery projectGetDataQuery,
+		public LegacyProjectAddNoteCommand(IConversionProjectRepository conversionProjectRepository,
 										   IProjectNoteAddCommand addNoteCommand)
 		{
-			_projectGetDataQuery = projectGetDataQuery;
+			_conversionProjectRepository = conversionProjectRepository;
 			_addNoteCommand = addNoteCommand;
 		}
 
 		public async Task<CommandResult> Execute(LegacyProjectAddNoteModel model)
 		{
-			IProject? project = await _projectGetDataQuery.Execute(model.ProjectId);
+			IProject? project = await _conversionProjectRepository.GetConversionProject(model.ProjectId);
 
 			if (project is null)
 			{

@@ -1,25 +1,36 @@
-﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Service.Queries;
 
-public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
+public class ConversionProjectQueryService : IConversionProjectQueryService
 {
-	private readonly IProjectListGetDataQuery _projectListGetDataQuery;
+	private readonly IConversionProjectRepository _conversionProjectRepository;
 
-	public LegacyProjectListGetQuery(IProjectListGetDataQuery projectListGetDataQuery)
+	public ConversionProjectQueryService(IConversionProjectRepository conversionProjectRepository)
 	{
-		_projectListGetDataQuery = projectListGetDataQuery;
+		_conversionProjectRepository = conversionProjectRepository;
+	}
+
+	public async Task<LegacyProjectServiceModel?> GetConversionProject(int id)
+	{
+		var project = await this._conversionProjectRepository.GetConversionProject(id).ConfigureAwait(false);
+
+		return project?.MapToServiceModel();
+
 	}
 
 	public async Task<LegacyApiResponse<LegacyProjectServiceModel>?> GetProjects(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions, IEnumerable<string>? applicationReferences)
 	{
 
-		var (projects, totalCount) = await _projectListGetDataQuery.SearchProjects(
+		var (projects, totalCount) = await _conversionProjectRepository.SearchProjects(
 												states, title, deliveryOfficers, page, count, urn, regions, applicationReferences);
 
 		var pageResponse = PagingResponseFactory.Create("legacy/projects", page, count, totalCount,
@@ -32,5 +43,10 @@ public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
 
 		return new LegacyApiResponse<LegacyProjectServiceModel>(data,
 			pageResponse);
+	}
+
+	public async Task<ProjectFilterParameters> GetFilterParameters()
+	{
+		return await _conversionProjectRepository.GetFilterParameters();
 	}
 }

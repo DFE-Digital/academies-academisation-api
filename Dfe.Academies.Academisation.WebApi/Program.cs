@@ -111,6 +111,7 @@ builder.Services.AddScoped<ICreateSponsoredProjectDataCommand, CreateSponsoredPr
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository>();
+builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
 
 builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
 builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
@@ -124,15 +125,10 @@ builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateDataCommand, AdvisoryBoar
 
 // Queries
 builder.Services.AddScoped<IApplicationQueryService, ApplicationQueryService>();
-builder.Services.AddScoped<IProjectGetDataQuery, ProjectGetDataQuery>();
+builder.Services.AddScoped<IConversionProjectQueryService, ConversionProjectQueryService>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();
-builder.Services.AddScoped<ILegacyProjectGetQuery, LegacyProjectGetQuery>();
-builder.Services.AddScoped<ILegacyProjectListGetQuery, LegacyProjectListGetQuery>();
-builder.Services.AddScoped<IProjectListGetDataQuery, ProjectListGetDataQuery>();
-builder.Services.AddScoped<IProjectStatusesDataQuery, ProjectStatusesDataQuery>();
-builder.Services.AddScoped<IProjectGetStatusesQuery, ProjectGetStatusesQuery>();
 builder.Services.AddScoped<IAcademiesQueryService, AcademiesQueryService>();
 builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
