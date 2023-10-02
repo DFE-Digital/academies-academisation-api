@@ -134,8 +134,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
 
-		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
-		
+		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);	
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 

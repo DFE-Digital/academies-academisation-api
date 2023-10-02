@@ -13,7 +13,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 {
 	public class ProjectNoteAddCommandTests
 	{
-		private readonly ProjectNoteState _newNote;
+		private readonly ProjectNote _newNote;
 		private readonly AcademisationContext _context;
 		private readonly Fixture _fixture;
 
@@ -28,14 +28,13 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			_context.Projects.Add(project);
 			_context.SaveChanges();
 
-			_newNote = new ProjectNoteState
-			{
-				Subject = "Subject",
-				Note = "Note",
-				Author = "Author",
-				Date = DateTime.Today,
-				ProjectId = project.Id
-			};
+			_newNote = new ProjectNote(
+				"Subject",
+				"Note",
+				"Author",
+				DateTime.Today,
+				project.Id)
+			;
 		}
 
 		private ProjectNoteAddCommand System_under_test()
@@ -46,7 +45,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		[Fact]
 		public async Task Should_return_not_found_result_if_the_specified_project_does_not_exist()
 		{
-			ProjectNoteState unknownNote = _fixture.Create<ProjectNoteState>();
+			ProjectNote unknownNote = _fixture.Create<ProjectNote>();
 
 			ProjectNoteAddCommand command = System_under_test();
 
@@ -57,15 +56,8 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			result.Should().BeOfType<NotFoundCommandResult>();
 
-			_context.ProjectNotes.Should().NotContainEquivalentOf(
-				new ProjectNoteState
-				{
-					Date = _newNote.Date,
-					Subject = _newNote.Subject,
-					Author = _newNote.Author,
-					Note = _newNote.Note,
-					ProjectId = _newNote.ProjectId
-				}, x => x.Excluding(q => q.Id));
+			_context.ProjectNotes.Should().NotContainEquivalentOf(_newNote
+				, x => x.Excluding(q => q.Id));
 		}
 
 		[Fact]
@@ -79,14 +71,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			);
 
 			_context.ProjectNotes.Should().ContainEquivalentOf(
-				new ProjectNoteState
-				{
-					Date = _newNote.Date,
-					Subject = _newNote.Subject,
-					Author = _newNote.Author,
-					Note = _newNote.Note,
-					ProjectId = _newNote.ProjectId
-				}, x => x.Excluding(q => q.Id));
+				_newNote, x => x.Excluding(q => q.Id));
 		}
 
 		[Fact]
