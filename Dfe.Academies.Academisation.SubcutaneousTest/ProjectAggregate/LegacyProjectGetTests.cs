@@ -46,12 +46,15 @@ public class ProjectGetTests
 		// assert
 		result.Result.Should().BeOfType<OkObjectResult>();
 
-		result.Result.As<OkObjectResult>().Value.Should()
-			.BeEquivalentTo(existingProject, options =>
-				options.Excluding(x => x.Notes)
-					.Excluding(x => x.Details.AssignedDate)
-					.Excluding(x => x.Details.AssignedUser.Id)
-					.Excluding(x => x.Details.AssignedUser.EmailAddress)
-					.Excluding(x => x.Details.AssignedUser.FullName)); ;
-	}	
+		var serviceModel = result.Result.As<OkObjectResult>().Value.As<LegacyProjectServiceModel>();
+
+		existingProject.Details.Should().BeEquivalentTo(serviceModel, options => options.ComparingByMembers<LegacyProjectServiceModel>()
+		.Excluding(x => x.Notes)
+		.Excluding(x => x.Id)
+		);
+
+		existingProject.Id.Should().Be(serviceModel.Id);
+		existingProject.Notes.Should().BeEquivalentTo(serviceModel.Notes);
+
+	}
 }

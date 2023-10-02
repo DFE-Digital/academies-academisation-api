@@ -14,12 +14,13 @@ public class Project : IProject
 	private Project(ProjectDetails projectDetails)
 	{
 		Details = projectDetails;
+
 	}
 
 	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
 	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
 
-	private readonly List<ProjectNote> _notes;
+	private readonly List<ProjectNote> _notes = new ();
 
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer

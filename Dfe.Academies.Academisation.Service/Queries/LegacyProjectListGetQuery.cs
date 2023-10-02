@@ -28,7 +28,9 @@ public class LegacyProjectListGetQuery : ILegacyProjectListGetQuery
 				{"urn", urn}
 			});
 
-		return new LegacyApiResponse<LegacyProjectServiceModel>(projects.Select(p => p.MapToServiceModel()),
+		var data = projects.Select(p => p.MapToServiceModel());
+
+		return new LegacyApiResponse<LegacyProjectServiceModel>(data,
 			pageResponse);
 	}
 }

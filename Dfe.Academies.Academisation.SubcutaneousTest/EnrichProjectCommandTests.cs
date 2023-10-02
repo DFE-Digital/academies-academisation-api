@@ -3,6 +3,8 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
@@ -59,12 +61,14 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		public async Task SomeProjectsAreIncomplete__ForKnownEstablishment__EnrichIncompleteProjectsWithMissingData()
 		{
 			// Arrange
-			var (project1, project2, project3) = ( CreateProject(1), CreateProject(1), CreateProject(1, "Bristol", "South West") );
+			var (project1, project2, project3) = (CreateProject(), CreateProject(), CreateProject("Bristol", "South West"));
 			_context.Projects.AddRange(project1, project2, project3);
 
 			await _context.SaveChangesAsync();
 
 			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/{project1.Details.Urn}")
+					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
+			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/{project2.Details.Urn}")
 					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
 			httpClient.BaseAddress = new Uri("http://localhost");
@@ -83,7 +87,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 				() => Assert.Equal(_establishment.Gor.Name, updatedProject1.Details.Region),
 				() => Assert.Equal(_establishment.LocalAuthorityName, updatedProject2.Details.LocalAuthority),
 				() => Assert.Equal(_establishment.Gor.Name, updatedProject2.Details.Region),
-				() => Assert.Equal("Bristol", updatedProject3.Details.Region)
+				() => Assert.Equal("Bristol", updatedProject3.Details.LocalAuthority),
+				() => Assert.Equal("South West", updatedProject3.Details.Region)
 			);
 		}
 
@@ -91,7 +96,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		public async Task SomeProjectsAreIncomplete__ForUnknownEstablishment__ProjectsRemainUnchanged()
 		{
 			// Arrange
-			var (project1, project2) = (CreateProject(1, null, null), CreateProject(2, string.Empty, string.Empty));
+			var (project1, project2) = (CreateProject(null, null), CreateProject(string.Empty, string.Empty));
 			_context.Projects.AddRange(project1, project2);
 			await _context.SaveChangesAsync();
 
@@ -115,13 +120,19 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			);
 		}
 
-		private Project CreateProject(int? urn = 0, string? la = null, string? region = null)
+		private Project CreateProject(string? la = null, string? region = null)
 		{
-			return _fixture.Build<Project>()
-							.With(p => p.Details.LocalAuthority, la)
-							.With(p => p.Details.Urn, urn)
-							.With(p => p.Details.Region, region)
+			var project = _fixture.Create<Project>();
+
+			var projectDetails = _fixture.Build<ProjectDetails>()
+							.With(p => p.LocalAuthority, la)
+							.With(p => p.Urn, project.Details.Urn)
+							.With(p => p.Region, region)
 							.Create();
+
+			project.Update(projectDetails);
+
+			return project;
 		}
 	}
 }
