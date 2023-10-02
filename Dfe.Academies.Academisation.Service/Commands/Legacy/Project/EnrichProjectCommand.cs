@@ -1,6 +1,6 @@
-﻿using Dfe.Academies.Academisation.IData.Establishment;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 using Microsoft.Extensions.Logging;
@@ -11,13 +11,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 	{
 		private readonly ILogger<EnrichProjectCommand> _logger;
 		private readonly IIncompleteProjectsGetDataQuery _incompleteProjectsGetDataQuery;
-		private readonly IEstablishmentGetDataQuery _establishmentRepository;
+		private readonly IAcademiesQueryService _establishmentRepository;
 		private readonly IProjectUpdateDataCommand _projectUpdateDataCommand;
 
 		public EnrichProjectCommand(
 			ILogger<EnrichProjectCommand> logger,
 			IIncompleteProjectsGetDataQuery incompleteProjectsGetDataQuery,
-			IEstablishmentGetDataQuery establishmentRepository,
+			IAcademiesQueryService establishmentRepository,
 			IProjectUpdateDataCommand projectUpdateDataCommand)
 		{
 			_logger = logger;

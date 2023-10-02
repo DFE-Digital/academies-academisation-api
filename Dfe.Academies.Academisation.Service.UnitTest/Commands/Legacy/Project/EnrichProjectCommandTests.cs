@@ -1,7 +1,8 @@
 ﻿using AutoFixture;
-using Dfe.Academies.Academisation.IData.Establishment;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -13,7 +14,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 	{
 		private readonly EnrichProjectCommand _subject;
 		private readonly Mock<IIncompleteProjectsGetDataQuery> _incompleteProjectGetDataQuery;
-		private readonly Mock<IEstablishmentGetDataQuery> _establishmentGetDataQuery;
+		private readonly Mock<IAcademiesQueryService> _establishmentGetDataQuery;
 		private readonly Mock<IProjectUpdateDataCommand> _updateCommand;
 		private readonly Mock<ILogger<EnrichProjectCommand>> _logger;
 
@@ -22,7 +23,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		public EnrichProjectCommandTests()
 		{
 			_incompleteProjectGetDataQuery = new Mock<IIncompleteProjectsGetDataQuery>();
-			_establishmentGetDataQuery = new Mock<IEstablishmentGetDataQuery>();
+			_establishmentGetDataQuery = new Mock<IAcademiesQueryService>();
 			_updateCommand = new Mock<IProjectUpdateDataCommand>();
 			_logger = new Mock<ILogger<EnrichProjectCommand>>();
 

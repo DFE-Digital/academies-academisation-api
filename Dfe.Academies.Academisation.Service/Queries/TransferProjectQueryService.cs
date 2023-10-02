@@ -3,9 +3,7 @@ using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using Dfe.Academies.Academisation.Data.Academies;
 using Dfe.Academies.Academisation.Data.Migrations;
-using Dfe.Academies.Academisation.Domain.Academies;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
@@ -21,13 +19,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
 		private readonly IMapper _mapper;
-		private readonly AcademiesContext _academiesContext;
 
-		public TransferProjectQueryService(ITransferProjectRepository transferProjectRepository, IMapper mapper, AcademiesContext academiesContext)
+		public TransferProjectQueryService(ITransferProjectRepository transferProjectRepository, IMapper mapper)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_mapper = mapper;
-			_academiesContext = academiesContext;
 		}
 
 		public async Task<AcademyTransferProjectResponse?> GetByUrn(int id)
@@ -58,11 +54,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			// remove any projects without an incoming or outgoing trust.
 			.Where(p =>
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName)))
-			.OrderByDescending(atp => atp.ProjectUrn)
-			.Skip((page - 1) * count).Take(count).ToList();
-
+				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+			
 			var recordTotal = projects.Count();
+
+			projects = projects.OrderByDescending(atp => atp.ProjectUrn)
+			.Skip((page - 1) * count).Take(count).ToList();
 
 			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(projects, recordTotal));
 		}
@@ -91,24 +88,14 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public IEnumerable<AcademyTransferProjectSummaryResponse> AcademyTransferProjectSummaryResponse(
  IEnumerable<ITransferProject> atp)
 		{
-			var outgoingTrustUkprns = atp.Select(x => x.OutgoingTrustUkprn).ToList();
-
-			var outgoingGroups =
-			   _academiesContext.Trusts.Where(trust => outgoingTrustUkprns.Contains(trust.UKPRN)).ToList();
-
-			var transferingAcademiesUrns = atp.SelectMany(x => x.TransferringAcademies.Select(ta => ta.IncomingTrustUkprn));
-
-			var incomingGroups = _academiesContext.Trusts.Where(trust => transferingAcademiesUrns.Contains(trust.UKPRN)).ToList();
-
 			return atp.Select(x =>
 			{
-				var outgoingGroup = outgoingGroups.FirstOrDefault(g => g.UKPRN == x.OutgoingTrustUkprn);
 				return new AcademyTransferProjectSummaryResponse
 				{
 					ProjectUrn = x.Urn.ToString(),
 					ProjectReference = x.ProjectReference,
 					OutgoingTrustUkprn = x.OutgoingTrustUkprn,
-					OutgoingTrustName = outgoingGroup?.Name,
+					OutgoingTrustName = x.OutgoingTrustName,
 					AssignedUser = string.IsNullOrWhiteSpace(x.AssignedUserEmailAddress)
 				   ? null
 				   : new AssignedUserResponse
@@ -119,12 +106,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				   },
 					TransferringAcademies = x.TransferringAcademies.Select(ta =>
 					{
-						var group = incomingGroups.FirstOrDefault(g => g.UKPRN == ta.IncomingTrustUkprn);
 						return new TransferringAcademiesResponse
 						{
 							OutgoingAcademyUkprn = ta.OutgoingAcademyUkprn,
 							IncomingTrustUkprn = ta.IncomingTrustUkprn,
-							IncomingTrustName = group?.Name,
+							IncomingTrustName = ta.IncomingTrustName,
 							PupilNumbersAdditionalInformation = ta.PupilNumbersAdditionalInformation,
 							LatestOfstedReportAdditionalInformation = ta.LatestOfstedReportAdditionalInformation,
 							KeyStage2PerformanceAdditionalInformation = ta.KeyStage2PerformanceAdditionalInformation,
