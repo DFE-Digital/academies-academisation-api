@@ -5,5 +5,9 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.76.0"
     }
+    statuscake = {
+      source  = "StatusCakeDev/statuscake"
+      version = ">= 2.1.0"
+    }
   }
 }
