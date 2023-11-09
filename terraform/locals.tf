@@ -12,6 +12,12 @@ locals {
   enable_logstash_consumer                        = var.enable_logstash_consumer
   eventhub_export_log_analytics_table_names       = var.eventhub_export_log_analytics_table_names
   enable_mssql_database                           = var.enable_mssql_database
+  mssql_server_admin_password                     = var.mssql_server_admin_password
+  mssql_azuread_admin_username                    = var.mssql_azuread_admin_username
+  mssql_azuread_admin_object_id                   = var.mssql_azuread_admin_object_id
+  mssql_database_name                             = var.mssql_database_name
+  mssql_firewall_ipv4_allow_list                  = var.mssql_firewall_ipv4_allow_list
+  mssql_server_public_access_enabled              = var.mssql_server_public_access_enabled
   enable_dns_zone                                 = var.enable_dns_zone
   dns_zone_domain_name                            = var.dns_zone_domain_name
   dns_ns_records                                  = var.dns_ns_records
