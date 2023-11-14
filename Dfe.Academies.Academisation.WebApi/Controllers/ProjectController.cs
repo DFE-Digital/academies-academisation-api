@@ -4,7 +4,9 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.WebApi.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -16,26 +18,25 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	{
 		private readonly ILegacyProjectAddNoteCommand _legacyProjectAddNoteCommand;
 		private readonly ILegacyProjectDeleteNoteCommand _legacyProjectDeleteNoteCommand;
-		private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
+		private readonly IMediator _mediator;
 
-		public ProjectController(
-									   ILegacyProjectUpdateCommand legacyProjectUpdateCommand,
-									   ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
+		public ProjectController(ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
 									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand, 
 									   ICreateSponsoredProjectCommand createSponsoredProjectCommand,
 									   
-									   IConversionProjectQueryService conversionProjectQueryService)
+									   IConversionProjectQueryService conversionProjectQueryService,
+									   IMediator mediator)
 		{
 
-			_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
 			_legacyProjectAddNoteCommand = legacyProjectAddNoteCommand;
 			_legacyProjectDeleteNoteCommand = legacyProjectDeleteNoteCommand;
 			_createSponsoredProjectCommand = createSponsoredProjectCommand;
 
 			_conversionProjectQueryService = conversionProjectQueryService;
+			_mediator = mediator;
 		}
 
 		/// <summary>
@@ -112,7 +113,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			int id,
 			LegacyProjectServiceModel projectUpdate)
 		{
-			CommandResult result = await _legacyProjectUpdateCommand.Execute(id, projectUpdate);
+			CommandResult result = await _mediator.Send(new ConversionProjectUpdateCommand(id, projectUpdate));
 
 			return result switch
 			{

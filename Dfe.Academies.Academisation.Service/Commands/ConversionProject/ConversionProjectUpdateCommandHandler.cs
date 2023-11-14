@@ -2,32 +2,32 @@
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
+using MediatR;
 
-namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 
-public class LegacyProjectUpdateCommand : ILegacyProjectUpdateCommand
+public class ConversionProjectUpdateCommandHandler : IRequestHandler<ConversionProjectUpdateCommand, CommandResult>
 {
 	private readonly IConversionProjectRepository _conversionProjectRepository;
 	private readonly IProjectUpdateDataCommand _projectUpdateDataCommand;
 
-	public LegacyProjectUpdateCommand(IConversionProjectRepository conversionProjectRepository, IProjectUpdateDataCommand projectUpdateDataCommand)
+	public ConversionProjectUpdateCommandHandler(IConversionProjectRepository conversionProjectRepository, IProjectUpdateDataCommand projectUpdateDataCommand)
 	{
 		_conversionProjectRepository = conversionProjectRepository;
 		_projectUpdateDataCommand = projectUpdateDataCommand;
 	}
 
-	public async Task<CommandResult> Execute(int id, LegacyProjectServiceModel legacyProjectServiceModel)
+	public async Task<CommandResult> Handle(ConversionProjectUpdateCommand request, CancellationToken cancellation)
 	{
-		var existingProject = await _conversionProjectRepository.GetConversionProject(id);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(request.UpdateModel.Id);
 
 		if (existingProject is null)
 		{
 			return new NotFoundCommandResult();
 		}
 
-		var result = existingProject.Update(legacyProjectServiceModel.MapNonEmptyFields(existingProject));
+		var result = existingProject.Update(request.UpdateModel.MapNonEmptyFields(existingProject));
 
 		if (result is CommandValidationErrorResult)
 		{

@@ -28,6 +28,7 @@ using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
@@ -115,7 +116,6 @@ builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectReposi
 
 builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
 builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
-builder.Services.AddScoped<ILegacyProjectUpdateCommand, LegacyProjectUpdateCommand>();
 
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();

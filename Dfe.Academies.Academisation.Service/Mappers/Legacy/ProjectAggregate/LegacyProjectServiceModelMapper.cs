@@ -1,6 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using User = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;

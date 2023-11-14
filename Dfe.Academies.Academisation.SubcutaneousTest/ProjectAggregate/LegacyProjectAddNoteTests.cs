@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using FluentAssertions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -14,7 +15,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 	{
 		private readonly Mock<ILegacyProjectAddNoteCommand> _projectAddNoteCommand;
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
-		private readonly ILegacyProjectUpdateCommand _projectUpdateCommand;
+		private readonly IMediator _mediator;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 		private ILegacyProjectDeleteNoteCommand _projectDeleteNoteCommand;
 
@@ -22,7 +23,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		{
 
 			_conversionProjectQueryService = Mock.Of<IConversionProjectQueryService>();
-			_projectUpdateCommand = Mock.Of<ILegacyProjectUpdateCommand>();
+			_mediator = Mock.Of<IMediator>();
 			_projectAddNoteCommand = new Mock<ILegacyProjectAddNoteCommand>();
 			_projectDeleteNoteCommand = Mock.Of<ILegacyProjectDeleteNoteCommand>();
 			_createSponsoredProjectCommand = Mock.Of<ICreateSponsoredProjectCommand>();
@@ -31,11 +32,11 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		private ProjectController System_under_test()
 		{
 			return new ProjectController(
-				_projectUpdateCommand,
 				_projectAddNoteCommand.Object,
 				_projectDeleteNoteCommand,
 				_createSponsoredProjectCommand,
-				_conversionProjectQueryService);
+				_conversionProjectQueryService,
+				_mediator);
 		}
 
 		[Fact]

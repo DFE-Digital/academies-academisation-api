@@ -5,7 +5,7 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Moq;
 using Xunit;
 
@@ -18,11 +18,11 @@ public class LegacyProjectUpdateCommandTests
 
 	private readonly Mock<IConversionProjectRepository> _getDataQueryMock = new();
 	private readonly Mock<IProjectUpdateDataCommand> _updateProjectCommandMock = new();
-	private readonly LegacyProjectUpdateCommand _subject;
+	private readonly ConversionProjectUpdateCommandHandler _subject;
 
 	public LegacyProjectUpdateCommandTests()
 	{
-		_subject = new LegacyProjectUpdateCommand(_getDataQueryMock.Object, _updateProjectCommandMock.Object);
+		_subject = new ConversionProjectUpdateCommandHandler(_getDataQueryMock.Object, _updateProjectCommandMock.Object);
 	}
 
 	[Fact]
@@ -33,7 +33,7 @@ public class LegacyProjectUpdateCommandTests
 		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync((IProject?)null);
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
+		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
 
 		// Assert
 		Assert.IsType<NotFoundCommandResult>(result);
@@ -52,7 +52,7 @@ public class LegacyProjectUpdateCommandTests
 		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync(project.Object);		
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
+		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
 
 		// Assert
 		Assert.Equal(validationErrorResult, result);
@@ -72,7 +72,7 @@ public class LegacyProjectUpdateCommandTests
 		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync(project.Object);
 
 		// Act & Assert
-		await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Execute(projectServiceModel.Id, projectServiceModel));		
+		await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default));		
 	}
 
 	[Fact]
@@ -86,7 +86,7 @@ public class LegacyProjectUpdateCommandTests
 			.ReturnsAsync(projectMock.Object);
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
+		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
 
 		// Assert
 		Assert.Multiple(

@@ -1,4 +1,4 @@
-using AutoFixture;
+﻿using AutoFixture;
 using AutoMapper;
 using Bogus;
 using Dfe.Academies.Academisation.Core;
@@ -45,7 +45,6 @@ public class ApplicationDeleteTests
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
 	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly ITrustQueryService _trustQueryService;
-	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 	private readonly IApplicationRepository _repo;
@@ -62,7 +61,6 @@ public class ApplicationDeleteTests
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
-		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>();
 
