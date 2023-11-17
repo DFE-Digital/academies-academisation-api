@@ -1,0 +1,126 @@
+name: Deploy to environment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: "Choose an environment to deploy to"
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.inputs.environment }}
+
+env:
+  NODE_VERSION: 16.x
+
+jobs:
+  set-env:
+    name: Determine environment
+    runs-on: ubuntu-22.04
+    outputs:
+      environment: ${{ steps.var.outputs.environment }}
+      branch: ${{ steps.var.outputs.branch }}
+      release: ${{ steps.var.outputs.release }}
+      checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - id: var
+        run: |
+          GIT_REF=${{ github.ref }}
+          GIT_BRANCH=${GIT_REF##*/}
+          INPUT=${{ github.event.inputs.environment }}
+          ENVIRONMENT=${INPUT:-"development"}
+          RELEASE=${ENVIRONMENT,,}-`date +%Y-%m-%d`.${{ github.run_number }}
+          CHECKED_OUT_SHA="$(git log -1 '--format=format:%H')"
+          echo "environment=${ENVIRONMENT,,}" >> $GITHUB_OUTPUT
+          echo "branch=$GIT_BRANCH" >> $GITHUB_OUTPUT
+          echo "release=${RELEASE}" >> $GITHUB_OUTPUT
+          echo "checked-out-sha=${CHECKED_OUT_SHA}" >> $GITHUB_OUTPUT
+
+  create-tag:
+    name: Tag and release
+    needs: [ set-env ]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Create tag
+        run: |
+          git tag ${{ needs.set-env.outputs.release }}
+          git push origin ${{ needs.set-env.outputs.release }}
+
+      - name: Create release
+        uses: "actions/github-script@v6"
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            try {
+              await github.rest.repos.createRelease({
+                draft: ${{ needs.set-env.outputs.environment == 'test' }},
+                generate_release_notes: true,
+                name: "${{ needs.set-env.outputs.release }}",
+                owner: context.repo.owner,
+                prerelease: ${{ needs.set-env.outputs.environment == 'test' }},
+                repo: context.repo.repo,
+                tag_name: "${{ needs.set-env.outputs.release }}",
+              });
+            } catch (error) {
+              core.setFailed(error.message);
+            }
+
+  deploy-image:
+    name: Deploy to environment
+    needs: [ set-env ]
+    uses: DFE-Digital/deploy-azure-container-apps-action/.github/workflows/build-push-deploy.yml@main
+    with:
+      docker-image-name: 'aca-app'
+      docker-build-args: 'COMMIT_SHA=${{ needs.set-env.outputs.checked-out-sha }}'
+      environment: ${{ needs.set-env.outputs.environment }}
+    secrets:
+      azure-acr-client-id: ${{ secrets.AZURE_ACR_CLIENTID }}
+      azure-acr-secret: ${{ secrets.AZURE_ACR_SECRET }}
+      azure-acr-url: ${{ secrets.AZURE_ACR_URL }}
+      azure-aca-credentials: ${{ secrets.AZURE_ACA_CREDENTIALS }}
+      azure-aca-name: ${{ secrets.AZURE_ACA_NAME }}
+      azure-aca-resource-group: ${{ secrets.AZURE_ACA_RESOURCE_GROUP }}
+
+  cypress-tests:
+    name: Run Cypress tests
+    if: needs.set-env.outputs.environment == 'test' || needs.set-env.outputs.environment == 'development'
+    needs: [ deploy-image, set-env ]
+    environment: ${{ needs.set-env.outputs.environment }}
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: CypressTests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Npm install
+        run: npm install
+
+      - name: Run cypress
+        run: npm run cy:run -- --env apiKey=${{ secrets.API_KEY }},url=${{ secrets.URL }}
+
+      - name: Upload artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v1
+        with:
+            name: screenshots-${{ needs.set-env.outputs.environment }}
+            path: CypressTests/cypress/screenshots
