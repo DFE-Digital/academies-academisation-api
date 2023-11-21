@@ -276,3 +276,9 @@ variable "statuscake_contact_group_email_addresses" {
   type        = list(string)
   default     = []
 }
+
+variable "alarm_log_ingestion_gb_per_day" {
+  description = "Define an alarm threshold for Log Analytics ingestion rate in GB (per day) (Defaults to 1GB/day)"
+  type        = number
+  default     = 1
+}
