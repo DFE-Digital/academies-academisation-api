@@ -51,4 +51,6 @@ module "azure_container_apps_hosting" {
   existing_logic_app_workflow                  = local.existing_logic_app_workflow
   existing_network_watcher_name                = local.existing_network_watcher_name
   existing_network_watcher_resource_group_name = local.existing_network_watcher_resource_group_name
+
+  alarm_log_ingestion_gb_per_day = local.alarm_log_ingestion_gb_per_day
 }
