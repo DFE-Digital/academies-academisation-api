@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.0.0"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.3.1"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -14,7 +14,13 @@ module "azure_container_apps_hosting" {
   container_command                      = local.container_command
   container_secret_environment_variables = local.container_secret_environment_variables
 
-  enable_mssql_database = local.enable_mssql_database
+  enable_mssql_database              = local.enable_mssql_database
+  mssql_server_admin_password        = local.mssql_server_admin_password
+  mssql_azuread_admin_username       = local.mssql_azuread_admin_username
+  mssql_azuread_admin_object_id      = local.mssql_azuread_admin_object_id
+  mssql_database_name                = local.mssql_database_name
+  mssql_firewall_ipv4_allow_list     = local.mssql_firewall_ipv4_allow_list
+  mssql_server_public_access_enabled = local.mssql_server_public_access_enabled
 
   enable_event_hub                          = local.enable_event_hub
   enable_logstash_consumer                  = local.enable_logstash_consumer
@@ -45,4 +51,6 @@ module "azure_container_apps_hosting" {
   existing_logic_app_workflow                  = local.existing_logic_app_workflow
   existing_network_watcher_name                = local.existing_network_watcher_name
   existing_network_watcher_resource_group_name = local.existing_network_watcher_resource_group_name
+
+  alarm_log_ingestion_gb_per_day = local.alarm_log_ingestion_gb_per_day
 }
