@@ -11,6 +11,7 @@ using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using MediatR;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
@@ -25,7 +26,7 @@ public class LegacyProjectGetStatusesTests
 	{
 		_context = new TestProjectContext().CreateContext();
 
-		_projectController = new ProjectController(Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)));
+		_projectController = new ProjectController(Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 	}
 
 	[Fact]
