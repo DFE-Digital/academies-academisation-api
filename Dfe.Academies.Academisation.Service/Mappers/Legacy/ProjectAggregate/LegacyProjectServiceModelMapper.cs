@@ -132,11 +132,11 @@ internal static class LegacyProjectServiceModelMapper
 		return serviceModel;
 	}
 
-	private static IEnumerable<ProjectNoteServiceModel> ToProjectNoteServiceModels(this IEnumerable<IProjectNote>? notes)
+	private static IEnumerable<ConversionProjectDeleteNote> ToProjectNoteServiceModels(this IEnumerable<IProjectNote>? notes)
 	{
-		if (notes is null) return Enumerable.Empty<ProjectNoteServiceModel>();
+		if (notes is null) return Enumerable.Empty<ConversionProjectDeleteNote>();
 
-		return notes.Select(note => new ProjectNoteServiceModel
+		return notes.Select(note => new ConversionProjectDeleteNote
 		{
 			Author = note.Author, Note = note.Note, Subject = note.Subject, Date = note.Date
 		});

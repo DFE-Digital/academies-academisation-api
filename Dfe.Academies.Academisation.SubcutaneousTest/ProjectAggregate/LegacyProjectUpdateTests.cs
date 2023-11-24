@@ -63,8 +63,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -90,8 +89,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -119,8 +117,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 
 		await _context.Projects.AddAsync(existingProject);

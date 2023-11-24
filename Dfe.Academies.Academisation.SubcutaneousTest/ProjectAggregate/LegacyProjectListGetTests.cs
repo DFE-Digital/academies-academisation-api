@@ -25,8 +25,7 @@ public class LegacyProjectListGetTests
 	{
 		_context = new TestProjectContext().CreateContext();
 
-		_subject = new ProjectController(Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(),Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
+		_subject = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 	}
 
 	[Fact]

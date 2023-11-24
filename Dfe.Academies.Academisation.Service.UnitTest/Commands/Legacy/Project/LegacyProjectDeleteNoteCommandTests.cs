@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using FluentAssertions;
 using Moq;
@@ -21,20 +22,20 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			_deleteNoteCommand = new Mock<IProjectNoteDeleteCommand>();
 		}
 
-		private LegacyProjectDeleteNoteCommand System_under_test()
+		private ConversionProjectDeleteNoteCommandHandler System_under_test()
 		{
-			return new LegacyProjectDeleteNoteCommand(_deleteNoteCommand.Object);
+			return new ConversionProjectDeleteNoteCommandHandler(_deleteNoteCommand.Object);
 		}
 
 		[Fact]
 		public async Task Should_pass_the_request_to_the_data_layer_command()
 		{
 			int projectId = Random.Shared.Next();
-			var note = _fixture.Create<ProjectNoteServiceModel>();
+			var note = _fixture.Create<ConversionProjectDeleteNoteCommand>();
 
-			LegacyProjectDeleteNoteCommand command = System_under_test();
+			var command = System_under_test();
 
-			await command.Execute(projectId, note);
+			await command.Handle(note, default);
 
 			_deleteNoteCommand.Verify(
 				x => x.Execute(
@@ -56,9 +57,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 				.Setup(x => x.Execute(It.IsAny<int>(), It.IsAny<ProjectNote>()))
 				.ReturnsAsync(dataCommandResult);
 
-			LegacyProjectDeleteNoteCommand command = System_under_test();
+			var command = System_under_test();
 
-			CommandResult result = await command.Execute(1, _fixture.Create<ProjectNoteServiceModel>());
+			CommandResult result = await command.Handle(_fixture.Create<ConversionProjectDeleteNoteCommand>(), default);
 
 			result.Should().Be(dataCommandResult);
 		}

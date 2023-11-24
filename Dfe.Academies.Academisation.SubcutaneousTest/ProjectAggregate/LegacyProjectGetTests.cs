@@ -28,8 +28,7 @@ public class ProjectGetTests
 	{
 		_context = new TestProjectContext().CreateContext();
 
-		_projectController = new ProjectController( Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
+		_projectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 	}
 
 	[Fact]

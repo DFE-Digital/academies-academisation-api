@@ -4,24 +4,24 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using MediatR;
 
-namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
+namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 {
-	public class LegacyProjectAddNoteCommand : ILegacyProjectAddNoteCommand
+	public class ConversionProjectAddNoteCommandHandler : IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>
 	{
 		private readonly IProjectNoteAddCommand _addNoteCommand;
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 
 
-		public LegacyProjectAddNoteCommand(IConversionProjectRepository conversionProjectRepository,
+		public ConversionProjectAddNoteCommandHandler(IConversionProjectRepository conversionProjectRepository,
 										   IProjectNoteAddCommand addNoteCommand)
 		{
 			_conversionProjectRepository = conversionProjectRepository;
 			_addNoteCommand = addNoteCommand;
 		}
 
-		public async Task<CommandResult> Execute(LegacyProjectAddNoteModel model)
+		public async Task<CommandResult> Handle(ConversionProjectAddNoteCommand model, CancellationToken cancellationToken)
 		{
 			IProject? project = await _conversionProjectRepository.GetConversionProject(model.ProjectId);
 

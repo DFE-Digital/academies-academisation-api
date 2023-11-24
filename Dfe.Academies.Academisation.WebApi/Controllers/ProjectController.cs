@@ -16,23 +16,18 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class ProjectController : ControllerBase
 	{
-		private readonly ILegacyProjectAddNoteCommand _legacyProjectAddNoteCommand;
-		private readonly ILegacyProjectDeleteNoteCommand _legacyProjectDeleteNoteCommand;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly IMediator _mediator;
 
-		public ProjectController(ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
-									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand, 
+		public ProjectController(
+
 									   ICreateSponsoredProjectCommand createSponsoredProjectCommand,
 									   
 									   IConversionProjectQueryService conversionProjectQueryService,
 									   IMediator mediator)
 		{
-
-			_legacyProjectAddNoteCommand = legacyProjectAddNoteCommand;
-			_legacyProjectDeleteNoteCommand = legacyProjectDeleteNoteCommand;
 			_createSponsoredProjectCommand = createSponsoredProjectCommand;
 
 			_conversionProjectQueryService = conversionProjectQueryService;
@@ -138,8 +133,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		public async Task<ActionResult> AddNote(int id, AddNoteRequest note)
 		{
-			CommandResult result = await _legacyProjectAddNoteCommand.Execute(note.ToAddNoteModel(id));
-
+			CommandResult result = await _mediator.Send(note.ToAddNoteModel(id));
 			return result switch
 			{
 				CommandSuccessResult => Created(new Uri($"/legacy/project/{id}", UriKind.Relative), null),
@@ -173,7 +167,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		///     Deletes the provided note from the project with the specified ID
 		/// </summary>
 		/// <param name="id">The ID for the project from which the note should be deleted</param>
-		/// <param name="note">Project note data</param>
+		/// <param name="command">Project note data</param>
 		/// <response code="404">
 		///     Either the project with the specified ID is not found, or the project does not contain the
 		///     provided note
@@ -184,10 +178,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> DeleteNote(int id, ProjectNoteServiceModel note)
+		public async Task<ActionResult> DeleteNote(int id, ConversionProjectDeleteNoteCommand command)
 		{
-			CommandResult result = await _legacyProjectDeleteNoteCommand.Execute(id, note);
+			command.ProjectId = id;
 
+			CommandResult result = await _mediator.Send(command);
 			return result switch
 			{
 				CommandSuccessResult => NoContent(),

@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using FluentAssertions;
 using MediatR;
@@ -13,37 +14,33 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 {
 	public class LegacyProjectAddNoteTests
 	{
-		private readonly Mock<ILegacyProjectAddNoteCommand> _projectAddNoteCommand;
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
-		private readonly IMediator _mediator;
+		private readonly Mock<IMediator> _mediator;
+		private readonly Mock<IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>> _projectAddNoteCommandHandler;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
-		private ILegacyProjectDeleteNoteCommand _projectDeleteNoteCommand;
 
 		public LegacyProjectAddNoteTests()
 		{
 
 			_conversionProjectQueryService = Mock.Of<IConversionProjectQueryService>();
-			_mediator = Mock.Of<IMediator>();
-			_projectAddNoteCommand = new Mock<ILegacyProjectAddNoteCommand>();
-			_projectDeleteNoteCommand = Mock.Of<ILegacyProjectDeleteNoteCommand>();
+			_mediator = new Mock<IMediator>();
+			_projectAddNoteCommandHandler = new Mock<IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>>();
 			_createSponsoredProjectCommand = Mock.Of<ICreateSponsoredProjectCommand>();
 		}
 
 		private ProjectController System_under_test()
 		{
 			return new ProjectController(
-				_projectAddNoteCommand.Object,
-				_projectDeleteNoteCommand,
 				_createSponsoredProjectCommand,
 				_conversionProjectQueryService,
-				_mediator);
+				_mediator.Object);
 		}
 
 		[Fact]
 		public async Task Should_return_a_201_result_when_the_note_is_added_successfully()
 		{
-			_projectAddNoteCommand
-				.Setup(x => x.Execute(It.IsAny<LegacyProjectAddNoteModel>()))
+			_mediator
+				.Setup(x => x.Send(It.IsAny<ConversionProjectAddNoteCommand>(), It.IsAny<CancellationToken>()))
 				.Returns(Task.FromResult(new CommandSuccessResult() as CommandResult));
 
 			ProjectController controller = System_under_test();
@@ -57,8 +54,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		[Fact]
 		public async Task Should_return_a_404_result_if_the_id_does_not_match_a_known_project()
 		{
-			_projectAddNoteCommand
-				.Setup(x => x.Execute(It.IsAny<LegacyProjectAddNoteModel>()))
+			_mediator
+				.Setup(x => x.Send(It.IsAny<ConversionProjectAddNoteCommand>(), It.IsAny<CancellationToken>()))
 				.Returns(Task.FromResult(new NotFoundCommandResult() as CommandResult));
 
 			ProjectController controller = System_under_test();

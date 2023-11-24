@@ -104,8 +104,6 @@ builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionS
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
 builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
-builder.Services.AddScoped<ILegacyProjectAddNoteCommand, LegacyProjectAddNoteCommand>();
-builder.Services.AddScoped<ILegacyProjectDeleteNoteCommand, LegacyProjectDeleteNoteCommand>();
 builder.Services.AddScoped<ICreateSponsoredProjectCommand, CreateSponsoredProjectCommand>();
 builder.Services.AddScoped<ICreateSponsoredProjectDataCommand, CreateSponsoredProjectDataCommand>();
 

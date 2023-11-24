@@ -4,7 +4,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using FluentAssertions;
 using Moq;
@@ -25,9 +25,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			_projectNoteAddCommand = new Mock<IProjectNoteAddCommand>();
 		}
 
-		private LegacyProjectAddNoteCommand System_under_test()
+		private ConversionProjectAddNoteCommandHandler System_under_test()
 		{
-			return new LegacyProjectAddNoteCommand(_projectGetDataQuery.Object, _projectNoteAddCommand.Object);
+			return new ConversionProjectAddNoteCommandHandler(_projectGetDataQuery.Object, _projectNoteAddCommand.Object);
 		}
 
 		[Fact]
@@ -37,9 +37,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 				.Setup(x => x.GetConversionProject(It.IsAny<int>()))
 				.ReturnsAsync((IProject?)null);
 
-			LegacyProjectAddNoteCommand command = System_under_test();
+			var command = System_under_test();
 
-			CommandResult result = await command.Execute(_fixture.Create<LegacyProjectAddNoteModel>());
+			CommandResult result = await command.Handle(_fixture.Create<ConversionProjectAddNoteCommand>(), default);
 
 			result.Should().BeOfType<NotFoundCommandResult>();
 		}
@@ -58,10 +58,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 				.Setup(x => x.Execute(It.IsAny<int>(), It.IsAny<ProjectNote>()))
 				.ReturnsAsync(addCommandResult);
 
-			LegacyProjectAddNoteCommand command = System_under_test();
+			var command = System_under_test();
 
-			CommandResult result = await command.Execute(
-				_fixture.Create<LegacyProjectAddNoteModel>() with { ProjectId = project.Id }
+			CommandResult result = await command.Handle(
+				_fixture.Create<ConversionProjectAddNoteCommand>() with { ProjectId = project.Id }, default
 			);
 
 			result.Should().Be(addCommandResult);
