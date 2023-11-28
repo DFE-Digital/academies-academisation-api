@@ -54,7 +54,6 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				.With(p => p.Region, region)
 				.Create();
 			var newProject = new Project(0, projectDetails);
-			//var mappedProject = ProjectState.MapFromDomain(newProject);
 
 			return (projectDetails, newProject);
 		}
