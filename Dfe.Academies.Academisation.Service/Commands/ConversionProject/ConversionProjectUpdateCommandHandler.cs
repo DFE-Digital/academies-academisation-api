@@ -20,7 +20,7 @@ public class ConversionProjectUpdateCommandHandler : IRequestHandler<ConversionP
 
 	public async Task<CommandResult> Handle(ConversionProjectUpdateCommand request, CancellationToken cancellation)
 	{
-		var existingProject = await _conversionProjectRepository.GetConversionProject(request.UpdateModel.Id);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id);
 
 		if (existingProject is null)
 		{
