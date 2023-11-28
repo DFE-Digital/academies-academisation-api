@@ -100,7 +100,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? KeyStage4PerformanceAdditionalInformation { get; init; }
 		public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 		public User? AssignedUser { get; init; }
-		public ICollection<ProjectNoteServiceModel>? Notes { get; set; }
+		public ICollection<ConversionProjectDeleteNote>? Notes { get; set; }
 		public DateTime CreatedOn { get; set; }
 
 		public bool Equals(LegacyProjectServiceModel? other)

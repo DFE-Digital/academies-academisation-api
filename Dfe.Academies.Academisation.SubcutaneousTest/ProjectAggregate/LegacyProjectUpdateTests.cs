@@ -1,16 +1,27 @@
-﻿using AutoFixture;
+﻿using System.Reflection;
+using AutoFixture;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using FluentAssertions;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
@@ -23,21 +34,28 @@ public class ProjectUpdateTests
 	// data
 
 	// service
-	private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
-	private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
+	private readonly IConversionProjectQueryService _legacyProjectGetQuery;
+	private IMediator _mediatr;
 
 
 	public ProjectUpdateTests()
 	{
 		_context = new TestProjectContext().CreateContext();
 
+
 		// data
-		IProjectGetDataQuery projectGetDataQuery = new ProjectGetDataQuery(_context);
+		IConversionProjectRepository conversionProjectRepository = new ConversionProjectRepository(_context, null);
 		IProjectUpdateDataCommand projectUpdateDataCommand = new ProjectUpdateDataCommand(_context);
 
 		// service
-		_legacyProjectGetQuery = new LegacyProjectGetQuery(projectGetDataQuery);
-		_legacyProjectUpdateCommand = new LegacyProjectUpdateCommand(projectGetDataQuery, projectUpdateDataCommand);
+		_legacyProjectGetQuery = new ConversionProjectQueryService(conversionProjectRepository);
+		var services = new ServiceCollection();
+
+		services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(ConversionProjectUpdateCommandHandler))));
+	    services.AddScoped(x => conversionProjectRepository);
+	    services.AddScoped(x => projectUpdateDataCommand);
+
+		_mediatr = services.BuildServiceProvider().GetService<IMediator>(); 
 	}
 
 
@@ -45,16 +63,14 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
-		var existingProject = _fixture.Create<ProjectState>();
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
 		var updatedProject = _fixture.Build<LegacyProjectServiceModel>()
 			.With(p => p.Id, existingProject.Id)
-			.With(p => p.Urn, existingProject.Urn)
+			.With(p => p.Urn, existingProject.Details.Urn)
 			.Create();
 
 		updatedProject.Notes?.Clear();
@@ -73,16 +89,14 @@ public class ProjectUpdateTests
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
-		var existingProject = _fixture.Create<ProjectState>();
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
 		var updatedProject = _fixture.Build<LegacyProjectServiceModel>()
 			.With(p => p.Id, existingProject.Id)
-			.With(p => p.Urn, existingProject.Urn)
+			.With(p => p.Urn, existingProject.Details.Urn)
 			.Create();
 
 		updatedProject.Notes?.Clear();
@@ -103,15 +117,13 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), _legacyProjectUpdateCommand, Mock.Of<ILegacyProjectAddNoteCommand>(),
-			Mock.Of<ILegacyProjectDeleteNoteCommand>(), Mock.Of<ICreateSponsoredProjectCommand>());
-		var existingProject = _fixture.Create<ProjectState>();
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var existingProject = _fixture.Create<Project>();
 
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
-		var updatedProject = new LegacyProjectServiceModel(existingProject.Id, existingProject.Urn)
+		var updatedProject = new LegacyProjectServiceModel(existingProject.Id, existingProject.Details.Urn)
 		{
 			ProjectStatus = "TestStatus"
 		};
@@ -126,66 +138,66 @@ public class ProjectUpdateTests
 
 		(_, LegacyProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
 
-		existingProject.ProjectStatus = updatedProject.ProjectStatus;
+		//existingProject.Details.ProjectStatus = updatedProject.Details.ProjectStatus;
 
 		Assert.Multiple(
-					() => Assert.Equal(existingProject.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),
-					() => Assert.Equal(existingProject.PartOfPfiScheme, getProject.PartOfPfiScheme),
-					() => Assert.Equal(existingProject.PfiSchemeDetails, getProject.PfiSchemeDetails),
-					() => Assert.Equal(existingProject.Author, getProject.Author),
-					() => Assert.Equal(existingProject.ClearedBy, getProject.ClearedBy),
-					() => Assert.Equal(existingProject.ProposedAcademyOpeningDate, getProject.ProposedAcademyOpeningDate),
-					() => Assert.Equal(existingProject.PublishedAdmissionNumber, getProject.PublishedAdmissionNumber),
-					() => Assert.Equal(existingProject.ViabilityIssues, getProject.ViabilityIssues),
-					() => Assert.Equal(existingProject.FinancialDeficit, getProject.FinancialDeficit),
-					() => Assert.Equal(existingProject.RationaleForProject, getProject.RationaleForProject),
-					() => Assert.Equal(existingProject.RisksAndIssues, getProject.RisksAndIssues),
-					() => Assert.Equal(existingProject.EndOfCurrentFinancialYear, getProject.EndOfCurrentFinancialYear),
-					() => Assert.Equal(existingProject.EndOfNextFinancialYear, getProject.EndOfNextFinancialYear),
-					() => Assert.Equal(existingProject.RevenueCarryForwardAtEndMarchCurrentYear, getProject.RevenueCarryForwardAtEndMarchCurrentYear),
-					() => Assert.Equal(existingProject.ProjectedRevenueBalanceAtEndMarchNextYear, getProject.ProjectedRevenueBalanceAtEndMarchNextYear),
-					() => Assert.Equal(existingProject.RationaleSectionComplete, getProject.RationaleSectionComplete),
-					() => Assert.Equal(existingProject.LocalAuthorityInformationTemplateSentDate, getProject.LocalAuthorityInformationTemplateSentDate),
-					() => Assert.Equal(existingProject.LocalAuthorityInformationTemplateReturnedDate, getProject.LocalAuthorityInformationTemplateReturnedDate),
-					() => Assert.Equal(existingProject.LocalAuthorityInformationTemplateComments, getProject.LocalAuthorityInformationTemplateComments),
-					() => Assert.Equal(existingProject.LocalAuthorityInformationTemplateLink, getProject.LocalAuthorityInformationTemplateLink),
-					() => Assert.Equal(existingProject.LocalAuthorityInformationTemplateSectionComplete, getProject.LocalAuthorityInformationTemplateSectionComplete),
-					() => Assert.Equal(existingProject.RecommendationForProject, getProject.RecommendationForProject),
-					() => Assert.Equal(existingProject.AcademyOrderRequired, getProject.AcademyOrderRequired),
-					() => Assert.Equal(existingProject.SchoolAndTrustInformationSectionComplete, getProject.SchoolAndTrustInformationSectionComplete),
-					() => Assert.Equal(existingProject.DistanceFromSchoolToTrustHeadquarters, getProject.DistanceFromSchoolToTrustHeadquarters),
-					() => Assert.Equal(existingProject.DistanceFromSchoolToTrustHeadquarters, getProject.DistanceFromSchoolToTrustHeadquarters),
-					() => Assert.Equal(existingProject.DistanceFromSchoolToTrustHeadquartersAdditionalInformation, getProject.DistanceFromSchoolToTrustHeadquartersAdditionalInformation),
-					() => Assert.Equal(existingProject.MemberOfParliamentNameAndParty, getProject.MemberOfParliamentNameAndParty),
-					() => Assert.Equal(existingProject.SchoolOverviewSectionComplete, getProject.SchoolOverviewSectionComplete),
-					() => Assert.Equal(existingProject.RisksAndIssuesSectionComplete, getProject.RisksAndIssuesSectionComplete),
-					() => Assert.Equal(existingProject.Consultation, getProject.Consultation),
-					() => Assert.Equal(existingProject.DiocesanTrust, getProject.DiocesanTrust),
-					() => Assert.Equal(existingProject.FoundationConsent, getProject.FoundationConsent),
-					() => Assert.Equal(existingProject.GoverningBodyResolution, getProject.GoverningBodyResolution),
-					() => Assert.Equal(existingProject.LegalRequirementsSectionComplete, getProject.LegalRequirementsSectionComplete),
-					() => Assert.Equal(existingProject.SchoolPerformanceAdditionalInformation, getProject.SchoolPerformanceAdditionalInformation),
-					() => Assert.Equal(existingProject.CapitalCarryForwardAtEndMarchCurrentYear, getProject.CapitalCarryForwardAtEndMarchCurrentYear),
-					() => Assert.Equal(existingProject.CapitalCarryForwardAtEndMarchNextYear, getProject.CapitalCarryForwardAtEndMarchNextYear),
-					() => Assert.Equal(existingProject.SchoolBudgetInformationAdditionalInformation, getProject.SchoolBudgetInformationAdditionalInformation),
-					() => Assert.Equal(existingProject.SchoolAndTrustInformationSectionComplete, getProject.SchoolAndTrustInformationSectionComplete),
-					() => Assert.Equal(existingProject.SchoolPupilForecastsAdditionalInformation, getProject.SchoolPupilForecastsAdditionalInformation),
-					() => Assert.Equal(existingProject.YearOneProjectedCapacity, getProject.YearOneProjectedCapacity),
-					() => Assert.Equal(existingProject.YearOneProjectedPupilNumbers, getProject.YearOneProjectedPupilNumbers),
-					() => Assert.Equal(existingProject.YearTwoProjectedCapacity, getProject.YearTwoProjectedCapacity),
-					() => Assert.Equal(existingProject.YearTwoProjectedPupilNumbers, getProject.YearTwoProjectedPupilNumbers),
-					() => Assert.Equal(existingProject.YearThreeProjectedCapacity, getProject.YearThreeProjectedCapacity),
-					() => Assert.Equal(existingProject.YearThreeProjectedPupilNumbers, getProject.YearThreeProjectedPupilNumbers),
-					() => Assert.Equal(existingProject.KeyStage2PerformanceAdditionalInformation, getProject.KeyStage2PerformanceAdditionalInformation),
-					() => Assert.Equal(existingProject.KeyStage4PerformanceAdditionalInformation, getProject.KeyStage4PerformanceAdditionalInformation),
-					() => Assert.Equal(existingProject.KeyStage5PerformanceAdditionalInformation, getProject.KeyStage5PerformanceAdditionalInformation),
-					() => Assert.Equal(existingProject.PreviousHeadTeacherBoardDateQuestion, getProject.PreviousHeadTeacherBoardDateQuestion),
-					() => Assert.Equal(existingProject.ConversionSupportGrantAmount, getProject.ConversionSupportGrantAmount),
-					() => Assert.Equal(existingProject.ConversionSupportGrantChangeReason, getProject.ConversionSupportGrantChangeReason),
-					() => Assert.Equal(existingProject.ConversionSupportGrantType, getProject.ConversionSupportGrantType),
-					() => Assert.Equal(existingProject.ConversionSupportGrantEnvironmentalImprovementGrant, getProject.ConversionSupportGrantEnvironmentalImprovementGrant),
-					() => Assert.Equal(existingProject.ConversionSupportGrantAmountChanged, getProject.ConversionSupportGrantAmountChanged),
-					() => Assert.Equal(existingProject.ProjectStatus, getProject.ProjectStatus)
+					() => Assert.Equal(existingProject.Details.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),
+					() => Assert.Equal(existingProject.Details.PartOfPfiScheme, getProject.PartOfPfiScheme),
+					() => Assert.Equal(existingProject.Details.PfiSchemeDetails, getProject.PfiSchemeDetails),
+					() => Assert.Equal(existingProject.Details.Author, getProject.Author),
+					() => Assert.Equal(existingProject.Details.ClearedBy, getProject.ClearedBy),
+					() => Assert.Equal(existingProject.Details.ProposedAcademyOpeningDate, getProject.ProposedAcademyOpeningDate),
+					() => Assert.Equal(existingProject.Details.PublishedAdmissionNumber, getProject.PublishedAdmissionNumber),
+					() => Assert.Equal(existingProject.Details.ViabilityIssues, getProject.ViabilityIssues),
+					() => Assert.Equal(existingProject.Details.FinancialDeficit, getProject.FinancialDeficit),
+					() => Assert.Equal(existingProject.Details.RationaleForProject, getProject.RationaleForProject),
+					() => Assert.Equal(existingProject.Details.RisksAndIssues, getProject.RisksAndIssues),
+					() => Assert.Equal(existingProject.Details.EndOfCurrentFinancialYear, getProject.EndOfCurrentFinancialYear),
+					() => Assert.Equal(existingProject.Details.EndOfNextFinancialYear, getProject.EndOfNextFinancialYear),
+					() => Assert.Equal(existingProject.Details.RevenueCarryForwardAtEndMarchCurrentYear, getProject.RevenueCarryForwardAtEndMarchCurrentYear),
+					() => Assert.Equal(existingProject.Details.ProjectedRevenueBalanceAtEndMarchNextYear, getProject.ProjectedRevenueBalanceAtEndMarchNextYear),
+					() => Assert.Equal(existingProject.Details.RationaleSectionComplete, getProject.RationaleSectionComplete),
+					() => Assert.Equal(existingProject.Details.LocalAuthorityInformationTemplateSentDate, getProject.LocalAuthorityInformationTemplateSentDate),
+					() => Assert.Equal(existingProject.Details.LocalAuthorityInformationTemplateReturnedDate, getProject.LocalAuthorityInformationTemplateReturnedDate),
+					() => Assert.Equal(existingProject.Details.LocalAuthorityInformationTemplateComments, getProject.LocalAuthorityInformationTemplateComments),
+					() => Assert.Equal(existingProject.Details.LocalAuthorityInformationTemplateLink, getProject.LocalAuthorityInformationTemplateLink),
+					() => Assert.Equal(existingProject.Details.LocalAuthorityInformationTemplateSectionComplete, getProject.LocalAuthorityInformationTemplateSectionComplete),
+					() => Assert.Equal(existingProject.Details.RecommendationForProject, getProject.RecommendationForProject),
+					() => Assert.Equal(existingProject.Details.AcademyOrderRequired, getProject.AcademyOrderRequired),
+					() => Assert.Equal(existingProject.Details.SchoolAndTrustInformationSectionComplete, getProject.SchoolAndTrustInformationSectionComplete),
+					() => Assert.Equal(existingProject.Details.DistanceFromSchoolToTrustHeadquarters, getProject.DistanceFromSchoolToTrustHeadquarters),
+					() => Assert.Equal(existingProject.Details.DistanceFromSchoolToTrustHeadquarters, getProject.DistanceFromSchoolToTrustHeadquarters),
+					() => Assert.Equal(existingProject.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation, getProject.DistanceFromSchoolToTrustHeadquartersAdditionalInformation),
+					() => Assert.Equal(existingProject.Details.MemberOfParliamentNameAndParty, getProject.MemberOfParliamentNameAndParty),
+					() => Assert.Equal(existingProject.Details.SchoolOverviewSectionComplete, getProject.SchoolOverviewSectionComplete),
+					() => Assert.Equal(existingProject.Details.RisksAndIssuesSectionComplete, getProject.RisksAndIssuesSectionComplete),
+					() => Assert.Equal(existingProject.Details.Consultation, getProject.Consultation),
+					() => Assert.Equal(existingProject.Details.DiocesanTrust, getProject.DiocesanTrust),
+					() => Assert.Equal(existingProject.Details.FoundationConsent, getProject.FoundationConsent),
+					() => Assert.Equal(existingProject.Details.GoverningBodyResolution, getProject.GoverningBodyResolution),
+					() => Assert.Equal(existingProject.Details.LegalRequirementsSectionComplete, getProject.LegalRequirementsSectionComplete),
+					() => Assert.Equal(existingProject.Details.SchoolPerformanceAdditionalInformation, getProject.SchoolPerformanceAdditionalInformation),
+					() => Assert.Equal(existingProject.Details.CapitalCarryForwardAtEndMarchCurrentYear, getProject.CapitalCarryForwardAtEndMarchCurrentYear),
+					() => Assert.Equal(existingProject.Details.CapitalCarryForwardAtEndMarchNextYear, getProject.CapitalCarryForwardAtEndMarchNextYear),
+					() => Assert.Equal(existingProject.Details.SchoolBudgetInformationAdditionalInformation, getProject.SchoolBudgetInformationAdditionalInformation),
+					() => Assert.Equal(existingProject.Details.SchoolAndTrustInformationSectionComplete, getProject.SchoolAndTrustInformationSectionComplete),
+					() => Assert.Equal(existingProject.Details.SchoolPupilForecastsAdditionalInformation, getProject.SchoolPupilForecastsAdditionalInformation),
+					() => Assert.Equal(existingProject.Details.YearOneProjectedCapacity, getProject.YearOneProjectedCapacity),
+					() => Assert.Equal(existingProject.Details.YearOneProjectedPupilNumbers, getProject.YearOneProjectedPupilNumbers),
+					() => Assert.Equal(existingProject.Details.YearTwoProjectedCapacity, getProject.YearTwoProjectedCapacity),
+					() => Assert.Equal(existingProject.Details.YearTwoProjectedPupilNumbers, getProject.YearTwoProjectedPupilNumbers),
+					() => Assert.Equal(existingProject.Details.YearThreeProjectedCapacity, getProject.YearThreeProjectedCapacity),
+					() => Assert.Equal(existingProject.Details.YearThreeProjectedPupilNumbers, getProject.YearThreeProjectedPupilNumbers),
+					() => Assert.Equal(existingProject.Details.KeyStage2PerformanceAdditionalInformation, getProject.KeyStage2PerformanceAdditionalInformation),
+					() => Assert.Equal(existingProject.Details.KeyStage4PerformanceAdditionalInformation, getProject.KeyStage4PerformanceAdditionalInformation),
+					() => Assert.Equal(existingProject.Details.KeyStage5PerformanceAdditionalInformation, getProject.KeyStage5PerformanceAdditionalInformation),
+					() => Assert.Equal(existingProject.Details.PreviousHeadTeacherBoardDateQuestion, getProject.PreviousHeadTeacherBoardDateQuestion),
+					() => Assert.Equal(existingProject.Details.ConversionSupportGrantAmount, getProject.ConversionSupportGrantAmount),
+					() => Assert.Equal(existingProject.Details.ConversionSupportGrantChangeReason, getProject.ConversionSupportGrantChangeReason),
+					() => Assert.Equal(existingProject.Details.ConversionSupportGrantType, getProject.ConversionSupportGrantType),
+					() => Assert.Equal(existingProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant, getProject.ConversionSupportGrantEnvironmentalImprovementGrant),
+					() => Assert.Equal(existingProject.Details.ConversionSupportGrantAmountChanged, getProject.ConversionSupportGrantAmountChanged),
+					() => Assert.Equal(existingProject.Details.ProjectStatus, getProject.ProjectStatus)
 		);
 	}
 }

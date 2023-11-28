@@ -1,28 +1,37 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
-public class Project : IProject
+public class Project : Entity, IProject, IAggregateRoot
 {
+	protected Project() { }
+
 	private Project(ProjectDetails projectDetails)
 	{
 		Details = projectDetails;
+
 	}
+
+	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
+	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
+
+	private readonly List<ProjectNote> _notes = new ();
 
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
 	/// </summary>
-	public Project(int id, ProjectDetails projectDetails)
+	public Project(int id, ProjectDetails projectDetails, DateTime? createdOn = null)
 	{
 		Id = id;
 		Details = projectDetails;
+		CreatedOn = createdOn ?? DateTime.Now;
 	}
-
-	public int Id { get; }
 
 	public ProjectDetails Details { get; private set; }
 

@@ -7,6 +7,9 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -32,8 +35,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; // done
 	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
 
-	public DbSet<ProjectState> Projects { get; set; } = null!;
-	public DbSet<ProjectNoteState> ProjectNotes { get; set; } = null!;
+	public DbSet<Project> Projects { get; set; } = null!;
+	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
@@ -128,9 +131,10 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<TrustKeyPerson>(ConfigureTrustKeyPerson);
 		modelBuilder.Entity<TrustKeyPersonRole>(ConfigureTrustKeyPersonRole);
 
-		modelBuilder.Entity<ProjectState>(ConfigureProject);
-		modelBuilder.Entity<ProjectNoteState>(ConfigureProjectNotes);
-		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
+		modelBuilder.Entity<Project>(ConfigureProject);
+		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
+
+		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);	
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 
@@ -183,29 +187,129 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		transferringAcademiesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
-	private static void ConfigureProject(EntityTypeBuilder<ProjectState> projectConfiguration)
+	private static void ConfigureProject(EntityTypeBuilder<Project> projectConfiguration)
 	{
 		projectConfiguration.ToTable("Project", DEFAULT_SCHEMA);
+		projectConfiguration.HasKey(x => x.Id);
+		projectConfiguration.Property(d => d.CreatedOn).HasColumnName("CreatedOn");
+
+		projectConfiguration.OwnsOne(x => x.Details, pd =>
+		{
+			pd.Property(d => d.ViabilityIssues).HasColumnName("ViabilityIssues");
+			pd.Property(d => d.PreviousHeadTeacherBoardDateQuestion).HasColumnName("PreviousHeadTeacherBoardDateQuestion");
+			pd.Property(d => d.PartOfPfiScheme).HasColumnName("PartOfPfiScheme");
+			pd.Property(d => d.LocalAuthorityInformationTemplateSectionComplete).HasColumnName("LocalAuthorityInformationTemplateSectionComplete");
+
+			pd.Property(d => d.AgeRange).HasColumnName("AgeRange");
+		    pd.Property(d => d.RisksAndIssuesSectionComplete).HasColumnName("RisksAndIssuesSectionComplete");
+		    pd.Property(d => d.RisksAndIssues).HasColumnName("RisksAndIssues");
+		    pd.Property(d => d.RationaleSectionComplete).HasColumnName("RationaleSectionComplete");
+		    pd.Property(d => d.RationaleForTrust).HasColumnName("RationaleForTrust");
+		    pd.Property(d => d.RationaleForProject).HasColumnName("RationaleForProject");
+		    pd.Property(d => d.SchoolPerformanceAdditionalInformation).HasColumnName("SchoolPerformanceAdditionalInformation");
+		    pd.Property(d => d.SchoolOverviewSectionComplete).HasColumnName("SchoolOverviewSectionComplete");
+		    pd.Property(d => d.MemberOfParliamentNameAndParty).HasColumnName("MemberOfParliamentNameAndParty");
+		    pd.Property(d => d.DistanceFromSchoolToTrustHeadquartersAdditionalInformation).HasColumnName("DistanceFromSchoolToTrustHeadquartersAdditionalInformation");
+		    pd.Property(d => d.DistanceFromSchoolToTrustHeadquarters).HasColumnName("DistanceFromSchoolToTrustHeadquarters");
+		    pd.Property(d => d.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust).HasColumnName("PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust");
+		    pd.Property(d => d.DiocesanTrust).HasColumnName("DiocesanTrust");
+		    pd.Property(d => d.FinancialDeficit).HasColumnName("FinancialDeficit");
+		    pd.Property(d => d.PfiSchemeDetails).HasColumnName("PfiSchemeDetails");
+		    pd.Property(d => d.PercentageFreeSchoolMeals).HasColumnName("PercentageFreeSchoolMeals");
+		    pd.Property(d => d.PublishedAdmissionNumber).HasColumnName("PublishedAdmissionNumber");
+		    pd.Property(d => d.Capacity).HasColumnName("Capacity");
+		    pd.Property(d => d.GoverningBodyResolution).HasColumnName("GoverningBodyResolution").HasConversion<string>(); ;
+		    pd.Property(d => d.Consultation).HasColumnName("Consultation").HasConversion<string>();
+		    pd.Property(d => d.DiocesanConsent).HasColumnName("DiocesanConsent").HasConversion<string>(); ;
+		    pd.Property(d => d.FoundationConsent).HasColumnName("FoundationConsent").HasConversion<string>(); ;
+			pd.OwnsOne(a => a.AssignedUser, a =>
+			{
+				a.Property(p => p.Id).HasColumnName("AssignedUserId");
+				a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
+				a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+			});
+			pd.Property(d => d.KeyStage5PerformanceAdditionalInformation).HasColumnName("KeyStage5PerformanceAdditionalInformation");
+		    pd.Property(d => d.KeyStage4PerformanceAdditionalInformation).HasColumnName("KeyStage4PerformanceAdditionalInformation");
+		    pd.Property(d => d.KeyStage2PerformanceAdditionalInformation).HasColumnName("KeyStage2PerformanceAdditionalInformation");
+		    pd.Property(d => d.SchoolPupilForecastsAdditionalInformation).HasColumnName("SchoolPupilForecastsAdditionalInformation");
+		    pd.Property(d => d.YearThreeProjectedPupilNumbers).HasColumnName("YearThreeProjectedPupilNumbers");
+		    pd.Property(d => d.YearThreeProjectedCapacity).HasColumnName("YearThreeProjectedCapacity");
+		    pd.Property(d => d.YearTwoProjectedPupilNumbers).HasColumnName("YearTwoProjectedPupilNumbers");
+		    pd.Property(d => d.YearTwoProjectedCapacity).HasColumnName("YearTwoProjectedCapacity");
+		    pd.Property(d => d.ActualPupilNumbers).HasColumnName("ActualPupilNumbers");
+		    pd.Property(d => d.YearOneProjectedPupilNumbers).HasColumnName("YearOneProjectedPupilNumbers");
+		    pd.Property(d => d.SchoolBudgetInformationSectionComplete).HasColumnName("SchoolBudgetInformationSectionComplete");
+		    pd.Property(d => d.SchoolBudgetInformationAdditionalInformation).HasColumnName("SchoolBudgetInformationAdditionalInformation");
+		    pd.Property(d => d.CapitalCarryForwardAtEndMarchNextYear).HasColumnName("CapitalCarryForwardAtEndMarchNextYear");
+		    pd.Property(d => d.CapitalCarryForwardAtEndMarchCurrentYear).HasColumnName("CapitalCarryForwardAtEndMarchCurrentYear");
+		    pd.Property(d => d.ProjectedRevenueBalanceAtEndMarchNextYear).HasColumnName("ProjectedRevenueBalanceAtEndMarchNextYear");
+		    pd.Property(d => d.RevenueCarryForwardAtEndMarchCurrentYear).HasColumnName("RevenueCarryForwardAtEndMarchCurrentYear");
+		    pd.Property(d => d.EndOfNextFinancialYear).HasColumnName("EndOfNextFinancialYear");
+		    pd.Property(d => d.EndOfCurrentFinancialYear).HasColumnName("EndOfCurrentFinancialYear");
+		    pd.Property(d => d.LegalRequirementsSectionComplete).HasColumnName("LegalRequirementsSectionComplete");
+		    pd.Property(d => d.YearOneProjectedCapacity).HasColumnName("YearOneProjectedCapacity");
+		    pd.Property(d => d.SchoolType).HasColumnName("SchoolType");
+		    pd.Property(d => d.SchoolPhase).HasColumnName("SchoolPhase");
+		    pd.Property(d => d.RecommendationForProject).HasColumnName("RecommendationForProject");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateLink).HasColumnName("LocalAuthorityInformationTemplateLink");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateComments).HasColumnName("LocalAuthorityInformationTemplateComments");
+		    pd.Property(d => d.Form7Received).HasColumnName("Form7Received");
+		    pd.Property(d => d.Form7ReceivedDate).HasColumnName("Form7ReceivedDate");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateReturnedDate).HasColumnName("LocalAuthorityInformationTemplateReturnedDate");
+		    pd.Property(d => d.LocalAuthorityInformationTemplateSentDate).HasColumnName("LocalAuthorityInformationTemplateSentDate");
+		    pd.Property(d => d.Author).HasColumnName("Author");
+		    pd.Property(d => d.BaselineDate).HasColumnName("BaselineDate");
+		    pd.Property(d => d.AssignedDate).HasColumnName("AssignedDate");
+		    pd.Property(d => d.ApplicationReceivedDate).HasColumnName("ApplicationReceivedDate");
+		    pd.Property(d => d.ProjectStatus).HasColumnName("ProjectStatus");
+		    pd.Property(d => d.ApplicationReferenceNumber).HasColumnName("ApplicationReferenceNumber");
+		    pd.Property(d => d.LocalAuthority).HasColumnName("LocalAuthority");
+		    pd.Property(d => d.SchoolName).HasColumnName("SchoolName");
+		    pd.Property(d => d.IfdPipelineId).HasColumnName("IfdPipelineId");
+		    pd.Property(d => d.Urn).HasColumnName("Urn");
+		    pd.Property(d => d.HeadTeacherBoardDate).HasColumnName("HeadTeacherBoardDate");
+			pd.Property(d => d.Version).HasColumnName("Version");
+		    pd.Property(d => d.AcademyOrderRequired).HasColumnName("AcademyOrderRequired");
+		    pd.Property(d => d.Region).HasColumnName("Region");
+		    pd.Property(d => d.ConversionSupportGrantAmountChanged).HasColumnName("ConversionSupportGrantAmountChanged");
+		    pd.Property(d => d.ConversionSupportGrantEnvironmentalImprovementGrant).HasColumnName("ConversionSupportGrantEnvironmentalImprovementGrant");
+		    pd.Property(d => d.ConversionSupportGrantType).HasColumnName("ConversionSupportGrantType");
+	     	pd.Property(d => d.ConversionSupportGrantChangeReason).HasColumnName("ConversionSupportGrantChangeReason");
+		    pd.Property(d => d.ConversionSupportGrantAmount).HasColumnName("ConversionSupportGrantAmount");
+		    pd.Property(d => d.SchoolAndTrustInformationSectionComplete).HasColumnName("SchoolAndTrustInformationSectionComplete");
+		    pd.Property(d => d.ProposedAcademyOpeningDate).HasColumnName("ProposedAcademyOpeningDate");
+		    pd.Property(d => d.ClearedBy).HasColumnName("ClearedBy");
+		    pd.Property(d => d.AcademyTypeAndRoute).HasColumnName("AcademyTypeAndRoute");
+		    pd.Property(d => d.SponsorReferenceNumber).HasColumnName("SponsorReferenceNumber");
+		    pd.Property(d => d.NameOfTrust).HasColumnName("NameOfTrust");
+		    pd.Property(d => d.TrustReferenceNumber).HasColumnName("TrustReferenceNumber");
+		    pd.Property(d => d.PreviousHeadTeacherBoardLink).HasColumnName("PreviousHeadTeacherBoardLink");
+		    pd.Property(d => d.PreviousHeadTeacherBoardDate).HasColumnName("PreviousHeadTeacherBoardDate");
+     		pd.Property(d => d.AnnexBFormUrl).HasColumnName("AnnexBFormUrl");
+	    	pd.Property(d => d.AnnexBFormReceived).HasColumnName("AnnexBFormReceived");
+		    pd.Property(d => d.DaoPackSentDate).HasColumnName("DaoPackSentDate");
+	        pd.Property(d => d.SponsorName).HasColumnName("SponsorName");
+			
+		});
 
 		projectConfiguration
-			.HasMany(x => x.Notes)
+			.HasMany(a => a.Notes)
 			.WithOne()
-			.HasForeignKey("ProjectId");
+			.HasForeignKey("ProjectId")
+			.IsRequired();
 
+		var notesNavigation = projectConfiguration.Metadata.FindNavigation(nameof(Project.Notes));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		notesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-		projectConfiguration
-			.Property(e => e.GoverningBodyResolution).HasConversion<string>();
-		projectConfiguration
-			.Property(e => e.Consultation).HasConversion<string>();
-		projectConfiguration
-			.Property(e => e.DiocesanConsent).HasConversion<string>();
-		projectConfiguration
-			.Property(e => e.FoundationConsent).HasConversion<string>();
 	}
 
-	private static void ConfigureProjectNotes(EntityTypeBuilder<ProjectNoteState> projectNoteConfiguration)
+	private static void ConfigureProjectNotes(EntityTypeBuilder<ProjectNote> projectNoteConfiguration)
 	{
 		projectNoteConfiguration.ToTable("ProjectNotes", DEFAULT_SCHEMA);
+		projectNoteConfiguration.HasKey(a => a.Id);
+		//projectNoteConfiguration.Property<int?>("ProjectId").IsRequired(false);
 	}
 
 	private static void ConfigureConversionAdvisoryBoardDecision(EntityTypeBuilder<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionConfiguration)

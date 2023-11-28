@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using FluentAssertions;
 using Xunit;
@@ -21,7 +22,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public CreateSponsoredProjectCommandTests()
 		{
 			_fixture = new Fixture();
-			ProjectState projectState = _fixture.Create<ProjectState>();
+			Project projectState = _fixture.Create<Project>();
 
 			var testProjectContext = new TestProjectContext();
 			_context = testProjectContext.CreateContext();
@@ -44,7 +45,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			await command.Execute(_newProject);
 
-			_context.Projects.Count(x => x.SchoolName == _newProject!.School!.Name).Should().Be(1);
+			_context.Projects.Count(x => x.Details.SchoolName == _newProject!.School!.Name).Should().Be(1);
 		}
 
 		[Fact]

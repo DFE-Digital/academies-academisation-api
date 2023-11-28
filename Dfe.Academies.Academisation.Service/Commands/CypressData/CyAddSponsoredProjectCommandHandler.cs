@@ -1,6 +1,8 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +36,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 
 			// Find the project
 			var existingProject = await DbContext.Projects
-				.FirstOrDefaultAsync(p => p.SchoolName == projectName, cancellationToken);
+				.FirstOrDefaultAsync(p => p.Details.SchoolName == projectName, cancellationToken);
 
 			// If the project exists, remove it
 			if (existingProject != null)
@@ -43,8 +45,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			}
 
 			// Create a new project
-			var newProject = new ProjectState
-			{
+			var projectDetails = new ProjectDetails
+
+			{   
 				SchoolName = projectName,
 				Urn = 139292,
 				ProjectStatus = "Approved with conditions",
@@ -69,10 +72,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				YearOneProjectedPupilNumbers = 104,
 				YearTwoProjectedPupilNumbers = 239,
 				YearThreeProjectedPupilNumbers = 370,
-				CreatedOn = DateTime.Now,
 				Region = "West Midlands",
-				LocalAuthority = "Coventry"
+				LocalAuthority = "Coventry" 
+				
+				
 			};
+
+			var newProject = new Project(1, projectDetails);
 
 			// Add the new project to the Projects DbSet
 			DbContext.Projects.Add(newProject);

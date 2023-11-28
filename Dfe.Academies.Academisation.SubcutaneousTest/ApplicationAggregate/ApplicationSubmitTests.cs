@@ -24,6 +24,7 @@ using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Application;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
@@ -46,7 +47,6 @@ public class ApplicationSubmitTests
 	private readonly IApplicationSubmissionService _applicationSubmissionService;
 	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly ITrustQueryService _trustQueryService;
-	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 	private readonly IApplicationRepository _repo;
@@ -63,7 +63,6 @@ public class ApplicationSubmitTests
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
-		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>();
 
@@ -149,9 +148,8 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new ProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), Mock.Of<ILegacyProjectListGetQuery>(),
-			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
-			Mock.Of<ICreateSponsoredProjectCommand>());
+		var projectController = new ProjectController(
+			Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 		var projectResult = await projectController.Get(1);
 
 		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
@@ -202,9 +200,8 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new ProjectController(new LegacyProjectGetQuery(new ProjectGetDataQuery(_context)), new LegacyProjectListGetQuery(new ProjectListGetDataQuery(_context)),
-			Mock.Of<IProjectGetStatusesQuery>(), Mock.Of<ILegacyProjectUpdateCommand>(), Mock.Of<ILegacyProjectAddNoteCommand>(), Mock.Of<ILegacyProjectDeleteNoteCommand>(),
-			Mock.Of<ICreateSponsoredProjectCommand>());
+		var projectController = new ProjectController(
+			Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
 
 		(_, LegacyApiResponse<LegacyProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);

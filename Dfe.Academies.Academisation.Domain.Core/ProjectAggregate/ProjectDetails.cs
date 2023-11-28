@@ -6,7 +6,7 @@
 /// <remarks>
 ///     The notes associated with the project do not affect equality, while all other properties do.
 /// </remarks>
-public sealed class ProjectDetails : IEquatable<ProjectDetails>
+public class ProjectDetails : IEquatable<ProjectDetails>
 {
 	public int Urn { get; init; }
 	public int? IfdPipelineId { get; init; }
@@ -96,8 +96,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage4PerformanceAdditionalInformation { get; init; }
 	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	public User? AssignedUser { get; init; }
-	public ICollection<ProjectNote> Notes { get; init; } = new List<ProjectNote>();
-	public DateTime CreatedOn { get; set; }
 	
 
 	public bool Equals(ProjectDetails? other)
@@ -331,7 +329,6 @@ public sealed class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(KeyStage4PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AssignedUser);
-		hashCode.Add(CreatedOn);
 		return hashCode.ToHashCode();
 	}
 }

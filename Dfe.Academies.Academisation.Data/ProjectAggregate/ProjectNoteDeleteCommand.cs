@@ -16,7 +16,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 
 		public async Task<CommandResult> Execute(int projectId, ProjectNote note)
 		{
-			ProjectNoteState? matchedNote =
+			ProjectNote? matchedNote =
 				await _context.ProjectNotes
 					.FirstOrDefaultAsync(x => x.ProjectId == projectId &&
 											  x.Subject == note.Subject &&

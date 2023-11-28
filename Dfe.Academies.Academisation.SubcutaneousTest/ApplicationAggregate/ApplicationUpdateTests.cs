@@ -30,7 +30,6 @@ public class ApplicationUpdateTests
 	private readonly Faker _faker = new();
 
 	private readonly IApplicationQueryService _applicationQueryService;
-	private readonly IApplicationListByUserQuery _applicationsListByUserQuery;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly Mock<IMediator> _mediator;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
@@ -46,7 +45,6 @@ public class ApplicationUpdateTests
 		_context = new TestApplicationContext().CreateContext();
 		_repo = new ApplicationRepository(_context, _mapper.Object);
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
-		_applicationsListByUserQuery = new Mock<IApplicationListByUserQuery>().Object;
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>();

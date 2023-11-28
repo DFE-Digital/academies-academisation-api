@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +16,9 @@ public class ProjectUpdateDataCommand : IProjectUpdateDataCommand
 
 	public async Task Execute(IProject project)
 	{
-		var projectState = ProjectState.MapFromDomain(project);
 
-		var projectInDb = await _context.Projects.SingleAsync(p => p.Id == project.Id);
-		projectState.CreatedOn = projectInDb.CreatedOn;
-
-		_context.ReplaceTracked(projectState)
-			.Collection(x => x.Notes!).IsModified = false;
+		_context.Entry(project as Project).State = EntityState.Modified;
+		_context.Update(project as Project);
 
 		await _context.SaveChangesAsync();
 	}

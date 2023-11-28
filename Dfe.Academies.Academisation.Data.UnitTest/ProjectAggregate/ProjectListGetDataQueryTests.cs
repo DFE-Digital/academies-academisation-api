@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -15,32 +16,41 @@ public class ProjectsListGetDataQueryTests
 {
 	private readonly Fixture _fixture = new();
 
-	private readonly ProjectListGetDataQuery _subject;
+	private readonly ConversionProjectRepository _subject;
 	private readonly AcademisationContext _context;
 
 	public ProjectsListGetDataQueryTests()
 	{
 		_context = new TestProjectContext().CreateContext();
-		_subject = new ProjectListGetDataQuery(_context);
+		_subject = new ConversionProjectRepository(_context, null);
 	}
 
 	[Fact]
 	public async Task ProjectsExists_SearchProjectsByStatus__ReturnsProjects()
 	{
 		// arrange
-		(ProjectDetails projectDetails1, ProjectState projectState1) = CreateTestProject(DateTime.Now);
-		(ProjectDetails projectDetails2, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
-		(_, ProjectState projectState3) = CreateTestProject();
+		(_, Project project1) = CreateTestProject(null);
+		(_, Project project2) = CreateTestProject(null);
+		(_, Project project3) = CreateTestProject();
 
-		_context.Projects.Add(projectState1);
-		_context.Projects.Add(projectState2);
-		_context.Projects.Add(projectState3);
+		var projectDetails1 = _fixture.Build<ProjectDetails>().Create();
+		var projectDetails2 = _fixture.Build<ProjectDetails>().Create();
+
+
+
+		project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now.AddDays(-1));
+		project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-2));
+
+
+		_context.Projects.Add(project1);
+		_context.Projects.Add(project2);
+		_context.Projects.Add(project3);
 
 		await _context.SaveChangesAsync();
 
 		// act
 		var searchStatus =
-			new string[] { projectState1.ProjectStatus!.ToLower(), projectState2.ProjectStatus!.ToLower() };
+			new string[] { project1.Details.ProjectStatus!.ToLower(), project2.Details.ProjectStatus!.ToLower() };
 		var projects = (await _subject.SearchProjects(searchStatus, null, null, 1, 10, null)).Item1.ToList();
 
 		// assert
@@ -50,10 +60,10 @@ public class ProjectsListGetDataQueryTests
 		Assert.Multiple(
 			() => Assert.NotNull(firstProject),
 			() => Assert.Equal(firstProject!.Details, projectDetails1),
-			() => Assert.Equal(projectState1.Id, firstProject!.Id),
+			() => Assert.Equal(project1.Id, firstProject!.Id),
 			() => Assert.NotNull(secondProject),
 			() => Assert.Equal(secondProject!.Details, projectDetails2),
-			() => Assert.Equal(projectState2.Id, secondProject!.Id)
+			() => Assert.Equal(project2.Id, secondProject!.Id)
 		);
 	}
 
@@ -65,9 +75,17 @@ public class ProjectsListGetDataQueryTests
 		string searchTerm = "Bristol";
 		for (int i = 0; i < 6; i++)
 		{
-			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
-			if (i % 2 == 0) projectState.SchoolName = $"{searchTerm} {i}";
-			_context.Projects.Add(projectState);
+			(_, Project project) = CreateTestProject(null);
+			if (i % 2 == 0)
+			{
+				var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.SchoolName,$"{searchTerm} {i}" )
+			.Create();
+
+
+				project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
+			}
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();
@@ -91,9 +109,17 @@ public class ProjectsListGetDataQueryTests
 		string deliveryOfficer = "Dave";
 		for (int i = 0; i < 6; i++)
 		{
-			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
-			if (i % 2 == 0) projectState.AssignedUserFullName = deliveryOfficer;
-			_context.Projects.Add(projectState);
+			(_, Project project) = CreateTestProject();
+
+			User user = new User(Guid.NewGuid(), deliveryOfficer, "dave@dave.com");
+			if (i % 2 == 0) 
+			{
+				var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.AssignedUser, user).Create();
+
+				project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
+			}
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();
@@ -117,9 +143,18 @@ public class ProjectsListGetDataQueryTests
 		string[] deliveryOfficers = new[] { "Dave", "Bob" };
 		for (int i = 0; i < 6; i++)
 		{
-			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
-			if (i < 2) projectState.AssignedUserFullName = deliveryOfficers[i];
-			_context.Projects.Add(projectState);
+			(_, Project project) = CreateTestProject(null);
+			if (i < 2) 
+			{
+
+			User user = new User(Guid.NewGuid(), deliveryOfficers[i], "dave@dave.com");
+			
+				var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.AssignedUser, user).Create();
+
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));	
+			}
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();
@@ -142,9 +177,16 @@ public class ProjectsListGetDataQueryTests
 		string[] regions = { "east", "west"};
 		for (int i = 0; i < 6; i++)
 		{
-			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
-			if (i < 2) projectState.Region = regions[i];
-			_context.Projects.Add(projectState);
+			(_, Project project) = CreateTestProject(null);
+			if (i < 2)
+			{
+				var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.Region, regions[i])
+			.Create();
+
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));	 
+			}
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();
@@ -165,17 +207,28 @@ public class ProjectsListGetDataQueryTests
 	{
 		// arrange
 		var ( deliveryOfficer, status, title, urn ) = ( "Dave", "active", "school", 1234 );
+
+		User user = new User(Guid.NewGuid(), deliveryOfficer,"dave@dave.com");
+
 		for (int i = 0; i < 3; i++)
 		{
-			(_, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject(null);
+
+
+
 			if (i == 0)
 			{
-				projectState.AssignedUserFullName = deliveryOfficer;
-				projectState.ProjectStatus = status;
-				projectState.SchoolName = title;
-				projectState.Urn = urn;
+				var projectDetails = _fixture.Build<ProjectDetails>()
+			.With(p => p.AssignedUser, user)
+			.With(p => p.ProjectStatus, status)
+			.With(p => p.SchoolName, title)
+			.With(p => p.Urn, urn)
+			.Create();
+
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
+
 			}
-			_context.Projects.Add(projectState);
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();
@@ -187,7 +240,7 @@ public class ProjectsListGetDataQueryTests
 		// assert		
 		Assert.Multiple(
 			() => Assert.Single(projects),
-			() => Assert.Equal(projects[0].Details.AssignedUser.FullName, deliveryOfficer),
+			() => Assert.Equal(projects[0].Details.AssignedUser, user),
 			() => Assert.Equal(projects[0].Details.ProjectStatus, status),
 			() => Assert.Equal(projects[0].Details.SchoolName, title),
 			() => Assert.Equal(projects[0].Details.Urn, urn)
@@ -198,17 +251,32 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchUnassignedProjects__ReturnsProjects()
 	{
 		// arrange
+		User user = new User(Guid.NewGuid(), "Dave", "dave@dave.com");
+		User emptyUser1 = new User(Guid.NewGuid(),"", "dave@dave1.com");
+		User emptyUser2 = new User(Guid.NewGuid(), "", "dave@dave2.com");
 		string[] deliveryOfficers = new[] { "Dave", "Not assigned" };
 		
-		(_, ProjectState projectState1) = CreateTestProject(DateTime.Now);
-		projectState1.AssignedUserFullName = "Dave";
-		(_, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
-		projectState2.AssignedUserFullName = "";
-		(_, ProjectState projectState3) = CreateTestProject(DateTime.Now.AddDays(-2));
-		projectState3.AssignedUserFullName = null;
-		(_, ProjectState projectState4) = CreateTestProject(DateTime.Now.AddDays(-3));
+		(_, Project project1) = CreateTestProject(null);
+		var projectDetails1 = _fixture.Build<ProjectDetails>()
+		.With(p => p.AssignedUser, user).Create();
+			project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now);
 		
-		await _context.Projects.AddRangeAsync(projectState1, projectState2, projectState3, projectState4);	
+		
+		(_, Project project2) = CreateTestProject(null);
+		     var projectDetails2 = _fixture.Build<ProjectDetails>()
+			.With(p => p.AssignedUser,emptyUser1).Create();
+		project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-1));
+
+		(_, Project project3) = CreateTestProject(null);
+	        var projectDetails3 = _fixture.Build<ProjectDetails>()
+			.With(p => p.AssignedUser, emptyUser2).Create();
+		project3 = AddProjectDetailToProject(projectDetails3, DateTime.Now.AddDays(-2));
+
+		(_, Project project4) = CreateTestProject(null);
+		var projectDetails4 = _fixture.Build<ProjectDetails>().Create();
+		project4 = AddProjectDetailToProject(projectDetails4, DateTime.Now.AddDays(-3));
+
+		await _context.Projects.AddRangeAsync(project1, project2, project3, project4);	
 		await _context.SaveChangesAsync();
 
 		// act		
@@ -218,8 +286,8 @@ public class ProjectsListGetDataQueryTests
 		Assert.Multiple(
 			() => Assert.Equal(3, projects.Count),
 			() => Assert.Equal(deliveryOfficers[0], projects[0].Details.AssignedUser!.FullName),
-			() => Assert.Equal(string.Empty, projects[1].Details.AssignedUser?.FullName),
-			() => Assert.Equal(string.Empty, projects[2].Details.AssignedUser?.FullName)
+			() => Assert.Equal("", projects[1].Details.AssignedUser?.FullName),
+			() => Assert.Equal("", projects[2].Details.AssignedUser?.FullName)
 		);
 	}
 
@@ -227,18 +295,18 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchProjectsByUrn__ReturnsProjects()
 	{
 		// arrange
-		(_, ProjectState projectState1) = CreateTestProject(DateTime.Now);
-		(ProjectDetails projectDetails2, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
-		(_, ProjectState projectState3) = CreateTestProject();
+		(_, Project project1) = CreateTestProject(DateTime.Now);
+		(ProjectDetails projectDetails2, Project project2) = CreateTestProject(DateTime.Now.AddDays(-1));
+		(_, Project project3) = CreateTestProject();
 
-		_context.Projects.Add(projectState1);
-		_context.Projects.Add(projectState2);
-		_context.Projects.Add(projectState3);
+		_context.Projects.Add(project1);
+		_context.Projects.Add(project2);
+		_context.Projects.Add(project3);
 
 		await _context.SaveChangesAsync();
 
 		// act
-		int searchUrn = projectState2.Urn;
+		int searchUrn = project2.Details.Urn;
 		var projects = (await _subject.SearchProjects(null, null, null, 1, 10, searchUrn)).Item1.ToList();
 
 		// assert
@@ -247,7 +315,7 @@ public class ProjectsListGetDataQueryTests
 		Assert.Multiple(
 			() => Assert.NotNull(firstProject),
 			() => Assert.Equal(firstProject!.Details, projectDetails2),
-			() => Assert.Equal(projectState2.Id, firstProject!.Id)
+			() => Assert.Equal(project2.Id, firstProject!.Id)
 		);
 	}
 
@@ -257,8 +325,8 @@ public class ProjectsListGetDataQueryTests
 		// arrange
 		for (int i = 0; i < 6; i++)
 		{
-			(ProjectDetails projectDetails, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
-			_context.Projects.Add(projectState);
+			(ProjectDetails projectDetails, Project project) = CreateTestProject(DateTime.Now.AddDays(-i));
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();
@@ -281,13 +349,13 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchDoesntMatch__ReturnsEmpty()
 	{
 		// arrange
-		(_, ProjectState projectState1) = CreateTestProject(DateTime.Now);
-		(_, ProjectState projectState2) = CreateTestProject(DateTime.Now.AddDays(-1));
-		(_, ProjectState projectState3) = CreateTestProject();
+		(_, Project project1) = CreateTestProject(DateTime.Now);
+		(_, Project project2) = CreateTestProject(DateTime.Now.AddDays(-1));
+		(_, Project project3) = CreateTestProject();
 
-		_context.Projects.Add(projectState1);
-		_context.Projects.Add(projectState2);
-		_context.Projects.Add(projectState3);
+		_context.Projects.Add(project1);
+		_context.Projects.Add(project2);
+		_context.Projects.Add(project3);
 
 		await _context.SaveChangesAsync();
 
@@ -306,9 +374,14 @@ public class ProjectsListGetDataQueryTests
 		List<ProjectDetails> createdProjects = new List<ProjectDetails>();
 		for (int i = 0; i < 6; i++)
 		{
-			(ProjectDetails projectDetails, ProjectState projectState) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject(null);
+
+			var projectDetails = _fixture.Build<ProjectDetails>().Create();
+
 			createdProjects.Add(projectDetails);
-			_context.Projects.Add(projectState);
+
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
+			_context.Projects.Add(project);
 		}
 
 		await _context.SaveChangesAsync();
@@ -329,15 +402,23 @@ public class ProjectsListGetDataQueryTests
 		);
 	}
 
-	private (ProjectDetails, ProjectState) CreateTestProject(DateTime? applicationDate = null)
+	private (ProjectDetails, Project) CreateTestProject(DateTime? applicationDate = null, DateTime? createdOnDate = null)
 	{
 		applicationDate ??= DateTime.Now;
 
 		var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.ApplicationReceivedDate, applicationDate).Create();
-		var newProject = new Project(0, projectDetails);
-		var mappedProject = ProjectState.MapFromDomain(newProject);
+			.With(p => p.ApplicationReceivedDate, applicationDate)
+			.Create();
+		var newProject = new Project(0, projectDetails, createdOnDate);
 
-		return (projectDetails, mappedProject);
+		return (projectDetails, newProject);
+	}
+
+	private Project AddProjectDetailToProject(ProjectDetails projectDetails, DateTime createdOnDate)
+	{
+	    var newProject = new Project(0, projectDetails, createdOnDate);
+		return newProject;
 	}
 }
+
+
