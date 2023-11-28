@@ -20,14 +20,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 				return new NotFoundCommandResult();
 			}
 
-			_context.ProjectNotes.Add(new ProjectNoteState
-			{
-				Author = note.Author,
-				Date = note.Date,
-				Subject = note.Subject,
-				Note = note.Note,
-				ProjectId = projectId
-			});
+			_context.ProjectNotes.Add(new ProjectNote (note.Subject, note.Note, note.Author,note.Date, projectId));
 
 			await _context.SaveChangesAsync();
 

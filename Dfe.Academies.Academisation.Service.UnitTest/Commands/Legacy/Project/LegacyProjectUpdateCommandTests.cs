@@ -1,10 +1,11 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Moq;
 using Xunit;
 
@@ -15,13 +16,13 @@ public class LegacyProjectUpdateCommandTests
 	private readonly Fixture _fixture = new();
 	private class UnhandledCommandResult : CommandResult { }
 
-	private readonly Mock<IProjectGetDataQuery> _getDataQueryMock = new();
+	private readonly Mock<IConversionProjectRepository> _getDataQueryMock = new();
 	private readonly Mock<IProjectUpdateDataCommand> _updateProjectCommandMock = new();
-	private readonly LegacyProjectUpdateCommand _subject;
+	private readonly ConversionProjectUpdateCommandHandler _subject;
 
 	public LegacyProjectUpdateCommandTests()
 	{
-		_subject = new LegacyProjectUpdateCommand(_getDataQueryMock.Object, _updateProjectCommandMock.Object);
+		_subject = new ConversionProjectUpdateCommandHandler(_getDataQueryMock.Object, _updateProjectCommandMock.Object);
 	}
 
 	[Fact]
@@ -29,10 +30,10 @@ public class LegacyProjectUpdateCommandTests
 	{
 		// Arrange
 		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
-		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync((IProject?)null);
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync((IProject?)null);
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
+		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
 
 		// Assert
 		Assert.IsType<NotFoundCommandResult>(result);
@@ -48,10 +49,10 @@ public class LegacyProjectUpdateCommandTests
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
 		project.Setup(m => m.Update(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
 
-		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);		
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync(project.Object);		
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
+		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
 
 		// Assert
 		Assert.Equal(validationErrorResult, result);
@@ -68,10 +69,10 @@ public class LegacyProjectUpdateCommandTests
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
 		project.Setup(m => m.Update(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
 
-		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id)).ReturnsAsync(project.Object);
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync(project.Object);
 
 		// Act & Assert
-		await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Execute(projectServiceModel.Id, projectServiceModel));		
+		await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default));		
 	}
 
 	[Fact]
@@ -81,11 +82,11 @@ public class LegacyProjectUpdateCommandTests
 		Mock<IProject> projectMock = new();
 		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
 		projectMock.Setup(x => x.Update(It.IsAny<ProjectDetails>())).Returns(new CommandSuccessResult());
-		_getDataQueryMock.Setup(x => x.Execute(projectServiceModel.Id))
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id))
 			.ReturnsAsync(projectMock.Object);
 
 		// Act
-		var result = await _subject.Execute(projectServiceModel.Id, projectServiceModel);
+		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
 
 		// Assert
 		Assert.Multiple(

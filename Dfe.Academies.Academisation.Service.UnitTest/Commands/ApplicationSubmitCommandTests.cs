@@ -11,6 +11,7 @@ using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.Application;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Moq;
 using Xunit;
 

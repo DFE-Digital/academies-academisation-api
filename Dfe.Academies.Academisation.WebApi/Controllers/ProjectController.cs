@@ -4,8 +4,9 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.WebApi.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -15,29 +16,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class ProjectController : ControllerBase
 	{
-		private readonly ILegacyProjectAddNoteCommand _legacyProjectAddNoteCommand;
-		private readonly ILegacyProjectDeleteNoteCommand _legacyProjectDeleteNoteCommand;
-		private readonly ILegacyProjectGetQuery _legacyProjectGetQuery;
-		private readonly ILegacyProjectListGetQuery _legacyProjectListGetQuery;
-		private readonly ILegacyProjectUpdateCommand _legacyProjectUpdateCommand;
-		private readonly IProjectGetStatusesQuery _projectGetStatusesQuery;
 		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
 
-		public ProjectController(ILegacyProjectGetQuery legacyProjectGetQuery,
-									   ILegacyProjectListGetQuery legacyProjectListGetQuery,
-									   IProjectGetStatusesQuery projectGetStatusesQuery,
-									   ILegacyProjectUpdateCommand legacyProjectUpdateCommand,
-									   ILegacyProjectAddNoteCommand legacyProjectAddNoteCommand,
-									   ILegacyProjectDeleteNoteCommand legacyProjectDeleteNoteCommand, 
-									   ICreateSponsoredProjectCommand createSponsoredProjectCommand)
+		private readonly IConversionProjectQueryService _conversionProjectQueryService;
+		private readonly IMediator _mediator;
+
+		public ProjectController(
+
+									   ICreateSponsoredProjectCommand createSponsoredProjectCommand,
+									   
+									   IConversionProjectQueryService conversionProjectQueryService,
+									   IMediator mediator)
 		{
-			_legacyProjectGetQuery = legacyProjectGetQuery;
-			_legacyProjectListGetQuery = legacyProjectListGetQuery;
-			_projectGetStatusesQuery = projectGetStatusesQuery;
-			_legacyProjectUpdateCommand = legacyProjectUpdateCommand;
-			_legacyProjectAddNoteCommand = legacyProjectAddNoteCommand;
-			_legacyProjectDeleteNoteCommand = legacyProjectDeleteNoteCommand;
 			_createSponsoredProjectCommand = createSponsoredProjectCommand;
+
+			_conversionProjectQueryService = conversionProjectQueryService;
+			_mediator = mediator;
 		}
 
 		/// <summary>
@@ -59,7 +53,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			[FromQuery] int? urn = null)
 		{
 			LegacyApiResponse<LegacyProjectServiceModel>? result =
-				await _legacyProjectListGetQuery.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
+				await _conversionProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn,
 					searchModel.RegionQueryString, searchModel.ApplicationReferences);
 			return result is null ? NotFound() : Ok(result);
@@ -76,7 +70,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<ActionResult<ProjectFilterParameters>> GetFilterParameters()
 		{
-			ProjectFilterParameters result = await _projectGetStatusesQuery.Execute();
+			ProjectFilterParameters result = await _conversionProjectQueryService.GetFilterParameters();
 			return Ok(result);
 		}
 
@@ -92,7 +86,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
 		{
-			LegacyProjectServiceModel? result = await _legacyProjectGetQuery.Execute(id);
+			LegacyProjectServiceModel? result = await _conversionProjectQueryService.GetConversionProject(id);
 			return result is null ? NotFound() : Ok(result);
 		}
 
@@ -114,11 +108,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			int id,
 			LegacyProjectServiceModel projectUpdate)
 		{
-			CommandResult result = await _legacyProjectUpdateCommand.Execute(id, projectUpdate);
+			CommandResult result = await _mediator.Send(new ConversionProjectUpdateCommand(id, projectUpdate));
 
 			return result switch
 			{
-				CommandSuccessResult => Ok(await _legacyProjectGetQuery.Execute(id)),
+				CommandSuccessResult => Ok(await _conversionProjectQueryService.GetConversionProject(id)),
 				NotFoundCommandResult => NotFound(),
 				CommandValidationErrorResult validationErrorResult =>
 					BadRequest(validationErrorResult.ValidationErrors),
@@ -139,8 +133,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		public async Task<ActionResult> AddNote(int id, AddNoteRequest note)
 		{
-			CommandResult result = await _legacyProjectAddNoteCommand.Execute(note.ToAddNoteModel(id));
-
+			CommandResult result = await _mediator.Send(note.ToAddNoteModel(id));
 			return result switch
 			{
 				CommandSuccessResult => Created(new Uri($"/legacy/project/{id}", UriKind.Relative), null),
@@ -174,7 +167,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		///     Deletes the provided note from the project with the specified ID
 		/// </summary>
 		/// <param name="id">The ID for the project from which the note should be deleted</param>
-		/// <param name="note">Project note data</param>
+		/// <param name="command">Project note data</param>
 		/// <response code="404">
 		///     Either the project with the specified ID is not found, or the project does not contain the
 		///     provided note
@@ -185,10 +178,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> DeleteNote(int id, ProjectNoteServiceModel note)
+		public async Task<ActionResult> DeleteNote(int id, ConversionProjectDeleteNoteCommand command)
 		{
-			CommandResult result = await _legacyProjectDeleteNoteCommand.Execute(id, note);
+			command.ProjectId = id;
 
+			CommandResult result = await _mediator.Send(command);
 			return result switch
 			{
 				CommandSuccessResult => NoContent(),

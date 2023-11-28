@@ -1,6 +1,9 @@
-﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
+﻿using Dfe.Academies.Academisation.Core;
+using MediatR;
+
+namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 {
-	public class ProjectNoteServiceModel
+	public class ConversionProjectDeleteNote
 	{
 		public string? Subject { get; set; } = null;
 		public string? Note { get; set; } = null;

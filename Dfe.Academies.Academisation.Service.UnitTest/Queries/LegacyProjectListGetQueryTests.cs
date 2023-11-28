@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
@@ -11,8 +12,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries;
 
 public class LegacyProjectListGetQueryTests
 {
-	private readonly LegacyProjectListGetQuery _subject;
-	private readonly Mock<IProjectListGetDataQuery> _query = new();
+	private readonly ConversionProjectQueryService _subject;
+	private readonly Mock<IConversionProjectRepository> _query = new();
 	private readonly Fixture _fixture = new();
 	
 	public LegacyProjectListGetQueryTests()

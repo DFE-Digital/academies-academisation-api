@@ -1,6 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using User = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
@@ -13,7 +14,7 @@ internal static class LegacyProjectServiceModelMapper
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
-			CreatedOn = project.Details.CreatedOn,
+			CreatedOn = project.CreatedOn,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,
@@ -125,17 +126,17 @@ internal static class LegacyProjectServiceModelMapper
 				? null
 				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress),
 
-			Notes = project.Details.Notes.ToProjectNoteServiceModels().ToList()
+			Notes = project.Notes?.ToProjectNoteServiceModels().ToList()
 		};
 
 		return serviceModel;
 	}
 
-	private static IEnumerable<ProjectNoteServiceModel> ToProjectNoteServiceModels(this IEnumerable<ProjectNote>? notes)
+	private static IEnumerable<ConversionProjectDeleteNote> ToProjectNoteServiceModels(this IEnumerable<IProjectNote>? notes)
 	{
-		if (notes is null) return Enumerable.Empty<ProjectNoteServiceModel>();
+		if (notes is null) return Enumerable.Empty<ConversionProjectDeleteNote>();
 
-		return notes.Select(note => new ProjectNoteServiceModel
+		return notes.Select(note => new ConversionProjectDeleteNote
 		{
 			Author = note.Author, Note = note.Note, Subject = note.Subject, Date = note.Date
 		});
