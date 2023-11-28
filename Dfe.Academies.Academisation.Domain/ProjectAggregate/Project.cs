@@ -8,7 +8,7 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
-public class Project : IProject, IAggregateRoot
+public class Project : Entity, IProject, IAggregateRoot
 {
 	protected Project() { }
 
@@ -26,13 +26,12 @@ public class Project : IProject, IAggregateRoot
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
 	/// </summary>
-	public Project(int id, ProjectDetails projectDetails)
+	public Project(int id, ProjectDetails projectDetails, DateTime? createdOn = null)
 	{
 		Id = id;
 		Details = projectDetails;
+		CreatedOn = createdOn ?? DateTime.Now;
 	}
-
-	public int Id { get; }
 
 	public ProjectDetails Details { get; private set; }
 

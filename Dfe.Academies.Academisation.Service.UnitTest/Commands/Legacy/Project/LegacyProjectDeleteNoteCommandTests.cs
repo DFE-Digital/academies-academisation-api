@@ -33,6 +33,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 			int projectId = Random.Shared.Next();
 			var note = _fixture.Create<ConversionProjectDeleteNoteCommand>();
 
+			note.ProjectId = projectId;
+
 			var command = System_under_test();
 
 			await command.Handle(note, default);

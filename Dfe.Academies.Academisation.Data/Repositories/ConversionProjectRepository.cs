@@ -33,7 +33,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			var totalProjects = queryable.Count();
 			var projects = await queryable
-				.OrderByDescending(acp => acp.Details.CreatedOn)
+				.OrderByDescending(acp => acp.CreatedOn)
 				.Skip((page - 1) * count)
 				.Take(count).ToListAsync();
 

@@ -8,6 +8,9 @@ public interface IProject
 {
 	public int Id { get; }
 
+	DateTime CreatedOn { get; }
+	DateTime LastModifiedOn { get; }
+
 	public IReadOnlyCollection<IProjectNote> Notes { get; }
 
 	public ProjectDetails Details { get; }

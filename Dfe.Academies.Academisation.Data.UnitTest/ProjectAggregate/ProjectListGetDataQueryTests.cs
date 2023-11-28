@@ -33,15 +33,13 @@ public class ProjectsListGetDataQueryTests
 		(_, Project project2) = CreateTestProject(null);
 		(_, Project project3) = CreateTestProject();
 
-		var projectDetails1 = _fixture.Build<ProjectDetails>()
-		.With(p => p.CreatedOn, DateTime.Now.AddDays(-1)).Create();
-		var projectDetails2 = _fixture.Build<ProjectDetails>()
-		.With(p => p.CreatedOn, DateTime.Now.AddDays(-2)).Create();
+		var projectDetails1 = _fixture.Build<ProjectDetails>().Create();
+		var projectDetails2 = _fixture.Build<ProjectDetails>().Create();
 
 
 
-		project1 = AddProjectDetailToProject(projectDetails1);
-		project2 = AddProjectDetailToProject(projectDetails2);
+		project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now.AddDays(-1));
+		project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-2));
 
 
 		_context.Projects.Add(project1);
@@ -82,11 +80,10 @@ public class ProjectsListGetDataQueryTests
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
 			.With(p => p.SchoolName,$"{searchTerm} {i}" )
-			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
 			.Create();
 
 
-				project = AddProjectDetailToProject(projectDetails);
+				project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
 			}
 			_context.Projects.Add(project);
 		}
@@ -112,7 +109,7 @@ public class ProjectsListGetDataQueryTests
 		string deliveryOfficer = "Dave";
 		for (int i = 0; i < 6; i++)
 		{
-			(_, Project project) = CreateTestProject(DateTime.Now.AddDays(-i));
+			(_, Project project) = CreateTestProject();
 
 			User user = new User(Guid.NewGuid(), deliveryOfficer, "dave@dave.com");
 			if (i % 2 == 0) 
@@ -120,7 +117,7 @@ public class ProjectsListGetDataQueryTests
 				var projectDetails = _fixture.Build<ProjectDetails>()
 			.With(p => p.AssignedUser, user).Create();
 
-				project = AddProjectDetailToProject(projectDetails);
+				project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
 			}
 			_context.Projects.Add(project);
 		}
@@ -153,10 +150,9 @@ public class ProjectsListGetDataQueryTests
 			User user = new User(Guid.NewGuid(), deliveryOfficers[i], "dave@dave.com");
 			
 				var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
 			.With(p => p.AssignedUser, user).Create();
 
-			project = AddProjectDetailToProject(projectDetails);	
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));	
 			}
 			_context.Projects.Add(project);
 		}
@@ -186,10 +182,9 @@ public class ProjectsListGetDataQueryTests
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
 			.With(p => p.Region, regions[i])
-			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
 			.Create();
 
-			project = AddProjectDetailToProject(projectDetails);	 
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));	 
 			}
 			_context.Projects.Add(project);
 		}
@@ -224,14 +219,13 @@ public class ProjectsListGetDataQueryTests
 			if (i == 0)
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i))
 			.With(p => p.AssignedUser, user)
 			.With(p => p.ProjectStatus, status)
 			.With(p => p.SchoolName, title)
 			.With(p => p.Urn, urn)
 			.Create();
 
-			project = AddProjectDetailToProject(projectDetails);
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
 
 			}
 			_context.Projects.Add(project);
@@ -264,27 +258,23 @@ public class ProjectsListGetDataQueryTests
 		
 		(_, Project project1) = CreateTestProject(null);
 		var projectDetails1 = _fixture.Build<ProjectDetails>()
-		.With(p => p.AssignedUser, user)
-		.With(p => p.CreatedOn, DateTime.Now).Create();
-			project1 = AddProjectDetailToProject(projectDetails1);
+		.With(p => p.AssignedUser, user).Create();
+			project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now);
 		
 		
 		(_, Project project2) = CreateTestProject(null);
 		     var projectDetails2 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser,emptyUser1)
-			.With(p => p.CreatedOn, DateTime.Now.AddDays(-1)).Create();
-		project2 = AddProjectDetailToProject(projectDetails2);
+			.With(p => p.AssignedUser,emptyUser1).Create();
+		project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-1));
 
 		(_, Project project3) = CreateTestProject(null);
 	        var projectDetails3 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser, emptyUser2)
-			.With(p => p.CreatedOn, DateTime.Now.AddDays(-2)).Create();
-		project3 = AddProjectDetailToProject(projectDetails3);
+			.With(p => p.AssignedUser, emptyUser2).Create();
+		project3 = AddProjectDetailToProject(projectDetails3, DateTime.Now.AddDays(-2));
 
 		(_, Project project4) = CreateTestProject(null);
-		var projectDetails4 = _fixture.Build<ProjectDetails>()
-		.With(p => p.CreatedOn, DateTime.Now.AddDays(-3)).Create();
-		project4 = AddProjectDetailToProject(projectDetails4);
+		var projectDetails4 = _fixture.Build<ProjectDetails>().Create();
+		project4 = AddProjectDetailToProject(projectDetails4, DateTime.Now.AddDays(-3));
 
 		await _context.Projects.AddRangeAsync(project1, project2, project3, project4);	
 		await _context.SaveChangesAsync();
@@ -386,12 +376,11 @@ public class ProjectsListGetDataQueryTests
 		{
 			(_, Project project) = CreateTestProject(null);
 
-			var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.CreatedOn, DateTime.Now.AddDays(-i)).Create();
+			var projectDetails = _fixture.Build<ProjectDetails>().Create();
 
 			createdProjects.Add(projectDetails);
 
-			project = AddProjectDetailToProject(projectDetails);
+			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
 			_context.Projects.Add(project);
 		}
 
@@ -413,20 +402,21 @@ public class ProjectsListGetDataQueryTests
 		);
 	}
 
-	private (ProjectDetails, Project) CreateTestProject(DateTime? applicationDate = null)
+	private (ProjectDetails, Project) CreateTestProject(DateTime? applicationDate = null, DateTime? createdOnDate = null)
 	{
 		applicationDate ??= DateTime.Now;
 
 		var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.ApplicationReceivedDate, applicationDate).Create();
-		var newProject = new Project(0, projectDetails);
+			.With(p => p.ApplicationReceivedDate, applicationDate)
+			.Create();
+		var newProject = new Project(0, projectDetails, createdOnDate);
 
 		return (projectDetails, newProject);
 	}
 
-	private Project AddProjectDetailToProject(ProjectDetails projectDetails)
+	private Project AddProjectDetailToProject(ProjectDetails projectDetails, DateTime createdOnDate)
 	{
-	    var newProject = new Project(0, projectDetails);
+	    var newProject = new Project(0, projectDetails, createdOnDate);
 		return newProject;
 	}
 }

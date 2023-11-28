@@ -191,9 +191,15 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		projectConfiguration.ToTable("Project", DEFAULT_SCHEMA);
 		projectConfiguration.HasKey(x => x.Id);
+		projectConfiguration.Property(d => d.CreatedOn).HasColumnName("CreatedOn");
 
 		projectConfiguration.OwnsOne(x => x.Details, pd =>
 		{
+			pd.Property(d => d.ViabilityIssues).HasColumnName("ViabilityIssues");
+			pd.Property(d => d.PreviousHeadTeacherBoardDateQuestion).HasColumnName("PreviousHeadTeacherBoardDateQuestion");
+			pd.Property(d => d.PartOfPfiScheme).HasColumnName("PartOfPfiScheme");
+			pd.Property(d => d.LocalAuthorityInformationTemplateSectionComplete).HasColumnName("LocalAuthorityInformationTemplateSectionComplete");
+
 			pd.Property(d => d.AgeRange).HasColumnName("AgeRange");
 		    pd.Property(d => d.RisksAndIssuesSectionComplete).HasColumnName("RisksAndIssuesSectionComplete");
 		    pd.Property(d => d.RisksAndIssues).HasColumnName("RisksAndIssues");
@@ -218,7 +224,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		    pd.Property(d => d.FoundationConsent).HasColumnName("FoundationConsent").HasConversion<string>(); ;
 			pd.OwnsOne(a => a.AssignedUser, a =>
 			{
-				a.Property(p => p.Id).HasColumnName("AssignedId");
+				a.Property(p => p.Id).HasColumnName("AssignedUserId");
 				a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
 				a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
 			});
@@ -243,7 +249,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		    pd.Property(d => d.LegalRequirementsSectionComplete).HasColumnName("LegalRequirementsSectionComplete");
 		    pd.Property(d => d.YearOneProjectedCapacity).HasColumnName("YearOneProjectedCapacity");
 		    pd.Property(d => d.SchoolType).HasColumnName("SchoolType");
-		    pd.Property(d => d.CreatedOn).HasColumnName("CreatedOn");
 		    pd.Property(d => d.SchoolPhase).HasColumnName("SchoolPhase");
 		    pd.Property(d => d.RecommendationForProject).HasColumnName("RecommendationForProject");
 		    pd.Property(d => d.LocalAuthorityInformationTemplateLink).HasColumnName("LocalAuthorityInformationTemplateLink");
@@ -283,8 +288,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
      		pd.Property(d => d.AnnexBFormUrl).HasColumnName("AnnexBFormUrl");
 	    	pd.Property(d => d.AnnexBFormReceived).HasColumnName("AnnexBFormReceived");
 		    pd.Property(d => d.DaoPackSentDate).HasColumnName("DaoPackSentDate");
-	        pd.Property(d => d.SponsorName).HasColumnName("SponsorName");			
-});
+	        pd.Property(d => d.SponsorName).HasColumnName("SponsorName");
+			
+		});
 
 		projectConfiguration
 			.HasMany(a => a.Notes)

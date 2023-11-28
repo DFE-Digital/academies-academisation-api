@@ -137,7 +137,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				YearOneProjectedPupilNumbers = 104,
 				YearTwoProjectedPupilNumbers = 239,
 				YearThreeProjectedPupilNumbers = 370,
-				CreatedOn = DateTime.Now,
 				Region = "West Midlands",
 				LocalAuthority = "Coventry"
 
@@ -174,7 +173,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				YearOneProjectedPupilNumbers = 104,
 				YearTwoProjectedPupilNumbers = 239,
 				YearThreeProjectedPupilNumbers = 370,
-				CreatedOn = DateTime.Now,
 				Region = "West Midlands",
 				LocalAuthority = "Coventry"
 			};

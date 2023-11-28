@@ -14,7 +14,7 @@ internal static class LegacyProjectServiceModelMapper
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
-			CreatedOn = project.Details.CreatedOn,
+			CreatedOn = project.CreatedOn,
 			LocalAuthority = project.Details.LocalAuthority,
 			ApplicationReferenceNumber = project.Details.ApplicationReferenceNumber,
 			ProjectStatus = project.Details.ProjectStatus,

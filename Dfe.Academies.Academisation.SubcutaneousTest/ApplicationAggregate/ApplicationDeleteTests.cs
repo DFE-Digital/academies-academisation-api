@@ -189,8 +189,8 @@ public class ApplicationDeleteTests
 		// Act
 		var deleteResult = await applicationController.DeleteApplication(123);
 
-        //Assert
-        Assert.IsAssignableFrom<NotFoundResult>(deleteResult);	;
+		//Assert
+		Assert.IsAssignableFrom<NotFoundResult>(deleteResult);
 	}
 
 	[Fact]

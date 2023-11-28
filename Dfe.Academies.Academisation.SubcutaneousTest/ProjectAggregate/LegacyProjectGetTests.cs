@@ -49,10 +49,12 @@ public class ProjectGetTests
 		existingProject.Details.Should().BeEquivalentTo(serviceModel, options => options.ComparingByMembers<LegacyProjectServiceModel>()
 		.Excluding(x => x.Notes)
 		.Excluding(x => x.Id)
+		.Excluding(x => x.CreatedOn)
 		);
 
 		existingProject.Id.Should().Be(serviceModel.Id);
 		existingProject.Notes.Should().BeEquivalentTo(serviceModel.Notes);
+		existingProject.CreatedOn.Should().Be(serviceModel.CreatedOn);
 
 	}
 }

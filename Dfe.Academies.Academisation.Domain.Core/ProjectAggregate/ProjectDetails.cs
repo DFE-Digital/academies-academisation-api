@@ -96,7 +96,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage4PerformanceAdditionalInformation { get; init; }
 	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	public User? AssignedUser { get; init; }
-	public DateTime CreatedOn { get; set; }
 	
 
 	public bool Equals(ProjectDetails? other)
@@ -330,7 +329,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(KeyStage4PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AssignedUser);
-		hashCode.Add(CreatedOn);
 		return hashCode.ToHashCode();
 	}
 }
