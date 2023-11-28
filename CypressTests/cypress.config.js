@@ -11,6 +11,7 @@ module.exports = defineConfig({
     URN: process.env.URN
   },
   video: false,
+	userAgent: 'DfEAcademiesAcademisation/1.0 Cypress',
   e2e: {
     setupNodeEvents(on, config) {
 
