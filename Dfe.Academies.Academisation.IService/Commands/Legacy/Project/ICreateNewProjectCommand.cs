@@ -3,8 +3,8 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 
 namespace Dfe.Academies.Academisation.IService.Commands.Legacy.Project
 {
-	public interface ICreateSponsoredProjectCommand
+	public interface ICreateNewProjectCommand
 	{
-		Task<CommandResult> Execute(SponsoredProjectServiceModel model);
+		Task<CommandResult> Execute(NewProjectServiceModel model);
 	}
 }

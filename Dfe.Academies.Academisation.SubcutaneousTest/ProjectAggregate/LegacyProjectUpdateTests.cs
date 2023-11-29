@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using AutoFixture;
-using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
@@ -8,20 +7,15 @@ using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
-using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
-using FluentAssertions;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
@@ -52,10 +46,10 @@ public class ProjectUpdateTests
 		var services = new ServiceCollection();
 
 		services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(ConversionProjectUpdateCommandHandler))));
-	    services.AddScoped(x => conversionProjectRepository);
-	    services.AddScoped(x => projectUpdateDataCommand);
+		services.AddScoped(x => conversionProjectRepository);
+		services.AddScoped(x => projectUpdateDataCommand);
 
-		_mediatr = services.BuildServiceProvider().GetService<IMediator>(); 
+		_mediatr = services.BuildServiceProvider().GetService<IMediator>();
 	}
 
 
@@ -63,7 +57,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -89,7 +83,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -117,7 +111,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 
 		await _context.Projects.AddAsync(existingProject);

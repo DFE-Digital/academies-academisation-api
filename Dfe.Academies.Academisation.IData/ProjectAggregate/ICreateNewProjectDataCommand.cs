@@ -4,8 +4,8 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.IData.ProjectAggregate
 {
-	public interface ICreateSponsoredProjectDataCommand
+	public interface ICreateNewProjectDataCommand
 	{
-		Task<CommandResult> Execute(SponsoredProject project);
+		Task<CommandResult> Execute(NewProject project);
 	}
 }

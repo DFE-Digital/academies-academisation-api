@@ -1,14 +1,11 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
-using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
@@ -26,7 +23,7 @@ public class LegacyProjectGetStatusesTests
 	{
 		_context = new TestProjectContext().CreateContext();
 
-		_projectController = new ProjectController(Mock.Of<ICreateSponsoredProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
+		_projectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 	}
 
 	[Fact]
@@ -34,12 +31,12 @@ public class LegacyProjectGetStatusesTests
 	{
 		var projectDetails1 = _fixture.Build<ProjectDetails>()
 			.With(p => p.ProjectStatus, "Active").Create();
-		
+
 		var projectDetails2 = _fixture.Build<ProjectDetails>()
 			.With(p => p.ProjectStatus, "Closed").Create();
 
-		_context.Add(new Project(1,projectDetails1));
-		_context.Add(new Project(2,projectDetails2));
+		_context.Add(new Project(1, projectDetails1));
+		_context.Add(new Project(2, projectDetails2));
 		await _context.SaveChangesAsync();
 
 		// act

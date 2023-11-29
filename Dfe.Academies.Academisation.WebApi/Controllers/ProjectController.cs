@@ -16,19 +16,19 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class ProjectController : ControllerBase
 	{
-		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
+		private readonly ICreateNewProjectCommand _createNewProjectCommand;
 
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly IMediator _mediator;
 
 		public ProjectController(
 
-									   ICreateSponsoredProjectCommand createSponsoredProjectCommand,
-									   
+									   ICreateNewProjectCommand createSponsoredProjectCommand,
+
 									   IConversionProjectQueryService conversionProjectQueryService,
 									   IMediator mediator)
 		{
-			_createSponsoredProjectCommand = createSponsoredProjectCommand;
+			_createNewProjectCommand = createSponsoredProjectCommand;
 
 			_conversionProjectQueryService = conversionProjectQueryService;
 			_mediator = mediator;
@@ -143,24 +143,24 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		/// <summary>
-		///     Adds a sponsored conversion project
+		///     Adds a new conversion project
 		/// </summary>
-		/// <param name="project">The model holding the data required to create a sponsored conversion</param>
+		/// <param name="project">The model holding the data required to create a new conversion</param>
 		/// <response code="201">The project has been added</response>
-		[HttpPost("project/sponsored-conversion-project")]
+		[HttpPost("project/new-conversion-project")]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
-		public async Task<ActionResult> AddSponsoredConversion(SponsoredProjectServiceModel project)
+		public async Task<ActionResult> AddConversion(NewProjectServiceModel project)
 		{
-			CommandResult result = await _createSponsoredProjectCommand.Execute(project);
+			CommandResult result = await _createNewProjectCommand.Execute(project);
 
 			return result switch
 			{
 				CommandSuccessResult => Created(new Uri("/legacy/project/", UriKind.Relative), null),
 				NotFoundCommandResult => NotFound(),
 				_ => throw new NotImplementedException()
-			}; 
+			};
 		}
 
 		/// <summary>

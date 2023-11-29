@@ -22,9 +22,9 @@ public static class AutoMapperSetup
 		//	.ForMember(x => x.DynamicsApplicationId, opt => opt.Ignore());
 		//profile.CreateMap<JoinTrustState, JoinTrust>();
 		profile.CreateMap<IJoinTrust, ApplicationJoinTrustServiceModel>();
-		profile.CreateMap<SponsoredProjectServiceModel, SponsoredProject>();
-		profile.CreateMap<SponsoredProjectTrustServiceModel, SponsoredProjectTrust>();
-		profile.CreateMap<SponsoredProjectSchoolServiceModel, SponsoredProjectSchool>();
+		profile.CreateMap<NewProjectServiceModel, NewProject>();
+		profile.CreateMap<NewProjectTrustServiceModel, NewProjectTrust>();
+		profile.CreateMap<NewProjectSchoolServiceModel, NewProjectSchool>();
 
 		// the mapping for this object is awkward because of the use of records, may have to re-think someof this but this is the best for now
 		//profile.CreateMap<FormTrustState, FormTrustDetails>().ReverseMap();
