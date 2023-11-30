@@ -437,4 +437,10 @@ public class Project : Entity, IProject, IAggregateRoot
 
 		return reason;
 	}
+
+	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl)
+	{
+		this.Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
+		this.Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
+	}
 }
