@@ -19,16 +19,13 @@ using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggrega
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
-using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.Service.Behaviours;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
-using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
-using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
@@ -50,7 +47,8 @@ using Newtonsoft.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-	.AddControllers(x => {
+	.AddControllers(x =>
+	{
 		x.Filters.Add(typeof(HttpGlobalExceptionFilter));
 	})
 	.AddNewtonsoftJson(options =>
@@ -104,8 +102,8 @@ builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionS
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
 builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
-builder.Services.AddScoped<ICreateSponsoredProjectCommand, CreateSponsoredProjectCommand>();
-builder.Services.AddScoped<ICreateSponsoredProjectDataCommand, CreateSponsoredProjectDataCommand>();
+builder.Services.AddScoped<ICreateNewProjectCommand, CreateNewProjectCommand>();
+builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
@@ -219,7 +217,8 @@ app.Run();
 
 namespace Dfe.Academies.Academisation.WebApi
 {
-	public partial class Program {
+	public partial class Program
+	{
 		public static string AppName = GetAppName();
 
 		public static string GetAppName()
