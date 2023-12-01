@@ -47,6 +47,14 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			_context.Projects.Count(x => x.Details.SchoolName == _newProject!.School!.Name).Should().Be(1);
 		}
+		[Fact]
+		public async Task Should_add_the_new_conversion_project()
+		{
+			CreateNewProjectDataCommand command = System_under_test();
+			await command.Execute(new NewProject(_newProject.School, _newProject.Trust, "yes"));
+
+			_context.Projects.Count(x => x.Details.AcademyTypeAndRoute == "converter").Should().Be(1);
+		}
 
 		[Fact]
 		public async Task Should_return_error_if_school_is_null()
