@@ -289,7 +289,10 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	    	pd.Property(d => d.AnnexBFormReceived).HasColumnName("AnnexBFormReceived");
 		    pd.Property(d => d.DaoPackSentDate).HasColumnName("DaoPackSentDate");
 	        pd.Property(d => d.SponsorName).HasColumnName("SponsorName");
-			
+
+	        pd.Property(d => d.ExternalApplicationFormSaved).HasColumnName("ExternalApplicationFormSaved");
+	        pd.Property(d => d.ExternalApplicationFormUrl).HasColumnName("ExternalApplicationFormUrl");
+
 		});
 
 		projectConfiguration

@@ -102,6 +102,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public User? AssignedUser { get; init; }
 		public ICollection<ConversionProjectDeleteNote>? Notes { get; set; }
 		public DateTime CreatedOn { get; set; }
+		public bool? ExternalApplicationFormSaved { get; init; }
+		public string? ExternalApplicationFormUrl { get; init; }
 
 		public bool Equals(LegacyProjectServiceModel? other)
 		{
@@ -225,7 +227,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 					   other.KeyStage4PerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(KeyStage5PerformanceAdditionalInformation,
 					   other.KeyStage5PerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) &&
-				   Equals(AssignedUser, other.AssignedUser);
+				   Equals(AssignedUser, other.AssignedUser) &&
+									  string.Equals(ExternalApplicationFormUrl,
+					   other.ExternalApplicationFormUrl, StringComparison.InvariantCultureIgnoreCase) &&
+					   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved;
 		}
 
 		public override bool Equals(object? obj)
@@ -338,6 +343,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(AssignedUser);
 			hashCode.Add(CreatedOn);
+			hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);
+			hashCode.Add(ExternalApplicationFormSaved);
 			return hashCode.ToHashCode();
 		}
 	}
