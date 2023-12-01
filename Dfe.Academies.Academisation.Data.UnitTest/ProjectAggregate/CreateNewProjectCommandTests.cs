@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			CreateNewProjectDataCommand command = System_under_test();
 			await command.Execute(new NewProject(_newProject.School, _newProject.Trust, "yes"));
 
-			_context.Projects.Count(x => x.Details.AcademyTypeAndRoute == "converter").Should().Be(1);
+			_context.Projects.Count(x => x.Details.AcademyTypeAndRoute == "Converter").Should().Be(1);
 		}
 
 		[Fact]
