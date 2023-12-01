@@ -148,7 +148,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ProjectStatus = "Converter Pre-AO (C)",
 			TrustReferenceNumber = project.Trust?.ReferenceNumber,
 			NameOfTrust = project.Trust?.Name,
-			AcademyTypeAndRoute = "Sponsored",
+			AcademyTypeAndRoute = DetermineRoute(project),
 			ConversionSupportGrantAmount = 25000,
 			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
 			LocalAuthority = project.School?.LocalAuthorityName,
@@ -156,6 +156,16 @@ public class Project : Entity, IProject, IAggregateRoot
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
+	public static string DetermineRoute(NewProject project)
+	{
+		return project.HasSchoolApplied?.ToLower() switch
+		{
+			"yes" => "Converter",
+			"no" => "Sponsored",
+			_ => "Converter",
+		};
 	}
 
 	public CommandResult Update(ProjectDetails detailsToUpdate)

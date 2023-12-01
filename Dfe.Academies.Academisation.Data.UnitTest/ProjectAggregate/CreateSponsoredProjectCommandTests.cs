@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			CreateNewProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new NewProject(null, _fixture.Create<NewProjectTrust>()));
+			var result = await command.Execute(new NewProject(null, _fixture.Create<NewProjectTrust>(), null));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
@@ -62,7 +62,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			CreateNewProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new NewProject(_fixture.Create<NewProjectSchool>(), null));
+			var result = await command.Execute(new NewProject(_fixture.Create<NewProjectSchool>(), null, null));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
