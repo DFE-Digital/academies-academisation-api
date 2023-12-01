@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
@@ -21,7 +20,7 @@ public class Project : Entity, IProject, IAggregateRoot
 	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
 	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
 
-	private readonly List<ProjectNote> _notes = new ();
+	private readonly List<ProjectNote> _notes = new();
 
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
@@ -35,6 +34,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public ProjectDetails Details { get; private set; }
 
+	// Create from A2b 
 	public static CreateResult Create(IApplication application)
 	{
 		if (application.ApplicationType != ApplicationType.JoinAMat)
@@ -54,7 +54,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			SchoolName = school.SchoolName,
 			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 			ProjectStatus = "Converter Pre-AO (C)",
-			ApplicationReceivedDate = application.ApplicationSubmittedDate,			
+			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
@@ -91,38 +91,38 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		var projectDetailsList = application.Schools.Select(school => new ProjectDetails
-			{
-				Urn = school.Details.Urn,
-				SchoolName = school.Details.SchoolName,
-				ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
-				ProjectStatus = "Converter Pre-AO (C)",
-				ApplicationReceivedDate = application.ApplicationSubmittedDate,				
-				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
-				AcademyTypeAndRoute = "Form a Mat",
-				// Temp hotfix
-				ProposedAcademyOpeningDate = null,
-				ConversionSupportGrantAmount = 25000,
-				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
-				PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
-				FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
-				RationaleForTrust = school.Details.SchoolConversionReasonsForJoining,
-				EndOfCurrentFinancialYear = school.Details.CurrentFinancialYear?.FinancialYearEndDate,
-				EndOfNextFinancialYear = school.Details.NextFinancialYear?.FinancialYearEndDate,
-				RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.Revenue, school.Details.CurrentFinancialYear?.RevenueStatus),
-				ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.Revenue, school.Details.NextFinancialYear?.RevenueStatus),
-				CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.CapitalCarryForward, school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus),
-				CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.CapitalCarryForward, school.Details.NextFinancialYear?.CapitalCarryForwardStatus),
-				YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
-				YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
-				YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3
-			})
+		{
+			Urn = school.Details.Urn,
+			SchoolName = school.Details.SchoolName,
+			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
+			ProjectStatus = "Converter Pre-AO (C)",
+			ApplicationReceivedDate = application.ApplicationSubmittedDate,
+			NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
+			AcademyTypeAndRoute = "Form a Mat",
+			// Temp hotfix
+			ProposedAcademyOpeningDate = null,
+			ConversionSupportGrantAmount = 25000,
+			PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
+			PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
+			FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+			RationaleForTrust = school.Details.SchoolConversionReasonsForJoining,
+			EndOfCurrentFinancialYear = school.Details.CurrentFinancialYear?.FinancialYearEndDate,
+			EndOfNextFinancialYear = school.Details.NextFinancialYear?.FinancialYearEndDate,
+			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.Revenue, school.Details.CurrentFinancialYear?.RevenueStatus),
+			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.Revenue, school.Details.NextFinancialYear?.RevenueStatus),
+			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.CapitalCarryForward, school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus),
+			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.CapitalCarryForward, school.Details.NextFinancialYear?.CapitalCarryForwardStatus),
+			YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
+			YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
+			YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3
+		})
 			.ToList();
 
 		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails)).ToList();
 		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
 	}
-
-	public static CreateResult CreateSponsoredProject(SponsoredProject project)
+	// Create from Conversions
+	public static CreateResult CreateNewProject(NewProject project)
 	{
 		ArgumentNullException.ThrowIfNull(project);
 
@@ -148,7 +148,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ProjectStatus = "Converter Pre-AO (C)",
 			TrustReferenceNumber = project.Trust?.ReferenceNumber,
 			NameOfTrust = project.Trust?.Name,
-			AcademyTypeAndRoute = "Sponsored",
+			AcademyTypeAndRoute = DetermineRoute(project),
 			ConversionSupportGrantAmount = 25000,
 			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
 			LocalAuthority = project.School?.LocalAuthorityName,
@@ -156,6 +156,16 @@ public class Project : Entity, IProject, IAggregateRoot
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+	}
+
+	public static string DetermineRoute(NewProject project)
+	{
+		return project.HasSchoolApplied?.ToLower() switch
+		{
+			"yes" => "Converter",
+			"no" => "Sponsored",
+			_ => "Converter",
+		};
 	}
 
 	public CommandResult Update(ProjectDetails detailsToUpdate)
@@ -178,7 +188,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ProjectStatus = detailsToUpdate.ProjectStatus,
 			ApplicationReceivedDate = detailsToUpdate.ApplicationReceivedDate,
 			AssignedDate = detailsToUpdate.AssignedDate,
-			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,			
+			HeadTeacherBoardDate = detailsToUpdate.HeadTeacherBoardDate,
 			BaselineDate = detailsToUpdate.BaselineDate,
 
 			// la summary page
@@ -212,7 +222,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
 			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
-			Region	= detailsToUpdate.Region,
+			Region = detailsToUpdate.Region,
 
 			// Annex B
 			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived,
@@ -321,13 +331,13 @@ public class Project : Entity, IProject, IAggregateRoot
 	private const string IntermediateGrantType = "intermediate";
 	private const string FullGrantType = "full";
 	const decimal FastTrackDefaultPrimary = 70000;
-	const decimal FastTrackDefaultSecondary= 80000;
+	const decimal FastTrackDefaultSecondary = 80000;
 	const decimal IntermediateDefaultPrimary = 90000;
 	const decimal IntermediateDefaultSecondary = 115000;
 	const decimal FullDefaultPrimary = 110000;
 	const decimal FullDefaultSecondary = 150000;
 	public static decimal? CalculateDefaultSponsoredGrant(string? existingConversionSupportGrantType,
-		string? newConversionSupportGrantType, 
+		string? newConversionSupportGrantType,
 		decimal? currentGrantAmount,
 		bool? detailsConversionSupportGrantAmountChanged,
 		string? schoolPhase)

@@ -12,14 +12,14 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 {
-	public class CreateSponsoredProjectCommandTests
+	public class CreateNewProjectCommandTests
 	{
-		private readonly SponsoredProject _newProject;
+		private readonly NewProject _newProject;
 		private readonly AcademisationContext _context;
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
 		private readonly Fixture _fixture;
 
-		public CreateSponsoredProjectCommandTests()
+		public CreateNewProjectCommandTests()
 		{
 			_fixture = new Fixture();
 			Project projectState = _fixture.Create<Project>();
@@ -30,39 +30,47 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			_context.Projects.Add(projectState);
 			_context.SaveChanges();
 
-			_newProject = _fixture.Create<SponsoredProject>();
+			_newProject = _fixture.Create<NewProject>();
 		}
 
-		private CreateSponsoredProjectDataCommand System_under_test()
+		private CreateNewProjectDataCommand System_under_test()
 		{
-			return new CreateSponsoredProjectDataCommand(_projectCreateDataCommand);
+			return new CreateNewProjectDataCommand(_projectCreateDataCommand);
 		}
 
 		[Fact]
 		public async Task Should_add_the_new_sponsored_project()
 		{
-			CreateSponsoredProjectDataCommand command = System_under_test();
+			CreateNewProjectDataCommand command = System_under_test();
 
 			await command.Execute(_newProject);
 
 			_context.Projects.Count(x => x.Details.SchoolName == _newProject!.School!.Name).Should().Be(1);
 		}
+		[Fact]
+		public async Task Should_add_the_new_conversion_project()
+		{
+			CreateNewProjectDataCommand command = System_under_test();
+			await command.Execute(new NewProject(_newProject.School, _newProject.Trust, "yes"));
+
+			_context.Projects.Count(x => x.Details.AcademyTypeAndRoute == "Converter").Should().Be(1);
+		}
 
 		[Fact]
 		public async Task Should_return_error_if_school_is_null()
 		{
-			CreateSponsoredProjectDataCommand command = System_under_test();
+			CreateNewProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new SponsoredProject(null, _fixture.Create<SponsoredProjectTrust>()));
+			var result = await command.Execute(new NewProject(null, _fixture.Create<NewProjectTrust>(), null));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
 		[Fact]
 		public async Task Should_return_error_if_join_trust_is_null()
 		{
-			CreateSponsoredProjectDataCommand command = System_under_test();
+			CreateNewProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new SponsoredProject(_fixture.Create<SponsoredProjectSchool>(), null));
+			var result = await command.Execute(new NewProject(_fixture.Create<NewProjectSchool>(), null, null));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}

@@ -6,17 +6,17 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 {
-	public class CreateSponsoredProjectDataCommand : ICreateSponsoredProjectDataCommand
+	public class CreateNewProjectDataCommand : ICreateNewProjectDataCommand
 	{
 		private readonly IProjectCreateDataCommand _projectCreateDataCommand;
-		public CreateSponsoredProjectDataCommand(IProjectCreateDataCommand projectCreateDataCommand)
+		public CreateNewProjectDataCommand(IProjectCreateDataCommand projectCreateDataCommand)
 		{
 			_projectCreateDataCommand = projectCreateDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(SponsoredProject project)
+		public async Task<CommandResult> Execute(NewProject project)
 		{
-			var domainServiceResult = Project.CreateSponsoredProject(project);
+			var domainServiceResult = Project.CreateNewProject(project);
 
 			switch (domainServiceResult)
 			{

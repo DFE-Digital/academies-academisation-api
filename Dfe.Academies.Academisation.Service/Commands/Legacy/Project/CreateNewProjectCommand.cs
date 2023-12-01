@@ -7,22 +7,22 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 
 namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 {
-	public class CreateSponsoredProjectCommand : ICreateSponsoredProjectCommand
+	public class CreateNewProjectCommand : ICreateNewProjectCommand
 	{
 		private readonly IMapper _mapper;
-		private readonly ICreateSponsoredProjectDataCommand _createSponsoredProjectDataCommand;
+		private readonly ICreateNewProjectDataCommand _createNewProjectDataCommand;
 
-		public CreateSponsoredProjectCommand(
+		public CreateNewProjectCommand(
 			IMapper mapper,
-			ICreateSponsoredProjectDataCommand createSponsoredProjectDataCommand)
+			ICreateNewProjectDataCommand createSponsoredProjectDataCommand)
 		{
 			_mapper = mapper;
-			_createSponsoredProjectDataCommand = createSponsoredProjectDataCommand;
+			_createNewProjectDataCommand = createSponsoredProjectDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(SponsoredProjectServiceModel model)
+		public async Task<CommandResult> Execute(NewProjectServiceModel model)
 		{
-			var result = await _createSponsoredProjectDataCommand.Execute(_mapper.Map<SponsoredProject>(model));
+			var result = await _createNewProjectDataCommand.Execute(_mapper.Map<NewProject>(model));
 
 			if (result is CommandValidationErrorResult)
 			{
