@@ -228,6 +228,10 @@ public class Project : Entity, IProject, IAggregateRoot
 			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived,
 			AnnexBFormUrl = detailsToUpdate.AnnexBFormUrl,
 
+			// External Application Form
+			ExternalApplicationFormSaved = detailsToUpdate.ExternalApplicationFormSaved,
+			ExternalApplicationFormUrl = detailsToUpdate.ExternalApplicationFormUrl,
+
 			// School Overview
 			SchoolPhase = detailsToUpdate.SchoolPhase,
 			AgeRange = detailsToUpdate.AgeRange,
@@ -446,5 +450,11 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		return reason;
+	}
+
+	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl)
+	{
+		this.Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
+		this.Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
 	}
 }
