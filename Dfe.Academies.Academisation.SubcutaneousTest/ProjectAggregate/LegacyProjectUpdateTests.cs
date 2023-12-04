@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
@@ -58,7 +59,13 @@ public class ProjectUpdateTests
 	{
 		// Arrange
 		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
-		var existingProject = _fixture.Create<Project>();
+		// had to do this to make the equality operator happy, weirdly the annex b form is missing from equality
+		var existingProjectDetails = _fixture.Build<ProjectDetails>()
+			.With(x => x.ExternalApplicationFormSaved, true)
+			.With(x => x.ExternalApplicationFormUrl, "test//url").Create();
+
+		var existingProject = new Project(101, existingProjectDetails);
+
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 

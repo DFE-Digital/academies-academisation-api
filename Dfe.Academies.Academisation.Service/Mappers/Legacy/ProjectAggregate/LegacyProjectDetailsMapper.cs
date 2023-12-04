@@ -65,6 +65,10 @@ internal static class LegacyProjectDetailsMapper
 			AnnexBFormReceived = detailsToUpdate.AnnexBFormReceived ?? existingProject.Details.AnnexBFormReceived,
 			AnnexBFormUrl = detailsToUpdate.AnnexBFormReceived is true ? detailsToUpdate.AnnexBFormUrl : string.Empty,
 
+			// External Application Form
+			ExternalApplicationFormSaved = detailsToUpdate.ExternalApplicationFormSaved ?? existingProject.Details.ExternalApplicationFormSaved,
+			ExternalApplicationFormUrl = detailsToUpdate.ExternalApplicationFormSaved is true ? detailsToUpdate.ExternalApplicationFormUrl : string.Empty,
+
 			// School Overview
 			SchoolPhase = detailsToUpdate.SchoolPhase ?? existingProject.Details.SchoolPhase,
 			AgeRange = detailsToUpdate.AgeRange ?? existingProject.Details.AgeRange,
