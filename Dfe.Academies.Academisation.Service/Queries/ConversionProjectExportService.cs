@@ -40,7 +40,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			var workbook = new XLWorkbook();
 			var worksheet = workbook.Worksheets.Add("Projects");
-
 			worksheet.Cell(1, 1).Value = "School";
 			worksheet.Cell(1, 1).Style.Font.Bold = true;
 			worksheet.Cell(1, 2).Value = "URN";
@@ -85,7 +84,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 12).Value = project.AcademyTypeAndRoute;
 				row++;
 			}
-
+			worksheet.Columns().AdjustToContents();
 			var stream = new MemoryStream();
 			workbook.SaveAs(stream);
 			stream.Position = 0;
