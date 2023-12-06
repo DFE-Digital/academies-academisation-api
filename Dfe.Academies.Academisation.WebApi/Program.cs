@@ -122,6 +122,7 @@ builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateDataCommand, AdvisoryBoar
 // Queries
 builder.Services.AddScoped<IApplicationQueryService, ApplicationQueryService>();
 builder.Services.AddScoped<IConversionProjectQueryService, ConversionProjectQueryService>();
+builder.Services.AddScoped<IConversionProjectExportService, ConversionProjectExportService>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();
