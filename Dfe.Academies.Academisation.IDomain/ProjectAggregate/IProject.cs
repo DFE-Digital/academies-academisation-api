@@ -17,4 +17,6 @@ public interface IProject
 
 	public CommandResult Update(ProjectDetails detailsToUpdate);
 
+	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl);
+
 }
