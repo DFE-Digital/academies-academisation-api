@@ -57,7 +57,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr, Mock.Of<IConversionProjectExportService>());
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -83,7 +83,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr, Mock.Of<IConversionProjectExportService>());
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -111,7 +111,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr, Mock.Of<IConversionProjectExportService>());
 		var existingProject = _fixture.Create<Project>();
 
 		await _context.Projects.AddAsync(existingProject);
