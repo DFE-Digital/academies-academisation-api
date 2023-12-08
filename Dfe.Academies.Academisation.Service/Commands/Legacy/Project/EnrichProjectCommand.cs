@@ -38,7 +38,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 
 			foreach (var project in incompleteProjects)
 			{
-				var school = await _establishmentRepository.GetEstablishment(project.Details.Urn);
+				IService.ServiceModels.Academies.Establishment? school = await _establishmentRepository.GetEstablishment(project.Details.Urn);
 
 				if (school == null)
 				{
@@ -48,7 +48,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 
 				var projectChanges = new LegacyProjectServiceModel(project.Id, project.Details.Urn)
 				{
-					LocalAuthority = school.LocalAuthorityName, Region = school.Gor.Name, SchoolPhase = school.PhaseOfEducation.Name
+					LocalAuthority = school.LocalAuthorityName,
+					Region = school.Gor.Name,
+					SchoolPhase = school.PhaseOfEducation.Name,
+					SchoolType = school.EstablishmentType.Name
 				};
 
 				project.Update(LegacyProjectDetailsMapper.MapNonEmptyFields(projectChanges, project));
