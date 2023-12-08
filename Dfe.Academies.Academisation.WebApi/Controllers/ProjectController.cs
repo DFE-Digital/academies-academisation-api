@@ -19,7 +19,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly ICreateNewProjectCommand _createNewProjectCommand;
 
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
-		private readonly IConversionProjectExportService _conversionProjectExportService;
 		private readonly IMediator _mediator;
 
 		public ProjectController(
@@ -27,14 +26,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 									   ICreateNewProjectCommand createSponsoredProjectCommand,
 
 									   IConversionProjectQueryService conversionProjectQueryService,
-									   IMediator mediator,
-									   IConversionProjectExportService conversionProjectExportService)
+									   IMediator mediator)
 		{
 			_createNewProjectCommand = createSponsoredProjectCommand;
 
 			_conversionProjectQueryService = conversionProjectQueryService;
 			_mediator = mediator;
-			_conversionProjectExportService = conversionProjectExportService;
 		}
 
 		/// <summary>
@@ -60,20 +57,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn,
 					searchModel.RegionQueryString, searchModel.ApplicationReferences);
 			return result is null ? NotFound() : Ok(result);
-		}
-
-		[HttpPost("export-projects", Name = "ExportProjectsToSpreadsheet")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> ExportProjectsToSpreadsheet(GetAcademyConversionSearchModel searchModel)
-		{
-			var spreadsheetStream = await _conversionProjectExportService.ExportProjectsToSpreadsheet(searchModel);
-			if (spreadsheetStream == null)
-			{
-				return NotFound("No projects found for the specified criteria.");
-			}
-
-			return File(spreadsheetStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "exported_projects.xlsx");
 		}
 
 		/// <summary>

@@ -34,8 +34,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 			return new ProjectController(
 				_createNewProjectCommand,
 				_conversionProjectQueryService,
-				_mediator.Object,
-				_conversionProjectExportService);
+				_mediator.Object);
 		}
 
 		[Fact]
