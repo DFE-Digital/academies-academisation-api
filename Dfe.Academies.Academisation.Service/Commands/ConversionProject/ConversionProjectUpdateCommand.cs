@@ -7,14 +7,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 {
 	public class ConversionProjectUpdateCommand : IRequest<CommandResult>
 	{
-		public ConversionProjectUpdateCommand(int id, LegacyProjectServiceModel updateModel)
+		public ConversionProjectUpdateCommand(int id, ConversionProjectServiceModel updateModel)
 		{			
 			Id = id;
 			UpdateModel = updateModel;
 		}
 		
 		public int Id { get; set; }
-		public LegacyProjectServiceModel UpdateModel { get; set; }
+		public ConversionProjectServiceModel UpdateModel { get; set; }
 
 	}
 }

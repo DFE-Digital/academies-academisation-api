@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 					continue;
 				}
 
-				var projectChanges = new LegacyProjectServiceModel(project.Id, project.Details.Urn)
+				var projectChanges = new ConversionProjectServiceModel(project.Id, project.Details.Urn)
 				{
 					LocalAuthority = school.LocalAuthorityName, Region = school.Gor.Name, SchoolPhase = school.PhaseOfEducation.Name
 				};

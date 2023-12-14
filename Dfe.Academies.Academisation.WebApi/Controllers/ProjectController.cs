@@ -48,11 +48,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("projects", Name = "GetLegacyProjects")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<LegacyApiResponse<LegacyProjectServiceModel>>> GetProjects(
+		public async Task<ActionResult<LegacyApiResponse<ConversionProjectServiceModel>>> GetProjects(
 			GetAcademyConversionSearchModel? searchModel,
 			[FromQuery] int? urn = null)
 		{
-			LegacyApiResponse<LegacyProjectServiceModel>? result =
+			LegacyApiResponse<ConversionProjectServiceModel>? result =
 				await _conversionProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn,
 					searchModel.RegionQueryString, searchModel.ApplicationReferences);
@@ -78,15 +78,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// Returns the project with the specified <paramref name="id"/>.
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns><see cref="LegacyProjectServiceModel"/></returns>
+		/// <returns><see cref="ConversionProjectServiceModel"/></returns>
 		/// <response code="200">The project with the specified ID was found and returned</response>
 		/// <response code="404">The project with the specified ID was not found</response>
 		[HttpGet("project/{id:int}", Name = "GetLegacyProject")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<LegacyProjectServiceModel>> Get(int id)
+		public async Task<ActionResult<ConversionProjectServiceModel>> Get(int id)
 		{
-			LegacyProjectServiceModel? result = await _conversionProjectQueryService.GetConversionProject(id);
+			ConversionProjectServiceModel? result = await _conversionProjectQueryService.GetConversionProject(id);
 			return result is null ? NotFound() : Ok(result);
 		}
 
@@ -104,9 +104,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<LegacyProjectServiceModel>> Patch(
+		public async Task<ActionResult<ConversionProjectServiceModel>> Patch(
 			int id,
-			LegacyProjectServiceModel projectUpdate)
+			ConversionProjectServiceModel projectUpdate)
 		{
 			CommandResult result = await _mediator.Send(new ConversionProjectUpdateCommand(id, projectUpdate));
 

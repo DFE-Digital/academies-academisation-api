@@ -69,7 +69,7 @@ public class ProjectUpdateTests
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
-		var updatedProject = _fixture.Build<LegacyProjectServiceModel>()
+		var updatedProject = _fixture.Build<ConversionProjectServiceModel>()
 			.With(p => p.Id, existingProject.Id)
 			.With(p => p.Urn, existingProject.Details.Urn)
 			.Create();
@@ -80,7 +80,7 @@ public class ProjectUpdateTests
 		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
 
 		// Assert
-		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(updateResult);
+		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(updateResult);
 
 		Assert.True(updatedProject.Equals(project));
 	}
@@ -95,7 +95,7 @@ public class ProjectUpdateTests
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
-		var updatedProject = _fixture.Build<LegacyProjectServiceModel>()
+		var updatedProject = _fixture.Build<ConversionProjectServiceModel>()
 			.With(p => p.Id, existingProject.Id)
 			.With(p => p.Urn, existingProject.Details.Urn)
 			.Create();
@@ -109,7 +109,7 @@ public class ProjectUpdateTests
 		var getResult = await legacyProjectController.Get(updatedProject.Id);
 
 		// Assert
-		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(getResult);
+		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(getResult);
 
 		updatedProject.Equals(project);
 	}
@@ -124,7 +124,7 @@ public class ProjectUpdateTests
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
 
-		var updatedProject = new LegacyProjectServiceModel(existingProject.Id, existingProject.Details.Urn)
+		var updatedProject = new ConversionProjectServiceModel(existingProject.Id, existingProject.Details.Urn)
 		{
 			ProjectStatus = "TestStatus"
 		};
@@ -137,7 +137,7 @@ public class ProjectUpdateTests
 
 		var getResult = await legacyProjectController.Get(updatedProject.Id);
 
-		(_, LegacyProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
+		(_, ConversionProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
 
 		//existingProject.Details.ProjectStatus = updatedProject.Details.ProjectStatus;
 

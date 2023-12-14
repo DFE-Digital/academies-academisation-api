@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+﻿
+using System.Globalization;
+using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +43,15 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<ProjectFilterParameters> GetFilterParameters()
 		{
+			var advisoryBoardDates = await this.dbSet
+					.OrderByDescending(p => p.Details.HeadTeacherBoardDate)
+					.AsNoTracking()
+					.Where(p => p.Details.HeadTeacherBoardDate.HasValue)
+					.Select(p => new { p.Details.HeadTeacherBoardDate.Value.Year, p.Details.HeadTeacherBoardDate.Value.Month })
+					.Distinct()
+					.ToListAsync()
+					.ConfigureAwait(false);
+
 			ProjectFilterParameters filterParameters = new ProjectFilterParameters
 			{
 				Statuses = (await this.dbSet
@@ -56,7 +66,17 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 					.Select(p => p.Details.AssignedUser.FullName)
 					.Where(p => !string.IsNullOrEmpty(p))
 					.Distinct()
-					.ToListAsync())!
+					.ToListAsync())!,
+
+				LocalAuthorities = (await this.dbSet
+					.OrderByDescending(p => p.Details.LocalAuthority)
+					.AsNoTracking()
+					.Select(p => p.Details.LocalAuthority)
+					.Where(p => !string.IsNullOrEmpty(p))
+					.Distinct()
+					.ToListAsync())!,
+
+				AdvisoryBoardDates = advisoryBoardDates.Select(x => new DateTime(x.Year, x.Month, 1).ToString("MMM yy")).ToList()
 			};
 
 			return filterParameters;
@@ -107,6 +127,20 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return queryable;
 		}
 
+		private static IQueryable<Project> FilterByKeyword(string? title, IQueryable<Project> queryable)
+		{
+			if (!string.IsNullOrWhiteSpace(title)) 
+			{ 
+				
+				queryable = queryable.Where(p => p.Details.SchoolName!.ToLower().Contains(title!.ToLower()) ||
+				p.Details.NameOfTrust!.ToLower().Contains(title!.ToLower()) ||
+				p.Details.Urn.ToString().ToLower().Contains(title!.ToLower())
+				); 
+			}
+
+			return queryable;
+		}
+
 		private static IQueryable<Project> FilterByDeliveryOfficer(IEnumerable<string>? deliveryOfficers, IQueryable<Project> queryable)
 		{
 			if (deliveryOfficers != null && deliveryOfficers.Any())
@@ -143,6 +177,50 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.AsQueryable();
 
 			return x;
+		}
+
+		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchProjectsV2(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
+		{
+			IQueryable<Project> queryable = this.dbSet;
+
+			queryable = FilterByRegion(regions, queryable);
+			queryable = FilterByStatus(states, queryable);
+			queryable = FilterByKeyword(title, queryable);
+			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
+			queryable = FilterByLocalAuthority(localAuthorities, queryable);
+			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
+
+			var totalProjects = queryable.Count();
+			var projects = await queryable
+				.OrderByDescending(acp => acp.CreatedOn)
+				.Skip((page - 1) * count)
+				.Take(count).ToListAsync();
+
+			return (projects, totalProjects);
+		}
+
+		private IQueryable<Project> FilterByAdvisoryBoardDates(IEnumerable<string>? advisoryBoardDates, IQueryable<Project> queryable)
+		{
+			if (advisoryBoardDates != null && advisoryBoardDates.Any())
+			{
+				var advisoryBoardDatesToDateTime = advisoryBoardDates.Select(abd => DateTime.ParseExact(abd, "MMM yy", CultureInfo.InvariantCulture));
+				queryable = queryable.Where(p =>
+					p.Details.HeadTeacherBoardDate != null && advisoryBoardDatesToDateTime.Contains(EF.Functions.DateFromParts(p.Details.HeadTeacherBoardDate.Value.Year, p.Details.HeadTeacherBoardDate.Value.Month, 1)));
+			}
+
+			return queryable;
+		}
+
+		private static IQueryable<Project> FilterByLocalAuthority(IEnumerable<string> localAuthorities, IQueryable<Project> queryable)
+		{
+			if (localAuthorities != null && localAuthorities.Any())
+			{
+				var lowerCaseRegions = localAuthorities.Select(la => la.ToLower());
+				queryable = queryable.Where(p =>
+					!string.IsNullOrEmpty(p.Details.LocalAuthority) && lowerCaseRegions.Contains(p.Details.LocalAuthority.ToLower()));
+			}
+
+			return queryable;
 		}
 	}
 }

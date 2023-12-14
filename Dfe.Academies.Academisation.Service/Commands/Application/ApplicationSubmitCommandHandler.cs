@@ -73,7 +73,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 					return createSuccessResult.MapToPayloadType(p => p.MapToServiceModel());
 				case CreateSuccessResult<IEnumerable<IProject>> createSuccessResult:
 					var projects = createSuccessResult.Payload.Select(p => p.MapToServiceModel());
-					return new CreateSuccessResult<IEnumerable<LegacyProjectServiceModel>>(projects);
+					return new CreateSuccessResult<IEnumerable<ConversionProjectServiceModel>>(projects);
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}

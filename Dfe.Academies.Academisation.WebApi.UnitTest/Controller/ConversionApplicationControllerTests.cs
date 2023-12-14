@@ -154,9 +154,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// arrange
 			int applicationId = _fixture.Create<int>();
 
-			LegacyProjectServiceModel projectServiceModel = new LegacyProjectServiceModel(1, 1);
+			ConversionProjectServiceModel projectServiceModel = new ConversionProjectServiceModel(1, 1);
 			_mockMediator.Setup(x => x.Send(It.Is<ApplicationSubmitCommand>(cmd => cmd.applicationId == applicationId), It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new CreateSuccessResult<LegacyProjectServiceModel>(projectServiceModel));
+				.ReturnsAsync(new CreateSuccessResult<ConversionProjectServiceModel>(projectServiceModel));
 
 			// act
 			var result = await _subject.Submit(applicationId);

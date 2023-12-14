@@ -1,5 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +16,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly IMediator _mediator;
 
-		public ConversionProjectController( IConversionProjectQueryService conversionProjectQueryService,
+		public ConversionProjectController(IConversionProjectQueryService conversionProjectQueryService,
 									   IMediator mediator)
 		{
 
@@ -51,6 +53,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 					BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
+		}
+
+		/// <summary>
+		///     Retrieve all projects matching specified filter conditions
+		/// </summary>
+		/// <param name="searchModel"><see cref="GetAcademyConversionSearchModel"/> describing filtering requirements for the request</param>
+		/// <param name="urn">URN of a specific project to retrieve</param>
+		/// <remarks>
+		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
+		///     Delivery Officer.
+		/// </remarks>
+		/// <response code="200">One or more projects matching the specified filter criteria were found</response>
+		/// <response code="404">No projects matched the specified search criteria</response>
+		[HttpPost("projects", Name = "GetProjects")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<LegacyApiResponse<ConversionProjectServiceModel>>> GetProjects(
+				GetAcademyConversionSearchModel? searchModel,
+				[FromQuery] int? urn = null)
+		{
+			LegacyApiResponse<ConversionProjectServiceModel>? result =
+				await _conversionProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
+					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count,
+					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
+			return result is null ? NotFound() : Ok(result);
 		}
 	}
 }

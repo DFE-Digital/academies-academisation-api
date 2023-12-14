@@ -5,10 +5,14 @@ namespace Dfe.Academies.Academisation.IService.Query
 {
 	public interface IConversionProjectQueryService
 	{
-		Task<LegacyApiResponse<LegacyProjectServiceModel>?> GetProjects(
+		Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjects(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions, IEnumerable<string>? applicationReferences);
 
-		Task<LegacyProjectServiceModel?> GetConversionProject(int id);
+		Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjects(
+IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions,
+IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
+
+		Task<ConversionProjectServiceModel?> GetConversionProject(int id);
 
 		Task<ProjectFilterParameters> GetFilterParameters();
 
