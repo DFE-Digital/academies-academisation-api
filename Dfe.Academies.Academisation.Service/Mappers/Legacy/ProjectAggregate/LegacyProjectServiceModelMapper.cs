@@ -79,6 +79,10 @@ internal static class LegacyProjectServiceModelMapper
 			AnnexBFormReceived = project.Details.AnnexBFormReceived,
 			AnnexBFormUrl = project.Details.AnnexBFormUrl,
 
+			//External Application Form
+			ExternalApplicationFormSaved = project.Details.ExternalApplicationFormSaved,
+			ExternalApplicationFormUrl = project.Details.ExternalApplicationFormUrl,
+
 			// school performance ofsted information
 			SchoolPerformanceAdditionalInformation = project.Details.SchoolPerformanceAdditionalInformation,
 

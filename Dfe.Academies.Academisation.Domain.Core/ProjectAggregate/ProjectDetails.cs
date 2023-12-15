@@ -96,7 +96,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage4PerformanceAdditionalInformation { get; init; }
 	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	public User? AssignedUser { get; init; }
-	
+
+	public bool? ExternalApplicationFormSaved { get; set; }
+	public string? ExternalApplicationFormUrl { get; set; }
 
 	public bool Equals(ProjectDetails? other)
 	{
@@ -217,7 +219,10 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(KeyStage4PerformanceAdditionalInformation, other.KeyStage4PerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation,
-				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser);
+				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser) &&
+				string.Equals(ExternalApplicationFormUrl, other.ExternalApplicationFormUrl,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+				   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved;
 	}
 
 	public override bool Equals(object? obj)
@@ -329,6 +334,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(KeyStage4PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AssignedUser);
+		hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(ExternalApplicationFormSaved);
+
 		return hashCode.ToHashCode();
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -17,7 +16,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly Mock<IMediator> _mediator;
 		private readonly Mock<IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>> _projectAddNoteCommandHandler;
-		private readonly ICreateSponsoredProjectCommand _createSponsoredProjectCommand;
+		private readonly ICreateNewProjectCommand _createNewProjectCommand;
+		private readonly IConversionProjectExportService _conversionProjectExportService;
 
 		public LegacyProjectAddNoteTests()
 		{
@@ -25,13 +25,14 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 			_conversionProjectQueryService = Mock.Of<IConversionProjectQueryService>();
 			_mediator = new Mock<IMediator>();
 			_projectAddNoteCommandHandler = new Mock<IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>>();
-			_createSponsoredProjectCommand = Mock.Of<ICreateSponsoredProjectCommand>();
+			_createNewProjectCommand = Mock.Of<ICreateNewProjectCommand>();
+			_conversionProjectExportService = Mock.Of<IConversionProjectExportService>();
 		}
 
 		private ProjectController System_under_test()
 		{
 			return new ProjectController(
-				_createSponsoredProjectCommand,
+				_createNewProjectCommand,
 				_conversionProjectQueryService,
 				_mediator.Object);
 		}

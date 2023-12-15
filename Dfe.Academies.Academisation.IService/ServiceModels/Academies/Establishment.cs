@@ -8,6 +8,7 @@
 		}
 
 		public string? LocalAuthorityName { get; set; }
+		public NameAndCodeResponse EstablishmentType { get; set; }
 		public NameAndCodeResponse PhaseOfEducation { get; set; }
 		public Region Gor { get; set; }
 

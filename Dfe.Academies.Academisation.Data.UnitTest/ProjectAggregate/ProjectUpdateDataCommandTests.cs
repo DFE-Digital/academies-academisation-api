@@ -32,20 +32,22 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			Project? existingProject = _fixture.Build<Project>().Create();
 
 			await _context.Projects.AddAsync(existingProject);
-			
+
 			await _context.SaveChangesAsync();
 
 			IProject updatedProject = await _context.Projects.SingleAsync(p => p.Id == existingProject.Id);
 
 
 			ProjectDetails projectDetails = _fixture.Build<ProjectDetails>()
-				.With(p =>p.Urn,updatedProject.Details.Urn)
+				.With(p => p.Urn, updatedProject.Details.Urn)
+				.With(x => x.ExternalApplicationFormSaved, true)
+				.With(x => x.ExternalApplicationFormUrl, "test//url")
 				.Create();
-		
+
 
 			updatedProject.Update(projectDetails);
 
-		
+
 			await _context.Projects.LoadAsync();
 
 			// act

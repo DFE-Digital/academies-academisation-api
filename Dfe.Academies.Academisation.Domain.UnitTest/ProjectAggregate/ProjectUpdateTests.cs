@@ -21,6 +21,8 @@ public class ProjectUpdateTests
 		var initialProject = _fixture.Create<ProjectDetails>();
 		var sut = new Project(1, initialProject);
 		var updatedProject = _fixture.Build<ProjectDetails>()
+			.With(x => x.ExternalApplicationFormSaved, true)
+			.With(x => x.ExternalApplicationFormUrl, "test//url")
 			.With(p => p.Urn, initialProject.Urn).Without(x => x.ConversionSupportGrantChangeReason).Create();
 
 		// Act

@@ -16,7 +16,7 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 		public async Task<IEnumerable<IProject>?> GetIncompleteProjects()
 		{
 			var createdProjectState = await _context.Projects
-				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase))
+				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType))
 				.ToListAsync();
 
 			return createdProjectState;
