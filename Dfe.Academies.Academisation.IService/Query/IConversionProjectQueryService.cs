@@ -8,9 +8,8 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjects(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions, IEnumerable<string>? applicationReferences);
 
-		Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjects(
-IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions,
-IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
+		Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjectsV2(
+		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions,IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
 
 		Task<ConversionProjectServiceModel?> GetConversionProject(int id);
 

@@ -27,7 +27,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// Arrange
 			var mockStream = new MemoryStream();
-			var searchModel = new GetAcademyConversionSearchModel(1, 10, null, null, null, null, null);
+			var searchModel = new ConversionProjectSearchModel(1, 10, null, null, null, null, null, null);
 			_mockConversionProjectExportService.Setup(s => s.ExportProjectsToSpreadsheet(searchModel))
 											   .ReturnsAsync(mockStream);
 
@@ -44,9 +44,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task ExportProjectsToSpreadsheet_ReturnsNotFound_WhenNoProjectsFound()
 		{
 			// Arrange
-			_mockConversionProjectExportService.Setup(s => s.ExportProjectsToSpreadsheet(It.IsAny<GetAcademyConversionSearchModel>()))
+			_mockConversionProjectExportService.Setup(s => s.ExportProjectsToSpreadsheet(It.IsAny<ConversionProjectSearchModel>()))
 											   .ReturnsAsync(null as Stream);
-			var searchModel = new GetAcademyConversionSearchModel(1, 10, null, null, null, null, null);
+			var searchModel = new ConversionProjectSearchModel(1, 10, null, null, null, null, null, null);
 
 			// Act
 			var result = await _controller.ExportProjectsToSpreadsheet(searchModel);

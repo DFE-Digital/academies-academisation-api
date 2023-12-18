@@ -70,11 +70,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<LegacyApiResponse<ConversionProjectServiceModel>>> GetProjects(
-				GetAcademyConversionSearchModel? searchModel,
+				ConversionProjectSearchModel? searchModel,
 				[FromQuery] int? urn = null)
 		{
 			LegacyApiResponse<ConversionProjectServiceModel>? result =
-				await _conversionProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
+				await _conversionProjectQueryService.GetProjectsV2(searchModel!.StatusQueryString, searchModel.TitleFilter,
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count,
 					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
 			return result is null ? NotFound() : Ok(result);

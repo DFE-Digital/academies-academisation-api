@@ -48,7 +48,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 		return await _conversionProjectRepository.GetFilterParameters();
 	}
 
-	public async Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+	public async Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjectsV2(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
 	{
 		var (projects, totalCount) = await _conversionProjectRepository.SearchProjectsV2(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates, page, count);
 
