@@ -459,7 +459,7 @@ public class Project : Entity, IProject, IAggregateRoot
 	}
 	public void SetSchoolOverview(string publishedAdmissionNumber, string viabilityIssues,
 							  string partOfPfiScheme, string financialDeficit,
-							  int? numberOfPlacesFundedFor, string pfiSchemeDetails,
+							  decimal? numberOfPlacesFundedFor, string pfiSchemeDetails,
 							  decimal? distanceFromSchoolToTrustHeadquarters,
 							  string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
 							  string memberOfParliamentNameAndParty)

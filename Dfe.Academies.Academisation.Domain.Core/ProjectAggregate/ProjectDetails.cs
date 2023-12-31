@@ -60,7 +60,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? PfiSchemeDetails { get; set; }
 	public string? ViabilityIssues { get; set; }
 	public string? FinancialDeficit { get; set; }
-	public int? NumberOfPlacesFundedFor { get; set; }
+	public decimal? NumberOfPlacesFundedFor { get; set; }
 	public string? DiocesanTrust { get; init; }
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }

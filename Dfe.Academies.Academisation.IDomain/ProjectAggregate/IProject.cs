@@ -19,7 +19,7 @@ public interface IProject
 
 	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl);
 	public void SetSchoolOverview(string publishedAdmissionNumber, string viabilityIssues, string partOfPfiScheme,
-			string financialDeficit, int? numberOfPlacesFundedFor, string pfiSchemeDetails,
+			string financialDeficit, decimal? numberOfPlacesFundedFor, string pfiSchemeDetails,
 			decimal? distanceFromSchoolToTrustHeadquarters,
 			string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			string memberOfParliamentNameAndParty);
