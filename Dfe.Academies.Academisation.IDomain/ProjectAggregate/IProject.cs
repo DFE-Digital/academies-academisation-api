@@ -18,5 +18,9 @@ public interface IProject
 	public CommandResult Update(ProjectDetails detailsToUpdate);
 
 	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl);
-
+	public void SetSchoolOverview(string publishedAdmissionNumber, string viabilityIssues, string partOfPfiScheme,
+			string financialDeficit, int? numberOfPlacesFundedFor, string pfiSchemeDetails,
+			decimal? distanceFromSchoolToTrustHeadquarters,
+			string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
+			string memberOfParliamentNameAndParty);
 }

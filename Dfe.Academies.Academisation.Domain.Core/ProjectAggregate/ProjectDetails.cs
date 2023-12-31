@@ -54,18 +54,19 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? SchoolType { get; init; }
 	public int? ActualPupilNumbers { get; init; }
 	public int? Capacity { get; init; }
-	public string? PublishedAdmissionNumber { get; init; }
-	public decimal? PercentageFreeSchoolMeals { get; init; }
-	public string? PartOfPfiScheme { get; init; }
-	public string? PfiSchemeDetails { get; init; }
-	public string? ViabilityIssues { get; init; }
-	public string? FinancialDeficit { get; init; }
+	public string? PublishedAdmissionNumber { get; set; }
+	public decimal? PercentageFreeSchoolMeals { get; set; }
+	public string? PartOfPfiScheme { get; set; }
+	public string? PfiSchemeDetails { get; set; }
+	public string? ViabilityIssues { get; set; }
+	public string? FinancialDeficit { get; set; }
+	public int? NumberOfPlacesFundedFor { get; set; }
 	public string? DiocesanTrust { get; init; }
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
-	public decimal? DistanceFromSchoolToTrustHeadquarters { get; init; }
-	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; init; }
-	public string? MemberOfParliamentNameAndParty { get; init; }
-	public bool? SchoolOverviewSectionComplete { get; init; }
+	public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }
+	public string? DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; set; }
+	public string? MemberOfParliamentNameAndParty { get; set; }
+	public bool? SchoolOverviewSectionComplete { get; set; }
 	public string? SchoolPerformanceAdditionalInformation { get; init; }
 	public string? RationaleForProject { get; init; }
 	public string? RationaleForTrust { get; init; }

@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly IMediator _mediator;
 
-		public ConversionProjectController( IConversionProjectQueryService conversionProjectQueryService,
+		public ConversionProjectController(IConversionProjectQueryService conversionProjectQueryService,
 									   IMediator mediator)
 		{
 
@@ -38,6 +38,36 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult> SetExternalApplicationForm(
 			int id,
 			SetExternalApplicationFormCommand request)
+		{
+			request.Id = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+		/// <summary>
+		/// Updates the project with the specified id - Sets the School Overview using data from the command <paramref name="request"/>
+		/// </summary>
+		/// <param name="id">The ID of the project to update</param>
+		/// <param name="request">the command containing the payload of updates</param>
+		/// <exception cref="NotImplementedException"></exception>
+		/// <response code="200">The update was applied successfully</response>
+		/// <response code="400">The request failed validation and the errors are returned</response>
+		/// <response code="404">The Project with the specified ID was not found</response>
+		[HttpPut("{id:int}/SetSchoolOverview", Name = "SetSchoolOverview")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSchoolOverview(
+			int id,
+			SetSchoolOverviewCommand request)
 		{
 			request.Id = id;
 
