@@ -1,9 +1,8 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using ServiceUser = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
-using DomainUser = Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User;
-using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using DomainUser = Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User;
+using ServiceUser = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
@@ -77,6 +76,9 @@ internal static class LegacyProjectDetailsMapper
 			Capacity = detailsToUpdate.Capacity ?? existingProject.Details.Capacity,
 			PublishedAdmissionNumber = detailsToUpdate.PublishedAdmissionNumber ?? existingProject.Details.PublishedAdmissionNumber,
 			PercentageFreeSchoolMeals = detailsToUpdate.PercentageFreeSchoolMeals ?? existingProject.Details.PercentageFreeSchoolMeals,
+			NumberOfPlacesFundedFor = detailsToUpdate.NumberOfPlacesFundedFor ?? existingProject.Details.NumberOfPlacesFundedFor,
+			NumberOfResidentialPlaces = detailsToUpdate.NumberOfResidentialPlaces ?? existingProject.Details.NumberOfResidentialPlaces,
+			NumberOfFundedResidentialPlaces = detailsToUpdate.NumberOfFundedResidentialPlaces ?? existingProject.Details.NumberOfFundedResidentialPlaces,
 			PartOfPfiScheme = detailsToUpdate.PartOfPfiScheme ?? existingProject.Details.PartOfPfiScheme,
 			PfiSchemeDetails = detailsToUpdate.PfiSchemeDetails ?? existingProject.Details.PfiSchemeDetails,
 			ViabilityIssues = detailsToUpdate.ViabilityIssues ?? existingProject.Details.ViabilityIssues,
