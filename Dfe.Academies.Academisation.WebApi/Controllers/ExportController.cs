@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -18,7 +19,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("export-projects", Name = "ExportProjectsToSpreadsheet")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> ExportProjectsToSpreadsheet(GetAcademyConversionSearchModel searchModel)
+		public async Task<IActionResult> ExportProjectsToSpreadsheet(ConversionProjectSearchModel searchModel)
 		{
 			var spreadsheetStream = await _conversionProjectExportService.ExportProjectsToSpreadsheet(searchModel);
 			if (spreadsheetStream == null)

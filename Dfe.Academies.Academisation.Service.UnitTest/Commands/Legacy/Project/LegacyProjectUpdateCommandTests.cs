@@ -29,7 +29,7 @@ public class LegacyProjectUpdateCommandTests
 	public async Task NotFound___NotFoundResultReturned()
 	{
 		// Arrange
-		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
+		var projectServiceModel = _fixture.Create<ConversionProjectServiceModel>();
 		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync((IProject?)null);
 
 		// Act
@@ -43,7 +43,7 @@ public class LegacyProjectUpdateCommandTests
 	public async Task CommandValidationErrorResult___CommandValidationErrorResultReturned()
 	{
 		// Arrange
-		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
+		var projectServiceModel = _fixture.Create<ConversionProjectServiceModel>();
 		var validationErrorResult = _fixture.Create<CommandValidationErrorResult>();
 		var project = new Mock<IProject>();
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
@@ -63,7 +63,7 @@ public class LegacyProjectUpdateCommandTests
 	public async Task UnsupportedCommandResult___ThrowsNotImplementedException()
 	{
 		// Arrange
-		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
+		var projectServiceModel = _fixture.Create<ConversionProjectServiceModel>();
 		var validationErrorResult = _fixture.Create<UnhandledCommandResult>();
 		var project = new Mock<IProject>();
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
@@ -80,7 +80,7 @@ public class LegacyProjectUpdateCommandTests
 	{
 		// Arrange
 		Mock<IProject> projectMock = new();
-		var projectServiceModel = _fixture.Create<LegacyProjectServiceModel>();
+		var projectServiceModel = _fixture.Create<ConversionProjectServiceModel>();
 		projectMock.Setup(x => x.Update(It.IsAny<ProjectDetails>())).Returns(new CommandSuccessResult());
 		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id))
 			.ReturnsAsync(projectMock.Object);
