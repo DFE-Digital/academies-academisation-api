@@ -8,9 +8,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
 internal static class LegacyProjectServiceModelMapper
 {
-	internal static LegacyProjectServiceModel MapToServiceModel(this IProject project)
+	internal static ConversionProjectServiceModel MapToServiceModel(this IProject project)
 	{
-		LegacyProjectServiceModel serviceModel = new(project.Id, project.Details.Urn)
+		ConversionProjectServiceModel serviceModel = new(project.Id, project.Details.Urn)
 		{
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,

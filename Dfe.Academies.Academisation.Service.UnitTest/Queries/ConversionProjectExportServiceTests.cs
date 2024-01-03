@@ -24,15 +24,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		public async Task ExportProjectsToSpreadsheet_ReturnsStream_WhenProjectsFound()
 		{
 			// Arrange
-			var sampleProjects = new List<LegacyProjectServiceModel>
+			var sampleProjects = new List<ConversionProjectServiceModel>
 			{
-				new LegacyProjectServiceModel(1, 100) { SchoolName = "Sample School 1", ProjectStatus = "Active" },
-				new LegacyProjectServiceModel(2, 200) { SchoolName = "Sample School 2", ProjectStatus = "Pending" }
+				new ConversionProjectServiceModel(1, 100) { SchoolName = "Sample School 1", ProjectStatus = "Active" },
+				new ConversionProjectServiceModel(2, 200) { SchoolName = "Sample School 2", ProjectStatus = "Pending" }
 			};
 
-			var legacyApiResponse = new LegacyApiResponse<LegacyProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
+			var legacyApiResponse = new LegacyApiResponse<ConversionProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
 
-			_mockConversionProjectQueryService.Setup(s => s.GetProjects(
+			_mockConversionProjectQueryService.Setup(s => s.GetProjectsV2(
 					null,
 					null,
 					null,
@@ -43,13 +43,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 					null))
 				.ReturnsAsync(legacyApiResponse);
 
-			var searchModel = new GetAcademyConversionSearchModel(
+			var searchModel = new ConversionProjectSearchModel(
 				1,
 				10,
 				null,
 				null,
-				null,
-				null,
+				null, 
+				null, 
+				null, 
 				null);
 
 			// Act
@@ -63,14 +64,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		public async Task ExportProjectsToSpreadsheet_ReturnsNull_WhenNoProjectsFound()
 		{
 			// Arrange		
-			var sampleProjects = new List<LegacyProjectServiceModel>
+			var sampleProjects = new List<ConversionProjectServiceModel>
 			{
-				new LegacyProjectServiceModel(1, 100) { SchoolName = "Sample School 1", ProjectStatus = "Active" },
-				new LegacyProjectServiceModel(2, 200) { SchoolName = "Sample School 2", ProjectStatus = "Pending" }
+				new ConversionProjectServiceModel(1, 100) { SchoolName = "Sample School 1", ProjectStatus = "Active" },
+				new ConversionProjectServiceModel(2, 200) { SchoolName = "Sample School 2", ProjectStatus = "Pending" }
 			};
-			var legacyApiResponse = new LegacyApiResponse<LegacyProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
+			var legacyApiResponse = new LegacyApiResponse<ConversionProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
 
-			_mockConversionProjectQueryService.Setup(s => s.GetProjects(
+			_mockConversionProjectQueryService.Setup(s => s.GetProjectsV2(
 					null,
 					"TitleThatDoesntExist",
 					null,
@@ -81,9 +82,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 					null))
 				.ReturnsAsync(legacyApiResponse);
 
-			var searchModel = new GetAcademyConversionSearchModel(
+			var searchModel = new ConversionProjectSearchModel(
 				1,
 				10,
+				null,
 				null,
 				null,
 				null,

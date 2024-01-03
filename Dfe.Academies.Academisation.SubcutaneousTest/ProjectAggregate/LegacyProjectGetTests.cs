@@ -35,14 +35,14 @@ public class ProjectGetTests
 		await _context.SaveChangesAsync();
 
 		// act
-		ActionResult<LegacyProjectServiceModel> result = await _projectController.Get(existingProject.Id);
+		ActionResult<ConversionProjectServiceModel> result = await _projectController.Get(existingProject.Id);
 
 		// assert
 		result.Result.Should().BeOfType<OkObjectResult>();
 
-		var serviceModel = result.Result.As<OkObjectResult>().Value.As<LegacyProjectServiceModel>();
+		var serviceModel = result.Result.As<OkObjectResult>().Value.As<ConversionProjectServiceModel>();
 
-		existingProject.Details.Should().BeEquivalentTo(serviceModel, options => options.ComparingByMembers<LegacyProjectServiceModel>()
+		existingProject.Details.Should().BeEquivalentTo(serviceModel, options => options.ComparingByMembers<ConversionProjectServiceModel>()
 		.Excluding(x => x.Notes)
 		.Excluding(x => x.Id)
 		.Excluding(x => x.CreatedOn)

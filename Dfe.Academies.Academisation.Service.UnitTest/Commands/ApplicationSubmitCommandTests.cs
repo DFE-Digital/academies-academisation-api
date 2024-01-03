@@ -109,7 +109,7 @@ public class ApplicationSubmitCommandTests
 		var result = await _subject.Handle(new ApplicationSubmitCommand(_applicationId), default(CancellationToken));
 
 		// assert
-		Assert.IsType<CreateSuccessResult<LegacyProjectServiceModel>>(result);
+		Assert.IsType<CreateSuccessResult<ConversionProjectServiceModel>>(result);
 		_projectCreateDataCommand.Verify(x => x.Execute(_projectMock.Object), Times.Once);
 		_repo.Verify(x => x.Update(_applicationMock.Object), Times.Once);		
 	}

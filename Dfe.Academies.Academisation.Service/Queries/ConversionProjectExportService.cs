@@ -21,11 +21,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_advisoryBoardDecisionGetDataByProjectIdQuery = advisoryBoardDecisionGetDataByProjectIdQuery;
 		}
 
-		public async Task<Stream?> ExportProjectsToSpreadsheet(GetAcademyConversionSearchModel searchModel)
+		public async Task<Stream?> ExportProjectsToSpreadsheet(ConversionProjectSearchModel searchModel)
 		{
-			var result = await _conversionProjectQueryService.GetProjects(searchModel.StatusQueryString, searchModel.TitleFilter,
-				searchModel.DeliveryOfficerQueryString, 1, int.MaxValue, null,
-				searchModel.RegionQueryString, searchModel.ApplicationReferences);
+			var result = await _conversionProjectQueryService.GetProjectsV2(searchModel.StatusQueryString, searchModel.TitleFilter,
+				searchModel.DeliveryOfficerQueryString, 1, int.MaxValue, searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
 
 			if (result?.Data == null || !result.Data.Any())
 			{
@@ -36,7 +35,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await GenerateSpreadsheet(projects);
 		}
 
-		private async Task<Stream> GenerateSpreadsheet(IEnumerable<LegacyProjectServiceModel> projects)
+		private async Task<Stream> GenerateSpreadsheet(IEnumerable<ConversionProjectServiceModel> projects)
 		{
 			var workbook = new XLWorkbook();
 			var worksheet = workbook.Worksheets.Add("Projects");

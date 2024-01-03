@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 {
-	public sealed class LegacyProjectServiceModel : IEquatable<LegacyProjectServiceModel>
+	public sealed class ConversionProjectServiceModel : IEquatable<ConversionProjectServiceModel>
 	{
-		public LegacyProjectServiceModel(int id, int urn)
+		public ConversionProjectServiceModel(int id, int urn)
 		{
 			Id = id;
 			Urn = urn;
@@ -105,7 +105,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public bool? ExternalApplicationFormSaved { get; init; }
 		public string? ExternalApplicationFormUrl { get; init; }
 
-		public bool Equals(LegacyProjectServiceModel? other)
+		public bool Equals(ConversionProjectServiceModel? other)
 		{
 			if (ReferenceEquals(null, other))
 			{
@@ -250,7 +250,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				return false;
 			}
 
-			return Equals((LegacyProjectServiceModel)obj);
+			return Equals((ConversionProjectServiceModel)obj);
 		}
 
 		public override int GetHashCode()

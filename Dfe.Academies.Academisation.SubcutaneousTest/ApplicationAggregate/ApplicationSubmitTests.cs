@@ -150,7 +150,7 @@ public class ApplicationSubmitTests
 			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 		var projectResult = await projectController.Get(1);
 
-		(_, LegacyProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
+		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
 
 		AssertProject(school, project, Converter);
 	}
@@ -202,14 +202,14 @@ public class ApplicationSubmitTests
 			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
 		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
 
-		(_, LegacyApiResponse<LegacyProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
+		(_, LegacyApiResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
 
 		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!, FormAMat);
 		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!, FormAMat);
 		AssertProject(thirdSchool, projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!, FormAMat);
 	}
 
-	private static void AssertProject(ApplicationSchoolServiceModel school, LegacyProjectServiceModel project, string type)
+	private static void AssertProject(ApplicationSchoolServiceModel school, ConversionProjectServiceModel project, string type)
 	{
 		Assert.Multiple(
 		() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),

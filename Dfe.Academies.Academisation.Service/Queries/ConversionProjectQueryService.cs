@@ -16,7 +16,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 		_conversionProjectRepository = conversionProjectRepository;
 	}
 
-	public async Task<LegacyProjectServiceModel?> GetConversionProject(int id)
+	public async Task<ConversionProjectServiceModel?> GetConversionProject(int id)
 	{
 		var project = await this._conversionProjectRepository.GetConversionProject(id).ConfigureAwait(false);
 
@@ -24,7 +24,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 	}
 
-	public async Task<LegacyApiResponse<LegacyProjectServiceModel>?> GetProjects(
+	public async Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjects(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions, IEnumerable<string>? applicationReferences)
 	{
 
@@ -39,12 +39,27 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 		var data = projects.Select(p => p.MapToServiceModel());
 
-		return new LegacyApiResponse<LegacyProjectServiceModel>(data,
+		return new LegacyApiResponse<ConversionProjectServiceModel>(data,
 			pageResponse);
 	}
 
 	public async Task<ProjectFilterParameters> GetFilterParameters()
 	{
 		return await _conversionProjectRepository.GetFilterParameters();
+	}
+
+	public async Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjectsV2(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+	{
+		var (projects, totalCount) = await _conversionProjectRepository.SearchProjectsV2(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates, page, count);
+
+		var pageResponse = PagingResponseFactory.Create("conversion-projects/projects", page, count, totalCount,
+			new Dictionary<string, object?> {
+				{"states", states},
+			});
+
+		var data = projects.Select(p => p.MapToServiceModel());
+
+		return new LegacyApiResponse<ConversionProjectServiceModel>(data,
+			pageResponse);
 	}
 }
