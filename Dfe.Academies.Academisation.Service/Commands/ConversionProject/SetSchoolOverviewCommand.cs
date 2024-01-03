@@ -12,6 +12,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 			string partOfPfiScheme,
 			string financialDeficit,
 			decimal? numberOfPlacesFundedFor,
+			decimal? numberOfResidentialPlaces,
+			decimal? numberOfFundedResidentialPlaces,
 			string pfiSchemeDetails,
 			decimal? distanceFromSchoolToTrustHeadquarters,
 			string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
@@ -23,6 +25,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 			PartOfPfiScheme = partOfPfiScheme;
 			FinancialDeficit = financialDeficit;
 			NumberOfPlacesFundedFor = numberOfPlacesFundedFor;
+			NumberOfResidentialPlaces = numberOfResidentialPlaces;
+			NumberOfFundedResidentialPlaces = numberOfFundedResidentialPlaces;
 			PfiSchemeDetails = pfiSchemeDetails;
 			DistanceFromSchoolToTrustHeadquarters = distanceFromSchoolToTrustHeadquarters;
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = distanceFromSchoolToTrustHeadquartersAdditionalInformation;
@@ -35,6 +39,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 		public string PartOfPfiScheme { get; set; }
 		public string FinancialDeficit { get; set; }
 		public decimal? NumberOfPlacesFundedFor { get; set; }
+		public decimal? NumberOfResidentialPlaces { get; set; }
+		public decimal? NumberOfFundedResidentialPlaces { get; set; }
 		public string PfiSchemeDetails { get; set; }
 		public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }
 		public string DistanceFromSchoolToTrustHeadquartersAdditionalInformation { get; set; }

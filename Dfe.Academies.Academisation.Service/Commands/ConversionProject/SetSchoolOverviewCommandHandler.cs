@@ -34,6 +34,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 				request.PartOfPfiScheme,
 				request.FinancialDeficit,
 				request.NumberOfPlacesFundedFor,
+				request.NumberOfResidentialPlaces,
+				request.NumberOfFundedResidentialPlaces,
 				request.PfiSchemeDetails,
 				request.DistanceFromSchoolToTrustHeadquarters,
 				request.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,

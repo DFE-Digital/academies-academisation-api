@@ -457,12 +457,19 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
 		this.Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
 	}
-	public void SetSchoolOverview(string publishedAdmissionNumber, string viabilityIssues,
-							  string partOfPfiScheme, string financialDeficit,
-							  decimal? numberOfPlacesFundedFor, string pfiSchemeDetails,
+	public void SetSchoolOverview(
+							  string publishedAdmissionNumber,
+							  string viabilityIssues,
+							  string partOfPfiScheme,
+							  string financialDeficit,
+							  decimal? numberOfPlacesFundedFor,
+							  decimal? numberOfResidentialPlaces,
+							  decimal? numberOfFundedResidentialPlaces,
+							  string pfiSchemeDetails,
 							  decimal? distanceFromSchoolToTrustHeadquarters,
 							  string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
-							  string memberOfParliamentNameAndParty)
+							  string memberOfParliamentNameAndParty
+		)
 	{
 		// Update the respective properties in the Details object
 		this.Details.PublishedAdmissionNumber = publishedAdmissionNumber;
@@ -470,6 +477,8 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.Details.PartOfPfiScheme = partOfPfiScheme;
 		this.Details.FinancialDeficit = financialDeficit;
 		this.Details.NumberOfPlacesFundedFor = numberOfPlacesFundedFor;
+		this.Details.NumberOfResidentialPlaces = numberOfResidentialPlaces;
+		this.Details.NumberOfFundedResidentialPlaces = numberOfFundedResidentialPlaces;
 		this.Details.PfiSchemeDetails = pfiSchemeDetails;
 		this.Details.DistanceFromSchoolToTrustHeadquarters = distanceFromSchoolToTrustHeadquarters;
 		this.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation = distanceFromSchoolToTrustHeadquartersAdditionalInformation;

@@ -66,6 +66,8 @@ internal static class LegacyProjectServiceModelMapper
 			PfiSchemeDetails = project.Details.PfiSchemeDetails,
 			ViabilityIssues = project.Details.ViabilityIssues,
 			NumberOfPlacesFundedFor = project.Details.NumberOfPlacesFundedFor,
+			NumberOfResidentialPlaces = project.Details.NumberOfResidentialPlaces,
+			NumberOfFundedResidentialPlaces = project.Details.NumberOfFundedResidentialPlaces,
 			FinancialDeficit = project.Details.FinancialDeficit,
 			DiocesanTrust = project.Details.DiocesanTrust,
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = project.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,

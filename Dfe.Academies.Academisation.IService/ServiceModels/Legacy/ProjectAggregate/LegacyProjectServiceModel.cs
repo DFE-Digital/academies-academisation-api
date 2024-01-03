@@ -64,6 +64,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? PfiSchemeDetails { get; init; }
 		public string? ViabilityIssues { get; init; }
 		public decimal? NumberOfPlacesFundedFor { get; init; }
+		public decimal? NumberOfResidentialPlaces { get; init; }
+		public decimal? NumberOfFundedResidentialPlaces { get; init; }
 		public string? FinancialDeficit { get; init; }
 		[JsonIgnore] public string? DiocesanTrust { get; init; }
 		[JsonIgnore] public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
