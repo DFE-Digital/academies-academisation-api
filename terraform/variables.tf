@@ -46,7 +46,7 @@ variable "enable_container_registry" {
 variable "registry_admin_enabled" {
   description = "Do you want to enable access key based authentication for your Container Registry?"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "registry_use_managed_identity" {
@@ -111,6 +111,12 @@ variable "mssql_firewall_ipv4_allow_list" {
 
 variable "mssql_server_public_access_enabled" {
   description = "Enable public internet access to your MSSQL instance. Be sure to specify 'mssql_firewall_ipv4_allow_list' to restrict inbound connections"
+  type        = bool
+  default     = false
+}
+
+variable "mssql_managed_identity_assign_role" {
+  description = "Assign the 'Storage Blob Data Contributor' Role to the SQL Server User-Assigned Managed Identity. Note: If you do not have 'Microsoft.Authorization/roleAssignments/write' permission, you will need to manually assign the 'Storage Blob Data Contributor' Role to the identity"
   type        = bool
   default     = false
 }
