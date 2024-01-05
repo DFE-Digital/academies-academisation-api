@@ -1,7 +1,7 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+﻿using System.Threading.Tasks;
+using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,49 +12,59 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
 	public class ConversionProjectControllerTests
 	{
-		private readonly Mock<IConversionProjectExportService> _mockConversionProjectExportService;
+		private readonly Mock<IConversionProjectQueryService> _mockConversionProjectQueryService;
 		private readonly Mock<IMediator> _mockMediator;
-		private readonly ExportController _controller;
+		private readonly ConversionProjectController _controller;
 
 		public ConversionProjectControllerTests()
 		{
-			_mockConversionProjectExportService = new Mock<IConversionProjectExportService>();
+			_mockConversionProjectQueryService = new Mock<IConversionProjectQueryService>();
 			_mockMediator = new Mock<IMediator>();
-			_controller = new ExportController(_mockConversionProjectExportService.Object);
+			_controller = new ConversionProjectController(_mockConversionProjectQueryService.Object, _mockMediator.Object);
 		}
-		[Fact]
-		public async Task ExportProjectsToSpreadsheet_ReturnsFileResult_WhenProjectsFound()
+
+		private SetSchoolOverviewCommand CreateValidSetSchoolOverviewCommand()
 		{
-			// Arrange
-			var mockStream = new MemoryStream();
-			var searchModel = new ConversionProjectSearchModel(1, 10, null, null, null, null, null, null);
-			_mockConversionProjectExportService.Setup(s => s.ExportProjectsToSpreadsheet(searchModel))
-											   .ReturnsAsync(mockStream);
-
-			// Act
-			var result = await _controller.ExportProjectsToSpreadsheet(searchModel);
-
-			// Assert
-			var fileResult = Assert.IsAssignableFrom<FileResult>(result);
-			Assert.Equal("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileResult.ContentType);
-			Assert.Equal("exported_projects.xlsx", fileResult.FileDownloadName);
+			return new SetSchoolOverviewCommand(
+				id: 1,
+				publishedAdmissionNumber: "100",
+				viabilityIssues: "No issues",
+				partOfPfiScheme: "No",
+				financialDeficit: "None",
+				numberOfPlacesFundedFor: 150m,
+				numberOfResidentialPlaces: 10m,
+				numberOfFundedResidentialPlaces: 5m,
+				pfiSchemeDetails: "N/A",
+				distanceFromSchoolToTrustHeadquarters: 20m,
+				distanceFromSchoolToTrustHeadquartersAdditionalInformation: "Within city limits",
+				memberOfParliamentNameAndParty: "Jane Doe - PartyName"
+			);
 		}
 
 		[Fact]
-		public async Task ExportProjectsToSpreadsheet_ReturnsNotFound_WhenNoProjectsFound()
+		public async Task SetSchoolOverview_ReturnsOk_WhenUpdateIsSuccessful()
 		{
-			// Arrange
-			_mockConversionProjectExportService.Setup(s => s.ExportProjectsToSpreadsheet(It.IsAny<ConversionProjectSearchModel>()))
-											   .ReturnsAsync(null as Stream);
-			var searchModel = new ConversionProjectSearchModel(1, 10, null, null, null, null, null, null);
+			var request = CreateValidSetSchoolOverviewCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetSchoolOverviewCommand>(), default))
+						 .ReturnsAsync(new CommandSuccessResult());
 
-			// Act
-			var result = await _controller.ExportProjectsToSpreadsheet(searchModel);
+			var result = await _controller.SetSchoolOverview(request.Id, request);
 
-			// Assert
-			var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-			Assert.Equal("No projects found for the specified criteria.", notFoundResult.Value);
+			Assert.IsType<OkResult>(result);
 		}
+
+		[Fact]
+		public async Task SetSchoolOverview_ReturnsNotFound_WhenProjectNotFound()
+		{
+			var request = CreateValidSetSchoolOverviewCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetSchoolOverviewCommand>(), default))
+						 .ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetSchoolOverview(request.Id, request);
+
+			Assert.IsType<NotFoundResult>(result);
+		}
+
 
 	}
 }
