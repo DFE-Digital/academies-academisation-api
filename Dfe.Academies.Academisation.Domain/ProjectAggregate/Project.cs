@@ -244,6 +244,9 @@ public class Project : Entity, IProject, IAggregateRoot
 			PfiSchemeDetails = detailsToUpdate.PfiSchemeDetails,
 			ViabilityIssues = detailsToUpdate.ViabilityIssues,
 			FinancialDeficit = detailsToUpdate.FinancialDeficit,
+			NumberOfPlacesFundedFor = detailsToUpdate.NumberOfPlacesFundedFor,
+			NumberOfResidentialPlaces = detailsToUpdate.NumberOfResidentialPlaces,
+			NumberOfFundedResidentialPlaces = detailsToUpdate.NumberOfFundedResidentialPlaces,
 			DiocesanTrust = detailsToUpdate.DiocesanTrust,
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = detailsToUpdate.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
@@ -457,4 +460,35 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
 		this.Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
 	}
+	public void SetSchoolOverview(
+							  string publishedAdmissionNumber,
+							  string viabilityIssues,
+							  string partOfPfiScheme,
+							  string financialDeficit,
+							  decimal? numberOfPlacesFundedFor,
+							  decimal? numberOfResidentialPlaces,
+							  decimal? numberOfFundedResidentialPlaces,
+							  string pfiSchemeDetails,
+							  decimal? distanceFromSchoolToTrustHeadquarters,
+							  string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
+							  string memberOfParliamentNameAndParty
+		)
+	{
+		// Update the respective properties in the Details object
+		this.Details.PublishedAdmissionNumber = publishedAdmissionNumber;
+		this.Details.ViabilityIssues = viabilityIssues;
+		this.Details.PartOfPfiScheme = partOfPfiScheme;
+		this.Details.FinancialDeficit = financialDeficit;
+		this.Details.NumberOfPlacesFundedFor = numberOfPlacesFundedFor;
+		this.Details.NumberOfResidentialPlaces = numberOfResidentialPlaces;
+		this.Details.NumberOfFundedResidentialPlaces = numberOfFundedResidentialPlaces;
+		this.Details.PfiSchemeDetails = pfiSchemeDetails;
+		this.Details.DistanceFromSchoolToTrustHeadquarters = distanceFromSchoolToTrustHeadquarters;
+		this.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation = distanceFromSchoolToTrustHeadquartersAdditionalInformation;
+		this.Details.MemberOfParliamentNameAndParty = memberOfParliamentNameAndParty;
+
+		// Update the LastModifiedOn property to the current time to indicate the object has been modified
+		this.LastModifiedOn = DateTime.UtcNow;
+	}
+
 }
