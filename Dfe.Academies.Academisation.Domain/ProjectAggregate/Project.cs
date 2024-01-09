@@ -222,6 +222,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
 			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
+			ConversionSupportGrantNumberOfSites = detailsToUpdate.ConversionSupportGrantNumberOfSites,
 			Region = detailsToUpdate.Region,
 
 			// Annex B

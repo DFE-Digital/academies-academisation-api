@@ -48,6 +48,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? ConversionSupportGrantType { get; init; }
 	public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; init; }
 	public bool? ConversionSupportGrantAmountChanged { get; init; }
+	public string? ConversionSupportGrantNumberOfSites { get; init; }
 	public string? Region { get; init; }
 	public string? SchoolPhase { get; init; }
 	public string? AgeRange { get; init; }
@@ -164,6 +165,8 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(ConversionSupportGrantChangeReason, other.ConversionSupportGrantChangeReason,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(ConversionSupportGrantType, other.ConversionSupportGrantType,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+				string.Equals(ConversionSupportGrantNumberOfSites, other.ConversionSupportGrantNumberOfSites,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(ConversionSupportGrantEnvironmentalImprovementGrant, other.ConversionSupportGrantEnvironmentalImprovementGrant,
 				   StringComparison.InvariantCultureIgnoreCase) &&
@@ -289,6 +292,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(ConversionSupportGrantChangeReason, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ConversionSupportGrantType, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ConversionSupportGrantEnvironmentalImprovementGrant, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(ConversionSupportGrantNumberOfSites, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ConversionSupportGrantAmountChanged);
 		hashCode.Add(Region, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(SchoolPhase, StringComparer.InvariantCultureIgnoreCase);
