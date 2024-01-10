@@ -43,7 +43,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
 				"N/A",
 				20m,
 				"Within city limits",
-				"Jane Doe - PartyName"
+				"Jane Doe - PartyName",
+				true,
+				true,
+				true
 			);
 		}
 

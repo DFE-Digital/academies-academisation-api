@@ -29,6 +29,9 @@ public interface IProject
 		string pfiSchemeDetails,
 		decimal? distanceFromSchoolToTrustHeadquarters,
 		string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
-		string memberOfParliamentNameAndParty
+		string memberOfParliamentNameAndParty,
+		bool? pupilsAttendingGroupPermanentlyExcluded,
+		bool? pupilsAttendingGroupMedicalAndHealthNeeds,
+		bool? pupilsAttendingGroupTeenageMums
 		);
 }

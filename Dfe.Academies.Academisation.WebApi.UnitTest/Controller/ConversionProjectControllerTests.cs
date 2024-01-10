@@ -37,7 +37,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				pfiSchemeDetails: "N/A",
 				distanceFromSchoolToTrustHeadquarters: 20m,
 				distanceFromSchoolToTrustHeadquartersAdditionalInformation: "Within city limits",
-				memberOfParliamentNameAndParty: "Jane Doe - PartyName"
+				memberOfParliamentNameAndParty: "Jane Doe - PartyName",
+				pupilsAttendingGroupPermanentlyExcluded: true,
+				pupilsAttendingGroupMedicalAndHealthNeeds: true,
+				pupilsAttendingGroupTeenageMums: true
 			);
 		}
 

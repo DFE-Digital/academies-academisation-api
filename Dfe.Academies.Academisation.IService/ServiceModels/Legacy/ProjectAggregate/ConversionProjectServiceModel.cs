@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? ConversionSupportGrantType { get; init; }
 		public string? ConversionSupportGrantEnvironmentalImprovementGrant { get; init; }
 		public bool? ConversionSupportGrantAmountChanged { get; init; }
-		public string ConversionSupportGrantNumberOfSites { get; set; }
+		public string? ConversionSupportGrantNumberOfSites { get; set; }
 		public string? Region { get; init; }
 		public string? SchoolPhase { get; init; }
 		[JsonIgnore] public string? AgeRange { get; init; }
@@ -108,6 +108,9 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public DateTime CreatedOn { get; set; }
 		public bool? ExternalApplicationFormSaved { get; init; }
 		public string? ExternalApplicationFormUrl { get; init; }
+		public bool? PupilsAttendingGroupPermanentlyExcluded { get; init; }
+		public bool? PupilsAttendingGroupMedicalAndHealthNeeds { get; init; }
+		public bool? PupilsAttendingGroupTeenageMums { get; init; }
 
 		public bool Equals(ConversionProjectServiceModel? other)
 		{

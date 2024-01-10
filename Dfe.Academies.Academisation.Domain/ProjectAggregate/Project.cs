@@ -472,7 +472,10 @@ public class Project : Entity, IProject, IAggregateRoot
 							  string pfiSchemeDetails,
 							  decimal? distanceFromSchoolToTrustHeadquarters,
 							  string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
-							  string memberOfParliamentNameAndParty
+							  string memberOfParliamentNameAndParty,
+							  bool? pupilsAttendingGroupPermanentlyExcluded,
+							  bool? pupilsAttendingGroupMedicalAndHealthNeeds,
+							  bool? pupilsAttendingGroupTeenageMums
 		)
 	{
 		// Update the respective properties in the Details object
@@ -487,6 +490,9 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.Details.DistanceFromSchoolToTrustHeadquarters = distanceFromSchoolToTrustHeadquarters;
 		this.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation = distanceFromSchoolToTrustHeadquartersAdditionalInformation;
 		this.Details.MemberOfParliamentNameAndParty = memberOfParliamentNameAndParty;
+		this.Details.PupilsAttendingGroupPermanentlyExcluded = pupilsAttendingGroupPermanentlyExcluded;
+		this.Details.PupilsAttendingGroupMedicalAndHealthNeeds = pupilsAttendingGroupMedicalAndHealthNeeds;
+		this.Details.PupilsAttendingGroupTeenageMums = pupilsAttendingGroupTeenageMums;
 
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;

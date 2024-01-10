@@ -76,6 +76,9 @@ internal static class LegacyProjectServiceModelMapper
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = project.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentNameAndParty = project.Details.MemberOfParliamentNameAndParty,
 			SchoolOverviewSectionComplete = project.Details.SchoolOverviewSectionComplete,
+			PupilsAttendingGroupPermanentlyExcluded = project.Details.PupilsAttendingGroupPermanentlyExcluded,
+			PupilsAttendingGroupMedicalAndHealthNeeds = project.Details.PupilsAttendingGroupMedicalAndHealthNeeds,
+			PupilsAttendingGroupTeenageMums = project.Details.PupilsAttendingGroupTeenageMums,
 
 			// Annex B
 			AnnexBFormReceived = project.Details.AnnexBFormReceived,

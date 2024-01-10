@@ -64,6 +64,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public decimal? NumberOfPlacesFundedFor { get; set; }
 	public decimal? NumberOfResidentialPlaces { get; set; }
 	public decimal? NumberOfFundedResidentialPlaces { get; set; }
+	public bool? PupilsAttendingGroupPermanentlyExcluded { get; set; }
+	public bool? PupilsAttendingGroupMedicalAndHealthNeeds { get; set; }
+	public bool? PupilsAttendingGroupTeenageMums { get; set; }
 	public string? DiocesanTrust { get; init; }
 	public decimal? PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust { get; init; }
 	public decimal? DistanceFromSchoolToTrustHeadquarters { get; set; }
