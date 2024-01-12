@@ -79,6 +79,10 @@ internal static class LegacyProjectServiceModelMapper
 			PupilsAttendingGroupPermanentlyExcluded = project.Details.PupilsAttendingGroupPermanentlyExcluded,
 			PupilsAttendingGroupMedicalAndHealthNeeds = project.Details.PupilsAttendingGroupMedicalAndHealthNeeds,
 			PupilsAttendingGroupTeenageMums = project.Details.PupilsAttendingGroupTeenageMums,
+			NumberOfAlternativeProvisionPlaces = project.Details.NumberOfAlternativeProvisionPlaces,
+			NumberOfMedicalPlaces = project.Details.NumberOfMedicalPlaces,
+			NumberOfSENUnitPlaces = project.Details.NumberOfSENUnitPlaces,
+			NumberOfPost16Places = project.Details.NumberOfPost16Places,
 
 			// Annex B
 			AnnexBFormReceived = project.Details.AnnexBFormReceived,

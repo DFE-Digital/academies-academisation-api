@@ -253,6 +253,10 @@ public class Project : Entity, IProject, IAggregateRoot
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentNameAndParty = detailsToUpdate.MemberOfParliamentNameAndParty,
+			NumberOfAlternativeProvisionPlaces = detailsToUpdate.NumberOfAlternativeProvisionPlaces,
+			NumberOfMedicalPlaces = detailsToUpdate.NumberOfMedicalPlaces,
+			NumberOfSENUnitPlaces = detailsToUpdate.NumberOfSENUnitPlaces,
+			NumberOfPost16Places = detailsToUpdate.NumberOfPost16Places,
 
 			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete,
 

@@ -64,6 +64,10 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public decimal? NumberOfPlacesFundedFor { get; set; }
 	public decimal? NumberOfResidentialPlaces { get; set; }
 	public decimal? NumberOfFundedResidentialPlaces { get; set; }
+	public int? NumberOfAlternativeProvisionPlaces { get; set; }
+	public int? NumberOfMedicalPlaces { get; set; }
+	public int? NumberOfSENUnitPlaces { get; set; }
+	public int? NumberOfPost16Places { get; set; }
 	public bool? PupilsAttendingGroupPermanentlyExcluded { get; set; }
 	public bool? PupilsAttendingGroupMedicalAndHealthNeeds { get; set; }
 	public bool? PupilsAttendingGroupTeenageMums { get; set; }

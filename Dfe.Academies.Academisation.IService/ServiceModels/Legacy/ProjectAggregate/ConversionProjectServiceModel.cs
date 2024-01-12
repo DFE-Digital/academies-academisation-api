@@ -111,6 +111,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public bool? PupilsAttendingGroupPermanentlyExcluded { get; init; }
 		public bool? PupilsAttendingGroupMedicalAndHealthNeeds { get; init; }
 		public bool? PupilsAttendingGroupTeenageMums { get; init; }
+		public int? NumberOfAlternativeProvisionPlaces { get; set; }
+		public int? NumberOfMedicalPlaces { get; set; }
+		public int? NumberOfSENUnitPlaces { get; set; }
+		public int? NumberOfPost16Places { get; set; }
 
 		public bool Equals(ConversionProjectServiceModel? other)
 		{
