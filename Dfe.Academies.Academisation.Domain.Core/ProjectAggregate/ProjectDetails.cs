@@ -92,9 +92,10 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public int? YearThreeProjectedCapacity { get; init; }
 	public int? YearThreeProjectedPupilNumbers { get; init; }
 	public string? SchoolPupilForecastsAdditionalInformation { get; init; }
-	public string? KeyStage2PerformanceAdditionalInformation { get; init; }
-	public string? KeyStage4PerformanceAdditionalInformation { get; init; }
-	public string? KeyStage5PerformanceAdditionalInformation { get; init; }
+	public string? KeyStage2PerformanceAdditionalInformation { get; private set; }
+	public string? KeyStage4PerformanceAdditionalInformation { get; private set; }
+	public string? KeyStage5PerformanceAdditionalInformation { get; private set; }
+	public string? EducationalAttendanceAdditionalInformation { get; private set; }
 	public User? AssignedUser { get; init; }
 
 	public bool? ExternalApplicationFormSaved { get; set; }
@@ -219,6 +220,8 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(KeyStage4PerformanceAdditionalInformation, other.KeyStage4PerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation,
+				   StringComparison.InvariantCultureIgnoreCase) &&
+			  string.Equals(EducationalAttendanceAdditionalInformation, other.EducationalAttendanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser) &&
 				string.Equals(ExternalApplicationFormUrl, other.ExternalApplicationFormUrl,
 				   StringComparison.InvariantCultureIgnoreCase) &&
@@ -333,10 +336,19 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(KeyStage2PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(KeyStage4PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(EducationalAttendanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AssignedUser);
 		hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ExternalApplicationFormSaved);
 
 		return hashCode.ToHashCode();
+	}
+
+	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation)
+	{
+		this.EducationalAttendanceAdditionalInformation = educationalAttendanceAdditionalInformation;
+		this.KeyStage2PerformanceAdditionalInformation = keyStage2PerformanceAdditionalInformation;
+		this.KeyStage4PerformanceAdditionalInformation = keyStage4PerformanceAdditionalInformation;
+		this.KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
 	}
 }
