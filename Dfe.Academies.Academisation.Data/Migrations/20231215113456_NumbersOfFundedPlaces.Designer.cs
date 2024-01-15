@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20231215113456_NumbersOfFundedPlaces")]
+    partial class NumbersOfFundedPlaces
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1572,14 +1575,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("NameOfTrust");
 
-                            b1.Property<decimal?>("NumberOfFundedResidentialPlaces")
-                                .HasColumnType("decimal(18,2)");
-
-                            b1.Property<decimal?>("NumberOfPlacesFundedFor")
-                                .HasColumnType("decimal(18,2)");
-
-                            b1.Property<decimal?>("NumberOfResidentialPlaces")
-                                .HasColumnType("decimal(18,2)");
+                            b1.Property<int?>("NumberOfPlacesFundedFor")
+                                .HasColumnType("int");
 
                             b1.Property<string>("PartOfPfiScheme")
                                 .HasColumnType("nvarchar(max)")

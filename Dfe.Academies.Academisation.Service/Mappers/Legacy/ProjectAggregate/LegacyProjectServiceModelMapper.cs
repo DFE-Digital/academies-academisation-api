@@ -1,7 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using User = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
@@ -67,6 +65,9 @@ internal static class LegacyProjectServiceModelMapper
 			PartOfPfiScheme = project.Details.PartOfPfiScheme,
 			PfiSchemeDetails = project.Details.PfiSchemeDetails,
 			ViabilityIssues = project.Details.ViabilityIssues,
+			NumberOfPlacesFundedFor = project.Details.NumberOfPlacesFundedFor,
+			NumberOfResidentialPlaces = project.Details.NumberOfResidentialPlaces,
+			NumberOfFundedResidentialPlaces = project.Details.NumberOfFundedResidentialPlaces,
 			FinancialDeficit = project.Details.FinancialDeficit,
 			DiocesanTrust = project.Details.DiocesanTrust,
 			PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust = project.Details.PercentageOfGoodOrOutstandingSchoolsInTheDiocesanTrust,
@@ -142,7 +143,10 @@ internal static class LegacyProjectServiceModelMapper
 
 		return notes.Select(note => new ConversionProjectDeleteNote
 		{
-			Author = note.Author, Note = note.Note, Subject = note.Subject, Date = note.Date
+			Author = note.Author,
+			Note = note.Note,
+			Subject = note.Subject,
+			Date = note.Date
 		});
 	}
 }

@@ -18,6 +18,19 @@ public interface IProject
 	public CommandResult Update(ProjectDetails detailsToUpdate);
 
 	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl);
+	public void SetSchoolOverview(
+		string publishedAdmissionNumber,
+		string viabilityIssues,
+		string partOfPfiScheme,
+		string financialDeficit,
+		decimal? numberOfPlacesFundedFor,
+		decimal? numberOfResidentialPlaces,
+		decimal? numberOfFundedResidentialPlaces,
+		string pfiSchemeDetails,
+		decimal? distanceFromSchoolToTrustHeadquarters,
+		string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
+		string memberOfParliamentNameAndParty
+		);
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
 
