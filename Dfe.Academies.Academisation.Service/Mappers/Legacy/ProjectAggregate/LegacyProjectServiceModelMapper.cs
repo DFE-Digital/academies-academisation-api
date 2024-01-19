@@ -126,6 +126,7 @@ internal static class LegacyProjectServiceModelMapper
 			KeyStage2PerformanceAdditionalInformation = project.Details.KeyStage2PerformanceAdditionalInformation,
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
+			EducationalAttendanceAdditionalInformation = project.Details.EducationalAttendanceAdditionalInformation,
 
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null

@@ -102,6 +102,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? KeyStage2PerformanceAdditionalInformation { get; init; }
 		public string? KeyStage4PerformanceAdditionalInformation { get; init; }
 		public string? KeyStage5PerformanceAdditionalInformation { get; init; }
+		public string? EducationalAttendanceAdditionalInformation { get; init; }
+
 		public User? AssignedUser { get; init; }
 		public ICollection<ConversionProjectDeleteNote>? Notes { get; set; }
 		public DateTime CreatedOn { get; set; }
@@ -230,6 +232,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 					   other.KeyStage4PerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(KeyStage5PerformanceAdditionalInformation,
 					   other.KeyStage5PerformanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) &&
+					string.Equals(EducationalAttendanceAdditionalInformation,
+					   other.EducationalAttendanceAdditionalInformation, StringComparison.InvariantCultureIgnoreCase) &&
 				   Equals(AssignedUser, other.AssignedUser) &&
 									  string.Equals(ExternalApplicationFormUrl,
 					   other.ExternalApplicationFormUrl, StringComparison.InvariantCultureIgnoreCase) &&
@@ -344,6 +348,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(KeyStage2PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(KeyStage4PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(KeyStage5PerformanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
+			hashCode.Add(EducationalAttendanceAdditionalInformation, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(AssignedUser);
 			hashCode.Add(CreatedOn);
 			hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);

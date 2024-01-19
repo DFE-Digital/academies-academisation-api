@@ -301,6 +301,8 @@ public class Project : Entity, IProject, IAggregateRoot
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
 
+		Details.SetPerformanceData(detailsToUpdate.KeyStage2PerformanceAdditionalInformation, detailsToUpdate.KeyStage4PerformanceAdditionalInformation, detailsToUpdate.KeyStage5PerformanceAdditionalInformation, detailsToUpdate.EducationalAttendanceAdditionalInformation);
+
 		return new CommandSuccessResult();
 	}
 
