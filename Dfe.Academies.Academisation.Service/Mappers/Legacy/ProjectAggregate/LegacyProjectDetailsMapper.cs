@@ -93,6 +93,9 @@ internal static class LegacyProjectDetailsMapper
 			NumberOfMedicalPlaces = detailsToUpdate.NumberOfMedicalPlaces ?? existingProject.Details.NumberOfMedicalPlaces,
 			NumberOfPost16Places = detailsToUpdate.NumberOfPost16Places ?? existingProject.Details.NumberOfPost16Places,
 			NumberOfSENUnitPlaces = detailsToUpdate.NumberOfSENUnitPlaces ?? existingProject.Details.NumberOfSENUnitPlaces,
+			PupilsAttendingGroupMedicalAndHealthNeeds = detailsToUpdate.PupilsAttendingGroupMedicalAndHealthNeeds ?? existingProject.Details.PupilsAttendingGroupMedicalAndHealthNeeds,
+			PupilsAttendingGroupPermanentlyExcluded = detailsToUpdate.PupilsAttendingGroupPermanentlyExcluded ?? existingProject.Details.PupilsAttendingGroupPermanentlyExcluded,
+			PupilsAttendingGroupTeenageMums = detailsToUpdate.PupilsAttendingGroupTeenageMums ?? existingProject.Details.PupilsAttendingGroupTeenageMums,
 
 			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete ?? existingProject.Details.SchoolOverviewSectionComplete,
 
