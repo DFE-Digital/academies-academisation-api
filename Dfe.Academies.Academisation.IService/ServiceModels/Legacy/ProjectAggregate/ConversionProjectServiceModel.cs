@@ -55,7 +55,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? Region { get; init; }
 		public string? SchoolPhase { get; init; }
 		[JsonIgnore] public string? AgeRange { get; init; }
-		[JsonIgnore] public string? SchoolType { get; init; }
+		public string? SchoolType { get; init; }
 		[JsonIgnore] public int? ActualPupilNumbers { get; init; }
 		[JsonIgnore] public int? Capacity { get; init; }
 		public string? PublishedAdmissionNumber { get; init; }
