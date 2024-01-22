@@ -39,7 +39,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 				request.PfiSchemeDetails,
 				request.DistanceFromSchoolToTrustHeadquarters,
 				request.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
-				request.MemberOfParliamentNameAndParty);
+				request.MemberOfParliamentNameAndParty,
+				request.PupilsAttendingGroupPermanentlyExcluded,
+				request.PupilsAttendingGroupMedicalAndHealthNeeds,
+				request.PupilsAttendingGroupTeenageMums
+				);
 
 			_conversionProjectRepository.Update(existingProject as Project);
 			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

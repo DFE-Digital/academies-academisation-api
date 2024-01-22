@@ -222,6 +222,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
 			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
+			ConversionSupportGrantNumberOfSites = detailsToUpdate.ConversionSupportGrantNumberOfSites,
 			Region = detailsToUpdate.Region,
 
 			// Annex B
@@ -252,6 +253,10 @@ public class Project : Entity, IProject, IAggregateRoot
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentNameAndParty = detailsToUpdate.MemberOfParliamentNameAndParty,
+			NumberOfAlternativeProvisionPlaces = detailsToUpdate.NumberOfAlternativeProvisionPlaces,
+			NumberOfMedicalPlaces = detailsToUpdate.NumberOfMedicalPlaces,
+			NumberOfSENUnitPlaces = detailsToUpdate.NumberOfSENUnitPlaces,
+			NumberOfPost16Places = detailsToUpdate.NumberOfPost16Places,
 
 			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete,
 
@@ -471,7 +476,10 @@ public class Project : Entity, IProject, IAggregateRoot
 							  string pfiSchemeDetails,
 							  decimal? distanceFromSchoolToTrustHeadquarters,
 							  string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
-							  string memberOfParliamentNameAndParty
+							  string memberOfParliamentNameAndParty,
+							  bool? pupilsAttendingGroupPermanentlyExcluded,
+							  bool? pupilsAttendingGroupMedicalAndHealthNeeds,
+							  bool? pupilsAttendingGroupTeenageMums
 		)
 	{
 		// Update the respective properties in the Details object
@@ -486,6 +494,9 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.Details.DistanceFromSchoolToTrustHeadquarters = distanceFromSchoolToTrustHeadquarters;
 		this.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation = distanceFromSchoolToTrustHeadquartersAdditionalInformation;
 		this.Details.MemberOfParliamentNameAndParty = memberOfParliamentNameAndParty;
+		this.Details.PupilsAttendingGroupPermanentlyExcluded = pupilsAttendingGroupPermanentlyExcluded;
+		this.Details.PupilsAttendingGroupMedicalAndHealthNeeds = pupilsAttendingGroupMedicalAndHealthNeeds;
+		this.Details.PupilsAttendingGroupTeenageMums = pupilsAttendingGroupTeenageMums;
 
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;
