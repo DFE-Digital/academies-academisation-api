@@ -257,6 +257,9 @@ public class Project : Entity, IProject, IAggregateRoot
 			NumberOfMedicalPlaces = detailsToUpdate.NumberOfMedicalPlaces,
 			NumberOfSENUnitPlaces = detailsToUpdate.NumberOfSENUnitPlaces,
 			NumberOfPost16Places = detailsToUpdate.NumberOfPost16Places,
+			PupilsAttendingGroupMedicalAndHealthNeeds = detailsToUpdate.PupilsAttendingGroupMedicalAndHealthNeeds,
+			PupilsAttendingGroupPermanentlyExcluded = detailsToUpdate.PupilsAttendingGroupPermanentlyExcluded,
+			PupilsAttendingGroupTeenageMums = detailsToUpdate.PupilsAttendingGroupTeenageMums,
 
 			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete,
 
