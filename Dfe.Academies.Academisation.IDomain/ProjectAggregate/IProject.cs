@@ -29,7 +29,10 @@ public interface IProject
 		string pfiSchemeDetails,
 		decimal? distanceFromSchoolToTrustHeadquarters,
 		string distanceFromSchoolToTrustHeadquartersAdditionalInformation,
-		string memberOfParliamentNameAndParty
+		string memberOfParliamentNameAndParty,
+		bool? pupilsAttendingGroupPermanentlyExcluded,
+		bool? pupilsAttendingGroupMedicalAndHealthNeeds,
+		bool? pupilsAttendingGroupTeenageMums
 		);
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);

@@ -72,6 +72,7 @@ public class ProjectUpdateTests
 		var updatedProject = _fixture.Build<ConversionProjectServiceModel>()
 			.With(p => p.Id, existingProject.Id)
 			.With(p => p.Urn, existingProject.Details.Urn)
+			.With(p => p.ExternalApplicationFormSaved, existingProject.Details.ExternalApplicationFormSaved)
 			.Create();
 
 		updatedProject.Notes?.Clear();

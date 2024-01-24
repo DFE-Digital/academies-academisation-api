@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240112124919_AddBreakdownOfPlaces")]
+    partial class AddBreakdownOfPlaces
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1482,9 +1485,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("DistanceFromSchoolToTrustHeadquartersAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("DistanceFromSchoolToTrustHeadquartersAdditionalInformation");
-
-                            b1.Property<string>("EducationalAttendanceAdditionalInformation")
-                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<DateTime?>("EndOfCurrentFinancialYear")
                                 .HasColumnType("datetime2")

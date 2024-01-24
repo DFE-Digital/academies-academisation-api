@@ -52,6 +52,7 @@ internal static class LegacyProjectServiceModelMapper
 			ConversionSupportGrantType = project.Details.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = project.Details.ConversionSupportGrantEnvironmentalImprovementGrant,
 			ConversionSupportGrantAmountChanged = project.Details.ConversionSupportGrantAmountChanged,
+			ConversionSupportGrantNumberOfSites = project.Details.ConversionSupportGrantNumberOfSites,
 			Region = project.Details.Region,
 
 			// School Overview
@@ -75,6 +76,13 @@ internal static class LegacyProjectServiceModelMapper
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = project.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentNameAndParty = project.Details.MemberOfParliamentNameAndParty,
 			SchoolOverviewSectionComplete = project.Details.SchoolOverviewSectionComplete,
+			PupilsAttendingGroupPermanentlyExcluded = project.Details.PupilsAttendingGroupPermanentlyExcluded,
+			PupilsAttendingGroupMedicalAndHealthNeeds = project.Details.PupilsAttendingGroupMedicalAndHealthNeeds,
+			PupilsAttendingGroupTeenageMums = project.Details.PupilsAttendingGroupTeenageMums,
+			NumberOfAlternativeProvisionPlaces = project.Details.NumberOfAlternativeProvisionPlaces,
+			NumberOfMedicalPlaces = project.Details.NumberOfMedicalPlaces,
+			NumberOfSENUnitPlaces = project.Details.NumberOfSENUnitPlaces,
+			NumberOfPost16Places = project.Details.NumberOfPost16Places,
 
 			// Annex B
 			AnnexBFormReceived = project.Details.AnnexBFormReceived,

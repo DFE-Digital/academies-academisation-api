@@ -58,6 +58,7 @@ internal static class LegacyProjectDetailsMapper
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType ?? existingProject.Details.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant ?? existingProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant,
 			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged ?? existingProject.Details.ConversionSupportGrantAmountChanged,
+			ConversionSupportGrantNumberOfSites = detailsToUpdate.ConversionSupportGrantNumberOfSites ?? existingProject.Details.ConversionSupportGrantNumberOfSites,
 			Region = detailsToUpdate.Region ?? existingProject.Details.Region,
 
 			// Annex B
@@ -88,6 +89,13 @@ internal static class LegacyProjectDetailsMapper
 			DistanceFromSchoolToTrustHeadquarters = detailsToUpdate.DistanceFromSchoolToTrustHeadquarters ?? existingProject.Details.DistanceFromSchoolToTrustHeadquarters,
 			DistanceFromSchoolToTrustHeadquartersAdditionalInformation = detailsToUpdate.DistanceFromSchoolToTrustHeadquartersAdditionalInformation ?? existingProject.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation,
 			MemberOfParliamentNameAndParty = detailsToUpdate.MemberOfParliamentNameAndParty ?? existingProject.Details.MemberOfParliamentNameAndParty,
+			NumberOfAlternativeProvisionPlaces = detailsToUpdate.NumberOfAlternativeProvisionPlaces ?? existingProject.Details.NumberOfAlternativeProvisionPlaces,
+			NumberOfMedicalPlaces = detailsToUpdate.NumberOfMedicalPlaces ?? existingProject.Details.NumberOfMedicalPlaces,
+			NumberOfPost16Places = detailsToUpdate.NumberOfPost16Places ?? existingProject.Details.NumberOfPost16Places,
+			NumberOfSENUnitPlaces = detailsToUpdate.NumberOfSENUnitPlaces ?? existingProject.Details.NumberOfSENUnitPlaces,
+			PupilsAttendingGroupMedicalAndHealthNeeds = detailsToUpdate.PupilsAttendingGroupMedicalAndHealthNeeds ?? existingProject.Details.PupilsAttendingGroupMedicalAndHealthNeeds,
+			PupilsAttendingGroupPermanentlyExcluded = detailsToUpdate.PupilsAttendingGroupPermanentlyExcluded ?? existingProject.Details.PupilsAttendingGroupPermanentlyExcluded,
+			PupilsAttendingGroupTeenageMums = detailsToUpdate.PupilsAttendingGroupTeenageMums ?? existingProject.Details.PupilsAttendingGroupTeenageMums,
 
 			SchoolOverviewSectionComplete = detailsToUpdate.SchoolOverviewSectionComplete ?? existingProject.Details.SchoolOverviewSectionComplete,
 
