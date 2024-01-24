@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace Dfe.Academies.Academisation.Service.UnitTest.Commands
+namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProject
 {
 	public class SetSchoolOverviewCommandHandlerTests
 	{

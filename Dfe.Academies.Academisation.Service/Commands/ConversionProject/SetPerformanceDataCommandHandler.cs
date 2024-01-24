@@ -9,9 +9,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 public class SetPerformanceDataCommandHandler : IRequestHandler<SetPerformanceDataCommand, CommandResult>
 {
 	private readonly IConversionProjectRepository _conversionProjectRepository;
-	private readonly ILogger<SetExternalApplicationFormCommandHandler> _logger;
+	private readonly ILogger<SetPerformanceDataCommandHandler> _logger;
 
-	public SetPerformanceDataCommandHandler(IConversionProjectRepository conversionProjectRepository, ILogger<SetExternalApplicationFormCommandHandler> logger)
+	public SetPerformanceDataCommandHandler(IConversionProjectRepository conversionProjectRepository, ILogger<SetPerformanceDataCommandHandler> logger)
 	{
 		_conversionProjectRepository = conversionProjectRepository;
 		_logger = logger;
