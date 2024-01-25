@@ -62,7 +62,8 @@ public class ProjectUpdateTests
 		// had to do this to make the equality operator happy, weirdly the annex b form is missing from equality
 		var existingProjectDetails = _fixture.Build<ProjectDetails>()
 			.With(x => x.ExternalApplicationFormSaved, true)
-			.With(x => x.ExternalApplicationFormUrl, "test//url").Create();
+			.With(x => x.ExternalApplicationFormUrl, "test//url")
+			.Create();
 
 		var existingProject = new Project(101, existingProjectDetails);
 
@@ -73,6 +74,11 @@ public class ProjectUpdateTests
 			.With(p => p.Id, existingProject.Id)
 			.With(p => p.Urn, existingProject.Details.Urn)
 			.With(p => p.ExternalApplicationFormSaved, existingProject.Details.ExternalApplicationFormSaved)
+			// excluded from update so need to be set for equality to assert
+			.With(x => x.KeyStage2PerformanceAdditionalInformation, existingProject.Details.KeyStage2PerformanceAdditionalInformation)
+			.With(x => x.KeyStage4PerformanceAdditionalInformation, existingProject.Details.KeyStage4PerformanceAdditionalInformation)
+			.With(x => x.KeyStage5PerformanceAdditionalInformation, existingProject.Details.KeyStage5PerformanceAdditionalInformation)
+			.With(x => x.EducationalAttendanceAdditionalInformation, existingProject.Details.EducationalAttendanceAdditionalInformation)
 			.Create();
 
 		updatedProject.Notes?.Clear();
