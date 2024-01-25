@@ -14,7 +14,7 @@ internal static class LegacyProjectDetailsMapper
 		// detailsToUpdate.HeadTeacherBoardDate.Equals(default(DateTime)) ? null : detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
 		// otherwise they wouldn't ever be able to be set back to null
 		// not the best solution but without rewriting the update funtionality this is the only option
-		return new ProjectDetails
+		var details =  new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn ?? existingProject.Details.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId ?? existingProject.Details.IfdPipelineId,
@@ -137,16 +137,16 @@ internal static class LegacyProjectDetailsMapper
 			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers ?? existingProject.Details.YearThreeProjectedPupilNumbers,
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation ?? existingProject.Details.SchoolPupilForecastsAdditionalInformation,
 
-			// key stage performance tables
-			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation ?? existingProject.Details.KeyStage2PerformanceAdditionalInformation,
-			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation ?? existingProject.Details.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation ?? existingProject.Details.KeyStage5PerformanceAdditionalInformation,
-
 			// assigned user
 			AssignedUser = detailsToUpdate.AssignedUser != null
 				? MapServiceUser(detailsToUpdate.AssignedUser)
 				: MapDomainUser(existingProject.Details.AssignedUser)
 		};
+
+		// fix for maintaining data in patch that is moved out to indivisual update
+		details.SetPerformanceData(existingProject.Details.KeyStage2PerformanceAdditionalInformation, existingProject.Details.KeyStage4PerformanceAdditionalInformation, existingProject.Details.KeyStage5PerformanceAdditionalInformation, existingProject.Details.EducationalAttendanceAdditionalInformation);
+		
+		return details;
 	}
 
 	private static DomainUser? MapServiceUser(ServiceUser? user)

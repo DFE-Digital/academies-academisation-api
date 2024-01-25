@@ -34,4 +34,7 @@ public interface IProject
 		bool? pupilsAttendingGroupMedicalAndHealthNeeds,
 		bool? pupilsAttendingGroupTeenageMums
 		);
+
+	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
+
 }

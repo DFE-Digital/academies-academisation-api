@@ -80,6 +80,7 @@ public class LegacyProjectUpdateCommandTests
 	{
 		// Arrange
 		Mock<IProject> projectMock = new();
+		projectMock.Setup(x => x.Details).Returns(_fixture.Create<ProjectDetails>());
 		var projectServiceModel = _fixture.Create<ConversionProjectServiceModel>();
 		projectMock.Setup(x => x.Update(It.IsAny<ProjectDetails>())).Returns(new CommandSuccessResult());
 		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id))

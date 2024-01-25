@@ -168,6 +168,10 @@ public class Project : Entity, IProject, IAggregateRoot
 		};
 	}
 
+	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation) {
+		Details.SetPerformanceData(keyStage2PerformanceAdditionalInformation, keyStage4PerformanceAdditionalInformation, keyStage5PerformanceAdditionalInformation, educationalAttendanceAdditionalInformation);
+	}
+
 	public CommandResult Update(ProjectDetails detailsToUpdate)
 	{
 		if (Details.Urn != detailsToUpdate.Urn)
@@ -301,14 +305,11 @@ public class Project : Entity, IProject, IAggregateRoot
 			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers,
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
 
-			// key stage performance tables
-			KeyStage2PerformanceAdditionalInformation = detailsToUpdate.KeyStage2PerformanceAdditionalInformation,
-			KeyStage4PerformanceAdditionalInformation = detailsToUpdate.KeyStage4PerformanceAdditionalInformation,
-			KeyStage5PerformanceAdditionalInformation = detailsToUpdate.KeyStage5PerformanceAdditionalInformation,
-
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
+
+		Details.SetPerformanceData(detailsToUpdate.KeyStage2PerformanceAdditionalInformation, detailsToUpdate.KeyStage4PerformanceAdditionalInformation, detailsToUpdate.KeyStage5PerformanceAdditionalInformation, detailsToUpdate.EducationalAttendanceAdditionalInformation);
 
 		return new CommandSuccessResult();
 	}
