@@ -9,9 +9,11 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -138,6 +140,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 
+		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
+
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
 		modelBuilder.Entity<TransferProject>(ConfigureTransferProject);
 		modelBuilder.Entity<IntendedTransferBenefit>(ConfigureTransferProjectIntendedTransferBenefit);
@@ -145,6 +149,10 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		base.OnModelCreating(modelBuilder);
 }
+	private static void ConfigureFormAMatProject(EntityTypeBuilder<FormAMatProject> formAMatProjectConfiguration) {
+		formAMatProjectConfiguration.ToTable("FormAMatProject", DEFAULT_SCHEMA);
+		formAMatProjectConfiguration.HasKey(x => x.Id);
+	}
 
 	private void ConfigureTransferringAcademy(EntityTypeBuilder<TransferringAcademy> transferringAcademy)
 	{

@@ -22,6 +22,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	private readonly List<ProjectNote> _notes = new();
 
+	public int? FormAMatProjectId { get; private set; }
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
 	/// </summary>
@@ -506,4 +507,12 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
 
+	public void SetFormAMatProjectId(int id)
+	{
+		// Protect normal conversions from having this value set
+		if (Details.AcademyTypeAndRoute == "Form a Mat")
+		{
+			FormAMatProjectId = id;
+		}
+	}
 }

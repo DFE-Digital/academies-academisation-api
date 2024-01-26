@@ -222,5 +222,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return queryable;
 		}
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsThatRequireFormAMatCreation(CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => !x.FormAMatProjectId.HasValue && x.Details.AcademyTypeAndRoute == "Form a Mat").ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
 	}
 }

@@ -14,4 +14,5 @@ public interface IConversionProjectRepository : IRepository<Project>, IGenericRe
 	Task<ProjectFilterParameters> GetFilterParameters();
 	Task<(IEnumerable<IProject> projects, int totalCount)> SearchProjectsV2(
 	IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers,  IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count);
+	Task<IEnumerable<IProject>> GetConversionProjectsThatRequireFormAMatCreation(CancellationToken cancellationToken);
 }

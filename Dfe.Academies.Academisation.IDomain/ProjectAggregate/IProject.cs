@@ -8,6 +8,7 @@ public interface IProject
 {
 	public int Id { get; }
 
+	public int? FormAMatProjectId { get;  }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
 
@@ -36,5 +37,5 @@ public interface IProject
 		);
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
-
+	void SetFormAMatProjectId(int id);
 }
