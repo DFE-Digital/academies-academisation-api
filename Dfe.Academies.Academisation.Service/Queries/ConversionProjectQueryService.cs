@@ -62,4 +62,19 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 		return new LegacyApiResponse<ConversionProjectServiceModel>(data,
 			pageResponse);
 	}
+
+	public async Task<LegacyApiResponse<MATProjectServiceModel>?> GetMATProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+	{
+		var (projects, totalCount) = await _conversionProjectRepository.SearchMATProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates, page, count);
+
+		var pageResponse = PagingResponseFactory.Create("conversion-projects/projects", page, count, totalCount,
+			new Dictionary<string, object?> {
+				{"states", states},
+			});
+
+		var data = projects.Select(p => p.MapToMATServiceModel());
+
+		return new LegacyApiResponse<MATProjectServiceModel>(data,
+			pageResponse);
+	}
 }
