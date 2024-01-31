@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.4.7"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.4.9"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -16,6 +16,7 @@ module "azure_container_apps_hosting" {
   image_name                             = local.image_name
   container_command                      = local.container_command
   container_secret_environment_variables = local.container_secret_environment_variables
+  container_scale_http_concurrency       = local.container_scale_http_concurrency
 
   enable_mssql_database              = local.enable_mssql_database
   mssql_server_admin_password        = local.mssql_server_admin_password
