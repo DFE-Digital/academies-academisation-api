@@ -84,7 +84,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		private static IQueryable<Project> FilterFormAMAT(bool isFormAMat, IQueryable<Project> queryable)
 		{
-			 queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute == "Form a Mat" : p.Details.AcademyTypeAndRoute != "Form a Mat");
+			queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute == "Form a Mat" : p.Details.AcademyTypeAndRoute != "Form a Mat");
 
 			return queryable;
 		}
