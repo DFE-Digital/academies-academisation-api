@@ -91,11 +91,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("projects", Name = "GetProjects")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<LegacyApiResponse<ConversionProjectServiceModel>>> GetProjects(
+		public async Task<ActionResult<PagedDataResponse<ConversionProjectServiceModel>>> GetProjects(
 				ConversionProjectSearchModel? searchModel,
 				[FromQuery] int? urn = null)
 		{
-			LegacyApiResponse<ConversionProjectServiceModel>? result =
+			PagedDataResponse<ConversionProjectServiceModel>? result =
 				await _conversionProjectQueryService.GetProjectsV2(searchModel!.StatusQueryString, searchModel.TitleFilter,
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count,
 					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
@@ -113,16 +113,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// </remarks>
 		/// <response code="200">One or more projects matching the specified filter criteria were found</response>
 		/// <response code="404">No projects matched the specified search criteria</response>
-		[HttpPost("MATprojects", Name = "GetMATProjects")]
+		[HttpPost("FormAMatProjects", Name = "GetFormAMatProjects")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<LegacyApiResponse<MATProjectServiceModel>>> GetMATProjects(
-				ConversionProjectSearchModel? searchModel,
-				[FromQuery] int? urn = null)
+		public async Task<ActionResult<PagedDataResponse<FormAMatProjectServiceModel>>> GetFormAMatProjects(
+				ConversionProjectSearchModel? searchModel, CancellationToken cancellationToken)
 		{
-			LegacyApiResponse<MATProjectServiceModel>? result =
-				await _conversionProjectQueryService.GetMATProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
-					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count,
+			PagedDataResponse<FormAMatProjectServiceModel>? result =
+				await _conversionProjectQueryService.GetFormAMatProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
+					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, cancellationToken,
 					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
 			return result is null ? NotFound() : Ok(result);
 		}

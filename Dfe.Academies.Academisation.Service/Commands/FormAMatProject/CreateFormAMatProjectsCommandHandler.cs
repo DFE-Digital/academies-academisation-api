@@ -41,7 +41,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				if (formAMat == null) {
 					// create formAMat
 					formAMat = FormAMatProject.Create(conversionProject.Details.NameOfTrust, conversionProject.Details.ApplicationReferenceNumber, _dateTimeProvider.Now);
-					_formAMatProjectRepository.Insert(formAMat);
+					_formAMatProjectRepository.Insert(formAMat as FormAMatProject);
 					await _formAMatProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 				}
 

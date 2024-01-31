@@ -147,7 +147,7 @@ public class ApplicationSubmitTests
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
 		var projectController = new ProjectController(
-			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
+			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 		var projectResult = await projectController.Get(1);
 
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
@@ -199,10 +199,10 @@ public class ApplicationSubmitTests
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
 		var projectController = new ProjectController(
-			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
+			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
 
-		(_, LegacyApiResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
+		(_, PagedDataResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
 
 		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!, FormAMat);
 		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!, FormAMat);

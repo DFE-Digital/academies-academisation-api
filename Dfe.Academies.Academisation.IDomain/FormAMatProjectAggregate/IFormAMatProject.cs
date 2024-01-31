@@ -8,6 +8,7 @@ namespace Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate
 {
 	public interface IFormAMatProject
 	{
+		int Id { get; }
 		string ProposedTrustName { get; }
 
 		string ApplicationReference { get;  }

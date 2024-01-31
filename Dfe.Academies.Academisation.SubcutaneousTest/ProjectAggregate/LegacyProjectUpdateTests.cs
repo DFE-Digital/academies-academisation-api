@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
@@ -40,10 +41,11 @@ public class ProjectUpdateTests
 
 		// data
 		IConversionProjectRepository conversionProjectRepository = new ConversionProjectRepository(_context, null);
+		IFormAMatProjectRepository formAMatProjectRepository = new FormAMatProjectRepository(_context);
 		IProjectUpdateDataCommand projectUpdateDataCommand = new ProjectUpdateDataCommand(_context);
 
 		// service
-		_legacyProjectGetQuery = new ConversionProjectQueryService(conversionProjectRepository);
+		_legacyProjectGetQuery = new ConversionProjectQueryService(conversionProjectRepository, formAMatProjectRepository);
 		var services = new ServiceCollection();
 
 		services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(ConversionProjectUpdateCommandHandler))));

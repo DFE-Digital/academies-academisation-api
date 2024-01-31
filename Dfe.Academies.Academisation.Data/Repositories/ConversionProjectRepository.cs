@@ -210,7 +210,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
-		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchMATProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
+		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchFormAMatProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
 		{
 			IQueryable<Project> queryable = this.dbSet;
 
