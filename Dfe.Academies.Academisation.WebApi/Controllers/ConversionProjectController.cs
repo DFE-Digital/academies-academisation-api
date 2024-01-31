@@ -101,6 +101,32 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
 			return result is null ? NotFound() : Ok(result);
 		}
+
+		/// <summary>
+		///     Retrieve all form a mat projects matching specified filter conditions
+		/// </summary>
+		/// <param name="searchModel"><see cref="GetAcademyConversionSearchModel"/> describing filtering requirements for the request</param>
+		/// <param name="urn">URN of a specific project to retrieve</param>
+		/// <remarks>
+		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
+		///     Delivery Officer.
+		/// </remarks>
+		/// <response code="200">One or more projects matching the specified filter criteria were found</response>
+		/// <response code="404">No projects matched the specified search criteria</response>
+		[HttpPost("MATprojects", Name = "GetMATProjects")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<LegacyApiResponse<MATProjectServiceModel>>> GetMATProjects(
+				ConversionProjectSearchModel? searchModel,
+				[FromQuery] int? urn = null)
+		{
+			LegacyApiResponse<MATProjectServiceModel>? result =
+				await _conversionProjectQueryService.GetMATProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
+					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count,
+					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
+			return result is null ? NotFound() : Ok(result);
+		}
+
 		/// <summary>
 		/// Updates the project with the specified id - Sets the School Overview using data from the command <paramref name="request"/>
 		/// </summary>
