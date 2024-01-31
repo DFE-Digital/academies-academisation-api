@@ -66,6 +66,32 @@ public class LegacyProjectListGetQueryTests
 	}
 
 	[Fact]
+	public async Task GetMatProjects__PerformSearch__ReturnsProjects()
+	{
+		// Arrange
+		var expectedProjects = _fixture.Create<List<Project>>();
+
+		_query.Setup(m => m.SearchMATProjects(It.IsAny<IEnumerable<string>?>(),
+									   It.IsAny<string>(),
+									   It.IsAny<IEnumerable<string>?>(),
+									   It.IsAny<IEnumerable<string>?>(),
+									   It.IsAny<IEnumerable<string>?>(),
+									   It.IsAny<IEnumerable<string>?>(),
+									   It.IsAny<int>(),
+									   It.IsAny<int>()))
+			.ReturnsAsync((expectedProjects, expectedProjects.Count));
+		List<string> status = new List<string>() { "complete", "active" };
+		// Act
+		var result = await _subject.GetMATProjects(status, null, null, 1, 1, null, null, null);
+
+		// Assert
+		Assert.Multiple(
+			() => Assert.Equal(expectedProjects[0].Id, result!.Data.ToList()[0].Id),
+			() => Assert.Equal(expectedProjects[1].Id, result!.Data.ToList()[1].Id),
+			() => Assert.Equal(expectedProjects[2].Id, result!.Data.ToList()[2].Id));
+	}
+
+	[Fact]
 	public async Task GetProjectsV2__PerformSearch__InvokesSearch()
 	{
 		// Arrange

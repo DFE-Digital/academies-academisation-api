@@ -11,6 +11,9 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjectsV2(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions,IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
 
+		Task<LegacyApiResponse<MATProjectServiceModel>?> GetMATProjects(
+		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
+
 		Task<ConversionProjectServiceModel?> GetConversionProject(int id);
 
 		Task<ProjectFilterParameters> GetFilterParameters();

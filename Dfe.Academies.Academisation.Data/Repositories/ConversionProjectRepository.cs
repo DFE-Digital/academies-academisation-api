@@ -81,6 +81,15 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return filterParameters;
 		}
+
+		private static IQueryable<Project> FilterFormAMAT(bool isFormAMat, IQueryable<Project> queryable)
+		{
+			queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute == "Form a Mat" : p.Details.AcademyTypeAndRoute != "Form a Mat");
+
+			return queryable;
+		}
+
+
 		private static IQueryable<Project> FilterByRegion(IEnumerable<string>? regions, IQueryable<Project> queryable)
 		{
 
@@ -183,6 +192,30 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			IQueryable<Project> queryable = this.dbSet;
 
+			bool isFormAMat = false;
+			queryable = FilterFormAMAT(isFormAMat, queryable);
+			queryable = FilterByRegion(regions, queryable);
+			queryable = FilterByStatus(states, queryable);
+			queryable = FilterByKeyword(title, queryable);
+			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
+			queryable = FilterByLocalAuthority(localAuthorities, queryable);
+			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
+
+			var totalProjects = queryable.Count();
+			var projects = await queryable
+				.OrderByDescending(acp => acp.CreatedOn)
+				.Skip((page - 1) * count)
+				.Take(count).ToListAsync();
+
+			return (projects, totalProjects);
+		}
+
+		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchMATProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
+		{
+			IQueryable<Project> queryable = this.dbSet;
+
+			bool isFormAMat = true;
+			queryable = FilterFormAMAT(isFormAMat, queryable);
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
 			queryable = FilterByKeyword(title, queryable);

@@ -108,6 +108,47 @@ public class ProjectsListGetDataQueryTests
 	}
 
 
+	// TODO:EA finish this unit test
+	//[Fact]
+	//public async Task ProjectsExists_SearchMATProjects__ReturnsMATProjects()
+	//{
+	//	// arrange
+	//	(_, Project project1) = CreateTestProject(null);
+	//	(_, Project project2) = CreateTestProject(null);
+	//	(_, Project project3) = CreateTestProject();
+
+	//	var projectDetails1 = _fixture.Build<ProjectDetails>()
+	//		.With(p => p.AcademyTypeAndRoute, "TEST EAAAAAA")
+	//		.Create();
+	//	var projectDetails2 = _fixture.Build<ProjectDetails>().Create();
+
+	//	project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now.AddDays(-1));
+	//	project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-2));
+
+	//	_context.Projects.Add(project1);
+	//	_context.Projects.Add(project2);
+	//	_context.Projects.Add(project3);
+
+	//	await _context.SaveChangesAsync();
+
+	//	// act
+	//	var projects = (await _subject.SearchMATProjects(null, null, null, null, null, null, 1, 10)).Item1.ToList();
+
+	//	// assert
+	//	var firstProject = projects.FirstOrDefault();
+	//	var secondProject = projects.LastOrDefault();
+
+	//	Assert.Multiple(
+	//		() => Assert.NotNull(firstProject),
+	//		() => Assert.Equal(firstProject!.Details, projectDetails1),
+	//		() => Assert.Equal(project1.Id, firstProject!.Id),
+	//		() => Assert.NotNull(secondProject),
+	//		() => Assert.Equal(secondProject!.Details, projectDetails2),
+	//		() => Assert.Equal(project2.Id, secondProject!.Id)
+	//	);
+	//}
+
+
 	[Fact]
 	public async Task ProjectsExists_SearchProjectsByTitle__ReturnsProjects()
 	{
