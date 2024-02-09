@@ -107,7 +107,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage4PerformanceAdditionalInformation { get; private set; }
 	public string? KeyStage5PerformanceAdditionalInformation { get; private set; }
 	public string? EducationalAttendanceAdditionalInformation { get; private set; }
-	public User? AssignedUser { get; init; }
+	public User? AssignedUser { get; set; }
 
 	public bool? ExternalApplicationFormSaved { get; set; }
 	public string? ExternalApplicationFormUrl { get; set; }

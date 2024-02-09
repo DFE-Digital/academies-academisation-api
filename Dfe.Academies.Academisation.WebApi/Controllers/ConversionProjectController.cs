@@ -54,7 +54,28 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+		[HttpPut("{id:int}/SetAssignedUser", Name = "SetAssignedUser")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetAssignedUser(
+										int id,
+										[FromBody] SetAssignedUserCommand request)
+		{
+			// Ensure the command's ID matches the route parameter
+			request.Id = id;
 
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 		[HttpPut("{id:int}/SetPerformancedata", Name = "SetPerformancedata")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]

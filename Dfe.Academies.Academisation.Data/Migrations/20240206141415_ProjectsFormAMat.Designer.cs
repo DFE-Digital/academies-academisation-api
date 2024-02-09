@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240206141415_ProjectsFormAMat")]
+    partial class ProjectsFormAMat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -588,8 +591,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnName("CreatedOn");
 
                     b.Property<int?>("FormAMatProjectId")
-                        .HasColumnType("int")
-                        .HasColumnName("FormAMatProjectId");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");

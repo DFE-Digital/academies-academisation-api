@@ -85,6 +85,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		private static IQueryable<Project> FilterFormAMAT(bool isFormAMat, IQueryable<Project> queryable)
 		{
 			queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute == "Form a Mat" : p.Details.AcademyTypeAndRoute != "Form a Mat");
+			queryable = queryable.Where(p => isFormAMat ? p.FormAMatProjectId != null : p.FormAMatProjectId == null);
 
 			return queryable;
 		}
@@ -138,13 +139,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		private static IQueryable<Project> FilterByKeyword(string? title, IQueryable<Project> queryable)
 		{
-			if (!string.IsNullOrWhiteSpace(title)) 
-			{ 
-				
+			if (!string.IsNullOrWhiteSpace(title))
+			{
+
 				queryable = queryable.Where(p => p.Details.SchoolName!.ToLower().Contains(title!.ToLower()) ||
 				p.Details.NameOfTrust!.ToLower().Contains(title!.ToLower()) ||
 				p.Details.Urn.ToString().ToLower().Contains(title!.ToLower())
-				); 
+				);
 			}
 
 			return queryable;
@@ -216,12 +217,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			bool isFormAMat = true;
 			queryable = FilterFormAMAT(isFormAMat, queryable);
-			queryable = FilterByRegion(regions, queryable);
-			queryable = FilterByStatus(states, queryable);
-			queryable = FilterByKeyword(title, queryable);
-			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
-			queryable = FilterByLocalAuthority(localAuthorities, queryable);
-			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
+			//queryable = FilterByRegion(regions, queryable);
+			//queryable = FilterByStatus(states, queryable);
+			//queryable = FilterByKeyword(title, queryable);
+			//queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
+			//queryable = FilterByLocalAuthority(localAuthorities, queryable);
+			//queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
 
 			var totalProjects = queryable.Count();
 			var projects = await queryable
