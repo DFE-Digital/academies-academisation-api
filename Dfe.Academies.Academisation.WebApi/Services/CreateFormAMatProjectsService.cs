@@ -1,7 +1,6 @@
-﻿using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+﻿using Dfe.Academies.Academisation.Service.Commands.FormAMat;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
-using TramsDataApi.RequestModels.AcademyTransferProject;
 
 namespace Dfe.Academies.Academisation.WebApi.Services
 {
@@ -38,7 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 
 						try
 						{
-							await mediator.Send(new CreateFormAMatProjectsCommand(),stoppingToken);
+							await mediator.Send(new CreateFormAMatProjectsCommand(), stoppingToken);
 						}
 						catch (Exception ex)
 						{

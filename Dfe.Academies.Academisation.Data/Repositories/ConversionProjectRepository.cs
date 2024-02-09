@@ -261,5 +261,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			return await this.dbSet.Where(x => !x.FormAMatProjectId.HasValue && x.Details.AcademyTypeAndRoute == "Form a Mat").ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatId(int? id, CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => x.FormAMatProjectId == id).ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
 	}
 }

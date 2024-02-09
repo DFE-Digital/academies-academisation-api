@@ -146,6 +146,13 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		formAMatProjectConfiguration.ToTable("FormAMatProject", DEFAULT_SCHEMA);
 		formAMatProjectConfiguration.HasKey(x => x.Id);
+
+		formAMatProjectConfiguration.OwnsOne(a => a.AssignedUser, a =>
+		{
+			a.Property(p => p.Id).HasColumnName("AssignedUserId");
+			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
+			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+		});
 	}
 
 	private void ConfigureTransferringAcademy(EntityTypeBuilder<TransferringAcademy> transferringAcademy)

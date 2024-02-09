@@ -1,9 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using MediatR;
 
-namespace TramsDataApi.RequestModels.AcademyTransferProject
+namespace Dfe.Academies.Academisation.Service.Commands.FormAMat
 {
-    public class CreateFormAMatProjectsCommand : IRequest<CommandResult>
-    {
-    }
+	public class CreateFormAMatProjectsCommand : IRequest<CommandResult>
+	{
+	}
 }

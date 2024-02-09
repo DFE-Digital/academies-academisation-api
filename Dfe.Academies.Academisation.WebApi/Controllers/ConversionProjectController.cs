@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+using Dfe.Academies.Academisation.Service.Commands.FormAMat;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +42,28 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			int id,
 			SetExternalApplicationFormCommand request)
 		{
+			request.Id = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+		[HttpPut("{id:int}/SetFormAMatAssignedUser", Name = "SetFormAMatAssignedUser")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetFormAMatAssignedUser(
+		int id,
+		[FromBody] SetFormAMatAssignedUserCommand request)
+		{
+			// Ensure the command's ID matches the route parameter
 			request.Id = id;
 
 			CommandResult result = await _mediator.Send(request);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate
 {
@@ -11,6 +7,7 @@ namespace Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate
 		int Id { get; }
 		string ProposedTrustName { get; }
 
-		string ApplicationReference { get;  }
+		string ApplicationReference { get; }
+		User? AssignedUser { get; }
 	}
 }
