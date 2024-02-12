@@ -9,13 +9,13 @@ namespace Dfe.Academies.Academisation.IService.Query
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions, IEnumerable<string>? applicationReferences);
 
 		Task<PagedDataResponse<ConversionProjectServiceModel>?> GetProjectsV2(
-		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions,IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
+		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
 
 		Task<PagedDataResponse<FormAMatProjectServiceModel>?> GetFormAMatProjects(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, CancellationToken cancellationToken, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
 
 		Task<ConversionProjectServiceModel?> GetConversionProject(int id);
-
+		Task<FormAMatProjectServiceModel> GetFormAMatProjectById(int id, CancellationToken cancellationToken);
 		Task<ProjectFilterParameters> GetFilterParameters();
 
 	}

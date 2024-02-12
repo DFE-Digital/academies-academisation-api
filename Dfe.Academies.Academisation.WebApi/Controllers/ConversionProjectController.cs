@@ -200,5 +200,21 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpGet("formamatproject/{id:int}", Name = "GetFormAMatProjectById")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<FormAMatProjectServiceModel>> GetFormAMatProjectById(int id, CancellationToken cancellationToken)
+		{
+			var project = await _conversionProjectQueryService.GetFormAMatProjectById(id, cancellationToken);
+
+			if (project == null)
+			{
+				return NotFound($"Project with ID {id} not found.");
+			}
+
+			return Ok(project);
+		}
+
 	}
 }

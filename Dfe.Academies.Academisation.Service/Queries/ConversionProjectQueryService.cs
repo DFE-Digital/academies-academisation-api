@@ -82,4 +82,11 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 		return new PagedDataResponse<FormAMatProjectServiceModel>(data,
 			pageResponse);
 	}
+	public async Task<FormAMatProjectServiceModel> GetFormAMatProjectById(int id, CancellationToken cancellationToken)
+	{
+		FormAMatProject project = await _formAMatProjectRepository.GetById(id);
+		var relatedProjects = await _conversionProjectRepository.GetConversionProjectsByFormAMatId(project.Id, cancellationToken).ConfigureAwait(false);
+
+		return project.MapToFormAMatServiceModel(relatedProjects);
+	}
 }
