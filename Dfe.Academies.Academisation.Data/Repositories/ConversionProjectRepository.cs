@@ -217,12 +217,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			bool isFormAMat = true;
 			queryable = FilterFormAMAT(isFormAMat, queryable);
-			//queryable = FilterByRegion(regions, queryable);
-			//queryable = FilterByStatus(states, queryable);
-			//queryable = FilterByKeyword(title, queryable);
-			//queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
-			//queryable = FilterByLocalAuthority(localAuthorities, queryable);
-			//queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
+			queryable = FilterByRegion(regions, queryable);
+			queryable = FilterByStatus(states, queryable);
+			queryable = FilterByKeyword(title, queryable);
+			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
+			queryable = FilterByLocalAuthority(localAuthorities, queryable);
+			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
 
 			var totalProjects = queryable.Count();
 			var projects = await queryable
