@@ -27,9 +27,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.FormAMat
 
 		public async Task<CommandResult> Handle(SetFormAMatAssignedUserCommand request, CancellationToken cancellationToken)
 		{
-			var firstProject = await _conversionProjectRepository.GetConversionProject(request.Id);
-			// Set user on parent Form a MAT object
-			var formAMatProject = await _formAMatProjectRepository.GetById((int)firstProject.FormAMatProjectId);
+			var formAMatProject = await _formAMatProjectRepository.GetById(request.Id);
+
 			if (formAMatProject is null)
 			{
 				_logger.LogError($"Form a MAT project not found from conversion project with id: {request.Id}");
@@ -40,7 +39,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.FormAMat
 			_formAMatProjectRepository.Update(formAMatProject);
 
 			// Get All Projects in this FAM by FAM Id
-			var otherProjectsInFormAMat = await _conversionProjectRepository.GetConversionProjectsByFormAMatId(firstProject.FormAMatProjectId, cancellationToken);
+			var otherProjectsInFormAMat = await _conversionProjectRepository.GetConversionProjectsByFormAMatId(formAMatProject.Id, cancellationToken);
 			//foreach project assign the user unless one is already assigned
 			foreach (var project in otherProjectsInFormAMat)
 			{
