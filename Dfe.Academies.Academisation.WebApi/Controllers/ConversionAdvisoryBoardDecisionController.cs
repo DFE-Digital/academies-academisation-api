@@ -55,8 +55,7 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
 			: new OkObjectResult(result);
 	}
 
-	[Route("~/transfer-project/advisory-board-decision")]
-	[HttpGet("{projectId:int}", Name = GetRouteName)]
+	[HttpGet("~/transfer-project/advisory-board-decision/{projectId:int}", Name = "GetTransferAdvisoryBoardDecisionByProjectId")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByTransferProjectId(int projectId)

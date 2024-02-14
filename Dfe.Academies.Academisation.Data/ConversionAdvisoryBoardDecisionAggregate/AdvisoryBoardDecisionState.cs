@@ -31,6 +31,7 @@ public class AdvisoryBoardDecisionState : BaseEntity
 		{
 			Id = decision.Id,
 			ConversionProjectId = decision.AdvisoryBoardDecisionDetails.ConversionProjectId,
+			TransferProjectId = decision.AdvisoryBoardDecisionDetails.TransferProjectId,
 			Decision = decision.AdvisoryBoardDecisionDetails.Decision,
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,

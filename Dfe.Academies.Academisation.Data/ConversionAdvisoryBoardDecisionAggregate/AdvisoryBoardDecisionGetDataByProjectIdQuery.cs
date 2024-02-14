@@ -17,19 +17,18 @@ public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisi
 	public async Task<IConversionAdvisoryBoardDecision?> Execute(int projectId, bool isTransfer = false)
 	{
 		AdvisoryBoardDecisionState? state = null;
+
+		var advisoryBoardDecisions = _context.ConversionAdvisoryBoardDecisions
+				.Include(s => s.DeclinedReasons)
+				.Include(s => s.DeferredReasons);
+
 		if (isTransfer)
 		{
-			 state = await _context.ConversionAdvisoryBoardDecisions
-			.Include(s => s.DeclinedReasons)
-			.Include(s => s.DeferredReasons)
-			.SingleOrDefaultAsync(s => s.TransferProjectId == projectId);
+			state = await advisoryBoardDecisions.SingleOrDefaultAsync(s => s.TransferProjectId == projectId);
 		}
 		else
 		{
-			state = await _context.ConversionAdvisoryBoardDecisions
-			.Include(s => s.DeclinedReasons)
-			.Include(s => s.DeferredReasons)
-			.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
+			state = await advisoryBoardDecisions.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
 		}
 
 		return state?.MapToDomain();
