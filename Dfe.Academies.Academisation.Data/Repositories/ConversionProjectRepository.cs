@@ -84,7 +84,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		private static IQueryable<Project> FilterFormAMAT(bool isFormAMat, IQueryable<Project> queryable)
 		{
-			queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute == "Form a Mat" : p.Details.AcademyTypeAndRoute != "Form a Mat");
+			queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute.ToLower() == "form a mat" : p.Details.AcademyTypeAndRoute.ToLower() != "form a mat");
 			queryable = queryable.Where(p => isFormAMat ? p.FormAMatProjectId != null : p.FormAMatProjectId == null);
 
 			return queryable;
@@ -224,7 +224,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			queryable = FilterByLocalAuthority(localAuthorities, queryable);
 			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
 
-			var totalProjects = queryable.Count();
+			var totalProjects = queryable.Select(p => p.FormAMatProjectId).Distinct().Count();
 			var projects = await queryable
 				.OrderByDescending(acp => acp.CreatedOn)
 				.Skip((page - 1) * count)
