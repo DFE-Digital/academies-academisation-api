@@ -18,7 +18,7 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 	public void ShouldReturnConversionAdvisoryBoardDecision()
 	{
 		//Arrange
-		var state = _fixture.Create<ConversionAdvisoryBoardDecisionState>();
+		var state = _fixture.Create<AdvisoryBoardDecisionState>();
 
 		//Act
 		var result = state.MapToDomain();
@@ -35,13 +35,15 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 	{
 		var timestamp = DateTime.UtcNow;
 		//Arrange
-		var state = _fixture.Build<ConversionAdvisoryBoardDecisionState>()
+		var state = _fixture.Build<AdvisoryBoardDecisionState>()
 			.With(s => s.CreatedOn, timestamp)
 			.With(s => s.LastModifiedOn, timestamp)
+			.With(s => s.TransferProjectId, (int?)null)
 			.Create();
 
 		AdvisoryBoardDecisionDetails details = new(
 			state.ConversionProjectId,
+			state.TransferProjectId,
 			state.Decision,
 			state.ApprovedConditionsSet,
 			state.ApprovedConditionsDetails,

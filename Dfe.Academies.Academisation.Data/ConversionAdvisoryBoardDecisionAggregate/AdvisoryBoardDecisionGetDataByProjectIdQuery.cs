@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +14,23 @@ public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisi
 		_context = context;
 	}
 
-	public async Task<IConversionAdvisoryBoardDecision?> Execute(int projectId)
+	public async Task<IConversionAdvisoryBoardDecision?> Execute(int projectId, bool isTransfer = false)
 	{
-		var state = await _context.ConversionAdvisoryBoardDecisions
+		AdvisoryBoardDecisionState? state = null;
+		if (isTransfer)
+		{
+			 state = await _context.ConversionAdvisoryBoardDecisions
+			.Include(s => s.DeclinedReasons)
+			.Include(s => s.DeferredReasons)
+			.SingleOrDefaultAsync(s => s.TransferProjectId == projectId);
+		}
+		else
+		{
+			state = await _context.ConversionAdvisoryBoardDecisions
 			.Include(s => s.DeclinedReasons)
 			.Include(s => s.DeferredReasons)
 			.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
+		}
 
 		return state?.MapToDomain();
 	}

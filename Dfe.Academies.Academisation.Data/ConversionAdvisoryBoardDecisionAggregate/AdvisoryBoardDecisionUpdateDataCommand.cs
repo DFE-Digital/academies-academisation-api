@@ -14,7 +14,7 @@ public class AdvisoryBoardDecisionUpdateDataCommand : IAdvisoryBoardDecisionUpda
 
 	public async Task Execute(IConversionAdvisoryBoardDecision decision)
 	{
-		var decisionState = ConversionAdvisoryBoardDecisionState.MapFromDomain(decision);
+		var decisionState = AdvisoryBoardDecisionState.MapFromDomain(decision);
 
 		_context.ReplaceTracked(decisionState);
 
