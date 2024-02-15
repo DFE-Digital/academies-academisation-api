@@ -23,7 +23,7 @@ public class ConversionAdvisoryBoardDecisionControllerGetTests
 		//Arrange
 		var data = _fixture.Create<ConversionAdvisoryBoardDecisionServiceModel>();
 
-		_mockGetQuery.Setup(q => q.Execute(It.IsAny<int>()))
+		_mockGetQuery.Setup(q => q.Execute(It.IsAny<int>(), false))
 			.ReturnsAsync(data);
 
 		var subject = new ConversionAdvisoryBoardDecisionController(
@@ -44,7 +44,7 @@ public class ConversionAdvisoryBoardDecisionControllerGetTests
 	public async Task QueryReturnIsNull___ReturnsNotFound()
 	{
 		//Arrange
-		_mockGetQuery.Setup(q => q.Execute(It.IsAny<int>()))
+		_mockGetQuery.Setup(q => q.Execute(It.IsAny<int>(), false))
 			.ReturnsAsync(It.IsAny<ConversionAdvisoryBoardDecisionServiceModel>());
 
 		var subject = new ConversionAdvisoryBoardDecisionController(

@@ -37,7 +37,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	public DbSet<Project> Projects { get; set; } = null!;
 	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
-	public DbSet<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
+	public DbSet<AdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 
@@ -134,7 +134,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
 
-		modelBuilder.Entity<ConversionAdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);	
+		modelBuilder.Entity<AdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);	
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 
@@ -315,7 +315,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		//projectNoteConfiguration.Property<int?>("ProjectId").IsRequired(false);
 	}
 
-	private static void ConfigureConversionAdvisoryBoardDecision(EntityTypeBuilder<ConversionAdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionConfiguration)
+	private static void ConfigureConversionAdvisoryBoardDecision(EntityTypeBuilder<AdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionConfiguration)
 	{
 		ConversionAdvisoryBoardDecisionConfiguration.ToTable("ConversionAdvisoryBoardDecision", DEFAULT_SCHEMA);
 		ConversionAdvisoryBoardDecisionConfiguration

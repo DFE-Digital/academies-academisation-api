@@ -55,6 +55,18 @@ public class ConversionAdvisoryBoardDecisionController : ControllerBase
 			: new OkObjectResult(result);
 	}
 
+	[HttpGet("~/transfer-project/advisory-board-decision/{projectId:int}", Name = "GetTransferAdvisoryBoardDecisionByProjectId")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByTransferProjectId(int projectId)
+	{
+		var result = await _decisionGetQuery.Execute(projectId, true);
+
+		return result is null
+			? NotFound()
+			: new OkObjectResult(result);
+	}
+
 	[HttpPut]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
