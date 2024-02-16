@@ -22,6 +22,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	private readonly List<ProjectNote> _notes = new();
 
+	public int? FormAMatProjectId { get; private set; }
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
 	/// </summary>
@@ -168,7 +169,8 @@ public class Project : Entity, IProject, IAggregateRoot
 		};
 	}
 
-	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation) {
+	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation)
+	{
 		Details.SetPerformanceData(keyStage2PerformanceAdditionalInformation, keyStage4PerformanceAdditionalInformation, keyStage5PerformanceAdditionalInformation, educationalAttendanceAdditionalInformation);
 	}
 
@@ -505,5 +507,21 @@ public class Project : Entity, IProject, IAggregateRoot
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
+	public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
+	{
+		// Update the respective properties in the Details object
+		this.Details.AssignedUser = new User(userId, fullName, emailAddress);
 
+		// Update the LastModifiedOn property to the current time to indicate the object has been modified
+		this.LastModifiedOn = DateTime.UtcNow;
+	}
+
+	public void SetFormAMatProjectId(int id)
+	{
+		// Protect normal conversions from having this value set
+		if (Details.AcademyTypeAndRoute == "Form a Mat")
+		{
+			FormAMatProjectId = id;
+		}
+	}
 }
