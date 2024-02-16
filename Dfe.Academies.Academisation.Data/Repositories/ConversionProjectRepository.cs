@@ -82,10 +82,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return filterParameters;
 		}
 
-		private static IQueryable<Project> FilterFormAMAT(bool isFormAMat, IQueryable<Project> queryable)
+		private static IQueryable<Project> FilterFormAMAT(IQueryable<Project> queryable)
 		{
-			queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute.ToLower() == "form a mat" : p.Details.AcademyTypeAndRoute.ToLower() != "form a mat");
-			queryable = queryable.Where(p => isFormAMat ? p.FormAMatProjectId != null : p.FormAMatProjectId == null);
+			queryable = queryable.Where(p => p.Details.AcademyTypeAndRoute.ToLower() == "form a mat");
+			queryable = queryable.Where(p => p.FormAMatProjectId != null);
 
 			return queryable;
 		}
@@ -193,8 +193,6 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			IQueryable<Project> queryable = this.dbSet;
 
-			bool isFormAMat = false;
-			queryable = FilterFormAMAT(isFormAMat, queryable);
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
 			queryable = FilterByKeyword(title, queryable);
@@ -215,8 +213,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			IQueryable<Project> queryable = this.dbSet;
 
-			bool isFormAMat = true;
-			queryable = FilterFormAMAT(isFormAMat, queryable);
+			queryable = FilterFormAMAT(queryable);
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
 			queryable = FilterByKeyword(title, queryable);
@@ -264,6 +261,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatId(int? id, CancellationToken cancellationToken)
 		{
 			return await this.dbSet.Where(x => x.FormAMatProjectId == id).ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatIds(IEnumerable<int?> ids, CancellationToken cancellationToken)
+		{
+			var formAMatProjectIds = ids.ToList();
+
+			return await this.dbSet.Where(x => formAMatProjectIds.Contains(x.FormAMatProjectId)).ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

@@ -11,6 +11,7 @@ internal static class LegacyProjectServiceModelMapper
 	{
 		ConversionProjectServiceModel serviceModel = new(project.Id, project.Details.Urn)
 		{
+			FormAMatProjectId = project.FormAMatProjectId,
 			IfdPipelineId = project.Details.IfdPipelineId,
 			SchoolName = project.Details.SchoolName,
 			CreatedOn = project.CreatedOn,

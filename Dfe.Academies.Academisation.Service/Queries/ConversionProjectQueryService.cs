@@ -72,6 +72,9 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 		var formAMatAggregates = await _formAMatProjectRepository.GetByIds(projects.Select(x => x.FormAMatProjectId).Distinct(), cancellationToken).ConfigureAwait(false);
 
+		// need to add back in any projects that were filtered out, otherwise the project list indicates there are less projects in the form a mat than there really is
+		projects = projects.Union(await _conversionProjectRepository.GetConversionProjectsByFormAMatIds(formAMatAggregates.Select(x => x.Id).Cast<int?>(), cancellationToken));
+
 		var pageResponse = PagingResponseFactory.Create("conversion-projects/FormAMatProjects", page, count, totalCount,
 			new Dictionary<string, object?> {
 				{"states", states},

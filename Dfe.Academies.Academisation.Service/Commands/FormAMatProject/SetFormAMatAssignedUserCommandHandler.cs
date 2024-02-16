@@ -48,7 +48,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.FormAMat
 					_logger.LogError($"Conversion project not found with id: {request.Id}");
 					return new NotFoundCommandResult();
 				}
-				if (project.Details.AssignedUser.FullName.IsNullOrEmpty())
+				if (project.Details.AssignedUser == null)
 				{
 					project.SetAssignedUser(request.UserId, request.FullName, request.EmailAddress);
 
