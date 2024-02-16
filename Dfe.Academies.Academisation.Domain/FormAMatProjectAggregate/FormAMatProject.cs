@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate
 		public string ApplicationReference { get; private set; }
 		public User? AssignedUser { get; private set; }
 
-		public static FormAMatProject Create(string proposedTrustName, string applicationReference, DateTime createdOn)
+	public static FormAMatProject Create(string proposedTrustName, string applicationReference, DateTime createdOn)
 		{
 			return new FormAMatProject(proposedTrustName, applicationReference, createdOn) { };
 		}

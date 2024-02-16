@@ -46,6 +46,7 @@ public class ProjectGetTests
 		.Excluding(x => x.Notes)
 		.Excluding(x => x.Id)
 		.Excluding(x => x.CreatedOn)
+		.Excluding(x => x.FormAMatProjectId)
 		);
 
 		existingProject.Id.Should().Be(serviceModel.Id);

@@ -1,7 +1,9 @@
-﻿using AutoFixture;
+﻿using System.Globalization;
+using AutoFixture;
 using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
@@ -88,6 +90,7 @@ public class LegacyProjectListGetQueryTests
 
 		var expectedFormAMatProject = _fixture.Create<IFormAMatProject>();
 		Mock.Get(expectedFormAMatProject).Setup(x => x.Id).Returns(formAMatProjectId);
+		Mock.Get(expectedFormAMatProject).Setup(x => x.AssignedUser).Returns(new Domain.Core.ProjectAggregate.User(Guid.NewGuid(), "test test", "test@test.com"));
 
 		_query.Setup(m => m.SearchFormAMatProjects(It.IsAny<IEnumerable<string>?>(),
 									   It.IsAny<string>(),

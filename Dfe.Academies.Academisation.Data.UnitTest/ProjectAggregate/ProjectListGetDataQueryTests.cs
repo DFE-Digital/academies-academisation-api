@@ -122,6 +122,8 @@ public class ProjectsListGetDataQueryTests
 		var projectDetails2 = _fixture.Build<ProjectDetails>().Create();
 
 		project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now.AddDays(-1));
+		project1.SetFormAMatProjectId(10);
+
 		project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-2));
 
 		_context.Projects.Add(project1);
@@ -132,7 +134,7 @@ public class ProjectsListGetDataQueryTests
 		// act
 		var searchStatus =
 			new string[] { project1.Details.ProjectStatus!.ToLower(), project2.Details.ProjectStatus!.ToLower() };
-		var projects = (await _subject.SearchMATProjects(searchStatus, null, null, null, null, null, 1, 10)).Item1.ToList();
+		var projects = (await _subject.SearchFormAMatProjects(searchStatus, null, null, null, null, null, 1, 10)).Item1.ToList();
 
 		// assert
 		Assert.Multiple(
