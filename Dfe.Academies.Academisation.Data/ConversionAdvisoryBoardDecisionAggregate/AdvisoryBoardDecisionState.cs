@@ -5,10 +5,11 @@ using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggrega
 
 namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 
-[Table(name: "ConversionAdvisoryBoardDecision")]
-public class ConversionAdvisoryBoardDecisionState : BaseEntity
+[Table(name: "AdvisoryBoardDecision")]
+public class AdvisoryBoardDecisionState : BaseEntity
 {
-	public int ConversionProjectId { get; init; }
+	public int? ConversionProjectId { get; init; }
+	public int? TransferProjectId { get; init; }
 	public AdvisoryBoardDecision Decision { get; init; }
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
@@ -24,12 +25,13 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
 
-	public static ConversionAdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
+	public static AdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
 	{
 		return new()
 		{
 			Id = decision.Id,
 			ConversionProjectId = decision.AdvisoryBoardDecisionDetails.ConversionProjectId,
+			TransferProjectId = decision.AdvisoryBoardDecisionDetails.TransferProjectId,
 			Decision = decision.AdvisoryBoardDecisionDetails.Decision,
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
@@ -58,6 +60,7 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
 	{
 		var details = new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			TransferProjectId,
 			Decision,
 			ApprovedConditionsSet,
 			ApprovedConditionsDetails,

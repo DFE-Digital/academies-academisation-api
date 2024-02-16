@@ -4,5 +4,5 @@ namespace Dfe.Academies.Academisation.IService.Query;
 
 public interface IConversionAdvisoryBoardDecisionGetQuery
 {
-	Task<ConversionAdvisoryBoardDecisionServiceModel?> Execute(int projectId);
+	Task<ConversionAdvisoryBoardDecisionServiceModel?> Execute(int projectId, bool isTransfer = false);
 }

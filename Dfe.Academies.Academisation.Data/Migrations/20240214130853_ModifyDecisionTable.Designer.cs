@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240214130853_ModifyDecisionTable")]
+    partial class ModifyDecisionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -551,33 +554,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ProjectNotes", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate.FormAMatProject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationReference")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProposedTrustName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FormAMatProject", "academisation");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -589,10 +565,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedOn");
-
-                    b.Property<int?>("FormAMatProjectId")
-                        .HasColumnType("int")
-                        .HasColumnName("FormAMatProjectId");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
@@ -1401,38 +1373,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate.FormAMatProject", b =>
-                {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b1 =>
-                        {
-                            b1.Property<int>("FormAMatProjectId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("EmailAddress")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("AssignedUserEmailAddress");
-
-                            b1.Property<string>("FullName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("AssignedUserFullName");
-
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uniqueidentifier")
-                                .HasColumnName("AssignedUserId");
-
-                            b1.HasKey("FormAMatProjectId");
-
-                            b1.ToTable("FormAMatProject", "academisation");
-
-                            b1.WithOwner()
-                                .HasForeignKey("FormAMatProjectId");
-                        });
-
-                    b.Navigation("AssignedUser");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>

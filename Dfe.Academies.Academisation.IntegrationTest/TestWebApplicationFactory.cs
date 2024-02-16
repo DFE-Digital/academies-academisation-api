@@ -59,9 +59,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 
 	private void SeedDecisionData()
 	{
-		_dbContext.AddRange(new ConversionAdvisoryBoardDecisionState
+		_dbContext.AddRange(new AdvisoryBoardDecisionState
 		{
 			ConversionProjectId = 1000,
+			TransferProjectId = null,
 			Decision = AdvisoryBoardDecision.Approved,
 			ApprovedConditionsSet = true,
 			ApprovedConditionsDetails = "TestData",

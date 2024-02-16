@@ -21,21 +21,21 @@ public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 
 		var timestamp = DateTime.UtcNow;
 
-		var seed = new List<ConversionAdvisoryBoardDecisionState>
+		var seed = new List<AdvisoryBoardDecisionState>
 		{
-			_fixture.Build<ConversionAdvisoryBoardDecisionState>()
+			_fixture.Build<AdvisoryBoardDecisionState>()
 				.With(d => d.Id, 1)
 				.With(d => d.ConversionProjectId, 1)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)
 				.Create(),
-			_fixture.Build<ConversionAdvisoryBoardDecisionState>()
+			_fixture.Build<AdvisoryBoardDecisionState>()
 				.With(d => d.Id, 2)
 				.With(d => d.ConversionProjectId, 2)
 				.With(d => d.CreatedOn, timestamp)
 				.With(d => d.LastModifiedOn, timestamp)
 				.Create(),
-			_fixture.Build<ConversionAdvisoryBoardDecisionState>()
+			_fixture.Build<AdvisoryBoardDecisionState>()
 				.With(d => d.Id, 3)
 				.With(d => d.ConversionProjectId, 3)
 				.With(d => d.CreatedOn, timestamp)
