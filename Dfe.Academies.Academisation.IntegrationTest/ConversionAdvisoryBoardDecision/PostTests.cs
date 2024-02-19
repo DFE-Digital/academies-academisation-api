@@ -57,6 +57,7 @@ public class PostTests
 			ApprovedConditionsDetails = null,
 			DeclinedReasons = new() {new(AdvisoryBoardDeclinedReason.Finance, "reason")},
 			DeferredReasons = new(),
+			WithdrawnReasons = new(),
 			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion
 		};
