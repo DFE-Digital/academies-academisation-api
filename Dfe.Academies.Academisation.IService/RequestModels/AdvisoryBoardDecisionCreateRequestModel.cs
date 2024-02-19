@@ -11,6 +11,7 @@ public class AdvisoryBoardDecisionCreateRequestModel
 	public string? ApprovedConditionsDetails { get; init; }
 	public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; }
 	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
+	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
 	public DateTime AdvisoryBoardDecisionDate { get; set; }
 	public DecisionMadeBy DecisionMadeBy { get; set; }
 }

@@ -33,6 +33,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			{
 				new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence())
 			},
+			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -64,6 +65,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			{
 				new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence())
 			},
+			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -82,7 +84,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			DeclinedReasons = null,
 			DeferredReasons = new(
 				expectedDetails.DeferredReasons!
-					.Select(reason => new ConversionAdvisoryBoardDecisionDeferredReasonState
+					.Select(reason => new AdvisoryBoardDecisionDeferredReasonState
 					{
 						Reason = reason.Reason,
 						Details = reason.Details,

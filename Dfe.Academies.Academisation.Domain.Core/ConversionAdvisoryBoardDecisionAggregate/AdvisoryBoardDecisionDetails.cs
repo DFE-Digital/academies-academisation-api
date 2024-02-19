@@ -8,6 +8,7 @@ public record AdvisoryBoardDecisionDetails(
 	string? ApprovedConditionsDetails,
 	List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons,
 	List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons,
+	List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons,
 	DateTime AdvisoryBoardDecisionDate,
 	DecisionMadeBy DecisionMadeBy
 );

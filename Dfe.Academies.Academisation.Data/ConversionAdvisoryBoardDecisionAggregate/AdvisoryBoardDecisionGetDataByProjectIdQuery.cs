@@ -20,7 +20,8 @@ public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisi
 
 		var advisoryBoardDecisions = _context.ConversionAdvisoryBoardDecisions
 				.Include(s => s.DeclinedReasons)
-				.Include(s => s.DeferredReasons);
+				.Include(s => s.DeferredReasons)
+				.Include(s => s.WithdrawnReasons);
 
 		if (isTransfer)
 		{

@@ -43,6 +43,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 			_faker.Lorem.Sentence(),
 			null,
 			null,
+			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 

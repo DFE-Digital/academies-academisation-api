@@ -53,6 +53,9 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 			state.DeferredReasons!
 				.Select(reason => new AdvisoryBoardDeferredReasonDetails(reason.Reason, reason.Details))
 				.ToList(),
+			state.WithdrawnReasons!
+				.Select(reason => new AdvisoryBoardWithdrawnReasonDetails(reason.Reason, reason.Details))
+				.ToList(),
 			state.AdvisoryBoardDecisionDate,
 			state.DecisionMadeBy
 		);

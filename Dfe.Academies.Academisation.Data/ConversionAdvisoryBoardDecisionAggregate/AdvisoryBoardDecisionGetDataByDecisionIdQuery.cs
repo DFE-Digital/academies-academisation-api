@@ -18,6 +18,7 @@ public class AdvisoryBoardDecisionGetDataByDecisionIdQuery : IAdvisoryBoardDecis
 		var state = await _context.ConversionAdvisoryBoardDecisions
 			.Include(s => s.DeclinedReasons)
 			.Include(s => s.DeferredReasons)
+			.Include(s => s.WithdrawnReasons)
 			.FirstOrDefaultAsync(s => s.Id == decisionId);
 
 		return state?.MapToDomain();

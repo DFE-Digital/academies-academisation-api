@@ -14,12 +14,14 @@ public class AdvisoryBoardDecisionState : BaseEntity
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
 
-	[ForeignKey(nameof(ConversionAdvisoryBoardDecisionDeclinedReasonState.AdvisoryBoardDecisionId))]
-	public HashSet<ConversionAdvisoryBoardDecisionDeclinedReasonState>? DeclinedReasons { get; init; }
+	[ForeignKey(nameof(AdvisoryBoardDecisionDeclinedReasonState.AdvisoryBoardDecisionId))]
+	public HashSet<AdvisoryBoardDecisionDeclinedReasonState>? DeclinedReasons { get; init; }
 
-	[ForeignKey(nameof(ConversionAdvisoryBoardDecisionDeferredReasonState.AdvisoryBoardDecisionId))]
-	public HashSet<ConversionAdvisoryBoardDecisionDeferredReasonState>? DeferredReasons { get; init; }
+	[ForeignKey(nameof(AdvisoryBoardDecisionDeferredReasonState.AdvisoryBoardDecisionId))]
+	public HashSet<AdvisoryBoardDecisionDeferredReasonState>? DeferredReasons { get; init; }
 
+	[ForeignKey(nameof(AdvisoryBoardDecisionWithdrawnReasonState.AdvisoryBoardDecisionId))]
+	public HashSet<AdvisoryBoardDecisionWithdrawnReasonState>? WithdrawnReasons { get; init; }
 
 
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
@@ -36,14 +38,21 @@ public class AdvisoryBoardDecisionState : BaseEntity
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
 			DeclinedReasons = decision.AdvisoryBoardDecisionDetails.DeclinedReasons?
-				.Select(reason => new ConversionAdvisoryBoardDecisionDeclinedReasonState
+				.Select(reason => new AdvisoryBoardDecisionDeclinedReasonState
 				{
 					Reason = reason.Reason,
 					Details = reason.Details
 				})
 				.ToHashSet(),
 			DeferredReasons = decision.AdvisoryBoardDecisionDetails.DeferredReasons?
-				.Select(reason => new ConversionAdvisoryBoardDecisionDeferredReasonState
+				.Select(reason => new AdvisoryBoardDecisionDeferredReasonState
+				{
+					Reason = reason.Reason,
+					Details = reason.Details
+				})
+				.ToHashSet(),
+			WithdrawnReasons = decision.AdvisoryBoardDecisionDetails.WithdrawnReasons?
+				.Select(reason => new AdvisoryBoardDecisionWithdrawnReasonState 
 				{
 					Reason = reason.Reason,
 					Details = reason.Details
@@ -69,6 +78,9 @@ public class AdvisoryBoardDecisionState : BaseEntity
 				.ToList(),
 			DeferredReasons?
 				.Select(reason => new AdvisoryBoardDeferredReasonDetails(reason.Reason, reason.Details))
+				.ToList(),
+			WithdrawnReasons?
+				.Select(reason => new AdvisoryBoardWithdrawnReasonDetails(reason.Reason, reason.Details))
 				.ToList(),
 			AdvisoryBoardDecisionDate,
 			DecisionMadeBy

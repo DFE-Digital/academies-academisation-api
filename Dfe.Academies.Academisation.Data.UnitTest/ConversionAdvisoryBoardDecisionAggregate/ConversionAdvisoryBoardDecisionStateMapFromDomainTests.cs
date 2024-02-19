@@ -28,6 +28,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 				new(_faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence())
 			},
 			null,
+			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -59,6 +60,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 				new(_faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence())
 			},
 			null,
+			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -76,7 +78,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 			ApprovedConditionsDetails = expectedDetails.ApprovedConditionsDetails,
 			DeclinedReasons = new(
 				expectedDetails.DeclinedReasons!
-					.Select(reason => new ConversionAdvisoryBoardDecisionDeclinedReasonState
+					.Select(reason => new AdvisoryBoardDecisionDeclinedReasonState
 					{
 						Reason = reason.Reason,
 						Details = reason.Details
