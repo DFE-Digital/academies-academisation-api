@@ -103,7 +103,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> SetExternalApplicationForm(
+		public async Task<ActionResult> SetPerformanceData(
 	int id,
 	SetPerformanceDataCommand request)
 		{
