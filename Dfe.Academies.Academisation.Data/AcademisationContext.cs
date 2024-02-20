@@ -130,8 +130,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
 
 		modelBuilder.Entity<AdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);	
-		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
-		modelBuilder.Entity<ConversionAdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
+		modelBuilder.Entity<AdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
+		modelBuilder.Entity<AdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
+		modelBuilder.Entity<AdvisoryBoardDecisionWithdrawnReasonState>(ConfigureAdvisoryBoardDecisionWithdrawnReason);
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
 
@@ -336,7 +337,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasConversion<string>();
 	}
 
-	private static void ConfigureConversionAdvisoryBoardDecisionDeferredReason(EntityTypeBuilder<ConversionAdvisoryBoardDecisionDeferredReasonState> ConversionAdvisoryBoardDecisionDeferredReasonConfiguration)
+	private static void ConfigureConversionAdvisoryBoardDecisionDeferredReason(EntityTypeBuilder<AdvisoryBoardDecisionDeferredReasonState> ConversionAdvisoryBoardDecisionDeferredReasonConfiguration)
 	{
 		ConversionAdvisoryBoardDecisionDeferredReasonConfiguration.ToTable("ConversionAdvisoryBoardDecisionDeferredReason", DEFAULT_SCHEMA);
 		ConversionAdvisoryBoardDecisionDeferredReasonConfiguration
@@ -344,10 +345,18 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasConversion<string>();
 	}
 
-	private static void ConfigureConversionAdvisoryBoardDecisionDeclinedReason(EntityTypeBuilder<ConversionAdvisoryBoardDecisionDeclinedReasonState> ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration)
+	private static void ConfigureConversionAdvisoryBoardDecisionDeclinedReason(EntityTypeBuilder<AdvisoryBoardDecisionDeclinedReasonState> ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration)
 	{
 		ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration.ToTable("ConversionAdvisoryBoardDecisionDeclinedReason", DEFAULT_SCHEMA);
 		ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration
+			.Property(e => e.Reason)
+			.HasConversion<string>();
+	}
+
+	private static void ConfigureAdvisoryBoardDecisionWithdrawnReason(EntityTypeBuilder<AdvisoryBoardDecisionWithdrawnReasonState> AdvisoryBoardDecisionWithdrawnReasonConfiguration)
+	{
+		AdvisoryBoardDecisionWithdrawnReasonConfiguration.ToTable("AdvisoryBoardDecisionWithdrawnReason", DEFAULT_SCHEMA);
+		AdvisoryBoardDecisionWithdrawnReasonConfiguration
 			.Property(e => e.Reason)
 			.HasConversion<string>();
 	}

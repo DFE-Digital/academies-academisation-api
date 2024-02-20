@@ -3,10 +3,10 @@ using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAgg
 
 namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 
-[Table(name: "ConversionAdvisoryBoardDecisionDeclinedReason")]
-public class ConversionAdvisoryBoardDecisionDeclinedReasonState : BaseEntity
+[Table(name: "AdvisoryBoardDecisionDeferredReason")]
+public class AdvisoryBoardDecisionDeferredReasonState : BaseEntity
 {
 	public int AdvisoryBoardDecisionId { get; set; }
-	public AdvisoryBoardDeclinedReason Reason { get; init; }
+	public AdvisoryBoardDeferredReason Reason { get; init; }
 	public string Details { get; init; } = null!;
 }

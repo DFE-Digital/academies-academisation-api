@@ -10,6 +10,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 		ValidateApprovedDecision();
 		ValidateDeclinedDecision();
 		ValidateDeferredDecision();
+		ValidateWithdrawnDecision();
 		ValidateDecisionDate();
 	}
 
@@ -189,6 +190,42 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 						nameof(AdvisoryBoardDecisionDetails.DeferredReasons),
 						"{CollectionIndex}")));
 	}
+
+	private void ValidateWithdrawnDecision()
+	{
+		RuleFor(details => details.WithdrawnReasons)
+			.NotNull()
+			.NotEmpty()
+			.When(details => details.Decision is AdvisoryBoardDecision.Withdrawn)
+			.WithMessage(details =>
+				NotEmptyMessage(
+					nameof(details.WithdrawnReasons)) +
+				WhenIsSuffix(
+					nameof(details.Decision),
+					nameof(AdvisoryBoardDecision.Withdrawn)));
+
+		RuleFor(details => details.WithdrawnReasons)
+			.Empty()
+			.When(details => details.Decision is not AdvisoryBoardDecision.Withdrawn)
+			.WithMessage(details =>
+				NullMessage(
+					nameof(details.WithdrawnReasons)) +
+				WhenIsNotSuffix(
+					nameof(details.Decision),
+					nameof(AdvisoryBoardDecision.Declined)));
+
+		RuleForEach(details => details.WithdrawnReasons)
+			.ChildRules(reason => reason
+				.RuleFor(r => r.Details)
+				.NotEmpty()
+				.WithMessage(r =>
+					NotEmptyMessage(
+						nameof(r.Details)) +
+					InNestedPropertySuffix(
+						nameof(AdvisoryBoardDecisionDetails.WithdrawnReasons),
+						"{CollectionIndex}")));
+	}
+
 
 	private void ValidateDecisionDate()
 	{

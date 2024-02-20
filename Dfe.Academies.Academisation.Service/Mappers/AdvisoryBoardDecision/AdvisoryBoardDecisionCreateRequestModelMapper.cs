@@ -15,6 +15,7 @@ internal static class AdvisoryBoardDecisionCreateRequestModelMapper
 			model.ApprovedConditionsDetails,
 			model.DeclinedReasons,
 			model.DeferredReasons,
+			model.WithdrawnReasons,
 			model.AdvisoryBoardDecisionDate,
 			model.DecisionMadeBy
 		);
