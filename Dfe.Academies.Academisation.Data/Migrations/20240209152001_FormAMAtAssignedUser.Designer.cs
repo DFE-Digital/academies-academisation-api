@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240209152001_FormAMAtAssignedUser")]
+    partial class FormAMAtAssignedUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeclinedReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +57,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecisionDeclinedReason", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeferredReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeferredReasonState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +89,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecisionDeferredReason", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +106,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<bool?>("ApprovedConditionsSet")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ConversionProjectId")
+                    b.Property<int>("ConversionProjectId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -120,44 +123,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TransferProjectId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionWithdrawnReasonState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdvisoryBoardDecisionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdvisoryBoardDecisionId");
-
-                    b.ToTable("AdvisoryBoardDecisionWithdrawnReason", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>
@@ -844,28 +812,19 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("TransferringAcademy", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeclinedReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", null)
+                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", null)
                         .WithMany("DeclinedReasons")
                         .HasForeignKey("AdvisoryBoardDecisionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeferredReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeferredReasonState", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", null)
+                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", null)
                         .WithMany("DeferredReasons")
-                        .HasForeignKey("AdvisoryBoardDecisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionWithdrawnReasonState", b =>
-                {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", null)
-                        .WithMany("WithdrawnReasons")
                         .HasForeignKey("AdvisoryBoardDecisionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1934,13 +1893,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>
                 {
                     b.Navigation("DeclinedReasons");
 
                     b.Navigation("DeferredReasons");
-
-                    b.Navigation("WithdrawnReasons");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>

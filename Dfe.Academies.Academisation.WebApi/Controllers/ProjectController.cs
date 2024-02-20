@@ -48,11 +48,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("projects", Name = "GetLegacyProjects")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<LegacyApiResponse<ConversionProjectServiceModel>>> GetProjects(
+		public async Task<ActionResult<PagedDataResponse<ConversionProjectServiceModel>>> GetProjects(
 			GetAcademyConversionSearchModel? searchModel,
 			[FromQuery] int? urn = null)
 		{
-			LegacyApiResponse<ConversionProjectServiceModel>? result =
+			PagedDataResponse<ConversionProjectServiceModel>? result =
 				await _conversionProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, urn,
 					searchModel.RegionQueryString, searchModel.ApplicationReferences);

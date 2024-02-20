@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				new ConversionProjectServiceModel(2, 200) { SchoolName = "Sample School 2", ProjectStatus = "Pending" }
 			};
 
-			var legacyApiResponse = new LegacyApiResponse<ConversionProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
+			var legacyApiResponse = new PagedDataResponse<ConversionProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
 
 			_mockConversionProjectQueryService.Setup(s => s.GetProjectsV2(
 					null,
@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				new ConversionProjectServiceModel(1, 100) { SchoolName = "Sample School 1", ProjectStatus = "Active" },
 				new ConversionProjectServiceModel(2, 200) { SchoolName = "Sample School 2", ProjectStatus = "Pending" }
 			};
-			var legacyApiResponse = new LegacyApiResponse<ConversionProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
+			var legacyApiResponse = new PagedDataResponse<ConversionProjectServiceModel>(sampleProjects, new PagingResponse { Page = 1, RecordCount = 2 });
 
 			_mockConversionProjectQueryService.Setup(s => s.GetProjectsV2(
 					null,

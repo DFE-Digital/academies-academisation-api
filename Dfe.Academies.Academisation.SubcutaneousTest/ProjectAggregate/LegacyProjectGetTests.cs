@@ -24,7 +24,7 @@ public class ProjectGetTests
 	{
 		_context = new TestProjectContext().CreateContext();
 
-		_projectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null)), Mock.Of<IMediator>());
+		_projectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 	}
 
 	[Fact]
@@ -46,6 +46,7 @@ public class ProjectGetTests
 		.Excluding(x => x.Notes)
 		.Excluding(x => x.Id)
 		.Excluding(x => x.CreatedOn)
+		.Excluding(x => x.FormAMatProjectId)
 		);
 
 		existingProject.Id.Should().Be(serviceModel.Id);

@@ -4,4 +4,5 @@
 		Guid Id,
 		string FullName,
 		string EmailAddress);
+
 }
