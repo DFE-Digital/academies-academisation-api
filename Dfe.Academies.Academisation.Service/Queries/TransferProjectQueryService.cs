@@ -82,6 +82,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			IEnumerable<ITransferProject> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();
 
+			// can i kill page/count? 
 			// FILTER BY TITLE
 			//IEnumerable<AcademyTransferProjectSummaryResponse> projects =
 			//	FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
@@ -121,6 +122,41 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					.ToList();
 			}
 			return queryable;
+		}
+		public async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject> atp)
+		{
+			if (atp == null) throw new ArgumentNullException(nameof(atp));
+
+			var tasks = atp.Select(MapProject).ToList();
+
+			return await Task.WhenAll(tasks);
+		}
+
+		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject project)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				var advisoryBoardDecisionRepository = scope.ServiceProvider.GetRequiredService<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
+				var advisoryBoardDecision = await advisoryBoardDecisionRepository.Execute(project.Id);
+
+				var transferringAcademy = project.TransferringAcademies.FirstOrDefault();
+				var school = await _establishmentRepository.GetEstablishmentByUkprn(transferringAcademy?.OutgoingAcademyUkprn);
+
+				return new ExportedTransferProjectModel
+				{
+					Id = project.Id,
+					AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
+					AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
+					IncomingTrustName = transferringAcademy?.IncomingTrustName,
+					IncomingTrustUkprn = transferringAcademy?.IncomingTrustUkprn,
+					LocalAuthority = school?.LocalAuthorityName,
+					OutgoingTrustName = project.OutgoingTrustName,
+					Region = school?.Gor?.Name,
+					SchoolType = school?.EstablishmentType?.Name,
+					Status = project.Status,
+					Urn = project.Urn.ToString(),
+				};
+			}
 		}
 
 		public IEnumerable<AcademyTransferProjectSummaryResponse> AcademyTransferProjectSummaryResponse(
