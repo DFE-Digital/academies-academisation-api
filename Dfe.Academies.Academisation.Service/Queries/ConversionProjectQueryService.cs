@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -10,10 +11,12 @@ namespace Dfe.Academies.Academisation.Service.Queries;
 public class ConversionProjectQueryService : IConversionProjectQueryService
 {
 	private readonly IConversionProjectRepository _conversionProjectRepository;
+	private readonly IFormAMatProjectRepository _formAMatProjectRepository;
 
-	public ConversionProjectQueryService(IConversionProjectRepository conversionProjectRepository)
+	public ConversionProjectQueryService(IConversionProjectRepository conversionProjectRepository, IFormAMatProjectRepository formAMatProjectRepository)
 	{
 		_conversionProjectRepository = conversionProjectRepository;
+		_formAMatProjectRepository = formAMatProjectRepository;
 	}
 
 	public async Task<ConversionProjectServiceModel?> GetConversionProject(int id)
@@ -24,7 +27,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 	}
 
-	public async Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjects(
+	public async Task<PagedDataResponse<ConversionProjectServiceModel>?> GetProjects(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions, IEnumerable<string>? applicationReferences)
 	{
 
@@ -39,7 +42,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 		var data = projects.Select(p => p.MapToServiceModel());
 
-		return new LegacyApiResponse<ConversionProjectServiceModel>(data,
+		return new PagedDataResponse<ConversionProjectServiceModel>(data,
 			pageResponse);
 	}
 
@@ -48,7 +51,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 		return await _conversionProjectRepository.GetFilterParameters();
 	}
 
-	public async Task<LegacyApiResponse<ConversionProjectServiceModel>?> GetProjectsV2(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+	public async Task<PagedDataResponse<ConversionProjectServiceModel>?> GetProjectsV2(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
 	{
 		var (projects, totalCount) = await _conversionProjectRepository.SearchProjectsV2(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates, page, count);
 
@@ -59,22 +62,34 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 		var data = projects.Select(p => p.MapToServiceModel());
 
-		return new LegacyApiResponse<ConversionProjectServiceModel>(data,
+		return new PagedDataResponse<ConversionProjectServiceModel>(data,
 			pageResponse);
 	}
 
-	public async Task<LegacyApiResponse<MATProjectServiceModel>?> GetMATProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+	public async Task<PagedDataResponse<FormAMatProjectServiceModel>?> GetFormAMatProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, CancellationToken cancellationToken, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
 	{
-		var (projects, totalCount) = await _conversionProjectRepository.SearchMATProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates, page, count);
+		var (projects, totalCount) = await _conversionProjectRepository.SearchFormAMatProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates, page, count);
 
-		var pageResponse = PagingResponseFactory.Create("conversion-projects/projects", page, count, totalCount,
+		var formAMatAggregates = await _formAMatProjectRepository.GetByIds(projects.Select(x => x.FormAMatProjectId).Distinct(), cancellationToken).ConfigureAwait(false);
+
+		// need to add back in any projects that were filtered out, otherwise the project list indicates there are less projects in the form a mat than there really is
+		projects = projects.Union(await _conversionProjectRepository.GetConversionProjectsByFormAMatIds(formAMatAggregates.Select(x => x.Id).Cast<int?>(), cancellationToken));
+
+		var pageResponse = PagingResponseFactory.Create("conversion-projects/FormAMatProjects", page, count, totalCount,
 			new Dictionary<string, object?> {
 				{"states", states},
 			});
 
-		var data = projects.Select(p => p.MapToMATServiceModel());
+		var data = formAMatAggregates.Select(p => p.MapToFormAMatServiceModel(projects));
 
-		return new LegacyApiResponse<MATProjectServiceModel>(data,
+		return new PagedDataResponse<FormAMatProjectServiceModel>(data,
 			pageResponse);
+	}
+	public async Task<FormAMatProjectServiceModel> GetFormAMatProjectById(int id, CancellationToken cancellationToken)
+	{
+		FormAMatProject project = await _formAMatProjectRepository.GetById(id);
+		var relatedProjects = await _conversionProjectRepository.GetConversionProjectsByFormAMatId(project.Id, cancellationToken).ConfigureAwait(false);
+
+		return project.MapToFormAMatServiceModel(relatedProjects);
 	}
 }

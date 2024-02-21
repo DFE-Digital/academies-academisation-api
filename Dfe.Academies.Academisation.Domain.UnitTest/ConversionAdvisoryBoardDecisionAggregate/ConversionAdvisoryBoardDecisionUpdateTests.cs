@@ -16,8 +16,10 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			1,
+			null,
 			AdvisoryBoardDecision.Approved,
 			false,
+			null,
 			null,
 			null,
 			null,
@@ -47,7 +49,9 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		AdvisoryBoardDecisionDetails details = new(
 			1,
+			null,
 			AdvisoryBoardDecision.Approved,
+			null,
 			null,
 			null,
 			null,

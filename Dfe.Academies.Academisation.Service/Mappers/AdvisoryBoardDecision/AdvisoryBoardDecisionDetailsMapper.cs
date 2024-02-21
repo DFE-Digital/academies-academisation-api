@@ -9,11 +9,13 @@ public static class AdvisoryBoardDecisionDetailsMapper
 	{
 		return new(
 			serviceModel.ConversionProjectId,
+			serviceModel.TransferProjectId,
 			serviceModel.Decision,
 			serviceModel.ApprovedConditionsSet,
 			serviceModel.ApprovedConditionsDetails,
 			serviceModel.DeclinedReasons,
 			serviceModel.DeferredReasons,
+			serviceModel.WithdrawnReasons,
 			serviceModel.AdvisoryBoardDecisionDate,
 			serviceModel.DecisionMadeBy
 		);

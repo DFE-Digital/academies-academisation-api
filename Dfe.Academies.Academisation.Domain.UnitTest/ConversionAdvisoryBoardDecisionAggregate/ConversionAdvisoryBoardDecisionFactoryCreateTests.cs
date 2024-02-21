@@ -37,9 +37,11 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
+			null,
 			AdvisoryBoardDecision.Approved,
 			true,
 			_faker.Lorem.Sentence(),
+			null,
 			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),

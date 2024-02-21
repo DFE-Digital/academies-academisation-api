@@ -59,6 +59,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			ApprovedConditionsDetails = details.ApprovedConditionsDetails,
 			DeclinedReasons = details.DeclinedReasons,
 			DeferredReasons = details.DeferredReasons,
+			WithdrawnReasons = details.WithdrawnReasons,
 			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = details.DecisionMadeBy
 		};

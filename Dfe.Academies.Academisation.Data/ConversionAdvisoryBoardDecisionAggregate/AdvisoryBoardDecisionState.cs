@@ -5,43 +5,54 @@ using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggrega
 
 namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 
-[Table(name: "ConversionAdvisoryBoardDecision")]
-public class ConversionAdvisoryBoardDecisionState : BaseEntity
+[Table(name: "AdvisoryBoardDecision")]
+public class AdvisoryBoardDecisionState : BaseEntity
 {
-	public int ConversionProjectId { get; init; }
+	public int? ConversionProjectId { get; init; }
+	public int? TransferProjectId { get; init; }
 	public AdvisoryBoardDecision Decision { get; init; }
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
 
-	[ForeignKey(nameof(ConversionAdvisoryBoardDecisionDeclinedReasonState.AdvisoryBoardDecisionId))]
-	public HashSet<ConversionAdvisoryBoardDecisionDeclinedReasonState>? DeclinedReasons { get; init; }
+	[ForeignKey(nameof(AdvisoryBoardDecisionDeclinedReasonState.AdvisoryBoardDecisionId))]
+	public HashSet<AdvisoryBoardDecisionDeclinedReasonState>? DeclinedReasons { get; init; }
 
-	[ForeignKey(nameof(ConversionAdvisoryBoardDecisionDeferredReasonState.AdvisoryBoardDecisionId))]
-	public HashSet<ConversionAdvisoryBoardDecisionDeferredReasonState>? DeferredReasons { get; init; }
+	[ForeignKey(nameof(AdvisoryBoardDecisionDeferredReasonState.AdvisoryBoardDecisionId))]
+	public HashSet<AdvisoryBoardDecisionDeferredReasonState>? DeferredReasons { get; init; }
 
+	[ForeignKey(nameof(AdvisoryBoardDecisionWithdrawnReasonState.AdvisoryBoardDecisionId))]
+	public HashSet<AdvisoryBoardDecisionWithdrawnReasonState>? WithdrawnReasons { get; init; }
 
 
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
 
-	public static ConversionAdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
+	public static AdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
 	{
 		return new()
 		{
 			Id = decision.Id,
 			ConversionProjectId = decision.AdvisoryBoardDecisionDetails.ConversionProjectId,
+			TransferProjectId = decision.AdvisoryBoardDecisionDetails.TransferProjectId,
 			Decision = decision.AdvisoryBoardDecisionDetails.Decision,
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
 			DeclinedReasons = decision.AdvisoryBoardDecisionDetails.DeclinedReasons?
-				.Select(reason => new ConversionAdvisoryBoardDecisionDeclinedReasonState
+				.Select(reason => new AdvisoryBoardDecisionDeclinedReasonState
 				{
 					Reason = reason.Reason,
 					Details = reason.Details
 				})
 				.ToHashSet(),
 			DeferredReasons = decision.AdvisoryBoardDecisionDetails.DeferredReasons?
-				.Select(reason => new ConversionAdvisoryBoardDecisionDeferredReasonState
+				.Select(reason => new AdvisoryBoardDecisionDeferredReasonState
+				{
+					Reason = reason.Reason,
+					Details = reason.Details
+				})
+				.ToHashSet(),
+			WithdrawnReasons = decision.AdvisoryBoardDecisionDetails.WithdrawnReasons?
+				.Select(reason => new AdvisoryBoardDecisionWithdrawnReasonState 
 				{
 					Reason = reason.Reason,
 					Details = reason.Details
@@ -58,6 +69,7 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
 	{
 		var details = new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			TransferProjectId,
 			Decision,
 			ApprovedConditionsSet,
 			ApprovedConditionsDetails,
@@ -66,6 +78,9 @@ public class ConversionAdvisoryBoardDecisionState : BaseEntity
 				.ToList(),
 			DeferredReasons?
 				.Select(reason => new AdvisoryBoardDeferredReasonDetails(reason.Reason, reason.Details))
+				.ToList(),
+			WithdrawnReasons?
+				.Select(reason => new AdvisoryBoardWithdrawnReasonDetails(reason.Reason, reason.Details))
 				.ToList(),
 			AdvisoryBoardDecisionDate,
 			DecisionMadeBy
