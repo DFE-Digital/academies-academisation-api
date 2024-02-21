@@ -33,7 +33,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? Author { get; init; }
 		public string? Version { get; init; }
 		public string? ClearedBy { get; init; }
-		public string? AcademyOrderRequired { get; init; }
 		public DateTime? DaoPackSentDate { get; init; }
 		public string? Form7Received { get; init; }
 		public DateTime? Form7ReceivedDate { get; init; }
@@ -157,8 +156,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				   string.Equals(Author, other.Author, StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(Version, other.Version, StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) &&
-				   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
-					   StringComparison.InvariantCultureIgnoreCase) &&
 				   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
 			   string.Equals(Form7Received, other.Form7Received, StringComparison.InvariantCultureIgnoreCase) &&
 			   Nullable.Equals(Form7ReceivedDate, other.Form7ReceivedDate) &&
@@ -293,7 +290,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(Author, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(Version, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(ClearedBy, StringComparer.InvariantCultureIgnoreCase);
-			hashCode.Add(AcademyOrderRequired, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(DaoPackSentDate);
 			hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(Form7ReceivedDate);

@@ -129,7 +129,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
 
-		modelBuilder.Entity<AdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);	
+		modelBuilder.Entity<AdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
 		modelBuilder.Entity<AdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
 		modelBuilder.Entity<AdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 		modelBuilder.Entity<AdvisoryBoardDecisionWithdrawnReasonState>(ConfigureAdvisoryBoardDecisionWithdrawnReason);
@@ -279,7 +279,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			pd.Property(d => d.Urn).HasColumnName("Urn");
 			pd.Property(d => d.HeadTeacherBoardDate).HasColumnName("HeadTeacherBoardDate");
 			pd.Property(d => d.Version).HasColumnName("Version");
-			pd.Property(d => d.AcademyOrderRequired).HasColumnName("AcademyOrderRequired");
 			pd.Property(d => d.Region).HasColumnName("Region");
 			pd.Property(d => d.ConversionSupportGrantAmountChanged).HasColumnName("ConversionSupportGrantAmountChanged");
 			pd.Property(d => d.ConversionSupportGrantEnvironmentalImprovementGrant).HasColumnName("ConversionSupportGrantEnvironmentalImprovementGrant");

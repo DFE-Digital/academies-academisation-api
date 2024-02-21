@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -114,7 +113,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
 				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
 				RecommendationForProject = "Approve",
-				AcademyOrderRequired = "Yes",
 				AcademyTypeAndRoute = "Converter",
 				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
 				ConversionSupportGrantAmount = 25000,
@@ -134,8 +132,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				LocalAuthority = "Coventry",
 			};
 
-			
-			DbContext.Projects.Add(new Project(2,newProjectDetails));
+
+			DbContext.Projects.Add(new Project(2, newProjectDetails));
 
 			// Save changes to the database
 			await DbContext.SaveChangesAsync(cancellationToken);
