@@ -123,6 +123,47 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return queryable;
 		}
 
+		public async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject> atp)
+		{
+			if (atp == null) throw new ArgumentNullException(nameof(atp));
+
+			var tasks = atp.Select(MapProject).ToList();
+
+			return await Task.WhenAll(tasks);
+		}
+
+		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject project)
+		{
+			using (var scope = _serviceScopeFactory.CreateScope())
+			{
+				// Resolve your scoped services from the new scope
+				var advisoryBoardDecisionRepository = scope.ServiceProvider.GetRequiredService<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
+				var establishmentRepository = scope.ServiceProvider.GetRequiredService<IAcademiesQueryService>();
+
+				// Perform your operations as before, now thread-safe
+				var transferringAcademy = project.TransferringAcademies.FirstOrDefault();
+				var advisoryBoardDecision = await advisoryBoardDecisionRepository.Execute(project.Id);
+				var school = await establishmentRepository.GetEstablishmentByUkprn(transferringAcademy?.OutgoingAcademyUkprn);
+
+				// Construct your model here as before
+				return new ExportedTransferProjectModel
+				{
+					Id = project.Id,
+					AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
+					AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
+					IncomingTrustName = transferringAcademy?.IncomingTrustName,
+					IncomingTrustUkprn = transferringAcademy?.IncomingTrustUkprn,
+					LocalAuthority = school?.LocalAuthorityName,
+					OutgoingTrustName = project.OutgoingTrustName,
+					Region = school?.Gor?.Name,
+					SchoolType = school?.EstablishmentType?.Name,
+					Status = project.Status,
+					Urn = project.Urn.ToString(),
+					// Populate other properties as needed
+				};
+			}
+		}
+
 		public IEnumerable<AcademyTransferProjectSummaryResponse> AcademyTransferProjectSummaryResponse(
  IEnumerable<ITransferProject> atp)
 		{

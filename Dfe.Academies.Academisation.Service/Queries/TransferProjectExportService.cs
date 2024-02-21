@@ -85,7 +85,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 7).Value = project.LocalAuthority;
 				worksheet.Cell(row, 8).Value = project.Region;
 				worksheet.Cell(row, 9).Value = project.AdvisoryBoardDate;
-				//var advisoryBoardDecisionDate = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(project.Id); // TODO iffy
 				worksheet.Cell(row, 10).Value = project.DecisionDate;
 				worksheet.Cell(row, 11).Value = project.Status;
 				worksheet.Cell(row, 12).Value = project.AssignedUserFullName;
