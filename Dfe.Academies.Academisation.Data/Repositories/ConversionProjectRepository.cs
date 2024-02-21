@@ -209,7 +209,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
-		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchFormAMatProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
+		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchFormAMatProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
 		{
 			IQueryable<Project> queryable = this.dbSet;
 
@@ -223,9 +223,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			var totalProjects = queryable.Select(p => p.FormAMatProjectId).Distinct().Count();
 			var projects = await queryable
-				.OrderByDescending(acp => acp.CreatedOn)
-				.Skip((page - 1) * count)
-				.Take(count).ToListAsync();
+				.OrderByDescending(acp => acp.CreatedOn).ToListAsync();
 
 			return (projects, totalProjects);
 		}
