@@ -25,6 +25,20 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_correlationContext = correlationContext;
 		}
 
+		public async Task<Establishment?> GetEstablishmentByUkprn(string ukprn)
+		{
+			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var response = await client.GetAsync($"/establishment/{ukprn}");
+
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.LogError("Request for establishment failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
+				return null;
+			}
+
+			return await response.Content.ReadFromJsonAsync<Establishment>();
+		}
+
 		public async Task<Establishment?> GetEstablishment(int urn)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);
