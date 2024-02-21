@@ -68,9 +68,13 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 	public async Task<PagedDataResponse<FormAMatProjectServiceModel>?> GetFormAMatProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, CancellationToken cancellationToken, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
 	{
-		var (projects, totalCount) = await _conversionProjectRepository.SearchFormAMatProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates, page, count);
+		var (projects, totalCount) = await _conversionProjectRepository.SearchFormAMatProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates);
 
 		var formAMatAggregates = await _formAMatProjectRepository.GetByIds(projects.Select(x => x.FormAMatProjectId).Distinct(), cancellationToken).ConfigureAwait(false);
+
+		// doing paging here as it has to be at a form a mat level
+		formAMatAggregates = formAMatAggregates.OrderByDescending(x => x.CreatedOn).Skip((page - 1) * count)
+				.Take(count).ToList();
 
 		// need to add back in any projects that were filtered out, otherwise the project list indicates there are less projects in the form a mat than there really is
 		projects = projects.Union(await _conversionProjectRepository.GetConversionProjectsByFormAMatIds(formAMatAggregates.Select(x => x.Id).Cast<int?>(), cancellationToken));

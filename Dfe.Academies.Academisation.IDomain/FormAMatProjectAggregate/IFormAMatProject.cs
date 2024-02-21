@@ -10,6 +10,8 @@ namespace Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate
 		string ApplicationReference { get; }
 		User? AssignedUser { get; }
 
+		DateTime CreatedOn { get; }
+
 		void SetAssignedUser(Guid userId, string fullName, string emailAddress);
 	}
 }

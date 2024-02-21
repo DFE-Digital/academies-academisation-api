@@ -97,9 +97,7 @@ public class LegacyProjectListGetQueryTests
 									   It.IsAny<IEnumerable<string>?>(),
 									   It.IsAny<IEnumerable<string>?>(),
 									   It.IsAny<IEnumerable<string>?>(),
-									   It.IsAny<IEnumerable<string>?>(),
-									   It.IsAny<int>(),
-									   It.IsAny<int>()))
+									   It.IsAny<IEnumerable<string>?>()))
 			.ReturnsAsync((expectedProjects, expectedProjects.Count));
 
 		_formAMatQuery.Setup(x => x.GetByIds(It.Is<IEnumerable<int?>>(id => id.Contains(formAMatProjectId)), It.IsAny<CancellationToken>())).ReturnsAsync(new List<IFormAMatProject>() { expectedFormAMatProject });
