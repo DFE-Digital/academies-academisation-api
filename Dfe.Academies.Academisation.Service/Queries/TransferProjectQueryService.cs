@@ -5,6 +5,14 @@ using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
+using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using static Dfe.Academies.Academisation.IService.ServiceModels.Academies.Establishment;
+using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Microsoft.Extensions.DependencyInjection;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -152,88 +160,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			});
 		}
 
-		public async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(
-	IEnumerable<ITransferProject> atp)
-		{
-			return await Task.WhenAll(atp.Select(async x =>
-			{
-				var transferringAcademy = x.TransferringAcademies.FirstOrDefault();
-				var advisoryBoardDecision = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(x.Id);
-				var school = await _establishmentRepository.GetEstablishmentByUkprn(x.OutgoingTrustUkprn) ?? new IService.ServiceModels.Academies.Establishment()
-				{
-					EstablishmentType = new IService.ServiceModels.Academies.Establishment.NameAndCodeResponse()
-					{
-						Name = default
-					},
-					Gor = new IService.ServiceModels.Academies.Establishment.Region()
-					{
-						Name = default
-					},
-					LocalAuthorityName = default
-				};
-
-				return new ExportedTransferProjectModel
-				{
-					Id = x.Id,
-					//AcademyTypeAndRoute =  + " " + "PLACEHOLDER ROUTE",
-					AssignedUserFullName = string.IsNullOrWhiteSpace(x.AssignedUserEmailAddress)
-					? null
-				   : x.AssignedUserFullName,
-					AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
-					//DecisionDate
-					IncomingTrustName = transferringAcademy.IncomingTrustName,
-					IncomingTrustUkprn = transferringAcademy.IncomingTrustUkprn,
-					LocalAuthority = school.LocalAuthorityName,
-					OutgoingTrustName = x.OutgoingTrustName,
-					//ProposedAcademyTransferDate
-					Region = school.Gor.Name,
-					//SchoolName = school.
-					SchoolType = school.EstablishmentType.Name,
-					Status = x.Status,
-					//TransferReason
-					//TransferType
-					Urn = x.Urn.ToString(),
-				};
-			}));
-		}
-
-
-		//public async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject> atp)
-		//{
-		//	if (atp == null) throw new ArgumentNullException(nameof(atp));
-
-		//	var tasks = atp.Select(MapProject).ToList();
-
-		//	return await Task.WhenAll(tasks);
-		//}
-
-		//private async Task<ExportedTransferProjectModel> MapProject(ITransferProject project)
-		//{
-		//	using (var scope = _serviceScopeFactory.CreateScope())
-		//	{
-		//		var advisoryBoardDecisionRepository = scope.ServiceProvider.GetRequiredService<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
-		//		var establishmentRepository = scope.ServiceProvider.GetRequiredService<IAcademiesQueryService>();
-
-		//		var transferringAcademy = project.TransferringAcademies.FirstOrDefault();
-		//		var advisoryBoardDecision = await advisoryBoardDecisionRepository.Execute(project.Id);
-		//		var school = await establishmentRepository.GetEstablishmentByUkprn(transferringAcademy.OutgoingAcademyUkprn);
-
-		//		return new ExportedTransferProjectModel
-		//		{
-		//			Id = project.Id,
-		//			AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
-		//			AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
-		//			IncomingTrustName = transferringAcademy?.IncomingTrustName,
-		//			IncomingTrustUkprn = transferringAcademy?.IncomingTrustUkprn,
-		//			LocalAuthority = school?.LocalAuthorityName,
-		//			OutgoingTrustName = project.OutgoingTrustName,
-		//			Region = school?.Gor?.Name,
-		//			SchoolType = school?.EstablishmentType?.Name,
-		//			Status = project.Status,
-		//			Urn = project.Urn.ToString(),
-		//		};
-		//	}
-		//}
 	}
 
 }

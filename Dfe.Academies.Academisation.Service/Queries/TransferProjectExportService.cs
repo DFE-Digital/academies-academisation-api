@@ -1,8 +1,10 @@
 ﻿using ClosedXML.Excel;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Queries
@@ -83,6 +85,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 7).Value = project.LocalAuthority;
 				worksheet.Cell(row, 8).Value = project.Region;
 				worksheet.Cell(row, 9).Value = project.AdvisoryBoardDate;
+				//var advisoryBoardDecisionDate = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(project.Id); // TODO iffy
 				worksheet.Cell(row, 10).Value = project.DecisionDate;
 				worksheet.Cell(row, 11).Value = project.Status;
 				worksheet.Cell(row, 12).Value = project.AssignedUserFullName;
