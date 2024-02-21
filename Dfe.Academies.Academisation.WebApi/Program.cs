@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
@@ -109,6 +110,7 @@ builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCom
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository>();
 builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
+builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 
 builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
 builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
@@ -172,6 +174,7 @@ builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typ
 
 builder.Services.AddHostedService<EnrichProjectService>();
 builder.Services.AddHostedService<EnrichTransferProjectService>();
+builder.Services.AddHostedService<CreateFormAMatProjectsService>();
 
 builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 {

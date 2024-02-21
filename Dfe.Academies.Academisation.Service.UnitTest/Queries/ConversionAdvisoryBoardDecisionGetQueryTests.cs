@@ -23,7 +23,7 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
 		ConversionAdvisoryBoardDecision data = new(expectedId, details, default, default);
 
-		_mockDataQuery.Setup(q => q.Execute(expectedId))
+		_mockDataQuery.Setup(q => q.Execute(expectedId,false))
 			.ReturnsAsync(data);
 
 		ConversionAdvisoryBoardDecisionGetQuery query = new(_mockDataQuery.Object);

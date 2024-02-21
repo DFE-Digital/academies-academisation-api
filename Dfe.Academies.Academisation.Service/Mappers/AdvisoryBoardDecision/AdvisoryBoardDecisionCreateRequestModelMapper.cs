@@ -9,11 +9,13 @@ internal static class AdvisoryBoardDecisionCreateRequestModelMapper
 	{
 		return new(
 			model.ConversionProjectId,
+			model.TransferProjectId,
 			model.Decision,
 			model.ApprovedConditionsSet,
 			model.ApprovedConditionsDetails,
 			model.DeclinedReasons,
 			model.DeferredReasons,
+			model.WithdrawnReasons,
 			model.AdvisoryBoardDecisionDate,
 			model.DecisionMadeBy
 		);

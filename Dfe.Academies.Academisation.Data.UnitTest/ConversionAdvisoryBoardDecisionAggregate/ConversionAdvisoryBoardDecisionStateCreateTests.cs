@@ -24,6 +24,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 		//Arrange
 		AdvisoryBoardDecisionDetails details = new(
 			_faker.Random.Int(1, 1000),
+			null,
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
@@ -32,6 +33,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			{
 				new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence())
 			},
+			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -42,10 +44,10 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			.Returns(details);
 
 		//Act
-		var result = ConversionAdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
+		var result = AdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
 
 		//Assert
-		Assert.IsType<ConversionAdvisoryBoardDecisionState>(result);
+		Assert.IsType<AdvisoryBoardDecisionState>(result);
 	}
 
 	[Fact]
@@ -54,6 +56,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 		//Arrange
 		AdvisoryBoardDecisionDetails expectedDetails = new(
 			_faker.Random.Int(1, 1000),
+			null,
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
@@ -62,6 +65,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			{
 				new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence())
 			},
+			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
@@ -71,7 +75,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(expectedDetails);
 
-		var expected = new ConversionAdvisoryBoardDecisionState
+		var expected = new AdvisoryBoardDecisionState
 		{
 			ConversionProjectId = expectedDetails.ConversionProjectId,
 			Decision = expectedDetails.Decision,
@@ -80,7 +84,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			DeclinedReasons = null,
 			DeferredReasons = new(
 				expectedDetails.DeferredReasons!
-					.Select(reason => new ConversionAdvisoryBoardDecisionDeferredReasonState
+					.Select(reason => new AdvisoryBoardDecisionDeferredReasonState
 					{
 						Reason = reason.Reason,
 						Details = reason.Details,
@@ -90,7 +94,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 		};
 
 		//Act
-		var result = ConversionAdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
+		var result = AdvisoryBoardDecisionState.MapFromDomain(mockDecision.Object);
 
 		//assert
 		Assert.Equivalent(expected, result);

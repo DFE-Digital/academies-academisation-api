@@ -108,45 +108,40 @@ public class ProjectsListGetDataQueryTests
 	}
 
 
-	// TODO:EA finish this unit test
-	//[Fact]
-	//public async Task ProjectsExists_SearchMATProjects__ReturnsMATProjects()
-	//{
-	//	// arrange
-	//	(_, Project project1) = CreateTestProject(null);
-	//	(_, Project project2) = CreateTestProject(null);
-	//	(_, Project project3) = CreateTestProject();
+   [Fact]
+	public async Task ProjectsExists_SearchMATProjects__ReturnsMATProjects()
+	{
+		// arrange
+		(_, Project project1) = CreateTestProject(null);
+		(_, Project project2) = CreateTestProject(null);
+		(_, Project project3) = CreateTestProject();
 
-	//	var projectDetails1 = _fixture.Build<ProjectDetails>()
-	//		.With(p => p.AcademyTypeAndRoute, "TEST EAAAAAA")
-	//		.Create();
-	//	var projectDetails2 = _fixture.Build<ProjectDetails>().Create();
+		var projectDetails1 = _fixture.Build<ProjectDetails>()
+			.With(p => p.AcademyTypeAndRoute, "Form a Mat")
+			.Create();
+		var projectDetails2 = _fixture.Build<ProjectDetails>().Create();
 
-	//	project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now.AddDays(-1));
-	//	project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-2));
+		project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now.AddDays(-1));
+		project1.SetFormAMatProjectId(10);
 
-	//	_context.Projects.Add(project1);
-	//	_context.Projects.Add(project2);
-	//	_context.Projects.Add(project3);
+		project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-2));
 
-	//	await _context.SaveChangesAsync();
+		_context.Projects.Add(project1);
+		_context.Projects.Add(project2);
 
-	//	// act
-	//	var projects = (await _subject.SearchMATProjects(null, null, null, null, null, null, 1, 10)).Item1.ToList();
+		await _context.SaveChangesAsync();
 
-	//	// assert
-	//	var firstProject = projects.FirstOrDefault();
-	//	var secondProject = projects.LastOrDefault();
+		// act
+		var searchStatus =
+			new string[] { project1.Details.ProjectStatus!.ToLower(), project2.Details.ProjectStatus!.ToLower() };
+		var projects = (await _subject.SearchFormAMatProjects(searchStatus, null, null, null, null, null, 1, 10)).Item1.ToList();
 
-	//	Assert.Multiple(
-	//		() => Assert.NotNull(firstProject),
-	//		() => Assert.Equal(firstProject!.Details, projectDetails1),
-	//		() => Assert.Equal(project1.Id, firstProject!.Id),
-	//		() => Assert.NotNull(secondProject),
-	//		() => Assert.Equal(secondProject!.Details, projectDetails2),
-	//		() => Assert.Equal(project2.Id, secondProject!.Id)
-	//	);
-	//}
+		// assert
+		Assert.Multiple(
+			() => Assert.True(projects.Count == 1),
+			() => Assert.True(projects.First().Details.AcademyTypeAndRoute == "Form a Mat")
+		);
+	}
 
 
 	[Fact]

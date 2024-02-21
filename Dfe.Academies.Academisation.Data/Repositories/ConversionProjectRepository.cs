@@ -82,9 +82,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return filterParameters;
 		}
 
-		private static IQueryable<Project> FilterFormAMAT(bool isFormAMat, IQueryable<Project> queryable)
+		private static IQueryable<Project> FilterFormAMAT(IQueryable<Project> queryable)
 		{
-			queryable = queryable.Where(p => isFormAMat ? p.Details.AcademyTypeAndRoute == "Form a Mat" : p.Details.AcademyTypeAndRoute != "Form a Mat");
+			queryable = queryable.Where(p => p.Details.AcademyTypeAndRoute.ToLower() == "form a mat");
+			queryable = queryable.Where(p => p.FormAMatProjectId != null);
 
 			return queryable;
 		}
@@ -138,13 +139,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		private static IQueryable<Project> FilterByKeyword(string? title, IQueryable<Project> queryable)
 		{
-			if (!string.IsNullOrWhiteSpace(title)) 
-			{ 
-				
+			if (!string.IsNullOrWhiteSpace(title))
+			{
+
 				queryable = queryable.Where(p => p.Details.SchoolName!.ToLower().Contains(title!.ToLower()) ||
 				p.Details.NameOfTrust!.ToLower().Contains(title!.ToLower()) ||
 				p.Details.Urn.ToString().ToLower().Contains(title!.ToLower())
-				); 
+				);
 			}
 
 			return queryable;
@@ -192,8 +193,6 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			IQueryable<Project> queryable = this.dbSet;
 
-			bool isFormAMat = false;
-			queryable = FilterFormAMAT(isFormAMat, queryable);
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
 			queryable = FilterByKeyword(title, queryable);
@@ -210,12 +209,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
-		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchMATProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
+		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchFormAMatProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
 		{
 			IQueryable<Project> queryable = this.dbSet;
 
-			bool isFormAMat = true;
-			queryable = FilterFormAMAT(isFormAMat, queryable);
+			queryable = FilterFormAMAT(queryable);
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
 			queryable = FilterByKeyword(title, queryable);
@@ -223,7 +221,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			queryable = FilterByLocalAuthority(localAuthorities, queryable);
 			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
 
-			var totalProjects = queryable.Count();
+			var totalProjects = queryable.Select(p => p.FormAMatProjectId).Distinct().Count();
 			var projects = await queryable
 				.OrderByDescending(acp => acp.CreatedOn)
 				.Skip((page - 1) * count)
@@ -254,6 +252,22 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			}
 
 			return queryable;
+		}
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsThatRequireFormAMatCreation(CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => !x.FormAMatProjectId.HasValue && x.Details.AcademyTypeAndRoute == "Form a Mat").ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatId(int? id, CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => x.FormAMatProjectId == id).ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatIds(IEnumerable<int?> ids, CancellationToken cancellationToken)
+		{
+			var formAMatProjectIds = ids.ToList();
+
+			return await this.dbSet.Where(x => formAMatProjectIds.Contains(x.FormAMatProjectId)).ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

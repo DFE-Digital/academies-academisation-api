@@ -22,7 +22,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecisionDeclinedReason", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeferredReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeferredReasonState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecisionDeferredReason", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +103,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<bool?>("ApprovedConditionsSet")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ConversionProjectId")
+                    b.Property<int?>("ConversionProjectId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -120,9 +120,44 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TransferProjectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionWithdrawnReasonState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdvisoryBoardDecisionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvisoryBoardDecisionId");
+
+                    b.ToTable("AdvisoryBoardDecisionWithdrawnReason", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>
@@ -548,6 +583,33 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ProjectNotes", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate.FormAMatProject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationReference")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProposedTrustName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FormAMatProject", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -559,6 +621,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedOn");
+
+                    b.Property<int?>("FormAMatProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("FormAMatProjectId");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
@@ -778,19 +844,28 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("TransferringAcademy", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeclinedReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeclinedReasonState", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", null)
+                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", null)
                         .WithMany("DeclinedReasons")
                         .HasForeignKey("AdvisoryBoardDecisionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionDeferredReasonState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDeferredReasonState", b =>
                 {
-                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", null)
+                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", null)
                         .WithMany("DeferredReasons")
+                        .HasForeignKey("AdvisoryBoardDecisionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionWithdrawnReasonState", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", null)
+                        .WithMany("WithdrawnReasons")
                         .HasForeignKey("AdvisoryBoardDecisionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1369,6 +1444,38 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate.FormAMatProject", b =>
+                {
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b1 =>
+                        {
+                            b1.Property<int>("FormAMatProjectId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("EmailAddress")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AssignedUserEmailAddress");
+
+                            b1.Property<string>("FullName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AssignedUserFullName");
+
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uniqueidentifier")
+                                .HasColumnName("AssignedUserId");
+
+                            b1.HasKey("FormAMatProjectId");
+
+                            b1.ToTable("FormAMatProject", "academisation");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FormAMatProjectId");
+                        });
+
+                    b.Navigation("AssignedUser");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
                     b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.ProjectDetails", "Details", b1 =>
@@ -1827,11 +1934,13 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecisionState", b =>
+            modelBuilder.Entity("Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionState", b =>
                 {
                     b.Navigation("DeclinedReasons");
 
                     b.Navigation("DeferredReasons");
+
+                    b.Navigation("WithdrawnReasons");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Application", b =>
