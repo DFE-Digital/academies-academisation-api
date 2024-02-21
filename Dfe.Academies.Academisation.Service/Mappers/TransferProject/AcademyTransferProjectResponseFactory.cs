@@ -29,6 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 			var features = new AcademyTransferProjectFeaturesResponse
 			{
 				WhoInitiatedTheTransfer = model.WhoInitiatedTheTransfer,
+				SpecificReasonForTransfer = model.SpecificReasonForTransfer,
 				RddOrEsfaIntervention = model.RddOrEsfaIntervention,
 				RddOrEsfaInterventionDetail = model.RddOrEsfaInterventionDetail,
 				TypeOfTransfer = model.TypeOfTransfer,

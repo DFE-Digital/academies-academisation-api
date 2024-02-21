@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
@@ -7,6 +8,8 @@ using System.Threading.Tasks;
 using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
+using Dfe.Academies.Contracts.V4.Trusts;
+using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +28,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_correlationContext = correlationContext;
 		}
 
-		public async Task<Establishment?> GetEstablishment(int urn)
+		public async Task<EstablishmentDto?> GetEstablishment(int urn)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);
 			var response = await client.GetAsync($"/establishment/urn/{urn}");
@@ -36,22 +39,22 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				return null;
 			}
 
-			return await response.Content.ReadFromJsonAsync<Establishment>();
+			return await response.Content.ReadFromJsonAsync<EstablishmentDto>();
 		}
 
-		public async Task<Trust?> GetTrust(string ukprn)
+		public async Task<TrustDto?> GetTrust(string ukprn)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);
-			var response = await client.GetAsync($"/v3/trusts?ukprn={ukprn}&includeEstablishments=false");
+			var response = await client.GetAsync($"/v4/trust/{ukprn}");
 
 			if (!response.IsSuccessStatusCode)
 			{
 				_logger.LogError("Request for trust failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
 				return null;
 			}
-			var trusts = await response.Content.ReadFromJsonAsync<AcademiesTrustsResponse>();
+			var trust = await response.Content.ReadFromJsonAsync<TrustDto>();
 
-			return trusts?.Data.FirstOrDefault();
+			return trust;
 		}
 	}
 }

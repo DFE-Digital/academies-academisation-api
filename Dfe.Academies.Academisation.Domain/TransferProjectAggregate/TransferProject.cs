@@ -32,6 +32,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string OutgoingTrustUkprn { get; private set; }
 		public string? OutgoingTrustName{ get; private set; }
 		public string? WhoInitiatedTheTransfer { get; private set; }
+		public string? SpecificReasonForTransfer { get; private set; }
 		public bool? RddOrEsfaIntervention { get; private set; }
 		public string? RddOrEsfaInterventionDetail { get; private set; }
 		public string? TypeOfTransfer { get; private set; }
@@ -119,10 +120,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted)
-		{
-			TypeOfTransfer = transferType;
+		public void SetFeatures(string whoInitiatedTheTransfer, string specificReasonForTransfer, string transferType, bool? isCompleted)
+		{	
 			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
+			SpecificReasonForTransfer = specificReasonForTransfer;
+			TypeOfTransfer = transferType;
 			FeatureSectionIsCompleted = isCompleted;
 		}
 		public void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted)

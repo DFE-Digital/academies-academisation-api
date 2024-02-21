@@ -50,11 +50,12 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		string? TypeOfTransfer { get; }
 		int Urn { get; }
 		string? WhoInitiatedTheTransfer { get; }
+		string? SpecificReasonForTransfer { get; }
 
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
 		void AssignUser(Guid userId, string userEmail, string userFullName);
-		void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted);
+		void SetFeatures(string whoInitiatedTheTransfer, string specificReasonForTransfer, string transferType, bool? isCompleted);
 		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement,
 			string diocesanConsent, bool? isCompleted);
 
