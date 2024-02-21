@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
 using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
@@ -23,6 +18,20 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_logger = logger;
 			_academiesApiClientFactory = academiesApiClientFactory;
 			_correlationContext = correlationContext;
+		}
+
+		public async Task<ExportedEstablishment?> GetEstablishmentByUkprn(string ukprn)
+		{
+			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var response = await client.GetAsync($"/establishment/{ukprn}");
+
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.LogError("Request for establishment failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
+				return null;
+			}
+
+			return await response.Content.ReadFromJsonAsync<ExportedEstablishment>();
 		}
 
 		public async Task<Establishment?> GetEstablishment(int urn)

@@ -15,10 +15,13 @@ public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisi
 
 	public async Task<IConversionAdvisoryBoardDecision?> Execute(int projectId)
 	{
-		var state = await _context.ConversionAdvisoryBoardDecisions
-			.Include(s => s.DeclinedReasons)
-			.Include(s => s.DeferredReasons)
-			.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
+		var state = await _context.ConversionAdvisoryBoardDecisions.SingleOrDefaultAsync(s=>s.ConversionProjectId == projectId);
+
+		//var state = state.includes
+		//var state = await _context.ConversionAdvisoryBoardDecisions
+		//	.Include(s => s.DeclinedReasons)
+		//	.Include(s => s.DeferredReasons)
+		//	.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
 
 		return state?.MapToDomain();
 	}

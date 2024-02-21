@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			_mockConversionProjectExportService = new Mock<IConversionProjectExportService>();
 			_mockMediator = new Mock<IMediator>();
-			_controller = new ExportController(_mockConversionProjectExportService.Object);
+			_controller = new ExportController(_mockConversionProjectExportService.Object, null); // Handle me correctly
 		}
 		[Fact]
 		public async Task ExportProjectsToSpreadsheet_ReturnsFileResult_WhenProjectsFound()

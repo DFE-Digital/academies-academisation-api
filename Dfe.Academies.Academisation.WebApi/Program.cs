@@ -130,6 +130,7 @@ builder.Services.AddScoped<IAcademiesQueryService, AcademiesQueryService>();
 builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
+builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
 
 //utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

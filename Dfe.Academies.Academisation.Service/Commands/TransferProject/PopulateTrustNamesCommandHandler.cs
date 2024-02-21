@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 
 			if (transferProjects == null || !transferProjects.Any())
 			{
-				_logger.LogError($"No trnasfer projects found with empty trust names");
+				_logger.LogError($"No transfer projects found with empty trust names");
 				return new NotFoundCommandResult();
 			}
 
