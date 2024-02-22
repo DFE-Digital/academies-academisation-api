@@ -85,6 +85,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 					})),
 			DeferredReasons = null,
 			AdvisoryBoardDecisionDate = expectedDetails.AdvisoryBoardDecisionDate,
+			AcademyOrderDate = expectedDetails.AcademyOrderDate,
 			DecisionMadeBy = expectedDetails.DecisionMadeBy
 		};
 

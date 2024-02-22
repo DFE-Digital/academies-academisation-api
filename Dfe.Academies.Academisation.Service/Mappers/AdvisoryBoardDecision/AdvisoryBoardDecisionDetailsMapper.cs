@@ -17,6 +17,7 @@ public static class AdvisoryBoardDecisionDetailsMapper
 			serviceModel.DeferredReasons,
 			serviceModel.WithdrawnReasons,
 			serviceModel.AdvisoryBoardDecisionDate,
+			serviceModel.AcademyOrderDate,
 			serviceModel.DecisionMadeBy
 		);
 	}

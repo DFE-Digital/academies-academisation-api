@@ -3,7 +3,6 @@ using System.Linq;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Xunit;
@@ -57,6 +56,7 @@ public class ConversionAdvisoryBoardDecisionStateMapToDomainTests
 				.Select(reason => new AdvisoryBoardWithdrawnReasonDetails(reason.Reason, reason.Details))
 				.ToList(),
 			state.AdvisoryBoardDecisionDate,
+			state.AcademyOrderDate,
 			state.DecisionMadeBy
 		);
 

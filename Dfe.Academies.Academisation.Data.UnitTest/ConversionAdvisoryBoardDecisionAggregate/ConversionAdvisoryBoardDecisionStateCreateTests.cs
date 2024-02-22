@@ -90,6 +90,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 						Details = reason.Details,
 					})),
 			AdvisoryBoardDecisionDate = expectedDetails.AdvisoryBoardDecisionDate,
+			AcademyOrderDate = expectedDetails.AcademyOrderDate,
 			DecisionMadeBy = expectedDetails.DecisionMadeBy
 		};
 
