@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		private readonly MockHttpMessageHandler _mockHttpMessageHandler = new MockHttpMessageHandler();
 		private readonly EnrichProjectCommand _subject;
 
-		private readonly Establishment _establishment;
+		private readonly EstablishmentDto _establishment;
 
 		private readonly Fixture _fixture = new Fixture();
 
@@ -35,7 +36,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			_context = new TestProjectContext().CreateContext();
 
 			// mock establishment
-			_establishment = _fixture.Create<Establishment>();
+			_establishment = _fixture.Create<EstablishmentDto>();
 			_httpClientFactory = new Mock<IHttpClientFactory>();
 
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
