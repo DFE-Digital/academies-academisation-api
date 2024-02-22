@@ -78,7 +78,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(projects, recordTotal));
 		}
 
-		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(int page, int count, string title)
+		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string title)
 		{
 			IEnumerable<ITransferProject> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();
 
