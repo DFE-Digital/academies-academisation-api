@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using MediatR;
@@ -47,7 +46,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			// Create a new project
 			var projectDetails = new ProjectDetails
 
-			{   
+			{
 				SchoolName = projectName,
 				Urn = 139292,
 				ProjectStatus = "Approved with conditions",
@@ -55,7 +54,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				LocalAuthorityInformationTemplateSentDate = new DateTime(2019, 3, 21),
 				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
 				RecommendationForProject = "Approve",
-				AcademyOrderRequired = "Yes",
 				AcademyTypeAndRoute = "Sponsored",
 				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
 				ConversionSupportGrantAmount = 25000,
@@ -73,9 +71,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				YearTwoProjectedPupilNumbers = 239,
 				YearThreeProjectedPupilNumbers = 370,
 				Region = "West Midlands",
-				LocalAuthority = "Coventry" 
-				
-				
+				LocalAuthority = "Coventry"
+
+
 			};
 
 			var newProject = new Project(1, projectDetails);

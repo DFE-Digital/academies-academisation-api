@@ -29,7 +29,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? Author { get; init; }
 	public string? Version { get; init; }
 	public string? ClearedBy { get; init; }
-	public string? AcademyOrderRequired { get; init; }
 	public DateTime? DaoPackSentDate { get; init; }
 	public bool? AnnexBFormReceived { get; init; }
 	public string? AnnexBFormUrl { get; init; }
@@ -149,8 +148,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(Author, other.Author, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(Version, other.Version, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(ClearedBy, other.ClearedBy, StringComparison.InvariantCultureIgnoreCase) &&
-			   string.Equals(AcademyOrderRequired, other.AcademyOrderRequired,
-				   StringComparison.InvariantCultureIgnoreCase) &&
 			   Nullable.Equals(DaoPackSentDate, other.DaoPackSentDate) &&
 			   string.Equals(PreviousHeadTeacherBoardDateQuestion, other.PreviousHeadTeacherBoardDateQuestion,
 				   StringComparison.InvariantCultureIgnoreCase) &&
@@ -286,7 +283,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(Author, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(Version, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ClearedBy, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(AcademyOrderRequired, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(DaoPackSentDate);
 		hashCode.Add(PreviousHeadTeacherBoardDateQuestion, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(PreviousHeadTeacherBoardDate);
