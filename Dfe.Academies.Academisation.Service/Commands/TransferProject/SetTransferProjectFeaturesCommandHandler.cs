@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 				_logger.LogError($"transfer project not found with urn:{request.Urn}");
 				return new NotFoundCommandResult();
 			}
-			transferProject.SetFeatures(request.WhoInitiatedTheTransfer, request.SpecificReasonForTransfer, request.TypeOfTransfer, request.IsCompleted);
+			transferProject.SetFeatures(request.WhoInitiatedTheTransfer, request.SpecificReasonsForTransfer, request.TypeOfTransfer, request.IsCompleted);
 
 			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

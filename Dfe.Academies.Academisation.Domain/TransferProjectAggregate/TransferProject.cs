@@ -32,7 +32,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string OutgoingTrustUkprn { get; private set; }
 		public string? OutgoingTrustName{ get; private set; }
 		public string? WhoInitiatedTheTransfer { get; private set; }
-		public string? SpecificReasonForTransfer { get; private set; }
+
+
+		private List<string> _specificReasonsForTransfer;
+		public IReadOnlyCollection<string> SpecificReasonsForTransfer => _specificReasonsForTransfer;
+		IReadOnlyCollection<string> ITransferProject.SpecificReasonsForTransfer => _specificReasonsForTransfer;
+
 		public bool? RddOrEsfaIntervention { get; private set; }
 		public string? RddOrEsfaInterventionDetail { get; private set; }
 		public string? TypeOfTransfer { get; private set; }
@@ -120,10 +125,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetFeatures(string whoInitiatedTheTransfer, string specificReasonForTransfer, string transferType, bool? isCompleted)
+		public void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted)
 		{	
 			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
-			SpecificReasonForTransfer = specificReasonForTransfer;
+			_specificReasonsForTransfer = specificReasonsForTransfer;
 			TypeOfTransfer = transferType;
 			FeatureSectionIsCompleted = isCompleted;
 		}

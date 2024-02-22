@@ -273,13 +273,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		[Theory]
 		[InlineData("Test Initiation", "test specific reason", "Test Type", true)]
 		[InlineData("Another Initiation", "Another test specific reason", "Another Type", false)]
-		public void SetFeatures_WithValidParameters_SetsPropertiesCorrectly(string whoInitiated, string specficReason, string transferType, bool isCompleted)
+		public void SetFeatures_WithValidParameters_SetsPropertiesCorrectly(string whoInitiated, string specficReasons, string transferType, bool isCompleted)
 		{
 			// Arrange
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _incomingTrustUkprn, _academyUkprns, _createdOn);
-
+			var reasons = new List<string>() { specficReasons };
 			// Act
-			transferProject.SetFeatures(whoInitiated, specficReason, transferType, isCompleted);
+			transferProject.SetFeatures(whoInitiated, reasons, transferType, isCompleted);
 
 			// Assert
 			transferProject.WhoInitiatedTheTransfer.Should().Be(whoInitiated);

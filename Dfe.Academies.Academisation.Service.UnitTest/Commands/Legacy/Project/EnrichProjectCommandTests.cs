@@ -2,8 +2,8 @@
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
+using Dfe.Academies.Contracts.V4.Establishments;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
@@ -54,9 +54,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 				.ReturnsAsync(projects);
 
 			_establishmentGetDataQuery.SetupSequence(m => m.GetEstablishment(It.IsAny<int>()))
-				.ReturnsAsync((Establishment?)null)
-				.ReturnsAsync(_fixture.Create<Establishment>())
-				.ReturnsAsync(_fixture.Create<Establishment>());
+				.ReturnsAsync((EstablishmentDto?)null)
+				.ReturnsAsync(_fixture.Create<EstablishmentDto>())
+				.ReturnsAsync(_fixture.Create<EstablishmentDto>());
 
 			await _subject.Execute();
 
@@ -75,7 +75,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 				.ReturnsAsync(new List<IProject> { project });
 
 			_establishmentGetDataQuery.Setup(m => m.GetEstablishment(It.IsAny<int>()))
-				.ReturnsAsync(_fixture.Create<Establishment>());
+				.ReturnsAsync(_fixture.Create<EstablishmentDto>());
 
 			await _subject.Execute();
 

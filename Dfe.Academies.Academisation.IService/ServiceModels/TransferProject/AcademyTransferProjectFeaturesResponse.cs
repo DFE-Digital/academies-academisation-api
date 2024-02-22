@@ -3,7 +3,7 @@
     public class AcademyTransferProjectFeaturesResponse
     {
         public string WhoInitiatedTheTransfer { get; set; }
-        public string SpecificReasonForTransfer { get; set; }
+        public List<string> SpecificReasonForTransfer { get; set; }
 		public bool? RddOrEsfaIntervention { get; set; }
         public string RddOrEsfaInterventionDetail { get; set; }
         public string TypeOfTransfer { get; set; }

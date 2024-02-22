@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 			var features = new AcademyTransferProjectFeaturesResponse
 			{
 				WhoInitiatedTheTransfer = model.WhoInitiatedTheTransfer,
-				SpecificReasonForTransfer = model.SpecificReasonForTransfer,
+				SpecificReasonForTransfer = model.SpecificReasonsForTransfer.ToList(),
 				RddOrEsfaIntervention = model.RddOrEsfaIntervention,
 				RddOrEsfaInterventionDetail = model.RddOrEsfaInterventionDetail,
 				TypeOfTransfer = model.TypeOfTransfer,
