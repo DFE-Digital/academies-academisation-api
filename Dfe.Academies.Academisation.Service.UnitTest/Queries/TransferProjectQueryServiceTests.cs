@@ -29,7 +29,7 @@ public class TransferProjectQueryServiceTests
 		// Mock the setup to return the dummy project
 		mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
 
-		var service = new TransferProjectQueryService(mockRepository.Object, null);
+		var service = new TransferProjectQueryService(mockRepository.Object, null, null, null);
 
 		// Setting up Test Data
 		var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
@@ -60,7 +60,7 @@ public class TransferProjectQueryServiceTests
 		// Mock the setup to return the dummy project
 		mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
 
-		var service = new TransferProjectQueryService(mockRepository.Object, null);
+		var service = new TransferProjectQueryService(mockRepository.Object, null, null, null); // TODO handle me correctly. There are other instance of this too
 
 		// Setting up Test Data
 		var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);

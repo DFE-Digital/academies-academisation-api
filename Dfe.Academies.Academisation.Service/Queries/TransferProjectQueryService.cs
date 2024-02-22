@@ -5,16 +5,9 @@ using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
-using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using static Dfe.Academies.Academisation.IService.ServiceModels.Academies.Establishment;
-using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Microsoft.Extensions.DependencyInjection;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.Extensions.DependencyInjection;
+using Dfe.Academies.Academisation.Service.Extensions;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -22,20 +15,17 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
 		private readonly IMapper _mapper;
-		private readonly IAdvisoryBoardDecisionGetDataByProjectIdQuery _advisoryBoardDecisionGetDataByProjectIdQuery;
 		private readonly IAcademiesQueryService _establishmentRepository;
 		private readonly IServiceScopeFactory _serviceScopeFactory;
 
 		public TransferProjectQueryService(
 			ITransferProjectRepository transferProjectRepository,
 			IMapper mapper,
-			IAdvisoryBoardDecisionGetDataByProjectIdQuery advisoryBoardDecisionGetDataByProjectIdQuery,
 			IAcademiesQueryService establishmentRepository,
 			IServiceScopeFactory serviceScopeFactory)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_mapper = mapper;
-			_advisoryBoardDecisionGetDataByProjectIdQuery = advisoryBoardDecisionGetDataByProjectIdQuery;
 			_establishmentRepository = establishmentRepository;
 			_serviceScopeFactory = serviceScopeFactory;
 		}
@@ -64,8 +54,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			IEnumerable<AcademyTransferProjectSummaryResponse> projects =
 				FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
 
-			projects = projects
 			// remove any projects without an incoming or outgoing trust.
+			projects = projects
 			.Where(p =>
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
 				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
@@ -82,13 +72,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			IEnumerable<ITransferProject> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();
 
-			// can i kill page/count? 
-			// FILTER BY TITLE
-			//IEnumerable<AcademyTransferProjectSummaryResponse> projects =
-			//	FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
+			transferProjects =
+				FilterExportedTransferProjectsByIncomingTrust(title, transferProjects);
 
-			transferProjects = transferProjects
 			// remove any projects without an incoming or outgoing trust.
+			transferProjects = transferProjects
 			.Where(p =>
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
 				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
@@ -97,8 +85,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			var recordTotal = projects.Count();
 
-			projects = projects.OrderByDescending(atp => atp.Urn)
-			.Skip((page - 1) * count).Take(count).ToList();
+			projects = projects.OrderByDescending(atp => atp.Urn);
 
 			return await Task.FromResult(new PagedResultResponse<ExportedTransferProjectModel>(projects, recordTotal));
 		}
@@ -111,6 +98,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return queryable;
 
 		}
+
 		private static IEnumerable<AcademyTransferProjectSummaryResponse> FilterByIncomingTrust(string title,
 		IEnumerable<AcademyTransferProjectSummaryResponse> queryable)
 		{
@@ -123,6 +111,20 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			}
 			return queryable;
 		}
+
+		private static IEnumerable<ITransferProject> FilterExportedTransferProjectsByIncomingTrust(string title,
+		IEnumerable<ITransferProject> queryable)
+		{
+			if (!string.IsNullOrWhiteSpace(title))
+			{
+				queryable = queryable
+					.Where(p => p.TransferringAcademies != null && p.TransferringAcademies.ToList()
+						.Exists(r => r != null && r.IncomingTrustName != null && r.IncomingTrustName.ToLower().Contains(title.ToLower())))
+					.ToList();
+			}
+			return queryable;
+		}
+
 		public async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject> atp)
 		{
 			if (atp == null) throw new ArgumentNullException(nameof(atp));
@@ -132,6 +134,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await Task.WhenAll(tasks);
 		}
 
+
 		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject project)
 		{
 			using (var scope = _serviceScopeFactory.CreateScope())
@@ -139,21 +142,35 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				var advisoryBoardDecisionRepository = scope.ServiceProvider.GetRequiredService<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
 				var advisoryBoardDecision = await advisoryBoardDecisionRepository.Execute(project.Id);
 
-				var transferringAcademy = project.TransferringAcademies.FirstOrDefault();
-				var school = await _establishmentRepository.GetEstablishmentByUkprn(transferringAcademy?.OutgoingAcademyUkprn);
+				var transferringAcademies = project.TransferringAcademies;
+
+				var schools = await Task.WhenAll(
+					transferringAcademies.Select(async transferringAcademy =>
+					{
+						return await _establishmentRepository.GetEstablishmentByUkprn(transferringAcademy?.OutgoingAcademyUkprn);
+					})
+				);
+
+				var schoolNames = schools.Select(s => s?.EstablishmentName).Distinct().JoinNonEmpty(", ");
+				var schoolTypes = schools.Select(s => s?.EstablishmentType?.Name).Distinct().JoinNonEmpty(", ");
+				var regions = schools.Select(s => s?.Gor?.Name).Distinct().JoinNonEmpty(", ");
+				var localAuthorities = schools.Select(s => s?.LocalAuthorityName).Distinct().JoinNonEmpty(", ");
 
 				return new ExportedTransferProjectModel
 				{
 					Id = project.Id,
 					AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
 					AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
-					IncomingTrustName = transferringAcademy?.IncomingTrustName,
-					IncomingTrustUkprn = transferringAcademy?.IncomingTrustUkprn,
-					LocalAuthority = school?.LocalAuthorityName,
+					IncomingTrustName = project.TransferringAcademies.FirstOrDefault()?.IncomingTrustName,
+					IncomingTrustUkprn = project.TransferringAcademies.FirstOrDefault()?.IncomingTrustUkprn,
+					LocalAuthority = localAuthorities,
 					OutgoingTrustName = project.OutgoingTrustName,
-					Region = school?.Gor?.Name,
-					SchoolType = school?.EstablishmentType?.Name,
+					ProposedAcademyTransferDate = project.TargetDateForTransfer,
+					Region = regions,
+					SchoolName = schoolNames,
+					SchoolType = schoolTypes,
 					Status = project.Status,
+					TransferType = project.TypeOfTransfer,
 					Urn = project.Urn.ToString(),
 				};
 			}

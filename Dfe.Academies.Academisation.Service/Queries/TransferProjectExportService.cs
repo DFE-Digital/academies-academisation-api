@@ -1,10 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Queries
@@ -12,20 +9,17 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	public class TransferProjectExportService : ITransferProjectExportService
 	{
 		private readonly ITransferProjectQueryService _transferProjectQueryService;
-		private readonly IAdvisoryBoardDecisionGetDataByProjectIdQuery _advisoryBoardDecisionGetDataByProjectIdQuery;
 
 		public TransferProjectExportService(
-			ITransferProjectQueryService transferProjectQueryService,
-			IAdvisoryBoardDecisionGetDataByProjectIdQuery advisoryBoardDecisionGetDataByProjectIdQuery
+			ITransferProjectQueryService transferProjectQueryService
 			)
 		{
 			_transferProjectQueryService = transferProjectQueryService;
-			_advisoryBoardDecisionGetDataByProjectIdQuery = advisoryBoardDecisionGetDataByProjectIdQuery;
 		}
 
 		public async Task<Stream?> ExportTransferProjectsToSpreadsheet(TransferProjectSearchModel searchModel)
 		{
-			var result = await _transferProjectQueryService.GetExportedTransferProjects(1, int.MaxValue, searchModel.TitleFilter);
+			var result = await _transferProjectQueryService.GetExportedTransferProjects(searchModel.TitleFilter);
 
 			if (result?.Results == null || !result.Results.Any())
 			{
@@ -64,14 +58,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			worksheet.Cell(1, 11).Style.Font.Bold = true;
 			worksheet.Cell(1, 12).Value = "Assigned To";
 			worksheet.Cell(1, 12).Style.Font.Bold = true;
-			worksheet.Cell(1, 13).Value = "Academy Type and Route";
+			worksheet.Cell(1, 13).Value = "Reason for transfer";
 			worksheet.Cell(1, 13).Style.Font.Bold = true;
-			worksheet.Cell(1, 14).Value = "Reason for transfer";
+			worksheet.Cell(1, 14).Value = "Type of transfer";
 			worksheet.Cell(1, 14).Style.Font.Bold = true;
-			worksheet.Cell(1, 15).Value = "Type of transfer";
+			worksheet.Cell(1, 15).Value = "Proposed academy transfer date";
 			worksheet.Cell(1, 15).Style.Font.Bold = true;
-			worksheet.Cell(1, 16).Value = "Proposed academy transfer date";
-			worksheet.Cell(1, 16).Style.Font.Bold = true;
 
 			int row = 2;
 			foreach (var project in projects)
@@ -88,10 +80,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 10).Value = project.DecisionDate;
 				worksheet.Cell(row, 11).Value = project.Status;
 				worksheet.Cell(row, 12).Value = project.AssignedUserFullName;
-				worksheet.Cell(row, 13).Value = project.AcademyTypeAndRoute;
-				worksheet.Cell(row, 14).Value = project.TransferReason;
-				worksheet.Cell(row, 15).Value = project.TransferType;
-				worksheet.Cell(row, 16).Value = project.ProposedAcademyTransferDate;
+				worksheet.Cell(row, 13).Value = project.TransferReason;
+				worksheet.Cell(row, 14).Value = project.TransferType;
+				worksheet.Cell(row, 15).Value = project.ProposedAcademyTransferDate;
 				row++;
 			}
 			worksheet.Columns().AdjustToContents();

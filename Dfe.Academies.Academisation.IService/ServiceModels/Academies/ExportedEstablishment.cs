@@ -2,7 +2,7 @@
 {
 	public class ExportedEstablishment : Establishment
 	{
-		public string? SchoolName { get; set; }
+		public string? EstablishmentName { get; set; }
 
 	}
 }
