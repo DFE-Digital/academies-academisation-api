@@ -318,6 +318,21 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.TargetDateForTransfer.Should().Be(expectedDateForTransfer);
 		}
 
+		[Theory]
+		[InlineData("Withdrwn")]
+		[InlineData("Declined")]
+		public void SetStatus_WithValidParameters_SetsPropertiesCorrectly(string status)
+		{
+			// Arrange
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _incomingTrustUkprn, _academyUkprns, _createdOn);
+
+			// Act
+			transferProject.SetStatus(status);
+
+			// Assert
+			transferProject.Status.Should().Be(status);
+		}
+
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
 			public IEnumerator<object[]> GetEnumerator()

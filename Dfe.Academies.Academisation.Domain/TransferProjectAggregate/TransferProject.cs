@@ -177,6 +177,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			OtherRisksFurtherSpecification = otherRisksFurtherSpecification;
 		}
 
+		public void SetStatus(string status)
+		{
+			Status = status;
+		}
+
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
 		{
 			Guard.Against.NullOrEmpty(outgoingTrustUkprn);
