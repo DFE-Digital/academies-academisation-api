@@ -15,6 +15,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 				new List<IntendedTransferBenefit>();
 			_transferringAcademies = new List<TransferringAcademy>();
 
+			_specificReasonsForTransfer = new List<string>();
+
 			OutgoingTrustUkprn = outgoingTrustUkprn;
 
 			foreach (var academyUkprn in academyUkprns)

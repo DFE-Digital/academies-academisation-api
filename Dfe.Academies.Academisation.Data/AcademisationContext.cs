@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+﻿using System.Text.Json;
+using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
@@ -10,6 +11,7 @@ using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data;
 
@@ -195,6 +197,17 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the TransferProjectIntendedTransferBenefits collection property through its field
 		transferringAcademiesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		transferProject.Property(x => x.SpecificReasonsForTransfer).Metadata
+			.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		transferProject.Property(x => x.SpecificReasonsForTransfer).HasConversion(
+		v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+		v => v.IsNullOrEmpty() ? new List<string>() : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null),
+		new ValueComparer<IReadOnlyCollection<string>>(
+			(c1, c2) => c1.SequenceEqual(c2),
+			c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+			c => c.ToList()));
 	}
 
 	private static void ConfigureProject(EntityTypeBuilder<Project> projectConfiguration)
