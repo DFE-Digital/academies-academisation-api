@@ -35,6 +35,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 			},
 			null,
 			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
 
@@ -66,6 +67,7 @@ public class ConversionAdvisoryBoardDecisionStateCreateTests
 				new(_faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence())
 			},
 			null,
+			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
