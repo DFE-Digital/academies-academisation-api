@@ -28,7 +28,17 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<ITransferProject?>> GetAllTransferProjects()
 		{
-			return await DefaultIncludes().ToListAsync();
+			try
+			{
+return await DefaultIncludes().ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				var x = 1;
+				throw;
+			}
+
+			
 		}
 
 		private IQueryable<TransferProject> DefaultIncludes()
