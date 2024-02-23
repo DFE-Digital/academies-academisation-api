@@ -209,7 +209,6 @@ public class Project : Entity, IProject, IAggregateRoot
 			Author = detailsToUpdate.Author,
 			Version = detailsToUpdate.Version,
 			ClearedBy = detailsToUpdate.ClearedBy,
-			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired,
 			DaoPackSentDate = detailsToUpdate.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate,

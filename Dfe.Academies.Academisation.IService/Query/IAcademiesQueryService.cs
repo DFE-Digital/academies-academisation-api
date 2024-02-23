@@ -1,10 +1,12 @@
 ﻿using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
+using Dfe.Academies.Contracts.V4.Establishments;
+using Dfe.Academies.Contracts.V4.Trusts;
 
 namespace Dfe.Academies.Academisation.IService.Query
 {
 	public interface IAcademiesQueryService
 	{
-		Task<Establishment?> GetEstablishment(int urn);
-		Task<Trust?> GetTrust(string ukprn);
+		Task<EstablishmentDto?> GetEstablishment(int urn);
+		Task<TrustDto?> GetTrust(string ukprn);
 	}
 }

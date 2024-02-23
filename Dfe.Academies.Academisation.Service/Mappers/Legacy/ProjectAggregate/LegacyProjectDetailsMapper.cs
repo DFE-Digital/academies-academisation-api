@@ -14,7 +14,7 @@ internal static class LegacyProjectDetailsMapper
 		// detailsToUpdate.HeadTeacherBoardDate.Equals(default(DateTime)) ? null : detailsToUpdate.HeadTeacherBoardDate ?? existingProject.Details.HeadTeacherBoardDate,
 		// otherwise they wouldn't ever be able to be set back to null
 		// not the best solution but without rewriting the update funtionality this is the only option
-		var details =  new ProjectDetails
+		var details = new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn ?? existingProject.Details.Urn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId ?? existingProject.Details.IfdPipelineId,
@@ -39,7 +39,6 @@ internal static class LegacyProjectDetailsMapper
 			Author = detailsToUpdate.Author ?? existingProject.Details.Author,
 			Version = detailsToUpdate.Version ?? existingProject.Details.Version,
 			ClearedBy = detailsToUpdate.ClearedBy ?? existingProject.Details.ClearedBy,
-			AcademyOrderRequired = detailsToUpdate.AcademyOrderRequired ?? existingProject.Details.AcademyOrderRequired,
 			DaoPackSentDate = detailsToUpdate.DaoPackSentDate ?? existingProject.Details.DaoPackSentDate,
 			PreviousHeadTeacherBoardDateQuestion = detailsToUpdate.PreviousHeadTeacherBoardDateQuestion ?? existingProject.Details.PreviousHeadTeacherBoardDateQuestion,
 			PreviousHeadTeacherBoardDate = detailsToUpdate.PreviousHeadTeacherBoardDate ?? existingProject.Details.PreviousHeadTeacherBoardDate,
@@ -145,7 +144,7 @@ internal static class LegacyProjectDetailsMapper
 
 		// fix for maintaining data in patch that is moved out to indivisual update
 		details.SetPerformanceData(existingProject.Details.KeyStage2PerformanceAdditionalInformation, existingProject.Details.KeyStage4PerformanceAdditionalInformation, existingProject.Details.KeyStage5PerformanceAdditionalInformation, existingProject.Details.EducationalAttendanceAdditionalInformation);
-		
+
 		return details;
 	}
 

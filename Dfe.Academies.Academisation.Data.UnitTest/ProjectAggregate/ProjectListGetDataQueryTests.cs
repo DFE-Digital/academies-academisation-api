@@ -134,7 +134,7 @@ public class ProjectsListGetDataQueryTests
 		// act
 		var searchStatus =
 			new string[] { project1.Details.ProjectStatus!.ToLower(), project2.Details.ProjectStatus!.ToLower() };
-		var projects = (await _subject.SearchFormAMatProjects(searchStatus, null, null, null, null, null, 1, 10)).Item1.ToList();
+		var projects = (await _subject.SearchFormAMatProjects(searchStatus, null, null, null, null, null)).Item1.ToList();
 
 		// assert
 		Assert.Multiple(
