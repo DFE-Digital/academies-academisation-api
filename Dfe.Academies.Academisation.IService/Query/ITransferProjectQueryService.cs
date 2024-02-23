@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<AcademyTransferProjectResponse?> GetById(int id);
 		Task<PagedResultResponse<AcademyTransferProjectSummaryResponse>> GetTransferProjects(int page, int count, int? urn,
 		string title);
-		Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string title);
+		Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string? title);
 
 	}
 }

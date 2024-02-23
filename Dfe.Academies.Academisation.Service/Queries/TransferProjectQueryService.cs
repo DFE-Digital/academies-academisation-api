@@ -68,9 +68,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(projects, recordTotal));
 		}
 
-		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string title)
+		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string? title)
 		{
-			IEnumerable<ITransferProject> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();
+			IEnumerable<ITransferProject?> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();
 
 			transferProjects =
 				FilterExportedTransferProjectsByIncomingTrust(title, transferProjects);
@@ -83,7 +83,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			var projects = await MapExportedTransferProjectModel(transferProjects);
 
-			var recordTotal = projects.Count();
+			int recordTotal = projects.Count();
 
 			projects = projects.OrderByDescending(atp => atp.Urn);
 
@@ -112,8 +112,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return queryable;
 		}
 
-		private static IEnumerable<ITransferProject> FilterExportedTransferProjectsByIncomingTrust(string title,
-		IEnumerable<ITransferProject> queryable)
+		private static IEnumerable<ITransferProject?> FilterExportedTransferProjectsByIncomingTrust(string? title,
+		IEnumerable<ITransferProject?> queryable)
 		{
 			if (!string.IsNullOrWhiteSpace(title))
 			{
@@ -125,7 +125,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return queryable;
 		}
 
-		public async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject> atp)
+		private async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject> atp)
 		{
 			if (atp == null) throw new ArgumentNullException(nameof(atp));
 
@@ -133,7 +133,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			return await Task.WhenAll(tasks);
 		}
-
 
 		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject project)
 		{
@@ -161,8 +160,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					Id = project.Id,
 					AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
 					AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
-					IncomingTrustName = project.TransferringAcademies.FirstOrDefault()?.IncomingTrustName,
-					IncomingTrustUkprn = project.TransferringAcademies.FirstOrDefault()?.IncomingTrustUkprn,
+					IncomingTrustName = transferringAcademies.FirstOrDefault()?.IncomingTrustName,
+					IncomingTrustUkprn = transferringAcademies.FirstOrDefault()?.IncomingTrustUkprn,
 					LocalAuthority = localAuthorities,
 					OutgoingTrustName = project.OutgoingTrustName,
 					ProposedAcademyTransferDate = project.TargetDateForTransfer,

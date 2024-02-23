@@ -10,9 +10,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	{
 		private readonly ITransferProjectQueryService _transferProjectQueryService;
 
-		public TransferProjectExportService(
-			ITransferProjectQueryService transferProjectQueryService
-			)
+		public TransferProjectExportService(ITransferProjectQueryService transferProjectQueryService)
 		{
 			_transferProjectQueryService = transferProjectQueryService;
 		}
