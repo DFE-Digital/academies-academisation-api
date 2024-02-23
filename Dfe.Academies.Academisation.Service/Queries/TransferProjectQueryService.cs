@@ -154,6 +154,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				var schoolTypes = schools.Select(s => s?.EstablishmentType?.Name).Distinct().JoinNonEmpty(", ");
 				var regions = schools.Select(s => s?.Gor?.Name).Distinct().JoinNonEmpty(", ");
 				var localAuthorities = schools.Select(s => s?.LocalAuthorityName).Distinct().JoinNonEmpty(", ");
+				var reason = project.SpecificReasonsForTransfer?.ToList().JoinNonEmpty(", ");
 
 				return new ExportedTransferProjectModel
 				{
@@ -169,6 +170,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					SchoolName = schoolNames,
 					SchoolType = schoolTypes,
 					Status = project.Status,
+					TransferReason = reason,
 					TransferType = project.TypeOfTransfer,
 					Urn = project.Urn.ToString(),
 				};
