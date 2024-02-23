@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await GenerateSpreadsheet(projects);
 		}
 
-		private async Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
+		private Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
 		{
 			var workbook = new XLWorkbook();
 			var worksheet = workbook.Worksheets.Add("Projects");
@@ -88,7 +88,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			workbook.SaveAs(stream);
 			stream.Position = 0;
 
-			return stream;
+			return Task.FromResult<Stream>(stream);
 		}
 	}
 }
