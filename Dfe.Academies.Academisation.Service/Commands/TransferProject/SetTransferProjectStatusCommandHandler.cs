@@ -5,18 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 {
-	public class SetTransferProjectFeaturesCommandHandler : IRequestHandler<SetTransferProjectFeaturesCommand, CommandResult>
+	public class SetTransferProjectStatusCommandHandler : IRequestHandler<SetTransferProjectStatusCommand, CommandResult>
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
-		private readonly ILogger<SetTransferProjectFeaturesCommandHandler> _logger;
+		private readonly ILogger<SetTransferProjectStatusCommandHandler> _logger;
 
-		public SetTransferProjectFeaturesCommandHandler(ITransferProjectRepository transferProjectRepository, ILogger<SetTransferProjectFeaturesCommandHandler> logger)
+		public SetTransferProjectStatusCommandHandler(ITransferProjectRepository transferProjectRepository, ILogger<SetTransferProjectStatusCommandHandler> logger)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(SetTransferProjectFeaturesCommand request, CancellationToken cancellationToken)
+		public async Task<CommandResult> Handle(SetTransferProjectStatusCommand request, CancellationToken cancellationToken)
 		{
 			var transferProject = await _transferProjectRepository.GetByUrn(request.Urn).ConfigureAwait(false);
 
@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 				_logger.LogError($"transfer project not found with urn:{request.Urn}");
 				return new NotFoundCommandResult();
 			}
-			transferProject.SetFeatures(request.WhoInitiatedTheTransfer, request.SpecificReasonsForTransfer, request.TypeOfTransfer, request.IsCompleted);
+			transferProject.SetStatus(request.Status);
 
 			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

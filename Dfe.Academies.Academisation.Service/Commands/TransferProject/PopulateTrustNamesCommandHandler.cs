@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
+using Dfe.Academies.Contracts.V4.Trusts;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using TramsDataApi.RequestModels.AcademyTransferProject;
@@ -37,9 +38,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 			{
 				var outgoingTrust = await _academiesQueryService.GetTrust(transferProject.OutgoingTrustUkprn).ConfigureAwait(false);
 
-				if (outgoingTrust != null) { transferProject.SetOutgoingTrustName(outgoingTrust?.GroupName);  }
+				if (outgoingTrust != null) { transferProject.SetOutgoingTrustName(outgoingTrust?.Name);  }
 
-				IService.ServiceModels.Academies.Trust? incomingTrust = null;
+				TrustDto? incomingTrust = null;
 
 				foreach (var academy in transferProject.TransferringAcademies)
 				{
@@ -48,7 +49,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 						incomingTrust = await _academiesQueryService.GetTrust(academy.IncomingTrustUkprn).ConfigureAwait(false);
 					}
 
-					if (incomingTrust != null) { transferProject.SetAcademyIncomingTrustName(academy.Id, incomingTrust?.GroupName); }
+					if (incomingTrust != null) { transferProject.SetAcademyIncomingTrustName(academy.Id, incomingTrust?.Name); }
 				}
 				_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			}
