@@ -67,9 +67,9 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 
 			await _context.SaveChangesAsync();
 
-			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/{project1.Details.Urn}")
+			_mockHttpMessageHandler.When($"http://localhost/v4/establishment/urn/{project1.Details.Urn}")
 					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
-			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/{project2.Details.Urn}")
+			_mockHttpMessageHandler.When($"http://localhost/v4/establishment/urn/{project2.Details.Urn}")
 					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
 			httpClient.BaseAddress = new Uri("http://localhost");
