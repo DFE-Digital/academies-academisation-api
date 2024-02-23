@@ -58,6 +58,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted);
 		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement,
 			string diocesanConsent, bool? isCompleted);
+		void SetStatus(string status);
 
 		void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer);
 
