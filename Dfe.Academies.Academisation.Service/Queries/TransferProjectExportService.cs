@@ -6,6 +6,8 @@ using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
+	internal record SpreadsheetFields(string header, string value);
+
 	public class TransferProjectExportService : ITransferProjectExportService
 	{
 		private readonly ITransferProjectQueryService _transferProjectQueryService;
@@ -28,40 +30,22 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await GenerateSpreadsheet(projects);
 		}
 
-		private Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
+		private static Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
 		{
+			string[] headers = new []{
+				"School", "URN", "School Type", "Incoming Trust", "Outgoing Trust", "Incoming Trust UKPRN", "Local Authority", "Region",
+				"Advisory Board Date", "Decision Date", "Status", "Assigned To", "Reason for transfer", "Type of transfer",
+				"Proposed academy transfer date"
+			};
+
 			var workbook = new XLWorkbook();
 			var worksheet = workbook.Worksheets.Add("Projects");
-			worksheet.Cell(1, 1).Value = "School";
-			worksheet.Cell(1, 1).Style.Font.Bold = true;
-			worksheet.Cell(1, 2).Value = "URN";
-			worksheet.Cell(1, 2).Style.Font.Bold = true;
-			worksheet.Cell(1, 3).Value = "School type";
-			worksheet.Cell(1, 3).Style.Font.Bold = true;
-			worksheet.Cell(1, 4).Value = "Incoming Trust";
-			worksheet.Cell(1, 4).Style.Font.Bold = true;
-			worksheet.Cell(1, 5).Value = "Outgoing Trust";
-			worksheet.Cell(1, 5).Style.Font.Bold = true;
-			worksheet.Cell(1, 6).Value = "Incoming Trust UKPRN";
-			worksheet.Cell(1, 6).Style.Font.Bold = true;
-			worksheet.Cell(1, 7).Value = "Local Authority";
-			worksheet.Cell(1, 7).Style.Font.Bold = true;
-			worksheet.Cell(1, 8).Value = "Region";
-			worksheet.Cell(1, 8).Style.Font.Bold = true;
-			worksheet.Cell(1, 9).Value = "Advisory Board Date";
-			worksheet.Cell(1, 9).Style.Font.Bold = true;
-			worksheet.Cell(1, 10).Value = "Decision Date";
-			worksheet.Cell(1, 10).Style.Font.Bold = true;
-			worksheet.Cell(1, 11).Value = "Status";
-			worksheet.Cell(1, 11).Style.Font.Bold = true;
-			worksheet.Cell(1, 12).Value = "Assigned To";
-			worksheet.Cell(1, 12).Style.Font.Bold = true;
-			worksheet.Cell(1, 13).Value = "Reason for transfer";
-			worksheet.Cell(1, 13).Style.Font.Bold = true;
-			worksheet.Cell(1, 14).Value = "Type of transfer";
-			worksheet.Cell(1, 14).Style.Font.Bold = true;
-			worksheet.Cell(1, 15).Value = "Proposed academy transfer date";
-			worksheet.Cell(1, 15).Style.Font.Bold = true;
+
+			for (int i = 0; i < headers.Length; i++)
+			{
+				worksheet.Cell(1, i + 1).Value = headers[i];
+				worksheet.Cell(1, i + 1).Style.Font.Bold = true;
+			}
 
 			int row = 2;
 			foreach (var project in projects)

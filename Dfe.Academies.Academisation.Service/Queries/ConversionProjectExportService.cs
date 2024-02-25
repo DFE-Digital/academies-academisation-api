@@ -35,7 +35,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await GenerateSpreadsheet(projects);
 		}
 
-		private static async Task<Stream> GenerateSpreadsheet(IEnumerable<ConversionProjectServiceModel> projects)
+		private async Task<Stream> GenerateSpreadsheet(IEnumerable<ConversionProjectServiceModel> projects)
 		{
 			var workbook = new XLWorkbook();
 			var worksheet = workbook.Worksheets.Add("Projects");

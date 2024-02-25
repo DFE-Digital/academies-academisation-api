@@ -33,9 +33,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			);
 
 			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
+			mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult((ITransferProject?)dummyTransferProject));
 
-			var service = new TransferProjectQueryService(mockRepository.Object, null, null, null);
+			var service = new TransferProjectQueryService(mockRepository.Object, null, null);
 
 			// Setting up Test Data
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
@@ -66,7 +66,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
 
-			var service = new TransferProjectQueryService(mockRepository.Object, null, null, null);
+			var service = new TransferProjectQueryService(mockRepository.Object, null, null);
 
 			// Setting up Test Data
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
@@ -106,7 +106,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var service = new TransferProjectQueryService(
 				mockRepository.Object,
-				null,
 				mockAcademiesQueryService.Object,
 				mockServiceScopeFactory.Object
 			);
@@ -145,7 +144,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var service = new TransferProjectQueryService(
 				mockRepository.Object,
-				null,
 				null,
 				null
 			);
@@ -193,7 +191,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var service = new TransferProjectQueryService(
 				mockRepository.Object,
-				null,
 				mockAcademiesQueryService.Object,
 				mockServiceScopeFactory.Object
 			);
@@ -218,7 +215,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
-		private ExportedTransferProjectModel GetDummyTransferProjectModel(
+		private static ExportedTransferProjectModel GetDummyTransferProjectModel(
 			string incomingTrustName,
 			string incomingTrustUkprn,
 			string outgoingTrustName,

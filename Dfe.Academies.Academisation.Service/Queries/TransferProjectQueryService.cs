@@ -14,18 +14,15 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	public class TransferProjectQueryService : ITransferProjectQueryService
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
-		private readonly IMapper _mapper;
-		private readonly IAcademiesQueryService _establishmentRepository;
-		private readonly IServiceScopeFactory _serviceScopeFactory;
+		private readonly IAcademiesQueryService? _establishmentRepository;
+		private readonly IServiceScopeFactory? _serviceScopeFactory;
 
 		public TransferProjectQueryService(
 			ITransferProjectRepository transferProjectRepository,
-			IMapper mapper,
-			IAcademiesQueryService establishmentRepository,
-			IServiceScopeFactory serviceScopeFactory)
+			IAcademiesQueryService? establishmentRepository,
+			IServiceScopeFactory? serviceScopeFactory)
 		{
 			_transferProjectRepository = transferProjectRepository;
-			_mapper = mapper;
 			_establishmentRepository = establishmentRepository;
 			_serviceScopeFactory = serviceScopeFactory;
 		}
@@ -77,9 +74,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			// remove any projects without an incoming or outgoing trust.
 			transferProjects = transferProjects
-			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+			.Where(project =>
+				!string.IsNullOrEmpty(project.OutgoingTrustUkprn) && !string.IsNullOrEmpty(project.OutgoingTrustName) &&
+				!project.TransferringAcademies.Any(transferringAcademy => string.IsNullOrEmpty(transferringAcademy.IncomingTrustUkprn) || string.IsNullOrEmpty(transferringAcademy.IncomingTrustName))).ToList();
 
 			var projects = await MapExportedTransferProjectModel(transferProjects);
 
@@ -125,7 +122,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return queryable;
 		}
 
-		private async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject> atp)
+		private async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject?> atp)
 		{
 			if (atp == null) throw new ArgumentNullException(nameof(atp));
 

@@ -8,7 +8,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Mocks
 
 	internal class MockTransferProject
 	{
-		public MockTransferProject(string outgoingTrustUkprn, string outgoingTrustName, List<MockTransferAcademyRecord> transferringAcademies = null)
+		public MockTransferProject(string outgoingTrustUkprn, string outgoingTrustName, List<MockTransferAcademyRecord> transferringAcademies)
 		{
 			OutgoingTrustUkprn = outgoingTrustUkprn;
 			OutgoingTrustName = outgoingTrustName;
