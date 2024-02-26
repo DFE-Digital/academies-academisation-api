@@ -14,13 +14,13 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	public class TransferProjectQueryService : ITransferProjectQueryService
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
-		private readonly IAcademiesQueryService? _establishmentRepository;
-		private readonly IServiceScopeFactory? _serviceScopeFactory;
+		private readonly IAcademiesQueryService _establishmentRepository;
+		private readonly IServiceScopeFactory _serviceScopeFactory;
 
 		public TransferProjectQueryService(
 			ITransferProjectRepository transferProjectRepository,
-			IAcademiesQueryService? establishmentRepository,
-			IServiceScopeFactory? serviceScopeFactory)
+			IAcademiesQueryService establishmentRepository,
+			IServiceScopeFactory serviceScopeFactory)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_establishmentRepository = establishmentRepository;
@@ -75,7 +75,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			// remove any projects without an incoming or outgoing trust.
 			transferProjects = transferProjects
 			.Where(project =>
-				!string.IsNullOrEmpty(project.OutgoingTrustUkprn) && !string.IsNullOrEmpty(project.OutgoingTrustName) &&
+				!string.IsNullOrEmpty(project?.OutgoingTrustUkprn) && !string.IsNullOrEmpty(project.OutgoingTrustName) &&
 				!project.TransferringAcademies.Any(transferringAcademy => string.IsNullOrEmpty(transferringAcademy.IncomingTrustUkprn) || string.IsNullOrEmpty(transferringAcademy.IncomingTrustName))).ToList();
 
 			var projects = await MapExportedTransferProjectModel(transferProjects);
@@ -115,7 +115,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			if (!string.IsNullOrWhiteSpace(title))
 			{
 				queryable = queryable
-					.Where(p => p.TransferringAcademies != null && p.TransferringAcademies.ToList()
+					.Where(p => p?.TransferringAcademies != null && p.TransferringAcademies.ToList()
 						.Exists(r => r != null && r.IncomingTrustName != null && r.IncomingTrustName.ToLower().Contains(title.ToLower())))
 					.ToList();
 			}
@@ -131,7 +131,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return await Task.WhenAll(tasks);
 		}
 
-		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject project)
+		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project)
 		{
 			using (var scope = _serviceScopeFactory.CreateScope())
 			{
@@ -151,7 +151,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				var schoolTypes = schools.Select(s => s?.EstablishmentType?.Name).Distinct().JoinNonEmpty(", ");
 				var regions = schools.Select(s => s?.Gor?.Name).Distinct().JoinNonEmpty(", ");
 				var localAuthorities = schools.Select(s => s?.LocalAuthorityName).Distinct().JoinNonEmpty(", ");
-				var reason = project.SpecificReasonsForTransfer?.ToList().JoinNonEmpty(", ");
+				var reason = project.SpecificReasonsForTransfer?.JoinNonEmpty(", ");
 
 				return new ExportedTransferProjectModel
 				{

@@ -11,11 +11,20 @@ using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.Service.UnitTest.Mocks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 {
 	public class TransferProjectQueryServiceTests
 	{
+		IAcademiesQueryService _establishmentRepo = new Mock<IAcademiesQueryService>().Object;
+		IServiceScopeFactory _serviceScope = new Mock<IServiceScopeFactory>().Object;
+
+		public TransferProjectQueryServiceTests()
+		{
+
+		}
+
 		[Fact]
 		public async Task GetByUrn_ShouldReturnExpectedResponse()
 		{
@@ -35,7 +44,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult((ITransferProject?)dummyTransferProject));
 
-			var service = new TransferProjectQueryService(mockRepository.Object, null, null);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _serviceScope);
 
 			// Setting up Test Data
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
@@ -66,7 +75,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
 
-			var service = new TransferProjectQueryService(mockRepository.Object, null, null);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _serviceScope);
 
 			// Setting up Test Data
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
@@ -142,11 +151,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
 
-			var service = new TransferProjectQueryService(
-				mockRepository.Object,
-				null,
-				null
-			);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _serviceScope);
 
 			// Setting up Test Data
 			var dummyProjects = new List<ExportedTransferProjectModel>();
