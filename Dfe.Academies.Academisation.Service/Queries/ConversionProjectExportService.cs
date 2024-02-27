@@ -63,6 +63,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			worksheet.Cell(1, 11).Style.Font.Bold = true;
 			worksheet.Cell(1, 12).Value = "Academy Type and Route";
 			worksheet.Cell(1, 12).Style.Font.Bold = true;
+			worksheet.Cell(1, 13).Value = "Part of PFI scheme";
+			worksheet.Cell(1, 13).Style.Font.Bold = true;
 
 
 			int row = 2;
@@ -81,6 +83,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 10).Value = project.ProjectStatus;
 				worksheet.Cell(row, 11).Value = project.AssignedUser?.FullName;
 				worksheet.Cell(row, 12).Value = project.AcademyTypeAndRoute;
+				worksheet.Cell(row, 13).Value = project.PartOfPfiScheme;
 				row++;
 			}
 			worksheet.Columns().AdjustToContents();
