@@ -125,7 +125,8 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 					Id = model.AssignedUserId
 				},
 				State = model.State,
-				Status = model.Status
+				Status = model.Status,
+				IsFormAMat =  model.IsFormAMat
 			};
 		}
 	}

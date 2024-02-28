@@ -119,7 +119,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							KeyStage4PerformanceAdditionalInformation = ta.KeyStage4PerformanceAdditionalInformation,
 							KeyStage5PerformanceAdditionalInformation = ta.KeyStage5PerformanceAdditionalInformation
 						};
-					}).ToList()
+					}).ToList(),
+					IsFormAMat = x.IsFormAMat
 				};
 			});
 		}
