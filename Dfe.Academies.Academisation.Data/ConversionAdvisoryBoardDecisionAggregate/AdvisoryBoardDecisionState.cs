@@ -25,7 +25,7 @@ public class AdvisoryBoardDecisionState : BaseEntity
 
 
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
-	public DateTime AcademyOrderDate { get; init; }
+	public DateTime? AcademyOrderDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
 
 	public static AdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)

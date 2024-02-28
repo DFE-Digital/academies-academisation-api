@@ -13,6 +13,6 @@ public class AdvisoryBoardDecisionCreateRequestModel
 	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
 	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
 	public DateTime AdvisoryBoardDecisionDate { get; set; }
-	public DateTime AcademyOrderDate { get; set; }
+	public DateTime? AcademyOrderDate { get; set; }
 	public DecisionMadeBy DecisionMadeBy { get; set; }
 }
