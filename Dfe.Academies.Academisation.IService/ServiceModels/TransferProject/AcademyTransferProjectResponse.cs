@@ -7,7 +7,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 
         public string ProjectReference { get; set; }
         public string OutgoingTrustUkprn { get; set; }
-        public List<TransferringAcademiesResponse> TransferringAcademies { get; set; }
+        public string OutgoingTrustName { get; set; }
+		public List<TransferringAcademiesResponse> TransferringAcademies { get; set; }
         public AcademyTransferProjectFeaturesResponse Features { get; set; }
         public AcademyTransferProjectDatesResponse Dates { get; set; }
         public AcademyTransferProjectBenefitsResponse Benefits { get; set; }

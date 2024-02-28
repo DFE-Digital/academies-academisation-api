@@ -54,7 +54,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			// remove any projects without an incoming or outgoing trust.
 			.Where(p =>
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+				// just filtered out by incoming trust name now to allow for form a mat
+				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
 			
 			var recordTotal = projects.Count();
 

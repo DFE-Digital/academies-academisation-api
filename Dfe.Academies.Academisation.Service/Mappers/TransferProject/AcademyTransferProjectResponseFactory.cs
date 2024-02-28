@@ -17,6 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				.Select(a => new TransferringAcademiesResponse
 				{
 					IncomingTrustUkprn = a.IncomingTrustUkprn,
+					IncomingTrustName = a.IncomingTrustName,
 					OutgoingAcademyUkprn = a.OutgoingAcademyUkprn,
 					PupilNumbersAdditionalInformation = a.PupilNumbersAdditionalInformation,
 					LatestOfstedReportAdditionalInformation = a.LatestOfstedReportAdditionalInformation,
@@ -85,6 +86,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				ProjectUrn = model.Urn.ToString(),
 				ProjectReference = model.ProjectReference,
 				OutgoingTrustUkprn = model.OutgoingTrustUkprn,
+				OutgoingTrustName = model.OutgoingTrustName,
 				TransferringAcademies = transferringAcademies,
 				Features = features,
 				Dates = dates,
