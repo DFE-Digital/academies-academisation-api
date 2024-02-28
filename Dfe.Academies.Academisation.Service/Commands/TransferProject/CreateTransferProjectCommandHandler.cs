@@ -23,7 +23,13 @@ public class CreateTransferProjectCommandHandler : IRequestHandler<CreateTransfe
 
 	public async Task<CreateResult> Handle(CreateTransferProjectCommand request, CancellationToken cancellationToken)
 	{
-		var transferProject = Domain.TransferProjectAggregate.TransferProject.Create(request.OutgoingTrustUkprn, request.IncomingTrustUkprn, request.TransferringAcademyUkprns, _dateTimeProvider.Now);
+		var transferProject = Domain.TransferProjectAggregate.TransferProject.Create(
+			request.OutgoingTrustUkprn, 
+			request.OutgoingTrustName,
+			request.IncomingTrustUkprn,
+			request.IncomingTrustName,
+			request.TransferringAcademyUkprns, 
+			_dateTimeProvider.Now);
 
 		 _transferProjectRepository.Insert(transferProject);
 		await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

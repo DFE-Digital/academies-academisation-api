@@ -2,14 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferProject : ITransferProject, IAggregateRoot
 	{
-		private TransferProject(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns)
+		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string incomingTrustName, List<string> academyUkprns)
 		{
 			_intendedTransferBenefits =
 				new List<IntendedTransferBenefit>();
@@ -18,10 +17,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			_specificReasonsForTransfer = new List<string>();
 
 			OutgoingTrustUkprn = outgoingTrustUkprn;
+			OutgoingTrustName = outgoingTrustName;
+			//Is form a mat if we have a trust name but no ukprn
+			IsFormAMat = incomingTrustUkprn == null && !string.IsNullOrEmpty(incomingTrustName);
 
 			foreach (var academyUkprn in academyUkprns)
 			{
-				_transferringAcademies.Add(new TransferringAcademy(incomingTrustUkprn, academyUkprn));
+				_transferringAcademies.Add(new TransferringAcademy(incomingTrustUkprn, incomingTrustName, academyUkprn));
 			}
 		}
 
@@ -82,6 +84,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? AssignedUserFullName { get; private set; }
 		public string? AssignedUserEmailAddress { get; private set; }
 		public Guid? AssignedUserId { get; private set; }
+
+		public bool? IsFormAMat { get; private set; }
 
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
 		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
@@ -191,14 +195,15 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			Status = status;
 		}
 
-		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)
+		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string incomingTrustName, List<string> academyUkprns, DateTime createdOn)
 		{
 			Guard.Against.NullOrEmpty(outgoingTrustUkprn);
-			Guard.Against.NullOrEmpty(incomingTrustUkprn);
+			Guard.Against.NullOrEmpty(outgoingTrustName);
+			Guard.Against.NullOrEmpty(incomingTrustName);
 			Guard.Against.NullOrEmpty(academyUkprns);
 			Guard.Against.OutOfSQLDateRange(createdOn);
 
-			return new TransferProject(outgoingTrustUkprn, incomingTrustUkprn, academyUkprns)
+			return new TransferProject(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrustName, academyUkprns)
 			{
 				CreatedOn = createdOn
 			};

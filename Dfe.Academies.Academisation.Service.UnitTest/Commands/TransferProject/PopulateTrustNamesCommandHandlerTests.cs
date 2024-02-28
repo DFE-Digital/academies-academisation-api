@@ -50,7 +50,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			var fixture = new Fixture();
 			fixture.Customize(new AutoMoqCustomization() { ConfigureMembers = true });
 			TrustDto? trust = fixture.Create<TrustDto>();
-			var tp = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "23456789", new List<string> { "34567890" }, DateTime.Now);
+			var tp = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, DateTime.Now);
 			var transferProjects = new List<ITransferProject>() { tp };
 
 			this.mockTransferProjectRepository.Setup(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));

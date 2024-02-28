@@ -21,7 +21,9 @@ public class TransferProjectQueryServiceTests
 		// Create a TransferProject
 		ITransferProject dummyTransferProject = TransferProject.Create(
 			"dummyOutgoingTrustUkprn",
+			"out trust",
 			"dummyIncomingTrustUkprn",
+			"in trust",
 			new List<string> { "dummyUkprn1", "dummyUkprn2" },
 			DateTime.Now
 		);
@@ -52,7 +54,9 @@ public class TransferProjectQueryServiceTests
 		// Create a TransferProject
 		var dummyTransferProject = TransferProject.Create(
 			"dummyOutgoingTrustUkprn",
+			"out trust",
 			"dummyIncomingTrustUkprn",
+			"in trust",
 			new List<string> { "dummyUkprn1", "dummyUkprn2" },
 			DateTime.Now
 		);

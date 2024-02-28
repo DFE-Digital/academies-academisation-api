@@ -93,10 +93,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		private static CreateTransferProjectCommand CreateValidTransferProjectCommand()
 		{
 			string outgoingTrustUkprn = "11112222";
+			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
+			string incomingTrusName = "incomingTrusName";
 			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
 
-			return new CreateTransferProjectCommand(outgoingTrustUkprn, incomingTrustUkprn, academyUkprns);
+			return new CreateTransferProjectCommand(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrusName, academyUkprns);
 		}
 	}
 }
