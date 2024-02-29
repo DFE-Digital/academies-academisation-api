@@ -15,6 +15,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 				new List<IntendedTransferBenefit>();
 			_transferringAcademies = new List<TransferringAcademy>();
 
+			_specificReasonsForTransfer = new List<string>();
+
 			OutgoingTrustUkprn = outgoingTrustUkprn;
 
 			foreach (var academyUkprn in academyUkprns)
@@ -32,6 +34,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string OutgoingTrustUkprn { get; private set; }
 		public string? OutgoingTrustName{ get; private set; }
 		public string? WhoInitiatedTheTransfer { get; private set; }
+
+
+		private List<string> _specificReasonsForTransfer;
+		public IReadOnlyCollection<string> SpecificReasonsForTransfer => _specificReasonsForTransfer;
+		IReadOnlyCollection<string> ITransferProject.SpecificReasonsForTransfer => _specificReasonsForTransfer;
+
 		public bool? RddOrEsfaIntervention { get; private set; }
 		public string? RddOrEsfaInterventionDetail { get; private set; }
 		public string? TypeOfTransfer { get; private set; }
@@ -119,10 +127,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetFeatures(string whoInitiatedTheTransfer, string transferType, bool? isCompleted)
-		{
-			TypeOfTransfer = transferType;
+		public void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted)
+		{	
 			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
+			_specificReasonsForTransfer = specificReasonsForTransfer;
+			TypeOfTransfer = transferType;
 			FeatureSectionIsCompleted = isCompleted;
 		}
 		public void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted)
@@ -175,6 +184,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			FinanceAndDebtFurtherSpecification = financeAndDebtFurtherSpecification;
 			OtherRisksShouldBeConsidered = otherRisksShouldBeConsidered;
 			OtherRisksFurtherSpecification = otherRisksFurtherSpecification;
+		}
+
+		public void SetStatus(string status)
+		{
+			Status = status;
 		}
 
 		public static TransferProject Create(string outgoingTrustUkprn, string incomingTrustUkprn, List<string> academyUkprns, DateTime createdOn)

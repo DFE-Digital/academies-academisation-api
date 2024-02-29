@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
+using Dfe.Academies.Contracts.V4.Establishments;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
@@ -38,7 +39,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 
 			foreach (var project in incompleteProjects)
 			{
-				IService.ServiceModels.Academies.Establishment? school = await _establishmentRepository.GetEstablishment(project.Details.Urn);
+				EstablishmentDto? school = await _establishmentRepository.GetEstablishment(project.Details.Urn);
 
 				if (school == null)
 				{

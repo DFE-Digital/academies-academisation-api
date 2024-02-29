@@ -96,6 +96,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					ProjectReference = x.ProjectReference,
 					OutgoingTrustUkprn = x.OutgoingTrustUkprn,
 					OutgoingTrustName = x.OutgoingTrustName,
+					Status = x.Status,
 					AssignedUser = string.IsNullOrWhiteSpace(x.AssignedUserEmailAddress)
 				   ? null
 				   : new AssignedUserResponse

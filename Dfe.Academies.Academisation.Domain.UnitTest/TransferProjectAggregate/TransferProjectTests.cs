@@ -271,15 +271,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		}
 
 		[Theory]
-		[InlineData("Test Initiation", "Test Type", true)]
-		[InlineData("Another Initiation", "Another Type", false)]
-		public void SetFeatures_WithValidParameters_SetsPropertiesCorrectly(string whoInitiated, string transferType, bool isCompleted)
+		[InlineData("Test Initiation", "test specific reason", "Test Type", true)]
+		[InlineData("Another Initiation", "Another test specific reason", "Another Type", false)]
+		public void SetFeatures_WithValidParameters_SetsPropertiesCorrectly(string whoInitiated, string specficReasons, string transferType, bool isCompleted)
 		{
 			// Arrange
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _incomingTrustUkprn, _academyUkprns, _createdOn);
-
+			var reasons = new List<string>() { specficReasons };
 			// Act
-			transferProject.SetFeatures(whoInitiated, transferType, isCompleted);
+			transferProject.SetFeatures(whoInitiated, reasons, transferType, isCompleted);
 
 			// Assert
 			transferProject.WhoInitiatedTheTransfer.Should().Be(whoInitiated);
@@ -316,6 +316,21 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Assert
 			transferProject.HtbDate.Should().Be(advisoryBoardDate);
 			transferProject.TargetDateForTransfer.Should().Be(expectedDateForTransfer);
+		}
+
+		[Theory]
+		[InlineData("Withdrwn")]
+		[InlineData("Declined")]
+		public void SetStatus_WithValidParameters_SetsPropertiesCorrectly(string status)
+		{
+			// Arrange
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _incomingTrustUkprn, _academyUkprns, _createdOn);
+
+			// Act
+			transferProject.SetStatus(status);
+
+			// Assert
+			transferProject.Status.Should().Be(status);
 		}
 
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
