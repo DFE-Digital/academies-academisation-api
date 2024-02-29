@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 {
 	public static class AcademyTransferProjectResponseFactory
 	{
-		public static AcademyTransferProjectResponse Create(ITransferProject model)
+		public static AcademyTransferProjectResponse Create(ITransferProject? model)
 		{
 			if (model == null)
 			{
