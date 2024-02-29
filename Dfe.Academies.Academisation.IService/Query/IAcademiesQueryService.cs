@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.IService.Query
 {
 	public interface IAcademiesQueryService
 	{
-        Task<ExportedEstablishment?> GetEstablishmentByUkprn(string ukprn);
+        Task<EstablishmentDto?> GetEstablishmentByUkprn(string ukprn);
         Task<EstablishmentDto?> GetEstablishment(int urn);
 		Task<TrustDto?> GetTrust(string ukprn);
 	}

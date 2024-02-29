@@ -6,7 +6,6 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Microsoft.Extensions.DependencyInjection;
 using Dfe.Academies.Academisation.Service.Extensions;
 
 namespace Dfe.Academies.Academisation.Service.Queries
@@ -15,16 +14,16 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
 		private readonly IAcademiesQueryService _establishmentRepository;
-		private readonly IServiceScopeFactory _serviceScopeFactory;
+		private readonly IAdvisoryBoardDecisionGetDataByProjectIdQuery _advisoryBoardDecisionGetDataByProjectIdQuery;
 
 		public TransferProjectQueryService(
 			ITransferProjectRepository transferProjectRepository,
 			IAcademiesQueryService establishmentRepository,
-			IServiceScopeFactory serviceScopeFactory)
+			IAdvisoryBoardDecisionGetDataByProjectIdQuery advisoryBoardDecisionGetDataByProjectIdQuery)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_establishmentRepository = establishmentRepository;
-			_serviceScopeFactory = serviceScopeFactory;
+			_advisoryBoardDecisionGetDataByProjectIdQuery = advisoryBoardDecisionGetDataByProjectIdQuery;
 		}
 
 		public async Task<AcademyTransferProjectResponse?> GetByUrn(int id)
@@ -133,45 +132,41 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project)
 		{
-			using (var scope = _serviceScopeFactory.CreateScope())
-			{
-				var advisoryBoardDecisionRepository = scope.ServiceProvider.GetRequiredService<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
-				var advisoryBoardDecision = await advisoryBoardDecisionRepository.Execute(project.Id);
+			var advisoryBoardDecision = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(project.Id, true);
 
-				var transferringAcademies = project.TransferringAcademies;
+			var transferringAcademies = project.TransferringAcademies;
 
-				var schools = await Task.WhenAll(
-					transferringAcademies.Select(async transferringAcademy =>
-					{
-						return await _establishmentRepository.GetEstablishmentByUkprn(transferringAcademy?.OutgoingAcademyUkprn);
-					})
-				);
-
-				var schoolNames = schools.Select(s => s?.EstablishmentName).Distinct().JoinNonEmpty(", ");
-				var schoolTypes = schools.Select(s => s?.EstablishmentType?.Name).Distinct().JoinNonEmpty(", ");
-				var regions = schools.Select(s => s?.Gor?.Name).Distinct().JoinNonEmpty(", ");
-				var localAuthorities = schools.Select(s => s?.LocalAuthorityName).Distinct().JoinNonEmpty(", ");
-				var reason = project.SpecificReasonsForTransfer?.JoinNonEmpty(", ");
-
-				return new ExportedTransferProjectModel
+			var schools = await Task.WhenAll(
+				transferringAcademies.Select(async transferringAcademy =>
 				{
-					Id = project.Id,
-					AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
-					AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
-					IncomingTrustName = transferringAcademies.FirstOrDefault()?.IncomingTrustName,
-					IncomingTrustUkprn = transferringAcademies.FirstOrDefault()?.IncomingTrustUkprn,
-					LocalAuthority = localAuthorities,
-					OutgoingTrustName = project.OutgoingTrustName,
-					ProposedAcademyTransferDate = project.TargetDateForTransfer,
-					Region = regions,
-					SchoolName = schoolNames,
-					SchoolType = schoolTypes,
-					Status = project.Status,
-					TransferReason = reason,
-					TransferType = project.TypeOfTransfer,
-					Urn = project.Urn.ToString(),
-				};
-			}
+					return await _establishmentRepository.GetEstablishmentByUkprn(transferringAcademy?.OutgoingAcademyUkprn);
+				})
+			);
+
+			var schoolNames = schools.Select(s => s?.Name).Distinct().JoinNonEmpty(", ");
+			var schoolTypes = schools.Select(s => s?.EstablishmentType?.Name).Distinct().JoinNonEmpty(", ");
+			var regions = schools.Select(s => s?.Gor?.Name).Distinct().JoinNonEmpty(", ");
+			var localAuthorities = schools.Select(s => s?.LocalAuthorityName).Distinct().JoinNonEmpty(", ");
+			var reason = project.SpecificReasonsForTransfer?.JoinNonEmpty(", ");
+
+			return new ExportedTransferProjectModel
+			{
+				Id = project.Id,
+				AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
+				AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
+				IncomingTrustName = transferringAcademies.FirstOrDefault()?.IncomingTrustName,
+				IncomingTrustUkprn = transferringAcademies.FirstOrDefault()?.IncomingTrustUkprn,
+				LocalAuthority = localAuthorities,
+				OutgoingTrustName = project.OutgoingTrustName,
+				ProposedAcademyTransferDate = project.TargetDateForTransfer,
+				Region = regions,
+				SchoolName = schoolNames,
+				SchoolType = schoolTypes,
+				Status = project.Status,
+				TransferReason = reason,
+				TransferType = project.TypeOfTransfer,
+				Urn = project.Urn.ToString(),
+			};
 		}
 
 		public IEnumerable<AcademyTransferProjectSummaryResponse> AcademyTransferProjectSummaryResponse(

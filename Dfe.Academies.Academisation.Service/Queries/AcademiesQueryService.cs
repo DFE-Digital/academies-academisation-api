@@ -26,10 +26,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_correlationContext = correlationContext;
 		}
 
-		public async Task<ExportedEstablishment?> GetEstablishmentByUkprn(string ukprn)
+		public async Task<EstablishmentDto?> GetEstablishmentByUkprn(string ukprn)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);
-			var response = await client.GetAsync($"/establishment/{ukprn}");
+			var response = await client.GetAsync($"/v4/establishment/{ukprn}");
 
 			if (!response.IsSuccessStatusCode)
 			{
@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				return null;
 			}
 
-			return await response.Content.ReadFromJsonAsync<ExportedEstablishment>();
+			return await response.Content.ReadFromJsonAsync<EstablishmentDto>();
 		}
 
 		public async Task<EstablishmentDto?> GetEstablishment(int urn)
