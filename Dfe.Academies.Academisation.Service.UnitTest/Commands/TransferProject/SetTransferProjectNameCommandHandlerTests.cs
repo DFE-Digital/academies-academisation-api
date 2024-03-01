@@ -9,27 +9,27 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 {
-	public class SetTransferProjectStatusCommandHandlerTests
+	public class SetTransferProjectNameCommandHandlerTests
 	{
 		private readonly Mock<ITransferProjectRepository> _transferProjectRepositoryMock;
-		private readonly Mock<ILogger<SetTransferProjectStatusCommandHandler>> _loggerMock;
-		private readonly SetTransferProjectStatusCommandHandler _handler;
+		private readonly Mock<ILogger<SetTransferProjectNameCommandHandler>> _loggerMock;
+		private readonly SetTransferProjectNameCommandHandler _handler;
 
-		public SetTransferProjectStatusCommandHandlerTests()
+		public SetTransferProjectNameCommandHandlerTests()
 		{
 			_transferProjectRepositoryMock = new Mock<ITransferProjectRepository>();
-			_loggerMock = new Mock<ILogger<SetTransferProjectStatusCommandHandler>>();
-			_handler = new SetTransferProjectStatusCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
+			_loggerMock = new Mock<ILogger<SetTransferProjectNameCommandHandler>>();
+			_handler = new SetTransferProjectNameCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
 		}
 
 		[Fact]
 		public async Task Handle_TransferProjectNotFound_ReturnsNotFoundCommandResult()
 		{
 			// Arrange
-			var command = new SetTransferProjectStatusCommand
+			var command = new SetTransferProjectNameCommand
 			{
 				Urn = 1,
-				Status = "Withdrawn"
+				ProjectName = "Test Project Name"
 			};
 
 			_transferProjectRepositoryMock.Setup(x => x.GetById(It.IsAny<int>()))!
@@ -54,12 +54,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public async Task Handle_TransferProjectFound_ReturnsCommandSuccessResult()
 		{
 			// Arrange
-			var command = new SetTransferProjectStatusCommand
+			var command = new SetTransferProjectNameCommand
 			{
 				Urn = 1,
-				Status = "Withdrawn"
+				ProjectName = "Test Project Name"
 			};
-			// Create a transfer project to 'SetStatus' to
+
+			// Create a transfer project to 'SetName' to
 			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, DateTime.Now);
 			// Mock Unit of work and Repository 
 			var unitOfWorkMock = new Mock<IUnitOfWork>();
@@ -78,9 +79,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Assert
 			result.Should().BeOfType<CommandSuccessResult>();
 
-			transferProject.Status.Should().Be(command.Status);
+			transferProject.TransferringAcademies.FirstOrDefault().IncomingTrustName.Should().Be(command.ProjectName);
 
-			_transferProjectRepositoryMock.Verify(repo => repo.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()), Times.Once);
+			_transferProjectRepositoryMock.Verify(repo => repo.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 	}
