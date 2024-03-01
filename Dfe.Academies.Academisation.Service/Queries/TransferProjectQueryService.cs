@@ -1,13 +1,10 @@
-﻿
-using AutoMapper;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
-using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Extensions;
-using DocumentFormat.OpenXml.Spreadsheet;
+using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -175,7 +172,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				SchoolType = schoolTypes,
 				Status = project.Status,
 				TransferReason = reason,
-				TransferType = project.TypeOfTransfer,
+				TransferType = project.WhoInitiatedTheTransfer,
 				Urn = project.Urn.ToString(),
 			};
 		}
