@@ -52,6 +52,8 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		string? WhoInitiatedTheTransfer { get; }
 		IReadOnlyCollection<string> SpecificReasonsForTransfer { get; }
 
+		bool? IsFormAMat { get; }
+
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
 		void AssignUser(Guid userId, string userEmail, string userFullName);

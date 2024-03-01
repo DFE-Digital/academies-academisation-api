@@ -11,5 +11,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
         public string Status { get; set; }
 		public List<TransferringAcademiesResponse> TransferringAcademies { get; set; }
         public AssignedUserResponse AssignedUser { get; set; }
+		public bool? IsFormAMat { get; set; }
     }
 }

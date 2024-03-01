@@ -127,6 +127,26 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{urn}/set-name", Name = "SetTransferProjectName")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> SetTransferProjectName(int urn,
+			[FromBody] SetTransferProjectNameCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation($"Setting transfer project name");
+
+			command.Urn = urn;
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPut("{urn}/set-features", Name = "SetTransferProjectFeatures")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
