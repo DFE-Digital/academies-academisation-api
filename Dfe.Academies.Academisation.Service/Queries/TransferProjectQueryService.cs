@@ -72,9 +72,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			// remove any projects without an incoming or outgoing trust.
 			transferProjects = transferProjects
-			.Where(project =>
-				!string.IsNullOrEmpty(project?.OutgoingTrustUkprn) && !string.IsNullOrEmpty(project.OutgoingTrustName) &&
-				!project.TransferringAcademies.Any(transferringAcademy => string.IsNullOrEmpty(transferringAcademy.IncomingTrustUkprn) || string.IsNullOrEmpty(transferringAcademy.IncomingTrustName))).ToList();
+			.Where(p =>
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
+				// just filtered out by incoming trust name now to allow for form a mat
+				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
 
 			var projects = await MapExportedTransferProjectModel(transferProjects);
 

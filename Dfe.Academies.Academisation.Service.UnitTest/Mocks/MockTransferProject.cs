@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Mocks
 
 		public void AddTransferringAcademy(MockTransferAcademyRecord mockTransferringAcademy)
 		{
-			var newTransferringAcademy = new TransferringAcademy(mockTransferringAcademy.incomingTrustUkprn, mockTransferringAcademy.outgoingAcademyUkprn);
+			var newTransferringAcademy = new TransferringAcademy(mockTransferringAcademy.incomingTrustUkprn, mockTransferringAcademy.incomingTrustName, mockTransferringAcademy.outgoingAcademyUkprn);
 			newTransferringAcademy.SetIncomingTrustName(mockTransferringAcademy.incomingTrustName);
 			TransferringAcademies.Add(newTransferringAcademy);
 		}
