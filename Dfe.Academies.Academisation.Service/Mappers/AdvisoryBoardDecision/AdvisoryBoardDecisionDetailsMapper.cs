@@ -13,9 +13,6 @@ public static class AdvisoryBoardDecisionDetailsMapper
 			serviceModel.Decision,
 			serviceModel.ApprovedConditionsSet,
 			serviceModel.ApprovedConditionsDetails,
-			serviceModel.DeclinedReasons,
-			serviceModel.DeferredReasons,
-			serviceModel.WithdrawnReasons,
 			serviceModel.AdvisoryBoardDecisionDate,
 			serviceModel.DecisionMadeBy
 		);

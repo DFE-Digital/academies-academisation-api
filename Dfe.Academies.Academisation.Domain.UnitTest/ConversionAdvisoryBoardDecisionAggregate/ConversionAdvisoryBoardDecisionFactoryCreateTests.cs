@@ -23,9 +23,12 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 	{
 		//Arrange
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
+		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
+		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
+		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
 
 		//Act
-		var result = _target.Create(details);
+		var result = _target.Create(details, deferred, declined, withdrawn);
 
 		//Assert
 		Assert.IsType<CreateValidationErrorResult>(result);
@@ -41,14 +44,15 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 			AdvisoryBoardDecision.Approved,
 			true,
 			_faker.Lorem.Sentence(),
-			null,
-			null,
-			null,
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 
+		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
+		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
+		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
+
 		//Act
-		var result = _target.Create(details);
+		var result = _target.Create(details, deferred, declined, withdrawn);
 
 		//Assert
 		var decision = Assert.IsType<CreateSuccessResult<IConversionAdvisoryBoardDecision>>(result);

@@ -20,19 +20,16 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
-			null,
-			null,
-			null,
 			timestamp.AddDays(-1),
 			DecisionMadeBy.DirectorGeneral);
 
 		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
 
-		ConversionAdvisoryBoardDecision expected = new(1, updatedDetails, timestamp, timestamp);
-		ConversionAdvisoryBoardDecision target = new(1, details, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision expected = new(1, updatedDetails, null, null, null, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, timestamp, timestamp);
 
 		//Act
-		var result = target.Update(updatedDetails);
+		var result = target.Update(updatedDetails, null, null, null);
 
 		//Assert
 		Assert.Multiple(
@@ -53,19 +50,16 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			AdvisoryBoardDecision.Approved,
 			null,
 			null,
-			null,
-			null,
-			null,
 			timestamp.AddDays(-1),
 			DecisionMadeBy.DirectorGeneral);
 
 		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
 
-		ConversionAdvisoryBoardDecision expected = new(1, details, timestamp, timestamp);
-		ConversionAdvisoryBoardDecision target = new(1, details, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision expected = new(1, details, null, null, null, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, timestamp, timestamp);
 
 		//Act
-		var result = target.Update(updatedDetails);
+		var result = target.Update(updatedDetails, null, null, null);
 
 		//Assert
 		Assert.Multiple(

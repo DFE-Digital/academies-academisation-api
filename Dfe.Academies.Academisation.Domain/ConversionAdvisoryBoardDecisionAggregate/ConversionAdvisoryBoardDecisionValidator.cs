@@ -3,11 +3,10 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 
-public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<AdvisoryBoardDecisionDetails>
+public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<ConversionAdvisoryBoardDecision>
 {
 	public ConversionAdvisoryBoardDecisionValidator()
 	{
-		ValidateApprovedDecision();
 		ValidateDeclinedDecision();
 		ValidateDeferredDecision();
 		ValidateWithdrawnDecision();
@@ -71,54 +70,54 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 
 	private void ValidateApprovedDecision()
 	{
-		RuleFor(details => details.ApprovedConditionsSet)
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)
 			.NotNull()
-			.When(details => details.Decision is AdvisoryBoardDecision.Approved)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is AdvisoryBoardDecision.Approved)
 			.WithMessage(details =>
 				NotNullMessage(
-					nameof(details.ApprovedConditionsSet)) +
+					nameof(details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)) +
 				WhenIsSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Approved)));
 
-		RuleFor(details => details.ApprovedConditionsSet)
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)
 			.Null()
-			.When(details => details.Decision is not AdvisoryBoardDecision.Approved)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is not AdvisoryBoardDecision.Approved)
 			.WithMessage(details =>
 				NullMessage(
-					nameof(details.ApprovedConditionsSet)) +
+					nameof(details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)) +
 				WhenIsNotSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Approved)));
 
-		RuleFor(details => details.ApprovedConditionsDetails)
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)
 			.NotEmpty()
 			.When(details =>
-				details.Decision is AdvisoryBoardDecision.Approved &&
-				details.ApprovedConditionsSet is true)
+				details.AdvisoryBoardDecisionDetails.Decision is AdvisoryBoardDecision.Approved &&
+				details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet is true)
 			.WithMessage(details =>
 				NotEmptyMessage(
-					nameof(details.ApprovedConditionsDetails)) +
+					nameof(details.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)) +
 				WhenIsSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Approved)) +
 				AndSuffix(
-					nameof(details.ApprovedConditionsSet),
+					nameof(details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet),
 					bool.TrueString));
 
-		RuleFor(details => details.ApprovedConditionsDetails)
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)
 			.Empty()
 			.When(details =>
-				details.Decision is not AdvisoryBoardDecision.Approved ||
-				details.ApprovedConditionsSet is false)
+				details.AdvisoryBoardDecisionDetails.Decision is not AdvisoryBoardDecision.Approved ||
+				details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet is false)
 			.WithMessage(details =>
 				EmptyMessage(
-					nameof(details.ApprovedConditionsDetails)) +
+					nameof(details.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)) +
 				WhenIsNotSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Approved)) +
 				OrSuffix(
-					nameof(details.ApprovedConditionsSet),
+					nameof(details.AdvisoryBoardDecisionDetails.ApprovedConditionsSet),
 					bool.FalseString));
 	}
 
@@ -126,22 +125,22 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 	{
 		RuleFor(details => details.DeclinedReasons)
 			.NotEmpty()
-			.When(details => details.Decision is AdvisoryBoardDecision.Declined)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is AdvisoryBoardDecision.Declined)
 			.WithMessage(details =>
 				NotEmptyMessage(
 					nameof(details.DeclinedReasons)) +
 				WhenIsSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Declined)));
 
 		RuleFor(details => details.DeclinedReasons)
 			.Empty()
-			.When(details => details.Decision is not AdvisoryBoardDecision.Declined)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is not AdvisoryBoardDecision.Declined)
 			.WithMessage(details =>
 				EmptyMessage(
 					nameof(details.DeclinedReasons)) +
 				WhenIsNotSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Declined)));
 
 		RuleForEach(details => details.DeclinedReasons)
@@ -152,7 +151,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 					NotEmptyMessage(
 						nameof(r.Details)) +
 					InNestedPropertySuffix(
-						nameof(AdvisoryBoardDecisionDetails.DeferredReasons),
+						nameof(ConversionAdvisoryBoardDecision.DeclinedReasons),
 						"{CollectionIndex}")));
 	}
 
@@ -161,22 +160,22 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 		RuleFor(details => details.DeferredReasons)
 			.NotNull()
 			.NotEmpty()
-			.When(details => details.Decision is AdvisoryBoardDecision.Deferred)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is AdvisoryBoardDecision.Deferred)
 			.WithMessage(details =>
 				NotEmptyMessage(
 					nameof(details.DeferredReasons)) +
 				WhenIsSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Deferred)));
 
 		RuleFor(details => details.DeferredReasons)
 			.Empty()
-			.When(details => details.Decision is not AdvisoryBoardDecision.Deferred)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is not AdvisoryBoardDecision.Deferred)
 			.WithMessage(details =>
 				NullMessage(
 					nameof(details.DeferredReasons)) +
 				WhenIsNotSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Declined)));
 
 		RuleForEach(details => details.DeferredReasons)
@@ -187,7 +186,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 					NotEmptyMessage(
 						nameof(r.Details)) +
 					InNestedPropertySuffix(
-						nameof(AdvisoryBoardDecisionDetails.DeferredReasons),
+						nameof(ConversionAdvisoryBoardDecision.DeferredReasons),
 						"{CollectionIndex}")));
 	}
 
@@ -196,22 +195,22 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 		RuleFor(details => details.WithdrawnReasons)
 			.NotNull()
 			.NotEmpty()
-			.When(details => details.Decision is AdvisoryBoardDecision.Withdrawn)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is AdvisoryBoardDecision.Withdrawn)
 			.WithMessage(details =>
 				NotEmptyMessage(
 					nameof(details.WithdrawnReasons)) +
 				WhenIsSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Withdrawn)));
 
 		RuleFor(details => details.WithdrawnReasons)
 			.Empty()
-			.When(details => details.Decision is not AdvisoryBoardDecision.Withdrawn)
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is not AdvisoryBoardDecision.Withdrawn)
 			.WithMessage(details =>
 				NullMessage(
 					nameof(details.WithdrawnReasons)) +
 				WhenIsNotSuffix(
-					nameof(details.Decision),
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
 					nameof(AdvisoryBoardDecision.Declined)));
 
 		RuleForEach(details => details.WithdrawnReasons)
@@ -222,23 +221,23 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Adviso
 					NotEmptyMessage(
 						nameof(r.Details)) +
 					InNestedPropertySuffix(
-						nameof(AdvisoryBoardDecisionDetails.WithdrawnReasons),
+						nameof(ConversionAdvisoryBoardDecision.WithdrawnReasons),
 						"{CollectionIndex}")));
 	}
 
 
 	private void ValidateDecisionDate()
 	{
-		RuleFor(details => details.AdvisoryBoardDecisionDate)
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)
 			.Must(date => date != default)
 			.WithMessage(details =>
 				NotSetDateMessage(
-					nameof(details.AdvisoryBoardDecisionDate)));
+					nameof(details.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
 
-		RuleFor(details => details.AdvisoryBoardDecisionDate)
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)
 			.Must(date => date < DateTime.UtcNow)
 			.WithMessage(details =>
 				FutureDateMessage(
-					nameof(details.AdvisoryBoardDecisionDate)));
+					nameof(details.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
 	}
 }

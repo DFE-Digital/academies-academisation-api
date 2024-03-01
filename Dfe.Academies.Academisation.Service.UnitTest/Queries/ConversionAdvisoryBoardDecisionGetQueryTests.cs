@@ -21,7 +21,11 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 		const int expectedId = 1;
 
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-		ConversionAdvisoryBoardDecision data = new(expectedId, details, default, default);
+		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
+		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
+		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
+
+		ConversionAdvisoryBoardDecision data = new(expectedId, details, deferred, declined, withdrawn, default, default);
 
 		_mockDataQuery.Setup(q => q.Execute(expectedId,false))
 			.ReturnsAsync(data);

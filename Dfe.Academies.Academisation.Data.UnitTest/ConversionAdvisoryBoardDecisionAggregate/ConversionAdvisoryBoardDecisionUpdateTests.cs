@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -17,10 +18,11 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 	private readonly Fixture _fixture = new();
 	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
-
+	private readonly AdvisoryBoardDecisionRepository _repo;
 	public ConversionAdvisoryBoardDecisionUpdateTests()
 	{
 		_context = new TestAdvisoryBoardDecisionContext().CreateContext();
+		_repo = new AdvisoryBoardDecisionRepository(_context);
 	}
 
 	[Fact]
@@ -28,7 +30,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 	{
 		const int decisionId = 4;
 
-		AdvisoryBoardDecisionUpdateDataCommand query = new(_context);
+		AdvisoryBoardDecisionUpdateDataCommand query = new(_repo);
 
 		_mockDecision.SetupGet(d => d.Id).Returns(decisionId);
 
@@ -45,7 +47,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		//Arrange
 		const int decisionId = 1;
 
-		AdvisoryBoardDecisionUpdateDataCommand query = new(_context);
+		AdvisoryBoardDecisionUpdateDataCommand query = new(_repo);
 
 		var existingDecision = await _context.ConversionAdvisoryBoardDecisions
 			.AsNoTracking()
@@ -66,7 +68,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(
 				_fixture.Build<AdvisoryBoardDecisionDetails>()
-					.With(d => d.ApprovedConditionsSet, !existingDecision.ApprovedConditionsSet)
+					.With(d => d.ApprovedConditionsSet, !existingDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)
 					.Create());
 
 		await _context.ConversionAdvisoryBoardDecisions.LoadAsync();
@@ -80,7 +82,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		//Assert
 		Assert.Multiple(
-			() => Assert.NotEqual(existingDecision.ApprovedConditionsSet, result!.ApprovedConditionsSet),
+			() => Assert.NotEqual(existingDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet, result!.AdvisoryBoardDecisionDetails.ApprovedConditionsSet),
 			() => Assert.NotEqual(existingDecision.LastModifiedOn, result!.LastModifiedOn),
 			() => Assert.Equal(existingDecision.CreatedOn, result!.CreatedOn)
 		);

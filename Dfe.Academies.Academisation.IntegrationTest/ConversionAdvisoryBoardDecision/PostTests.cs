@@ -55,7 +55,7 @@ public class PostTests
 			Decision = AdvisoryBoardDecision.Declined,
 			ApprovedConditionsSet = null,
 			ApprovedConditionsDetails = null,
-			DeclinedReasons = new() {new(AdvisoryBoardDeclinedReason.Finance, "reason")},
+			DeclinedReasons = new() {new(conversionProjectId, AdvisoryBoardDeclinedReason.Finance, "reason")},
 			DeferredReasons = new(),
 			WithdrawnReasons = new(),
 			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),

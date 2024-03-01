@@ -15,7 +15,7 @@ public class ConversionAdvisoryBoardDecisionSetIdTests
 	{
 		//Arrange
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-		ConversionAdvisoryBoardDecision target = new(1, details, default, default);
+		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, default, default);
 
 		//Act & Assert
 		Assert.Throws<InvalidOperationException>(() => target.SetId(1));
@@ -28,8 +28,11 @@ public class ConversionAdvisoryBoardDecisionSetIdTests
 		const int expectedId = 4;
 
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-		ConversionAdvisoryBoardDecision expected = new(expectedId, details, default, default);
-		ConversionAdvisoryBoardDecision target = new(default, details, default, default);
+		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
+		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
+		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
+		ConversionAdvisoryBoardDecision expected = new(expectedId, details, deferred, declined, withdrawn, default, default);
+		ConversionAdvisoryBoardDecision target = new(default, details, deferred, declined, withdrawn, default, default);
 
 		//Act
 		target.SetId(expectedId);

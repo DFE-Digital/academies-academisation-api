@@ -35,7 +35,7 @@ public class AdvisoryBoardDecisionUpdateCommand : IAdvisoryBoardDecisionUpdateCo
 			return new NotFoundCommandResult();
 		}
 
-		var result = existingDecision.Update(serviceModel.ToDomain());
+		var result = existingDecision.Update(serviceModel.ToDomain(), serviceModel.DeferredReasons, serviceModel.DeclinedReasons, serviceModel.WithdrawnReasons);
 
 		return result switch
 		{

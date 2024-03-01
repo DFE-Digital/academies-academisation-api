@@ -1,3 +1,3 @@
 ﻿namespace Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 
-public record AdvisoryBoardWithdrawnReasonDetails(AdvisoryBoardWithdrawnReason Reason, string Details);
+public record AdvisoryBoardWithdrawnReasonDetails(int Id, int AdvisoryBoardDecisionId, AdvisoryBoardWithdrawnReason Reason, string Details);
