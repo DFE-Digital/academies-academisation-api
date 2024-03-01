@@ -34,7 +34,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		client.DefaultRequestHeaders.Add("x-api-key", _authKey);
 		base.ConfigureClient(client);
 	}
-	
+
 	protected override void ConfigureWebHost(IWebHostBuilder builder)
 	{
 		builder.UseEnvironment("production");
@@ -43,10 +43,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 			var context = services.Single(d => d.ServiceType == typeof(DbContextOptions<AcademisationContext>));
 			services.Remove(context);
 			services.AddDbContext<AcademisationContext>(options => options.UseSqlite(_connection));
-			
-			var optionsConfig = Options.Create<AuthenticationConfig>(new() {ApiKeys = new List<string> {_authKey}});
+
+			var optionsConfig = Options.Create<AuthenticationConfig>(new() { ApiKeys = new List<string> { _authKey } });
 			services.AddScoped<IOptions<AuthenticationConfig>>(_ => optionsConfig);
-		
+
 			var serviceProvider = services.BuildServiceProvider();
 
 			_dbContext = serviceProvider.GetRequiredService<AcademisationContext>();
@@ -68,21 +68,22 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 			ApprovedConditionsDetails = "TestData",
 			DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
 			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),
+			AcademyOrderDate = DateTime.UtcNow.AddMonths(-1),
 			CreatedOn = new(2022, 02, 02),
 			LastModifiedOn = new(2022, 02, 02)
 		});
-		
+
 		_dbContext.SaveChanges();
 	}
 
 	protected override void Dispose(bool disposing)
 	{
 		if (!disposing) return;
-		
+
 		_dbContext.Database.EnsureDeleted();
-		
-		if(_dbContext.Database.IsSqlite()) _connection.Dispose();
-		
+
+		if (_dbContext.Database.IsSqlite()) _connection.Dispose();
+
 		base.Dispose(disposing);
 	}
 }

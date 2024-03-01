@@ -25,6 +25,7 @@ public class AdvisoryBoardDecisionState : BaseEntity
 
 
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
+	public DateTime? AcademyOrderDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
 
 	public static AdvisoryBoardDecisionState MapFromDomain(IConversionAdvisoryBoardDecision decision)
@@ -52,13 +53,14 @@ public class AdvisoryBoardDecisionState : BaseEntity
 				})
 				.ToHashSet(),
 			WithdrawnReasons = decision.AdvisoryBoardDecisionDetails.WithdrawnReasons?
-				.Select(reason => new AdvisoryBoardDecisionWithdrawnReasonState 
+				.Select(reason => new AdvisoryBoardDecisionWithdrawnReasonState
 				{
 					Reason = reason.Reason,
 					Details = reason.Details
 				})
 				.ToHashSet(),
 			AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
+			AcademyOrderDate = decision.AdvisoryBoardDecisionDetails.AcademyOrderDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,
 			CreatedOn = decision.CreatedOn,
 			LastModifiedOn = decision.LastModifiedOn
@@ -83,6 +85,7 @@ public class AdvisoryBoardDecisionState : BaseEntity
 				.Select(reason => new AdvisoryBoardWithdrawnReasonDetails(reason.Reason, reason.Details))
 				.ToList(),
 			AdvisoryBoardDecisionDate,
+			AcademyOrderDate,
 			DecisionMadeBy
 		);
 

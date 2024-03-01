@@ -10,5 +10,6 @@ public record AdvisoryBoardDecisionDetails(
 	List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons,
 	List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons,
 	DateTime AdvisoryBoardDecisionDate,
+	DateTime? AcademyOrderDate,
 	DecisionMadeBy DecisionMadeBy
 );

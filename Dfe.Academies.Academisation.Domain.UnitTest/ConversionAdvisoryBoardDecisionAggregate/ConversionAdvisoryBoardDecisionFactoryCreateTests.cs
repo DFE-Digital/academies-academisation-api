@@ -45,6 +45,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 
 		//Act

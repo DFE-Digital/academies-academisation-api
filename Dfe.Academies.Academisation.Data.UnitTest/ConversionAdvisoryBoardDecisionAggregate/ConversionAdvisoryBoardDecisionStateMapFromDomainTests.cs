@@ -30,6 +30,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
 
@@ -62,6 +63,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 			null,
 			null,
 			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>()
 		);
 
@@ -85,6 +87,7 @@ public class ConversionAdvisoryBoardDecisionStateMapFromDomainTests
 					})),
 			DeferredReasons = null,
 			AdvisoryBoardDecisionDate = expectedDetails.AdvisoryBoardDecisionDate,
+			AcademyOrderDate = expectedDetails.AcademyOrderDate,
 			DecisionMadeBy = expectedDetails.DecisionMadeBy
 		};
 

@@ -94,7 +94,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
 
 		IReadOnlyCollection<IIntendedTransferBenefit> ITransferProject.IntendedTransferBenefits => _intendedTransferBenefits;
-		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies => _transferringAcademies;
+		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies => 
+			_transferringAcademies;
 
 		public DateTime? CreatedOn { get; private set; }
 
