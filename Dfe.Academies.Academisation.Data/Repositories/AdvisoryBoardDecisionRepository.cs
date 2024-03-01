@@ -38,7 +38,16 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<ConversionAdvisoryBoardDecision?> GetTransferProjectDecsion(int projectId)
 		{
-			return await DefaultIncludes().SingleOrDefaultAsync(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == projectId);
+			try
+			{
+return await DefaultIncludes().SingleOrDefaultAsync(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == projectId);
+			}
+			catch (Exception ex)
+			{
+				var e = ex;
+				throw;
+			}
+			
 		}
 
 		private IQueryable<ConversionAdvisoryBoardDecision> DefaultIncludes()

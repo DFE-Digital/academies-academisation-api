@@ -16,8 +16,19 @@ public class AdvisoryBoardDecisionUpdateDataCommand : IAdvisoryBoardDecisionUpda
 
 	public async Task Execute(IConversionAdvisoryBoardDecision decision)
 	{
+		var x = decision as ConversionAdvisoryBoardDecision;
+
 		_advisoryBoardDecisionRepository.Update(decision as ConversionAdvisoryBoardDecision);
 
-		await _advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync();
+		try
+		{
+await _advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync();
+		}
+		catch (Exception ex)
+		{
+			var e = ex;
+			throw;
+		}
+		
 	}
 }

@@ -7,7 +7,7 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 
-public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision, IAggregateRoot
+public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardDecision, IAggregateRoot
 {
 	protected ConversionAdvisoryBoardDecision(){}
 	private ConversionAdvisoryBoardDecision(AdvisoryBoardDecisionDetails details,
@@ -39,21 +39,18 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision,
 	private static readonly ConversionAdvisoryBoardDecisionValidator Validator = new();
 
 	public AdvisoryBoardDecisionDetails AdvisoryBoardDecisionDetails { get; private set; }
-	public int Id { get; private set; }
-	public DateTime CreatedOn { get; }
-	public DateTime LastModifiedOn { get; }
 
 	public IEnumerable<AdvisoryBoardDeclinedReasonDetails> DeclinedReasons => _declinedReasons.AsReadOnly();
 	IReadOnlyCollection<AdvisoryBoardDeclinedReasonDetails> IConversionAdvisoryBoardDecision.DeclinedReasons => _declinedReasons.AsReadOnly();
-	private readonly List<AdvisoryBoardDeclinedReasonDetails> _declinedReasons;
+	private readonly List<AdvisoryBoardDeclinedReasonDetails> _declinedReasons = new();
 
 	public IEnumerable<AdvisoryBoardDeferredReasonDetails> DeferredReasons => _deferredReasons.AsReadOnly();
 	IReadOnlyCollection<AdvisoryBoardDeferredReasonDetails> IConversionAdvisoryBoardDecision.DeferredReasons => _deferredReasons.AsReadOnly();
-	private readonly List<AdvisoryBoardDeferredReasonDetails> _deferredReasons;
+	private readonly List<AdvisoryBoardDeferredReasonDetails> _deferredReasons = new();
 
 	public IEnumerable<AdvisoryBoardWithdrawnReasonDetails> WithdrawnReasons => _withdrawnReasons.AsReadOnly();
 	IReadOnlyCollection<AdvisoryBoardWithdrawnReasonDetails> IConversionAdvisoryBoardDecision.WithdrawnReasons => _withdrawnReasons.AsReadOnly();
-	private readonly List<AdvisoryBoardWithdrawnReasonDetails> _withdrawnReasons;
+	private readonly List<AdvisoryBoardWithdrawnReasonDetails> _withdrawnReasons = new();
 
 	internal static CreateResult Create(AdvisoryBoardDecisionDetails details,
 				IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
@@ -81,7 +78,7 @@ public class ConversionAdvisoryBoardDecision : IConversionAdvisoryBoardDecision,
 		_declinedReasons.AddRange(declinedReasons.ToList());
 		_deferredReasons.Clear();
 		_deferredReasons.AddRange(deferredReasons.ToList());
-		_declinedReasons.Clear();
+		_withdrawnReasons.Clear();
 		_withdrawnReasons.AddRange(withdrawnReasons.ToList());
 
 		var validationResult = Validator.Validate(this);

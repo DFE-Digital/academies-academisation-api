@@ -4,6 +4,7 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -50,33 +51,20 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		AdvisoryBoardDecisionUpdateDataCommand query = new(_repo);
 
 		var existingDecision = await _context.ConversionAdvisoryBoardDecisions
-			.AsNoTracking()
 			.SingleAsync(d => d.Id == decisionId);
 
-		_mockDecision
-			.SetupGet(d => d.Id)
-			.Returns(decisionId);
-
-		_mockDecision
-			.SetupGet(d => d.CreatedOn)
-			.Returns(existingDecision.CreatedOn);
-
-		_mockDecision
-			.SetupGet(d => d.LastModifiedOn)
-			.Returns(existingDecision.LastModifiedOn);
-
-		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-			.Returns(
-				_fixture.Build<AdvisoryBoardDecisionDetails>()
+		var details = _fixture.Build<AdvisoryBoardDecisionDetails>()
+			.With(d => d.Decision, AdvisoryBoardDecision.Approved)
+			.With(d => d.AdvisoryBoardDecisionDate, DateTime.Now.AddDays(-1))
 					.With(d => d.ApprovedConditionsSet, !existingDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)
-					.Create());
+					.Create();
 
 		await _context.ConversionAdvisoryBoardDecisions.LoadAsync();
 
-		//Act
-		await query.Execute(_mockDecision.Object);
+		existingDecision.Update(details, existingDecision.DeferredReasons, existingDecision.DeclinedReasons, existingDecision.WithdrawnReasons);
 
-		_context.ChangeTracker.Clear();
+		//Act
+		await query.Execute(existingDecision);
 
 		var result = await _context.ConversionAdvisoryBoardDecisions.FindAsync(decisionId);
 

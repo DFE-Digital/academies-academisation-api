@@ -91,6 +91,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		var timestamp = DateTime.UtcNow;
 
 		var entities = ChangeTracker.Entries<BaseEntity>().ToList();
+		var entities2 = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
+		var entities3 = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
+		var entities4 = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
 
 		foreach (var entity in entities.Where(e => e.State == EntityState.Added))
 		{
@@ -99,6 +102,40 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		}
 
 		foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+
+		foreach (var entity in entities2.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in entities2.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in entities3.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in entities3.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in entities4.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in entities4.Where(e => e.State == EntityState.Modified))
 		{
 			entity.Entity.LastModifiedOn = timestamp;
 		}
@@ -348,12 +385,13 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.OwnsOne(e => e.AdvisoryBoardDecisionDetails, abd =>
 			{
 				abd.Property(d => d.ConversionProjectId).HasColumnName("ConversionProjectId");
-				abd.Property(d => d.ConversionProjectId).HasColumnName("TransferProjectId");
-				abd.Property(d => d.Decision).HasColumnName("Decision").HasConversion<string>(); ;
+				abd.Property(d => d.TransferProjectId).HasColumnName("TransferProjectId");
+				abd.Property(d => d.Decision).HasColumnName("Decision").HasConversion<string>();
 				abd.Property(d => d.ApprovedConditionsSet).HasColumnName("ApprovedConditionsSet");
 				abd.Property(d => d.ApprovedConditionsDetails).HasColumnName("ApprovedConditionsDetails");
 				abd.Property(d => d.AdvisoryBoardDecisionDate).HasColumnName("AdvisoryBoardDecisionDate");
 				abd.Property(d => d.DecisionMadeBy).HasColumnName("DecisionMadeBy").HasConversion<string>();
+				abd.Property(d => d.AcademyOrderDate).HasColumnName("AcademyOrderDate").HasConversion<string>();
 			});
 
 		ConversionAdvisoryBoardDecisionConfiguration
