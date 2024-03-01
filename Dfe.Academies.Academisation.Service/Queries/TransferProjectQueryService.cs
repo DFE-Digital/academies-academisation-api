@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Extensions;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -125,9 +126,19 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			if (atp == null) throw new ArgumentNullException(nameof(atp));
 
-			var tasks = atp.Select(MapProject).ToList();
+			var projects = new List<ExportedTransferProjectModel>();
 
-			return await Task.WhenAll(tasks);
+			foreach (var transferProject in atp)
+			{
+				if (transferProject == null)
+				{
+					continue;
+				}
+				var project = await MapProject(transferProject).ConfigureAwait(false);
+				projects.Add(project);
+			}
+
+			return projects.AsEnumerable();
 		}
 
 		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project)
