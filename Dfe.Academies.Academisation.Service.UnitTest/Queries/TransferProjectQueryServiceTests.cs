@@ -35,13 +35,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var dummyUrn = 1;
 
-			// Create a TransferProject
-			ITransferProject dummyTransferProject = TransferProject.Create(
-				"dummyOutgoingTrustUkprn",
-				"dummyIncomingTrustUkprn",
-				new List<string> { "dummyUkprn1", "dummyUkprn2" },
-				DateTime.Now
-			);
+		// Create a TransferProject
+		ITransferProject dummyTransferProject = TransferProject.Create(
+			"dummyOutgoingTrustUkprn",
+			"out trust",
+			"dummyIncomingTrustUkprn",
+			"in trust",
+			new List<string> { "dummyUkprn1", "dummyUkprn2" },
+			DateTime.Now
+		);
 
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult((ITransferProject?)dummyTransferProject));
@@ -66,13 +68,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var dummyId = 1;
 
-			// Create a TransferProject
-			var dummyTransferProject = TransferProject.Create(
-				"dummyOutgoingTrustUkprn",
-				"dummyIncomingTrustUkprn",
-				new List<string> { "dummyUkprn1", "dummyUkprn2" },
-				DateTime.Now
-			);
+		// Create a TransferProject
+		var dummyTransferProject = TransferProject.Create(
+			"dummyOutgoingTrustUkprn",
+			"out trust",
+			"dummyIncomingTrustUkprn",
+			"in trust",
+			new List<string> { "dummyUkprn1", "dummyUkprn2" },
+			DateTime.Now
+		);
 
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));

@@ -14,6 +14,7 @@ internal static class AdvisoryBoardDecisionCreateRequestModelMapper
 			model.ApprovedConditionsSet,
 			model.ApprovedConditionsDetails,
 			model.AdvisoryBoardDecisionDate,
+			model.AcademyOrderDate,
 			model.DecisionMadeBy
 		);
 	}

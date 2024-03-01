@@ -45,6 +45,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 			true,
 			_faker.Lorem.Sentence(),
 			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 
 		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();

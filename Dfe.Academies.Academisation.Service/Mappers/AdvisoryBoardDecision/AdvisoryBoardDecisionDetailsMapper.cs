@@ -14,6 +14,7 @@ public static class AdvisoryBoardDecisionDetailsMapper
 			serviceModel.ApprovedConditionsSet,
 			serviceModel.ApprovedConditionsDetails,
 			serviceModel.AdvisoryBoardDecisionDate,
+			serviceModel.AcademyOrderDate,
 			serviceModel.DecisionMadeBy
 		);
 	}

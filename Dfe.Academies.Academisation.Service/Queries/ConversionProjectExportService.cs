@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academisation.ExtensionMethods;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -67,6 +68,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			worksheet.Cell(1, 13).Style.Font.Bold = true;
 
 
+			worksheet.Cell(1, 14).Value = "Date AO issued";
+			worksheet.Cell(1, 14).Style.Font.Bold = true;
+			worksheet.Cell(1, 15).Value = "Date dAO issued";
+			worksheet.Cell(1, 15).Style.Font.Bold = true;
 			int row = 2;
 			foreach (var project in projects)
 			{
@@ -78,12 +83,20 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 6).Value = project.LocalAuthority;
 				worksheet.Cell(row, 7).Value = project.Region;
 				worksheet.Cell(row, 8).Value = project.HeadTeacherBoardDate;
-				var advisoryBoardDecisionDate = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(project.Id);
-				worksheet.Cell(row, 9).Value = advisoryBoardDecisionDate?.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate;
+				var advisoryBoardDecision = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(project.Id);
+				worksheet.Cell(row, 9).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate;
 				worksheet.Cell(row, 10).Value = project.ProjectStatus;
 				worksheet.Cell(row, 11).Value = project.AssignedUser?.FullName;
 				worksheet.Cell(row, 12).Value = project.AcademyTypeAndRoute;
 				worksheet.Cell(row, 13).Value = project.PartOfPfiScheme;
+				if (project.AcademyTypeAndRoute?.ToLower().Equals("sponsored") ?? false)
+				{
+					worksheet.Cell(row, 15).Value = project.DaoPackSentDate.ToDateString();
+				}
+				else
+				{
+					worksheet.Cell(row, 14).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDetails.AcademyOrderDate.ToDateString();
+				}
 				row++;
 			}
 			worksheet.Columns().AdjustToContents();

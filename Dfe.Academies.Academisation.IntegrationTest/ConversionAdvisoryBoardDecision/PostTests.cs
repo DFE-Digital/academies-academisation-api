@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using Dfe.Academies.Academisation.Domain.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IntegrationTest.Extensions;
 using Dfe.Academies.Academisation.IService.RequestModels;
@@ -25,12 +24,12 @@ public class PostTests
 		//Arrange
 		const int conversionProjectId = 9000;
 		var client = _factory.CreateClient();
-		var request = new AdvisoryBoardDecisionCreateRequestModel {ConversionProjectId = conversionProjectId};
-		
+		var request = new AdvisoryBoardDecisionCreateRequestModel { ConversionProjectId = conversionProjectId };
+
 		//Act
 		var result = await client.PostAsJsonDeserialized<ConversionAdvisoryBoardDecisionServiceModel>(
 			"/conversion-project/advisory-board-decision", request);
-		
+
 		var outcome = await client.GetDeserialized<ConversionAdvisoryBoardDecisionServiceModel>(
 			$"/conversion-project/advisory-board-decision/{conversionProjectId}");
 
@@ -59,6 +58,7 @@ public class PostTests
 			DeferredReasons = new(),
 			WithdrawnReasons = new(),
 			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),
+			AcademyOrderDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion
 		};
 
@@ -74,12 +74,12 @@ public class PostTests
 		{
 			Assert.Equal(HttpStatusCode.Created, result.StatusCode);
 			Assert.NotNull(result.Result);
-			
+
 			Assert.Equal(HttpStatusCode.OK, outcome.StatusCode);
 			Assert.Equivalent(result.Result, outcome.Result);
 		});
 	}
-		
+
 	[Fact]
 	public async void Post_WithoutApiKey_ReturnsUnauthorised()
 	{

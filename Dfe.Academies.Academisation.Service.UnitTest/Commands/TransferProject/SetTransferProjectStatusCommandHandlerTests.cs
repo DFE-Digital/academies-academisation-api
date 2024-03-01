@@ -59,8 +59,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 				Urn = 1,
 				Status = "Withdrawn"
 			};
-			// Create a transfer project to 'SetLegalRequirements' to
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "23456789", new List<string> { "34567890" }, DateTime.Now);
+			// Create a transfer project to 'SetStatus' to
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, DateTime.Now);
 			// Mock Unit of work and Repository 
 			var unitOfWorkMock = new Mock<IUnitOfWork>();
 			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))

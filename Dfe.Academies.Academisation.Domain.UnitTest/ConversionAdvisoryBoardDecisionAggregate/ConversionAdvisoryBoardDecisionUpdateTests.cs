@@ -21,6 +21,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			false,
 			null,
 			timestamp.AddDays(-1),
+			timestamp.AddDays(-1),
 			DecisionMadeBy.DirectorGeneral);
 
 		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
@@ -50,6 +51,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			AdvisoryBoardDecision.Approved,
 			null,
 			null,
+			timestamp.AddDays(-1),
 			timestamp.AddDays(-1),
 			DecisionMadeBy.DirectorGeneral);
 

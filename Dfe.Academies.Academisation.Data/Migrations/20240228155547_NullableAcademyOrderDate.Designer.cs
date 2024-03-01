@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240228155547_NullableAcademyOrderDate")]
+    partial class NullableAcademyOrderDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -730,9 +733,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("IncomingTrustAgreement")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsFormAMat")
-                        .HasColumnType("bit");
-
                     b.Property<bool?>("LegalRequirementsSectionIsCompleted")
                         .HasColumnType("bit");
 
@@ -777,10 +777,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("Recommendation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SpecificReasonsForTransfer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
@@ -822,6 +818,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IncomingTrustUkprn")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KeyStage2PerformanceAdditionalInformation")

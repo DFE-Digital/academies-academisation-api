@@ -39,7 +39,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 
 	}
 
-	
+
 	[Fact]
 	private void DecisionIsDeclined_AndDetailsAreValid___ReturnsValidResult()
 	{

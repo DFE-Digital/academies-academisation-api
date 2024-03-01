@@ -32,7 +32,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		private static Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
 		{
-			string[] headers = new []{
+			string[] headers = new[]{
 				"School", "URN", "School Type", "Incoming Trust", "Outgoing Trust", "Incoming Trust UKPRN", "Local Authority", "Region",
 				"Advisory Board Date", "Decision Date", "Status", "Assigned To", "Reason for transfer", "Type of transfer",
 				"Proposed academy transfer date"

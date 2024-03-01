@@ -7,5 +7,6 @@ public record AdvisoryBoardDecisionDetails(
 	bool? ApprovedConditionsSet,
 	string? ApprovedConditionsDetails,
 	DateTime AdvisoryBoardDecisionDate,
+	DateTime? AcademyOrderDate,
 	DecisionMadeBy DecisionMadeBy
 );

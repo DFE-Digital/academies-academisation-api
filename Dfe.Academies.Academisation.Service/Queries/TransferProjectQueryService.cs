@@ -1,11 +1,8 @@
-﻿
-using AutoMapper;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
-using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 
@@ -55,8 +52,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			projects = projects
 			.Where(p =>
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustUkprn) || string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
-
+				// just filtered out by incoming trust name now to allow for form a mat
+				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+			
 			var recordTotal = projects.Count();
 
 			projects = projects.OrderByDescending(atp => atp.ProjectUrn)
@@ -85,9 +83,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			// remove any projects without an incoming or outgoing trust.
 			transferProjects = transferProjects
-			.Where(project =>
-				!string.IsNullOrEmpty(project?.OutgoingTrustUkprn) && !string.IsNullOrEmpty(project.OutgoingTrustName) &&
-				!project.TransferringAcademies.Any(transferringAcademy => string.IsNullOrEmpty(transferringAcademy.IncomingTrustUkprn) || string.IsNullOrEmpty(transferringAcademy.IncomingTrustName))).ToList();
+			.Where(p =>
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
+				// just filtered out by incoming trust name now to allow for form a mat
+				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
 
 			var projects = await MapExportedTransferProjectModel(transferProjects, advisoryBoardDecisions);
 
@@ -187,7 +186,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				SchoolType = schoolTypes,
 				Status = project.Status,
 				TransferReason = reason,
-				TransferType = project.TypeOfTransfer,
+				TransferType = project.WhoInitiatedTheTransfer,
 				Urn = project.Urn.ToString(),
 			};
 		}
@@ -225,7 +224,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							KeyStage4PerformanceAdditionalInformation = ta.KeyStage4PerformanceAdditionalInformation,
 							KeyStage5PerformanceAdditionalInformation = ta.KeyStage5PerformanceAdditionalInformation
 						};
-					}).ToList()
+					}).ToList(),
+					IsFormAMat = x.IsFormAMat
 				};
 			});
 		}
