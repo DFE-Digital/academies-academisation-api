@@ -1,35 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.18.0" />
-    <PackageReference Include="Bogus" Version="34.0.2" />
-    <PackageReference Include="Dfe.Academies.Contracts" Version="1.0.10" />
-    <PackageReference Include="FluentAssertions" Version="6.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
-    <PackageReference Include="Moq" Version="4.18.4" />
-    <PackageReference Include="xunit" Version="2.4.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+	<ItemGroup>
+		<PackageReference Include="AutoFixture" Version="4.18.0" />
+		<PackageReference Include="Bogus" Version="34.0.2" />
+		<PackageReference Include="Dfe.Academies.Contracts" Version="1.0.10" />
+		<PackageReference Include="FluentAssertions" Version="6.11.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+		<PackageReference Include="Moq" Version="4.18.4" />
+		<PackageReference Include="xunit" Version="2.4.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="coverlet.collector" Version="6.0.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-  </ItemGroup>
+	</ItemGroup>
 
-  <ItemGroup>
-	 <ProjectReference Include="..\Dfe.Academies.Academisation.Core\Dfe.Academies.Academisation.Core.csproj" />
-	 <ProjectReference Include="..\Dfe.Academies.Academisation.Data.UnitTest\Dfe.Academies.Academisation.Data.UnitTest.csproj" />
-	 <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
-	 <ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
-    <ProjectReference Include="..\Dfe.Academies.Academisation.Service\Dfe.Academies.Academisation.Service.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Dfe.Academies.Academisation.Core\Dfe.Academies.Academisation.Core.csproj" />
+		<ProjectReference Include="..\Dfe.Academies.Academisation.Data.UnitTest\Dfe.Academies.Academisation.Data.UnitTest.csproj" />
+		<ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
+		<ProjectReference Include="..\Dfe.Academies.Academisation.IDomain\Dfe.Academies.Academisation.IDomain.csproj" />
+		<ProjectReference Include="..\Dfe.Academies.Academisation.Service\Dfe.Academies.Academisation.Service.csproj" />
+	</ItemGroup>
 
 </Project>
