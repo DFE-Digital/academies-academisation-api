@@ -61,6 +61,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			DeferredReasons = details.DeferredReasons,
 			WithdrawnReasons = details.WithdrawnReasons,
 			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
+			AcademyOrderDate = details.AcademyOrderDate,
 			DecisionMadeBy = details.DecisionMadeBy
 		};
 

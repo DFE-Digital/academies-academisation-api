@@ -14,5 +14,6 @@ public class ConversionAdvisoryBoardDecisionServiceModel
 	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
 	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
+	public DateTime? AcademyOrderDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
 }
