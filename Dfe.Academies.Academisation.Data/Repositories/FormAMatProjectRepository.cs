@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
@@ -23,6 +24,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<List<IFormAMatProject>> GetByIds(IEnumerable<int?> formAMatProjectIds, CancellationToken cancellationToken)
 		{
 			return await this.dbSet.Where(x => formAMatProjectIds.Contains(x.Id)).Cast<IFormAMatProject>().ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
+		public async Task<List<IFormAMatProject>> GetProjectsWithoutReference(CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => x.ReferenceNumber.IsNullOrEmpty()).Cast<IFormAMatProject>().ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 	}
 }
