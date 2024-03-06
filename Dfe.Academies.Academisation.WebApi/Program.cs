@@ -175,6 +175,7 @@ builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typ
 builder.Services.AddHostedService<EnrichProjectService>();
 builder.Services.AddHostedService<EnrichTransferProjectService>();
 builder.Services.AddHostedService<CreateFormAMatProjectsService>();
+builder.Services.AddHostedService<SetFormAMatProjectReferenceNumbersService>();
 
 builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 {
