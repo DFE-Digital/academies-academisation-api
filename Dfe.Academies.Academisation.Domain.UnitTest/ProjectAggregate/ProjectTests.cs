@@ -46,5 +46,23 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 			project.Details.ExternalApplicationFormUrl.Should().Be(ExternalApplicationFormUrl);
 			this.mockRepository.VerifyAll();
         }
-    }
+
+
+		[Fact]
+		public void SetIncomingTrust_StateUnderTest_ExpectedBehavior()
+		{
+			// Arrange
+			var project = this.CreateProject();
+			string trustReferrenceNumber = "Ref";
+			string trustName = "Name";
+
+			// Act
+			project.SetIncomingTrust(trustReferrenceNumber, trustName);
+
+			// Assert
+			project.Details.TrustReferenceNumber.Should().Be(trustReferrenceNumber);
+			project.Details.NameOfTrust.Should().Be(trustName);
+			this.mockRepository.VerifyAll();
+		}
+	}
 }
