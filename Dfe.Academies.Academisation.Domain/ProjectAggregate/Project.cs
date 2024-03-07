@@ -524,4 +524,9 @@ public class Project : Entity, IProject, IAggregateRoot
 			FormAMatProjectId = id;
 		}
 	}
+
+	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
+	{
+		Details.SetIncomingTrust(trustReferrenceNumber, trustName);
+	}
 }
