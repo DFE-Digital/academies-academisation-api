@@ -39,4 +39,5 @@ public interface IProject
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
 	void SetFormAMatProjectId(int id);
+	void SetRoute(string route);
 }

@@ -524,4 +524,8 @@ public class Project : Entity, IProject, IAggregateRoot
 			FormAMatProjectId = id;
 		}
 	}
+	public void SetRoute(string route)
+	{
+		Details.AcademyTypeAndRoute = route;
+	}
 }

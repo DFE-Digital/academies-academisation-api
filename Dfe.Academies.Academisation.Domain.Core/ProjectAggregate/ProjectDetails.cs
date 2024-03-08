@@ -39,7 +39,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? NameOfTrust { get; init; }
 	public string? SponsorReferenceNumber { get; init; }
 	public string? SponsorName { get; init; }
-	public string? AcademyTypeAndRoute { get; init; }
+	public string? AcademyTypeAndRoute { get; set; }
 	public DateTime? ProposedAcademyOpeningDate { get; init; }
 	public bool? SchoolAndTrustInformationSectionComplete { get; init; }
 	public decimal? ConversionSupportGrantAmount { get; init; }
