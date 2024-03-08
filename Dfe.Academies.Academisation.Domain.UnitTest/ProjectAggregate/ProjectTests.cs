@@ -89,4 +89,24 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 			project.FormAMatProjectId.Should().BeNull(); // Since the route is not "Form a Mat", the ID should not be set
 		}
 	}
+        }
+
+
+		[Fact]
+		public void SetIncomingTrust_StateUnderTest_ExpectedBehavior()
+		{
+			// Arrange
+			var project = this.CreateProject();
+			string trustReferrenceNumber = "Ref";
+			string trustName = "Name";
+
+			// Act
+			project.SetIncomingTrust(trustReferrenceNumber, trustName);
+
+			// Assert
+			project.Details.TrustReferenceNumber.Should().Be(trustReferrenceNumber);
+			project.Details.NameOfTrust.Should().Be(trustName);
+			this.mockRepository.VerifyAll();
+		}
+	}
 }

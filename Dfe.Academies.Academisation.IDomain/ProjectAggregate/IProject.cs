@@ -19,6 +19,7 @@ public interface IProject
 	public CommandResult Update(ProjectDetails detailsToUpdate);
 
 	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl);
+	public void SetIncomingTrust(string trustReferrenceNumber, string trustName);
 	public void SetSchoolOverview(
 		string publishedAdmissionNumber,
 		string viabilityIssues,
