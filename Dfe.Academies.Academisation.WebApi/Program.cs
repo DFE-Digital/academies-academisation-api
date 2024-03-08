@@ -105,6 +105,7 @@ builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
 builder.Services.AddScoped<ICreateNewProjectCommand, CreateNewProjectCommand>();
 builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
+builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();

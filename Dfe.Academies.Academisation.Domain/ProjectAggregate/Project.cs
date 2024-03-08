@@ -529,4 +529,8 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		Details.SetIncomingTrust(trustReferrenceNumber, trustName);
 	}
+	public void SetRoute(string route)
+	{
+		Details.SetRoute(route);
+	}
 }

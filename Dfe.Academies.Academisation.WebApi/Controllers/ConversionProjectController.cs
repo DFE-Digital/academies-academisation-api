@@ -235,6 +235,25 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return Ok(project);
 		}
+		/// <summary>
+		/// Creates a new FormAMat project along with a child conversion project.
+		/// </summary>
+		/// <param name="command">The command containing the data needed to create the project</param>
+		/// <returns>An ActionResult indicating the outcome of the operation</returns>
+		[HttpPost("FormAMatProject", Name = "CreateFormAMatAndChildConversion")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> CreateFormAMatAndChildConversion(CreateFormAMatAndChildConversionCommand command)
+		{
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException("The command result is not recognized.")
+			};
+		}
 
 	}
 }
