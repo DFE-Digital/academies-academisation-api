@@ -41,7 +41,8 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	private string? _nameOfTrust;
 	public string? SponsorReferenceNumber { get; init; }
 	public string? SponsorName { get; init; }
-	public string? AcademyTypeAndRoute { get; set; }
+	public string? AcademyTypeAndRoute { get => _academyTypeAndRoute; init => _academyTypeAndRoute = value; }
+	public string? _academyTypeAndRoute;
 	public DateTime? ProposedAcademyOpeningDate { get; init; }
 	public bool? SchoolAndTrustInformationSectionComplete { get; init; }
 	public decimal? ConversionSupportGrantAmount { get; init; }
@@ -364,8 +365,13 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		this.KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
 	}
 
-	public void SetIncomingTrust(string trustReferrenceNumber, string trustName) {
+	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
+	{
 		_trustReferenceNumber = trustReferrenceNumber;
 		_nameOfTrust = trustName;
+	}
+	public void SetRoute(string academyTypeAndRoute)
+	{
+		_academyTypeAndRoute = academyTypeAndRoute;
 	}
 }

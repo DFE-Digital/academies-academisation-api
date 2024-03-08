@@ -531,6 +531,6 @@ public class Project : Entity, IProject, IAggregateRoot
 	}
 	public void SetRoute(string route)
 	{
-		Details.AcademyTypeAndRoute = route;
+		Details.SetRoute(route);
 	}
 }
