@@ -24,5 +24,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			return await this.dbSet.Where(x => formAMatProjectIds.Contains(x.Id)).Cast<IFormAMatProject>().ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
+		public async Task<List<IFormAMatProject>> GetProjectsWithoutReference(CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => x.ReferenceNumber == null || x.ReferenceNumber == "").Cast<IFormAMatProject>().ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
 	}
 }

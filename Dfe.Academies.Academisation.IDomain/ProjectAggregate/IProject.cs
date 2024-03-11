@@ -19,6 +19,7 @@ public interface IProject
 	public CommandResult Update(ProjectDetails detailsToUpdate);
 
 	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl);
+	public void SetIncomingTrust(string trustReferrenceNumber, string trustName);
 	public void SetSchoolOverview(
 		string publishedAdmissionNumber,
 		string viabilityIssues,
@@ -39,4 +40,5 @@ public interface IProject
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
 	void SetFormAMatProjectId(int id);
+	void SetRoute(string route);
 }

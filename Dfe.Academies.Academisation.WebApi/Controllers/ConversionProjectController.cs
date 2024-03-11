@@ -121,6 +121,26 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{id:int}/SetIncomingTrust", Name = "SetIncomingTrust")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetIncomingTrust(int id, SetIncomingTrustCommand request)
+		{
+			request.Id = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		/// <summary>
 		///     Retrieve all projects matching specified filter conditions
 		/// </summary>
@@ -214,6 +234,25 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			}
 
 			return Ok(project);
+		}
+		/// <summary>
+		/// Creates a new FormAMat project along with a child conversion project.
+		/// </summary>
+		/// <param name="command">The command containing the data needed to create the project</param>
+		/// <returns>An ActionResult indicating the outcome of the operation</returns>
+		[HttpPost("FormAMatProject", Name = "CreateFormAMatAndChildConversion")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> CreateFormAMatAndChildConversion(CreateFormAMatAndChildConversionCommand command)
+		{
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException("The command result is not recognized.")
+			};
 		}
 
 	}

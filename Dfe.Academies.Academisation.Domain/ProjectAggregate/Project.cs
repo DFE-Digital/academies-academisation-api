@@ -127,13 +127,14 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		ArgumentNullException.ThrowIfNull(project);
 
-		if (project.Trust == null)
+		if (project.Trust == null && project.HasPreferredTrust.ToLower().Equals("yes"))
 		{
 			return new CreateValidationErrorResult(new List<ValidationError>
 			{
 				new("Trust", "Trust in the model must not be null")
 			});
 		}
+
 		if (project.School == null)
 		{
 			return new CreateValidationErrorResult(new List<ValidationError>
@@ -161,7 +162,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public static string DetermineRoute(NewProject project)
 	{
-		return project.HasSchoolApplied?.ToLower() switch
+		return project.HasSchoolApplied.ToLower() switch
 		{
 			"yes" => "Converter",
 			"no" => "Sponsored",
@@ -522,5 +523,14 @@ public class Project : Entity, IProject, IAggregateRoot
 		{
 			FormAMatProjectId = id;
 		}
+	}
+
+	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
+	{
+		Details.SetIncomingTrust(trustReferrenceNumber, trustName);
+	}
+	public void SetRoute(string route)
+	{
+		Details.SetRoute(route);
 	}
 }
