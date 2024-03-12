@@ -50,8 +50,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 			if (newConversion is CreateSuccessResult<IProject> successResult)
 			{
 				var project = successResult.Payload;
-				project.Details.SetRoute("Form a Mat");
-				project.SetFormAMatProjectId(newFormAMat.Id);
+
+				project.SetFormAMatProjectId(newFormAMat.Id, true);
 				_conversionProjectRepository.Insert((Project)project);
 				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			}
