@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +24,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			try
 			{
-return await DefaultIncludes().ToListAsync();
+				return await DefaultIncludes().ToListAsync();
 			}
 			catch (Exception ex)
 			{
@@ -38,7 +32,7 @@ return await DefaultIncludes().ToListAsync();
 				throw;
 			}
 
-			
+
 		}
 
 		private IQueryable<TransferProject> DefaultIncludes()
@@ -51,9 +45,5 @@ return await DefaultIncludes().ToListAsync();
 			return x;
 		}
 
-		public async Task<IEnumerable<ITransferProject?>> GetAllTransferProjectsWhereTrustNameIsNull()
-		{
-			return await DefaultIncludes().Where(x => x.OutgoingTrustName == null || x.TransferringAcademies.Any(ta => ta.IncomingTrustName == null)).ToListAsync();
-		}
 	}
 }
