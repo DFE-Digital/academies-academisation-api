@@ -174,7 +174,6 @@ builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(Create
 builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typeof(CreateTransferProjectCommandValidator));
 
 builder.Services.AddHostedService<EnrichProjectService>();
-builder.Services.AddHostedService<EnrichTransferProjectService>();
 builder.Services.AddHostedService<CreateFormAMatProjectsService>();
 builder.Services.AddHostedService<SetFormAMatProjectReferenceNumbersService>();
 
