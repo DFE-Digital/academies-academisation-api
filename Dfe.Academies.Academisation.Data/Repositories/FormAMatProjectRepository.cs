@@ -28,5 +28,22 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			return await this.dbSet.Where(x => x.ReferenceNumber == null || x.ReferenceNumber == "").Cast<IFormAMatProject>().ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
+
+		/// <summary>
+		/// Searches projects by a single search term across application reference, proposed trust name, and reference number.
+		/// </summary>
+		/// <param name="searchTerm">The search term to apply across multiple fields.</param>
+		/// <param name="cancellationToken">Cancellation token.</param>
+		/// <returns>A list of projects where the search term matches any of the specified fields.</returns>
+		public async Task<IEnumerable<FormAMatProject>> SearchProjectsByTermAsync(string searchTerm, CancellationToken cancellationToken)
+		{
+			return await this.dbSet
+				.Where(x => EF.Functions.Like(x.ApplicationReference, $"%{searchTerm}%")
+							|| EF.Functions.Like(x.ProposedTrustName, $"%{searchTerm}%")
+							|| EF.Functions.Like(x.ReferenceNumber, $"%{searchTerm}%"))
+				.ToListAsync(cancellationToken);
+		}
+
 	}
 }
+

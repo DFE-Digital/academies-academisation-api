@@ -17,6 +17,7 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<ConversionProjectServiceModel?> GetConversionProject(int id);
 		Task<FormAMatProjectServiceModel> GetFormAMatProjectById(int id, CancellationToken cancellationToken);
 		Task<ProjectFilterParameters> GetFilterParameters();
+		Task<IEnumerable<FormAMatProjectServiceModel>> SearchFormAMatProjectsByTermAsync(string searchTerm, CancellationToken cancellationToken);
 
 	}
 }

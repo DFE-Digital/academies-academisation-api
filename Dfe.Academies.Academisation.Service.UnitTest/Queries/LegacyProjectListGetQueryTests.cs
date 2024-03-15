@@ -1,17 +1,12 @@
-﻿using System.Globalization;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.AutoMoq;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
-using Fare;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -86,7 +81,7 @@ public class LegacyProjectListGetQueryTests
 		foreach (var projectMock in expectedProjects)
 		{
 			Mock.Get(projectMock).Setup(x => x.FormAMatProjectId).Returns(formAMatProjectId);
-		}		
+		}
 
 		var expectedFormAMatProject = _fixture.Create<IFormAMatProject>();
 		Mock.Get(expectedFormAMatProject).Setup(x => x.Id).Returns(formAMatProjectId);
@@ -308,4 +303,31 @@ public class LegacyProjectListGetQueryTests
 			() => Assert.Equal(expectedProjects.Count, result!.Paging.RecordCount)
 		);
 	}
+	[Fact]
+	public async Task SearchFormAMatProjectsByTermAsync_PerformSearch_ReturnsMatchingProjects()
+	{
+		// Arrange
+		string searchTerm = "test";
+		var expectedFormAMatProjects = _fixture.CreateMany<FormAMatProject>(3).ToList();
+
+		_formAMatQuery.Setup(x => x.SearchProjectsByTermAsync(searchTerm, It.IsAny<CancellationToken>()))
+			.ReturnsAsync(expectedFormAMatProjects);
+
+		// Act
+		var result = await _subject.SearchFormAMatProjectsByTermAsync(searchTerm, default);
+
+		// Assert
+		result.Should().NotBeNull();
+		result.Should().HaveCount(expectedFormAMatProjects.Count);
+		result.ToList().ForEach(model =>
+		{
+			var expectedProject = expectedFormAMatProjects.FirstOrDefault(p => p.Id == model.Id);
+			expectedProject.Should().NotBeNull();
+			model.ProposedTrustName.Should().Be(expectedProject.ProposedTrustName);
+			model.ApplicationReference.Should().Be(expectedProject.ApplicationReference);
+		});
+
+		_formAMatQuery.Verify(x => x.SearchProjectsByTermAsync(searchTerm, It.IsAny<CancellationToken>()), Times.Once);
+	}
+
 }

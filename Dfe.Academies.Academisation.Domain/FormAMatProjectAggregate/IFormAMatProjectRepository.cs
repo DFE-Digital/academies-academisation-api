@@ -8,5 +8,6 @@ namespace Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate
 		Task<IFormAMatProject?> GetByApplicationReference(string? applicationReferenceNumber, CancellationToken cancellationToken);
 		Task<List<IFormAMatProject>> GetByIds(IEnumerable<int?> formAMatProjectIds, CancellationToken cancellationToken);
 		Task<List<IFormAMatProject>> GetProjectsWithoutReference(CancellationToken cancellationToken);
+		Task<IEnumerable<FormAMatProject>> SearchProjectsByTermAsync(string searchTerm, CancellationToken cancellationToken);
 	}
 }
