@@ -15,7 +15,7 @@
 
 		public string ProposedTrustName { get; init; }
 		public string ApplicationReference { get; init; }
-		public string ReferenceNumber { get; init; }
+		public string? ReferenceNumber { get; init; }
 		public User AssignedUser { get; init; }
 
 

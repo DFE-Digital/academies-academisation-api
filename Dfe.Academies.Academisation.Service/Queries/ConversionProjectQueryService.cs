@@ -96,4 +96,18 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 		return project.MapToFormAMatServiceModel(relatedProjects);
 	}
+	public async Task<IEnumerable<FormAMatProjectServiceModel>> SearchFormAMatProjectsByTermAsync(string searchTerm, CancellationToken cancellationToken)
+	{
+		var projects = await _formAMatProjectRepository.SearchProjectsByTermAsync(searchTerm, cancellationToken);
+
+		var serviceModels = projects.Select(project => new FormAMatProjectServiceModel(
+			project.Id,
+			project.ProposedTrustName,
+			project.ApplicationReference,
+			new User(project.AssignedUser?.Id ?? Guid.Empty, project.AssignedUser?.FullName ?? string.Empty, project.AssignedUser?.EmailAddress ?? string.Empty),
+			project.ReferenceNumber
+		)).ToList();
+
+		return serviceModels;
+	}
 }
