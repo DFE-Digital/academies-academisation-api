@@ -516,10 +516,10 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
 
-	public void SetFormAMatProjectId(int id)
+	public void SetFormAMatProjectId(int id, bool fromNewConversionJourney = false)
 	{
 		// Protect normal conversions from having this value set
-		if (Details.AcademyTypeAndRoute == "Form a Mat")
+		if (Details.AcademyTypeAndRoute == "Form a Mat" || fromNewConversionJourney)
 		{
 			FormAMatProjectId = id;
 		}
@@ -528,5 +528,9 @@ public class Project : Entity, IProject, IAggregateRoot
 	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
 	{
 		Details.SetIncomingTrust(trustReferrenceNumber, trustName);
+	}
+	public void SetRoute(string route)
+	{
+		Details.SetRoute(route);
 	}
 }

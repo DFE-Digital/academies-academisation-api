@@ -39,5 +39,6 @@ public interface IProject
 	public void SetAssignedUser(Guid userId, string fullName, string emailAddress);
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
-	void SetFormAMatProjectId(int id);
+	void SetFormAMatProjectId(int id, bool fromNewConversionJourney = false);
+	void SetRoute(string route);
 }
