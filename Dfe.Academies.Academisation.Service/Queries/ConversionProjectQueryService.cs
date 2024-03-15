@@ -104,7 +104,8 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 			project.Id,
 			project.ProposedTrustName,
 			project.ApplicationReference,
-			new User(project.AssignedUser?.Id ?? Guid.Empty, project.AssignedUser?.FullName ?? string.Empty, project.AssignedUser?.EmailAddress ?? string.Empty)
+			new User(project.AssignedUser?.Id ?? Guid.Empty, project.AssignedUser?.FullName ?? string.Empty, project.AssignedUser?.EmailAddress ?? string.Empty),
+			project.ReferenceNumber
 		)).ToList();
 
 		return serviceModels;
