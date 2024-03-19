@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public async Task Should_add_the_new_conversion_project()
 		{
 			CreateNewProjectDataCommand command = System_under_test();
-			await command.Execute(new NewProject(_newProject.School, _newProject.Trust, "yes", "yes"));
+			await command.Execute(new NewProject(_newProject.School, _newProject.Trust, "yes", "yes", false));
 
 			_context.Projects.Count(x => x.Details.AcademyTypeAndRoute == "Converter").Should().Be(1);
 		}
@@ -61,7 +61,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			CreateNewProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new NewProject(null, _fixture.Create<NewProjectTrust>(), null, null));
+			var result = await command.Execute(new NewProject(null, _fixture.Create<NewProjectTrust>(), null, null, false));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}
@@ -70,7 +70,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		{
 			CreateNewProjectDataCommand command = System_under_test();
 
-			var result = await command.Execute(new NewProject(_fixture.Create<NewProjectSchool>(), null, null, "yes"));
+			var result = await command.Execute(new NewProject(_fixture.Create<NewProjectSchool>(), null, null, "yes", false));
 
 			result.Should().BeOfType<CommandValidationErrorResult>();
 		}

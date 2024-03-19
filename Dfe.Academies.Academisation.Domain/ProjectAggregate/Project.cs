@@ -23,6 +23,7 @@ public class Project : Entity, IProject, IAggregateRoot
 	private readonly List<ProjectNote> _notes = new();
 
 	public int? FormAMatProjectId { get; private set; }
+
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
 	/// </summary>
@@ -59,6 +60,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
+			IsFormAMat = false,
 			// Temp hotfix
 			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
@@ -99,7 +101,8 @@ public class Project : Entity, IProject, IAggregateRoot
 			ProjectStatus = "Converter Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
-			AcademyTypeAndRoute = "Form a Mat",
+			AcademyTypeAndRoute = "Converter",
+			IsFormAMat = true,
 			// Temp hotfix
 			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
@@ -150,6 +153,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ProjectStatus = "Converter Pre-AO (C)",
 			TrustReferenceNumber = project.Trust?.ReferenceNumber,
 			NameOfTrust = project.Trust?.Name,
+			IsFormAMat = project.IsFormAMat,
 			AcademyTypeAndRoute = DetermineRoute(project),
 			ConversionSupportGrantAmount = 25000,
 			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
@@ -516,10 +520,10 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
 
-	public void SetFormAMatProjectId(int id, bool fromNewConversionJourney = false)
+	public void SetFormAMatProjectId(int id)
 	{
 		// Protect normal conversions from having this value set
-		if (Details.AcademyTypeAndRoute == "Form a Mat" || fromNewConversionJourney)
+		if ((this.Details.IsFormAMat.HasValue && this.Details.IsFormAMat.Value))
 		{
 			FormAMatProjectId = id;
 		}
