@@ -290,7 +290,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			int id,
 			SetFormAMatProjectReferenceCommand request)
 		{
-			request.Id = id;
+			request.ProjectId = id;
 
 			CommandResult result = await _mediator.Send(request);
 

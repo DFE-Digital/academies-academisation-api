@@ -9,7 +9,7 @@ public class SetFormAMatProjectReferenceCommand : IRequest<CommandResult>
 		FormAMatProjectId = formAMatProjectId;
 	}
 
-	public int ProjectId { get; }
-	public int FormAMatProjectId { get; }
+	public int ProjectId { get; set; }
+	public int FormAMatProjectId { get; set; }
 }
 
