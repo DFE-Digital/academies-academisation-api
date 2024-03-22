@@ -37,6 +37,7 @@ public interface IProject
 		bool? pupilsAttendingGroupTeenageMums
 		);
 	public void SetAssignedUser(Guid userId, string fullName, string emailAddress);
+	public void SetFormAMatProjectReference(int FormAMAtProjectId);
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
 	void SetFormAMatProjectId(int id);
