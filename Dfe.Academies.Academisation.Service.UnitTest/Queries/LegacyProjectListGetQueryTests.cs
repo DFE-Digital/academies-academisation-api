@@ -303,4 +303,31 @@ public class LegacyProjectListGetQueryTests
 			() => Assert.Equal(expectedProjects.Count, result!.Paging.RecordCount)
 		);
 	}
+	[Fact]
+	public async Task SearchFormAMatProjectsByTermAsync_PerformSearch_ReturnsMatchingProjects()
+	{
+		// Arrange
+		string searchTerm = "test";
+		var expectedFormAMatProjects = _fixture.CreateMany<FormAMatProject>(3).ToList();
+
+		_formAMatQuery.Setup(x => x.SearchProjectsByTermAsync(searchTerm, It.IsAny<CancellationToken>()))
+			.ReturnsAsync(expectedFormAMatProjects);
+
+		// Act
+		var result = await _subject.SearchFormAMatProjectsByTermAsync(searchTerm, default);
+
+		// Assert
+		result.Should().NotBeNull();
+		result.Should().HaveCount(expectedFormAMatProjects.Count);
+		result.ToList().ForEach(model =>
+		{
+			var expectedProject = expectedFormAMatProjects.FirstOrDefault(p => p.Id == model.Id);
+			expectedProject.Should().NotBeNull();
+			model.ProposedTrustName.Should().Be(expectedProject.ProposedTrustName);
+			model.ApplicationReference.Should().Be(expectedProject.ApplicationReference);
+		});
+
+		_formAMatQuery.Verify(x => x.SearchProjectsByTermAsync(searchTerm, It.IsAny<CancellationToken>()), Times.Once);
+	}
+
 }

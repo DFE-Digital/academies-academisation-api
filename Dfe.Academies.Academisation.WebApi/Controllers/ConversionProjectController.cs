@@ -254,6 +254,25 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException("The command result is not recognized.")
 			};
 		}
+		[HttpGet("search-formamatprojects", Name = "SearchFormAMatProjects")]
+		[ProducesResponseType(typeof(IEnumerable<FormAMatProjectServiceModel>), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<IEnumerable<FormAMatProjectServiceModel>>> SearchFormAMatProjects([FromQuery] string searchTerm, CancellationToken cancellationToken)
+		{
+			if (string.IsNullOrWhiteSpace(searchTerm))
+			{
+				return BadRequest("Search term must not be empty.");
+			}
+
+			var projects = await _conversionProjectQueryService.SearchFormAMatProjectsByTermAsync(searchTerm, cancellationToken);
+
+			if (projects == null || !projects.Any())
+			{
+				return NotFound($"No Form A Mat projects found matching search term '{searchTerm}'.");
+			}
+
+			return Ok(projects);
+		}
 
 	}
 }
