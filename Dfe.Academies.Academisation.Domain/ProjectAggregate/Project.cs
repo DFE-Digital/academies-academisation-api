@@ -471,6 +471,10 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
 		this.Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
 	}
+	public void SetFormAMatProjectReference(int formAMatProjectId)
+	{
+		this.FormAMatProjectId = formAMatProjectId;
+	}
 	public void SetSchoolOverview(
 							  string publishedAdmissionNumber,
 							  string viabilityIssues,
