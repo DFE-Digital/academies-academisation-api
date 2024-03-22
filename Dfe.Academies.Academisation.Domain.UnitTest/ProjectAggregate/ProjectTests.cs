@@ -20,9 +20,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 			_fixture = new Fixture();
 		}
 
-		private Project CreateProject()
+		private Project CreateProject(bool isFormAMat = false)
 		{
-			var projectDetails = _fixture.Build<ProjectDetails>().Create();
+			var projectDetails = _fixture.Build<ProjectDetails>().With(x => x.IsFormAMat, isFormAMat).Create();
+
 
 			return new Project(101, projectDetails);
 		}
@@ -63,8 +64,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 		public void SetFormAMatProjectId_ValidId_UpdatesIdForFormAMatRoute()
 		{
 			// Arrange
-			var project = this.CreateProject();
-			project.SetRoute("Form a Mat"); // Setting the route to "Form a Mat"
+			var project = this.CreateProject(true);
 			int id = _fixture.Create<int>();
 
 			// Act

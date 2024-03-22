@@ -80,7 +80,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 						   new NewProjectSchool("Sample School", 12345, DateTime.UtcNow, false, "Local Authority", "Region"),
 						   new NewProjectTrust("Trust Name", "Reference Number"),
 						   "yes",
-						   "yes"
+						   "yes", false
 					   ));
 			_mapperMock.Setup(x => x.Map<CreateResult>(It.IsAny<NewProject>()))
 					   .Returns(newProjectResult);
