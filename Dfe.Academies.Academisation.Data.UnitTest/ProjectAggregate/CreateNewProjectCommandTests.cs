@@ -63,7 +63,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			var result = await command.Execute(new NewProject(null, _fixture.Create<NewProjectTrust>(), null, null));
 
-			result.Should().BeOfType<CommandValidationErrorResult>();
+			result.Should().BeOfType<CreateValidationErrorResult>();
 		}
 		[Fact]
 		public async Task Should_return_error_if_join_trust_is_null_and_preferred_trust_is_yes()
@@ -72,7 +72,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 			var result = await command.Execute(new NewProject(_fixture.Create<NewProjectSchool>(), null, null, "yes"));
 
-			result.Should().BeOfType<CommandValidationErrorResult>();
+			result.Should().BeOfType<CreateValidationErrorResult>();
 		}
 	}
 }
