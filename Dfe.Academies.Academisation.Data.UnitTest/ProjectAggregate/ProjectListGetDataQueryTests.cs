@@ -117,7 +117,7 @@ public class ProjectsListGetDataQueryTests
 		(_, Project project3) = CreateTestProject();
 
 		var projectDetails1 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AcademyTypeAndRoute, "Form a Mat")
+			.With(p => p.IsFormAMat, true)
 			.Create();
 		var projectDetails2 = _fixture.Build<ProjectDetails>().Create();
 
@@ -139,7 +139,7 @@ public class ProjectsListGetDataQueryTests
 		// assert
 		Assert.Multiple(
 			() => Assert.True(projects.Count == 1),
-			() => Assert.True(projects.First().Details.AcademyTypeAndRoute == "Form a Mat")
+			() => Assert.True(projects.First().Details.IsFormAMat == true)
 		);
 	}
 

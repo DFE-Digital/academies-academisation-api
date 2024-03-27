@@ -40,6 +40,6 @@ public interface IProject
 	public void SetFormAMatProjectReference(int FormAMAtProjectId);
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
-	void SetFormAMatProjectId(int id, bool fromNewConversionJourney = false);
+	void SetFormAMatProjectId(int id);
 	void SetRoute(string route);
 }
