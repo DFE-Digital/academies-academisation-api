@@ -14,17 +14,17 @@ namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 			_projectCreateDataCommand = projectCreateDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(NewProject project)
+		public async Task<CreateResult> Execute(NewProject project)
 		{
 			var domainServiceResult = Project.CreateNewProject(project);
 
 			switch (domainServiceResult)
 			{
 				case CreateValidationErrorResult createValidationErrorResult:
-					return new CommandValidationErrorResult(createValidationErrorResult.ValidationErrors);
+					return new CreateValidationErrorResult(createValidationErrorResult.ValidationErrors);
 				case CreateSuccessResult<IProject> createSuccessResult:
 					await _projectCreateDataCommand.Execute(createSuccessResult.Payload);
-					return new CommandSuccessResult();
+					return createSuccessResult;
 				default:
 					throw new NotImplementedException("Other CreateResult types not expected");
 			}

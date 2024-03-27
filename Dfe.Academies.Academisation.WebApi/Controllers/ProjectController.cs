@@ -1,6 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -153,12 +154,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		public async Task<ActionResult> AddConversion(NewProjectServiceModel project)
 		{
-			CommandResult result = await _createNewProjectCommand.Execute(project);
+			CreateResult result = await _createNewProjectCommand.Execute(project);
 
 			return result switch
 			{
-				CommandSuccessResult => Created(new Uri("/legacy/project/", UriKind.Relative), null),
-				NotFoundCommandResult => NotFound(),
+				CreateSuccessResult<IProject> success => CreatedAtRoute("GetLegacyProject", new { id = success.Payload.Id }, success.Payload),
+				CreateValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
 		}
