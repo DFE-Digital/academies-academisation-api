@@ -6,6 +6,6 @@ namespace Dfe.Academies.Academisation.IData.ProjectAggregate
 {
 	public interface ICreateNewProjectDataCommand
 	{
-		Task<CommandResult> Execute(NewProject project);
+		Task<CreateResult> Execute(NewProject project);
 	}
 }

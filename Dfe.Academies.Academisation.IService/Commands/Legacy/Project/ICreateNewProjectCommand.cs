@@ -5,6 +5,6 @@ namespace Dfe.Academies.Academisation.IService.Commands.Legacy.Project
 {
 	public interface ICreateNewProjectCommand
 	{
-		Task<CommandResult> Execute(NewProjectServiceModel model);
+		Task<CreateResult> Execute(NewProjectServiceModel model);
 	}
 }

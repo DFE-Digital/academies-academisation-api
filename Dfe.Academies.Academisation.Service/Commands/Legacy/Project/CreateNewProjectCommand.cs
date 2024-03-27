@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
@@ -20,15 +21,15 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 			_createNewProjectDataCommand = createSponsoredProjectDataCommand;
 		}
 
-		public async Task<CommandResult> Execute(NewProjectServiceModel model)
+		public async Task<CreateResult> Execute(NewProjectServiceModel model)
 		{
 			var result = await _createNewProjectDataCommand.Execute(_mapper.Map<NewProject>(model));
 
-			if (result is CommandValidationErrorResult)
+			if (result is CreateValidationErrorResult)
 			{
 				return result;
 			}
-			if (result is not CommandSuccessResult)
+			if (result is not CreateSuccessResult<IProject>)
 			{
 				throw new NotImplementedException();
 			}
