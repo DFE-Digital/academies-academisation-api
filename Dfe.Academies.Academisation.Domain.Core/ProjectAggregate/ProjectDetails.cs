@@ -113,6 +113,8 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 
 	public bool? ExternalApplicationFormSaved { get; set; }
 	public string? ExternalApplicationFormUrl { get; set; }
+	public bool? IsFormAMat { get; init; }
+
 
 	public bool Equals(ProjectDetails? other)
 	{

@@ -6,6 +6,7 @@
 		public NewProjectTrustServiceModel? Trust { get; init; }
 		public string? HasSchoolApplied { get; init; }
 		public string? HasPreferredTrust { get; init; }
+		public bool IsFormAMat { get; init; }
 	}
 
 	public class NewProjectTrustServiceModel
