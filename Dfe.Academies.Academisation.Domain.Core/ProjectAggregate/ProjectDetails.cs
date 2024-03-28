@@ -113,8 +113,8 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 
 	public bool? ExternalApplicationFormSaved { get; set; }
 	public string? ExternalApplicationFormUrl { get; set; }
-	public bool? IsFormAMat { get; init; }
-
+	public bool? IsFormAMat { get => _IsFormAMat; init => _IsFormAMat = value; }
+	private bool? _IsFormAMat;
 
 	public bool Equals(ProjectDetails? other)
 	{
@@ -366,7 +366,10 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		this.KeyStage4PerformanceAdditionalInformation = keyStage4PerformanceAdditionalInformation;
 		this.KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
 	}
-
+	public void SetIsFormAMat(bool? isFormAMat)
+	{
+		_IsFormAMat = isFormAMat;
+	}
 	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
 	{
 		_trustReferenceNumber = trustReferrenceNumber;
