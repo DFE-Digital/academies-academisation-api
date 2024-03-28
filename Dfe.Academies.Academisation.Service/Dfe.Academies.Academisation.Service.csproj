@@ -22,7 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="ClosedXML" Version="0.102.1" />
+    <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="Dfe.Academies.Contracts" Version="1.0.10" />
     <PackageReference Include="Dfe.Academisation.ExtensionMethods" Version="1.2.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
