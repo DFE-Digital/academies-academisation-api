@@ -311,3 +311,9 @@ variable "alarm_log_ingestion_gb_per_day" {
   type        = number
   default     = 1
 }
+
+variable "enable_cdn_frontdoor_health_probe" {
+  description = "Enable CDN Front Door health probe"
+  type        = bool
+  default     = false
+}
