@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest
 			fixture.Customizations.Add(
 				new PropertiesPostprocessor(
 					new MockPostprocessor(
-						new MethodInvoker(
+						new AutoFixture.Kernel.MethodInvoker(
 							new MockConstructorQuery()))));
 			fixture.ResidueCollectors.Add(new MockRelay());
 		}

@@ -101,7 +101,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			_context.Projects.AddRange(project1, project2);
 			await _context.SaveChangesAsync();
 
-			_mockHttpMessageHandler.When($"http://localhost/establishment/urn/*").Respond(HttpStatusCode.NotFound);
+			_mockHttpMessageHandler.When($"http://localhost/v4/establishment/urn/*").Respond(HttpStatusCode.NotFound);
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
 			httpClient.BaseAddress = new Uri("http://localhost");
 			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
