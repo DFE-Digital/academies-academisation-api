@@ -23,6 +23,7 @@ public class Project : Entity, IProject, IAggregateRoot
 	private readonly List<ProjectNote> _notes = new();
 
 	public int? FormAMatProjectId { get; private set; }
+	public DateTime? DeletedAt { get; private set; }
 
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
@@ -540,5 +541,10 @@ public class Project : Entity, IProject, IAggregateRoot
 	public void SetRoute(string route)
 	{
 		Details.SetRoute(route);
+	}
+
+	public void SetDeletedAt()
+	{
+		DeletedAt = DateTime.UtcNow;
 	}
 }

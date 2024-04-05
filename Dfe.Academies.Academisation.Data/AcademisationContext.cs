@@ -318,6 +318,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		});
 
+		projectConfiguration.HasQueryFilter(d => !d.DeletedAt.HasValue);
+
 		projectConfiguration
 			.HasMany(a => a.Notes)
 			.WithOne()

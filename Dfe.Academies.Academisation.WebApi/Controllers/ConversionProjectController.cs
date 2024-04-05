@@ -303,5 +303,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpDelete("{id:int}/Delete", Name = "DeleteProject")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> DeleteAProjectById(int id, CancellationToken cancellationToken)
+		{
+			SetDeletedAtCommand request = new SetDeletedAtCommand(id);
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }
