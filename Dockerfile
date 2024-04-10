@@ -21,7 +21,7 @@ RUN dotnet restore Dfe.Academies.Academisation.WebApi
 RUN dotnet build Dfe.Academies.Academisation.WebApi
 
 RUN dotnet new tool-manifest
-RUN dotnet tool install dotnet-ef --version 7.0.14
+RUN dotnet tool install dotnet-ef --version 8.0.4
 
 RUN dotnet ef migrations script --output /app/SQL/DbMigrationScript.sql --idempotent -p /build/Dfe.Academies.Academisation.Data -s /build/Dfe.Academies.Academisation.WebApi -c AcademisationContext
 
