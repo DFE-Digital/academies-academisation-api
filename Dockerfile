@@ -33,11 +33,11 @@ ARG ASPNET_IMAGE_TAG
 FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
 
 RUN apt-get update
-RUN apt-get install unixodbc curl gnupg -y
+RUN apt-get install curl gnupg -y
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 RUN curl https://packages.microsoft.com/config/debian/11/prod.list | tee /etc/apt/sources.list.d/msprod.list
 RUN apt-get update
-RUN ACCEPT_EULA=Y apt-get install msodbcsql18 mssql-tools18 -y
+RUN ACCEPT_EULA=Y apt-get install msodbcsql18 mssql-tools18 unixodbc-dev -y
 
 COPY --from=build /app /app
 WORKDIR /app
