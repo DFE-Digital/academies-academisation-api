@@ -279,15 +279,14 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <summary>
 		///     Retrieve all projects matching specified filter conditions
 		/// </summary>
-		/// <param name="searchModel"><see cref="AcademyTransferProjectSummaryResponse"/> describing filtering requirements for the request</param>
-		/// <param name="urn">URN of a specific project to retrieve</param>
+		/// <param name="searchModel"><see cref="AcademyTransferProjectSummaryResponse"/> describing filtering requirements for the request</param>	
 		/// <remarks>
 		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
 		///     Delivery Officer.
 		/// </remarks>
 		/// <response code="200">One or more projects matching the specified filter criteria were found</response>
 		/// <response code="404">No projects matched the specified search criteria</response>
-		[HttpPost("projects", Name = "GetProjects")]
+		[HttpPost("GetTransferProjects", Name = "GetTransferProjects")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedDataResponse<AcademyTransferProjectSummaryResponse>>> GetProjects(
