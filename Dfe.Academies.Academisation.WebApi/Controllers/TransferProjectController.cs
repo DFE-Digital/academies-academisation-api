@@ -1,5 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
@@ -274,6 +276,27 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return Ok(result);
 		}
-
+		/// <summary>
+		///     Retrieve all projects matching specified filter conditions
+		/// </summary>
+		/// <param name="searchModel"><see cref="AcademyTransferProjectSummaryResponse"/> describing filtering requirements for the request</param>
+		/// <param name="urn">URN of a specific project to retrieve</param>
+		/// <remarks>
+		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
+		///     Delivery Officer.
+		/// </remarks>
+		/// <response code="200">One or more projects matching the specified filter criteria were found</response>
+		/// <response code="404">No projects matched the specified search criteria</response>
+		[HttpPost("projects", Name = "GetProjects")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<PagedDataResponse<AcademyTransferProjectSummaryResponse>>> GetProjects(
+		GetAcademyConversionSearchModel? searchModel)
+		{
+			PagedDataResponse<AcademyTransferProjectSummaryResponse>? result =
+				await _transferProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,
+					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count);
+			return result is null ? NotFound() : Ok(result);
+		}
 	}
 }
