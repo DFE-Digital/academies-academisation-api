@@ -2,8 +2,10 @@
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Extensions;
+using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Queries
@@ -62,7 +64,18 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(projects, recordTotal));
 		}
+		public async Task<PagedDataResponse<AcademyTransferProjectSummaryResponse>?> GetProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+		{
+			var (projects, totalCount) = await _transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
+			IEnumerable<AcademyTransferProjectSummaryResponse> data = AcademyTransferProjectSummaryResponse(projects);
+			var pageResponse = PagingResponseFactory.Create("transfer-projects/projects", page, count, totalCount,
+				new Dictionary<string, object?> {
+				{"states", states},
+				});
 
+			return new PagedDataResponse<AcademyTransferProjectSummaryResponse>(data,
+				pageResponse);
+		}
 		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string? title)
 		{
 			IEnumerable<ITransferProject?> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();

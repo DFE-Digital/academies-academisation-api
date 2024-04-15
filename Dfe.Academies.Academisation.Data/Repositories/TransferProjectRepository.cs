@@ -19,15 +19,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
 		}
-		public async Task<(IEnumerable<ITransferProject>, int totalcount)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default)
+		public async Task<(IEnumerable<ITransferProject>, int totalcount)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
 		{
 			IQueryable<TransferProject> queryable = this.dbSet;
 
 			// Region & Local Authority isn't on Transfers right now
 			//queryable = FilterByRegion(regions, queryable);
-			//queryable = FilterByLocalAuthority(localAuthorities, queryable);
+			//queryable = FilterByLocalAuthority(localAuthorities, queryable);			
 			queryable = FilterByStatus(states, queryable);
-			queryable = FilterByUrn(urn, queryable);
 			queryable = FilterByKeyword(title, queryable);
 			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
 
