@@ -1,13 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TramsDataApi.RequestModels.AcademyTransferProject;
-using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.Service.Commands.Application;
-using System;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -20,7 +18,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		private readonly IMediator _mediator;
 		private readonly ILogger<TransferProjectController> _logger;
 		private readonly ITransferProjectQueryService _transferProjectQueryService;
-		
+
 
 		public TransferProjectController(IMediator mediator, ITransferProjectQueryService transferProjectQueryService,
 			ILogger<TransferProjectController> logger)
@@ -257,24 +255,25 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 		[HttpGet("GetTransferProjects", Name = "GetTransferProjects")]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetTransferProjects(
-	    [FromQuery] string? title,
-	    [FromQuery] int page = 1,
-	    [FromQuery] int count = 50,
-	    [FromQuery] int? urn = null)
+		[FromQuery] string? title,
+		[FromQuery] int page = 1,
+		[FromQuery] int count = 50,
+		[FromQuery] int? urn = null)
 		{
-			
-		   _logger.LogInformation($"Attempting to retrieve {count} Academy Transfer Projects filtered by: urn: {urn} title: {title}", count, urn, title);
 
-           PagedResultResponse<AcademyTransferProjectSummaryResponse> result =
-              await _transferProjectQueryService.GetTransferProjects(page, count, urn,title);
+			_logger.LogInformation($"Attempting to retrieve {count} Academy Transfer Projects filtered by: urn: {urn} title: {title}", count, urn, title);
 
-           if (result.Results.Any())
-           {
-              IEnumerable<string> projectIds = result.Results.Select(p => p.ProjectUrn);
-              _logger.LogInformation($"Returning {count} Academy Transfer Projects with Id(s): {projectIds}", result.Results.Count(), string.Join(',', projectIds));
-           }
+			PagedResultResponse<AcademyTransferProjectSummaryResponse> result =
+			   await _transferProjectQueryService.GetTransferProjects(page, count, urn, title);
 
-           return Ok(result);
-	    }
+			if (result.Results.Any())
+			{
+				IEnumerable<string> projectIds = result.Results.Select(p => p.ProjectUrn);
+				_logger.LogInformation($"Returning {count} Academy Transfer Projects with Id(s): {projectIds}", result.Results.Count(), string.Join(',', projectIds));
+			}
+
+			return Ok(result);
+		}
+
 	}
 }
