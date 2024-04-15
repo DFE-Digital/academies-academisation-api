@@ -281,7 +281,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// </summary>
 		/// <param name="searchModel"><see cref="AcademyTransferProjectSummaryResponse"/> describing filtering requirements for the request</param>	
 		/// <remarks>
-		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
+		///     Filters are cumulative (AND logic), applied in the following order: by Status, by URN, by
 		///     Delivery Officer.
 		/// </remarks>
 		/// <response code="200">One or more projects matching the specified filter criteria were found</response>
@@ -290,7 +290,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedDataResponse<AcademyTransferProjectSummaryResponse>>> GetProjects(
-		GetAcademyConversionSearchModel? searchModel)
+		GetProjectSearchModel? searchModel)
 		{
 			PagedDataResponse<AcademyTransferProjectSummaryResponse>? result =
 				await _transferProjectQueryService.GetProjects(searchModel!.StatusQueryString, searchModel.TitleFilter,

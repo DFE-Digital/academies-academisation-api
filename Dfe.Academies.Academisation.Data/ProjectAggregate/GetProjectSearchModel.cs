@@ -1,8 +1,8 @@
 ﻿namespace Dfe.Academies.Academisation.Data.ProjectAggregate
 {
-	public class GetAcademyConversionSearchModel
+	public class GetProjectSearchModel
 	{
-		public GetAcademyConversionSearchModel(int page, int count, string? titleFilter,
+		public GetProjectSearchModel(int page, int count, string? titleFilter,
 			IEnumerable<string>? deliveryOfficerQueryString, IEnumerable<string>? regionQueryString,
 			IEnumerable<string>? statusQueryString, IEnumerable<string>? applicationReferences)
 		{
