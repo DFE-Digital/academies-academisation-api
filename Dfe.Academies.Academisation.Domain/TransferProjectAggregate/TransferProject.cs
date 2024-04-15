@@ -8,7 +8,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferProject : ITransferProject, IAggregateRoot
 	{
-		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string incomingTrustName, List<string> academyUkprns)
+		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns)
 		{
 			_intendedTransferBenefits =
 				new List<IntendedTransferBenefit>();
@@ -196,11 +196,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			Status = status;
 		}
 
-		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string incomingTrustName, List<string> academyUkprns, DateTime createdOn)
+		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, DateTime createdOn)
 		{
 			Guard.Against.NullOrEmpty(outgoingTrustUkprn);
 			Guard.Against.NullOrEmpty(outgoingTrustName);
-			Guard.Against.NullOrEmpty(incomingTrustName);
+			//Guard.Against.NullOrEmpty(incomingTrustName);
 			Guard.Against.NullOrEmpty(academyUkprns);
 			Guard.Against.OutOfSQLDateRange(createdOn);
 

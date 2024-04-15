@@ -257,7 +257,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 		[Theory]
 		[ClassData(typeof(CreationArgumentExceptionTestData))]
-		public void CreateTransferProject_WithTestData_ThrowsArgumentExceptions(string outgoingTrustUkprn, string outgoingTrustName, string incomingTrustUkprn, string incomingTrustName, List<string> academyUkprns, DateTime createdOn, Type exType)
+		public void CreateTransferProject_WithTestData_ThrowsArgumentExceptions(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, DateTime createdOn, Type exType)
 		{
 			// Arrange      
 			dynamic exception;
