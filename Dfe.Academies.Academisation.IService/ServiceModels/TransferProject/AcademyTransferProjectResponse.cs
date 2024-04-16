@@ -3,6 +3,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 {
 	public class AcademyTransferProjectResponse
     {
+		public int Id { get; set; }
         public string ProjectUrn { get; set; }
 
         public string ProjectReference { get; set; }
