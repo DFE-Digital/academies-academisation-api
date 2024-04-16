@@ -48,12 +48,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			IEnumerable<AcademyTransferProjectSummaryResponse> projects =
 				FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
 
-			// remove any projects without an incoming or outgoing trust.
+			// remove any projects without an outgoing trust.
 			projects = projects
 			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				// just filtered out by incoming trust name now to allow for form a mat
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) 
+				).ToList();
 
 			var recordTotal = projects.Count();
 
@@ -70,12 +69,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			transferProjects =
 				FilterExportedTransferProjectsByIncomingTrust(title, transferProjects);
 
-			// remove any projects without an incoming or outgoing trust.
+			// remove any projects without an outgoing trust.
 			transferProjects = transferProjects
 			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				// just filtered out by incoming trust name now to allow for form a mat
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)).ToList(); 
 
 			var projects = await MapExportedTransferProjectModel(transferProjects);
 
