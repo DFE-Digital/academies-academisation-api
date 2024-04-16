@@ -42,6 +42,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			"dummyIncomingTrustUkprn",
 			"in trust",
 			new List<string> { "dummyUkprn1", "dummyUkprn2" },
+			false,
 			DateTime.Now
 		);
 
@@ -75,6 +76,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			"dummyIncomingTrustUkprn",
 			"in trust",
 			new List<string> { "dummyUkprn1", "dummyUkprn2" },
+			false,
 			DateTime.Now
 		);
 

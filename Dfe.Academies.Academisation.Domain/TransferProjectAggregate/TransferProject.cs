@@ -8,7 +8,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferProject : ITransferProject, IAggregateRoot
 	{
-		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns)
+		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat)
 		{
 			_intendedTransferBenefits =
 				new List<IntendedTransferBenefit>();
@@ -19,7 +19,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			OutgoingTrustUkprn = outgoingTrustUkprn;
 			OutgoingTrustName = outgoingTrustName;
 			//Is form a mat if we have a trust name but no ukprn
-			IsFormAMat = incomingTrustUkprn == null && !string.IsNullOrEmpty(incomingTrustName);
+			IsFormAMat = isFormAMat.HasValue && isFormAMat.Value;
 
 			foreach (var academyUkprn in academyUkprns)
 			{
@@ -196,15 +196,14 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			Status = status;
 		}
 
-		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, DateTime createdOn)
+		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat, DateTime createdOn)
 		{
 			Guard.Against.NullOrEmpty(outgoingTrustUkprn);
 			Guard.Against.NullOrEmpty(outgoingTrustName);
-			//Guard.Against.NullOrEmpty(incomingTrustName);
 			Guard.Against.NullOrEmpty(academyUkprns);
 			Guard.Against.OutOfSQLDateRange(createdOn);
 
-			return new TransferProject(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrustName, academyUkprns)
+			return new TransferProject(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrustName, academyUkprns, isFormAMat)
 			{
 				CreatedOn = createdOn
 			};

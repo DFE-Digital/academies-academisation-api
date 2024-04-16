@@ -17,6 +17,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		private readonly string _incomingTrustUkprn = "23456789";
 		private readonly string _incomingTrustName = "_incomingTrustName";
 		private readonly List<string> _academyUkprns = new() { "academy1", "academy2" };
+		private readonly bool _isFormAMat = true;
 		private readonly DateTime _createdOn = DateTime.Now;
 		public TransferProjectTests()
 		{
@@ -32,6 +33,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
 			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
 			// Act
@@ -41,6 +43,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				incomingTrustUkprn,
 				incomingTrustName,
 				academyUkprns,
+				isFormAMat,
 				createdOn);
 
 			// Act
@@ -59,6 +62,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
 			List<string> academyUkprns = new List<string>() { "22221111" };
+			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
 			// Act
@@ -68,6 +72,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				incomingTrustUkprn,
 				incomingTrustName,
 				academyUkprns,
+				isFormAMat,
 				createdOn);
 
 			// Act
@@ -86,6 +91,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
 			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			bool isFormAMat = false;
 			DateTime createdOn = DateTime.Now;
 
 			// Act
@@ -95,6 +101,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				incomingTrustUkprn,
 				incomingTrustName,
 				academyUkprns,
+				isFormAMat,
 				createdOn);
 
 			// Assert
@@ -114,6 +121,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
 			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
 			// Act
@@ -123,6 +131,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				incomingTrustUkprn,
 				incomingTrustName,
 				academyUkprns,
+				isFormAMat,
 				createdOn));
 		}
 
@@ -242,6 +251,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
 			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
 			// Act
@@ -251,13 +261,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				incomingTrustUkprn,
 				incomingTrustName,
 				academyUkprns,
+				isFormAMat,
 				createdOn);
 			return result;
 		}
 
 		[Theory]
 		[ClassData(typeof(CreationArgumentExceptionTestData))]
-		public void CreateTransferProject_WithTestData_ThrowsArgumentExceptions(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, DateTime createdOn, Type exType)
+		public void CreateTransferProject_WithTestData_ThrowsArgumentExceptions(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat, DateTime createdOn, Type exType)
 		{
 			// Arrange      
 			dynamic exception;
@@ -270,6 +281,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				   incomingTrustUkprn,
 				   incomingTrustName,
 				   academyUkprns,
+				   isFormAMat,
 				   createdOn));
 			}
 
@@ -281,6 +293,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				   incomingTrustUkprn,
 				   incomingTrustName,
 				   academyUkprns,
+				   isFormAMat,
 				   createdOn));
 			}
 
@@ -292,6 +305,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				   incomingTrustUkprn,
 				   incomingTrustName,
 				   academyUkprns,
+				   isFormAMat,
 				   createdOn));
 			}
 		}
@@ -302,7 +316,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetFeatures_WithValidParameters_SetsPropertiesCorrectly(string whoInitiated, string specficReasons, string transferType, bool isCompleted)
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
 			var reasons = new List<string>() { specficReasons };
 			// Act
 			transferProject.SetFeatures(whoInitiated, reasons, transferType, isCompleted);
@@ -318,7 +332,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetLegalRequirements_WithValidParameters_SetsPropertiesCorrectly(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool isCompleted)
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
 
 			// Act
 			transferProject.SetLegalRequirements(outgoingTrustResolution, incomingTrustAgreement, diocesanConsent, isCompleted);
@@ -333,7 +347,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetTransferDates_WithValidParameters_SetsPropertiesCorrectly()
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
 			var advisoryBoardDate = DateTime.UtcNow;
 			var expectedDateForTransfer = DateTime.UtcNow.AddMonths(1);
 			// Act
@@ -350,7 +364,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetStatus_WithValidParameters_SetsPropertiesCorrectly(string status)
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
 
 			// Act
 			transferProject.SetStatus(status);
@@ -363,18 +377,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		{
 			public IEnumerator<object[]> GetEnumerator()
 			{
-				yield return new object[] { null, "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentNullException) };
-				yield return new object[] { string.Empty, "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentException) };
+				yield return new object[] { null, "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.Now, typeof(ArgumentNullException) };
+				yield return new object[] { string.Empty, "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.Now, typeof(ArgumentException) };
 
-				yield return new object[] { "11112222", "out trust", "11110000", null, new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentNullException) };
-				yield return new object[] { "11112222", "out trust", "11110000", string.Empty, new List<string>() { "22221111", "33331111" }, DateTime.Now, typeof(ArgumentException) };
+				yield return new object[] { "11112222", "out trust", "11110000", "in trust", null, false, DateTime.Now, typeof(ArgumentNullException) };
+				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>(), false, DateTime.Now, typeof(ArgumentException) };
 
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", null, DateTime.Now, typeof(ArgumentNullException) };
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>(), DateTime.Now, typeof(ArgumentException) };
-
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, DateTime.MinValue, typeof(ArgumentOutOfRangeException) };
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, DateTime.MaxValue, typeof(ArgumentOutOfRangeException) };
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, null, typeof(ArgumentOutOfRangeException) };
+				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.MinValue, typeof(ArgumentOutOfRangeException) };
+				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.MaxValue, typeof(ArgumentOutOfRangeException) };
+				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, null, typeof(ArgumentOutOfRangeException) };
 			}
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
