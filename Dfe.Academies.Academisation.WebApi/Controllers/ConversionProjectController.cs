@@ -121,6 +121,26 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{id:int}/SetIncomingTrust", Name = "SetIncomingTrust")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetIncomingTrust(int id, SetIncomingTrustCommand request)
+		{
+			request.Id = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		/// <summary>
 		///     Retrieve all projects matching specified filter conditions
 		/// </summary>
@@ -215,6 +235,90 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return Ok(project);
 		}
+		/// <summary>
+		/// Creates a new FormAMat project along with a child conversion project.
+		/// </summary>
+		/// <param name="command">The command containing the data needed to create the project</param>
+		/// <returns>An ActionResult indicating the outcome of the operation</returns>
+		[HttpPost("FormAMatProject", Name = "CreateFormAMatAndChildConversion")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> CreateFormAMatAndChildConversion(CreateFormAMatAndChildConversionCommand command)
+		{
+			CommandResult result = await _mediator.Send(command);
 
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException("The command result is not recognized.")
+			};
+		}
+		[HttpGet("search-formamatprojects", Name = "SearchFormAMatProjects")]
+		[ProducesResponseType(typeof(IEnumerable<FormAMatProjectServiceModel>), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<IEnumerable<FormAMatProjectServiceModel>>> SearchFormAMatProjects([FromQuery] string searchTerm, CancellationToken cancellationToken)
+		{
+			if (string.IsNullOrWhiteSpace(searchTerm))
+			{
+				return BadRequest("Search term must not be empty.");
+			}
+
+			var projects = await _conversionProjectQueryService.SearchFormAMatProjectsByTermAsync(searchTerm, cancellationToken);
+
+			if (projects == null || !projects.Any())
+			{
+				return NotFound($"No Form A Mat projects found matching search term '{searchTerm}'.");
+			}
+
+			return Ok(projects);
+		}
+		/// <summary>
+		/// Updates the project with the specified id - Sets the Form A Mat Project Reference using data from the command <paramref name="request"/>
+		/// </summary>
+		/// <param name="id">The ID of the project to update</param>
+		/// <param name="request">the command containing the payload of updates</param>
+		/// <exception cref="NotImplementedException"></exception>
+		/// <response code="200">The update was applied successfully</response>
+		/// <response code="400">The request failed validation and the errors are returned</response>
+		/// <response code="404">The Project with the specified ID was not found</response>
+		[HttpPut("{id:int}/SetFormAMatProjectReference", Name = "SetFormAMatProjectReference")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetFormAMatProjectReference(
+			int id,
+			SetFormAMatProjectReferenceCommand request)
+		{
+			request.ProjectId = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpDelete("{id:int}/Delete", Name = "DeleteProject")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> DeleteAProjectById(int id, CancellationToken cancellationToken)
+		{
+			SetDeletedAtCommand request = new SetDeletedAtCommand(id);
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }

@@ -83,6 +83,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 
 			return new AcademyTransferProjectResponse
 			{
+				Id = model.Id,
 				ProjectUrn = model.Urn.ToString(),
 				ProjectReference = model.ProjectReference,
 				OutgoingTrustUkprn = model.OutgoingTrustUkprn,

@@ -105,6 +105,7 @@ builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
 builder.Services.AddScoped<ICreateNewProjectCommand, CreateNewProjectCommand>();
 builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
+builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
@@ -174,8 +175,8 @@ builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(Create
 builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typeof(CreateTransferProjectCommandValidator));
 
 builder.Services.AddHostedService<EnrichProjectService>();
-builder.Services.AddHostedService<EnrichTransferProjectService>();
 builder.Services.AddHostedService<CreateFormAMatProjectsService>();
+builder.Services.AddHostedService<SetFormAMatProjectReferenceNumbersService>();
 
 builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 {

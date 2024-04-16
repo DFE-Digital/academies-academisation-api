@@ -9,7 +9,7 @@ public class DfeAssert
 	{
 		if (commandResult is CommandValidationErrorResult validationErrorResult)
 		{
-			throw new FailException("Validation Error:" + string.Join(";", validationErrorResult.ValidationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+			throw FailException.ForFailure("Validation Error:" + string.Join(";", validationErrorResult.ValidationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
 		}
 
 		Assert.IsAssignableFrom<CommandSuccessResult>(commandResult);
@@ -36,7 +36,7 @@ public class DfeAssert
 		{
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
 
-			throw new FailException("BadObjectRequestResult" + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+			throw FailException.ForFailure("BadObjectRequestResult" + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
 		}
 
 		var createdAtRouteResult = Assert.IsAssignableFrom<CreatedAtRouteResult>(result.Result);
@@ -52,7 +52,7 @@ public class DfeAssert
 		{
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
 
-			throw new FailException("BadObjectRequestResult: " + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+			throw FailException.ForFailure("BadObjectRequestResult: " + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
 		}
 
 		var okResult = Assert.IsAssignableFrom<OkResult>(result);
@@ -68,7 +68,7 @@ public class DfeAssert
 		{
 			var validationErrors = Assert.IsAssignableFrom<IReadOnlyCollection<ValidationError>>(badRequestObjectResult.Value);
 
-			throw new FailException("BadObjectRequestResult: " + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
+			throw FailException.ForFailure("BadObjectRequestResult: " + string.Join(";", validationErrors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
 		}
 
 		var okResult = Assert.IsAssignableFrom<OkObjectResult>(result.Result);

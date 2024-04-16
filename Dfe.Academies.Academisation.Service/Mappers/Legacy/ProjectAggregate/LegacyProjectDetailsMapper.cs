@@ -144,7 +144,7 @@ internal static class LegacyProjectDetailsMapper
 
 		// fix for maintaining data in patch that is moved out to indivisual update
 		details.SetPerformanceData(existingProject.Details.KeyStage2PerformanceAdditionalInformation, existingProject.Details.KeyStage4PerformanceAdditionalInformation, existingProject.Details.KeyStage5PerformanceAdditionalInformation, existingProject.Details.EducationalAttendanceAdditionalInformation);
-
+		details.SetIsFormAMat(existingProject.Details.IsFormAMat);
 		return details;
 	}
 

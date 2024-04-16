@@ -38,7 +38,6 @@ public class ApplicationSubmitTests
 	private readonly Fixture _fixture = new();
 	private readonly Faker _faker = new();
 	private readonly AcademisationContext _context;
-	private const string FormAMat = "Form a Mat";
 	private const string Converter = "Converter";
 
 	private readonly IProjectFactory _projectFactory = new ProjectFactory();
@@ -204,16 +203,17 @@ public class ApplicationSubmitTests
 
 		(_, PagedDataResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
 
-		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!, FormAMat);
-		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!, FormAMat);
-		AssertProject(thirdSchool, projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!, FormAMat);
+		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!, Converter, true);
+		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!, Converter, true);
+		AssertProject(thirdSchool, projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!, Converter, true);
 	}
 
-	private static void AssertProject(ApplicationSchoolServiceModel school, ConversionProjectServiceModel project, string type)
+	private static void AssertProject(ApplicationSchoolServiceModel school, ConversionProjectServiceModel project, string type, bool isFormAMat = false)
 	{
 		Assert.Multiple(
 		() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
 		() => Assert.Equal(type, project.AcademyTypeAndRoute),
+		() => Assert.Equal(isFormAMat, project.IsFormAMat),
 		() => Assert.Null(project.ProposedAcademyOpeningDate),
 		() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
 		() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),

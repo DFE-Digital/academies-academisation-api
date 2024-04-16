@@ -23,6 +23,8 @@ public class Project : Entity, IProject, IAggregateRoot
 	private readonly List<ProjectNote> _notes = new();
 
 	public int? FormAMatProjectId { get; private set; }
+	public DateTime? DeletedAt { get; private set; }
+
 	/// <summary>
 	/// This is the persistence constructor, only use from the data layer
 	/// </summary>
@@ -59,6 +61,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = "Converter",
+			IsFormAMat = false,
 			// Temp hotfix
 			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
@@ -99,7 +102,8 @@ public class Project : Entity, IProject, IAggregateRoot
 			ProjectStatus = "Converter Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
-			AcademyTypeAndRoute = "Form a Mat",
+			AcademyTypeAndRoute = "Converter",
+			IsFormAMat = true,
 			// Temp hotfix
 			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
@@ -127,13 +131,14 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		ArgumentNullException.ThrowIfNull(project);
 
-		if (project.Trust == null)
+		if (project.Trust == null && project.HasPreferredTrust.ToLower().Equals("yes"))
 		{
 			return new CreateValidationErrorResult(new List<ValidationError>
 			{
 				new("Trust", "Trust in the model must not be null")
 			});
 		}
+
 		if (project.School == null)
 		{
 			return new CreateValidationErrorResult(new List<ValidationError>
@@ -149,6 +154,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			ProjectStatus = "Converter Pre-AO (C)",
 			TrustReferenceNumber = project.Trust?.ReferenceNumber,
 			NameOfTrust = project.Trust?.Name,
+			IsFormAMat = project.IsFormAMat,
 			AcademyTypeAndRoute = DetermineRoute(project),
 			ConversionSupportGrantAmount = 25000,
 			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
@@ -161,7 +167,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public static string DetermineRoute(NewProject project)
 	{
-		return project.HasSchoolApplied?.ToLower() switch
+		return project.HasSchoolApplied.ToLower() switch
 		{
 			"yes" => "Converter",
 			"no" => "Sponsored",
@@ -470,6 +476,10 @@ public class Project : Entity, IProject, IAggregateRoot
 		this.Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
 		this.Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
 	}
+	public void SetFormAMatProjectReference(int formAMatProjectId)
+	{
+		this.FormAMatProjectId = formAMatProjectId;
+	}
 	public void SetSchoolOverview(
 							  string publishedAdmissionNumber,
 							  string viabilityIssues,
@@ -518,9 +528,23 @@ public class Project : Entity, IProject, IAggregateRoot
 	public void SetFormAMatProjectId(int id)
 	{
 		// Protect normal conversions from having this value set
-		if (Details.AcademyTypeAndRoute == "Form a Mat")
+		if ((this.Details.IsFormAMat.HasValue && this.Details.IsFormAMat.Value))
 		{
 			FormAMatProjectId = id;
 		}
+	}
+
+	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
+	{
+		Details.SetIncomingTrust(trustReferrenceNumber, trustName);
+	}
+	public void SetRoute(string route)
+	{
+		Details.SetRoute(route);
+	}
+
+	public void SetDeletedAt()
+	{
+		DeletedAt = DateTime.UtcNow;
 	}
 }

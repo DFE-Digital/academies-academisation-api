@@ -35,11 +35,14 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; init; }
 	public string? PreviousHeadTeacherBoardLink { get; init; }
-	public string? TrustReferenceNumber { get; init; }
-	public string? NameOfTrust { get; init; }
+	public string? TrustReferenceNumber { get => _trustReferenceNumber; init => _trustReferenceNumber = value; }
+	private string? _trustReferenceNumber;
+	public string? NameOfTrust { get => _nameOfTrust; init => _nameOfTrust = value; }
+	private string? _nameOfTrust;
 	public string? SponsorReferenceNumber { get; init; }
 	public string? SponsorName { get; init; }
-	public string? AcademyTypeAndRoute { get; init; }
+	public string? AcademyTypeAndRoute { get => _academyTypeAndRoute; init => _academyTypeAndRoute = value; }
+	public string? _academyTypeAndRoute;
 	public DateTime? ProposedAcademyOpeningDate { get; init; }
 	public bool? SchoolAndTrustInformationSectionComplete { get; init; }
 	public decimal? ConversionSupportGrantAmount { get; init; }
@@ -110,6 +113,8 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 
 	public bool? ExternalApplicationFormSaved { get; set; }
 	public string? ExternalApplicationFormUrl { get; set; }
+	public bool? IsFormAMat { get => _IsFormAMat; init => _IsFormAMat = value; }
+	private bool? _IsFormAMat;
 
 	public bool Equals(ProjectDetails? other)
 	{
@@ -360,5 +365,18 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		this.KeyStage2PerformanceAdditionalInformation = keyStage2PerformanceAdditionalInformation;
 		this.KeyStage4PerformanceAdditionalInformation = keyStage4PerformanceAdditionalInformation;
 		this.KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
+	}
+	public void SetIsFormAMat(bool? isFormAMat)
+	{
+		_IsFormAMat = isFormAMat;
+	}
+	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
+	{
+		_trustReferenceNumber = trustReferrenceNumber;
+		_nameOfTrust = trustName;
+	}
+	public void SetRoute(string academyTypeAndRoute)
+	{
+		_academyTypeAndRoute = academyTypeAndRoute;
 	}
 }

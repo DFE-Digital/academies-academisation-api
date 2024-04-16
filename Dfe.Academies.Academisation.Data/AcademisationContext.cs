@@ -353,8 +353,11 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 			pd.Property(d => d.ExternalApplicationFormSaved).HasColumnName("ExternalApplicationFormSaved");
 			pd.Property(d => d.ExternalApplicationFormUrl).HasColumnName("ExternalApplicationFormUrl");
+			pd.Property(d => d.IsFormAMat).HasColumnName("IsFormAMat");
 
 		});
+
+		projectConfiguration.HasQueryFilter(d => !d.DeletedAt.HasValue);
 
 		projectConfiguration
 			.HasMany(a => a.Notes)

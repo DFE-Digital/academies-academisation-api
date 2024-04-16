@@ -55,7 +55,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
 				// just filtered out by incoming trust name now to allow for form a mat
 				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
-			
+
 			var recordTotal = projects.Count();
 
 			projects = projects.OrderByDescending(atp => atp.ProjectUrn)
@@ -176,7 +176,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			{
 				Id = project.Id,
 				AssignedUserFullName = string.IsNullOrWhiteSpace(project.AssignedUserEmailAddress) ? null : project.AssignedUserFullName,
-				AdvisoryBoardDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
+				AdvisoryBoardDate = project?.HtbDate ?? null,
+				DecisionDate = advisoryBoardDecision?.AdvisoryBoardDecisionDetails?.AdvisoryBoardDecisionDate,
 				IncomingTrustName = transferringAcademies.FirstOrDefault()?.IncomingTrustName,
 				IncomingTrustUkprn = transferringAcademies.FirstOrDefault()?.IncomingTrustUkprn,
 				LocalAuthority = localAuthorities,

@@ -106,8 +106,11 @@ variable "mssql_database_name" {
 
 variable "mssql_firewall_ipv4_allow_list" {
   description = "A list of IPv4 Addresses that require remote access to the MSSQL Server"
-  type        = list(string)
-  default     = []
+  type = map(object({
+    start_ip_range : string,
+    end_ip_range : optional(string, "")
+  }))
+  default = {}
 }
 
 variable "mssql_server_public_access_enabled" {
@@ -307,4 +310,10 @@ variable "alarm_log_ingestion_gb_per_day" {
   description = "Define an alarm threshold for Log Analytics ingestion rate in GB (per day) (Defaults to 1GB/day)"
   type        = number
   default     = 1
+}
+
+variable "enable_cdn_frontdoor_health_probe" {
+  description = "Enable CDN Front Door health probe"
+  type        = bool
+  default     = false
 }

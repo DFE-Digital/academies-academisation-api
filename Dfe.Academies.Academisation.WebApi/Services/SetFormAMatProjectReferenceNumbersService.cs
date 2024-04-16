@@ -1,17 +1,16 @@
-﻿using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+﻿using Dfe.Academies.Academisation.Service.Commands.FormAMat;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
-using TramsDataApi.RequestModels.AcademyTransferProject;
 
 namespace Dfe.Academies.Academisation.WebApi.Services
 {
-	public sealed class EnrichTransferProjectService : BackgroundService
+	public sealed class SetFormAMatProjectReferenceNumbersService : BackgroundService
 	{
-		private readonly ILogger<EnrichTransferProjectService> _logger;
+		private readonly ILogger<SetFormAMatProjectReferenceNumbersService> _logger;
 		private readonly IServiceScopeFactory _factory;
 		private readonly int _delayInMilliseconds;
 
-		public EnrichTransferProjectService(ILogger<EnrichTransferProjectService> logger, IServiceScopeFactory factory,
+		public SetFormAMatProjectReferenceNumbersService(ILogger<SetFormAMatProjectReferenceNumbersService> logger, IServiceScopeFactory factory,
 			IConfiguration config)
 		{
 			_logger = logger;
@@ -33,16 +32,16 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 
 					using (_logger.BeginScope("x-correlationId: {x-correlationId}", correlationContext.CorrelationId.ToString()))
 					{
-						_logger.LogInformation("Enrich Project Service running at: {time}", DateTimeOffset.Now);
+						_logger.LogInformation("Setting Form A Mat Projects Reference Numbers Service running at: {time}", DateTimeOffset.Now);
 						var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
 						try
 						{
-							await mediator.Send(new PopulateTrustNamesCommand(),stoppingToken);
+							await mediator.Send(new SetFormAMatReferenceNumberCommand(), stoppingToken);
 						}
 						catch (Exception ex)
 						{
-							_logger.LogError("Error enriching project", ex);
+							_logger.LogError("Error setting project reference numbers", ex);
 						}
 
 						await Task.Delay(_delayInMilliseconds, stoppingToken);

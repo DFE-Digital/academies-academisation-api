@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -608,6 +608,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ReferenceNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("FormAMatProject", "academisation");
@@ -624,6 +627,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("FormAMatProjectId")
                         .HasColumnType("int")
@@ -819,6 +825,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("IncomingTrustName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IncomingTrustUkprn")
@@ -1641,6 +1648,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int?>("IfdPipelineId")
                                 .HasColumnType("int")
                                 .HasColumnName("IfdPipelineId");
+
+                            b1.Property<bool?>("IsFormAMat")
+                                .HasColumnType("bit")
+                                .HasColumnName("IsFormAMat");
 
                             b1.Property<string>("KeyStage2PerformanceAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")

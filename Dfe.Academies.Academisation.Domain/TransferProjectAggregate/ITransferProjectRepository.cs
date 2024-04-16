@@ -7,6 +7,5 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 	{
 		public Task<ITransferProject?> GetByUrn(int urn);
 		public Task<IEnumerable<ITransferProject?>> GetAllTransferProjects();
-		public Task<IEnumerable<ITransferProject?>> GetAllTransferProjectsWhereTrustNameIsNull();
 	}
 }

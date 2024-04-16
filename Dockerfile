@@ -1,6 +1,6 @@
 # Stage 1
-ARG ASPNET_IMAGE_TAG=6.0.9-bullseye-slim
-FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
+ARG ASPNET_IMAGE_TAG=8.0-bookworm-slim
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 WORKDIR /build
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -21,7 +21,7 @@ RUN dotnet restore Dfe.Academies.Academisation.WebApi
 RUN dotnet build Dfe.Academies.Academisation.WebApi
 
 RUN dotnet new tool-manifest
-RUN dotnet tool install dotnet-ef --version 7.0.14
+RUN dotnet tool install dotnet-ef --version 8.0.4
 
 RUN dotnet ef migrations script --output /app/SQL/DbMigrationScript.sql --idempotent -p /build/Dfe.Academies.Academisation.Data -s /build/Dfe.Academies.Academisation.WebApi -c AcademisationContext
 
@@ -33,13 +33,14 @@ ARG ASPNET_IMAGE_TAG
 FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
 
 RUN apt-get update
-RUN apt-get install unixodbc curl gnupg -y
+RUN apt-get install curl gnupg -y
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 RUN curl https://packages.microsoft.com/config/debian/11/prod.list | tee /etc/apt/sources.list.d/msprod.list
 RUN apt-get update
-RUN ACCEPT_EULA=Y apt-get install msodbcsql18 mssql-tools18 -y
+RUN ACCEPT_EULA=Y apt-get install msodbcsql18 mssql-tools18 unixodbc-dev -y
 
 COPY --from=build /app /app
 WORKDIR /app
 RUN chmod +x ./docker-entrypoint.sh
+ENV ASPNETCORE_HTTP_PORTS=80
 EXPOSE 80/tcp
