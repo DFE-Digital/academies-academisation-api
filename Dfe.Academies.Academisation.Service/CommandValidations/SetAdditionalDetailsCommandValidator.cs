@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
+﻿using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Service.CommandValidations;

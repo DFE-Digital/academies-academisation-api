@@ -5,7 +5,6 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
-using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace Dfe.Academies.Academisation.Service.Queries;
 

@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ApplicationAggregate;
 

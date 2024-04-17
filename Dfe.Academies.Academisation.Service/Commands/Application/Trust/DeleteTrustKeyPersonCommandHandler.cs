@@ -1,7 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using MediatR;
-using TrustKeyPerson = Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {

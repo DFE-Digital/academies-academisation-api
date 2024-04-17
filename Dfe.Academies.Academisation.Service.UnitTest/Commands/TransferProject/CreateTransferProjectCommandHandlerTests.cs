@@ -8,14 +8,11 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 {
-    public class CreateTransferProjectCommandHandlerTests
+	public class CreateTransferProjectCommandHandlerTests
     {
         private MockRepository mockRepository;
 
@@ -97,10 +94,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			string incomingTrustUkprn = "11110000";
 			string incomingTrusName = "incomingTrusName";
 			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
-			bool isFormAMat = true;
 
-
-			return new CreateTransferProjectCommand(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrusName, academyUkprns, isFormAMat);
+			return new CreateTransferProjectCommand(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrusName, academyUkprns);
 		}
 	}
 }

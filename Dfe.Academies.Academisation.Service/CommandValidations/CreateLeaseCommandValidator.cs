@@ -1,4 +1,3 @@
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using FluentValidation;
 

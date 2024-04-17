@@ -1,9 +1,7 @@
 ﻿using AutoFixture;
 using AutoMapper;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;

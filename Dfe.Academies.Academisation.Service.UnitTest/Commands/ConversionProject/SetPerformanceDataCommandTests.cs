@@ -1,6 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
-using Moq;
-using System;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProject

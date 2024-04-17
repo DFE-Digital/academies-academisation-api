@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
-using Dfe.Academies.Contracts.V4.Establishments;
+﻿using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academies.Contracts.V4.Trusts;
 
 namespace Dfe.Academies.Academisation.IService.Query

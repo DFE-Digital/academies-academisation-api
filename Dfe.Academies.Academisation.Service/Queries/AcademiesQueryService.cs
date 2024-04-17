@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;

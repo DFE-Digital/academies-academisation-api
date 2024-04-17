@@ -1,23 +1,13 @@
-﻿using AutoMapper;
-using Dfe.Academies.Academisation.Core.Utils;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Commands.Application;
-using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using TramsDataApi.RequestModels.AcademyTransferProject;
 using Xunit;
 using AutoFixture;
 using FluentAssertions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Threading;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 {
@@ -51,7 +41,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		{
 			this._mockTransferProjectRepository.Setup(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));
 
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, false, DateTime.Now);
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, DateTime.Now);
 			// Mock GetById to use our Transfer Project from above
 			_mockTransferProjectRepository.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
@@ -91,7 +81,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public async Task Handle_ValidCommand_ReturnsCommandSuccessResponse()
 		{
 			this._mockTransferProjectRepository.Setup(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, false, DateTime.Now);
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, DateTime.Now);
 			// Mock GetById to use our Transfer Project from above
 			_mockTransferProjectRepository.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 

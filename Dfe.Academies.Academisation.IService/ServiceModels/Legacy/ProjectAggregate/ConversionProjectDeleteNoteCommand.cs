@@ -1,7 +1,4 @@
-﻿using Dfe.Academies.Academisation.Core;
-using MediatR;
-
-namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 {
 	public class ConversionProjectDeleteNote
 	{

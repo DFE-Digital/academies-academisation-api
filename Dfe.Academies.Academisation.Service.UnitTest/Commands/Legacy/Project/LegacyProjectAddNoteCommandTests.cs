@@ -5,7 +5,6 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
-using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using FluentAssertions;
 using Moq;
 using Xunit;

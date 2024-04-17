@@ -1,6 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
-
-namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+﻿namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
 public class SchoolDetails
 {

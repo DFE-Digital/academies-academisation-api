@@ -1,7 +1,6 @@
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
-using Dfe.Academies.Academisation.Service.CommandValidations;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application.School;

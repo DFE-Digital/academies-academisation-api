@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 {
-    public class PagedResultResponse<T>
+	public class PagedResultResponse<T>
     {
         public PagedResultResponse(IEnumerable<T> results = null, int totalCount = 0)
         {

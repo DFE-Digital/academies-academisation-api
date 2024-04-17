@@ -8,7 +8,6 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ApplicationAggregate

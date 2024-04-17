@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
@@ -29,7 +28,6 @@ public class CreateTransferProjectCommandHandler : IRequestHandler<CreateTransfe
 			request.IncomingTrustUkprn,
 			request.IncomingTrustName,
 			request.TransferringAcademyUkprns, 
-			request.IsFormAMat,
 			_dateTimeProvider.Now);
 
 		 _transferProjectRepository.Insert(transferProject);

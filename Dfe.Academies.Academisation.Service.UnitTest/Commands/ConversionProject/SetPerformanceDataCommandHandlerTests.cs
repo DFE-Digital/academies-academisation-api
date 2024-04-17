@@ -8,13 +8,11 @@ using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProject
 {
-    public class SetPerformanceDataCommandHandlerTests
+	public class SetPerformanceDataCommandHandlerTests
     {
 		private MockRepository mockRepository;
 

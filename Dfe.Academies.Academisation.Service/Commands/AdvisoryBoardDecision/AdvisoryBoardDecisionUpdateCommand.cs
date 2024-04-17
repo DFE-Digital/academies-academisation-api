@@ -3,7 +3,6 @@ using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
-using Dfe.Academies.Academisation.Service.Mappers;
 using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 
 namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;

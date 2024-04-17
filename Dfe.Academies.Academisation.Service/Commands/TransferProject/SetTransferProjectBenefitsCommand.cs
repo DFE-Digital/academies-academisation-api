@@ -1,9 +1,6 @@
-﻿using Dfe.Academies.Academisation.Core;
-using MediatR;
-
-namespace TramsDataApi.RequestModels.AcademyTransferProject
+﻿namespace TramsDataApi.RequestModels.AcademyTransferProject
 {
-    public class SetTransferProjectBenefitsCommand : SetTransferProjectCommand
+	public class SetTransferProjectBenefitsCommand : SetTransferProjectCommand
 	{
         public IntendedTransferBenefitDto IntendedTransferBenefits { get; set; }
         public OtherFactorsToConsiderDto OtherFactorsToConsider { get; set; }

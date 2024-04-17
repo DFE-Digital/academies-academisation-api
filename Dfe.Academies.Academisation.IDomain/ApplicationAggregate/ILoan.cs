@@ -1,6 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-
-namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
+﻿namespace Dfe.Academies.Academisation.IDomain.ApplicationAggregate
 {
 	public interface ILoan
 	{

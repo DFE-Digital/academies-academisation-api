@@ -1,6 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.Query;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

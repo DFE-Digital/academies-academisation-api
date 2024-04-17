@@ -7,7 +7,6 @@ using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Dfe.Academies.Academisation.Service.Commands.Application;
-using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers

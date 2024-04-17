@@ -1,14 +1,11 @@
 ﻿using AutoFixture;
-using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using FluentAssertions;
-using Moq;
-using System;
 using TramsDataApi.RequestModels.AcademyTransferProject;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 {
-    public class SetTransferProjectBenefitsCommandTests
+	public class SetTransferProjectBenefitsCommandTests
     {
 		[Fact]
 		public void CommandProperties_AreSetCorrectly()

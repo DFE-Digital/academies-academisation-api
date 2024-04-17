@@ -3,7 +3,6 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using TramsDataApi.RequestModels.AcademyTransferProject;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands.Application;
-using System;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {

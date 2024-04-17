@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Domain.Validations;
 

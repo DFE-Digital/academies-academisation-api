@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 {
 	public class AssignedUserResponse
 	{

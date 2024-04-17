@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using AutoMapper;
-using Dfe.Academies.Academisation.Data.Migrations;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
 using FluentAssertions;

@@ -1,6 +1,4 @@
-﻿using AutoFixture.Kernel;
-using AutoFixture;
-using System.Reflection;
+﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest

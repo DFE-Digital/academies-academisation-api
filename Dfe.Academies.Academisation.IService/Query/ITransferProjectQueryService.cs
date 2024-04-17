@@ -1,6 +1,4 @@
-﻿using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
+﻿using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.IService.Query
 {
