@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferringAcademy : ITransferringAcademy
 	{
-		public TransferringAcademy(string? incomingTrustUkprn, string incomingTrustName, string outgoingAcademyUkprn)
+		public TransferringAcademy(string? incomingTrustUkprn, string? incomingTrustName, string outgoingAcademyUkprn)
 		{
 			IncomingTrustUkprn = incomingTrustUkprn;
 			IncomingTrustName = incomingTrustName;	
@@ -21,7 +21,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public int TransferProjectId { get; private set; }
 		public string OutgoingAcademyUkprn { get; private set; }
 		public string? IncomingTrustUkprn { get; private set; }
-		public string IncomingTrustName { get; private set; }
+		public string? IncomingTrustName { get; private set; }
 
 		public string? PupilNumbersAdditionalInformation { get; private set; }
 		public string? LatestOfstedReportAdditionalInformation { get; private set; }

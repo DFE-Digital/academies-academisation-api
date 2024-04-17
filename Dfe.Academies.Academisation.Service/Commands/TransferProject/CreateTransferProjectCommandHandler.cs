@@ -29,6 +29,7 @@ public class CreateTransferProjectCommandHandler : IRequestHandler<CreateTransfe
 			request.IncomingTrustUkprn,
 			request.IncomingTrustName,
 			request.TransferringAcademyUkprns, 
+			request.IsFormAMat,
 			_dateTimeProvider.Now);
 
 		 _transferProjectRepository.Insert(transferProject);
