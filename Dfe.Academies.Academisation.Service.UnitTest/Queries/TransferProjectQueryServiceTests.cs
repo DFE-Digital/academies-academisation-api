@@ -1,18 +1,17 @@
-﻿using Xunit;
-using Moq;
-using FluentAssertions;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
-using Dfe.Academies.Academisation.Service.Queries;
+﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
+using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
+using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.Service.UnitTest.Mocks;
-using Microsoft.Extensions.DependencyInjection;
 using Dfe.Academies.Contracts.V4.Establishments;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 {
@@ -35,15 +34,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var dummyUrn = 1;
 
-		// Create a TransferProject
-		ITransferProject dummyTransferProject = TransferProject.Create(
-			"dummyOutgoingTrustUkprn",
-			"out trust",
-			"dummyIncomingTrustUkprn",
-			"in trust",
-			new List<string> { "dummyUkprn1", "dummyUkprn2" },
-			DateTime.Now
-		);
+			// Create a TransferProject
+			ITransferProject dummyTransferProject = TransferProject.Create(
+				"dummyOutgoingTrustUkprn",
+				"out trust",
+				"dummyIncomingTrustUkprn",
+				"in trust",
+				new List<string> { "dummyUkprn1", "dummyUkprn2" },
+				DateTime.Now
+			);
 
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult((ITransferProject?)dummyTransferProject));
@@ -68,15 +67,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var dummyId = 1;
 
-		// Create a TransferProject
-		var dummyTransferProject = TransferProject.Create(
-			"dummyOutgoingTrustUkprn",
-			"out trust",
-			"dummyIncomingTrustUkprn",
-			"in trust",
-			new List<string> { "dummyUkprn1", "dummyUkprn2" },
-			DateTime.Now
-		);
+			// Create a TransferProject
+			var dummyTransferProject = TransferProject.Create(
+				"dummyOutgoingTrustUkprn",
+				"out trust",
+				"dummyIncomingTrustUkprn",
+				"in trust",
+				new List<string> { "dummyUkprn1", "dummyUkprn2" },
+				DateTime.Now
+			);
 
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
@@ -246,5 +245,58 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				Urn = "0"
 			};
 		}
+
+
+		[Fact]
+		public async Task GetProjects_ReturnsFilteredProjects()
+		{
+			// Arrange
+			var mockRepository = new Mock<ITransferProjectRepository>();
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionGetDataByProjectIdQuery);
+
+			var states = new List<string> { "Active", "Completed" };
+			var title = "Project X";
+			var deliveryOfficers = new List<string> { "Officer A" };
+			var page = 1;
+			var count = 10;
+
+			// Sample data setup
+			var dummyProjects = new List<TransferProject>
+	{
+		TransferProject.Create("outUkprn1", "Out Trust 1", "inUkprn1", "In Trust 1", new List<string> { "ukprn1" }, DateTime.UtcNow),
+		TransferProject.Create("outUkprn2", "Out Trust 2", "inUkprn2", "In Trust 2", new List<string> { "ukprn2" }, DateTime.UtcNow)
+	};
+
+			// Expected data setup
+			var expectedData = dummyProjects.Select(p => new AcademyTransferProjectSummaryResponse
+			{
+				ProjectUrn = p.Urn.ToString(),
+				ProjectReference = p.ProjectReference,
+				OutgoingTrustUkprn = p.OutgoingTrustUkprn,
+				OutgoingTrustName = p.OutgoingTrustName,
+				Status = p.Status,
+				TransferringAcademies = p.TransferringAcademies.Select(a => new TransferringAcademiesResponse
+				{
+					IncomingTrustName = a.IncomingTrustName,
+					IncomingTrustUkprn = a.IncomingTrustUkprn,
+					OutgoingAcademyUkprn = a.OutgoingAcademyUkprn,
+				}).ToList(),
+				AssignedUser = null,
+				IsFormAMat = false
+			});
+
+			mockRepository.Setup(repo => repo.SearchProjects(states, title, deliveryOfficers, page, count))
+				.ReturnsAsync((dummyProjects, 2));  // 2 represents the total count of items
+
+			// Act
+			var result = await service.GetProjects(states, title, deliveryOfficers, page, count);
+
+			// Assert
+			result.Should().NotBeNull();
+			result!.Data.Should().BeEquivalentTo(expectedData);
+			result.Paging.Page.Should().Be(page);
+			result.Paging.RecordCount.Should().Be(2);
+		}
+
 	}
 }
