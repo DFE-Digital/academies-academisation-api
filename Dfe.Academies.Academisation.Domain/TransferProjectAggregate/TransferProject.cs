@@ -34,7 +34,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public string? ProjectReference { get; private set; }
 		public string OutgoingTrustUkprn { get; private set; }
-		public string? OutgoingTrustName{ get; private set; }
+		public string? OutgoingTrustName { get; private set; }
 		public string? WhoInitiatedTheTransfer { get; private set; }
 
 
@@ -94,7 +94,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
 
 		IReadOnlyCollection<IIntendedTransferBenefit> ITransferProject.IntendedTransferBenefits => _intendedTransferBenefits;
-		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies => 
+		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies =>
 			_transferringAcademies;
 
 		public DateTime? CreatedOn { get; private set; }
@@ -133,7 +133,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		}
 
 		public void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted)
-		{	
+		{
 			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
 			_specificReasonsForTransfer = specificReasonsForTransfer;
 			TypeOfTransfer = transferType;
@@ -166,12 +166,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			);
 		}
 
-		public void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered, 
-			List<string> selectedBenefits, string? otherBenefitValue, 
-			bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification, 
-			bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification, 
-			bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification, 
-			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification, 
+		public void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered,
+			List<string> selectedBenefits, string? otherBenefitValue,
+			bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification,
+			bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification,
+			bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification,
+			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification,
 			bool? isCompleted)
 		{
 			AnyRisks = anyRisks;
@@ -182,7 +182,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			OtherBenefitValue = otherBenefitValue;
 
 			HighProfileShouldBeConsidered = highProfileShouldBeConsidered;
-            HighProfileFurtherSpecification = highProfileFurtherSpecification;
+			HighProfileFurtherSpecification = highProfileFurtherSpecification;
 			ComplexLandAndBuildingShouldBeConsidered = complexLandAndBuildingShouldBeConsidered;
 			ComplexLandAndBuildingFurtherSpecification = complexLandAndBuildingFurtherSpecification;
 			FinanceAndDebtShouldBeConsidered = financeAndDebtShouldBeConsidered;
@@ -219,7 +219,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			var transferringAcademy =
 						TransferringAcademies.SingleOrDefault(x => x.Id == academyId);
 
-			if (transferringAcademy != null) {
+			if (transferringAcademy != null)
+			{
 
 				transferringAcademy.SetIncomingTrustName(incomingTrustName);
 

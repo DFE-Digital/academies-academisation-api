@@ -35,16 +35,16 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var dummyUrn = 1;
 
 
-		// Create a TransferProject
-		ITransferProject dummyTransferProject = TransferProject.Create(
-			"dummyOutgoingTrustUkprn",
-			"out trust",
-			"dummyIncomingTrustUkprn",
-			"in trust",
-			new List<string> { "dummyUkprn1", "dummyUkprn2" },
-			false,
-			DateTime.Now
-		);
+			// Create a TransferProject
+			ITransferProject dummyTransferProject = TransferProject.Create(
+				"dummyOutgoingTrustUkprn",
+				"out trust",
+				"dummyIncomingTrustUkprn",
+				"in trust",
+				new List<string> { "dummyUkprn1", "dummyUkprn2" },
+				false,
+				DateTime.Now
+			);
 
 
 			// Mock the setup to return the dummy project
@@ -71,16 +71,16 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var dummyId = 1;
 
 
-		// Create a TransferProject
-		var dummyTransferProject = TransferProject.Create(
-			"dummyOutgoingTrustUkprn",
-			"out trust",
-			"dummyIncomingTrustUkprn",
-			"in trust",
-			new List<string> { "dummyUkprn1", "dummyUkprn2" },
-			false,
-			DateTime.Now
-		);
+			// Create a TransferProject
+			var dummyTransferProject = TransferProject.Create(
+				"dummyOutgoingTrustUkprn",
+				"out trust",
+				"dummyIncomingTrustUkprn",
+				"in trust",
+				new List<string> { "dummyUkprn1", "dummyUkprn2" },
+				false,
+				DateTime.Now
+			);
 
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
@@ -268,8 +268,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Sample data setup
 			var dummyProjects = new List<TransferProject>
 	{
-		TransferProject.Create("outUkprn1", "Out Trust 1", "inUkprn1", "In Trust 1", new List<string> { "ukprn1" }, DateTime.UtcNow),
-		TransferProject.Create("outUkprn2", "Out Trust 2", "inUkprn2", "In Trust 2", new List<string> { "ukprn2" }, DateTime.UtcNow)
+		TransferProject.Create("outUkprn1", "Out Trust 1", "inUkprn1", "In Trust 1", new List<string> { "ukprn1" },false, DateTime.UtcNow),
+		TransferProject.Create("outUkprn2", "Out Trust 2", "inUkprn2", "In Trust 2", new List<string> { "ukprn2" },false, DateTime.UtcNow)
 	};
 
 			// Expected data setup
