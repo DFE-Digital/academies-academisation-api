@@ -144,7 +144,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <summary>
 		///     Retrieve all projects matching specified filter conditions
 		/// </summary>
-		/// <param name="searchModel"><see cref="GetAcademyConversionSearchModel"/> describing filtering requirements for the request</param>
+		/// <param name="searchModel"><see cref="GetProjectSearchModel"/> describing filtering requirements for the request</param>
 		/// <param name="urn">URN of a specific project to retrieve</param>
 		/// <remarks>
 		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
@@ -169,7 +169,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// <summary>
 		///     Retrieve all form a mat projects matching specified filter conditions
 		/// </summary>
-		/// <param name="searchModel"><see cref="GetAcademyConversionSearchModel"/> describing filtering requirements for the request</param>
+		/// <param name="searchModel"><see cref="GetProjectSearchModel"/> describing filtering requirements for the request</param>
 		/// <param name="urn">URN of a specific project to retrieve</param>
 		/// <remarks>
 		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
@@ -300,23 +300,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				NotFoundCommandResult => NotFound(),
 				CommandValidationErrorResult validationErrorResult =>
 					BadRequest(validationErrorResult.ValidationErrors),
-				_ => throw new NotImplementedException()
-			};
-		}
-
-		[HttpDelete("{id:int}/Delete", Name = "DeleteProject")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> DeleteAProjectById(int id, CancellationToken cancellationToken)
-		{
-			SetDeletedAtCommand request = new SetDeletedAtCommand(id);
-
-			CommandResult result = await _mediator.Send(request);
-
-			return result switch
-			{
-				CommandSuccessResult => Ok(),
-				NotFoundCommandResult => NotFound(),
 				_ => throw new NotImplementedException()
 			};
 		}

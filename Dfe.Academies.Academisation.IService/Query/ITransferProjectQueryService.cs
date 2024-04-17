@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.IService.Query
@@ -10,6 +9,7 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<AcademyTransferProjectResponse?> GetById(int id);
 		Task<PagedResultResponse<AcademyTransferProjectSummaryResponse>> GetTransferProjects(int page, int count, int? urn,
 		string title);
+		Task<PagedDataResponse<AcademyTransferProjectSummaryResponse>?> GetProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count);
 		Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string? title);
 
 	}
