@@ -7,6 +7,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 {
 	public ConversionAdvisoryBoardDecisionValidator()
 	{
+		ValidateApprovedDecision();
 		ValidateDeclinedDecision();
 		ValidateDeferredDecision();
 		ValidateWithdrawnDecision();

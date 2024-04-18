@@ -46,28 +46,28 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		return base.SaveChanges();
 	}
 
-	public EntityEntry<T> ReplaceTracked<T>(T baseEntity) where T : BaseEntity
-	{
-		var entity = ChangeTracker
-			.Entries<T>()
-			.SingleOrDefault(s => s.Entity.Id == baseEntity.Id);
+	//public EntityEntry<T> ReplaceTracked<T>(T baseEntity) where T : BaseEntity
+	//{
+	//	var entity = ChangeTracker
+	//		.Entries<T>()
+	//		.SingleOrDefault(s => s.Entity.Id == baseEntity.Id);
 
-		if (entity is null) throw new InvalidOperationException("An entity matching this Id is not being tracked");
+	//	if (entity is null) throw new InvalidOperationException("An entity matching this Id is not being tracked");
 
-		var childCollections = entity.Collections
-			.Select(collection => collection.CurrentValue)
-			.Select(childCollection => childCollection);
+	//	var childCollections = entity.Collections
+	//		.Select(collection => collection.CurrentValue)
+	//		.Select(childCollection => childCollection);
 
-		foreach (var children in childCollections)
-		{
-			if (children is null) continue;
-			foreach (var child in children) Remove(child);
-		}
+	//	foreach (var children in childCollections)
+	//	{
+	//		if (children is null) continue;
+	//		foreach (var child in children) Remove(child);
+	//	}
 
-		entity.State = EntityState.Detached;
+	//	entity.State = EntityState.Detached;
 
-		return Update(baseEntity);
-	}
+	//	return Update(baseEntity);
+	//}
 
 	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
 	{
@@ -90,22 +90,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		var timestamp = DateTime.UtcNow;
 
-		var entities = ChangeTracker.Entries<BaseEntity>().ToList();
 		var entities2 = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
-		var entities3 = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
-		var entities4 = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
-
-		foreach (var entity in entities.Where(e => e.State == EntityState.Added))
-		{
-			entity.Entity.CreatedOn = timestamp;
-			entity.Entity.LastModifiedOn = timestamp;
-		}
-
-		foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
-		{
-			entity.Entity.LastModifiedOn = timestamp;
-		}
-
+		var entities3 = ChangeTracker.Entries<AdvisoryBoardDeclinedReasonDetails>().ToList();
+		var entities4 = ChangeTracker.Entries<AdvisoryBoardWithdrawnReasonDetails>().ToList();
 
 		foreach (var entity in entities2.Where(e => e.State == EntityState.Added))
 		{

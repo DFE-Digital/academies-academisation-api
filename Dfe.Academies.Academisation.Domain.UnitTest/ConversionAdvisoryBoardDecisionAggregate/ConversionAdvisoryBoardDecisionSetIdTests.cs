@@ -16,7 +16,7 @@ public class ConversionAdvisoryBoardDecisionSetIdTests
 		//Arrange
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
 		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, default, default);
-
+		
 		//Act & Assert
 		Assert.Throws<InvalidOperationException>(() => target.SetId(1));
 	}

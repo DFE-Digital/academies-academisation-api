@@ -146,7 +146,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-				   == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate))
+				   == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)}")
 			);
 	}
 
@@ -173,7 +173,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate))
+					 == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)}")
 		);
 	}
 
@@ -200,7 +200,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
+					 == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.ApprovedConditionsSet)}")
 		);
 	}
 
@@ -230,8 +230,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.False(result.IsValid),
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
-				e => e.PropertyName
-					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails))
+				e => e.PropertyName ==
+					 $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)}")
 		);
 	}
 
@@ -258,7 +258,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails))
+					 == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.ApprovedConditionsDetails)}")
 		);
 	}
 
@@ -485,7 +485,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
+					 == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.ApprovedConditionsSet)}")
 		);
 	}
 
@@ -512,7 +512,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-					 == nameof(IConversionAdvisoryBoardDecision.DeferredReasons))
+					 == $"{nameof(ConversionAdvisoryBoardDecision.DeferredReasons)}")
 		);
 	}
 
@@ -625,7 +625,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			() => Assert.NotEmpty(result.Errors),
 			() => Assert.Contains(result.Errors,
 				e => e.PropertyName
-					 == nameof(IConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet))
+					 == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.ApprovedConditionsSet)}")
 		);
 	}
 

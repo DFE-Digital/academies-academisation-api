@@ -27,22 +27,6 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 	}
 
 	[Fact]
-	public async Task WhenRecordDoesNotExist___ThrowsConcurrencyException()
-	{
-		const int decisionId = 4;
-
-		AdvisoryBoardDecisionUpdateDataCommand query = new(_repo);
-
-		_mockDecision.SetupGet(d => d.Id).Returns(decisionId);
-
-		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-		 	.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
-
-		//Act & Assert
-		await Assert.ThrowsAsync<InvalidOperationException>(() => query.Execute(_mockDecision.Object));
-	}
-
-	[Fact]
 	public async Task WhenRecordAlreadyExists___UpdatesExistingRecord()
 	{
 		//Arrange
@@ -52,6 +36,10 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		var existingDecision = await _context.ConversionAdvisoryBoardDecisions
 			.SingleAsync(d => d.Id == decisionId);
+
+		var originalDecisionApprovedConditionsSet = existingDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet;
+		var originalDecisionLastModified = existingDecision.LastModifiedOn;
+		var originalDecisionCreatedOn = existingDecision.CreatedOn;
 
 		var details = _fixture.Build<AdvisoryBoardDecisionDetails>()
 			.With(d => d.Decision, AdvisoryBoardDecision.Approved)
@@ -70,9 +58,9 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		//Assert
 		Assert.Multiple(
-			() => Assert.NotEqual(existingDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet, result!.AdvisoryBoardDecisionDetails.ApprovedConditionsSet),
-			() => Assert.NotEqual(existingDecision.LastModifiedOn, result!.LastModifiedOn),
-			() => Assert.Equal(existingDecision.CreatedOn, result!.CreatedOn)
+			() => Assert.NotEqual(originalDecisionApprovedConditionsSet, result!.AdvisoryBoardDecisionDetails.ApprovedConditionsSet),
+			() => Assert.NotEqual(originalDecisionLastModified, result!.LastModifiedOn),
+			() => Assert.Equal(originalDecisionCreatedOn, result!.CreatedOn)
 		);
 	}
 }

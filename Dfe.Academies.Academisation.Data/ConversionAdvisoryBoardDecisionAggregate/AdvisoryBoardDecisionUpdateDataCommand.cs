@@ -20,15 +20,9 @@ public class AdvisoryBoardDecisionUpdateDataCommand : IAdvisoryBoardDecisionUpda
 
 		_advisoryBoardDecisionRepository.Update(decision as ConversionAdvisoryBoardDecision);
 
-		try
-		{
+
 await _advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync();
-		}
-		catch (Exception ex)
-		{
-			var e = ex;
-			throw;
-		}
+
 		
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoFixture;
 using Bogus;
 using Dfe.Academies.Academisation.Core;
@@ -48,9 +49,9 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>());
 
-		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
-		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
-		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
+		var deferred = new List<AdvisoryBoardDeferredReasonDetails>();
+		var declined = new List<AdvisoryBoardDeclinedReasonDetails>();
+		var withdrawn = new List<AdvisoryBoardWithdrawnReasonDetails>();
 
 		//Act
 		var result = _target.Create(details, deferred, declined, withdrawn);

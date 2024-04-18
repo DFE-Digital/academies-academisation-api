@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Collections.Generic;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
@@ -11,15 +12,15 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 {
 	protected ConversionAdvisoryBoardDecision(){}
 	private ConversionAdvisoryBoardDecision(AdvisoryBoardDecisionDetails details,
-		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
-		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
-		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons
+		IEnumerable<AdvisoryBoardDeferredReasonDetails>? deferredReasons,
+		IEnumerable<AdvisoryBoardDeclinedReasonDetails>? declinedReasons,
+		IEnumerable<AdvisoryBoardWithdrawnReasonDetails>? withdrawnReasons
 		)
 	{
 		AdvisoryBoardDecisionDetails = details;
-		_deferredReasons = deferredReasons.ToList();
-		_declinedReasons = declinedReasons.ToList();
-		_withdrawnReasons = withdrawnReasons.ToList();
+		_deferredReasons = deferredReasons?.Any() ?? false ? deferredReasons.ToList() : _deferredReasons;
+		_declinedReasons = declinedReasons?.Any() ?? false ? declinedReasons.ToList() : _declinedReasons;
+		_withdrawnReasons = withdrawnReasons?.Any() ?? false ? withdrawnReasons.ToList() : _withdrawnReasons;
 	}
 
 	public ConversionAdvisoryBoardDecision(
@@ -69,19 +70,15 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 	}
 
 	public CommandResult Update(AdvisoryBoardDecisionDetails details,
-		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
-		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
-		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons)
+		IEnumerable<AdvisoryBoardDeferredReasonDetails>? deferredReasons,
+		IEnumerable<AdvisoryBoardDeclinedReasonDetails>? declinedReasons,
+		IEnumerable<AdvisoryBoardWithdrawnReasonDetails>? withdrawnReasons)
 	{
-		AdvisoryBoardDecisionDetails = details;
-		_declinedReasons.Clear(); 
-		_declinedReasons.AddRange(declinedReasons.ToList());
-		_deferredReasons.Clear();
-		_deferredReasons.AddRange(deferredReasons.ToList());
-		_withdrawnReasons.Clear();
-		_withdrawnReasons.AddRange(withdrawnReasons.ToList());
+		// create a new decision to validate intended state
+		// if validation fails do not change internal state and raise validation error result
+		var decision = new ConversionAdvisoryBoardDecision(details, deferredReasons, declinedReasons, withdrawnReasons);
 
-		var validationResult = Validator.Validate(this);
+		var validationResult = Validator.Validate(decision);
 
 		if (!validationResult.IsValid)
 		{
@@ -89,9 +86,16 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 				.Select(x => new ValidationError(x.PropertyName, x.ErrorMessage));
 
 			return new CommandValidationErrorResult(validationError);
-		}
-
+		}		
 		
+		AdvisoryBoardDecisionDetails = details;
+		_declinedReasons.Clear(); 
+		_declinedReasons.AddRange(declinedReasons?.Any() ?? false ? declinedReasons.ToList() : _declinedReasons);
+		_deferredReasons.Clear();
+		_deferredReasons.AddRange(deferredReasons?.Any() ?? false ? deferredReasons.ToList() : _deferredReasons);
+		_withdrawnReasons.Clear();
+		_withdrawnReasons.AddRange(WithdrawnReasons?.Any() ?? false ? WithdrawnReasons.ToList() : _withdrawnReasons);
+	
 		return new CommandSuccessResult();
 	}
 

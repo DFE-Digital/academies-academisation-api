@@ -35,6 +35,15 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		_mockDecision
 			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
+		_mockDecision
+			.SetupGet(d => d.DeferredReasons)
+			.Returns(new List<AdvisoryBoardDeferredReasonDetails>());
+		_mockDecision
+			.SetupGet(d => d.DeclinedReasons)
+			.Returns(new List<AdvisoryBoardDeclinedReasonDetails>());
+		_mockDecision
+			.SetupGet(d => d.WithdrawnReasons)
+			.Returns(new List<AdvisoryBoardWithdrawnReasonDetails>());
 
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 
@@ -76,6 +85,15 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		_mockDecision
 			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
 			.Returns(details);
+		_mockDecision
+			.SetupGet(d => d.DeferredReasons)
+			.Returns(deferred.ToList().AsReadOnly());
+		_mockDecision
+			.SetupGet(d => d.DeclinedReasons)
+			.Returns(declined.ToList().AsReadOnly());
+		_mockDecision
+			.SetupGet(d => d.WithdrawnReasons)
+			.Returns(withdrawn.ToList().AsReadOnly());
 
 		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
 
