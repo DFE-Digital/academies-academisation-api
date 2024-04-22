@@ -257,7 +257,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		{
 			// Arrange
 			var mockRepository = new Mock<ITransferProjectRepository>();
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionGetDataByProjectIdQuery);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
 
 			var states = new List<string> { "Active", "Completed" };
 			var title = "Project X";
