@@ -199,7 +199,7 @@ public class ApplicationSubmitTests
 
 		var projectController = new ProjectController(
 			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
-		var projectResults = await projectController.GetProjects(new GetAcademyConversionSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
+		var projectResults = await projectController.GetProjects(new GetProjectSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
 
 		(_, PagedDataResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
 

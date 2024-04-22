@@ -97,8 +97,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			string incomingTrustUkprn = "11110000";
 			string incomingTrusName = "incomingTrusName";
 			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			bool isFormAMat = true;
 
-			return new CreateTransferProjectCommand(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrusName, academyUkprns);
+
+			return new CreateTransferProjectCommand(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrusName, academyUkprns, isFormAMat);
 		}
 	}
 }

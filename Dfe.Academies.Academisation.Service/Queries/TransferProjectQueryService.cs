@@ -2,8 +2,10 @@
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Extensions;
+using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 
@@ -49,12 +51,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			IEnumerable<AcademyTransferProjectSummaryResponse> projects =
 				FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
 
-			// remove any projects without an incoming or outgoing trust.
+			// remove any projects without an outgoing trust.
 			projects = projects
 			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				// just filtered out by incoming trust name now to allow for form a mat
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) 
+				).ToList();
 
 			var recordTotal = projects.Count();
 
@@ -63,7 +64,18 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			return await Task.FromResult(new PagedResultResponse<AcademyTransferProjectSummaryResponse>(projects, recordTotal));
 		}
+		public async Task<PagedDataResponse<AcademyTransferProjectSummaryResponse>?> GetProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
+		{
+			var (projects, totalCount) = await _transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
+			IEnumerable<AcademyTransferProjectSummaryResponse> data = AcademyTransferProjectSummaryResponse(projects);
+			var pageResponse = PagingResponseFactory.Create("transfer-projects/projects", page, count, totalCount,
+				new Dictionary<string, object?> {
+				{"states", states},
+				});
 
+			return new PagedDataResponse<AcademyTransferProjectSummaryResponse>(data,
+				pageResponse);
+		}
 		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string? title)
 		{
 			IEnumerable<ITransferProject?> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();
@@ -82,12 +94,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			transferProjects =
 				FilterExportedTransferProjectsByIncomingTrust(title, transferProjects);
 
-			// remove any projects without an incoming or outgoing trust.
+			// remove any projects without an outgoing trust.
 			transferProjects = transferProjects
 			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) &&
-				// just filtered out by incoming trust name now to allow for form a mat
-				!p.TransferringAcademies.Any(ta => string.IsNullOrEmpty(ta.IncomingTrustName))).ToList();
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)).ToList(); 
 
 			var projects = await MapExportedTransferProjectModel(transferProjects, advisoryBoardDecisions);
 
