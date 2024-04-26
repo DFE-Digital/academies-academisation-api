@@ -25,14 +25,14 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	}
 
-	public DbSet<Application> Applications { get; set; } = null!; // done
-	public DbSet<Contributor> Contributors { get; set; } = null!; // done
-	public DbSet<School> Schools { get; set; } = null!; // done
-	public DbSet<Loan> SchoolLoans { get; set; } = null!;  // done
-	public DbSet<Lease> SchoolLeases { get; set; } = null!; // done
+	public DbSet<Application> Applications { get; set; } = null!;
+	public DbSet<Contributor> Contributors { get; set; } = null!;
+	public DbSet<School> Schools { get; set; } = null!; 
+	public DbSet<Loan> SchoolLoans { get; set; } = null!; 
+	public DbSet<Lease> SchoolLeases { get; set; } = null!;
 
-	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; // done
-	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
+	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; 
+	public DbSet<FormTrust> FormTrusts { get; set; } = null!; 
 
 	public DbSet<Project> Projects { get; set; } = null!;
 	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
@@ -45,29 +45,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		SetModifiedAndCreatedDates();
 		return base.SaveChanges();
 	}
-
-	//public EntityEntry<T> ReplaceTracked<T>(T baseEntity) where T : BaseEntity
-	//{
-	//	var entity = ChangeTracker
-	//		.Entries<T>()
-	//		.SingleOrDefault(s => s.Entity.Id == baseEntity.Id);
-
-	//	if (entity is null) throw new InvalidOperationException("An entity matching this Id is not being tracked");
-
-	//	var childCollections = entity.Collections
-	//		.Select(collection => collection.CurrentValue)
-	//		.Select(childCollection => childCollection);
-
-	//	foreach (var children in childCollections)
-	//	{
-	//		if (children is null) continue;
-	//		foreach (var child in children) Remove(child);
-	//	}
-
-	//	entity.State = EntityState.Detached;
-
-	//	return Update(baseEntity);
-	//}
 
 	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
 	{
@@ -90,39 +67,40 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		var timestamp = DateTime.UtcNow;
 
-		var entities2 = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
-		var entities3 = ChangeTracker.Entries<AdvisoryBoardDeclinedReasonDetails>().ToList();
-		var entities4 = ChangeTracker.Entries<AdvisoryBoardWithdrawnReasonDetails>().ToList();
+		// ToDo: tech debt - these need changing to implement 'entity' so they are not a special case in this scenario
+		var advisoryBoardDeferredReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
+		var advisoryBoardDeclinedReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardDeclinedReasonDetails>().ToList();
+		var AdvisoryBoardWithdrawnReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardWithdrawnReasonDetails>().ToList();
 
-		foreach (var entity in entities2.Where(e => e.State == EntityState.Added))
+		foreach (var entity in advisoryBoardDeferredReasonDetailsEntities.Where(e => e.State == EntityState.Added))
 		{
 			entity.Entity.CreatedOn = timestamp;
 			entity.Entity.LastModifiedOn = timestamp;
 		}
 
-		foreach (var entity in entities2.Where(e => e.State == EntityState.Modified))
+		foreach (var entity in advisoryBoardDeferredReasonDetailsEntities.Where(e => e.State == EntityState.Modified))
 		{
 			entity.Entity.LastModifiedOn = timestamp;
 		}
 
-		foreach (var entity in entities3.Where(e => e.State == EntityState.Added))
-		{
-			entity.Entity.CreatedOn = timestamp;
-			entity.Entity.LastModifiedOn = timestamp;
-		}
-
-		foreach (var entity in entities3.Where(e => e.State == EntityState.Modified))
-		{
-			entity.Entity.LastModifiedOn = timestamp;
-		}
-
-		foreach (var entity in entities4.Where(e => e.State == EntityState.Added))
+		foreach (var entity in advisoryBoardDeclinedReasonDetailsEntities.Where(e => e.State == EntityState.Added))
 		{
 			entity.Entity.CreatedOn = timestamp;
 			entity.Entity.LastModifiedOn = timestamp;
 		}
 
-		foreach (var entity in entities4.Where(e => e.State == EntityState.Modified))
+		foreach (var entity in advisoryBoardDeclinedReasonDetailsEntities.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in AdvisoryBoardWithdrawnReasonDetailsEntities.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in AdvisoryBoardWithdrawnReasonDetailsEntities.Where(e => e.State == EntityState.Modified))
 		{
 			entity.Entity.LastModifiedOn = timestamp;
 		}
