@@ -317,6 +317,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		};
 
 		Details.SetPerformanceData(detailsToUpdate.KeyStage2PerformanceAdditionalInformation, detailsToUpdate.KeyStage4PerformanceAdditionalInformation, detailsToUpdate.KeyStage5PerformanceAdditionalInformation, detailsToUpdate.EducationalAttendanceAdditionalInformation);
+		Details.SetIsFormAMat(detailsToUpdate.IsFormAMat);
 
 		return new CommandSuccessResult();
 	}
