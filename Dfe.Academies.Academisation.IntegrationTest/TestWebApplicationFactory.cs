@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.AspNetCore.Hosting;
@@ -59,19 +58,12 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 
 	private void SeedDecisionData()
 	{
-		_dbContext.AddRange(new AdvisoryBoardDecisionState
-		{
-			ConversionProjectId = 1000,
-			TransferProjectId = null,
-			Decision = AdvisoryBoardDecision.Approved,
-			ApprovedConditionsSet = true,
-			ApprovedConditionsDetails = "TestData",
-			DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
-			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),
-			AcademyOrderDate = DateTime.UtcNow.AddMonths(-1),
-			CreatedOn = new(2022, 02, 02),
-			LastModifiedOn = new(2022, 02, 02)
-		});
+		_dbContext.AddRange(new Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision(
+			1,
+			new AdvisoryBoardDecisionDetails(1000, null, AdvisoryBoardDecision.Approved, true, "TestData", System.DateTime.UtcNow.AddMonths(-1), System.DateTime.UtcNow.AddMonths(-1), DecisionMadeBy.DirectorGeneral),
+			null, null, null, new(2022, 02, 02),
+			new(2022, 02, 02)
+			));
 
 		_dbContext.SaveChanges();
 	}

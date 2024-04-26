@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -17,26 +19,11 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 	private readonly Fixture _fixture = new();
 	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
-
+	private readonly AdvisoryBoardDecisionRepository _repo;
 	public ConversionAdvisoryBoardDecisionUpdateTests()
 	{
 		_context = new TestAdvisoryBoardDecisionContext().CreateContext();
-	}
-
-	[Fact]
-	public async Task WhenRecordDoesNotExist___ThrowsConcurrencyException()
-	{
-		const int decisionId = 4;
-
-		AdvisoryBoardDecisionUpdateDataCommand query = new(_context);
-
-		_mockDecision.SetupGet(d => d.Id).Returns(decisionId);
-
-		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-		 	.Returns(_fixture.Create<AdvisoryBoardDecisionDetails>());
-
-		//Act & Assert
-		await Assert.ThrowsAsync<InvalidOperationException>(() => query.Execute(_mockDecision.Object));
+		_repo = new AdvisoryBoardDecisionRepository(_context);
 	}
 
 	[Fact]
@@ -45,44 +32,35 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		//Arrange
 		const int decisionId = 1;
 
-		AdvisoryBoardDecisionUpdateDataCommand query = new(_context);
+		AdvisoryBoardDecisionUpdateDataCommand query = new(_repo);
 
 		var existingDecision = await _context.ConversionAdvisoryBoardDecisions
-			.AsNoTracking()
 			.SingleAsync(d => d.Id == decisionId);
 
-		_mockDecision
-			.SetupGet(d => d.Id)
-			.Returns(decisionId);
+		var originalDecisionApprovedConditionsSet = existingDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet;
+		var originalDecisionLastModified = existingDecision.LastModifiedOn;
+		var originalDecisionCreatedOn = existingDecision.CreatedOn;
 
-		_mockDecision
-			.SetupGet(d => d.CreatedOn)
-			.Returns(existingDecision.CreatedOn);
-
-		_mockDecision
-			.SetupGet(d => d.LastModifiedOn)
-			.Returns(existingDecision.LastModifiedOn);
-
-		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-			.Returns(
-				_fixture.Build<AdvisoryBoardDecisionDetails>()
-					.With(d => d.ApprovedConditionsSet, !existingDecision.ApprovedConditionsSet)
-					.Create());
+		var details = _fixture.Build<AdvisoryBoardDecisionDetails>()
+			.With(d => d.Decision, AdvisoryBoardDecision.Approved)
+			.With(d => d.AdvisoryBoardDecisionDate, DateTime.Now.AddDays(-1))
+					.With(d => d.ApprovedConditionsSet, !existingDecision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet)
+					.Create();
 
 		await _context.ConversionAdvisoryBoardDecisions.LoadAsync();
 
-		//Act
-		await query.Execute(_mockDecision.Object);
+		existingDecision.Update(details, existingDecision.DeferredReasons, existingDecision.DeclinedReasons, existingDecision.WithdrawnReasons);
 
-		_context.ChangeTracker.Clear();
+		//Act
+		await query.Execute(existingDecision);
 
 		var result = await _context.ConversionAdvisoryBoardDecisions.FindAsync(decisionId);
 
 		//Assert
 		Assert.Multiple(
-			() => Assert.NotEqual(existingDecision.ApprovedConditionsSet, result!.ApprovedConditionsSet),
-			() => Assert.NotEqual(existingDecision.LastModifiedOn, result!.LastModifiedOn),
-			() => Assert.Equal(existingDecision.CreatedOn, result!.CreatedOn)
+			() => Assert.NotEqual(originalDecisionApprovedConditionsSet, result!.AdvisoryBoardDecisionDetails.ApprovedConditionsSet),
+			() => Assert.NotEqual(originalDecisionLastModified, result!.LastModifiedOn),
+			() => Assert.Equal(originalDecisionCreatedOn, result!.CreatedOn)
 		);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Xunit;
@@ -13,7 +14,8 @@ public class ConversionAdvisoryBoardDecisionStateGetByProjectIdTests
 	public ConversionAdvisoryBoardDecisionStateGetByProjectIdTests()
 	{
 		var mockContext = new TestAdvisoryBoardDecisionContext().CreateContext();
-		_target = new(mockContext);
+		var repo = new AdvisoryBoardDecisionRepository(mockContext);
+		_target = new(repo);
 	}
 
 	[Fact]

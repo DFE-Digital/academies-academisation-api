@@ -3,6 +3,8 @@ using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -23,18 +25,18 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	}
 
-	public DbSet<Application> Applications { get; set; } = null!; // done
-	public DbSet<Contributor> Contributors { get; set; } = null!; // done
-	public DbSet<School> Schools { get; set; } = null!; // done
-	public DbSet<Loan> SchoolLoans { get; set; } = null!;  // done
-	public DbSet<Lease> SchoolLeases { get; set; } = null!; // done
+	public DbSet<Application> Applications { get; set; } = null!;
+	public DbSet<Contributor> Contributors { get; set; } = null!;
+	public DbSet<School> Schools { get; set; } = null!; 
+	public DbSet<Loan> SchoolLoans { get; set; } = null!; 
+	public DbSet<Lease> SchoolLeases { get; set; } = null!;
 
-	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; // done
-	public DbSet<FormTrust> FormTrusts { get; set; } = null!; // done
+	public DbSet<JoinTrust> JoinTrusts { get; set; } = null!; 
+	public DbSet<FormTrust> FormTrusts { get; set; } = null!; 
 
 	public DbSet<Project> Projects { get; set; } = null!;
 	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
-	public DbSet<AdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisions { get; set; } = null!;
+	public DbSet<ConversionAdvisoryBoardDecision> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 
@@ -42,29 +44,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		SetModifiedAndCreatedDates();
 		return base.SaveChanges();
-	}
-
-	public EntityEntry<T> ReplaceTracked<T>(T baseEntity) where T : BaseEntity
-	{
-		var entity = ChangeTracker
-			.Entries<T>()
-			.SingleOrDefault(s => s.Entity.Id == baseEntity.Id);
-
-		if (entity is null) throw new InvalidOperationException("An entity matching this Id is not being tracked");
-
-		var childCollections = entity.Collections
-			.Select(collection => collection.CurrentValue)
-			.Select(childCollection => childCollection);
-
-		foreach (var children in childCollections)
-		{
-			if (children is null) continue;
-			foreach (var child in children) Remove(child);
-		}
-
-		entity.State = EntityState.Detached;
-
-		return Update(baseEntity);
 	}
 
 	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
@@ -88,15 +67,40 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		var timestamp = DateTime.UtcNow;
 
-		var entities = ChangeTracker.Entries<BaseEntity>().ToList();
+		// ToDo: tech debt - these need changing to implement 'entity' so they are not a special case in this scenario
+		var advisoryBoardDeferredReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardDeferredReasonDetails>().ToList();
+		var advisoryBoardDeclinedReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardDeclinedReasonDetails>().ToList();
+		var AdvisoryBoardWithdrawnReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardWithdrawnReasonDetails>().ToList();
 
-		foreach (var entity in entities.Where(e => e.State == EntityState.Added))
+		foreach (var entity in advisoryBoardDeferredReasonDetailsEntities.Where(e => e.State == EntityState.Added))
 		{
 			entity.Entity.CreatedOn = timestamp;
 			entity.Entity.LastModifiedOn = timestamp;
 		}
 
-		foreach (var entity in entities.Where(e => e.State == EntityState.Modified))
+		foreach (var entity in advisoryBoardDeferredReasonDetailsEntities.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in advisoryBoardDeclinedReasonDetailsEntities.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in advisoryBoardDeclinedReasonDetailsEntities.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in AdvisoryBoardWithdrawnReasonDetailsEntities.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in AdvisoryBoardWithdrawnReasonDetailsEntities.Where(e => e.State == EntityState.Modified))
 		{
 			entity.Entity.LastModifiedOn = timestamp;
 		}
@@ -131,10 +135,10 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
 
-		modelBuilder.Entity<AdvisoryBoardDecisionState>(ConfigureConversionAdvisoryBoardDecision);
-		modelBuilder.Entity<AdvisoryBoardDecisionDeferredReasonState>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
-		modelBuilder.Entity<AdvisoryBoardDecisionDeclinedReasonState>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
-		modelBuilder.Entity<AdvisoryBoardDecisionWithdrawnReasonState>(ConfigureAdvisoryBoardDecisionWithdrawnReason);
+		modelBuilder.Entity<ConversionAdvisoryBoardDecision>(ConfigureConversionAdvisoryBoardDecision);
+		modelBuilder.Entity<AdvisoryBoardDeferredReasonDetails>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
+		modelBuilder.Entity<AdvisoryBoardDeclinedReasonDetails>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
+		modelBuilder.Entity<AdvisoryBoardWithdrawnReasonDetails>(ConfigureAdvisoryBoardDecisionWithdrawnReason);
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
 
@@ -340,27 +344,62 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		//projectNoteConfiguration.Property<int?>("ProjectId").IsRequired(false);
 	}
 
-	private static void ConfigureConversionAdvisoryBoardDecision(EntityTypeBuilder<AdvisoryBoardDecisionState> ConversionAdvisoryBoardDecisionConfiguration)
+	private static void ConfigureConversionAdvisoryBoardDecision(EntityTypeBuilder<ConversionAdvisoryBoardDecision> ConversionAdvisoryBoardDecisionConfiguration)
 	{
 		ConversionAdvisoryBoardDecisionConfiguration.ToTable("ConversionAdvisoryBoardDecision", DEFAULT_SCHEMA);
-		ConversionAdvisoryBoardDecisionConfiguration
-			.Property(e => e.DecisionMadeBy)
-			.HasConversion<string>();
+		ConversionAdvisoryBoardDecisionConfiguration.HasKey(x => x.Id);
 
 		ConversionAdvisoryBoardDecisionConfiguration
-			.Property(e => e.Decision)
-			.HasConversion<string>();
+			.OwnsOne(e => e.AdvisoryBoardDecisionDetails, abd =>
+			{
+				abd.Property(d => d.ConversionProjectId).HasColumnName("ConversionProjectId");
+				abd.Property(d => d.TransferProjectId).HasColumnName("TransferProjectId");
+				abd.Property(d => d.Decision).HasColumnName("Decision").HasConversion<string>();
+				abd.Property(d => d.ApprovedConditionsSet).HasColumnName("ApprovedConditionsSet");
+				abd.Property(d => d.ApprovedConditionsDetails).HasColumnName("ApprovedConditionsDetails");
+				abd.Property(d => d.AdvisoryBoardDecisionDate).HasColumnName("AdvisoryBoardDecisionDate");
+				abd.Property(d => d.DecisionMadeBy).HasColumnName("DecisionMadeBy").HasConversion<string>();
+				abd.Property(d => d.AcademyOrderDate).HasColumnName("AcademyOrderDate");
+			});
+
+		ConversionAdvisoryBoardDecisionConfiguration
+			.HasMany(a => a.WithdrawnReasons)
+			.WithOne()
+			.HasForeignKey(x => x.AdvisoryBoardDecisionId)
+			.IsRequired();
+
+		var withdrawnNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.WithdrawnReasons));
+		withdrawnNav.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		ConversionAdvisoryBoardDecisionConfiguration
+			.HasMany(a => a.DeferredReasons)
+			.WithOne()
+			.HasForeignKey(x => x.AdvisoryBoardDecisionId)
+			.IsRequired();
+
+		var diferredNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.DeferredReasons));
+		diferredNav.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		ConversionAdvisoryBoardDecisionConfiguration
+			.HasMany(a => a.DeclinedReasons)
+			.WithOne()
+			.HasForeignKey(x => x.AdvisoryBoardDecisionId)
+			.IsRequired();
+
+		var declineNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.DeclinedReasons));
+		declineNav.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
-	private static void ConfigureConversionAdvisoryBoardDecisionDeferredReason(EntityTypeBuilder<AdvisoryBoardDecisionDeferredReasonState> ConversionAdvisoryBoardDecisionDeferredReasonConfiguration)
+	private static void ConfigureConversionAdvisoryBoardDecisionDeferredReason(EntityTypeBuilder<AdvisoryBoardDeferredReasonDetails> ConversionAdvisoryBoardDecisionDeferredReasonConfiguration)
 	{
 		ConversionAdvisoryBoardDecisionDeferredReasonConfiguration.ToTable("ConversionAdvisoryBoardDecisionDeferredReason", DEFAULT_SCHEMA);
+		ConversionAdvisoryBoardDecisionDeferredReasonConfiguration.HasKey(x => x.Id);
 		ConversionAdvisoryBoardDecisionDeferredReasonConfiguration
 			.Property(e => e.Reason)
 			.HasConversion<string>();
 	}
 
-	private static void ConfigureConversionAdvisoryBoardDecisionDeclinedReason(EntityTypeBuilder<AdvisoryBoardDecisionDeclinedReasonState> ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration)
+	private static void ConfigureConversionAdvisoryBoardDecisionDeclinedReason(EntityTypeBuilder<AdvisoryBoardDeclinedReasonDetails> ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration)
 	{
 		ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration.ToTable("ConversionAdvisoryBoardDecisionDeclinedReason", DEFAULT_SCHEMA);
 		ConversionAdvisoryBoardDecisionDeclinedReasonConfiguration
@@ -368,7 +407,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.HasConversion<string>();
 	}
 
-	private static void ConfigureAdvisoryBoardDecisionWithdrawnReason(EntityTypeBuilder<AdvisoryBoardDecisionWithdrawnReasonState> AdvisoryBoardDecisionWithdrawnReasonConfiguration)
+	private static void ConfigureAdvisoryBoardDecisionWithdrawnReason(EntityTypeBuilder<AdvisoryBoardWithdrawnReasonDetails> AdvisoryBoardDecisionWithdrawnReasonConfiguration)
 	{
 		AdvisoryBoardDecisionWithdrawnReasonConfiguration.ToTable("AdvisoryBoardDecisionWithdrawnReason", DEFAULT_SCHEMA);
 		AdvisoryBoardDecisionWithdrawnReasonConfiguration
