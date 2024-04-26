@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
-using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 

@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -11,15 +10,15 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	public class ConversionProjectExportService : IConversionProjectExportService
 	{
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
-		private readonly IAdvisoryBoardDecisionGetDataByProjectIdQuery _advisoryBoardDecisionGetDataByProjectIdQuery;
+		private readonly IAdvisoryBoardDecisionQueryService _advisoryBoardDecisionQueryService;
 
 		public ConversionProjectExportService(
 			IConversionProjectQueryService conversionProjectQueryService,
-			IAdvisoryBoardDecisionGetDataByProjectIdQuery advisoryBoardDecisionGetDataByProjectIdQuery
+			IAdvisoryBoardDecisionQueryService advisoryBoardDecisionQueryService
 			)
 		{
 			_conversionProjectQueryService = conversionProjectQueryService;
-			_advisoryBoardDecisionGetDataByProjectIdQuery = advisoryBoardDecisionGetDataByProjectIdQuery;
+			_advisoryBoardDecisionQueryService = advisoryBoardDecisionQueryService;
 		}
 
 		public async Task<Stream?> ExportProjectsToSpreadsheet(ConversionProjectSearchModel searchModel)
@@ -83,8 +82,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 6).Value = project.LocalAuthority;
 				worksheet.Cell(row, 7).Value = project.Region;
 				worksheet.Cell(row, 8).Value = project.HeadTeacherBoardDate;
-				var advisoryBoardDecision = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(project.Id);
-				worksheet.Cell(row, 9).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate;
+				var advisoryBoardDecision = await _advisoryBoardDecisionQueryService.GetByProjectId(project.Id);
+				worksheet.Cell(row, 9).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDate;
 				worksheet.Cell(row, 10).Value = project.ProjectStatus;
 				worksheet.Cell(row, 11).Value = project.AssignedUser?.FullName;
 				worksheet.Cell(row, 12).Value = project.AcademyTypeAndRoute;
@@ -95,7 +94,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				}
 				else
 				{
-					worksheet.Cell(row, 14).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDetails.AcademyOrderDate.ToDateString();
+					worksheet.Cell(row, 14).Value = advisoryBoardDecision?.AcademyOrderDate.ToDateString();
 				}
 				row++;
 			}

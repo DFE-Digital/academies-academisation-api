@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
+using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -23,9 +25,8 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 	}
 
 	private readonly Fixture _fixture = new();
-	private readonly Mock<IAdvisoryBoardDecisionCreateCommand> _mockCreateCommand = new();
-	private readonly Mock<IConversionAdvisoryBoardDecisionGetQuery> _mockGetQuery = new();
-	private readonly Mock<IAdvisoryBoardDecisionUpdateCommand> _mockUpdateCommand = new();
+	private readonly Mock<IAdvisoryBoardDecisionQueryService> _mockGetQuery = new();
+	private readonly Mock<IMediator> _mockMediator = new();
 
 	[Fact]
 	public async Task CommandReturnsCreateSuccessResult___ReturnsCreateAtRouteResult()
@@ -33,17 +34,16 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 		//Arrange
 		var decisionServiceModel = _fixture.Create<ConversionAdvisoryBoardDecisionServiceModel>();
 
-		_mockCreateCommand
-			.Setup(c => c.Execute(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()))
+		_mockMediator
+			.Setup(c => c.Send(It.IsAny<AdvisoryBoardDecisionCreateCommand>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>(decisionServiceModel));
 
-		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object,
-			_mockGetQuery.Object,
-			_mockUpdateCommand.Object);
+		var subject = new AdvisoryBoardDecisionController(
+			_mockMediator.Object,
+			_mockGetQuery.Object);
 
 		//Act
-		var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>());
+		var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateCommand>(), default);
 
 		//Assert
 		var createdResult = Assert.IsType<CreatedAtRouteResult>(result.Result);
@@ -59,18 +59,17 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 		var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
 
 		//Arrange
-		_mockCreateCommand
-			.Setup(c => c.Execute(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()))
+		_mockMediator
+			.Setup(c => c.Send(It.IsAny<AdvisoryBoardDecisionCreateCommand>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(
 				new CreateValidationErrorResult(expectedValidationErrors));
 
-		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object,
-			_mockGetQuery.Object,
-			_mockUpdateCommand.Object);
+		var subject = new AdvisoryBoardDecisionController(
+			_mockMediator.Object,
+			_mockGetQuery.Object);
 
 		//Act
-		var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>());
+		var result = await subject.Post(It.IsAny<AdvisoryBoardDecisionCreateCommand>(), It.IsAny<CancellationToken>());
 
 		//Assert
 		var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -82,16 +81,15 @@ public class ConversionAdvisoryBoardDecisionControllerPostTests
 	public async Task CommandReturnsCreateUnhandledCreateResult___ThrowsException()
 	{
 		//Arrange
-		_mockCreateCommand
-			.Setup(c => c.Execute(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()))
+		_mockMediator
+			.Setup(c => c.Send(It.IsAny<AdvisoryBoardDecisionCreateCommand>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new UnhandledCreateResult());
 
-		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object,
-			_mockGetQuery.Object,
-			_mockUpdateCommand.Object);
+		var subject = new AdvisoryBoardDecisionController(
+			_mockMediator.Object,
+			_mockGetQuery.Object);
 
 		//Act
-		await Assert.ThrowsAsync<NotImplementedException>(() => subject.Post(It.IsAny<AdvisoryBoardDecisionCreateRequestModel>()));
+		await Assert.ThrowsAsync<NotImplementedException>(() => subject.Post(It.IsAny<AdvisoryBoardDecisionCreateCommand>(), It.IsAny<CancellationToken>()));
 	}
 }

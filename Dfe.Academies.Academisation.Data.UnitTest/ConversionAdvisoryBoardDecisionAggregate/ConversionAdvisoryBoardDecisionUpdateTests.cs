@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoFixture;
-using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
-using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +16,6 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 	private readonly AcademisationContext _context;
 
 	private readonly Fixture _fixture = new();
-	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
 	private readonly AdvisoryBoardDecisionRepository _repo;
 	public ConversionAdvisoryBoardDecisionUpdateTests()
 	{
@@ -31,8 +28,6 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 	{
 		//Arrange
 		const int decisionId = 1;
-
-		AdvisoryBoardDecisionUpdateDataCommand query = new(_repo);
 
 		var existingDecision = await _context.ConversionAdvisoryBoardDecisions
 			.SingleAsync(d => d.Id == decisionId);
@@ -52,7 +47,8 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 		existingDecision.Update(details, existingDecision.DeferredReasons, existingDecision.DeclinedReasons, existingDecision.WithdrawnReasons);
 
 		//Act
-		await query.Execute(existingDecision);
+		_repo.Update(existingDecision);
+		_repo.UnitOfWork.SaveChangesAsync();
 
 		var result = await _context.ConversionAdvisoryBoardDecisions.FindAsync(decisionId);
 

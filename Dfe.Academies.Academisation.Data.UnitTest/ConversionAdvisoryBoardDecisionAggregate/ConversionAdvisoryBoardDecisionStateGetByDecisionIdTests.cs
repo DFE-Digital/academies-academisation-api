@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
@@ -9,13 +8,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecis
 
 public class ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests
 {
-	private readonly AdvisoryBoardDecisionGetDataByDecisionIdQuery _target;
+	private readonly AdvisoryBoardDecisionRepository _target;
 
 	public ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests()
 	{
 		var mockContext = new TestAdvisoryBoardDecisionContext().CreateContext();
-		var repo = new AdvisoryBoardDecisionRepository(mockContext);
-		_target = new(repo);
+		_target = new AdvisoryBoardDecisionRepository(mockContext);		 
 	}
 
 	[Fact]
@@ -24,7 +22,7 @@ public class ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests
 		const int expectedDecisionId = 2;
 
 		//Act
-		var result = await _target.Execute(expectedDecisionId);
+		var result = await _target.GetAdvisoryBoardDecisionById(expectedDecisionId);
 
 		//Assert
 		Assert.Multiple(
@@ -43,7 +41,7 @@ public class ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests
 		const int decisionId = 4;
 
 		//Act
-		var result = await _target.Execute(decisionId);
+		var result = await _target.GetAdvisoryBoardDecisionById(decisionId);
 
 		//Assert
 		Assert.Null(result);
