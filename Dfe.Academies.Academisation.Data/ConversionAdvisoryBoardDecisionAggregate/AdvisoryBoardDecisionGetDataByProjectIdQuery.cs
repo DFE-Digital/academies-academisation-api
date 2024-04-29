@@ -1,4 +1,6 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -7,31 +9,26 @@ namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggreg
 
 public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisionGetDataByProjectIdQuery
 {
-	private readonly AcademisationContext _context;
+	private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
 
-	public AdvisoryBoardDecisionGetDataByProjectIdQuery(AcademisationContext context)
+	public AdvisoryBoardDecisionGetDataByProjectIdQuery(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
 	{
-		_context = context;
+		_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
 	}
 
 	public async Task<IConversionAdvisoryBoardDecision?> Execute(int projectId, bool isTransfer = false)
 	{
-		AdvisoryBoardDecisionState? state = null;
-
-		var advisoryBoardDecisions = _context.ConversionAdvisoryBoardDecisions
-				.Include(s => s.DeclinedReasons)
-				.Include(s => s.DeferredReasons)
-				.Include(s => s.WithdrawnReasons);
+		ConversionAdvisoryBoardDecision? decision = null;
 
 		if (isTransfer)
 		{
-			state = await advisoryBoardDecisions.SingleOrDefaultAsync(s => s.TransferProjectId == projectId);
+			decision = await _advisoryBoardDecisionRepository.GetTransferProjectDecsion(projectId);
 		}
 		else
 		{
-			state = await advisoryBoardDecisions.SingleOrDefaultAsync(s => s.ConversionProjectId == projectId);
+			decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(projectId);
 		}
 
-		return state?.MapToDomain();
+		return decision;
 	}
 }

@@ -31,6 +31,7 @@ COPY ./script/webapi-docker-entrypoint.sh /app/docker-entrypoint.sh
 
 ARG ASPNET_IMAGE_TAG
 FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
+LABEL org.opencontainers.image.source=https://github.com/DFE-Digital/academies-academisation-api
 
 RUN apt-get update
 RUN apt-get install curl gnupg -y

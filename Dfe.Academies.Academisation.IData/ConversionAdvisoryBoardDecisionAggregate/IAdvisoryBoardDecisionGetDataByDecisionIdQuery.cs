@@ -4,5 +4,5 @@ namespace Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggre
 
 public interface IAdvisoryBoardDecisionGetDataByDecisionIdQuery
 {
-	Task<IConversionAdvisoryBoardDecision?> Execute(int projectId);
+	Task<IConversionAdvisoryBoardDecision?> Execute(int decisionId);
 }
