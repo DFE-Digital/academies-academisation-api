@@ -4,7 +4,6 @@ using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academisation.ExtensionMethods;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -91,11 +90,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 13).Value = project.PartOfPfiScheme;
 				if (project.AcademyTypeAndRoute?.ToLower().Equals("sponsored") ?? false)
 				{
-					worksheet.Cell(row, 15).Value = project.DaoPackSentDate.ToDateString();
+					worksheet.Cell(row, 15).Value = project.DaoPackSentDate;
 				}
 				else
 				{
-					worksheet.Cell(row, 14).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDetails.AcademyOrderDate.ToDateString();
+					worksheet.Cell(row, 14).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDetails.AcademyOrderDate;
 				}
 				row++;
 			}
