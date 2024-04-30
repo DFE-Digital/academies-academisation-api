@@ -10,6 +10,8 @@ using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Dfe.Academies.Academisation.Service.Extensions;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -67,6 +69,43 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			var trust = await response.Content.ReadFromJsonAsync<TrustDto>();
 
 			return trust;
+		}
+
+		public async Task<IEnumerable<EstablishmentDto>> GetBulkEstablishmentsByUkprn(IEnumerable<string> ukprns)
+		{
+			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var response = await client.GetAsync($"/v4/establishments/bulk?Urn=10034661");
+			//var response = await client.GetAsync($"/v4/trust/{10034661}");
+
+			var queryParameters = new Dictionary<string, string>();
+
+
+			foreach (var item in queryParameters)
+			{
+				
+			}
+
+			//ukprns.Select(x => 
+			//{
+			//	queryParameters.Add("Urn", "x");
+			//});
+
+
+			//queryParameters.
+
+
+			var t = queryParameters.ToQueryString();
+
+
+			//
+			if (!response.IsSuccessStatusCode)
+			{
+				//_logger.LogError("Request for trust failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
+				return null;
+			}
+			var establishments = await response.Content.ReadFromJsonAsync<IEnumerable<EstablishmentDto>>();
+
+			return establishments;
 		}
 	}
 }
