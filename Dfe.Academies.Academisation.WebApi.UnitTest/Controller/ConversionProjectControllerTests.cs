@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

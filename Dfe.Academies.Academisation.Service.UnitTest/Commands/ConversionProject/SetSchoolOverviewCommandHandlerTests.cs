@@ -3,7 +3,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;

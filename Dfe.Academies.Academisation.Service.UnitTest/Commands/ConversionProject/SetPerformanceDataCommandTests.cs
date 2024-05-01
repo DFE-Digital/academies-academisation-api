@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+﻿using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Moq;
 using System;
 using Xunit;

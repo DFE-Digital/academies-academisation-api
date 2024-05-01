@@ -99,9 +99,6 @@ builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionS
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
 builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
-builder.Services.AddScoped<ICreateNewProjectCommand, CreateNewProjectCommand>();
-builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
-builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
 
 //Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
@@ -110,7 +107,6 @@ builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectReposi
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 
-builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
 builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
 
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();

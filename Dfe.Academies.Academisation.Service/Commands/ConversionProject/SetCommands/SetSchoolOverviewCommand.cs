@@ -1,7 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using MediatR;
 
-namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
+namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands
 {
 	public class SetSchoolOverviewCommand : IRequest<CommandResult>
 	{

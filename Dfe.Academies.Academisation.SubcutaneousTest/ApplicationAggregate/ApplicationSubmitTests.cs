@@ -46,8 +46,8 @@ public class ApplicationSubmitTests
 	private readonly ITrustQueryService _trustQueryService;
 	private readonly ILogger<ApplicationController> _applicationLogger;
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
-	private readonly IApplicationRepository _repo;
-	private readonly IProjectCreateDataCommand _projectCreateDataCommand;
+	private readonly IApplicationRepository _applicationRepo;
+	private readonly IConversionProjectRepository _conversionRepo;
 	private readonly Mock<IMapper> _mapper = new();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
 	private readonly Mock<IMediator> _mediator;
@@ -56,14 +56,14 @@ public class ApplicationSubmitTests
 		_context = new TestApplicationContext().CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
-		_repo = new ApplicationRepository(_context, _mapper.Object);
-		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
-		_projectCreateDataCommand = new ProjectCreateDataCommand(_context);
+		_applicationRepo = new ApplicationRepository(_context, _mapper.Object);
+		_conversionRepo = new ConversionProjectRepository(_context, _mapper.Object);
+		_applicationQueryService = new ApplicationQueryService(_applicationRepo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>();
 
-		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_repo, _projectCreateDataCommand, _applicationSubmissionService);
+		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationRepo, _conversionRepo, _applicationSubmissionService);
 
 		_mediator.Setup(x => x.Send(It.IsAny<ApplicationSubmitCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) =>
@@ -72,7 +72,7 @@ public class ApplicationSubmitTests
 				return await submitApplicationHandler.Handle((ApplicationSubmitCommand)cmd, ct);
 			});
 
-		var applicationCreateCommandHandler = new ApplicationCreateCommandHandler(_applicationFactory, _repo, _mapper.Object);
+		var applicationCreateCommandHandler = new ApplicationCreateCommandHandler(_applicationFactory, _applicationRepo, _mapper.Object);
 
 		_mediator.Setup(x => x.Send(It.IsAny<ApplicationCreateCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CreateResult>, CancellationToken>(async (cmd, ct) =>
@@ -81,7 +81,7 @@ public class ApplicationSubmitTests
 				return await applicationCreateCommandHandler.Handle((ApplicationCreateCommand)cmd, ct);
 			});
 
-		var applicationUpdateCommandHandler = new ApplicationUpdateCommandHandler(_repo);
+		var applicationUpdateCommandHandler = new ApplicationUpdateCommandHandler(_applicationRepo);
 
 		_mediator.Setup(x => x.Send(It.IsAny<ApplicationUpdateCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CommandResult>, CancellationToken>(async (cmd, ct) =>
@@ -145,8 +145,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new ProjectController(
-			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		var projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 		var projectResult = await projectController.Get(1);
 
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
@@ -197,8 +196,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new ProjectController(
-			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		var projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 		var projectResults = await projectController.GetProjects(new GetProjectSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
 
 		(_, PagedDataResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);

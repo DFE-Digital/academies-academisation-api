@@ -4,17 +4,17 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProject
 {
-    public class SetPerformanceDataCommandHandlerTests
+	public class SetPerformanceDataCommandHandlerTests
     {
 		private MockRepository mockRepository;
 

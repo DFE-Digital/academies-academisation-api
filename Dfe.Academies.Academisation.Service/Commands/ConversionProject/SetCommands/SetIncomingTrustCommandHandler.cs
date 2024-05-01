@@ -4,7 +4,7 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 
 public class SetIncomingTrustCommandHandler : IRequestHandler<SetIncomingTrustCommand, CommandResult>
 {

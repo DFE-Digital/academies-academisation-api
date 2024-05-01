@@ -4,20 +4,20 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 
-public class SetExternalApplicationFormCommandHandler : IRequestHandler<SetExternalApplicationFormCommand, CommandResult>
+public class SetPerformanceDataCommandHandler : IRequestHandler<SetPerformanceDataCommand, CommandResult>
 {
 	private readonly IConversionProjectRepository _conversionProjectRepository;
-	private readonly ILogger<SetExternalApplicationFormCommandHandler> _logger;
+	private readonly ILogger<SetPerformanceDataCommandHandler> _logger;
 
-	public SetExternalApplicationFormCommandHandler(IConversionProjectRepository conversionProjectRepository, ILogger<SetExternalApplicationFormCommandHandler> logger)
+	public SetPerformanceDataCommandHandler(IConversionProjectRepository conversionProjectRepository, ILogger<SetPerformanceDataCommandHandler> logger)
 	{
 		_conversionProjectRepository = conversionProjectRepository;
 		_logger = logger;
 	}
 
-	public async Task<CommandResult> Handle(SetExternalApplicationFormCommand request, CancellationToken cancellationToken)
+	public async Task<CommandResult> Handle(SetPerformanceDataCommand request, CancellationToken cancellationToken)
 	{
 		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id);
 
@@ -27,7 +27,7 @@ public class SetExternalApplicationFormCommandHandler : IRequestHandler<SetExter
 			return new NotFoundCommandResult();
 		}
 
-		existingProject.SetExternalApplicationForm(request.ExternalApplicationFormSaved, request.ExternalApplicationFormUrl);
+		existingProject.SetPerformanceData(request.KeyStage2PerformanceAdditionalInformation, request.KeyStage4PerformanceAdditionalInformation, request.KeyStage5PerformanceAdditionalInformation, request.EducationalAttendanceAdditionalInformation);
 
 		_conversionProjectRepository.Update(existingProject as Project);
 		await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+﻿using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProject
