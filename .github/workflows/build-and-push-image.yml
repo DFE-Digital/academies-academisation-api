@@ -28,13 +28,12 @@ jobs:
       release: ${{ steps.var.outputs.release }}
       checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - id: var
         run: |
-          GIT_REF=${{ github.ref }}
+          GIT_REF=${{ github.ref_name }}
           GIT_BRANCH=${GIT_REF##*/}
           INPUT=${{ github.event.inputs.environment }}
           ENVIRONMENT=${INPUT:-"development"}
