@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 	{
 		public string OutgoingAcademyUkprn { get; set; }
 		public string? IncomingTrustUkprn { get; set; }
-		public string IncomingTrustName { get; set; }
+		public string? IncomingTrustName { get; set; }
 
 
 		public string PupilNumbersAdditionalInformation { get; set; }
