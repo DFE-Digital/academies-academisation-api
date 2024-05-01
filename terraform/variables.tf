@@ -271,6 +271,22 @@ variable "dns_ns_records" {
   )
 }
 
+variable "dns_mx_records" {
+  description = "DNS MX records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(
+        object({
+          preference : number,
+          exchange : string
+        })
+      )
+    })
+  )
+  default = {}
+}
+
 variable "dns_txt_records" {
   description = "DNS TXT records to add to the DNS Zone"
   type = map(
