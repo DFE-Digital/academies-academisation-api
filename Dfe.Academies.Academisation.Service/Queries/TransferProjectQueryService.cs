@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+﻿using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
@@ -75,25 +76,17 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return new PagedDataResponse<AcademyTransferProjectSummaryResponse>(data,
 				pageResponse);
 		}
-		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(string? title)
+		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
 		{
-			IEnumerable<ITransferProject?> transferProjects = (await _transferProjectRepository.GetAllTransferProjects()).ToList();
+			var (projects, totalCount) = await _transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
 
-			transferProjects =
-				FilterExportedTransferProjectsByIncomingTrust(title, transferProjects);
-
-			// remove any projects without an outgoing trust.
-			transferProjects = transferProjects
-			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)).ToList(); 
-
-			var projects = await MapExportedTransferProjectModel(transferProjects);
+			var mappedProjects = await MapExportedTransferProjectModel(projects);
 
 			int recordTotal = projects.Count();
 
 			projects = projects.OrderByDescending(atp => atp.Urn);
 
-			return await Task.FromResult(new PagedResultResponse<ExportedTransferProjectModel>(projects, recordTotal));
+			return await Task.FromResult(new PagedResultResponse<ExportedTransferProjectModel>(mappedProjects, recordTotal));
 		}
 
 		private static IEnumerable<ITransferProject> FilterByUrn(IEnumerable<ITransferProject> queryable,

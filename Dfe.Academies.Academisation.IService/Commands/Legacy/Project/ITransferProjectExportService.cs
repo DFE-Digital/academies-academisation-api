@@ -4,6 +4,6 @@ namespace Dfe.Academies.Academisation.IService.Commands.Legacy.Project
 {
 	public interface ITransferProjectExportService
 	{
-		Task<Stream?> ExportTransferProjectsToSpreadsheet(TransferProjectSearchModel searchModel);
+		Task<Stream?> ExportTransferProjectsToSpreadsheet(GetProjectSearchModel searchModel);
 	}
 }

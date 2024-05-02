@@ -30,10 +30,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			var apiResponse = new PagedResultResponse<ExportedTransferProjectModel>(sampleProjects, 2);
 
-			_mockTransferProjectQueryService.Setup(s => s.GetExportedTransferProjects(null))
+			_mockTransferProjectQueryService.Setup(s => s.GetExportedTransferProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>()))
 				.ReturnsAsync(apiResponse);
 
-			var searchModel = new TransferProjectSearchModel(null);
+			var searchModel = new GetProjectSearchModel(1, 10, "test", Enumerable.Empty<string>(), Enumerable.Empty<string>(), Enumerable.Empty<string>(), Enumerable.Empty<string>());
 
 			// Act
 			var result = await _service.ExportTransferProjectsToSpreadsheet(searchModel);
@@ -46,17 +46,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		public async Task ExportProjectsToSpreadsheet_ReturnsNull_WhenNoProjectsFound()
 		{
 			// Arrange
-			var sampleProjects = new List<ExportedTransferProjectModel>
-			{
-				new () { SchoolName = "Sample School 1", Status = "Active" },
-				new () { SchoolName = "Sample School 2", Status = "Pending" }
-			};
-			var apiResponse = new PagedResultResponse<ExportedTransferProjectModel>(sampleProjects, 2);
+			var sampleProjects = new List<ExportedTransferProjectModel>();
+			var apiResponse = new PagedResultResponse<ExportedTransferProjectModel>(sampleProjects, 0);
 
-			_mockTransferProjectQueryService.Setup(s => s.GetExportedTransferProjects(""))
+			_mockTransferProjectQueryService.Setup(s => s.GetExportedTransferProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>()))
 				.ReturnsAsync(apiResponse);
 
-			var searchModel = new TransferProjectSearchModel(null);
+			var searchModel = new GetProjectSearchModel(1, 10, "test", Enumerable.Empty<string>(), Enumerable.Empty<string>(), Enumerable.Empty<string>(), Enumerable.Empty<string>());
 
 			// Act
 			var result = await _service.ExportTransferProjectsToSpreadsheet(searchModel);

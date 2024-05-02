@@ -64,11 +64,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// Arrange
 			var mockStream = new MemoryStream();
 			var searchModel = new TransferProjectSearchModel(null);
-			_mockTransferProjectExportService.Setup(s => s.ExportTransferProjectsToSpreadsheet(searchModel))
+			_mockTransferProjectExportService.Setup(s => s.ExportTransferProjectsToSpreadsheet(It.IsAny<GetProjectSearchModel>()))
 				.ReturnsAsync(mockStream);
 
 			// Act
-			var result = await _controller.ExportTransferProjectsToSpreadsheet(searchModel);
+			var result = await _controller.ExportTransferProjectsToSpreadsheet(It.IsAny<GetProjectSearchModel>());
 
 			// Assert
 			var fileResult = Assert.IsAssignableFrom<FileResult>(result);
@@ -80,12 +80,12 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task ExportTransferProjectsToSpreadsheet_ReturnsNotFound_WhenNoProjectsFound()
 		{
 			// Arrange
-			_mockTransferProjectExportService.Setup(s => s.ExportTransferProjectsToSpreadsheet(It.IsAny<TransferProjectSearchModel>()))
+			_mockTransferProjectExportService.Setup(s => s.ExportTransferProjectsToSpreadsheet(It.IsAny<GetProjectSearchModel>()))
 				.ReturnsAsync(null as Stream);
 			var searchModel = new TransferProjectSearchModel(null);
 
 			// Act
-			var result = await _controller.ExportTransferProjectsToSpreadsheet(searchModel);
+			var result = await _controller.ExportTransferProjectsToSpreadsheet(It.IsAny<GetProjectSearchModel>());
 
 			// Assert
 			var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
