@@ -1,12 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.Service.Factories;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Queries
@@ -54,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			// remove any projects without an outgoing trust.
 			projects = projects
 			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) 
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)
 				).ToList();
 
 			var recordTotal = projects.Count();
@@ -82,14 +81,14 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			IEnumerable<IConversionAdvisoryBoardDecision> advisoryBoardDecisions;
 			try
 			{
- advisoryBoardDecisions = await _advisoryBoardDecisionRepository.GetAllAdvisoryBoardDecisionsForTransfers();
+				advisoryBoardDecisions = await _advisoryBoardDecisionRepository.GetAllAdvisoryBoardDecisionsForTransfers();
 			}
 			catch (Exception ex)
 			{
 				var e = ex;
 				throw;
 			}
-			
+
 
 			transferProjects =
 				FilterExportedTransferProjectsByIncomingTrust(title, transferProjects);
@@ -97,7 +96,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			// remove any projects without an outgoing trust.
 			transferProjects = transferProjects
 			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)).ToList(); 
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)).ToList();
 
 			var projects = await MapExportedTransferProjectModel(transferProjects, advisoryBoardDecisions);
 
@@ -177,6 +176,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			);
 
 			var schoolNames = schools.Select(s => s?.Name).Distinct().JoinNonEmpty(", ");
+			var partOfPfiScheme = schools.Select(s => s?.Pfi).Distinct().JoinNonEmpty(", ");
 			var schoolTypes = schools.Select(s => s?.EstablishmentType?.Name).Distinct().JoinNonEmpty(", ");
 			var regions = schools.Select(s => s?.Gor?.Name).Distinct().JoinNonEmpty(", ");
 			var localAuthorities = schools.Select(s => s?.LocalAuthorityName).Distinct().JoinNonEmpty(", ");
@@ -200,6 +200,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				TransferReason = reason,
 				TransferType = project.WhoInitiatedTheTransfer,
 				Urn = project.Urn.ToString(),
+				PartOfPfiScheme = partOfPfiScheme
 			};
 		}
 

@@ -32,11 +32,24 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		private static Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
 		{
-			string[] headers = new[]{
-				"School", "URN", "School Type", "Incoming Trust", "Outgoing Trust", "Incoming Trust UKPRN", "Local Authority", "Region",
-				"Advisory Board Date", "Decision Date", "Status", "Assigned To", "Reason for transfer", "Type of transfer",
-				"Proposed academy transfer date"
-			};
+			string[] headers = [
+				"School",
+				"URN",
+				"School Type",
+				"Incoming Trust",
+				"Outgoing Trust",
+				"Incoming Trust UKPRN",
+				"Local Authority",
+				"Region",
+				"Advisory Board Date",
+				"Decision Date",
+				"Status",
+				"Assigned To",
+				"Reason for transfer",
+				"Type of transfer",
+				"Proposed academy transfer date",
+				"Part of a PFI Scheme?"
+			];
 
 			var workbook = new XLWorkbook();
 			var worksheet = workbook.Worksheets.Add("Projects");
@@ -65,6 +78,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 13).Value = project.TransferReason;
 				worksheet.Cell(row, 14).Value = project.TransferType;
 				worksheet.Cell(row, 15).Value = project.ProposedAcademyTransferDate;
+				worksheet.Cell(row, 16).Value = project.PartOfPfiScheme;
 				row++;
 			}
 			worksheet.Columns().AdjustToContents();
