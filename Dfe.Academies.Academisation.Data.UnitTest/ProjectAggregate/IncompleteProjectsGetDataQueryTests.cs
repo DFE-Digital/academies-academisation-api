@@ -1,10 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoMapper;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
@@ -13,13 +16,14 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 	{
 		private readonly Fixture _fixture = new();
 
-		private readonly IncompleteProjectsGetDataQuery _subject;
+		private readonly ConversionProjectRepository _subject;
 		private readonly AcademisationContext _context;
+		private Mock<IMapper> _mockMapper  = new Mock<IMapper>();
 
 		public IncompleteProjectsGetDataQueryTests()
 		{
 			_context = new TestProjectContext().CreateContext();
-			_subject = new IncompleteProjectsGetDataQuery(_context);
+			_subject = new ConversionProjectRepository(_context, _mockMapper.Object);
 		}
 
 		[Fact]

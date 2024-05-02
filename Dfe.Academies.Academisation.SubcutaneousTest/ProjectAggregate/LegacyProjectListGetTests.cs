@@ -1,11 +1,11 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core.Test;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;

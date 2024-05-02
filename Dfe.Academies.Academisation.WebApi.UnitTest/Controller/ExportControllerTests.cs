@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

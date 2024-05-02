@@ -97,7 +97,6 @@ builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
-builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
 builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
 
 //Repositories
@@ -117,7 +116,6 @@ builder.Services.AddScoped<IConversionProjectQueryService, ConversionProjectQuer
 builder.Services.AddScoped<IConversionProjectExportService, ConversionProjectExportService>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionQueryService, AdvisoryBoardDecisionGetQueryService>();
 builder.Services.AddScoped<IAcademiesQueryService, AcademiesQueryService>();
-builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();

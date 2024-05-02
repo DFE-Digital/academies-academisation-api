@@ -1,11 +1,10 @@
-﻿namespace Dfe.Academies.Academisation.Data.ProjectAggregate
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels
 {
-	public class ConversionProjectSearchModel
+	public class GetProjectSearchModel
 	{
-		public ConversionProjectSearchModel(int page, int count, string? titleFilter,
+		public GetProjectSearchModel(int page, int count, string? titleFilter,
 			IEnumerable<string>? deliveryOfficerQueryString, IEnumerable<string>? regionQueryString,
-			IEnumerable<string>? statusQueryString,
-			IEnumerable<string>? localAuthoritiesQueryString, IEnumerable<string>? advisoryBoardDatesQueryString)
+			IEnumerable<string>? statusQueryString, IEnumerable<string>? applicationReferences)
 		{
 			Page = page;
 			Count = count;
@@ -13,8 +12,7 @@
 			DeliveryOfficerQueryString = deliveryOfficerQueryString;
 			RegionQueryString = regionQueryString;
 			StatusQueryString = statusQueryString;
-			LocalAuthoritiesQueryString = localAuthoritiesQueryString;
-			AdvisoryBoardDatesQueryString = advisoryBoardDatesQueryString;
+			ApplicationReferences = applicationReferences;
 		}
 
 		public int Page { get; set; }
@@ -24,7 +22,5 @@
 		public IEnumerable<string>? RegionQueryString { get; set; }
 		public IEnumerable<string>? StatusQueryString { get; set; }
 		public IEnumerable<string>? ApplicationReferences { get; set; }
-		public IEnumerable<string>? LocalAuthoritiesQueryString { get; }
-		public IEnumerable<string>? AdvisoryBoardDatesQueryString { get; }
 	}
 }

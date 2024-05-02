@@ -1,4 +1,4 @@
-﻿namespace Dfe.Academies.Academisation.Data.ProjectAggregate
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 {
 	public class TransferProjectSearchModel
 	{

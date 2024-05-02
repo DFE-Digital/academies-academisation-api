@@ -1,5 +1,4 @@
 ﻿using ClosedXML.Excel;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -75,9 +74,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 7).Value = project.LocalAuthority;
 				worksheet.Cell(row, 8).Value = project.Region;
 				worksheet.Cell(row, 9).Value = project.HeadTeacherBoardDate;
-                var advisoryBoardDecision = await _advisoryBoardDecisionQueryService.GetByProjectId(project.Id);
-                worksheet.Cell(row, 10).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDate;
-                worksheet.Cell(row, 11).Value = project.ProjectStatus;
+
+				var advisoryBoardDecision = await _advisoryBoardDecisionQueryService.GetByProjectId(project.Id);
+				worksheet.Cell(row, 10).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDate;
+				worksheet.Cell(row, 11).Value = project.ProjectStatus;
 				worksheet.Cell(row, 12).Value = project.AssignedUser?.FullName;
 				worksheet.Cell(row, 13).Value = project.AcademyTypeAndRoute;
 				worksheet.Cell(row, 14).Value = project.PartOfPfiScheme;
@@ -88,7 +88,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				}
 				else
 				{
-					worksheet.Cell(row, 15).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDetails.AcademyOrderDate;
+					worksheet.Cell(row, 15).Value = advisoryBoardDecision?.AcademyOrderDate;
 				}
 				row++;
 			}

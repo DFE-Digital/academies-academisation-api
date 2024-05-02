@@ -548,4 +548,9 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		DeletedAt = DateTime.UtcNow;
 	}
+
+	public void AddNote(string subject, string note, string author, DateTime date)
+	{
+		_notes.Add(new ProjectNote(subject, note, author, date, Id));
+	}
 }

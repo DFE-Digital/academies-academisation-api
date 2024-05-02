@@ -19,4 +19,6 @@ public interface IConversionProjectRepository : IRepository<Project>, IGenericRe
 	Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatIds(IEnumerable<int?> ids, CancellationToken cancellationToken);
 	Task<(IEnumerable<IProject> projects, int totalCount)> SearchFormAMatProjects(
 	IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
+
+	Task<IEnumerable<IProject>?> GetIncompleteProjects();
 }
