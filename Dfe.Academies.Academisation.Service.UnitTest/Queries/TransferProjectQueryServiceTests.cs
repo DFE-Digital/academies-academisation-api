@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 	public class TransferProjectQueryServiceTests
 	{
 		IAcademiesQueryService _establishmentRepo = new Mock<IAcademiesQueryService>().Object;
-		IAdvisoryBoardDecisionGetDataByProjectIdQuery _advisoryBoardDecisionGetDataByProjectIdQuery = new Mock<IAdvisoryBoardDecisionGetDataByProjectIdQuery>().Object;
+		IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository = new Mock<IAdvisoryBoardDecisionRepository>().Object;
 		IServiceScopeFactory _serviceScope = new Mock<IServiceScopeFactory>().Object;
 
 		public TransferProjectQueryServiceTests()
@@ -50,7 +50,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult((ITransferProject?)dummyTransferProject));
 
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionGetDataByProjectIdQuery);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
 
 			// Setting up Test Data
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
@@ -85,7 +85,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
 
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionGetDataByProjectIdQuery);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
 
 			// Setting up Test Data
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
@@ -103,7 +103,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mocking the Dependencies
 			var mockRepository = new Mock<ITransferProjectRepository>();
 			var mockAcademiesQueryService = new Mock<IAcademiesQueryService>();
-			var (mockServiceScopeFactory, mockAdvisoryBoardDecisionGetDataByProjectIdQuery) = MockServiceScopeFactory.CreateMock<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
+			var (mockServiceScopeFactory, mockAdvisoryBoardDecisionGetDataByProjectIdQuery) = MockServiceScopeFactory.CreateMock<IAdvisoryBoardDecisionRepository>();
 
 			// Mocking the data
 			var mockDecision = new Mock<IConversionAdvisoryBoardDecision>();
@@ -111,12 +111,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1")
 			}).CreateMock();
 
+
+
 			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
+			mockRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
 
 			// Set up behavior for methods
 			mockAdvisoryBoardDecisionGetDataByProjectIdQuery
-				.Setup(query => query.Execute(It.IsAny<int>(), false))
+				.Setup(query => query.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 				.ReturnsAsync(mockDecision.Object);
 
 			mockAcademiesQueryService
@@ -141,7 +143,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 1);
 
 			// Testing the Method
-			var result = await service.GetExportedTransferProjects(null);
+			var result = await service.GetExportedTransferProjects(Enumerable.Empty<string>(), string.Empty, Enumerable.Empty<string>(), 1, 10);
 
 			// Assertion
 			result.Should().BeEquivalentTo(expectedResponse);
@@ -161,14 +163,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
 
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionGetDataByProjectIdQuery);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
 
 			// Setting up Test Data
 			var dummyProjects = new List<ExportedTransferProjectModel>();
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 0);
 
 			// Testing the Method
-			var result = await service.GetExportedTransferProjects("TitleFilter");
+			var result = await service.GetExportedTransferProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>());
 
 			// Assertion
 			result.Should().BeEquivalentTo(expectedResponse);
@@ -180,7 +182,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mocking the Dependencies
 			var mockRepository = new Mock<ITransferProjectRepository>();
 			var mockAcademiesQueryService = new Mock<IAcademiesQueryService>();
-			var (mockServiceScopeFactory, mockAdvisoryBoardDecisionGetDataByProjectIdQuery) = MockServiceScopeFactory.CreateMock<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
+			var (mockServiceScopeFactory, mockAdvisoryBoardDecisionRepository) = MockServiceScopeFactory.CreateMock<IAdvisoryBoardDecisionRepository>();
 
 			// Mocking the data
 			var mockDecision = new Mock<IConversionAdvisoryBoardDecision>();
@@ -190,11 +192,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			}).CreateMock();
 
 			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
+			mockRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
 
 			// Set up behavior for methods
-			mockAdvisoryBoardDecisionGetDataByProjectIdQuery
-				.Setup(query => query.Execute(It.IsAny<int>(), false))
+			mockAdvisoryBoardDecisionRepository
+				.Setup(query => query.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 				.ReturnsAsync(mockDecision.Object);
 
 			mockAcademiesQueryService
@@ -207,7 +209,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var service = new TransferProjectQueryService(
 				mockRepository.Object,
 				mockAcademiesQueryService.Object,
-				mockAdvisoryBoardDecisionGetDataByProjectIdQuery.Object
+				mockAdvisoryBoardDecisionRepository.Object
 			);
 
 			// Setting up Test Data
@@ -224,7 +226,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 1);
 
 			// Testing the Method
-			var result = await service.GetExportedTransferProjects(null);
+			var result = await service.GetExportedTransferProjects(Enumerable.Empty<string>(), null, Enumerable.Empty<string>(), 1, 10);
 
 			// Assertion
 			result.Should().BeEquivalentTo(expectedResponse);
@@ -257,7 +259,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		{
 			// Arrange
 			var mockRepository = new Mock<ITransferProjectRepository>();
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionGetDataByProjectIdQuery);
+			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
 
 			var states = new List<string> { "Active", "Completed" };
 			var title = "Project X";

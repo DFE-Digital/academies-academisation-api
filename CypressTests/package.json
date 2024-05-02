@@ -12,7 +12,7 @@
   "author": "Dan Good",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^10.8.0",
+    "cypress": "^13.0.0",
     "zaproxy": "^2.0.0-rc.2"
   },
   "devDependencies": {

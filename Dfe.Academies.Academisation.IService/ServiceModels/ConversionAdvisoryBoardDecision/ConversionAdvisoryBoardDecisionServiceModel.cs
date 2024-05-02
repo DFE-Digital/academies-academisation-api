@@ -10,9 +10,9 @@ public class ConversionAdvisoryBoardDecisionServiceModel
 	public AdvisoryBoardDecision Decision { get; init; }
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
-	public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; }
-	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
-	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
+	public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; } = new();
+	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; } = new();
+	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; } = new();
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
 	public DateTime? AcademyOrderDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
