@@ -5,5 +5,8 @@ namespace Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAgg
 
 public interface IConversionAdvisoryBoardDecisionFactory
 {
-	CreateResult Create(AdvisoryBoardDecisionDetails details);
+	CreateResult Create(AdvisoryBoardDecisionDetails details,
+		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
+		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
+		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons);
 }

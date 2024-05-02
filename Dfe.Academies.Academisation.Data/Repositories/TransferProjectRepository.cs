@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using System.Threading;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		}
 		public async Task<(IEnumerable<ITransferProject>, int totalcount)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
 		{
-			IQueryable<TransferProject> queryable = this.dbSet;
+			IQueryable<TransferProject> queryable = DefaultIncludes();
 
 			// Region & Local Authority isn't on Transfers right now
 			//queryable = FilterByRegion(regions, queryable);
@@ -65,29 +66,16 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			if (!string.IsNullOrWhiteSpace(title))
 			{
-
-				queryable = FilterIncomingTrust(title, queryable);
-				queryable = FilterOutgoingTrust(title, queryable);
-				queryable = FilterURN(title, queryable);
-
+				queryable = queryable.Where(p =>
+							p.TransferringAcademies.Any(x =>
+							EF.Functions.Like(x.IncomingTrustName, $"%{title}%"))
+							|| EF.Functions.Like(p.OutgoingTrustName, $"%{title}%") 
+							|| EF.Functions.Like(p.Urn.ToString(), $"%{title}%"));  
 			}
 
 			return queryable;
 		}
 
-		private static IQueryable<TransferProject> FilterIncomingTrust(string title, IQueryable<TransferProject> queryable)
-		{
-			return queryable.Where(p =>
-							p.TransferringAcademies.Any(x =>
-							x.IncomingTrustName != null &&
-							x.IncomingTrustName.Contains(title, StringComparison.CurrentCultureIgnoreCase)
-				)
-			);
-		}
-		private static IQueryable<TransferProject> FilterOutgoingTrust(string title, IQueryable<TransferProject> queryable)
-		{
-			return queryable.Where(p => p.OutgoingTrustName != null && p.OutgoingTrustName.Contains(title, StringComparison.CurrentCultureIgnoreCase));
-		}
 		private static IQueryable<TransferProject> FilterURN(string title, IQueryable<TransferProject> queryable)
 		{
 			return queryable.Where(p => p.Urn.ToString().Contains(title, StringComparison.CurrentCultureIgnoreCase));
