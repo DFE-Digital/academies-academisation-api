@@ -74,33 +74,19 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public async Task<IEnumerable<EstablishmentDto>> GetBulkEstablishmentsByUkprn(IEnumerable<string> ukprns)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);
-			var response = await client.GetAsync($"/v4/establishments/bulk?Urn=10034661");
-			//var response = await client.GetAsync($"/v4/trust/{10034661}");
 
-			var queryParameters = new Dictionary<string, string>();
-
-
-			foreach (var item in queryParameters)
+			var queryParameters = ukprns.Select(ukprn =>
 			{
-				
-			}
+				return new KeyValuePair<string, string>("Ukprn", ukprn);
+			})
+			.ToList()
+			.ToQueryString();
 
-			//ukprns.Select(x => 
-			//{
-			//	queryParameters.Add("Urn", "x");
-			//});
+			var response = await client.GetAsync($"/establishments/ukprn/bulk{queryParameters}");
 
-
-			//queryParameters.
-
-
-			var t = queryParameters.ToQueryString();
-
-
-			//
 			if (!response.IsSuccessStatusCode)
 			{
-				//_logger.LogError("Request for trust failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
+				_logger.LogError("Request for establishments failed , statuscode - {statusCode}", response!.StatusCode);
 				return null;
 			}
 			var establishments = await response.Content.ReadFromJsonAsync<IEnumerable<EstablishmentDto>>();

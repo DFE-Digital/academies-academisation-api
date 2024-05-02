@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Extensions
 		///    true)
 		/// </param>
 		/// <returns>A string representing the parameters combined, UrlEncoded and (optionally) prefixed ready to be used in a URI</returns>
-		public static string ToQueryString(this IDictionary<string, string> parameters, bool prefix = true,
+		public static string ToQueryString(this IList<KeyValuePair<string, string>> parameters, bool prefix = true,
 		   bool keepEmpty = true)
 		{
 			IList<string> parameterPairs = parameters
