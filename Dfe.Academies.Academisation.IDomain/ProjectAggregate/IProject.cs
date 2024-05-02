@@ -44,4 +44,5 @@ public interface IProject
 	void SetFormAMatProjectId(int id);
 	void SetRoute(string route);
 	void AddNote(string subject, string note, string author, DateTime date);
+	void RemoveNote(int id);
 }

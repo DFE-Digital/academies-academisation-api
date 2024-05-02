@@ -11,8 +11,6 @@ using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregat
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IData.Http;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -94,23 +92,18 @@ var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfi
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
-builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
-builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
-builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
+builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
 
-//Repositories
+// Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository>();
 builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 
-builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
-
-builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
-
-// Queries
+// Queries and services
+builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IApplicationQueryService, ApplicationQueryService>();
 builder.Services.AddScoped<IConversionProjectQueryService, ConversionProjectQueryService>();
 builder.Services.AddScoped<IConversionProjectExportService, ConversionProjectExportService>();
@@ -120,13 +113,15 @@ builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
 
-//utils
+// utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<ICorrelationContext, CorrelationContext>();
-builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
+builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
+builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
+builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 
 //Validators
 builder.Services.AddSingleton<ICypressKeyValidator, CypressKeyValidator>();

@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.IData.Http;
-using Dfe.Academisation.CorrelationIdMiddleware;
+﻿using Dfe.Academisation.CorrelationIdMiddleware;
 
 namespace Dfe.Academies.Academisation.Data.Http
 {

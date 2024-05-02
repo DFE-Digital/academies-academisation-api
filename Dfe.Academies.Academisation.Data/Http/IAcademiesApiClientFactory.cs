@@ -1,6 +1,6 @@
 ﻿using Dfe.Academisation.CorrelationIdMiddleware;
 
-namespace Dfe.Academies.Academisation.IData.Http
+namespace Dfe.Academies.Academisation.Data.Http
 {
 	public interface IAcademiesApiClientFactory
 	{
