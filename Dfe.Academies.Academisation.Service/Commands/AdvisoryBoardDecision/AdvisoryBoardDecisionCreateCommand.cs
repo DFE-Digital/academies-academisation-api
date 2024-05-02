@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
@@ -22,7 +23,11 @@ public class AdvisoryBoardDecisionCreateCommand : IAdvisoryBoardDecisionCreateCo
 	public async Task<CreateResult> Execute(
 		AdvisoryBoardDecisionCreateRequestModel requestModel)
 	{
-		var result = _factory.Create(requestModel.AsDomain());
+		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons = requestModel.DeferredReasons ?? new List<AdvisoryBoardDeferredReasonDetails>();
+		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons = requestModel.DeclinedReasons ?? new List<AdvisoryBoardDeclinedReasonDetails>();
+		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons = requestModel.WithdrawnReasons ?? new List<AdvisoryBoardWithdrawnReasonDetails>();
+
+		var result = _factory.Create(requestModel.AsDomain(), deferredReasons, declinedReasons, withdrawnReasons);
 
 		return result switch
 		{

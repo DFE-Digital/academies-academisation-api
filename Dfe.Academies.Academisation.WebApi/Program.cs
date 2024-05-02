@@ -112,6 +112,7 @@ builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository>();
 builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 
 builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
 builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();

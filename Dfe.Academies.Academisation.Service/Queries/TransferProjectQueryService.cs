@@ -7,6 +7,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.Service.Factories;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Queries
@@ -15,16 +16,16 @@ namespace Dfe.Academies.Academisation.Service.Queries
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
 		private readonly IAcademiesQueryService _establishmentRepository;
-		private readonly IAdvisoryBoardDecisionGetDataByProjectIdQuery _advisoryBoardDecisionGetDataByProjectIdQuery;
+		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
 
 		public TransferProjectQueryService(
 			ITransferProjectRepository transferProjectRepository,
 			IAcademiesQueryService establishmentRepository,
-			IAdvisoryBoardDecisionGetDataByProjectIdQuery advisoryBoardDecisionGetDataByProjectIdQuery)
+			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_establishmentRepository = establishmentRepository;
-			_advisoryBoardDecisionGetDataByProjectIdQuery = advisoryBoardDecisionGetDataByProjectIdQuery;
+			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
 		}
 
 		public async Task<AcademyTransferProjectResponse?> GetByUrn(int id)
@@ -79,12 +80,22 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
 		{
 			var (projects, totalCount) = await _transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
+			IEnumerable<IConversionAdvisoryBoardDecision> advisoryBoardDecisions;
+			try
+			{
+				advisoryBoardDecisions = await _advisoryBoardDecisionRepository.GetAllAdvisoryBoardDecisionsForTransfers();
+			}
+			catch (Exception ex)
+			{
+				var e = ex;
+				throw;
+			}	
 
-			var mappedProjects = await MapExportedTransferProjectModel(projects);
+			var mappedProjects = await MapExportedTransferProjectModel(projects, advisoryBoardDecisions);
 
-			int recordTotal = projects.Count();
+			int recordTotal = mappedProjects.Count();
 
-			projects = projects.OrderByDescending(atp => atp.Urn);
+			mappedProjects = mappedProjects.OrderByDescending(atp => atp.Urn);
 
 			return await Task.FromResult(new PagedResultResponse<ExportedTransferProjectModel>(mappedProjects, recordTotal));
 		}
@@ -124,7 +135,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return queryable;
 		}
 
-		private async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject?> atp)
+		private async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject?> atp, IEnumerable<IConversionAdvisoryBoardDecision> decisions)
 		{
 			if (atp == null) throw new ArgumentNullException(nameof(atp));
 
@@ -136,17 +147,18 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				{
 					continue;
 				}
-				var project = await MapProject(transferProject).ConfigureAwait(false);
+				var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
+				var project = await MapProject(transferProject, decision).ConfigureAwait(false);
 				projects.Add(project);
 			}
 
 			return projects.AsEnumerable();
+
+
 		}
 
-		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project)
+		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project, IConversionAdvisoryBoardDecision? advisoryBoardDecision)
 		{
-			var advisoryBoardDecision = await _advisoryBoardDecisionGetDataByProjectIdQuery.Execute(project.Id, true);
-
 			var transferringAcademies = project.TransferringAcademies;
 
 			var schools = await Task.WhenAll(

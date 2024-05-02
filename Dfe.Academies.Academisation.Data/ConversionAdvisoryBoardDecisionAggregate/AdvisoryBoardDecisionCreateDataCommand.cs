@@ -1,24 +1,23 @@
-﻿using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 
 namespace Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 
 public class AdvisoryBoardDecisionCreateDataCommand : IAdvisoryBoardDecisionCreateDataCommand
 {
-	private readonly AcademisationContext _context;
+	private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
 
-	public AdvisoryBoardDecisionCreateDataCommand(AcademisationContext context)
+	public AdvisoryBoardDecisionCreateDataCommand(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
 	{
-		_context = context;
+		_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
 	}
 
 	public async Task Execute(IConversionAdvisoryBoardDecision decision)
 	{
-		var decisionState = AdvisoryBoardDecisionState.MapFromDomain(decision);
+		_advisoryBoardDecisionRepository.Insert(decision as ConversionAdvisoryBoardDecision);
 
-		await _context.ConversionAdvisoryBoardDecisions.AddAsync(decisionState);
-		await _context.SaveChangesAsync();
-
-		decision.SetId(decisionState.Id);
+		await _advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync();
 	}
 }
