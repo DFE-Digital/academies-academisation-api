@@ -111,8 +111,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1")
 			}).CreateMock();
 
+
+
 			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
+			mockRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
 
 			// Set up behavior for methods
 			mockAdvisoryBoardDecisionGetDataByProjectIdQuery
@@ -141,7 +143,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 1);
 
 			// Testing the Method
-			var result = await service.GetExportedTransferProjects(null);
+			var result = await service.GetExportedTransferProjects(Enumerable.Empty<string>(), string.Empty, Enumerable.Empty<string>(), 1, 10);
 
 			// Assertion
 			result.Should().BeEquivalentTo(expectedResponse);
@@ -168,7 +170,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 0);
 
 			// Testing the Method
-			var result = await service.GetExportedTransferProjects("TitleFilter");
+			var result = await service.GetExportedTransferProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>());
 
 			// Assertion
 			result.Should().BeEquivalentTo(expectedResponse);
@@ -190,7 +192,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			}).CreateMock();
 
 			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
+			mockRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
 
 			// Set up behavior for methods
 			mockAdvisoryBoardDecisionRepository
@@ -224,7 +226,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 1);
 
 			// Testing the Method
-			var result = await service.GetExportedTransferProjects(null);
+			var result = await service.GetExportedTransferProjects(Enumerable.Empty<string>(), null, Enumerable.Empty<string>(), 1, 10);
 
 			// Assertion
 			result.Should().BeEquivalentTo(expectedResponse);
