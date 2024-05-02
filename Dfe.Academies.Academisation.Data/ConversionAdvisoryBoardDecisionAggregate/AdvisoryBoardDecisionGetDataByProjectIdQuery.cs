@@ -31,33 +31,4 @@ public class AdvisoryBoardDecisionGetDataByProjectIdQuery : IAdvisoryBoardDecisi
 
 		return decision;
 	}
-
-	public async Task<IConversionAdvisoryBoardDecision?> Execute(List<int?> projectIds, bool isTransfer = false)
-	{
-		List<AdvisoryBoardDecisionState> state = new List<AdvisoryBoardDecisionState>();
-
-		var advisoryBoardDecisions = _context.ConversionAdvisoryBoardDecisions
-				.Include(s => s.DeclinedReasons)
-				.Include(s => s.DeferredReasons)
-				.Include(s => s.WithdrawnReasons);
-
-		if (isTransfer)
-		{
-
-			//.Where(a => projectIds.Contains(a.TransferProjectId));
-
-			//state = advisoryBoardDecisions.Where(s => projectIds.Contains(s.TransferProjectId)).Select(r => r.MapToDomain());
-				
-				
-				
-				//.Select(r => r.MapToDomain()).ToList();
-		}
-		else
-		{
-			//state = await advisoryBoardDecisions.Where(s => s.ConversionProjectId == projectId);
-		}
-
-		//TODO:EA finish this method
-		return null;
-	}
 }
