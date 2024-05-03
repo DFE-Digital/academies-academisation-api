@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 					model.Author,
 					model.Date);
 
-			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync();
+			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			return new CommandSuccessResult();
 

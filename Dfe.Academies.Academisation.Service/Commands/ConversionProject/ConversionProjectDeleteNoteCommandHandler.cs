@@ -41,7 +41,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 
 			_conversionProjectRepository.Update(project as Project);
 
-			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync();
+			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			return new CommandSuccessResult();
 		}
