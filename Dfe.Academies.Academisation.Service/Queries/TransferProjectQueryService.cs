@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -9,8 +8,6 @@ using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 using Dfe.Academies.Contracts.V4.Establishments;
-using DocumentFormat.OpenXml.Wordprocessing;
-using static Dfe.Academies.Academisation.IService.ServiceModels.Academies.Establishment;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -124,19 +121,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return queryable;
 		}
 
-		private static IEnumerable<ITransferProject?> FilterExportedTransferProjectsByIncomingTrust(string? title,
-		IEnumerable<ITransferProject?> queryable)
-		{
-			if (!string.IsNullOrWhiteSpace(title))
-			{
-				queryable = queryable
-					.Where(p => p?.TransferringAcademies != null && p.TransferringAcademies.ToList()
-						.Exists(r => r != null && r.IncomingTrustName != null && r.IncomingTrustName.ToLower().Contains(title.ToLower())))
-					.ToList();
-			}
-			return queryable;
-		}
-
 		private async Task<IEnumerable<ExportedTransferProjectModel>> MapExportedTransferProjectModel(IEnumerable<ITransferProject?> atp, IEnumerable<IConversionAdvisoryBoardDecision> decisions)
 		{
 			if (atp == null) throw new ArgumentNullException(nameof(atp));
@@ -156,12 +140,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				{
 					continue;
 				}
-				var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
 
 				var establishmentsForAcademies = transferProject.TransferringAcademies
 				.Select(academy => establishments.FirstOrDefault(e => e.Ukprn == academy.OutgoingAcademyUkprn))
 				.ToList();
 
+				var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
 				var project = await MapProject(transferProject, establishmentsForAcademies, decision).ConfigureAwait(false);
 				projects.Add(project);
 			}
@@ -171,7 +155,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project, List<EstablishmentDto?> schools, IConversionAdvisoryBoardDecision? advisoryBoardDecision)
 		{
-
 			var transferringAcademies = project.TransferringAcademies;
 
 			var schoolNames = schools.Select(s => s?.Name).Distinct().JoinNonEmpty(", ");
