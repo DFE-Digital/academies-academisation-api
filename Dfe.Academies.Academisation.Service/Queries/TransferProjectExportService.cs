@@ -16,9 +16,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			_transferProjectQueryService = transferProjectQueryService;
 		}
 
-		public async Task<Stream?> ExportTransferProjectsToSpreadsheet(TransferProjectSearchModel searchModel)
+		public async Task<Stream?> ExportTransferProjectsToSpreadsheet(GetProjectSearchModel searchModel)
 		{
-			var result = await _transferProjectQueryService.GetExportedTransferProjects(searchModel.TitleFilter);
+			var result = await _transferProjectQueryService.GetExportedTransferProjects(searchModel.StatusQueryString, searchModel.TitleFilter, searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count);
 
 			if (result?.Results == null || !result.Results.Any())
 			{

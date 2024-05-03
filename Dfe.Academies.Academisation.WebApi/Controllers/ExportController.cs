@@ -38,7 +38,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("export-transfer-projects", Name = "ExportTransferProjectsToSpreadsheet")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> ExportTransferProjectsToSpreadsheet(TransferProjectSearchModel searchModel)
+		public async Task<IActionResult> ExportTransferProjectsToSpreadsheet(GetProjectSearchModel searchModel)
 		{
 			var spreadsheetStream = await _transferProjectExportService.ExportTransferProjectsToSpreadsheet(searchModel);
 			if (spreadsheetStream == null)
