@@ -141,19 +141,18 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					continue;
 				}
 
-				var establishmentsForAcademies = transferProject.TransferringAcademies
-				.Select(academy => establishments.FirstOrDefault(e => e.Ukprn == academy.OutgoingAcademyUkprn))
-				.ToList();
+				var _ukprns = transferProject.TransferringAcademies.Select(ta => ta.OutgoingAcademyUkprn);
+				var establishmentsForTheseAcademies = establishments.Where(e => _ukprns.Contains(e.Ukprn));
 
 				var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
-				var project = await MapProject(transferProject, establishmentsForAcademies, decision).ConfigureAwait(false);
+				var project = await MapProject(transferProject, establishmentsForTheseAcademies, decision).ConfigureAwait(false);
 				projects.Add(project);
 			}
 
 			return projects.AsEnumerable();
 		}
 
-		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project, List<EstablishmentDto?> schools, IConversionAdvisoryBoardDecision? advisoryBoardDecision)
+		private async Task<ExportedTransferProjectModel> MapProject(ITransferProject? project, IEnumerable<EstablishmentDto?> schools, IConversionAdvisoryBoardDecision? advisoryBoardDecision)
 		{
 			var transferringAcademies = project.TransferringAcademies;
 

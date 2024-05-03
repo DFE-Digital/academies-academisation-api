@@ -199,12 +199,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				.Setup(query => query.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 				.ReturnsAsync(mockDecision.Object);
 
-			mockAcademiesQueryService
-				.Setup(academiesQueryService => academiesQueryService.GetEstablishmentByUkprn("dummyOutgoingAcademyUkprn1"))
-				.ReturnsAsync(new EstablishmentDto() { Name = "dummyAcademy1", LocalAuthorityName = "dummyLocalAuthority1" });
-			mockAcademiesQueryService
-				.Setup(academiesQueryService => academiesQueryService.GetEstablishmentByUkprn("dummyOutgoingAcademyUkprn2"))
-				.ReturnsAsync(new EstablishmentDto() { Name = "dummyAcademy2" });
+
+			List<EstablishmentDto> establishments = new List<EstablishmentDto>()
+			{
+				new EstablishmentDto() { Name = "dummyAcademy1", LocalAuthorityName = "dummyLocalAuthority1", Ukprn = "dummyOutgoingAcademyUkprn1" },
+				new EstablishmentDto() { Name = "dummyAcademy2", Ukprn = "dummyOutgoingAcademyUkprn2" }
+			};
+
+			mockAcademiesQueryService.Setup(academiesQueryService => academiesQueryService.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>()))
+					.ReturnsAsync(establishments);
 
 			var service = new TransferProjectQueryService(
 				mockRepository.Object,
