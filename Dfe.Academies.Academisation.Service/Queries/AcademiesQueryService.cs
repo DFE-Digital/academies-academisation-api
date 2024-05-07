@@ -82,7 +82,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			.ToList()
 			.ToQueryString();
 
-			var response = await client.GetAsync($"/establishments/ukprn/bulk{queryParameters}");
+			var response = await client.GetAsync($"v4/establishments/ukprn/bulk{queryParameters}");
 
 			if (!response.IsSuccessStatusCode)
 			{
