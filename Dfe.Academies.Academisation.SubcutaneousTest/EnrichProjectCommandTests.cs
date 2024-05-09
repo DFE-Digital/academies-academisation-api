@@ -1,12 +1,13 @@
 ﻿using System.Net;
 using AutoFixture;
+using AutoMapper;
 using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.Http;
-using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Contracts.V4.Establishments;
@@ -53,7 +54,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			// create command
 			_subject = new EnrichProjectCommand(
 				Mock.Of<ILogger<EnrichProjectCommand>>(),
-				new IncompleteProjectsGetDataQuery(_context),
+				new ConversionProjectRepository(_context, Mock.Of<IMapper>()),
 				new AcademiesQueryService(Mock.Of<ILogger<AcademiesQueryService>>(), _academiesApiClientFactory.Object, correlationContext),
 				new ProjectUpdateDataCommand(_context));
 		}

@@ -16,7 +16,6 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly Mock<IMediator> _mediator;
 		private readonly Mock<IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>> _projectAddNoteCommandHandler;
-		private readonly ICreateNewProjectCommand _createNewProjectCommand;
 		private readonly IConversionProjectExportService _conversionProjectExportService;
 
 		public LegacyProjectAddNoteTests()
@@ -25,14 +24,12 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate
 			_conversionProjectQueryService = Mock.Of<IConversionProjectQueryService>();
 			_mediator = new Mock<IMediator>();
 			_projectAddNoteCommandHandler = new Mock<IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>>();
-			_createNewProjectCommand = Mock.Of<ICreateNewProjectCommand>();
 			_conversionProjectExportService = Mock.Of<IConversionProjectExportService>();
 		}
 
 		private ProjectController System_under_test()
 		{
 			return new ProjectController(
-				_createNewProjectCommand,
 				_conversionProjectQueryService,
 				_mediator.Object);
 		}

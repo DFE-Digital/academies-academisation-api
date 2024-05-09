@@ -1,6 +1,8 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Moq;
@@ -12,18 +14,23 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 {
 	private class UnhandledCommandResult : CommandResult { }
 
-	private readonly Mock<IAdvisoryBoardDecisionGetDataByDecisionIdQuery> _mockDataQuery = new();
-	private readonly Mock<IAdvisoryBoardDecisionUpdateDataCommand> _mockDataCommand = new();
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockRepo = new();
 	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
+
+	public AdvisoryBoardDecisionUpdateCommandExecuteTests()
+	{
+		var mockContext = new Mock<IUnitOfWork>();
+		_mockRepo.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
+	}
 
 	[Fact]
 	public async Task AdvisoryBoardDecisionIdIsDefault___ReturnsBadResult()
 	{
 		//Arrange
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object);
 
 		//Act
-		var result = await target.Execute(new());
+		var result = await target.Handle(new(), default);
 
 		//Assert
 		Assert.IsType<BadRequestCommandResult>(result);
@@ -32,10 +39,10 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	[Fact]
 	public async Task DataQueryReturnsNull__ReturnsCommandNotFoundResult()
 	{
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object);
 
 		//Act
-		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+		var result = await target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default);
 
 		//Assert
 		Assert.IsType<NotFoundCommandResult>(result);
@@ -49,34 +56,34 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
 			.Returns(new UnhandledCommandResult());
 
-		_mockDataQuery
-			.Setup(d => d.Execute(It.IsAny<int>()))
+		_mockRepo
+			.Setup(d => d.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object);
 
 		//Act & Assert
-		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new() { AdvisoryBoardDecisionId = 1 }));
+		await Assert.ThrowsAsync<NotImplementedException>(() => target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default));
 	}
 
 	[Fact]
 	public async Task DomainReturnsValidatorError_DoesNotCallExecuteOnDataCommand()
 	{
 		_mockDecision
-			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
+			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
 			.Returns(new CommandValidationErrorResult(new List<ValidationError>()));
 
-		_mockDataQuery
-			.Setup(q => q.Execute(It.IsAny<int>()))
+		_mockRepo
+			.Setup(q => q.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object);
 
 		//Act
-		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+		_ = await target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default);
 
 		//Assert
-		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
+		_mockRepo.Verify(c => c.Update(It.IsAny<ConversionAdvisoryBoardDecision>()), Times.Never);
 	}
 
 	[Fact]
@@ -86,17 +93,17 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 
-		_mockDataQuery
-			.Setup(q => q.Execute(It.IsAny<int>()))
+		_mockRepo
+			.Setup(q => q.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object);
 
 		//Act
-		_ = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+		_ = await target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default);
 
 		//Assert
-		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
+		_mockRepo.Verify(c => c.Update(It.IsAny<ConversionAdvisoryBoardDecision>()), Times.Once);
 	}
 
 	[Fact]
@@ -107,14 +114,14 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 
-		_mockDataQuery
-			.Setup(q => q.Execute(It.IsAny<int>()))
+		_mockRepo
+			.Setup(q => q.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommand(_mockDataCommand.Object, _mockDataQuery.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object);
 
 		//Act
-		var result = await target.Execute(new() { AdvisoryBoardDecisionId = 1 });
+		var result = await target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default);
 
 		//Assert
 		Assert.IsType<CommandSuccessResult>(result);

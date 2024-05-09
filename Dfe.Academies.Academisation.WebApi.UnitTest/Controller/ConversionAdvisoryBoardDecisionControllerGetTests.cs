@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoFixture;
-using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -13,9 +13,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller;
 public class ConversionAdvisoryBoardDecisionControllerGetTests
 {
 	private readonly Fixture _fixture = new();
-	private readonly Mock<IAdvisoryBoardDecisionCreateCommand> _mockCreateCommand = new();
-	private readonly Mock<IConversionAdvisoryBoardDecisionGetQuery> _mockGetQuery = new();
-	private readonly Mock<IAdvisoryBoardDecisionUpdateCommand> _mockUpdateCommand = new();
+	private readonly Mock<IAdvisoryBoardDecisionQueryService> _mockGetQuery = new();
+	private readonly Mock<IMediator> _mockMediator = new();
 
 	[Fact]
 	public async Task QueryReturnIsNotNull___ReturnsOk()
@@ -23,13 +22,12 @@ public class ConversionAdvisoryBoardDecisionControllerGetTests
 		//Arrange
 		var data = _fixture.Create<ConversionAdvisoryBoardDecisionServiceModel>();
 
-		_mockGetQuery.Setup(q => q.Execute(It.IsAny<int>(), false))
+		_mockGetQuery.Setup(q => q.GetByProjectId(It.IsAny<int>(), false))
 			.ReturnsAsync(data);
 
-		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object,
-			_mockGetQuery.Object,
-			_mockUpdateCommand.Object);
+		var subject = new AdvisoryBoardDecisionController(
+			_mockMediator.Object,
+			_mockGetQuery.Object);
 
 		//Act
 		var result = await subject.GetByProjectId(It.IsAny<int>());
@@ -44,13 +42,12 @@ public class ConversionAdvisoryBoardDecisionControllerGetTests
 	public async Task QueryReturnIsNull___ReturnsNotFound()
 	{
 		//Arrange
-		_mockGetQuery.Setup(q => q.Execute(It.IsAny<int>(), false))
+		_mockGetQuery.Setup(q => q.GetByProjectId(It.IsAny<int>(), false))
 			.ReturnsAsync(It.IsAny<ConversionAdvisoryBoardDecisionServiceModel>());
 
-		var subject = new ConversionAdvisoryBoardDecisionController(
-			_mockCreateCommand.Object,
-			_mockGetQuery.Object,
-			_mockUpdateCommand.Object);
+		var subject = new AdvisoryBoardDecisionController(
+			_mockMediator.Object,
+			_mockGetQuery.Object);
 
 		//Act
 		var result = await subject.GetByProjectId(It.IsAny<int>());

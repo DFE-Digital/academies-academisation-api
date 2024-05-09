@@ -1,29 +1,49 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 {
 	public class ConversionProjectDeleteNoteCommandHandler : IRequestHandler<ConversionProjectDeleteNoteCommand, CommandResult>
 	{
-		private readonly IProjectNoteDeleteCommand _deleteNoteCommand;
+		private readonly IConversionProjectRepository _conversionProjectRepository;
 
-		public ConversionProjectDeleteNoteCommandHandler(IProjectNoteDeleteCommand deleteNoteCommand)
+		public ConversionProjectDeleteNoteCommandHandler(IConversionProjectRepository conversionProjectRepository)
 		{
-			_deleteNoteCommand = deleteNoteCommand;
+			_conversionProjectRepository = conversionProjectRepository;
 		}
 
 		public async Task<CommandResult> Handle(ConversionProjectDeleteNoteCommand note, CancellationToken cancellationToken)
 		{
-			return await _deleteNoteCommand.Execute(
-				note.ProjectId,
-				new ProjectNote(
-					note.Subject,
-					note.Note,
-					note.Author,
-					note.Date, note.ProjectId)
-			);
+			IProject? project = await _conversionProjectRepository.GetConversionProject(note.ProjectId);
+
+			if (project is null)
+			{
+				return new NotFoundCommandResult();
+			}
+
+			// we are doing this because the note id doesn't come from the client
+			var matchedNote = project.Notes
+					.FirstOrDefault(x => x.ProjectId == note.ProjectId &&
+											  x.Subject == note.Subject &&
+											  x.Note == note.Note &&
+											  x.Author == note.Author &&
+											  x.Date == note.Date);
+
+			if (matchedNote is null)
+			{
+				return new NotFoundCommandResult();
+			}
+
+			project.RemoveNote(matchedNote.Id);
+
+			_conversionProjectRepository.Update(project as Project);
+
+			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+			return new CommandSuccessResult();
 		}
 	}
 }

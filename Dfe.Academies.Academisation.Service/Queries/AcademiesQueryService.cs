@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Net.Http.Json;
-using Dfe.Academies.Academisation.IData.Http;
+﻿using System.Net.Http.Json;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Dfe.Academies.Academisation.Service.Extensions;
+using Dfe.Academies.Academisation.Data.Http;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {

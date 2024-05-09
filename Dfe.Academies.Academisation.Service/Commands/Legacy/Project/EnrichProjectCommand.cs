@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IData.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -11,25 +12,25 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 	public class EnrichProjectCommand : IEnrichProjectCommand
 	{
 		private readonly ILogger<EnrichProjectCommand> _logger;
-		private readonly IIncompleteProjectsGetDataQuery _incompleteProjectsGetDataQuery;
+		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAcademiesQueryService _establishmentRepository;
 		private readonly IProjectUpdateDataCommand _projectUpdateDataCommand;
 
 		public EnrichProjectCommand(
 			ILogger<EnrichProjectCommand> logger,
-			IIncompleteProjectsGetDataQuery incompleteProjectsGetDataQuery,
+			IConversionProjectRepository conversionProjectRepository,
 			IAcademiesQueryService establishmentRepository,
 			IProjectUpdateDataCommand projectUpdateDataCommand)
 		{
 			_logger = logger;
-			_incompleteProjectsGetDataQuery = incompleteProjectsGetDataQuery;
+			_conversionProjectRepository = conversionProjectRepository;
 			_establishmentRepository = establishmentRepository;
 			_projectUpdateDataCommand = projectUpdateDataCommand;
 		}
 
 		public async Task Execute()
 		{
-			var incompleteProjects = await _incompleteProjectsGetDataQuery.GetIncompleteProjects();
+			var incompleteProjects = await _conversionProjectRepository.GetIncompleteProjects();
 
 			if (incompleteProjects == null || !incompleteProjects.Any())
 			{

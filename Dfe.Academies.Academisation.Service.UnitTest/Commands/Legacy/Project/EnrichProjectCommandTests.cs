@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
+using Dfe.Academies.Academisation.Data.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
@@ -13,7 +14,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 	public class EnrichProjectCommandTests
 	{
 		private readonly EnrichProjectCommand _subject;
-		private readonly Mock<IIncompleteProjectsGetDataQuery> _incompleteProjectGetDataQuery;
+		private readonly Mock<IConversionProjectRepository> _conversionProjectRepository;
 		private readonly Mock<IAcademiesQueryService> _establishmentGetDataQuery;
 		private readonly Mock<IProjectUpdateDataCommand> _updateCommand;
 		private readonly Mock<ILogger<EnrichProjectCommand>> _logger;
@@ -22,14 +23,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 
 		public EnrichProjectCommandTests()
 		{
-			_incompleteProjectGetDataQuery = new Mock<IIncompleteProjectsGetDataQuery>();
+			_conversionProjectRepository = new Mock<IConversionProjectRepository>();
 			_establishmentGetDataQuery = new Mock<IAcademiesQueryService>();
 			_updateCommand = new Mock<IProjectUpdateDataCommand>();
 			_logger = new Mock<ILogger<EnrichProjectCommand>>();
 
 			_subject = new EnrichProjectCommand(
 				_logger.Object,
-				_incompleteProjectGetDataQuery.Object,
+				_conversionProjectRepository.Object,
 				_establishmentGetDataQuery.Object,
 				_updateCommand.Object);
 		}
@@ -50,7 +51,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		public async Task IncompleteProjects__UnknownSchool__LogAndContinue()
 		{
 			var projects = _fixture.CreateMany<Domain.ProjectAggregate.Project>();
-			_incompleteProjectGetDataQuery.Setup(m => m.GetIncompleteProjects())
+			_conversionProjectRepository.Setup(m => m.GetIncompleteProjects())
 				.ReturnsAsync(projects);
 
 			_establishmentGetDataQuery.SetupSequence(m => m.GetEstablishment(It.IsAny<int>()))
@@ -71,7 +72,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		public async Task IncompleteProjects__KnownSchool__UpdateDb()
 		{
 			var project = _fixture.Create<Domain.ProjectAggregate.Project>();
-			_incompleteProjectGetDataQuery.Setup(m => m.GetIncompleteProjects())
+			_conversionProjectRepository.Setup(m => m.GetIncompleteProjects())
 				.ReturnsAsync(new List<IProject> { project });
 
 			_establishmentGetDataQuery.Setup(m => m.GetEstablishment(It.IsAny<int>()))
