@@ -79,6 +79,6 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 
 		void SetGeneralInformation(string recommendation, string author);
 		void SetOutgoingTrustName(string outgoingTrustName);
-		void SetAcademyIncomingTrustName(int academyId, string incomingTrustName, string? incomingTrustUKPRN);
+		void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN);
 	}
 }

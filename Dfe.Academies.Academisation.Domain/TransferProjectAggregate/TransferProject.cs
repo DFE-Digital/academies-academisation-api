@@ -214,7 +214,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			OutgoingTrustName = outgoingTrustName;
 		}
 
-		public void SetAcademyIncomingTrustName(int academyId, string incomingTrustName, string? incomingTrustUKPRN)
+		public void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN)
 		{
 			var transferringAcademy =
 						TransferringAcademies.SingleOrDefault(x => x.Id == academyId);
