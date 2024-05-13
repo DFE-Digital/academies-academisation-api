@@ -6,5 +6,7 @@ public enum DecisionMadeBy
 	OtherRegionalDirector = 1,
 	Minister = 2,
 	DirectorGeneral = 3,
-	None = 4
+	None = 4,
+	Grade6 = 5,
+	DeputyDirector = 6
 }

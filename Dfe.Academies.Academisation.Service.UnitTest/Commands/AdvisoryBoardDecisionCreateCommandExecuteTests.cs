@@ -81,7 +81,8 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			WithdrawnReasons = withdrawn.ToList(),
 			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
 			AcademyOrderDate = details.AcademyOrderDate,
-			DecisionMadeBy = details.DecisionMadeBy
+			DecisionMadeBy = details.DecisionMadeBy,
+			DecisionMakersName = details.DecisionMakersName
 		};
 
 		//Arrange

@@ -8,5 +8,6 @@ public record AdvisoryBoardDecisionDetails(
 	string? ApprovedConditionsDetails,
 	DateTime AdvisoryBoardDecisionDate,
 	DateTime? AcademyOrderDate,
-	DecisionMadeBy DecisionMadeBy
+	DecisionMadeBy DecisionMadeBy,
+	string? DecisionMakersName
 );

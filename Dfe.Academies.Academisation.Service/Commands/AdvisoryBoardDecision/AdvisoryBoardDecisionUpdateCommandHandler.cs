@@ -39,7 +39,8 @@ public class AdvisoryBoardDecisionUpdateCommandHandler : IRequestHandler<Advisor
 			command.ApprovedConditionsDetails,
 			command.AdvisoryBoardDecisionDate,
 			command.AcademyOrderDate,
-			command.DecisionMadeBy
+			command.DecisionMadeBy,
+			command.DecisionMakersName
 		);
 
 		var result = existingDecision.Update(details, command.DeferredReasons, command.DeclinedReasons, command.WithdrawnReasons);

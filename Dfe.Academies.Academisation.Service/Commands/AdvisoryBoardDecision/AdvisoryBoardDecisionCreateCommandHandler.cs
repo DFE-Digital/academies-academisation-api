@@ -34,7 +34,8 @@ public class AdvisoryBoardDecisionCreateCommandHandler : IRequestHandler<Advisor
 			request.ApprovedConditionsDetails,
 			request.AdvisoryBoardDecisionDate,
 			request.AcademyOrderDate,
-			request.DecisionMadeBy
+			request.DecisionMadeBy,
+			request.DecisionMakersName
 		);
 
 		var result = _factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons);

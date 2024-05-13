@@ -60,7 +60,8 @@ public class PostTests
 			WithdrawnReasons = new(),
 			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),
 			AcademyOrderDate = DateTime.UtcNow.AddMonths(-1),
-			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion
+			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion,
+			DecisionMakersName = "John Smith"
 		};
 
 		//Act

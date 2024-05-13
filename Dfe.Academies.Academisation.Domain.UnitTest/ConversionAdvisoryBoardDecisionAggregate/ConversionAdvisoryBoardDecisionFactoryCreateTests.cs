@@ -47,7 +47,8 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 			_faker.Lorem.Sentence(),
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>());
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString());
 
 		var deferred = new List<AdvisoryBoardDeferredReasonDetails>();
 		var declined = new List<AdvisoryBoardDeclinedReasonDetails>();

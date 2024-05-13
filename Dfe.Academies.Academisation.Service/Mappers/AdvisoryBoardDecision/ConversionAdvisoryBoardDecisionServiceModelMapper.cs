@@ -20,7 +20,8 @@ internal static class ConversionAdvisoryBoardDecisionServiceModelMapper
 			WithdrawnReasons = decision.WithdrawnReasons.ToList(),
 			AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			AcademyOrderDate = decision.AdvisoryBoardDecisionDetails.AcademyOrderDate,
-			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy
+			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,
+			DecisionMakersName = decision.AdvisoryBoardDecisionDetails.DecisionMakersName
 		};
 	}
 }
