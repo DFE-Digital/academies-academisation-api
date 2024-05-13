@@ -22,8 +22,7 @@ public class LegacyProjectGetStatusesTests
 	public LegacyProjectGetStatusesTests()
 	{
 		_context = new TestProjectContext().CreateContext();
-		_projectController = new ProjectController(
-			Mock.Of<ICreateNewProjectCommand>(), new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		_projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 	}
 
 	[Fact]

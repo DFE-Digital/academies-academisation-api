@@ -1,9 +1,10 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Moq;
@@ -13,6 +14,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands;
 
 public class AdvisoryBoardDecisionCreateCommandExecuteTests
 {
+	public AdvisoryBoardDecisionCreateCommandExecuteTests()
+	{
+		var mockContext = new Mock<IUnitOfWork>();
+		_mockRepo.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
+	}
 	private class UnhandledCreateResult : CreateResult
 	{
 		public UnhandledCreateResult() : base(default) { }
@@ -20,9 +26,10 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 
 	private readonly Fixture _fixture = new();
 
-	private readonly Mock<IAdvisoryBoardDecisionCreateDataCommand> _mockDataCommand = new();
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockRepo = new();
 	private readonly Mock<IConversionAdvisoryBoardDecisionFactory> _mockDecisionFactory = new();
 	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
+
 
 	[Fact]
 	public async Task RequestModelIsValid___CallsExecuteOnDataCommand()
@@ -45,13 +52,13 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			.SetupGet(d => d.WithdrawnReasons)
 			.Returns(new List<AdvisoryBoardWithdrawnReasonDetails>());
 
-		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
 
 		//Act
-		_ = await target.Execute(new AdvisoryBoardDecisionCreateRequestModel());
+		_ = await target.Handle(new AdvisoryBoardDecisionCreateCommand(), default);
 
 		//Assert
-		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Once);
+		_mockRepo.Verify(c => c.Insert(It.IsAny<ConversionAdvisoryBoardDecision>()), Times.Once);
 	}
 
 	[Fact]
@@ -95,10 +102,10 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			.SetupGet(d => d.WithdrawnReasons)
 			.Returns(withdrawn.ToList().AsReadOnly());
 
-		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
 
 		//Act
-		var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>)await target.Execute(new());
+		var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>)await target.Handle(new(), default);
 
 		//Assert
 		Assert.Equivalent(expected, result.Payload);
@@ -112,13 +119,13 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
 			.Returns(new CreateValidationErrorResult(Enumerable.Empty<ValidationError>()));
 
-		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
 
 		//Act
-		_ = await target.Execute(new());
+		_ = await target.Handle(new(), default);
 
 		//Assert
-		_mockDataCommand.Verify(c => c.Execute(It.IsAny<IConversionAdvisoryBoardDecision>()), Times.Never);
+		_mockRepo.Verify(c => c.Insert(It.IsAny<ConversionAdvisoryBoardDecision>()), Times.Never);
 	}
 
 	[Fact]
@@ -129,9 +136,9 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
 			.Returns(new UnhandledCreateResult());
 
-		var target = new AdvisoryBoardDecisionCreateCommand(_mockDecisionFactory.Object, _mockDataCommand.Object);
+		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
 
 		//Act && Assert
-		await Assert.ThrowsAsync<NotImplementedException>(() => target.Execute(new AdvisoryBoardDecisionCreateRequestModel()));
+		await Assert.ThrowsAsync<NotImplementedException>(() => target.Handle(new AdvisoryBoardDecisionCreateCommand(), default));
 	}
 }

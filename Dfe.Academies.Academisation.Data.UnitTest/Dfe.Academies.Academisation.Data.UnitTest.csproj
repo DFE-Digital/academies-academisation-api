@@ -30,7 +30,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Dfe.Academies.Academisation.Data\Dfe.Academies.Academisation.Data.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Domain\Dfe.Academies.Academisation.Domain.csproj" />
-    <ProjectReference Include="..\Dfe.Academies.Academisation.IData\Dfe.Academies.Academisation.IData.csproj" />
   </ItemGroup>
 
 </Project>

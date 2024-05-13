@@ -1,6 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Commands.Application;
@@ -127,13 +127,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("{urn}/set-name", Name = "SetTransferProjectName")]
+		[HttpPut("{urn}/set-trust", Name = "SetTransferProjectTrust")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<ActionResult> SetTransferProjectName(int urn,
-			[FromBody] SetTransferProjectNameCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> SetTransferProjectTrust(int urn,
+			[FromBody] SetTransferProjectTrustCommand command, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Setting transfer project name");
+			_logger.LogInformation($"Setting transfer project trust");
 
 			command.Urn = urn;
 			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);

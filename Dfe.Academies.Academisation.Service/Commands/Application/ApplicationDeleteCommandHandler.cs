@@ -1,11 +1,6 @@
-﻿using AutoMapper;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
-using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.RequestModels;
-using Dfe.Academies.Academisation.Service.Mappers.Application;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application;

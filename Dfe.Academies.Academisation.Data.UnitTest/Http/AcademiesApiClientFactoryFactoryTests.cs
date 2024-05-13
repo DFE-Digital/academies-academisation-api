@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using Dfe.Academies.Academisation.Data.Http;
-using Dfe.Academies.Academisation.IData.Http;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using FluentAssertions;
 using Moq;

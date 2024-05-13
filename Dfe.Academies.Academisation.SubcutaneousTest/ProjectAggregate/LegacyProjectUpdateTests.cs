@@ -9,8 +9,6 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
@@ -60,7 +58,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, _mediatr);
 		// had to do this to make the equality operator happy, weirdly the annex b form is missing from equality
 		var existingProjectDetails = _fixture.Build<ProjectDetails>()
 			.With(x => x.ExternalApplicationFormSaved, true)
@@ -99,7 +97,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 		await _context.Projects.AddAsync(existingProject);
 		await _context.SaveChangesAsync();
@@ -127,7 +125,7 @@ public class ProjectUpdateTests
 	public async Task ProjectExists___PartialProjectIsUpdated()
 	{
 		// Arrange
-		var legacyProjectController = new ProjectController(Mock.Of<ICreateNewProjectCommand>(), _legacyProjectGetQuery, _mediatr);
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, _mediatr);
 		var existingProject = _fixture.Create<Project>();
 
 		await _context.Projects.AddAsync(existingProject);

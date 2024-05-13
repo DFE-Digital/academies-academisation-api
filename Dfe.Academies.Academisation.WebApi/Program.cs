@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Data.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
@@ -12,19 +11,14 @@ using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregat
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IData.Http;
-using Dfe.Academies.Academisation.IData.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
-using Dfe.Academies.Academisation.IService.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.Service.Behaviours;
-using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
@@ -98,51 +92,36 @@ var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfi
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
-builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
-builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
-builder.Services.AddScoped<IProjectNoteAddCommand, ProjectNoteAddCommand>();
-builder.Services.AddScoped<IProjectNoteDeleteCommand, ProjectNoteDeleteCommand>();
-builder.Services.AddScoped<ICreateNewProjectCommand, CreateNewProjectCommand>();
-builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
-builder.Services.AddScoped<ICreateNewProjectDataCommand, CreateNewProjectDataCommand>();
+builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
 
-//Repositories
+// Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository>();
 builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 
-builder.Services.AddScoped<IProjectCreateDataCommand, ProjectCreateDataCommand>();
-builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
-
-builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
-builder.Services.AddScoped<IAdvisoryBoardDecisionCreateCommand, AdvisoryBoardDecisionCreateCommand>();
-builder.Services.AddScoped<IAdvisoryBoardDecisionCreateDataCommand, AdvisoryBoardDecisionCreateDataCommand>();
-builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateCommand, AdvisoryBoardDecisionUpdateCommand>();
-builder.Services.AddScoped<IAdvisoryBoardDecisionUpdateDataCommand, AdvisoryBoardDecisionUpdateDataCommand>();
-
-// Queries
+// Queries and services
+builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
 builder.Services.AddScoped<IApplicationQueryService, ApplicationQueryService>();
 builder.Services.AddScoped<IConversionProjectQueryService, ConversionProjectQueryService>();
 builder.Services.AddScoped<IConversionProjectExportService, ConversionProjectExportService>();
-builder.Services.AddScoped<IConversionAdvisoryBoardDecisionGetQuery, ConversionAdvisoryBoardDecisionGetQuery>();
-builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByProjectIdQuery, AdvisoryBoardDecisionGetDataByProjectIdQuery>();
-builder.Services.AddScoped<IAdvisoryBoardDecisionGetDataByDecisionIdQuery, AdvisoryBoardDecisionGetDataByDecisionIdQuery>();
+builder.Services.AddScoped<IAdvisoryBoardDecisionQueryService, AdvisoryBoardDecisionGetQueryService>();
 builder.Services.AddScoped<IAcademiesQueryService, AcademiesQueryService>();
-builder.Services.AddScoped<IIncompleteProjectsGetDataQuery, IncompleteProjectsGetDataQuery>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
 
-//utils
+// utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<ICorrelationContext, CorrelationContext>();
-builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
+builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
+builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
+builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 
 //Validators
 builder.Services.AddSingleton<ICypressKeyValidator, CypressKeyValidator>();

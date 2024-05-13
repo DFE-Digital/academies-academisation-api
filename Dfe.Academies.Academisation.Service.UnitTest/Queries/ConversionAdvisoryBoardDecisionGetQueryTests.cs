@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Queries;
 using Moq;
@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries;
 public class ConversionAdvisoryBoardDecisionGetQueryTests
 {
 	private readonly Fixture _fixture = new();
-	private readonly Mock<IAdvisoryBoardDecisionGetDataByProjectIdQuery> _mockDataQuery = new();
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockDataQuery = new();
 
 	[Fact]
 	public async Task WhenDataQueryReturnIsNotNull___ReturnsExpectedServiceModel()
@@ -27,13 +27,13 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 
 		ConversionAdvisoryBoardDecision data = new(expectedId, details, deferred, declined, withdrawn, default, default);
 
-		_mockDataQuery.Setup(q => q.Execute(expectedId,false))
+		_mockDataQuery.Setup(q => q.GetConversionProjectDecsion(expectedId))
 			.ReturnsAsync(data);
 
-		ConversionAdvisoryBoardDecisionGetQuery query = new(_mockDataQuery.Object);
+		AdvisoryBoardDecisionGetQueryService query = new(_mockDataQuery.Object);
 
 		//Act
-		var result = await query.Execute(expectedId);
+		var result = await query.GetByProjectId(expectedId);
 
 		//Assert
 		Assert.Multiple(
@@ -49,10 +49,10 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 		//Arrange
 		const int requestedId = 4;
 
-		ConversionAdvisoryBoardDecisionGetQuery query = new(_mockDataQuery.Object);
+		AdvisoryBoardDecisionGetQueryService query = new(_mockDataQuery.Object);
 
 		//Act
-		var result = await query.Execute(requestedId);
+		var result = await query.GetByProjectId(requestedId);
 
 		//Assert
 		Assert.Null(result);

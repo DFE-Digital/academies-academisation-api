@@ -1,5 +1,5 @@
-﻿using Dfe.Academies.Academisation.Data.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Query;
+﻿using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Queries;
 using Moq;

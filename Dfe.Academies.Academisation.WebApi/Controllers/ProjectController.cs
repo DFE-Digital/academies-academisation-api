@@ -1,9 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.WebApi.Extensions;
@@ -17,20 +17,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class ProjectController : ControllerBase
 	{
-		private readonly ICreateNewProjectCommand _createNewProjectCommand;
-
 		private readonly IConversionProjectQueryService _conversionProjectQueryService;
 		private readonly IMediator _mediator;
 
-		public ProjectController(
-
-									   ICreateNewProjectCommand createSponsoredProjectCommand,
-
-									   IConversionProjectQueryService conversionProjectQueryService,
-									   IMediator mediator)
+		public ProjectController(IConversionProjectQueryService conversionProjectQueryService, IMediator mediator)
 		{
-			_createNewProjectCommand = createSponsoredProjectCommand;
-
 			_conversionProjectQueryService = conversionProjectQueryService;
 			_mediator = mediator;
 		}
@@ -152,9 +143,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
-		public async Task<ActionResult> AddConversion(NewProjectServiceModel project)
+		public async Task<ActionResult> AddConversion(NewProjectServiceModel project, CancellationToken cancellationToken)
 		{
-			CreateResult result = await _createNewProjectCommand.Execute(project);
+			CreateResult result = await _mediator.Send(new ConversionProjectCreateCommand(project), cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{

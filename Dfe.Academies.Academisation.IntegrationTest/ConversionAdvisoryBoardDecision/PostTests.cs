@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAgg
 using Dfe.Academies.Academisation.IntegrationTest.Extensions;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
+using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.IntegrationTest.ConversionAdvisoryBoardDecision;
@@ -24,7 +25,7 @@ public class PostTests
 		//Arrange
 		const int conversionProjectId = 9000;
 		var client = _factory.CreateClient();
-		var request = new AdvisoryBoardDecisionCreateRequestModel { ConversionProjectId = conversionProjectId };
+		var request = new AdvisoryBoardDecisionCreateCommand { ConversionProjectId = conversionProjectId };
 
 		//Act
 		var result = await client.PostAsJsonDeserialized<ConversionAdvisoryBoardDecisionServiceModel>(
@@ -48,13 +49,13 @@ public class PostTests
 		//Arrange
 		const int conversionProjectId = 9001;
 		var client = _factory.CreateClient();
-		var request = new AdvisoryBoardDecisionCreateRequestModel
+		var request = new AdvisoryBoardDecisionCreateCommand
 		{
 			ConversionProjectId = conversionProjectId,
 			Decision = AdvisoryBoardDecision.Declined,
 			ApprovedConditionsSet = null,
 			ApprovedConditionsDetails = null,
-			DeclinedReasons = new() {new(conversionProjectId, AdvisoryBoardDeclinedReason.Finance, "reason")},
+			DeclinedReasons = new() { new(conversionProjectId, AdvisoryBoardDeclinedReason.Finance, "reason") },
 			DeferredReasons = new(),
 			WithdrawnReasons = new(),
 			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),

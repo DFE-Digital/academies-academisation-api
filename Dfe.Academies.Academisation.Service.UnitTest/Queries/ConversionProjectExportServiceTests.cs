@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Data.ProjectAggregate;
-using Dfe.Academies.Academisation.IData.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
@@ -11,14 +10,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 	public class ConversionProjectExportServiceTests
 	{
 		private readonly Mock<IConversionProjectQueryService> _mockConversionProjectQueryService;
-		private readonly Mock<IAdvisoryBoardDecisionGetDataByProjectIdQuery> _mockAdvisoryBoardDecisionQuery;
+		private readonly Mock<IAdvisoryBoardDecisionQueryService> _mockAdvisoryBoardDecisionQueryService;
 		private readonly ConversionProjectExportService _service;
 
 		public ConversionProjectExportServiceTests()
 		{
 			_mockConversionProjectQueryService = new Mock<IConversionProjectQueryService>();
-			_mockAdvisoryBoardDecisionQuery = new Mock<IAdvisoryBoardDecisionGetDataByProjectIdQuery>();
-			_service = new ConversionProjectExportService(_mockConversionProjectQueryService.Object, _mockAdvisoryBoardDecisionQuery.Object);
+			_mockAdvisoryBoardDecisionQueryService = new Mock<IAdvisoryBoardDecisionQueryService>();
+			_service = new ConversionProjectExportService(_mockConversionProjectQueryService.Object, _mockAdvisoryBoardDecisionQueryService.Object);
 		}
 		[Fact]
 		public async Task ExportProjectsToSpreadsheet_ReturnsStream_WhenProjectsFound()

@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
@@ -547,5 +548,17 @@ public class Project : Entity, IProject, IAggregateRoot
 	public void SetDeletedAt()
 	{
 		DeletedAt = DateTime.UtcNow;
+	}
+
+	public void AddNote(string subject, string note, string author, DateTime date)
+	{
+		_notes.Add(new ProjectNote(subject, note, author, date, Id));
+	}
+
+	public void RemoveNote(int id)
+	{
+		var note = _notes.SingleOrDefault(x => x.Id == id);
+		if (note != null) { _notes.Remove(note); }
+
 	}
 }

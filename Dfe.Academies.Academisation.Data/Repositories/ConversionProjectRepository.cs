@@ -89,6 +89,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return queryable;
 		}
 
+		public async Task<IEnumerable<IProject>?> GetIncompleteProjects()
+		{
+			var createdProjectState = await _context.Projects
+				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType))
+				.ToListAsync();
+
+			return createdProjectState;
+		}
 
 		private static IQueryable<Project> FilterByRegion(IEnumerable<string>? regions, IQueryable<Project> queryable)
 		{
