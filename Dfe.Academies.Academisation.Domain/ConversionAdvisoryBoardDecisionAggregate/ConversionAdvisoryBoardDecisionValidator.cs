@@ -12,7 +12,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 		ValidateDeferredDecision();
 		ValidateWithdrawnDecision();
 		ValidateDecisionDate();
-		ValidateDecisionMakersName();
+		ValidateDecisionMakerName();
 	}
 
 
@@ -243,12 +243,12 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 				FutureDateMessage(
 					nameof(details.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
 	}
-	private void ValidateDecisionMakersName()
+	private void ValidateDecisionMakerName()
 	{
-		RuleFor(details => details.AdvisoryBoardDecisionDetails.DecisionMakersName)
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.DecisionMakerName)
 			.NotNull()
 			.NotEmpty()
 			.WithMessage(details => NullMessage(
-					nameof(details.AdvisoryBoardDecisionDetails.DecisionMakersName)));
+					nameof(details.AdvisoryBoardDecisionDetails.DecisionMakerName)));
 	}
 }

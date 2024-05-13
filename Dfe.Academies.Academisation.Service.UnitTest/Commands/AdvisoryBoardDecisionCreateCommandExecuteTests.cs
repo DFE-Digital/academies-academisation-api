@@ -82,7 +82,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
 			AcademyOrderDate = details.AcademyOrderDate,
 			DecisionMadeBy = details.DecisionMadeBy,
-			DecisionMakersName = details.DecisionMakersName
+			DecisionMakerName = details.DecisionMakerName
 		};
 
 		//Arrange

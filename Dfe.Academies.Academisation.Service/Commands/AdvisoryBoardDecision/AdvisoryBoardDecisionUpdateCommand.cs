@@ -19,5 +19,5 @@ public class AdvisoryBoardDecisionUpdateCommand : IRequest<CommandResult>
 	public DateTime? AcademyOrderDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
 
-	public string DecisionMakersName { get; set; }
+	public string DecisionMakerName { get; set; }
 }

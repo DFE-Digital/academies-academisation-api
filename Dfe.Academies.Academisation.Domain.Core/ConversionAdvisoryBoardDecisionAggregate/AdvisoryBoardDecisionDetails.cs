@@ -9,5 +9,5 @@ public record AdvisoryBoardDecisionDetails(
 	DateTime AdvisoryBoardDecisionDate,
 	DateTime? AcademyOrderDate,
 	DecisionMadeBy DecisionMadeBy,
-	string? DecisionMakersName
+	string? DecisionMakerName
 );

@@ -61,7 +61,7 @@ public class PostTests
 			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),
 			AcademyOrderDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion,
-			DecisionMakersName = "John Smith"
+			DecisionMakerName = "John Smith"
 		};
 
 		//Act

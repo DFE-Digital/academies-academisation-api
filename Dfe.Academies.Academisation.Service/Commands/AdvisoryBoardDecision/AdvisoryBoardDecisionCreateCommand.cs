@@ -17,5 +17,5 @@ public class AdvisoryBoardDecisionCreateCommand : IRequest<CreateResult>
 	public DateTime AdvisoryBoardDecisionDate { get; set; }
 	public DateTime? AcademyOrderDate { get; set; }
 	public DecisionMadeBy DecisionMadeBy { get; set; }
-	public string DecisionMakersName { get; set; }
+	public string DecisionMakerName { get; set; }
 }
