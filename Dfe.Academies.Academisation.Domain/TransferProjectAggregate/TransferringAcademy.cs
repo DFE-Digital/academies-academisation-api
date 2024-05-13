@@ -38,9 +38,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
 		}
 
-		public void SetIncomingTrustName(string incomingTrustName)
+		public void SetIncomingTrustName(string incomingTrustName, string incomingTrustUKPRN = "")
 		{
 			IncomingTrustName = incomingTrustName;
+			if (!string.IsNullOrEmpty(incomingTrustUKPRN))
+			{
+				IncomingTrustUkprn = incomingTrustUKPRN;
+			}
 		}
 	}
 }

@@ -12,21 +12,21 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 	public class SetTransferProjectNameCommandHandlerTests
 	{
 		private readonly Mock<ITransferProjectRepository> _transferProjectRepositoryMock;
-		private readonly Mock<ILogger<SetTransferProjectNameCommandHandler>> _loggerMock;
-		private readonly SetTransferProjectNameCommandHandler _handler;
+		private readonly Mock<ILogger<SetTransferProjectTrustCommandHandler>> _loggerMock;
+		private readonly SetTransferProjectTrustCommandHandler _handler;
 
 		public SetTransferProjectNameCommandHandlerTests()
 		{
 			_transferProjectRepositoryMock = new Mock<ITransferProjectRepository>();
-			_loggerMock = new Mock<ILogger<SetTransferProjectNameCommandHandler>>();
-			_handler = new SetTransferProjectNameCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
+			_loggerMock = new Mock<ILogger<SetTransferProjectTrustCommandHandler>>();
+			_handler = new SetTransferProjectTrustCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
 		}
 
 		[Fact]
 		public async Task Handle_TransferProjectNotFound_ReturnsNotFoundCommandResult()
 		{
 			// Arrange
-			var command = new SetTransferProjectNameCommand
+			var command = new SetTransferProjectTrustCommand
 			{
 				Urn = 1,
 				ProjectName = "Test Project Name"
@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public async Task Handle_TransferProjectFound_ReturnsCommandSuccessResult()
 		{
 			// Arrange
-			var command = new SetTransferProjectNameCommand
+			var command = new SetTransferProjectTrustCommand
 			{
 				Urn = 1,
 				ProjectName = "Test Project Name"
