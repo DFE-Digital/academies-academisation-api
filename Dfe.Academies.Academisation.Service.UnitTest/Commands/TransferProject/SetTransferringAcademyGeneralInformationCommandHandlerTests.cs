@@ -38,12 +38,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public async Task Handle_ValidCommand_ReturnsCommandSuccessResult()
 		{
 			// Arrange
-			var transferringAcademy = new TransferringAcademy("12345678", "Incoming Trust", "12345678");
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
 
-			// Use reflection to set the private field "_transferringAcademies"
-			var transferringAcademiesField = typeof(Domain.TransferProjectAggregate.TransferProject).GetField("_transferringAcademies", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-			transferringAcademiesField.SetValue(transferProject, new List<TransferringAcademy> { transferringAcademy });
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
 
 			var transferProjectRepositoryMock = new Mock<ITransferProjectRepository>();
 			var unitOfWorkMock = new Mock<IUnitOfWork>();
@@ -68,7 +64,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			transferProjectRepositoryMock.Verify(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()), Times.Once);
 			unitOfWorkMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 			Assert.IsType<CommandSuccessResult>(result);
-			Assert.Equal("PFI Scheme", transferringAcademy.PFIScheme);
+			Assert.Equal("PFI Scheme", transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
 		}
 	}
 }
