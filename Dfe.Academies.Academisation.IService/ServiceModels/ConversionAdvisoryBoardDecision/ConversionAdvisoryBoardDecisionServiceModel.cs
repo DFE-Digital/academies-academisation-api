@@ -16,5 +16,5 @@ public class ConversionAdvisoryBoardDecisionServiceModel
 	public DateTime AdvisoryBoardDecisionDate { get; init; }
 	public DateTime? AcademyOrderDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
-	public string DecisionMakerName { get; init; }
+	public string? DecisionMakerName { get; init; }
 }

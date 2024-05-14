@@ -681,4 +681,85 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 					 == nameof(IConversionAdvisoryBoardDecision.DeclinedReasons))
 		);
 	}
+
+	[Fact]
+	private void DecisionMadeByNotNone_WithEmptyDecisionMakerName_ReturnsInvalidResult()
+	{
+		//Arrange
+		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
+			ConversionProjectId,
+			null,
+			AdvisoryBoardDecision.Approved,
+			false,
+			null,
+			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
+			DecisionMadeBy.DeputyDirector,
+			string.Empty),
+			null,
+			null,
+			null, DateTime.UtcNow, DateTime.UtcNow);
+
+		// Act
+		var result = _validator.Validate(decision);
+
+		//Assert
+		Assert.Multiple(
+			() => Assert.False(result.IsValid),
+			() => Assert.NotEmpty(result.Errors),
+			() => Assert.Contains(result.Errors,
+				e => e.PropertyName
+					 == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.DecisionMakerName)}")
+		);
+	}
+
+	[Fact]
+	private void DecisionMadeByNotNone_WithyDecisionMakerName_ReturnsValidResult()
+	{
+		//Arrange
+		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
+			ConversionProjectId,
+			null,
+			AdvisoryBoardDecision.Approved,
+			false,
+			null,
+			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
+			DecisionMadeBy.DeputyDirector,
+			"John Smith"),
+			null,
+			null,
+			null, DateTime.UtcNow, DateTime.UtcNow);
+
+		// Act
+		var result = _validator.Validate(decision);
+
+		//Assert
+		Assert.True(result.IsValid);
+	}
+
+	[Fact]
+	private void DecisionMadeByIsNone_WithEmptyDecisionMakerName_ReturnsValidResult()
+	{
+		//Arrange
+		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
+			ConversionProjectId,
+			null,
+			AdvisoryBoardDecision.Approved,
+			false,
+			null,
+			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
+			DecisionMadeBy.None,
+			string.Empty),
+			null,
+			null,
+			null, DateTime.UtcNow, DateTime.UtcNow);
+
+		// Act
+		var result = _validator.Validate(decision);
+
+		//Assert
+		Assert.True(result.IsValid);
+	}
 }

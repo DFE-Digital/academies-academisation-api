@@ -248,7 +248,8 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 		RuleFor(details => details.AdvisoryBoardDecisionDetails.DecisionMakerName)
 			.NotNull()
 			.NotEmpty()
-			.WithMessage(details => NullMessage(
+			.When(details => details.AdvisoryBoardDecisionDetails.DecisionMadeBy is not DecisionMadeBy.None)
+			.WithMessage(details => NotEmptyMessage(
 					nameof(details.AdvisoryBoardDecisionDetails.DecisionMakerName)));
 	}
 }
