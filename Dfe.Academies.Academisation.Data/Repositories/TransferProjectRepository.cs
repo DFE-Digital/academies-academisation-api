@@ -70,7 +70,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 							p.TransferringAcademies.Any(x =>
 							EF.Functions.Like(x.IncomingTrustName, $"%{title}%"))
 							|| EF.Functions.Like(p.OutgoingTrustName, $"%{title}%") 
-							|| EF.Functions.Like(p.Urn.ToString(), $"%{title}%"));  
+							|| EF.Functions.Like(p.Urn.ToString(), $"%{title}%")
+							|| EF.Functions.Like(p.OutgoingTrustUkprn, $"%{title}%")
+							|| EF.Functions.Like(p.ProjectReference, $"%{title}%")
+							|| p.TransferringAcademies.Any(ta => EF.Functions.Like(ta.IncomingTrustUkprn, $"%{title}%")));  
 			}
 
 			return queryable;
