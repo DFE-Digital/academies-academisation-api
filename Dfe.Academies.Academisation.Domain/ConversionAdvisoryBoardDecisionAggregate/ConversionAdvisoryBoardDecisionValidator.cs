@@ -12,7 +12,9 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 		ValidateDeferredDecision();
 		ValidateWithdrawnDecision();
 		ValidateDecisionDate();
+		ValidateDecisionMakerName();
 	}
+
 
 	private static string NotNullMessage(string target)
 	{
@@ -240,5 +242,14 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 			.WithMessage(details =>
 				FutureDateMessage(
 					nameof(details.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate)));
+	}
+	private void ValidateDecisionMakerName()
+	{
+		RuleFor(details => details.AdvisoryBoardDecisionDetails.DecisionMakerName)
+			.NotNull()
+			.NotEmpty()
+			.When(details => details.AdvisoryBoardDecisionDetails.DecisionMadeBy is not DecisionMadeBy.None)
+			.WithMessage(details => NotEmptyMessage(
+					nameof(details.AdvisoryBoardDecisionDetails.DecisionMakerName)));
 	}
 }

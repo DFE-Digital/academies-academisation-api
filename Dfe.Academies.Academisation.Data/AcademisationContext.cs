@@ -359,6 +359,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 				abd.Property(d => d.AdvisoryBoardDecisionDate).HasColumnName("AdvisoryBoardDecisionDate");
 				abd.Property(d => d.DecisionMadeBy).HasColumnName("DecisionMadeBy").HasConversion<string>();
 				abd.Property(d => d.AcademyOrderDate).HasColumnName("AcademyOrderDate");
+				abd.Property(d => d.DecisionMakerName).HasColumnName("DecisionMakerName");
 			});
 
 		ConversionAdvisoryBoardDecisionConfiguration

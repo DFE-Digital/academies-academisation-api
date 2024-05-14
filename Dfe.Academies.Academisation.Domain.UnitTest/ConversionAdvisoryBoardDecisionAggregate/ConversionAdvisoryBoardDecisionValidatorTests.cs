@@ -31,7 +31,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			approvedConditionsSet ? _faker.Lorem.Sentence() : null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -60,7 +61,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, declinedReasons, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, declinedReasons, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -87,7 +89,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), deferredReasons, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), deferredReasons, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -114,7 +117,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, withdrawnReasons, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, withdrawnReasons, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -135,7 +139,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			default,
 			default,
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -162,7 +167,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(1),
 			DateTime.UtcNow.AddDays(1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -189,7 +195,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -220,7 +227,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			value,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -247,7 +255,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			_faker.Lorem.Sentence(),
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -274,7 +283,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, new List<AdvisoryBoardDeclinedReasonDetails>() { new (1, _faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) }, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, new List<AdvisoryBoardDeclinedReasonDetails>() { new (1, _faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) }, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -301,7 +311,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -328,7 +339,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, new List<AdvisoryBoardWithdrawnReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardWithdrawnReason>(), _faker.Lorem.Sentence()) }, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, new List<AdvisoryBoardWithdrawnReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardWithdrawnReason>(), _faker.Lorem.Sentence()) }, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -355,7 +367,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -382,7 +395,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, new List<AdvisoryBoardDeclinedReasonDetails>(), null, DateTime.UtcNow, DateTime.UtcNow); ;
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, new List<AdvisoryBoardDeclinedReasonDetails>(), null, DateTime.UtcNow, DateTime.UtcNow); ;
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -413,7 +427,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, new List<AdvisoryBoardDeclinedReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeclinedReason>(), declinedReasonDetails) }, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, new List<AdvisoryBoardDeclinedReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeclinedReason>(), declinedReasonDetails) }, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -445,7 +460,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, new List<AdvisoryBoardWithdrawnReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardWithdrawnReason>(), withdrawnReasonDetails) }, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, new List<AdvisoryBoardWithdrawnReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardWithdrawnReason>(), withdrawnReasonDetails) }, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -474,7 +490,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, new List<AdvisoryBoardDeclinedReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) }, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, new List<AdvisoryBoardDeclinedReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) }, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -501,7 +518,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -528,7 +546,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), null, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -555,7 +574,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), new List<AdvisoryBoardDeferredReasonDetails>(), null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), new List<AdvisoryBoardDeferredReasonDetails>(), null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -586,7 +606,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), deferredReasonDetails) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), deferredReasonDetails) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -614,7 +635,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) }, null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -641,7 +663,8 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			null,
 			DateTime.UtcNow.AddDays(-1),
 			DateTime.UtcNow.AddDays(-1),
-			_faker.PickRandom<DecisionMadeBy>()), 
+			_faker.PickRandom<DecisionMadeBy>(),
+			_faker.Name.ToString()), 
 			new List<AdvisoryBoardDeferredReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeferredReason>(), _faker.Lorem.Sentence()) }, 
 			new List<AdvisoryBoardDeclinedReasonDetails>() { new(1, _faker.PickRandom<AdvisoryBoardDeclinedReason>(), _faker.Lorem.Sentence()) }, 
 			null, DateTime.UtcNow, DateTime.UtcNow);
@@ -657,5 +680,86 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 				e => e.PropertyName
 					 == nameof(IConversionAdvisoryBoardDecision.DeclinedReasons))
 		);
+	}
+
+	[Fact]
+	private void DecisionMadeByNotNone_WithEmptyDecisionMakerName_ReturnsInvalidResult()
+	{
+		//Arrange
+		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
+			ConversionProjectId,
+			null,
+			AdvisoryBoardDecision.Approved,
+			false,
+			null,
+			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
+			DecisionMadeBy.DeputyDirector,
+			string.Empty),
+			null,
+			null,
+			null, DateTime.UtcNow, DateTime.UtcNow);
+
+		// Act
+		var result = _validator.Validate(decision);
+
+		//Assert
+		Assert.Multiple(
+			() => Assert.False(result.IsValid),
+			() => Assert.NotEmpty(result.Errors),
+			() => Assert.Contains(result.Errors,
+				e => e.PropertyName
+					 == $"{nameof(AdvisoryBoardDecisionDetails)}.{nameof(AdvisoryBoardDecisionDetails.DecisionMakerName)}")
+		);
+	}
+
+	[Fact]
+	private void DecisionMadeByNotNone_WithyDecisionMakerName_ReturnsValidResult()
+	{
+		//Arrange
+		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
+			ConversionProjectId,
+			null,
+			AdvisoryBoardDecision.Approved,
+			false,
+			null,
+			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
+			DecisionMadeBy.DeputyDirector,
+			"John Smith"),
+			null,
+			null,
+			null, DateTime.UtcNow, DateTime.UtcNow);
+
+		// Act
+		var result = _validator.Validate(decision);
+
+		//Assert
+		Assert.True(result.IsValid);
+	}
+
+	[Fact]
+	private void DecisionMadeByIsNone_WithEmptyDecisionMakerName_ReturnsValidResult()
+	{
+		//Arrange
+		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
+			ConversionProjectId,
+			null,
+			AdvisoryBoardDecision.Approved,
+			false,
+			null,
+			DateTime.UtcNow.AddDays(-1),
+			DateTime.UtcNow.AddDays(-1),
+			DecisionMadeBy.None,
+			string.Empty),
+			null,
+			null,
+			null, DateTime.UtcNow, DateTime.UtcNow);
+
+		// Act
+		var result = _validator.Validate(decision);
+
+		//Assert
+		Assert.True(result.IsValid);
 	}
 }
