@@ -1,11 +1,10 @@
-﻿using AutoFixture;
-using AutoMapper;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using FluentAssertions;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
@@ -372,7 +371,33 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Assert
 			transferProject.Status.Should().Be(status);
 		}
+		[Fact]
+		public void SetTransferringAcademyGeneralInformation_ValidData_SetsPFIScheme()
+		{
+			// Arrange
+			var transferringAcademy = new TransferringAcademy("12345678", "Incoming Trust", "12345678");
+			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
 
+			// Use reflection to set the private field "_transferringAcademies"
+			var transferringAcademiesField = typeof(TransferProject).GetField("_transferringAcademies", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+			transferringAcademiesField.SetValue(transferProject, new List<TransferringAcademy> { transferringAcademy });
+
+			// Act
+			transferProject.SetTransferringAcademyGeneralInformation("12345678", "PFI Scheme");
+
+			// Assert
+			Assert.Equal("PFI Scheme", transferringAcademy.PFIScheme);
+		}
+
+		[Fact]
+		public void SetTransferringAcademyGeneralInformation_AcademyNotFound_ThrowsException()
+		{
+			// Arrange
+			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
+
+			// Act & Assert
+			Assert.Throws<InvalidOperationException>(() => transferProject.SetTransferringAcademyGeneralInformation("87654321", "PFI Scheme"));
+		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
 			public IEnumerator<object[]> GetEnumerator()
