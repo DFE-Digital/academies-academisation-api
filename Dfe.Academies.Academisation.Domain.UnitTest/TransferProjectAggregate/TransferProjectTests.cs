@@ -374,19 +374,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		[Fact]
 		public void SetTransferringAcademyGeneralInformation_ValidData_SetsPFIScheme()
 		{
-			// Arrange
-			var transferringAcademy = new TransferringAcademy("12345678", "Incoming Trust", "12345678");
+			// Arrange			
 			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
-
-			// Use reflection to set the private field "_transferringAcademies"
-			var transferringAcademiesField = typeof(TransferProject).GetField("_transferringAcademies", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-			transferringAcademiesField.SetValue(transferProject, new List<TransferringAcademy> { transferringAcademy });
 
 			// Act
 			transferProject.SetTransferringAcademyGeneralInformation("12345678", "PFI Scheme");
 
 			// Assert
-			Assert.Equal("PFI Scheme", transferringAcademy.PFIScheme);
+			Assert.Equal("PFI Scheme", actual: transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
 		}
 
 		[Fact]
