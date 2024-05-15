@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
@@ -21,15 +20,20 @@ public class CreateTransferProjectCommandHandler : IRequestHandler<CreateTransfe
 		_dateTimeProvider = dateTimeProvider;
 	}
 
-	public async Task<CreateResult> Handle(CreateTransferProjectCommand request, CancellationToken cancellationToken)
+	public async Task<CreateResult> Handle(CreateTransferProjectCommand message, CancellationToken cancellationToken)
 	{
+		List<TransferringAcademy> transferringAcademies = new List<TransferringAcademy>();
+
+		foreach (var transferringAcademy in message.TransferringAcademies)
+		{
+			transferringAcademies.Add(new TransferringAcademy(transferringAcademy.IncomingTrustUkprn, transferringAcademy.IncomingTrustName, transferringAcademy.OutgoingAcademyUkprn, transferringAcademy.Region, transferringAcademy.LocalAuthority));
+		}
+
 		var transferProject = Domain.TransferProjectAggregate.TransferProject.Create(
-			request.OutgoingTrustUkprn, 
-			request.OutgoingTrustName,
-			request.IncomingTrustUkprn,
-			request.IncomingTrustName,
-			request.TransferringAcademyUkprns, 
-			request.IsFormAMat,
+			message.OutgoingTrustUkprn, 
+			message.OutgoingTrustName,
+			transferringAcademies,
+			message.IsFormAMat,
 			_dateTimeProvider.Now);
 
 		 _transferProjectRepository.Insert(transferProject);

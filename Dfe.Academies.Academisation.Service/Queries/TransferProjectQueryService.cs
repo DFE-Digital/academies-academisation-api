@@ -205,7 +205,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				   },
 					TransferringAcademies = x.TransferringAcademies.Select(ta =>
 					{
-						return new TransferringAcademiesResponse
+						return new TransferringAcademyDto
 						{
 							OutgoingAcademyUkprn = ta.OutgoingAcademyUkprn,
 							IncomingTrustUkprn = ta.IncomingTrustUkprn,

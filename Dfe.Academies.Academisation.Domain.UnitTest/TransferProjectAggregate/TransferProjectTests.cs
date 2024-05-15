@@ -14,9 +14,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 	{
 		private readonly string _outgoingTrustUkprn = "12345678";
 		private readonly string _outgoingTrusName = "_outgoingTrusName";
-		private readonly string _incomingTrustUkprn = "23456789";
-		private readonly string _incomingTrustName = "_incomingTrustName";
-		private readonly List<string> _academyUkprns = new() { "academy1", "academy2" };
+		private readonly static string _incomingTrustUkprn = "23456789";
+		private readonly static string _incomingTrustName = "_incomingTrustName";
+
+		private readonly List<TransferringAcademy> _academies = new List<TransferringAcademy>() { 
+			new TransferringAcademy(_incomingTrustUkprn, _incomingTrustName, "academy1", "region", "local authority"), 
+			new TransferringAcademy(_incomingTrustUkprn, _incomingTrustName, "academy2", "region", "local authority") };
+
 		private readonly bool _isFormAMat = true;
 		private readonly DateTime _createdOn = DateTime.Now;
 		public TransferProjectTests()
@@ -32,7 +36,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
 			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
@@ -40,9 +44,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var result = TransferProject.Create(
 				outgoingTrustUkprn,
 				outgoingTrustName,
-				incomingTrustUkprn,
-				incomingTrustName,
-				academyUkprns,
+				academies,
 				isFormAMat,
 				createdOn);
 
@@ -61,7 +63,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<string> academyUkprns = new List<string>() { "22221111" };
+			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority") };
+
 			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
@@ -69,9 +72,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var result = TransferProject.Create(
 				outgoingTrustUkprn,
 				outgoingTrustName,
-				incomingTrustUkprn,
-				incomingTrustName,
-				academyUkprns,
+				academies,
 				isFormAMat,
 				createdOn);
 
@@ -90,7 +91,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
 			bool isFormAMat = false;
 			DateTime createdOn = DateTime.Now;
 
@@ -98,9 +99,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var result = TransferProject.Create(
 				outgoingTrustUkprn,
 				outgoingTrustName,
-				incomingTrustUkprn,
-				incomingTrustName,
-				academyUkprns,
+				academies,
 				isFormAMat,
 				createdOn);
 
@@ -120,7 +119,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
 			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
@@ -128,9 +127,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			Assert.Throws<ArgumentNullException>(() => TransferProject.Create(
 				null,
 				outgoingTrustName,
-				incomingTrustUkprn,
-				incomingTrustName,
-				academyUkprns,
+				academies,
 				isFormAMat,
 				createdOn));
 		}
@@ -250,7 +247,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
 			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
@@ -258,9 +255,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var result = TransferProject.Create(
 				outgoingTrustUkprn,
 				outgoingTrustName,
-				incomingTrustUkprn,
-				incomingTrustName,
-				academyUkprns,
+				academies,
 				isFormAMat,
 				createdOn);
 			return result;
@@ -268,7 +263,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 		[Theory]
 		[ClassData(typeof(CreationArgumentExceptionTestData))]
-		public void CreateTransferProject_WithTestData_ThrowsArgumentExceptions(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat, DateTime createdOn, Type exType)
+		public void CreateTransferProject_WithTestData_ThrowsArgumentExceptions(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> academies, bool? isFormAMat, DateTime createdOn, Type exType)
 		{
 			// Arrange      
 			dynamic exception;
@@ -278,9 +273,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				Assert.Throws<ArgumentException>(() => TransferProject.Create(
 				   outgoingTrustUkprn,
 				   outgoingTrustName,
-				   incomingTrustUkprn,
-				   incomingTrustName,
-				   academyUkprns,
+				   academies,
 				   isFormAMat,
 				   createdOn));
 			}
@@ -290,9 +283,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				Assert.Throws<ArgumentNullException>(() => TransferProject.Create(
 				  outgoingTrustUkprn,
 				   outgoingTrustName,
-				   incomingTrustUkprn,
-				   incomingTrustName,
-				   academyUkprns,
+				   academies,
 				   isFormAMat,
 				   createdOn));
 			}
@@ -302,9 +293,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 				Assert.Throws<ArgumentOutOfRangeException>(() => TransferProject.Create(
 				   outgoingTrustUkprn,
 				   outgoingTrustName,
-				   incomingTrustUkprn,
-				   incomingTrustName,
-				   academyUkprns,
+				   academies,
 				   isFormAMat,
 				   createdOn));
 			}
@@ -316,7 +305,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetFeatures_WithValidParameters_SetsPropertiesCorrectly(string whoInitiated, string specficReasons, string transferType, bool isCompleted)
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var reasons = new List<string>() { specficReasons };
 			// Act
 			transferProject.SetFeatures(whoInitiated, reasons, transferType, isCompleted);
@@ -332,7 +321,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetLegalRequirements_WithValidParameters_SetsPropertiesCorrectly(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool isCompleted)
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 
 			// Act
 			transferProject.SetLegalRequirements(outgoingTrustResolution, incomingTrustAgreement, diocesanConsent, isCompleted);
@@ -347,7 +336,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetTransferDates_WithValidParameters_SetsPropertiesCorrectly()
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var advisoryBoardDate = DateTime.UtcNow;
 			var expectedDateForTransfer = DateTime.UtcNow.AddMonths(1);
 			// Act
@@ -364,7 +353,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetStatus_WithValidParameters_SetsPropertiesCorrectly(string status)
 		{
 			// Arrange
-			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _incomingTrustUkprn, _incomingTrustName, _academyUkprns, _isFormAMat, _createdOn);
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 
 			// Act
 			transferProject.SetStatus(status);

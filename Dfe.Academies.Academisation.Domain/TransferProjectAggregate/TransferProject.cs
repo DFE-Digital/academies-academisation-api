@@ -8,23 +8,21 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferProject : ITransferProject, IAggregateRoot
 	{
-		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat)
+		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> transferringAcademies, bool? isFormAMat)
 		{
-			_intendedTransferBenefits =
-				new List<IntendedTransferBenefit>();
+			_intendedTransferBenefits = new List<IntendedTransferBenefit>();
 			_transferringAcademies = new List<TransferringAcademy>();
-
 			_specificReasonsForTransfer = new List<string>();
 
 			OutgoingTrustUkprn = outgoingTrustUkprn;
 			OutgoingTrustName = outgoingTrustName;
-			//Is form a mat if we have a trust name but no ukprn
-			IsFormAMat = isFormAMat.HasValue && isFormAMat.Value;
 
-			foreach (var academyUkprn in academyUkprns)
+			IsFormAMat = isFormAMat.HasValue && isFormAMat.Value;
+			if (transferringAcademies is not null)
 			{
-				_transferringAcademies.Add(new TransferringAcademy(incomingTrustUkprn, incomingTrustName, academyUkprn));
+				_transferringAcademies = transferringAcademies;
 			}
+
 		}
 
 		protected TransferProject() { }
@@ -196,14 +194,14 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			Status = status;
 		}
 
-		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat, DateTime createdOn)
+		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> transferringAcademies, bool? isFormAMat, DateTime createdOn)
 		{
 			Guard.Against.NullOrEmpty(outgoingTrustUkprn);
 			Guard.Against.NullOrEmpty(outgoingTrustName);
-			Guard.Against.NullOrEmpty(academyUkprns);
+			Guard.Against.NullOrEmpty(transferringAcademies);
 			Guard.Against.OutOfSQLDateRange(createdOn);
 
-			return new TransferProject(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrustName, academyUkprns, isFormAMat)
+			return new TransferProject(outgoingTrustUkprn, outgoingTrustName, transferringAcademies, isFormAMat)
 			{
 				CreatedOn = createdOn
 			};
@@ -222,7 +220,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			if (transferringAcademy != null)
 			{
 
-				transferringAcademy.SetIncomingTrustName(incomingTrustName, incomingTrustUKPRN);
+				transferringAcademy.SetIncomingTrust(incomingTrustName, incomingTrustUKPRN);
 
 			}
 		}

@@ -10,11 +10,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferringAcademy : ITransferringAcademy
 	{
-		public TransferringAcademy(string? incomingTrustUkprn, string? incomingTrustName, string outgoingAcademyUkprn)
+		public TransferringAcademy(string? incomingTrustUkprn, string? incomingTrustName, string outgoingAcademyUkprn, string? region, string? localAuthority)
 		{
 			IncomingTrustUkprn = incomingTrustUkprn;
 			IncomingTrustName = incomingTrustName;	
 			OutgoingAcademyUkprn = outgoingAcademyUkprn;
+			Region = region;
+			LocalAuthority = localAuthority;
 		}
 
 		public int Id { get; private set; }
@@ -22,6 +24,9 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string OutgoingAcademyUkprn { get; private set; }
 		public string? IncomingTrustUkprn { get; private set; }
 		public string? IncomingTrustName { get; private set; }
+
+		public string? Region { get; private set; }
+		public string? LocalAuthority { get; init; }
 
 		public string? PupilNumbersAdditionalInformation { get; private set; }
 		public string? LatestOfstedReportAdditionalInformation { get; private set; }
@@ -38,12 +43,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			KeyStage5PerformanceAdditionalInformation = keyStage5PerformanceAdditionalInformation;
 		}
 
-		public void SetIncomingTrustName(string incomingTrustName, string incomingTrustUKPRN = "")
+		public void SetIncomingTrust(string incomingTrustName, string? incomingTrustUkprn)
 		{
 			IncomingTrustName = incomingTrustName;
-			if (!string.IsNullOrEmpty(incomingTrustUKPRN))
+			if (!string.IsNullOrEmpty(incomingTrustUkprn))
 			{
-				IncomingTrustUkprn = incomingTrustUKPRN;
+				IncomingTrustUkprn = incomingTrustUkprn;
 			}
 		}
 	}
