@@ -91,7 +91,7 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 		_deferredReasons.Clear();
 		_deferredReasons.AddRange(deferredReasons?.Any() ?? false ? deferredReasons.ToList() : _deferredReasons);
 		_withdrawnReasons.Clear();
-		_withdrawnReasons.AddRange(WithdrawnReasons?.Any() ?? false ? WithdrawnReasons.ToList() : _withdrawnReasons);
+		_withdrawnReasons.AddRange(withdrawnReasons?.Any() ?? false ? withdrawnReasons.ToList() : _withdrawnReasons);
 	
 		return new CommandSuccessResult();
 	}
