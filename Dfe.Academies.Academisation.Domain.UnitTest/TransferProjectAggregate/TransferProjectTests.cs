@@ -378,7 +378,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
 
 			// Act
-			transferProject.SetTransferringAcademyGeneralInformation("12345678", "PFI Scheme");
+			transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details");
 
 			// Assert
 			Assert.Equal("PFI Scheme", actual: transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
@@ -391,7 +391,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
 
 			// Act & Assert
-			Assert.Throws<InvalidOperationException>(() => transferProject.SetTransferringAcademyGeneralInformation("87654321", "PFI Scheme"));
+			Assert.Throws<InvalidOperationException>(() => transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details"));
 		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{

@@ -25,7 +25,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 				return new NotFoundCommandResult();
 			}
 
-			transferProject.SetTransferringAcademyGeneralInformation(request.TransferringAcademyUkprn, request.PFIScheme);
+			transferProject.SetTransferringAcademyGeneralInformation(request.TransferringAcademyUkprn, request.PFIScheme, request.PFISchemeDetails);
 			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

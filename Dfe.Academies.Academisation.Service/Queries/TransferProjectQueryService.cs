@@ -1,11 +1,11 @@
 ﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.Service.Factories;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 using Dfe.Academies.Contracts.V4.Establishments;
 
@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			// remove any projects without an outgoing trust.
 			projects = projects
 			.Where(p =>
-				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName) 
+				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)
 				).ToList();
 
 			var recordTotal = projects.Count();
@@ -88,7 +88,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			{
 				var e = ex;
 				throw;
-			}	
+			}
 
 			var mappedProjects = await MapExportedTransferProjectModel(projects, advisoryBoardDecisions);
 
@@ -214,7 +214,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							LatestOfstedReportAdditionalInformation = ta.LatestOfstedReportAdditionalInformation,
 							KeyStage2PerformanceAdditionalInformation = ta.KeyStage2PerformanceAdditionalInformation,
 							KeyStage4PerformanceAdditionalInformation = ta.KeyStage4PerformanceAdditionalInformation,
-							KeyStage5PerformanceAdditionalInformation = ta.KeyStage5PerformanceAdditionalInformation
+							KeyStage5PerformanceAdditionalInformation = ta.KeyStage5PerformanceAdditionalInformation,
+							PFIScheme = ta.PFIScheme,
+							PFISchemeDetails = ta.PFISchemeDetails
 						};
 					}).ToList(),
 					IsFormAMat = x.IsFormAMat

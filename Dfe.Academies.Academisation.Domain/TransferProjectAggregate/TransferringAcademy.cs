@@ -27,6 +27,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? KeyStage4PerformanceAdditionalInformation { get; private set; }
 		public string? KeyStage5PerformanceAdditionalInformation { get; private set; }
 		public string? PFIScheme { get; private set; }
+		public string? PFISchemeDetails { get; private set; }
 
 		public void SetSchoolAdditionalData(string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
 		{
@@ -46,9 +47,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			}
 		}
 
-		public void SetGeneralInformation(string pfiScheme)
+		public void SetGeneralInformation(string pfiScheme, string pfiSchemeDetails)
 		{
 			PFIScheme = pfiScheme;
+			PFISchemeDetails = pfiSchemeDetails;
 		}
 	}
 }

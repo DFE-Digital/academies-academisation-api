@@ -63,6 +63,6 @@
 		void SetGeneralInformation(string recommendation, string author);
 		void SetOutgoingTrustName(string outgoingTrustName);
 		void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN);
-		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme);
+		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails);
 	}
 }

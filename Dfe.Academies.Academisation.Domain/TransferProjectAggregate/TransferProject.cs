@@ -219,11 +219,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			}
 		}
 
-		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme)
+		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails)
 		{
 			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn);
 
-			transferringAcademy.SetGeneralInformation(pfiScheme);
+			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails);
 		}
 	}
 }
