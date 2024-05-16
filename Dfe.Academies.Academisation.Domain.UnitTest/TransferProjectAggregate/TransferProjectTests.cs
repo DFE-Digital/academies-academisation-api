@@ -364,17 +364,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
+			private List<TransferringAcademy>  _transferringAcademies = new List<TransferringAcademy>() { 
+				new TransferringAcademy("11110000", "in trust", "22221111", "", ""),
+				new TransferringAcademy("11110000", "in trust", "33331111", "", ""),
+			};
+
 			public IEnumerator<object[]> GetEnumerator()
 			{
-				yield return new object[] { null, "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.Now, typeof(ArgumentNullException) };
-				yield return new object[] { string.Empty, "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.Now, typeof(ArgumentException) };
+				yield return new object[] { null, "out trust", _transferringAcademies, false, DateTime.Now, typeof(ArgumentNullException) };
+				yield return new object[] { string.Empty, "out trust", _transferringAcademies, false, DateTime.Now, typeof(ArgumentException) };
 
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", null, false, DateTime.Now, typeof(ArgumentNullException) };
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>(), false, DateTime.Now, typeof(ArgumentException) };
+				yield return new object[] { "11112222", "out trust", null, false, DateTime.Now, typeof(ArgumentNullException) };
+				yield return new object[] { "11112222", "out trust", new List<TransferringAcademy>(), false, DateTime.Now, typeof(ArgumentException) };
 
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.MinValue, typeof(ArgumentOutOfRangeException) };
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, DateTime.MaxValue, typeof(ArgumentOutOfRangeException) };
-				yield return new object[] { "11112222", "out trust", "11110000", "in trust", new List<string>() { "22221111", "33331111" }, false, null, typeof(ArgumentOutOfRangeException) };
+				yield return new object[] { "11112222", "out trust", _transferringAcademies, false, DateTime.MinValue, typeof(ArgumentOutOfRangeException) };
+				yield return new object[] { "11112222", "out trust", _transferringAcademies, false, DateTime.MaxValue, typeof(ArgumentOutOfRangeException) };
+				yield return new object[] { "11112222", "out trust", _transferringAcademies, false, null, typeof(ArgumentOutOfRangeException) };
 			}
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
