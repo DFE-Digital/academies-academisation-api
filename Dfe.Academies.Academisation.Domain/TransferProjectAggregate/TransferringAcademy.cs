@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? IncomingTrustName { get; private set; }
 
 		public string? Region { get; private set; }
-		public string? LocalAuthority { get; init; }
+		public string? LocalAuthority { get; private set; }
 
 		public string? PupilNumbersAdditionalInformation { get; private set; }
 		public string? LatestOfstedReportAdditionalInformation { get; private set; }
@@ -50,6 +50,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			{
 				IncomingTrustUkprn = incomingTrustUkprn;
 			}
+		}
+
+		public void SetReferenceData(string region, string localAuthority)
+		{
+			Region = region;
+			LocalAuthority = localAuthority;			
 		}
 	}
 }

@@ -9,10 +9,10 @@
 		public string? LocalAuthority { get; init; }
 
 
-		public string PupilNumbersAdditionalInformation { get; init; }
-		public string LatestOfstedReportAdditionalInformation { get; init; }
-		public string KeyStage2PerformanceAdditionalInformation { get; init; }
-		public string KeyStage4PerformanceAdditionalInformation { get; init; }
-		public string KeyStage5PerformanceAdditionalInformation { get; init; }
+		public string? PupilNumbersAdditionalInformation { get; init; }
+		public string? LatestOfstedReportAdditionalInformation { get; init; }
+		public string? KeyStage2PerformanceAdditionalInformation { get; init; }
+		public string? KeyStage4PerformanceAdditionalInformation { get; init; }
+		public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 	}
 }

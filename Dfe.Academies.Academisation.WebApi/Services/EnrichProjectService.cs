@@ -33,10 +33,12 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 					{
 						_logger.LogInformation("Enrich Project Service running at: {time}", DateTimeOffset.Now);
 						var enrichProjectCommand = scope.ServiceProvider.GetRequiredService<IEnrichProjectCommand>();
+						var enrichTransferProjectCommand = scope.ServiceProvider.GetRequiredService<IEnrichTransferProjectCommand>();
 
 						try
 						{
 							await enrichProjectCommand.Execute();
+							await enrichTransferProjectCommand.Execute();
 						}
 						catch (Exception ex)
 						{

@@ -224,6 +224,15 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 			}
 		}
+
+		public void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName)
+		{
+			var academy = _transferringAcademies.SingleOrDefault(x => x.OutgoingAcademyUkprn == outgoingAcademyUkprn);
+
+			if (academy != null) { 
+				academy.SetReferenceData(name, localAuthorityName);
+			}
+		}
 	}
 
 
