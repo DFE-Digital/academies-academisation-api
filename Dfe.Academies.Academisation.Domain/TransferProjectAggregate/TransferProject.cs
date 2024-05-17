@@ -221,8 +221,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails)
 		{
-			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn);
-
+			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn) ?? throw new InvalidOperationException();
 			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails);
 		}
 	}

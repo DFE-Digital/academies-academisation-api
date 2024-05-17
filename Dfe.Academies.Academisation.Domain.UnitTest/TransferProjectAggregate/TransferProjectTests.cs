@@ -381,14 +381,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details");
 
 			// Assert
-			Assert.Equal("PFI Scheme", actual: transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
+			Assert.Equal("No", actual: transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
 		}
 
 		[Fact]
 		public void SetTransferringAcademyGeneralInformation_AcademyNotFound_ThrowsException()
 		{
 			// Arrange
-			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
+			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { null }, false, DateTime.Now);
 
 			// Act & Assert
 			Assert.Throws<InvalidOperationException>(() => transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details"));
