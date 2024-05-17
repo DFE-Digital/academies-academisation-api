@@ -50,6 +50,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public void SetGeneralInformation(string pfiScheme, string pfiSchemeDetails)
 		{
 			PFIScheme = pfiScheme;
+			if (PFIScheme.Contains("No")) pfiSchemeDetails = null;
 			PFISchemeDetails = pfiSchemeDetails;
 		}
 	}
