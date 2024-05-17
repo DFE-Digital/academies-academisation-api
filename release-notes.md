@@ -1,3 +1,5 @@
+## NEXT
+* Added ability to edit PFI schemes within a Transfer project for their requisite Transferring Academies
 ## 9.2.0
 * Added transfer projects
 * Added fields required to a Conversion Project to allow for sponsored grants
