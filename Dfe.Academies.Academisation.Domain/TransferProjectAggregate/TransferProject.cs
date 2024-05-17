@@ -87,6 +87,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public bool? IsFormAMat { get; private set; }
 
+		public DateTime? DeletedAt { get; set; }
+
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
 		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
 
@@ -226,6 +228,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 			}
 		}
+
+		public void SetDeletedAt()
+		{
+			DeletedAt = DateTime.UtcNow;
+		}
+
 	}
 
 
