@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 			// Create a new project
 			var projectDetails = new ProjectDetails
 			{
-				Urn = 999999,
+				Urn = 113537,
 				ApplicationReferenceNumber = "A2B_124088",
 				SchoolName = projectName,
 				SchoolPhase = "Secondary",
