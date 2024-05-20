@@ -1,4 +1,5 @@
 ﻿using System;
+using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
@@ -22,7 +23,8 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			null,
 			timestamp.AddDays(-1),
 			timestamp.AddDays(-1),
-			DecisionMadeBy.DirectorGeneral);
+			DecisionMadeBy.DirectorGeneral,
+			"John Smith");
 
 		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
 
@@ -53,7 +55,8 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 			null,
 			timestamp.AddDays(-1),
 			timestamp.AddDays(-1),
-			DecisionMadeBy.DirectorGeneral);
+			DecisionMadeBy.DirectorGeneral,
+			"John Smith");
 
 		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
 
