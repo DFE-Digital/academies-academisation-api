@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			var command = new SetTransferringAcademyGeneralInformationCommand
 			{
 				Urn = 1,
-				TransferringAcademyUkprn = "12345678",
+				TransferringAcademyUkprn = "34567890",
 				PFIScheme = "PFI Scheme"
 			};
 

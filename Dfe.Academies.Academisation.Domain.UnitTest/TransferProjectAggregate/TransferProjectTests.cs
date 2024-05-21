@@ -367,7 +367,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", _academies, false, DateTime.Now);
 
 			// Act
-			transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details");
+			transferProject.SetTransferringAcademyGeneralInformation("academy1", "No", "Details");
 
 			// Assert
 			Assert.Equal("No", actual: transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
