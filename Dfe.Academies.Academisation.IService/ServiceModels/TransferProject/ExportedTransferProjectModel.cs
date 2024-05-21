@@ -22,5 +22,6 @@
 		public string? TransferReason { get; init; }
 		public string? TransferType { get; init; }
 		public string? Urn { get; init; }
+		public string? PFI { get; init; }
 	}
 }
