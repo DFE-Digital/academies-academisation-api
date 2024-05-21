@@ -14,5 +14,7 @@
 		public string? KeyStage2PerformanceAdditionalInformation { get; init; }
 		public string? KeyStage4PerformanceAdditionalInformation { get; init; }
 		public string? KeyStage5PerformanceAdditionalInformation { get; init; }
+		public string? PFIScheme { get; init; }
+		public string? PFISchemeDetails { get; init; }
 	}
 }

@@ -226,14 +226,16 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		{
 			var academy = _transferringAcademies.SingleOrDefault(x => x.OutgoingAcademyUkprn == outgoingAcademyUkprn);
 
-			if (academy != null) { 
+			if (academy != null)
+			{
 				academy.SetReferenceData(name, localAuthorityName);
 			}
 
-	}		
+		}
 		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails)
 		{
 			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn) ?? throw new InvalidOperationException();
 			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails);
 		}
+	}
 }
