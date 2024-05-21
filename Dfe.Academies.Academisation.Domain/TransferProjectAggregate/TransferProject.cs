@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
@@ -29,12 +28,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public int Id { get; private set; }
 		public int Urn { get; private set; }
-
 		public string? ProjectReference { get; private set; }
 		public string OutgoingTrustUkprn { get; private set; }
 		public string? OutgoingTrustName { get; private set; }
 		public string? WhoInitiatedTheTransfer { get; private set; }
-
 
 		private List<string> _specificReasonsForTransfer;
 		public IReadOnlyCollection<string> SpecificReasonsForTransfer => _specificReasonsForTransfer;
@@ -54,7 +51,6 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? TrustSponsorRationale { get; private set; }
 		public string? State { get; private set; }
 		public string? Status { get; private set; }
-
 		public bool? AnyRisks { get; private set; }
 		public bool? HighProfileShouldBeConsidered { get; private set; }
 		public string? HighProfileFurtherSpecification { get; private set; }
@@ -62,11 +58,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? ComplexLandAndBuildingFurtherSpecification { get; private set; }
 		public bool? FinanceAndDebtShouldBeConsidered { get; private set; }
 		public string? FinanceAndDebtFurtherSpecification { get; private set; }
-
 		public bool? OtherRisksShouldBeConsidered { get; private set; }
-
 		public bool? EqualitiesImpactAssessmentConsidered { get; private set; }
-
 		[MaxLength(20000)]
 		public string? OtherRisksFurtherSpecification { get; private set; }
 		public string? OtherBenefitValue { get; private set; }
@@ -82,7 +75,6 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? AssignedUserFullName { get; private set; }
 		public string? AssignedUserEmailAddress { get; private set; }
 		public Guid? AssignedUserId { get; private set; }
-
 		public bool? IsFormAMat { get; private set; }
 
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
@@ -90,18 +82,21 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		private List<TransferringAcademy> _transferringAcademies;
 		public IReadOnlyCollection<TransferringAcademy> TransferringAcademies => _transferringAcademies;
-
 		IReadOnlyCollection<IIntendedTransferBenefit> ITransferProject.IntendedTransferBenefits => _intendedTransferBenefits;
-		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies =>
-			_transferringAcademies;
+		IReadOnlyCollection<ITransferringAcademy> ITransferProject.TransferringAcademies => _transferringAcademies;
 
 		public DateTime? CreatedOn { get; private set; }
 
 		public void GenerateUrn(int? urnOverride = null)
 		{
-			//urn override proably not usefull, but as it is database generated allows us to set it for unit testing the generate logic
-			if (urnOverride.HasValue) { Urn = urnOverride.Value; }
-			else { Urn = Id; }
+			if (urnOverride.HasValue)
+			{
+				Urn = urnOverride.Value;
+			}
+			else
+			{
+				Urn = Id;
+			}
 
 			string referenceNumber = "SAT";
 			if (TransferringAcademies.Count > 1)
@@ -118,11 +113,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
 		}
+
 		public void SetGeneralInformation(string recommendation, string author)
 		{
 			Recommendation = recommendation;
 			Author = author;
 		}
+
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
 			AssignedUserId = userId;
@@ -137,6 +134,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			TypeOfTransfer = transferType;
 			FeatureSectionIsCompleted = isCompleted;
 		}
+
 		public void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted)
 		{
 			OutgoingTrustConsent = outgoingTrustResolution;
@@ -144,16 +142,16 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			DiocesanConsent = diocesanConsent;
 			LegalRequirementsSectionIsCompleted = isCompleted;
 		}
+
 		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer)
 		{
-			// HtbDate maps from the front-end would be good to move this to more business focused language
 			HtbDate = advisoryBoardDate;
 			TargetDateForTransfer = expectedDateForTransfer;
 		}
+
 		public void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
 		{
-			var transferringAcademy =
-				TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn);
+			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn);
 
 			transferringAcademy.SetSchoolAdditionalData(
 				latestOfstedReportAdditionalInformation,
@@ -214,8 +212,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN)
 		{
-			var transferringAcademy =
-						TransferringAcademies.SingleOrDefault(x => x.Id == academyId);
+			var transferringAcademy = TransferringAcademies.SingleOrDefault(x => x.Id == academyId);
 
 			if (transferringAcademy != null)
 			{
@@ -232,9 +229,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			if (academy != null) { 
 				academy.SetReferenceData(name, localAuthorityName);
 			}
+
+	}		
+		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails)
+		{
+			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn) ?? throw new InvalidOperationException();
+			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails);
 		}
-	}
-
-
-
 }

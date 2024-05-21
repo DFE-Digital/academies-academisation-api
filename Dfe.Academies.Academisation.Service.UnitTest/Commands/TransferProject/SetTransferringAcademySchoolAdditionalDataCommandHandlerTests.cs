@@ -32,10 +32,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 				TransferringAcademyUkprn = "0",
 				LatestOfstedReportAdditionalInformation = "Ofsted",
 				PupilNumbersAdditionalInformation = "Pupil",
-				KeyStage2PerformanceAdditionalInformation= "KS2",
+				KeyStage2PerformanceAdditionalInformation = "KS2",
 				KeyStage4PerformanceAdditionalInformation = "KS4",
 				KeyStage5PerformanceAdditionalInformation = "KS5"
-				
+
 			};
 
 			_transferProjectRepositoryMock.Setup(x => x.GetById(It.IsAny<int>()))!

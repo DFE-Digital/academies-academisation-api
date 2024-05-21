@@ -1,6 +1,4 @@
-﻿
-namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
-
+﻿namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 {
 	public interface ITransferProject
 	{
@@ -51,35 +49,21 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		int Urn { get; }
 		string? WhoInitiatedTheTransfer { get; }
 		IReadOnlyCollection<string> SpecificReasonsForTransfer { get; }
-
 		bool? IsFormAMat { get; }
 
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
 		void AssignUser(Guid userId, string userEmail, string userFullName);
 		void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted);
-		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement,
-			string diocesanConsent, bool? isCompleted);
+		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted);
 		void SetStatus(string status);
-
 		void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer);
-
-		void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn,
-			string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation,
-			string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation,
-			string keyStage5PerformanceAdditionalInformation);
-
-		void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered,
-			List<string> selectedBenefits, string? otherBenefitValue,
-			bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification,
-			bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification,
-			bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification,
-			bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification,
-			bool? isCompleted);
-
+		void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation);
+		void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered, List<string> selectedBenefits, string? otherBenefitValue, bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification, bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification, bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification, bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification, bool? isCompleted);
 		void SetGeneralInformation(string recommendation, string author);
 		void SetOutgoingTrustName(string outgoingTrustName);
 		void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN);
+		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails);
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
 	}
 }

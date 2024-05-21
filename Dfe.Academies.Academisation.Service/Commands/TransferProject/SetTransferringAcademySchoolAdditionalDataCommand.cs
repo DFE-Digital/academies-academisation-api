@@ -1,6 +1,4 @@
-﻿using Dfe.Academies.Academisation.Core;
-using MediatR;
-using TramsDataApi.RequestModels.AcademyTransferProject;
+﻿using TramsDataApi.RequestModels.AcademyTransferProject;
 
 namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 {
@@ -14,3 +12,4 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 		public string KeyStage5PerformanceAdditionalInformation { get; set; }
 	}
 }
+

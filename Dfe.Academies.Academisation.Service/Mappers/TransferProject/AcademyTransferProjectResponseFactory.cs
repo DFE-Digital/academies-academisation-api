@@ -23,7 +23,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 					LatestOfstedReportAdditionalInformation = a.LatestOfstedReportAdditionalInformation,
 					KeyStage2PerformanceAdditionalInformation = a.KeyStage2PerformanceAdditionalInformation,
 					KeyStage4PerformanceAdditionalInformation = a.KeyStage4PerformanceAdditionalInformation,
-					KeyStage5PerformanceAdditionalInformation = a.KeyStage5PerformanceAdditionalInformation
+					KeyStage5PerformanceAdditionalInformation = a.KeyStage5PerformanceAdditionalInformation,
+					PFIScheme = a.PFIScheme,
+					PFISchemeDetails = a.PFISchemeDetails,
 				})
 				.ToList();
 
@@ -127,7 +129,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				},
 				State = model.State,
 				Status = model.Status,
-				IsFormAMat =  model.IsFormAMat
+				IsFormAMat = model.IsFormAMat
 			};
 		}
 	}
