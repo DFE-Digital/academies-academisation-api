@@ -1,11 +1,10 @@
-﻿using AutoFixture;
-using AutoMapper;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using FluentAssertions;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
@@ -372,7 +371,28 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Assert
 			transferProject.Status.Should().Be(status);
 		}
+		[Fact]
+		public void SetTransferringAcademyGeneralInformation_ValidData_SetsPFIScheme()
+		{
+			// Arrange			
+			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
 
+			// Act
+			transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details");
+
+			// Assert
+			Assert.Equal("No", actual: transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
+		}
+
+		[Fact]
+		public void SetTransferringAcademyGeneralInformation_AcademyNotFound_ThrowsException()
+		{
+			// Arrange
+			var transferProject = TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { null }, false, DateTime.Now);
+
+			// Act & Assert
+			Assert.Throws<InvalidOperationException>(() => transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details"));
+		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
 			public IEnumerator<object[]> GetEnumerator()
