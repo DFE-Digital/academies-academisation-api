@@ -4,7 +4,7 @@ using Moq;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Mocks
 {
-	public record MockTransferAcademyRecord(string incomingTrustUkprn, string outgoingAcademyUkprn, string incomingTrustName);
+	public record MockTransferAcademyRecord(string incomingTrustUkprn, string outgoingAcademyUkprn, string incomingTrustName, string region, string localAuthority);
 
 	internal class MockTransferProject
 	{
@@ -25,8 +25,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Mocks
 
 		public void AddTransferringAcademy(MockTransferAcademyRecord mockTransferringAcademy)
 		{
-			var newTransferringAcademy = new TransferringAcademy(mockTransferringAcademy.incomingTrustUkprn, mockTransferringAcademy.incomingTrustName, mockTransferringAcademy.outgoingAcademyUkprn);
-			newTransferringAcademy.SetIncomingTrustName(mockTransferringAcademy.incomingTrustName);
+			var newTransferringAcademy = new TransferringAcademy(mockTransferringAcademy.incomingTrustUkprn, mockTransferringAcademy.incomingTrustName, mockTransferringAcademy.outgoingAcademyUkprn, mockTransferringAcademy.region, mockTransferringAcademy.localAuthority);
+			newTransferringAcademy.SetIncomingTrust(mockTransferringAcademy.incomingTrustName, mockTransferringAcademy.incomingTrustUkprn);
 			TransferringAcademies.Add(newTransferringAcademy);
 		}
 

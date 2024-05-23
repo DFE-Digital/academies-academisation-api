@@ -51,7 +51,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		{
 			this._mockTransferProjectRepository.Setup(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));
 
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, false, DateTime.Now);
+			var transferringAcademies = new List<TransferringAcademy>() { new TransferringAcademy("23456789", "in trust", "34567890", "", "") };
+
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", transferringAcademies, false, DateTime.Now);
 			// Mock GetById to use our Transfer Project from above
 			_mockTransferProjectRepository.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
@@ -91,7 +93,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public async Task Handle_ValidCommand_ReturnsCommandSuccessResponse()
 		{
 			this._mockTransferProjectRepository.Setup(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, false, DateTime.Now);
+			var transferringAcademies = new List<TransferringAcademy>() { new TransferringAcademy("23456789", "in trust", "34567890", "", "") };
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", transferringAcademies, false, DateTime.Now);
 			// Mock GetById to use our Transfer Project from above
 			_mockTransferProjectRepository.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 

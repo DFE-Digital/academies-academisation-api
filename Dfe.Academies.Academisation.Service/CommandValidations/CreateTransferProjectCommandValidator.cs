@@ -12,9 +12,12 @@ namespace Dfe.Academies.Academisation.Service.CommandValidations
 				.WithMessage("OutgoingTrustUkprn must be length 8")
 				.NotNull().WithMessage("OutgoingTrustUkprn must not be null");
 
-			RuleForEach(x => x.TransferringAcademyUkprns).Length(8)
+			RuleForEach(x => x.TransferringAcademies).ChildRules(ta =>
+			{
+				ta.RuleFor(x => x.OutgoingAcademyUkprn).Length(8)
 				.WithMessage("OutgoingAcademyUkprn must be length 8")
 				.NotNull().WithMessage("OutgoingAcademyUkprn must not be null");
+			});
 		}
 	}
 }

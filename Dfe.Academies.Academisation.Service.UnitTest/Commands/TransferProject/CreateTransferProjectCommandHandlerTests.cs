@@ -8,9 +8,6 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
@@ -60,7 +57,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 
 			// Assert
 			this.mockTransferProjectRepository.Verify(x => x.Insert(It.Is<Domain.TransferProjectAggregate.TransferProject>(x => x.OutgoingTrustUkprn == request.OutgoingTrustUkprn 
-			&& x.TransferringAcademies.Count(ta => ta.IncomingTrustUkprn == request.IncomingTrustUkprn && request.TransferringAcademyUkprns.Contains(ta.OutgoingAcademyUkprn)) == request.TransferringAcademyUkprns.Count
+			&& x.TransferringAcademies.Count == request.TransferringAcademies.Count
 			&& x.CreatedOn == now)), Times.Once());
 
 			// called twice to generate urn from database generated field
@@ -87,7 +84,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Assert
 			result.GetType().Should().Be(typeof(CreateSuccessResult<AcademyTransferProjectResponse>));
 			((CreateSuccessResult<AcademyTransferProjectResponse>)result).Payload.OutgoingTrustUkprn.Should().Be(request.OutgoingTrustUkprn);
-			((CreateSuccessResult<AcademyTransferProjectResponse>)result).Payload.TransferringAcademies.All(x => x.IncomingTrustUkprn == request.IncomingTrustUkprn && request.TransferringAcademyUkprns.Contains(x.OutgoingAcademyUkprn)).Should().BeTrue();
+			((CreateSuccessResult<AcademyTransferProjectResponse>)result).Payload.TransferringAcademies.All(x => {
+				var transferringAcademy = request.TransferringAcademies.Single(ta => ta.OutgoingAcademyUkprn == x.OutgoingAcademyUkprn);
+				return transferringAcademy.IncomingTrustUkprn.Equals(x.IncomingTrustUkprn) && transferringAcademy.IncomingTrustName.Equals(x.IncomingTrustName);
+			}).Should().BeTrue();
 		}
 
 		private static CreateTransferProjectCommand CreateValidTransferProjectCommand()
@@ -96,11 +96,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrusName = "incomingTrusName";
-			List<string> academyUkprns = new List<string>() { "22221111", "33331111" };
+
 			bool isFormAMat = true;
+			var transferringAcademies = new List<TransferringAcademyDto>() { 
+				new TransferringAcademyDto(){ IncomingTrustUkprn = incomingTrustUkprn, IncomingTrustName = incomingTrusName, OutgoingAcademyUkprn = "22221111" },
+				new TransferringAcademyDto(){ IncomingTrustUkprn = incomingTrustUkprn, IncomingTrustName = incomingTrusName, OutgoingAcademyUkprn = "33331111" },
+			};
 
-
-			return new CreateTransferProjectCommand(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrusName, academyUkprns, isFormAMat);
+			return new CreateTransferProjectCommand(outgoingTrustUkprn, outgoingTrustName, transferringAcademies, isFormAMat);
 		}
 	}
 }

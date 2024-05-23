@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 			}
 
 			var transferringAcademies = model.TransferringAcademies
-				.Select(a => new TransferringAcademiesResponse
+				.Select(a => new TransferringAcademyDto
 				{
 					IncomingTrustUkprn = a.IncomingTrustUkprn,
 					IncomingTrustName = a.IncomingTrustName,

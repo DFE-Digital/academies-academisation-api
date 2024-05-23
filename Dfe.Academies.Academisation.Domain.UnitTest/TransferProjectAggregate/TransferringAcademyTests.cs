@@ -13,21 +13,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var incomingTrustUkprn = "12345";
 			var incomingTrustName= "incomingTrustName";
 			var outgoingAcademyUkprn = "67890";
+			var region = "region";
+			var localAuthority = "local authority";
 
 			// Act
-			var academy = new TransferringAcademy(incomingTrustUkprn, incomingTrustName, outgoingAcademyUkprn);
+			var academy = new TransferringAcademy(incomingTrustUkprn, incomingTrustName, outgoingAcademyUkprn, region, localAuthority);
 
 			// Assert
 			academy.IncomingTrustUkprn.Should().Be(incomingTrustUkprn);
 			academy.IncomingTrustName.Should().Be(incomingTrustName);
 			academy.OutgoingAcademyUkprn.Should().Be(outgoingAcademyUkprn);
+			academy.Region.Should().Be(region);
+			academy.LocalAuthority.Should().Be(localAuthority);
 		}
 
 		[Fact]
 		public void SetSchoolAdditionalData_SetsPropertiesCorrectly()
 		{
 			// Arrange
-			var academy = new TransferringAcademy("12345", "trust name", "67890");
+			var academy = new TransferringAcademy("12345", "trust name", "67890", "", "");
 			var ofstedReport = "Ofsted Report Data";
 			var pupilNumbers = "Pupil Numbers Data";
 			var keyStage2Performance = "Key Stage 2 Data";

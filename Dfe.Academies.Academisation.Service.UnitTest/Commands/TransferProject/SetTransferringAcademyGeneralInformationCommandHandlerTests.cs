@@ -38,8 +38,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public async Task Handle_ValidCommand_ReturnsCommandSuccessResult()
 		{
 			// Arrange
-
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "Outgoing Trust", null, null, new List<string> { "12345678" }, false, DateTime.Now);
+			var transferringAcademies = new List<TransferringAcademy>() { new TransferringAcademy("23456789", "in trust", "34567890", "", "") };
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "Outgoing Trust", transferringAcademies, false, DateTime.Now);
 
 			var transferProjectRepositoryMock = new Mock<ITransferProjectRepository>();
 			var unitOfWorkMock = new Mock<IUnitOfWork>();
@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			var command = new SetTransferringAcademyGeneralInformationCommand
 			{
 				Urn = 1,
-				TransferringAcademyUkprn = "12345678",
+				TransferringAcademyUkprn = "34567890",
 				PFIScheme = "PFI Scheme"
 			};
 

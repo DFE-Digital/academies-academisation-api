@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
@@ -69,11 +70,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				queryable = queryable.Where(p =>
 							p.TransferringAcademies.Any(x =>
 							EF.Functions.Like(x.IncomingTrustName, $"%{title}%"))
-							|| EF.Functions.Like(p.OutgoingTrustName, $"%{title}%") 
+							|| EF.Functions.Like(p.OutgoingTrustName, $"%{title}%")
 							|| EF.Functions.Like(p.Urn.ToString(), $"%{title}%")
 							|| EF.Functions.Like(p.OutgoingTrustUkprn, $"%{title}%")
 							|| EF.Functions.Like(p.ProjectReference, $"%{title}%")
-							|| p.TransferringAcademies.Any(ta => EF.Functions.Like(ta.IncomingTrustUkprn, $"%{title}%")));  
+							|| p.TransferringAcademies.Any(ta => EF.Functions.Like(ta.IncomingTrustUkprn, $"%{title}%")));
 			}
 
 			return queryable;
@@ -100,17 +101,8 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		}
 		public async Task<IEnumerable<ITransferProject?>> GetAllTransferProjects()
 		{
-			try
-			{
-				return await DefaultIncludes().ToListAsync();
-			}
-			catch (Exception ex)
-			{
-				var x = 1;
-				throw;
-			}
 
-
+			return await DefaultIncludes().ToListAsync();
 		}
 
 		private IQueryable<TransferProject> DefaultIncludes()
@@ -123,5 +115,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return x;
 		}
 
+		public async Task<IEnumerable<ITransferProject?>> GetIncompleteProjects()
+		{
+			var results = await DefaultIncludes().Where(x => x.TransferringAcademies.Any(ta => ta.Region == null || ta.LocalAuthority == null)).ToListAsync();
+
+			return results;
+		}
 	}
 }
