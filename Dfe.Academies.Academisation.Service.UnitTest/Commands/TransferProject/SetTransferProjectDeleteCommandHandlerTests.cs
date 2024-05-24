@@ -52,9 +52,23 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		{
 			// Arrange
 			var command = new SetTransferProjectDeletedAtCommand(1);
-	
+
+			// Arrange      
+			string outgoingTrustUkprn = "11112222";
+			string outgoingTrustName = "outgoingTrustName";
+			string incomingTrustUkprn = "11110000";
+			string incomingTrustName = "incomingTrustName";
+			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority") };
+
+			bool isFormAMat = true;
+			DateTime createdOn = DateTime.Now;
+
 			// Create a transfer project
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, false, DateTime.Now);
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create(outgoingTrustUkprn,
+				outgoingTrustName,
+				academies,
+				isFormAMat,
+				createdOn);
 			// Mock Unit of work and Repository 
 			var unitOfWorkMock = new Mock<IUnitOfWork>();
 			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
