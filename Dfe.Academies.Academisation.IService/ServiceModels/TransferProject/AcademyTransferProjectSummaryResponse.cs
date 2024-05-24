@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
         public string Status { get; set; }
-		public List<TransferringAcademiesResponse> TransferringAcademies { get; set; }
+		public List<TransferringAcademyDto> TransferringAcademies { get; set; }
         public AssignedUserResponse AssignedUser { get; set; }
 		public bool? IsFormAMat { get; set; }
     }

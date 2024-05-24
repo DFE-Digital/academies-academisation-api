@@ -1,6 +1,6 @@
 ﻿using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
-namespace Dfe.Academies.Academisation.IService.Commands.Legacy.Project
+namespace Dfe.Academies.Academisation.IService.Query
 {
 	public interface IConversionProjectExportService
 	{
