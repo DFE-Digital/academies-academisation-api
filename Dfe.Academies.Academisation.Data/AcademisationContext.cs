@@ -179,6 +179,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		transferProject.HasKey(x => x.Id);
 		transferProject.Property(p => p.Id).UseIdentityColumn(10003000, 1);
 
+		transferProject.HasQueryFilter(d => !d.DeletedAt.HasValue);
+
 		transferProject
 		.HasMany(a => a.IntendedTransferBenefits)
 		.WithOne()

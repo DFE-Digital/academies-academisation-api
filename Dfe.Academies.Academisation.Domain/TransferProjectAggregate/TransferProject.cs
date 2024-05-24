@@ -77,6 +77,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public Guid? AssignedUserId { get; private set; }
 		public bool? IsFormAMat { get; private set; }
 
+		public DateTime? DeletedAt { get; set; }
+
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
 		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
 
@@ -237,5 +239,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn) ?? throw new InvalidOperationException();
 			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails);
 		}
+
+		public void SetDeletedAt()
+		{
+			DeletedAt = DateTime.UtcNow;
+		}
+
 	}
 }
