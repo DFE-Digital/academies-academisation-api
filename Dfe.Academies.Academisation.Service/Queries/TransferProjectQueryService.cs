@@ -176,6 +176,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				IncomingTrustUkprn = transferringAcademies.FirstOrDefault()?.IncomingTrustUkprn,
 				LocalAuthority = localAuthority,
 				OutgoingTrustName = project?.OutgoingTrustName,
+				OutgoingTrustUKPRN = project?.OutgoingTrustUkprn,
 				ProposedAcademyTransferDate = project.TargetDateForTransfer,
 				Region = region,
 				SchoolName = schoolName,
@@ -183,7 +184,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				Status = project.Status,
 				TransferReason = reason,
 				TransferType = project.WhoInitiatedTheTransfer,
-				Urn = project.Urn.ToString(),
+				Urn = school.Urn,
 				PFI = transferringAcademyPfi
 			};
 		}
