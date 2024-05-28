@@ -1,6 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -9,31 +10,24 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 {
-	public class SetTransferProjectLegalRequirementsCommandHandlerTests
+	public class SetTransferProjectDeleteCommandHandlerTests
 	{
 		private readonly Mock<ITransferProjectRepository> _transferProjectRepositoryMock;
-		private readonly Mock<ILogger<SetTransferProjectLegalRequirementsCommandHandler>> _loggerMock;
-		private readonly SetTransferProjectLegalRequirementsCommandHandler _handler;
+		private readonly Mock<ILogger<SetTransferProjectDeletedAtCommandHandler>> _loggerMock;
+		private readonly SetTransferProjectDeletedAtCommandHandler _handler;
 
-		public SetTransferProjectLegalRequirementsCommandHandlerTests()
+		public SetTransferProjectDeleteCommandHandlerTests()
 		{
 			_transferProjectRepositoryMock = new Mock<ITransferProjectRepository>();
-			_loggerMock = new Mock<ILogger<SetTransferProjectLegalRequirementsCommandHandler>>();
-			_handler = new SetTransferProjectLegalRequirementsCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
+			_loggerMock = new Mock<ILogger<SetTransferProjectDeletedAtCommandHandler>>();
+			_handler = new SetTransferProjectDeletedAtCommandHandler(_transferProjectRepositoryMock.Object, _loggerMock.Object);
 		}
 
 		[Fact]
 		public async Task Handle_TransferProjectNotFound_ReturnsNotFoundCommandResult()
 		{
 			// Arrange
-			var command = new SetTransferProjectLegalRequirementsCommand
-			{
-				Urn = 1,
-				IncomingTrustAgreement = "TestTrustAgreement",
-				OutgoingTrustConsent = "TestOutgoingTrustConsent",
-				DiocesanConsent = "TestDiocesanConsent",
-				IsCompleted = true
-			};
+			var command = new SetTransferProjectDeletedAtCommand(1);
 
 			_transferProjectRepositoryMock.Setup(x => x.GetById(It.IsAny<int>()))!
 				.ReturnsAsync((Domain.TransferProjectAggregate.TransferProject)null);
@@ -57,17 +51,24 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		public async Task Handle_TransferProjectFound_ReturnsCommandSuccessResult()
 		{
 			// Arrange
-			var command = new SetTransferProjectLegalRequirementsCommand
-			{
-				Urn = 1,
-				IncomingTrustAgreement = "TestTrustAgreement",
-				OutgoingTrustConsent = "TestOutgoingTrustConsent",
-				DiocesanConsent = "TestDiocesanConsent",
-				IsCompleted = true
-			};
-			// Create a transfer project to 'SetLegalRequirements' to
-			var transferringAcademies = new List<TransferringAcademy>() { new TransferringAcademy("23456789", "in trust", "34567890", "", "") };
-			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", transferringAcademies, false, DateTime.Now);
+			var command = new SetTransferProjectDeletedAtCommand(1);
+
+			// Arrange      
+			string outgoingTrustUkprn = "11112222";
+			string outgoingTrustName = "outgoingTrustName";
+			string incomingTrustUkprn = "11110000";
+			string incomingTrustName = "incomingTrustName";
+			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority") };
+
+			bool isFormAMat = true;
+			DateTime createdOn = DateTime.Now;
+
+			// Create a transfer project
+			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create(outgoingTrustUkprn,
+				outgoingTrustName,
+				academies,
+				isFormAMat,
+				createdOn);
 			// Mock Unit of work and Repository 
 			var unitOfWorkMock = new Mock<IUnitOfWork>();
 			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
@@ -78,17 +79,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Mock GetById to use our Transfer Project from above
 			_transferProjectRepositoryMock.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
 
-
 			// Act
 			var result = await _handler.Handle(command, new CancellationToken(false));
 
 			// Assert
 			result.Should().BeOfType<CommandSuccessResult>();
 
-			transferProject.IncomingTrustAgreement.Should().Be(command.IncomingTrustAgreement);
-			transferProject.OutgoingTrustConsent.Should().Be(command.OutgoingTrustConsent);
-			transferProject.DiocesanConsent.Should().Be(command.DiocesanConsent);
-			transferProject.LegalRequirementsSectionIsCompleted.Should().Be(command.IsCompleted);
 
 			_transferProjectRepositoryMock.Verify(repo => repo.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()), Times.Once);
 		}

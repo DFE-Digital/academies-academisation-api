@@ -93,6 +93,7 @@ builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
 
 // Commands
 builder.Services.AddScoped<IEnrichProjectCommand, EnrichProjectCommand>();
+builder.Services.AddScoped<IEnrichTransferProjectCommand, EnrichTransferProjectCommand>();
 builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>();
 
 // Repositories

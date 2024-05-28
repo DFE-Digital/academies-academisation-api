@@ -17,7 +17,7 @@
 
 		void SetSchoolAdditionalData(string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation);
 
-		void SetIncomingTrustName(string incomingTrustName, string? incomingTrustUKPRN);
+		void SetIncomingTrust(string incomingTrustName, string? incomingTrustUkprn);
 
 		void SetGeneralInformation(string pfiScheme, string pfiSchemeDetails);
 	}
