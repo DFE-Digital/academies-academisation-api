@@ -35,12 +35,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 
 			// Create a TransferProject
+			var transferringAcademies = new List<TransferringAcademy>() { 
+				new TransferringAcademy("23456789", "in trust", "34567890", "", "") ,
+				new TransferringAcademy("23456789", "in trust", "34567891", "", "")
+
+			};
 			ITransferProject dummyTransferProject = TransferProject.Create(
 				"dummyOutgoingTrustUkprn",
 				"out trust",
-				"dummyIncomingTrustUkprn",
-				"in trust",
-				new List<string> { "dummyUkprn1", "dummyUkprn2" },
+				transferringAcademies,
 				false,
 				DateTime.Now
 			);
@@ -71,12 +74,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 
 			// Create a TransferProject
+			var transferringAcademies = new List<TransferringAcademy>() {
+				new TransferringAcademy("23456789", "in trust", "34567890", "", "") ,
+				new TransferringAcademy("23456789", "in trust", "34567891", "", "")
+
+			};
 			var dummyTransferProject = TransferProject.Create(
 				"dummyOutgoingTrustUkprn",
 				"out trust",
-				"dummyIncomingTrustUkprn",
-				"in trust",
-				new List<string> { "dummyUkprn1", "dummyUkprn2" },
+				transferringAcademies,
 				false,
 				DateTime.Now
 			);
@@ -106,10 +112,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			// Mocking the data
 			var mockDecision = new Mock<IConversionAdvisoryBoardDecision>();
-			var mockTransferProject = new MockTransferProject("dummyOutgoingTrustUkprn", "dummyOutgoingTrustName", new List<MockTransferAcademyRecord>()
-	{
-		new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1")
-	}).CreateMock();
+
+			var mockTransferProject = new MockTransferProject("dummyOutgoingTrustUkprn", "dummyOutgoingTrustName", new List<MockTransferAcademyRecord>() {
+				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1", "dummyRegion", "dummyLocalAuthority")
+			}).CreateMock();
 
 			// Mock establishment data
 			var establishmentDto = new EstablishmentDto
@@ -178,7 +184,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
 			// Mocking the data
 			var mockTransferProject = new MockTransferProject("dummyOutgoingTrustUkprn", "dummyOutgoingTrustName", new List<MockTransferAcademyRecord>() {
-				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1")
+				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1","dummyRegion", "dummyLocalAuthority")
 			}).CreateMock();
 
 			// Mock the setup to return the dummy project
@@ -208,9 +214,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Mocking the data
 			var mockDecision = new Mock<IConversionAdvisoryBoardDecision>();
 			var mockTransferProject = new MockTransferProject("dummyOutgoingTrustUkprn", "dummyOutgoingTrustName", new List<MockTransferAcademyRecord>() {
-		new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1"),
-		new("dummyIncomingTrustUkprn2", "dummyOutgoingAcademyUkprn2", "dummyIncomingTrustName2")
-	}).CreateMock();
+
+				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1", "dummyRegion", "dummyLocalAuthority"),
+				new("dummyIncomingTrustUkprn2", "dummyOutgoingAcademyUkprn2", "dummyIncomingTrustName2", "dummyRegion", "dummyLocalAuthority")
+			}).CreateMock();
 
 			// Mock the setup to return the dummy project
 			mockRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
@@ -291,10 +298,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var count = 10;
 
 			// Sample data setup
+			var transferrinAcademies1 = new List<TransferringAcademy>() { new TransferringAcademy("inUkprn1", "In Trust 1", "ukprn1", "", "") };
+			var transferrinAcademies2 = new List<TransferringAcademy>() { new TransferringAcademy("inUkprn2", "In Trust 2", "ukprn2", "", "") };
 			var dummyProjects = new List<TransferProject>
 	{
-		TransferProject.Create("outUkprn1", "Out Trust 1", "inUkprn1", "In Trust 1", new List<string> { "ukprn1" },false, DateTime.UtcNow),
-		TransferProject.Create("outUkprn2", "Out Trust 2", "inUkprn2", "In Trust 2", new List<string> { "ukprn2" },false, DateTime.UtcNow)
+		TransferProject.Create("outUkprn1", "Out Trust 1", transferrinAcademies1, false, DateTime.UtcNow),
+		TransferProject.Create("outUkprn2", "Out Trust 2", transferrinAcademies2, false, DateTime.UtcNow)
 	};
 
 			// Expected data setup
@@ -305,7 +314,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				OutgoingTrustUkprn = p.OutgoingTrustUkprn,
 				OutgoingTrustName = p.OutgoingTrustName,
 				Status = p.Status,
-				TransferringAcademies = p.TransferringAcademies.Select(a => new TransferringAcademiesResponse
+				TransferringAcademies = p.TransferringAcademies.Select(a => new TransferringAcademyDto
 				{
 					IncomingTrustName = a.IncomingTrustName,
 					IncomingTrustUkprn = a.IncomingTrustUkprn,

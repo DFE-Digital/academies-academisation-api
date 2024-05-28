@@ -64,7 +64,8 @@ public class AssignTransferProjectUserCommandHandlerTests
 			UserFullName = "UserFullName"
 		};
 		// Create a transfer project to 'SetFeatures' to
-		var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", "23456789", "in trust", new List<string> { "34567890" }, false,  DateTime.Now);
+		var transferringAcademies = new List<TransferringAcademy>() { new ("23456789", "in trust", "34567890", "region", "local authority") };
+		var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", transferringAcademies, false,  DateTime.Now);
 		// Mock Unit of work and Repository 
 		var unitOfWorkMock = new Mock<IUnitOfWork>();
 		unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))

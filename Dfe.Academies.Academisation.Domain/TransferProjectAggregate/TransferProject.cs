@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public class TransferProject : ITransferProject, IAggregateRoot
 	{
-		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat)
+		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> transferringAcademies, bool? isFormAMat)
 		{
 			_intendedTransferBenefits = new List<IntendedTransferBenefit>();
 			_transferringAcademies = new List<TransferringAcademy>();
@@ -15,12 +15,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 			OutgoingTrustUkprn = outgoingTrustUkprn;
 			OutgoingTrustName = outgoingTrustName;
-			IsFormAMat = isFormAMat.HasValue && isFormAMat.Value;
 
-			foreach (var academyUkprn in academyUkprns)
+			IsFormAMat = isFormAMat.HasValue && isFormAMat.Value;
+			if (transferringAcademies is not null)
 			{
-				_transferringAcademies.Add(new TransferringAcademy(incomingTrustUkprn, incomingTrustName, academyUkprn));
+				_transferringAcademies = transferringAcademies;
 			}
+
 		}
 
 		protected TransferProject() { }
@@ -75,6 +76,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? AssignedUserEmailAddress { get; private set; }
 		public Guid? AssignedUserId { get; private set; }
 		public bool? IsFormAMat { get; private set; }
+
+		public DateTime? DeletedAt { get; set; }
 
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
 		public IReadOnlyCollection<IntendedTransferBenefit> IntendedTransferBenefits => _intendedTransferBenefits;
@@ -191,14 +194,14 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			Status = status;
 		}
 
-		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, string? incomingTrustUkprn, string? incomingTrustName, List<string> academyUkprns, bool? isFormAMat, DateTime createdOn)
+		public static TransferProject Create(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> transferringAcademies, bool? isFormAMat, DateTime createdOn)
 		{
 			Guard.Against.NullOrEmpty(outgoingTrustUkprn);
 			Guard.Against.NullOrEmpty(outgoingTrustName);
-			Guard.Against.NullOrEmpty(academyUkprns);
+			Guard.Against.NullOrEmpty(transferringAcademies);
 			Guard.Against.OutOfSQLDateRange(createdOn);
 
-			return new TransferProject(outgoingTrustUkprn, outgoingTrustName, incomingTrustUkprn, incomingTrustName, academyUkprns, isFormAMat)
+			return new TransferProject(outgoingTrustUkprn, outgoingTrustName, transferringAcademies, isFormAMat)
 			{
 				CreatedOn = createdOn
 			};
@@ -215,14 +218,32 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 			if (transferringAcademy != null)
 			{
-				transferringAcademy.SetIncomingTrustName(incomingTrustName, incomingTrustUKPRN);
+
+				transferringAcademy.SetIncomingTrust(incomingTrustName, incomingTrustUKPRN);
+
 			}
 		}
 
+		public void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName)
+		{
+			var academy = _transferringAcademies.SingleOrDefault(x => x.OutgoingAcademyUkprn == outgoingAcademyUkprn);
+
+			if (academy != null)
+			{
+				academy.SetReferenceData(name, localAuthorityName);
+			}
+
+		}
 		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails)
 		{
 			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn) ?? throw new InvalidOperationException();
 			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails);
 		}
+
+		public void SetDeletedAt()
+		{
+			DeletedAt = DateTime.UtcNow;
+		}
+
 	}
 }

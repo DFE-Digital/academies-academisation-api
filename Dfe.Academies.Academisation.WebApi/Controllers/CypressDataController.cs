@@ -37,5 +37,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return Ok(result);
 		}
 
+		[HttpPost]
+		[Route("add-project-from-A2B.cy")]
+		public async Task<IActionResult> AddProjectFromA2B([FromBody] CyAddProjectFromA2BCommand command, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			return Ok(result);
+		}
+
 	}
 }
