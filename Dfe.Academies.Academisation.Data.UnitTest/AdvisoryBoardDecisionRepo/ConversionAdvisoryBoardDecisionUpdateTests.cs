@@ -4,9 +4,7 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecisionAggregate;
@@ -44,7 +42,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		await _context.ConversionAdvisoryBoardDecisions.LoadAsync();
 
-		existingDecision.Update(details, existingDecision.DeferredReasons, existingDecision.DeclinedReasons, existingDecision.WithdrawnReasons);
+		existingDecision.Update(details, existingDecision.DeferredReasons, existingDecision.DeclinedReasons, existingDecision.WithdrawnReasons, existingDecision.DAORevokedReasons);
 
 		//Act
 		_repo.Update(existingDecision);
