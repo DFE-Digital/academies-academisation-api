@@ -7,11 +7,12 @@ namespace Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggr
 public class ConversionAdvisoryBoardDecisionFactory : IConversionAdvisoryBoardDecisionFactory
 {
 	public CreateResult Create(AdvisoryBoardDecisionDetails details,
-		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons, 
-		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons, 
-		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons)
+		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
+		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
+		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons)
 	{
-		return ConversionAdvisoryBoardDecision.Create(details, deferredReasons, declinedReasons, withdrawnReasons);
+		return ConversionAdvisoryBoardDecision.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
 	}
 
 }
