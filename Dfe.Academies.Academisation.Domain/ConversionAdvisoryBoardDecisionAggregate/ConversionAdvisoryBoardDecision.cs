@@ -52,7 +52,7 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 	public IEnumerable<AdvisoryBoardWithdrawnReasonDetails> WithdrawnReasons => _withdrawnReasons.AsReadOnly();
 	IReadOnlyCollection<AdvisoryBoardWithdrawnReasonDetails> IConversionAdvisoryBoardDecision.WithdrawnReasons => _withdrawnReasons.AsReadOnly();
 	private readonly List<AdvisoryBoardWithdrawnReasonDetails> _withdrawnReasons = new();
-	public IEnumerable<AdvisoryBoardDAORevokedReasonDetails> DAORevokedReasons => _daoRevokedReasons.AsReadOnly();
+	public IEnumerable<AdvisoryBoardDAORevokedReasonDetails> DaoRevokedReasons => _daoRevokedReasons.AsReadOnly();
 	IReadOnlyCollection<AdvisoryBoardDAORevokedReasonDetails> IConversionAdvisoryBoardDecision.DAORevokedReasons => _daoRevokedReasons.AsReadOnly();
 	private readonly List<AdvisoryBoardDAORevokedReasonDetails> _daoRevokedReasons = new();
 
