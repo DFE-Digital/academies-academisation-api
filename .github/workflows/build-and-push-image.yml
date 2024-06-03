@@ -97,31 +97,9 @@ jobs:
     name: Run Cypress tests
     if: needs.set-env.outputs.environment == 'test' || needs.set-env.outputs.environment == 'development'
     needs: [ deploy-image, set-env ]
-    environment: ${{ needs.set-env.outputs.environment }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: CypressTests
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Setup node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Npm install
-        run: npm install
-
-      - name: Run cypress
-        run: npm run cy:run -- --env apiKey=${{ secrets.API_KEY }},url=${{ secrets.URL }}
-
-      - name: Upload artifacts
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
-        with:
-           name: screenshots-${{ needs.set-env.outputs.environment }}
-           path: CypressTests/cypress/screenshots
+    uses: ./.github/workflows/cypress-tests.yml
+    with:
+      environment: ${{ needs.set-env.outputs.environment }}
+    secrets:
+      API_KEY: ${{ secrets.API_KEY }}
+      URL: ${{ secrets.URL }}
