@@ -25,6 +25,7 @@ public class AdvisoryBoardDecisionCreateCommandHandler : IRequestHandler<Advisor
 		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons = request.DeferredReasons ?? new List<AdvisoryBoardDeferredReasonDetails>();
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons = request.DeclinedReasons ?? new List<AdvisoryBoardDeclinedReasonDetails>();
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons = request.WithdrawnReasons ?? new List<AdvisoryBoardWithdrawnReasonDetails>();
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons = request.DAORevokedReasons ?? new List<AdvisoryBoardDAORevokedReasonDetails>();
 
 		var details = new AdvisoryBoardDecisionDetails(
 			request.ConversionProjectId,
@@ -38,7 +39,7 @@ public class AdvisoryBoardDecisionCreateCommandHandler : IRequestHandler<Advisor
 			request.DecisionMakerName
 		);
 
-		var result = _factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons);
+		var result = _factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
 
 		return result switch
 		{

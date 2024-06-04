@@ -36,7 +36,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 	{
 		//Arrange
 		_mockDecisionFactory
-			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
 			.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
 
 		_mockDecision
@@ -51,6 +51,9 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		_mockDecision
 			.SetupGet(d => d.WithdrawnReasons)
 			.Returns(new List<AdvisoryBoardWithdrawnReasonDetails>());
+		_mockDecision
+			.SetupGet(d => d.DAORevokedReasons)
+			.Returns(new List<AdvisoryBoardDAORevokedReasonDetails>());
 
 		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
 
@@ -69,6 +72,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
 		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
 		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
+		var daoRevoked = _fixture.CreateMany<AdvisoryBoardDAORevokedReasonDetails>();
 
 		var expected = new ConversionAdvisoryBoardDecisionServiceModel
 		{
@@ -79,6 +83,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 			DeclinedReasons = declined.ToList(),
 			DeferredReasons = deferred.ToList(),
 			WithdrawnReasons = withdrawn.ToList(),
+			DAORevokedReasons = daoRevoked.ToList(),
 			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
 			AcademyOrderDate = details.AcademyOrderDate,
 			DecisionMadeBy = details.DecisionMadeBy,
@@ -87,7 +92,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 
 		//Arrange
 		_mockDecisionFactory
-			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
 			.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
 
 		_mockDecision
@@ -102,6 +107,9 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		_mockDecision
 			.SetupGet(d => d.WithdrawnReasons)
 			.Returns(withdrawn.ToList().AsReadOnly());
+		_mockDecision
+			.SetupGet(d => d.DAORevokedReasons)
+			.Returns(daoRevoked.ToList().AsReadOnly());
 
 		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
 
@@ -117,7 +125,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 	{
 		//Arrange
 		_mockDecisionFactory
-			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
 			.Returns(new CreateValidationErrorResult(Enumerable.Empty<ValidationError>()));
 
 		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
@@ -134,7 +142,7 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 	{
 		//Arrange
 		_mockDecisionFactory
-			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>()))
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
 			.Returns(new UnhandledCreateResult());
 
 		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object);
