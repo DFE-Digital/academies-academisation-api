@@ -14,6 +14,7 @@
 		public string? IncomingTrustUkprn { get; init; }
 		public string? LocalAuthority { get; init; }
 		public string? OutgoingTrustName { get; init; }
+		public string? OutgoingTrustUKPRN { get; init; }
 		public DateTime? ProposedAcademyTransferDate { get; init; }
 		public string? Region { get; init; }
 		public string? SchoolName { get; init; }
@@ -22,5 +23,6 @@
 		public string? TransferReason { get; init; }
 		public string? TransferType { get; init; }
 		public string? Urn { get; init; }
+		public string? PFI { get; init; }
 	}
 }
