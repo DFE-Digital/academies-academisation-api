@@ -8,6 +8,8 @@ public interface IProject
 {
 	public int Id { get; }
 
+	public Guid? SharePointId { get; }
+
 	public int? FormAMatProjectId { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }

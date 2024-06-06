@@ -18,6 +18,8 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	}
 
+	public Guid? SharePointId { get; private set; }
+
 	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
 	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
 
