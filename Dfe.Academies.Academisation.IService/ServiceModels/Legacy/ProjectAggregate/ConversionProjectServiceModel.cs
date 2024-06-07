@@ -15,7 +15,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public int? Urn { get; init; }
 
 		public int? FormAMatProjectId { get; init; }
-		public Guid? SharePointId { get; init; }
+		public Guid? SchoolSharePointId { get; init; }
 		public bool? IsFormAMat { get; init; }
 		[JsonIgnore] public int? IfdPipelineId { get; init; }
 		public string? SchoolName { get; init; }
@@ -120,6 +120,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public int? NumberOfMedicalPlaces { get; set; }
 		public int? NumberOfSENUnitPlaces { get; set; }
 		public int? NumberOfPost16Places { get; set; }
+		public Guid? ApplicationSharePointId { get; set; }
 
 		public bool Equals(ConversionProjectServiceModel? other)
 		{

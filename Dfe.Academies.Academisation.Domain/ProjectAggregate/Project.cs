@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
@@ -18,7 +19,8 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	}
 
-	public Guid? SharePointId { get; private set; }
+	public Guid? SchoolSharePointId { get; private set; }
+	public Guid? ApplicationSharePointId { get; private set; }
 
 	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
 	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
@@ -51,13 +53,13 @@ public class Project : Entity, IProject, IAggregateRoot
 					new("ApplicationStatus", "Only projects of type JoinAMat are supported")
 				});
 		}
-
-		var school = application.Schools.Single().Details;
+		var school = application.Schools.Single();
+		var schoolDetails = school.Details;
 
 		var projectDetails = new ProjectDetails
 		{
-			Urn = school.Urn,
-			SchoolName = school.SchoolName,
+			Urn = schoolDetails.Urn,
+			SchoolName = schoolDetails.SchoolName,
 			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
 			ProjectStatus = "Converter Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
@@ -68,22 +70,22 @@ public class Project : Entity, IProject, IAggregateRoot
 			// Temp hotfix
 			ProposedAcademyOpeningDate = null,
 			ConversionSupportGrantAmount = 25000,
-			PublishedAdmissionNumber = school.CapacityPublishedAdmissionsNumber.ToString(),
-			PartOfPfiScheme = ToYesNoString(school.LandAndBuildings?.PartOfPfiScheme),
-			FinancialDeficit = ToYesNoString(IsDeficit(school.CurrentFinancialYear?.CapitalCarryForwardStatus)),
-			RationaleForTrust = school.SchoolConversionReasonsForJoining,
-			EndOfCurrentFinancialYear = school.CurrentFinancialYear?.FinancialYearEndDate,
-			EndOfNextFinancialYear = school.NextFinancialYear?.FinancialYearEndDate,
-			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.Revenue, school.CurrentFinancialYear?.RevenueStatus),
-			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.Revenue, school.NextFinancialYear?.RevenueStatus),
-			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.CurrentFinancialYear?.CapitalCarryForward, school.CurrentFinancialYear?.CapitalCarryForwardStatus),
-			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.NextFinancialYear?.CapitalCarryForward, school.NextFinancialYear?.CapitalCarryForwardStatus),
-			YearOneProjectedPupilNumbers = school.ProjectedPupilNumbersYear1,
-			YearTwoProjectedPupilNumbers = school.ProjectedPupilNumbersYear2,
-			YearThreeProjectedPupilNumbers = school.ProjectedPupilNumbersYear3
+			PublishedAdmissionNumber = schoolDetails.CapacityPublishedAdmissionsNumber.ToString(),
+			PartOfPfiScheme = ToYesNoString(schoolDetails.LandAndBuildings?.PartOfPfiScheme),
+			FinancialDeficit = ToYesNoString(IsDeficit(schoolDetails.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+			RationaleForTrust = schoolDetails.SchoolConversionReasonsForJoining,
+			EndOfCurrentFinancialYear = schoolDetails.CurrentFinancialYear?.FinancialYearEndDate,
+			EndOfNextFinancialYear = schoolDetails.NextFinancialYear?.FinancialYearEndDate,
+			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(schoolDetails.CurrentFinancialYear?.Revenue, schoolDetails.CurrentFinancialYear?.RevenueStatus),
+			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(schoolDetails.NextFinancialYear?.Revenue, schoolDetails.NextFinancialYear?.RevenueStatus),
+			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(schoolDetails.CurrentFinancialYear?.CapitalCarryForward, schoolDetails.CurrentFinancialYear?.CapitalCarryForwardStatus),
+			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(schoolDetails.NextFinancialYear?.CapitalCarryForward, schoolDetails.NextFinancialYear?.CapitalCarryForwardStatus),
+			YearOneProjectedPupilNumbers = schoolDetails.ProjectedPupilNumbersYear1,
+			YearTwoProjectedPupilNumbers = schoolDetails.ProjectedPupilNumbersYear2,
+			YearThreeProjectedPupilNumbers = schoolDetails.ProjectedPupilNumbersYear3
 		};
 
-		return new CreateSuccessResult<IProject>(new Project(projectDetails));
+		return new CreateSuccessResult<IProject>(new Project(projectDetails) { ApplicationSharePointId = application.EntityId, SchoolSharePointId = school.EntityId});
 	}
 
 	public static CreateResult CreateFormAMat(IApplication application)
@@ -126,7 +128,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		})
 			.ToList();
 
-		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails)).ToList();
+		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails) { ApplicationSharePointId = application.EntityId, SchoolSharePointId = application.Schools.Single(x => x.Details.Urn == projectDetails.Urn).EntityId }).ToList();
 		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
 	}
 	// Create from Conversions
