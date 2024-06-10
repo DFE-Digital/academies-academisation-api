@@ -1,5 +1,4 @@
 ﻿using System;
-using Bogus;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
@@ -28,11 +27,11 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
 
-		ConversionAdvisoryBoardDecision expected = new(1, updatedDetails, null, null, null, timestamp, timestamp);
-		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision expected = new(1, updatedDetails, null, null, null, null, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, null, timestamp, timestamp);
 
 		//Act
-		var result = target.Update(updatedDetails, null, null, null);
+		var result = target.Update(updatedDetails, null, null, null, null);
 
 		//Assert
 		Assert.Multiple(
@@ -60,11 +59,11 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		var updatedDetails = details with { DecisionMadeBy = DecisionMadeBy.Minister };
 
-		ConversionAdvisoryBoardDecision expected = new(1, details, null, null, null, timestamp, timestamp);
-		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision expected = new(1, details, null, null, null, null, timestamp, timestamp);
+		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, null, timestamp, timestamp);
 
 		//Act
-		var result = target.Update(updatedDetails, null, null, null);
+		var result = target.Update(updatedDetails, null, null, null, null);
 
 		//Assert
 		Assert.Multiple(

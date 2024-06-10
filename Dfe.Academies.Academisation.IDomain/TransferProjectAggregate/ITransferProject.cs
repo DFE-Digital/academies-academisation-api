@@ -65,5 +65,6 @@
 		void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN);
 		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails);
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
+		void SetDeletedAt();
 	}
 }

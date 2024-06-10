@@ -1,0 +1,58 @@
+name: Run Cypress tests
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      API_KEY:
+        required: true
+      URL:
+        required: true
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        type: environment
+
+concurrency:
+  group: ${{ github.workflow }}
+
+env:
+  NODE_VERSION: 18.x
+
+jobs:
+  cypress-tests:
+    name: Run Cypress tests
+    if: inputs.environment == 'test' || inputs.environment == 'development'
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: CypressTests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Npm install
+        run: npm install
+
+      - name: Run cypress
+        run: npm run cy:run -- --env apiKey=${{ secrets.API_KEY }},url=${{ secrets.URL }}
+
+      - name: Upload artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+           name: screenshots-${{ inputs.environment }}
+           path: CypressTests/cypress/screenshots

@@ -316,5 +316,23 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count);
 			return result is null ? NotFound() : Ok(result);
 		}
+
+		[HttpDelete("{urn:int}/Delete", Name = "DeleteProject")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> DeleteAProjectByUrn(int urn, CancellationToken cancellationToken)
+		{
+			SetTransferProjectDeletedAtCommand request = new SetTransferProjectDeletedAtCommand(urn);
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 	}
 }
