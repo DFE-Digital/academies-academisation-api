@@ -26,6 +26,12 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 					KeyStage5PerformanceAdditionalInformation = a.KeyStage5PerformanceAdditionalInformation,
 					PFIScheme = a.PFIScheme,
 					PFISchemeDetails = a.PFISchemeDetails,
+					DistanceFromAcademyToTrustHq = a.DistanceFromAcademyToTrustHq,
+					DistanceFromAcademyToTrustHqDetails = a.DistanceFromAcademyToTrustHqDetails,
+					ViabilityIssues = a.ViabilityIssues,
+					FinancialDeficit = a.FinancialDeficit,
+					MPNameAndParty = a.MPNameAndParty,
+					PublishedAdmissionNumber = a.PublishedAdmissionNumber
 				})
 				.ToList();
 
