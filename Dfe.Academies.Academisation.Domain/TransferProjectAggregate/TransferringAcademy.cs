@@ -33,6 +33,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? KeyStage5PerformanceAdditionalInformation { get; private set; }
 		public string? PFIScheme { get; private set; }
 		public string? PFISchemeDetails { get; private set; }
+		public string? DistanceFromAcademyToTrustHq { get; private set; }
+		public string? DistanceFromAcademyToTrustHqDetails { get; private set; }
+		public string? ViabilityIssues { get; set; }
+		public string? FinancialDeficit { get; set; }
+		public string? MPNameAndParty { get; set; }
+		public string? PublishedAdmissionNumber { get; set; }
 
 		public void SetSchoolAdditionalData(string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
 		{
@@ -58,11 +64,17 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			LocalAuthority = localAuthority;			
 		}
 
-		public void SetGeneralInformation(string pfiScheme, string pfiSchemeDetails)
+		public void SetGeneralInformation(string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber)
 		{
 			PFIScheme = pfiScheme;
 			if (PFIScheme.Contains("No")) pfiSchemeDetails = null;
 			PFISchemeDetails = pfiSchemeDetails;
+			DistanceFromAcademyToTrustHq = distanceFromAcademyToTrustHq;
+			DistanceFromAcademyToTrustHqDetails = distanceFromAcademyToTrustHqDetails;
+			ViabilityIssues = viabilityIssues;
+			FinancialDeficit = financialDeficit;
+			MPNameAndParty = mpNameAndParty;
+			PublishedAdmissionNumber = publishedAdmissionNumber;
 		}
 	}
 }

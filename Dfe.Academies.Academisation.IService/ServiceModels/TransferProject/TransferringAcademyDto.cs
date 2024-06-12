@@ -16,5 +16,11 @@
 		public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 		public string? PFIScheme { get; init; }
 		public string? PFISchemeDetails { get; init; }
+		public string? ViabilityIssues { get; init; }
+		public string? FinancialDeficit { get; init; }
+		public string? MPNameAndParty { get; init; }
+		public string? DistanceFromAcademyToTrustHq { get; init; }
+		public string? DistanceFromAcademyToTrustHqDetails { get; init; }
+		public string? PublishedAdmissionNumber { get; init; }
 	}
 }

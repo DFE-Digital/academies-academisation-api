@@ -222,7 +222,13 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							KeyStage4PerformanceAdditionalInformation = ta.KeyStage4PerformanceAdditionalInformation,
 							KeyStage5PerformanceAdditionalInformation = ta.KeyStage5PerformanceAdditionalInformation,
 							PFIScheme = ta.PFIScheme,
-							PFISchemeDetails = ta.PFISchemeDetails
+							PFISchemeDetails = ta.PFISchemeDetails,
+							DistanceFromAcademyToTrustHq = ta.DistanceFromAcademyToTrustHq,
+							DistanceFromAcademyToTrustHqDetails = ta.DistanceFromAcademyToTrustHqDetails,
+							FinancialDeficit = ta.FinancialDeficit,
+							ViabilityIssues = ta.ViabilityIssues,
+							MPNameAndParty = ta.MPNameAndParty,
+							PublishedAdmissionNumber = ta.PublishedAdmissionNumber
 						};
 					}).ToList(),
 					IsFormAMat = x.IsFormAMat

@@ -11,11 +11,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "AcademyOrderRequired",
-                schema: "academisation",
-                table: "Project");
-
             migrationBuilder.AddColumn<DateTime>(
                 name: "AcademyOrderDate",
                 schema: "academisation",
@@ -32,13 +27,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 name: "AcademyOrderDate",
                 schema: "academisation",
                 table: "ConversionAdvisoryBoardDecision");
-
-            migrationBuilder.AddColumn<string>(
-                name: "AcademyOrderRequired",
-                schema: "academisation",
-                table: "Project",
-                type: "nvarchar(max)",
-                nullable: true);
         }
     }
 }
