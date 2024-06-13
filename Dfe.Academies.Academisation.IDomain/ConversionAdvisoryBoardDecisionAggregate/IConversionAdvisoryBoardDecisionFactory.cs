@@ -8,5 +8,7 @@ public interface IConversionAdvisoryBoardDecisionFactory
 	CreateResult Create(AdvisoryBoardDecisionDetails details,
 		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
-		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons);
+		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons
+		);
 }

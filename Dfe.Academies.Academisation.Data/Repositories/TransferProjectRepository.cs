@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;

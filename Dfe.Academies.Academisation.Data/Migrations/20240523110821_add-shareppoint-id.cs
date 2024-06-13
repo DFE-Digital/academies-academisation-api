@@ -6,27 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AcademyOrderDateAdded : Migration
+    public partial class addshareppointid : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<DateTime>(
-                name: "AcademyOrderDate",
+            migrationBuilder.AddColumn<Guid>(
+                name: "SharePointId",
                 schema: "academisation",
-                table: "ConversionAdvisoryBoardDecision",
-                type: "datetime2",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                table: "Project",
+                type: "uniqueidentifier",
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "AcademyOrderDate",
+                name: "SharePointId",
                 schema: "academisation",
-                table: "ConversionAdvisoryBoardDecision");
+                table: "Project");
         }
     }
 }

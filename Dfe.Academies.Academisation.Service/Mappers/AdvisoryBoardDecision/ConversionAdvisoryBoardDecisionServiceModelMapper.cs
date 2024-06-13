@@ -18,6 +18,7 @@ internal static class ConversionAdvisoryBoardDecisionServiceModelMapper
 			DeclinedReasons = decision.DeclinedReasons.ToList(),
 			DeferredReasons = decision.DeferredReasons.ToList(),
 			WithdrawnReasons = decision.WithdrawnReasons.ToList(),
+			DAORevokedReasons = decision.DAORevokedReasons.ToList(),
 			AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			AcademyOrderDate = decision.AdvisoryBoardDecisionDetails.AcademyOrderDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,
