@@ -45,5 +45,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return Ok(result);
 		}
 
+		[HttpPost]
+		[Route("add-fam-project-from-A2B.cy")]
+		public async Task<IActionResult> AddFAMProjectFromA2B([FromBody] CyAddFAMProjectFromA2BCommand command, CancellationToken cancellationToken)
+		{
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			return Ok(result);
+		}
+
 	}
 }
