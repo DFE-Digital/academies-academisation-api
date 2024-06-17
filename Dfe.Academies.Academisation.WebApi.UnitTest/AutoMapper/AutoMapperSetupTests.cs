@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 {
-    public class AutoMapperSetupTests
+	public class AutoMapperSetupTests
     {
         private MockRepository mockRepository;
 		private Fixture fixture;

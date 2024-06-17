@@ -3,8 +3,10 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SchoolImprovementPlan;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Dfe.Academies.Academisation.Service.Commands.FormAMat;
+using Dfe.Academies.Academisation.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -301,6 +303,28 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				NotFoundCommandResult => NotFound(),
 				CommandValidationErrorResult validationErrorResult =>
 					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		/// <summary>
+		///     Adds a school improvement plan to the project with the specified ID
+		/// </summary>
+		/// <param name="id">The ID for the project to which the school improvement plan should be added</param>
+		/// <param name="command">Add school improvement plan Note data</param>
+		/// <response code="404">The ID does not correspond to a known Project</response>
+		/// <response code="201">The school improvement plan has been added to the specified Project</response>
+		[HttpPost("project/{id:int}/school-improvement-plans")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		public async Task<ActionResult> AddSchooImprovementPlan(int id, ConversionProjectAddSchoolImprovementPlanCommand command)
+		{
+			CommandResult result = await _mediator.Send(command);
+			return result switch
+			{
+				CommandSuccessResult => Created(new Uri($"/legacy/project/{id}", UriKind.Relative), null),
+				NotFoundCommandResult => NotFound(),
 				_ => throw new NotImplementedException()
 			};
 		}
