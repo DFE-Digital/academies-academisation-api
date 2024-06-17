@@ -3,15 +3,14 @@ const fs = require('fs')
 
 module.exports = {
   generateZapReport: async () => {
-
     console.log('Generating ZAP report')
 
     const zapOptions = {
       apiKey: process.env.ZAP_API_KEY,
       proxy: {
         host: process.env.ZAP_ADDRESS,
-        port: process.env.ZAP_PORT
-      }
+        port: process.env.ZAP_PORT,
+      },
     }
     const zaproxy = new ZapClient(zapOptions)
     // Wait for passive scanner to finish scanning before generating report
@@ -21,10 +20,12 @@ module.exports = {
         .then((resp) => {
           try {
             recordsRemaining = parseInt(resp.recordsToScan, 10)
-          } catch (err) {
+          }
+          catch (err) {
             if (err instanceof Error) {
               console.log(`Error converting result: ${err.message}`)
-            } else {
+            }
+            else {
               console.log('Unknown error during results conversion')
             }
             recordsRemaining = 0
@@ -40,7 +41,7 @@ module.exports = {
       title: 'Report',
       template: 'traditional-html',
       reportfilename: 'ZAP-Report.html',
-      reportdir: '/zap/wrk'
+      reportdir: '/zap/wrk',
     })
       .then((resp) => {
         console.log(`${JSON.stringify(resp)}`)
@@ -48,5 +49,5 @@ module.exports = {
       .catch((err) => {
         console.log(`Error from ZAP Report API: ${err}`)
       })
-  }
+  },
 }

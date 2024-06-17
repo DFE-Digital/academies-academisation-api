@@ -1,14 +1,13 @@
-/// <reference types="Cypress" />
-import { AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCanCreateNewFAMTrustKeyPerson.spec'
-import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCanUpdateNewFAMTrustKeyPerson.spec'
-import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB.spec'
-import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../support/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson.spec'
+import { AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCanCreateNewFAMTrustKeyPerson.spec'
+import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCanUpdateNewFAMTrustKeyPerson.spec'
+import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB.spec'
+import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson.spec'
 
 describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
-  let apiKey = Cypress.env('apiKey');
-  let url = Cypress.env('url');
-  let applicationNumber = 10038;
-  let trustKeyPersonNumber = 0;
+  let apiKey = Cypress.env('apiKey')
+  let url = Cypress.env('url')
+  let applicationNumber = 10038
+  let trustKeyPersonNumber = 0
 
   it('POST - Verify An UnAuthorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', function () {
     cy.skipWhen(url.includes('d01'), this)
@@ -19,14 +18,12 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       failOnStatusCode: false,
       headers:
       {
-        'x-api-key': 'INVALIDAPIKEY'
+        'x-api-key': 'INVALIDAPIKEY',
       },
       body:
-        AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload
+        AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload,
     }).then((response) => {
-
       expect(response).to.have.property('status', 401)
-
     })
   })
 
@@ -36,14 +33,12 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       url: url + '/application/' + applicationNumber + '/form-trust/key-person',
       headers:
       {
-        'x-api-key': apiKey
+        'x-api-key': apiKey,
       },
       body:
-        AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload
+        AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload,
     }).then((response) => {
-
       expect(response).to.have.property('status', 200)
-
     })
   })
 
@@ -54,14 +49,12 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       failOnStatusCode: false,
       headers:
       {
-        'x-api-key': apiKey
+        'x-api-key': apiKey,
       },
       body:
-        AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload
+        AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload,
     }).then((response) => {
-
       expect(response).to.have.property('status', 400)
-
     })
   })
 
@@ -74,10 +67,9 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       failOnStatusCode: false,
       headers:
       {
-        'x-api-key': 'INVALIDAPIKEY'
+        'x-api-key': 'INVALIDAPIKEY',
       },
     }).then((response) => {
-
       expect(response).to.have.property('status', 401)
     })
   })
@@ -88,17 +80,13 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       url: url + '/application/' + applicationNumber + '/form-trust/key-person',
       headers:
       {
-        'x-api-key': apiKey
+        'x-api-key': apiKey,
       },
     }).then((response) => {
-
       expect(response).to.have.property('status', 200)
       expect(response.body[0]).to.have.property('id')
-      trustKeyPersonNumber = response.body[0].id;
-
-
+      trustKeyPersonNumber = response.body[0].id
     })
-
   })
 
   it('GET - Verify An UNAuthorised User Is UNAble To GET FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', function () {
@@ -110,14 +98,11 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       failOnStatusCode: false,
       headers:
       {
-        'x-api-key': 'INVALIDAPIKEY'
+        'x-api-key': 'INVALIDAPIKEY',
       },
     }).then((response) => {
-
       expect(response).to.have.property('status', 401)
-
     })
-
   })
 
   it('GET - Verify An Authorised User Is Able To GET FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
@@ -126,38 +111,31 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + trustKeyPersonNumber,
       headers:
       {
-        'x-api-key': apiKey
+        'x-api-key': apiKey,
       },
     }).then((response) => {
-
       expect(response).to.have.property('status', 200)
       expect(response.body).to.have.property('id')
-
-
     })
-
   })
 
   it('PUT - Verify An UNAuthorised User Is UNAble To UPDATE a FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', function () {
-
     cy.skipWhen(url.includes('d01'), this)
 
-    cy.log(JSON.stringify("Id = " + Cypress.env('responseIDForRequest')))
+    cy.log(JSON.stringify('Id = ' + Cypress.env('responseIDForRequest')))
     cy.request({
       method: 'PUT',
       url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 19,
       failOnStatusCode: false,
       headers:
       {
-        'x-api-key': 'INVALIDAPIKEY'
+        'x-api-key': 'INVALIDAPIKEY',
       },
       body:
-        UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload
+        UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload,
     }).then((response) => {
-
       expect(response).to.have.property('status', 401)
     })
-
   })
 
   it('PUT - Verify An Authorised User Is Able To UPDATE a FAM-Trust Key Person - Form-Trust Key-Person - 200 OK Expected', () => {
@@ -166,12 +144,11 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + trustKeyPersonNumber,
       headers:
       {
-        'x-api-key': apiKey
+        'x-api-key': apiKey,
       },
       body:
-        AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload
+        AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload,
     }).then((response) => {
-
       expect(response).to.have.property('status', 200)
     })
   })
@@ -183,14 +160,12 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
             method: 'DELETE',
             url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
             failOnStatusCode: false,
-            headers: 
+            headers:
             {
               'x-api-key' : 'INVALID APIKEY'
             },
         }).then((response) => {
-  
         expect(response).to.have.property('status', 401)
-  
         })
       })
     */
@@ -201,14 +176,12 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
       cy.request({
               method: 'DELETE',
               url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
-              headers: 
+              headers:
               {
                 'x-api-key' : apiKey
               },
           }).then((response) => {
-     
           expect(response).to.have.property('status', 200)
-  
           })
     })
     */
@@ -220,18 +193,13 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
               method: 'DELETE',
               url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + Cypress.env('responseIDForRequest'),
               failOnStatusCode: false,
-              headers: 
+              headers:
               {
                 'x-api-key' : apiKey
               },
           }).then((response) => {
-  
           expect(response).to.have.property('status', 400)
-    
           })
     })
     */
-
-
-
 })

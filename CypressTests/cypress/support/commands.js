@@ -31,7 +31,7 @@
  * it('does a thing', function () { //do something })
  */
 Cypress.Commands.add('skipWhen', (expr, context) => {
-    if(expr) {
-        context.skip.bind(context)();
-    }
+  if (expr) {
+    context.skip.bind(context)()
+  }
 })
