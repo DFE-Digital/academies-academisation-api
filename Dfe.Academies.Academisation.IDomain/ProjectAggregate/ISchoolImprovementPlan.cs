@@ -13,8 +13,8 @@ namespace Dfe.Academies.Academisation.IDomain.ProjectAggregate
 		string ProvidedBy { get;  }
 		DateTime StartDate { get; }
 		SchoolImprovementPlanExpectedEndDate ExpectedEndDate { get; }
-		DateTime ExpectedEndDateOther { get; }
+		DateTime? ExpectedEndDateOther { get; }
 		SchoolImprovementPlanConfidenceLevel ConfidenceLevel { get; }
-		string PlanComments { get; }
+		string? PlanComments { get; }
 	}
 }

@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
@@ -143,6 +144,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
+		modelBuilder.Entity<SchoolImprovementPlan>(ConfigureSchoolImprovementPlans);
 
 		modelBuilder.Entity<ConversionAdvisoryBoardDecision>(ConfigureConversionAdvisoryBoardDecision);
 		modelBuilder.Entity<AdvisoryBoardDeferredReasonDetails>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
@@ -159,6 +161,24 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		base.OnModelCreating(modelBuilder);
 	}
+
+	private void ConfigureSchoolImprovementPlans(EntityTypeBuilder<SchoolImprovementPlan> SchoolImprovementPlanConfiguration)
+	{
+		SchoolImprovementPlanConfiguration.ToTable("SchoolImprovementPlans", DEFAULT_SCHEMA);
+		SchoolImprovementPlanConfiguration.HasKey(a => a.Id);
+
+		SchoolImprovementPlanConfiguration.Property(x => x.ArrangedBy).HasConversion(
+		v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+		v => JsonSerializer.Deserialize<List<SchoolImprovementPlanArranger>>(v, (JsonSerializerOptions)null),
+		new ValueComparer<IList<SchoolImprovementPlanArranger>>(
+			(c1, c2) => c1.SequenceEqual(c2),
+			c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+			c => c.ToList()));
+
+		SchoolImprovementPlanConfiguration.Property(x => x.ExpectedEndDate).HasConversion<string>();
+		SchoolImprovementPlanConfiguration.Property(x => x.ConfidenceLevel).HasConversion<string>();
+	}
+
 	private static void ConfigureFormAMatProject(EntityTypeBuilder<FormAMatProject> formAMatProjectConfiguration)
 	{
 		formAMatProjectConfiguration.ToTable("FormAMatProject", DEFAULT_SCHEMA);
@@ -346,6 +366,18 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
 		notesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		projectConfiguration
+			.HasMany(a => a.SchoolImprovementPlans)
+			.WithOne()
+			.HasForeignKey("ProjectId")
+			.IsRequired();
+
+		var schoolImprovementPlansNavigation = projectConfiguration.Metadata.FindNavigation(nameof(Project.SchoolImprovementPlans));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		schoolImprovementPlansNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
 
 	}
 

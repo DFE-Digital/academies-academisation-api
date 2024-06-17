@@ -12,9 +12,9 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate
 			string providedBy,
 			DateTime startDate,
 			SchoolImprovementPlanExpectedEndDate expectedEndDate,
-			DateTime expectedEndDateOther,
+			DateTime? expectedEndDateOther,
 			SchoolImprovementPlanConfidenceLevel confidenceLevel,
-			string planComments)
+			string? planComments)
 		{
 			ProjectId = projectId;
 			ArrangedBy = arrangedBy;
@@ -33,9 +33,9 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate
 		public string ProvidedBy { get; private set; }
 		public DateTime StartDate { get; private set; }
 		public SchoolImprovementPlanExpectedEndDate ExpectedEndDate { get; private set; }
-		public DateTime ExpectedEndDateOther { get; private set; }
+		public DateTime? ExpectedEndDateOther { get; private set; }
 		public SchoolImprovementPlanConfidenceLevel ConfidenceLevel { get; private set; }
-		public string PlanComments { get; private set; }
+		public string? PlanComments { get; private set; }
 
 
 	}
