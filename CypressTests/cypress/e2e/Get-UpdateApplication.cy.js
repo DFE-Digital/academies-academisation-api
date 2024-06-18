@@ -17,7 +17,7 @@ describe('Academisation API Testing', () => {
   let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})Z?$/
 
   it('GET - Verify An Authorised User Can Retrieve A Respective Application - 200 OK EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'GET',
       url: url + '/application/' + applicationNumber,
       headers:
@@ -68,7 +68,7 @@ describe('Academisation API Testing', () => {
   it('GET - Verify An UNAUTHORISED USER CANNOT Retreive An Application - 401 UNAUTHORISED EXPECTED', function () {
     cy.skipWhen(url.includes('d01'), this)
 
-    cy.request({
+    cy.api({
       method: 'GET',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -78,7 +78,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Can Update An Application Correctly - 200 OK EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       headers:
@@ -94,7 +94,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change Their Contributor\'s Email to ANOTHER EMAIL ADDRESS - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -110,7 +110,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change Their Contributor\'s Email to AN INVALID EMAIL ADDRESS - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -126,7 +126,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change The worksPlannedDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -142,7 +142,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change The sacreExemptionDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -158,7 +158,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change The previousFinancialYearEndDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -174,7 +174,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change The currentFinancialYearEndDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -190,7 +190,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change The nextFinancialYearEndDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -206,7 +206,7 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An Authorised User Is Unable To Change The schoolConversionTargetDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
@@ -224,7 +224,7 @@ describe('Academisation API Testing', () => {
   it('PUT - Verify An UNAUTHORISED USER CANNOT Update An Application - 401 UNAUTHORISED EXPECTED', function () {
     cy.skipWhen(url.includes('d01'), this)
 
-    cy.request({
+    cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
       failOnStatusCode: false,
