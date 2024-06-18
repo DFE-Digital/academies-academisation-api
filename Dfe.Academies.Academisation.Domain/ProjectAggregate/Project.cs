@@ -561,4 +561,13 @@ public class Project : Entity, IProject, IAggregateRoot
 		if (note != null) { _notes.Remove(note); }
 
 	}
+
+	public void SetProjectDates(DateTime? publishedAdmissionNumber, DateTime? viabilityIssues)
+	{
+		// Update the respective properties in the Details object
+		this.Details.PublishedAdmissionNumber = publishedAdmissionNumber;
+
+		// Update the LastModifiedOn property to the current time to indicate the object has been modified
+		this.LastModifiedOn = DateTime.UtcNow;
+	}
 }

@@ -115,6 +115,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? ExternalApplicationFormUrl { get; set; }
 	public bool? IsFormAMat { get => _IsFormAMat; init => _IsFormAMat = value; }
 	private bool? _IsFormAMat;
+	public DateTime? AdvisoryBoardDate { get; init; }
+	public DateTime? PreviousAdvisoryBoard { get; init; }
+
 
 	public bool Equals(ProjectDetails? other)
 	{

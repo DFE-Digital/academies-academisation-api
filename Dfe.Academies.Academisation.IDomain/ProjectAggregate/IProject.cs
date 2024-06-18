@@ -45,4 +45,8 @@ public interface IProject
 	void SetRoute(string route);
 	void AddNote(string subject, string note, string author, DateTime date);
 	void RemoveNote(int id);
+
+	public void SetProjectDates(
+	DateTime? publishedAdmissionNumber,
+	DateTime? viabilityIssues);
 }
