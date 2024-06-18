@@ -99,6 +99,7 @@ describe('Academisation API Testing - Transfers SAT Projects', () => {
       expect(response).to.have.property('status', 401)
     })
   })
+
   // VERIFY AN UNAUTHORISED USER GETS A 401 UNAUTH RESPONSE WHEN TRYING TO SET RATIONALE
   it('PUT - Verify An UN-authorised User CANNOT SET-RATIONALE On New SAT Transfer We Created - 401 UNAUTHORISED EXPECTED', () => {
     cy.api({
@@ -116,6 +117,7 @@ describe('Academisation API Testing - Transfers SAT Projects', () => {
       cy.log(URN)
     })
   })
+
   // TRY TO SET RATIONALE ON THE NEW SAT PROJECT AND HOPE WE GET A 200 OK RESPONSE
   it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Created - 200 OK EXPECTED', () => {
     cy.api({
@@ -590,6 +592,7 @@ describe('Academisation API Testing - Transfers SAT Projects', () => {
       cy.log(URN)
     })
   })
+
   // TRY TO SET TRUST GENERAL INFO
   it('PUT - Verify An Authorised User Can SET-SCHOOL-TRUST-GENERAL-INFORMATION On New SAT Transfer We Created - 200 OK EXPECTED', () => {
     cy.api({
