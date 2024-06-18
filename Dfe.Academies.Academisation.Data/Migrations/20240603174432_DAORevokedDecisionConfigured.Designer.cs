@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240603174432_DAORevokedDecisionConfigured")]
+    partial class DAORevokedDecisionConfigured
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -630,9 +633,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("ApplicationSharePointId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedOn");
@@ -646,9 +646,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("SchoolSharePointId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -839,15 +836,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DistanceFromAcademyToTrustHq")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DistanceFromAcademyToTrustHqDetails")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FinancialDeficit")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("IncomingTrustName")
                         .HasColumnType("nvarchar(max)");
 
@@ -869,9 +857,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("LocalAuthority")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MPNameAndParty")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("OutgoingAcademyUkprn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -882,9 +867,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("PFISchemeDetails")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PublishedAdmissionNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PupilNumbersAdditionalInformation")
                         .HasColumnType("nvarchar(max)");
 
@@ -893,9 +875,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<int>("TransferProjectId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ViabilityIssues")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1617,9 +1596,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("int")
                                 .HasColumnName("ActualPupilNumbers");
 
-                            b1.Property<DateTime?>("AdvisoryBoardDate")
-                                .HasColumnType("datetime2");
-
                             b1.Property<string>("AgeRange")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("AgeRange");
@@ -1850,9 +1826,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("PfiSchemeDetails")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PfiSchemeDetails");
-
-                            b1.Property<DateTime?>("PreviousAdvisoryBoard")
-                                .HasColumnType("datetime2");
 
                             b1.Property<DateTime?>("PreviousHeadTeacherBoardDate")
                                 .HasColumnType("datetime2")

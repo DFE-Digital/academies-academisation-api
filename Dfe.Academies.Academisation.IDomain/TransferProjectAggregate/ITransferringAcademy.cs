@@ -14,11 +14,17 @@
 		int TransferProjectId { get; }
 		string? PFIScheme { get; }
 		string? PFISchemeDetails { get; }
+		string? ViabilityIssues { get; }
+		string? FinancialDeficit { get; }
+		string? MPNameAndParty { get; }
+		string? DistanceFromAcademyToTrustHq { get; }
+		string? DistanceFromAcademyToTrustHqDetails { get; }
+		string? PublishedAdmissionNumber { get; }
 
 		void SetSchoolAdditionalData(string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation);
 
 		void SetIncomingTrust(string incomingTrustName, string? incomingTrustUkprn);
 
-		void SetGeneralInformation(string pfiScheme, string pfiSchemeDetails);
+		void SetGeneralInformation(string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber);
 	}
 }

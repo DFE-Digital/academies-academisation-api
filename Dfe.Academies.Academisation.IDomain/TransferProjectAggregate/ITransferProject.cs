@@ -63,7 +63,7 @@
 		void SetGeneralInformation(string recommendation, string author);
 		void SetOutgoingTrustName(string outgoingTrustName);
 		void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN);
-		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails);
+		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber);
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
 		void SetDeletedAt();
 	}

@@ -234,10 +234,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			}
 
 		}
-		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails)
+		public void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber)
 		{
 			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn) ?? throw new InvalidOperationException();
-			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails);
+			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails, distanceFromAcademyToTrustHq, distanceFromAcademyToTrustHqDetails, viabilityIssues, financialDeficit, mpNameAndParty, publishedAdmissionNumber);
 		}
 
 		public void SetDeletedAt()

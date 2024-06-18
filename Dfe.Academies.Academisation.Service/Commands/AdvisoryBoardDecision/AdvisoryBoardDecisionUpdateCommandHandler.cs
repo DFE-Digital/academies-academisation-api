@@ -43,7 +43,7 @@ public class AdvisoryBoardDecisionUpdateCommandHandler : IRequestHandler<Advisor
 			command.DecisionMakerName
 		);
 
-		var result = existingDecision.Update(details, command.DeferredReasons, command.DeclinedReasons, command.WithdrawnReasons);
+		var result = existingDecision.Update(details, command.DeferredReasons, command.DeclinedReasons, command.WithdrawnReasons, command.DAORevokedReasons);
 
 		return result switch
 		{
