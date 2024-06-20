@@ -9,7 +9,6 @@ using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Application;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.RequestModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application;
@@ -40,13 +39,13 @@ public class ApplicationCreateTests
 
 	public ApplicationCreateTests()
 	{
-		_context = new TestApplicationContext().CreateContext();
+		_context = new TestApplicationContext(_mediator.Object).CreateContext();
 		_repo = new ApplicationRepository(_context, _mapper.Object);
 
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
-		
+
 
 		var applicationCreateCommandHandler = new ApplicationCreateCommandHandler(_applicationFactory, _repo, _mapper.Object);
 
@@ -101,7 +100,7 @@ public class ApplicationCreateTests
 				applicationCreateRequestModel.Contributor.Role,
 				applicationCreateRequestModel.Contributor.OtherRoleName) },
 			new List<ApplicationSchoolServiceModel>(),
-			null, null, null, id.ToString(), actualApplication.EntityId,null);
+			null, null, null, id.ToString(), actualApplication.EntityId, null);
 
 		Assert.Equivalent(expectedApplication, actualApplication);
 	}

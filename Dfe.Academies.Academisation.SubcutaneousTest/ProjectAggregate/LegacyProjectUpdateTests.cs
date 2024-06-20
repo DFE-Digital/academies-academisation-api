@@ -16,7 +16,6 @@ using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
@@ -34,7 +33,7 @@ public class ProjectUpdateTests
 
 	public ProjectUpdateTests()
 	{
-		_context = new TestProjectContext().CreateContext();
+		_context = new TestProjectContext(_mediatr).CreateContext();
 
 
 		// data

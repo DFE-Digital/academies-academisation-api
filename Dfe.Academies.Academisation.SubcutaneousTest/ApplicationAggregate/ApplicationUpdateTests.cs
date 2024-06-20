@@ -16,7 +16,6 @@ using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -40,7 +39,7 @@ public class ApplicationUpdateTests
 
 	public ApplicationUpdateTests()
 	{
-		_context = new TestApplicationContext().CreateContext();
+		_context = new TestApplicationContext(_mediator.Object).CreateContext();
 		_repo = new ApplicationRepository(_context, _mapper.Object);
 		_applicationQueryService = new ApplicationQueryService(_repo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
@@ -110,8 +109,8 @@ public class ApplicationUpdateTests
 			existingApplication.Contributors.ToArray()[0],
 			existingApplication.Contributors.ToArray()[1],
 			applicationContributorServiceModel
-		}, 
-			new List<ApplicationSchoolServiceModel> {          
+		},
+			new List<ApplicationSchoolServiceModel> {
 				existingApplication.Schools.ToArray()[0],
 				applicationSchoolServiceModel,
 				existingApplication.Schools.ToArray()[2] });

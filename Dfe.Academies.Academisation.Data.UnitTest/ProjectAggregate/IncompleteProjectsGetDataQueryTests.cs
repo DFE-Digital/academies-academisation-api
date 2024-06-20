@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoMapper;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using MediatR;
 using Moq;
 using Xunit;
 
@@ -18,11 +18,11 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 
 		private readonly ConversionProjectRepository _subject;
 		private readonly AcademisationContext _context;
-		private Mock<IMapper> _mockMapper  = new Mock<IMapper>();
-
+		private Mock<IMapper> _mockMapper = new Mock<IMapper>();
+		private readonly IMediator _mediator;
 		public IncompleteProjectsGetDataQueryTests()
 		{
-			_context = new TestProjectContext().CreateContext();
+			_context = new TestProjectContext(_mediator).CreateContext();
 			_subject = new ConversionProjectRepository(_context, _mockMapper.Object);
 		}
 

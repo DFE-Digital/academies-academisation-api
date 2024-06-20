@@ -11,6 +11,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
+using MediatR;
 using Moq;
 using Xunit;
 
@@ -22,10 +23,10 @@ public class ApplicationUpdateDataCommandTests
 	private readonly Fixture _fixture = new();
 	private readonly IApplicationRepository _repo;
 	private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
-
+	private readonly IMediator _mediator;
 	public ApplicationUpdateDataCommandTests()
 	{
-		_context = new TestApplicationContext().CreateContext();
+		_context = new TestApplicationContext(_mediator).CreateContext();
 		_repo = new ApplicationRepository(_context, _mapper.Object);
 		_fixture.Customize(new AutoMoqCustomization());
 		//_fixture.Customize<Loan>(composer =>
@@ -72,7 +73,7 @@ public class ApplicationUpdateDataCommandTests
 
 		//Act
 		_repo.Update(existingApplication);
-				await _repo.UnitOfWork.SaveChangesAsync();
+		await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
 		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
@@ -175,7 +176,7 @@ public class ApplicationUpdateDataCommandTests
 
 		//Act
 		_repo.Update(existingApplication);
-				await _repo.UnitOfWork.SaveChangesAsync();
+		await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
 		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
@@ -209,7 +210,7 @@ public class ApplicationUpdateDataCommandTests
 				ms.Details.ContactHeadName, $"{ms.Details.ContactHeadEmail}@test.com",
 				ms.Details.ContactChairName, $"{ms.Details.ContactChairEmail}@test.com",
 				ms.Details.ContactRole, ms.Details.MainContactOtherName, $"{ms.Details.MainContactOtherEmail}@test.com",
-		        ms.Details.MainContactOtherRole,
+				ms.Details.MainContactOtherRole,
 				ms.Details.ApproverContactName, $"{ms.Details.ApproverContactEmail}@test.com",
 				ms.Details.ConversionTargetDateSpecified, ms.Details.ConversionTargetDate,
 				ms.Details.ConversionTargetDateExplained, ms.Details.ConversionChangeNamePlanned,
@@ -224,7 +225,7 @@ public class ApplicationUpdateDataCommandTests
 				ms.Details.DeclarationSignedByName, ms.Details.SchoolConversionReasonsForJoining),
 			ms.Loans, ms.Leases, ms.HasLoans, ms.HasLeases);
 
-		var schools = new List<School>{ addedSchool};
+		var schools = new List<School> { addedSchool };
 
 		existingApplication.Update(existingApplication.ApplicationType, existingApplication.ApplicationStatus,
 			existingApplication.Contributors.ToDictionary(x => x.Id, x => x.Details),
@@ -254,7 +255,7 @@ public class ApplicationUpdateDataCommandTests
 
 		//Act
 		_repo.Update(existingApplication);
-				await _repo.UnitOfWork.SaveChangesAsync();
+		await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
 		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 
@@ -301,7 +302,7 @@ public class ApplicationUpdateDataCommandTests
 
 		//Act
 		_repo.Update(existingApplication);
-				await _repo.UnitOfWork.SaveChangesAsync();
+		await _repo.UnitOfWork.SaveChangesAsync();
 		_context.ChangeTracker.Clear();
 		var updatedApplication = await _repo.GetByIdAsync(existingApplication.Id);
 

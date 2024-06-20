@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using MediatR;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecisionAggregate;
@@ -9,11 +10,11 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecis
 public class ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests
 {
 	private readonly AdvisoryBoardDecisionRepository _target;
-
+	private readonly IMediator _mediator;
 	public ConversionAdvisoryBoardDecisionStateGetByDecisionIdTests()
 	{
-		var mockContext = new TestAdvisoryBoardDecisionContext().CreateContext();
-		_target = new AdvisoryBoardDecisionRepository(mockContext);		 
+		var mockContext = new TestAdvisoryBoardDecisionContext(_mediator).CreateContext();
+		_target = new AdvisoryBoardDecisionRepository(mockContext);
 	}
 
 	[Fact]
