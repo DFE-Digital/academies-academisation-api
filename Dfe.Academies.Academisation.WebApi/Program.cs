@@ -24,6 +24,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
+using Dfe.Academies.Academisation.Service.DomainEventHandlers;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.Filters;
@@ -102,6 +103,9 @@ builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository
 builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(OpeningDateChangedDomainEventHandler).Assembly));
+
 
 // Queries and services
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();

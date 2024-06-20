@@ -27,7 +27,7 @@ public class CreateLeaseCommandHandler : IRequestHandler<CreateLeaseCommand, Com
 		}
 			
 		_applicationRepository.Update(existingApplication);
-		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(new CancellationToken()) 
+		return await _applicationRepository.UnitOfWork.SaveChangesAsync(new CancellationToken()) 
 			? new CommandSuccessResult()
 			: new BadRequestCommandResult();
 	}

@@ -6,9 +6,11 @@ using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregat
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.Domain.OpeningDateHistory;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -19,10 +21,13 @@ namespace Dfe.Academies.Academisation.Data;
 public class AcademisationContext : DbContext, IUnitOfWork
 {
 	const string DEFAULT_SCHEMA = "academisation";
-	public AcademisationContext(DbContextOptions<AcademisationContext> options) : base(options)
+	private IMediator _mediator;
+	public AcademisationContext(DbContextOptions<AcademisationContext> options, IMediator mediator) : base(options)
 	{
-
+		_mediator = mediator;
 	}
+	public DbSet<OpeningDateHistory> OpeningDateHistories { get; set; }
+
 
 	public DbSet<Application> Applications { get; set; } = null!;
 	public DbSet<Contributor> Contributors { get; set; } = null!;
@@ -45,23 +50,34 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		return base.SaveChanges();
 	}
 
-	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
 	{
+		await DispatchDomainEventsAsync();
 		SetModifiedAndCreatedDates();
-		return base.SaveChangesAsync(cancellationToken);
+		return await base.SaveChangesAsync(cancellationToken);
 	}
-
-	public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+	private async Task DispatchDomainEventsAsync()
 	{
-		//This will be used to dispatch domain events in mediator before committing changes with SaveChangesAsync
-		/*
-		 * await _mediator.DispatchDomainEventsAsync(this);
-		 */
-		//SetModifiedAndCreatedDates();
-		await base.SaveChangesAsync(cancellationToken);
-		return true;
-	}
+		var domainEntities = ChangeTracker
+			.Entries<Entity>()
+			.Where(x => x.Entity.DomainEvents != null && x.Entity.DomainEvents.Any())
+			.ToArray();
 
+		var domainEvents = domainEntities
+			.SelectMany(x => x.Entity.DomainEvents)
+			.ToList();
+
+		domainEntities.ToList()
+			.ForEach(entity => entity.Entity.ClearDomainEvents());
+
+		var tasks = domainEvents
+			.Select(async (domainEvent) =>
+			{
+				await _mediator.Publish(domainEvent);
+			});
+
+		await Task.WhenAll(tasks);
+	}
 	private void SetModifiedAndCreatedDates()
 	{
 		var timestamp = DateTime.UtcNow;

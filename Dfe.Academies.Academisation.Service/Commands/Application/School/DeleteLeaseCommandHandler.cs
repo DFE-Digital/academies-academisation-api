@@ -27,7 +27,7 @@ public class DeleteLeaseCommandHandler : IRequestHandler<DeleteLeaseCommand, Com
 		
 		_applicationRepository.Update(existingApplication);
 
-		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken) 
+		return await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken) 
 			? new CommandSuccessResult()
 			: new BadRequestCommandResult();
 	}

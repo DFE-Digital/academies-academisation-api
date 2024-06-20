@@ -41,7 +41,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 			}
 
 			_applicationRepository.Update(existingApplication);
-			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
+			return await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken)
 				? new CommandSuccessResult()
 				: new BadRequestCommandResult();
 		}

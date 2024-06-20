@@ -5,7 +5,7 @@ using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
-	public class TransferProject : ITransferProject, IAggregateRoot
+	public class TransferProject : Entity, ITransferProject, IAggregateRoot
 	{
 		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> transferringAcademies, bool? isFormAMat)
 		{
@@ -42,7 +42,21 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? TypeOfTransfer { get; private set; }
 		public string? OtherTransferTypeDescription { get; private set; }
 		public DateTime? TransferFirstDiscussed { get; private set; }
-		public DateTime? TargetDateForTransfer { get; private set; }
+		private DateTime? _targetDateForTransfer;
+
+		public DateTime? TargetDateForTransfer
+		{
+			get => _targetDateForTransfer;
+			set
+			{
+				if (_targetDateForTransfer != value)
+				{
+					var oldDate = _targetDateForTransfer;
+					_targetDateForTransfer = value;
+					AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, _targetDateForTransfer, DateTime.UtcNow));
+				}
+			}
+		}
 		public DateTime? HtbDate { get; private set; }
 		public bool? HasTransferFirstDiscussedDate { get; private set; }
 		public bool? HasTargetDateForTransfer { get; private set; }
