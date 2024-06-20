@@ -1,7 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using MediatR;
-using TrustKeyPerson = Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.TrustKeyPerson;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 {
@@ -39,7 +38,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application.Trust
 
 			_applicationRepository.Update(existingApplication);
 
-			return await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken)
+			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
 				? new CommandSuccessResult()
 				: new BadRequestCommandResult();
 		}

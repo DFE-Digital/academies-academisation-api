@@ -56,6 +56,11 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		SetModifiedAndCreatedDates();
 		return await base.SaveChangesAsync(cancellationToken);
 	}
+	public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+	{
+		await base.SaveChangesAsync(cancellationToken);
+		return true;
+	}
 	private async Task DispatchDomainEventsAsync()
 	{
 		var domainEntities = ChangeTracker

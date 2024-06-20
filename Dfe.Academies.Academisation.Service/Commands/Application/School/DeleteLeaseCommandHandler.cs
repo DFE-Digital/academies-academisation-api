@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application.School;
 
 public class DeleteLeaseCommandHandler : IRequestHandler<DeleteLeaseCommand, CommandResult>
 {
-	private readonly IApplicationRepository _applicationRepository; 
+	private readonly IApplicationRepository _applicationRepository;
 
 	public DeleteLeaseCommandHandler(IApplicationRepository applicationRepository)
 	{
@@ -24,10 +24,10 @@ public class DeleteLeaseCommandHandler : IRequestHandler<DeleteLeaseCommand, Com
 		{
 			return result;
 		}
-		
+
 		_applicationRepository.Update(existingApplication);
 
-		return await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken) 
+		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
 			? new CommandSuccessResult()
 			: new BadRequestCommandResult();
 	}

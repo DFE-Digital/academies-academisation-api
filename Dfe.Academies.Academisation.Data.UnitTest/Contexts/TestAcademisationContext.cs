@@ -1,4 +1,5 @@
 ﻿using System;
+using MediatR;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +10,8 @@ public abstract class TestAcademisationContext : IDisposable
 	private readonly SqliteConnection _connection;
 
 	private readonly DbContextOptions<AcademisationContext> _contextOptions;
-
-	protected TestAcademisationContext()
+	private readonly IMediator _mediator;
+	protected TestAcademisationContext(IMediator mediator)
 	{
 		_connection = new("Filename=:memory:");
 		_connection.Open();
@@ -18,11 +19,12 @@ public abstract class TestAcademisationContext : IDisposable
 		_contextOptions = new DbContextOptionsBuilder<AcademisationContext>()
 			.UseSqlite(_connection)
 			.Options;
+		_mediator = mediator;
 	}
 
 	public AcademisationContext CreateContext()
 	{
-		return new(_contextOptions);
+		return new(_contextOptions, _mediator);
 	}
 
 	protected void Seed()

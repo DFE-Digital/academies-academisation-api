@@ -44,7 +44,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application.School
 			//TODO: This can be removed when there is no longer a disconnect between domain and persistence entities
 			//await _applicationRepository.DeleteChildObjectById<ApplicationSchoolState>(schoolToDelete.Id);
 
-			return await _applicationRepository.UnitOfWork.SaveChangesAsync(cancellationToken)
+			return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
 				? new CommandSuccessResult()
 				: new BadRequestCommandResult();
 		}

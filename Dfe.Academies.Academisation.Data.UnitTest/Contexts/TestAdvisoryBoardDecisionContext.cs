@@ -4,14 +4,15 @@ using System.Linq;
 using AutoFixture;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using MediatR;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 
 public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 {
 	private readonly Fixture _fixture = new();
-
-	public TestAdvisoryBoardDecisionContext()
+	private IMediator _mediator;
+	public TestAdvisoryBoardDecisionContext(IMediator mediator) : base(mediator)
 	{
 		Seed();
 	}

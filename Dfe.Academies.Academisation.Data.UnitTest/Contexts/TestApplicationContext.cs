@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using MediatR;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 
@@ -12,7 +13,7 @@ public class TestApplicationContext : TestAcademisationContext
 {
 	private readonly Fixture _fixture = new();
 
-	public TestApplicationContext()
+	public TestApplicationContext(IMediator mediator) : base(mediator)
 	{
 		Seed();
 	}
@@ -47,10 +48,10 @@ public class TestApplicationContext : TestAcademisationContext
 			schools.Add(new School(ms.Id, ms.TrustBenefitDetails, ms.OfstedInspectionDetails, ms.Safeguarding,
 				ms.LocalAuthorityReorganisationDetails, ms.LocalAuthorityClosurePlanDetails, ms.DioceseName,
 				ms.DioceseFolderIdentifier, ms.PartOfFederation, ms.FoundationTrustOrBodyName,
-				ms.FoundationConsentFolderIdentifier, ms.ExemptionEndDate, ms.MainFeederSchools, ms.ResolutionConsentFolderIdentifier, ms.ProtectedCharacteristics, ms.FurtherInformation, 
+				ms.FoundationConsentFolderIdentifier, ms.ExemptionEndDate, ms.MainFeederSchools, ms.ResolutionConsentFolderIdentifier, ms.ProtectedCharacteristics, ms.FurtherInformation,
 				new SchoolDetails(ms.Details.Urn, ms.Details.ProposedNewSchoolName!, ms.Details.LandAndBuildings,
 					ms.Details.PreviousFinancialYear, ms.Details.CurrentFinancialYear, ms.Details.NextFinancialYear,
-					ms.Details.ContactHeadName, $"{ms.Details.ContactHeadEmail}@test.com", 
+					ms.Details.ContactHeadName, $"{ms.Details.ContactHeadEmail}@test.com",
 					ms.Details.ContactChairName, $"{ms.Details.ContactChairEmail}@test.com",
 					ms.Details.ContactRole, ms.Details.MainContactOtherName, $"{ms.Details.MainContactOtherEmail}@test.com",
 					ms.Details.MainContactOtherRole,
@@ -68,7 +69,7 @@ public class TestApplicationContext : TestAcademisationContext
 					ms.Details.DeclarationSignedByName, ms.Details.SchoolConversionReasonsForJoining),
 				ms.Loans, ms.Leases, ms.HasLoans, ms.HasLeases));
 
-			
+
 		}
 
 		Application application = new(
@@ -79,9 +80,9 @@ public class TestApplicationContext : TestAcademisationContext
 			applicationStatus,
 			_fixture.Create<Dictionary<int, ContributorDetails>>(),
 			schools,
-			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<string>(),_fixture.Create<ChangesToTrust>(),
+			JoinTrust.Create(_fixture.Create<int>(), _fixture.Create<string>(), _fixture.Create<string>(), _fixture.Create<ChangesToTrust>(),
 				_fixture.Create<string>(), _fixture.Create<bool>(), _fixture.Create<string>()),
-			null, null, applicationRef,null);
+			null, null, applicationRef, null);
 
 		return application;
 	}

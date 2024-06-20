@@ -1,8 +1,10 @@
-﻿namespace Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+﻿using MediatR;
+
+namespace Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 
 public class TestProjectContext : TestAcademisationContext
 {
-	public TestProjectContext()
+	public TestProjectContext(IMediator mediator) : base(mediator)
 	{
 		Seed();
 	}
