@@ -30,7 +30,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 			// Update the project dates in the existing project
 			existingProject.SetProjectDates(
 				request.AdvisoryBoardDate,
-				request.PreviousAdvisoryBoard);
+				request.PreviousAdvisoryBoard,
+				request.ProjectDatesSectionComplete);
 
 			_conversionProjectRepository.Update(existingProject as Project);
 			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

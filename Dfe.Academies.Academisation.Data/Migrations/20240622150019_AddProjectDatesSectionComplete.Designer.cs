@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20240618120434_AddProjectDates")]
-    partial class AddProjectDates
+    [Migration("20240622150019_AddProjectDatesSectionComplete")]
+    partial class AddProjectDatesSectionComplete
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -437,6 +437,38 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAORevokedReasonDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdvisoryBoardDecisionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvisoryBoardDecisionId");
+
+                    b.ToTable("AdvisoryBoardDecisionDAORevokedReason", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeclinedReasonDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -601,6 +633,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<Guid?>("ApplicationSharePointId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedOn");
@@ -614,6 +649,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("SchoolSharePointId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -804,6 +842,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("DistanceFromAcademyToTrustHq")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DistanceFromAcademyToTrustHqDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinancialDeficit")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IncomingTrustName")
                         .HasColumnType("nvarchar(max)");
 
@@ -825,6 +872,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("LocalAuthority")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MPNameAndParty")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OutgoingAcademyUkprn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -835,6 +885,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("PFISchemeDetails")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PublishedAdmissionNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PupilNumbersAdditionalInformation")
                         .HasColumnType("nvarchar(max)");
 
@@ -843,6 +896,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<int>("TransferProjectId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ViabilityIssues")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1472,6 +1528,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAORevokedReasonDetails", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", null)
+                        .WithMany("DaoRevokedReasons")
+                        .HasForeignKey("AdvisoryBoardDecisionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeclinedReasonDetails", b =>
                 {
                     b.HasOne("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", null)
@@ -1554,9 +1619,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int?>("ActualPupilNumbers")
                                 .HasColumnType("int")
                                 .HasColumnName("ActualPupilNumbers");
-
-                            b1.Property<DateTime?>("AdvisoryBoardDate")
-                                .HasColumnType("datetime2");
 
                             b1.Property<string>("AgeRange")
                                 .HasColumnType("nvarchar(max)")
@@ -1789,9 +1851,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PfiSchemeDetails");
 
-                            b1.Property<DateTime?>("PreviousAdvisoryBoard")
-                                .HasColumnType("datetime2");
-
                             b1.Property<DateTime?>("PreviousHeadTeacherBoardDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("PreviousHeadTeacherBoardDate");
@@ -1803,6 +1862,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("PreviousHeadTeacherBoardLink")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PreviousHeadTeacherBoardLink");
+
+                            b1.Property<bool?>("ProjectDatesSectionComplete")
+                                .HasColumnType("bit");
 
                             b1.Property<string>("ProjectStatus")
                                 .HasColumnType("nvarchar(max)")
@@ -2030,6 +2092,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", b =>
                 {
+                    b.Navigation("DaoRevokedReasons");
+
                     b.Navigation("DeclinedReasons");
 
                     b.Navigation("DeferredReasons");

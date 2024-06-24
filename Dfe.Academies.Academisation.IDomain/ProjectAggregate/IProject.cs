@@ -48,7 +48,5 @@ public interface IProject
 	void AddNote(string subject, string note, string author, DateTime date);
 	void RemoveNote(int id);
 
-	public void SetProjectDates(
-	DateTime? publishedAdmissionNumber,
-	DateTime? viabilityIssues);
+	public void SetProjectDates(DateTime? publishedAdmissionNumber, DateTime? viabilityIssues, bool? projectDatesSectionComplete);
 }

@@ -1617,9 +1617,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("int")
                                 .HasColumnName("ActualPupilNumbers");
 
-                            b1.Property<DateTime?>("AdvisoryBoardDate")
-                                .HasColumnType("datetime2");
-
                             b1.Property<string>("AgeRange")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("AgeRange");
@@ -1851,9 +1848,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PfiSchemeDetails");
 
-                            b1.Property<DateTime?>("PreviousAdvisoryBoard")
-                                .HasColumnType("datetime2");
-
                             b1.Property<DateTime?>("PreviousHeadTeacherBoardDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("PreviousHeadTeacherBoardDate");
@@ -1865,6 +1859,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("PreviousHeadTeacherBoardLink")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PreviousHeadTeacherBoardLink");
+
+                            b1.Property<bool?>("ProjectDatesSectionComplete")
+                                .HasColumnType("bit");
 
                             b1.Property<string>("ProjectStatus")
                                 .HasColumnType("nvarchar(max)")
