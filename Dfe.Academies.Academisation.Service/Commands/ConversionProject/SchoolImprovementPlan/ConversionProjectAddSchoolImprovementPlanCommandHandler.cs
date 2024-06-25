@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SchoolI
 
 		public async Task<CommandResult> Handle(ConversionProjectAddSchoolImprovementPlanCommand message, CancellationToken cancellationToken)
 		{
-			IProject? project = await _conversionProjectRepository.GetConversionProject(message.ProjectId);
+			IProject? project = await _conversionProjectRepository.GetConversionProject(message.ProjectId, cancellationToken);
 
 			if (project is null)
 			{

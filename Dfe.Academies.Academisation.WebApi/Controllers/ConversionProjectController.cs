@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -311,22 +312,40 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		///     Adds a school improvement plan to the project with the specified ID
 		/// </summary>
 		/// <param name="id">The ID for the project to which the school improvement plan should be added</param>
-		/// <param name="command">Add school improvement plan Note data</param>
+		/// <param name="command">Add school improvement plan data</param>
 		/// <response code="404">The ID does not correspond to a known Project</response>
 		/// <response code="201">The school improvement plan has been added to the specified Project</response>
-		[HttpPost("project/{id:int}/school-improvement-plans")]
+		[HttpPost("{id:int}/school-improvement-plans")]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status201Created)]
-		public async Task<ActionResult> AddSchooImprovementPlan(int id, ConversionProjectAddSchoolImprovementPlanCommand command)
+		public async Task<ActionResult> AddSchooImprovementPlan(int id, ConversionProjectAddSchoolImprovementPlanCommand command, CancellationToken cancellationToken)
 		{
-			CommandResult result = await _mediator.Send(command);
+			CommandResult result = await _mediator.Send(command, cancellationToken);
 			return result switch
 			{
 				CommandSuccessResult => Created(new Uri($"/legacy/project/{id}", UriKind.Relative), null),
 				NotFoundCommandResult => NotFound(),
 				_ => throw new NotImplementedException()
 			};
+		}
+
+
+		[HttpGet("{id:int}/school-improvement-plans")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<List<SchoolImprovementPlanServiceModel>>> GetSchooImprovementPlans(int id, CancellationToken cancellationToken)
+		{ 
+			var project = await _conversionProjectQueryService.GetConversionProject(id, cancellationToken);
+			if (project == null)
+
+			{
+				return NotFound($"Project with ID {id} not found.");
+			}
+
+			var schoolImprovementPlans = await _conversionProjectQueryService.GetSchoolImprovementPlansByConversionProjectId(id, cancellationToken);
+
+			return Ok(schoolImprovementPlans);
 		}
 	}
 }

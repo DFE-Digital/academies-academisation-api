@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 
 		public async Task<CommandResult> Handle(ConversionProjectDeleteNoteCommand note, CancellationToken cancellationToken)
 		{
-			IProject? project = await _conversionProjectRepository.GetConversionProject(note.ProjectId);
+			IProject? project = await _conversionProjectRepository.GetConversionProject(note.ProjectId, cancellationToken);
 
 			if (project is null)
 			{

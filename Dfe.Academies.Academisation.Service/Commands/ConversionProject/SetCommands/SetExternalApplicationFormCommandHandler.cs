@@ -19,7 +19,7 @@ public class SetExternalApplicationFormCommandHandler : IRequestHandler<SetExter
 
 	public async Task<CommandResult> Handle(SetExternalApplicationFormCommand request, CancellationToken cancellationToken)
 	{
-		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id, cancellationToken);
 
 		if (existingProject is null)
 		{

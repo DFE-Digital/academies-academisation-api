@@ -19,7 +19,7 @@ public class SetIncomingTrustCommandHandler : IRequestHandler<SetIncomingTrustCo
 
 	public async Task<CommandResult> Handle(SetIncomingTrustCommand request, CancellationToken cancellationToken)
 	{
-		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id, cancellationToken);
 
 		if (existingProject is null)
 		{

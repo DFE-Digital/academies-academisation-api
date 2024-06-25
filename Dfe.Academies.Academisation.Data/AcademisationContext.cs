@@ -13,6 +13,7 @@ using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data;
@@ -164,16 +165,13 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	private void ConfigureSchoolImprovementPlans(EntityTypeBuilder<SchoolImprovementPlan> SchoolImprovementPlanConfiguration)
 	{
+		var converter = new EnumListJsonValueConverter<SchoolImprovementPlanArranger>();
+		var comparer = new ListValueComparer<SchoolImprovementPlanArranger>();
+
 		SchoolImprovementPlanConfiguration.ToTable("SchoolImprovementPlans", DEFAULT_SCHEMA);
 		SchoolImprovementPlanConfiguration.HasKey(a => a.Id);
 
-		SchoolImprovementPlanConfiguration.Property(x => x.ArrangedBy).HasConversion(
-		v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-		v => JsonSerializer.Deserialize<List<SchoolImprovementPlanArranger>>(v, (JsonSerializerOptions)null),
-		new ValueComparer<IList<SchoolImprovementPlanArranger>>(
-			(c1, c2) => c1.SequenceEqual(c2),
-			c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-			c => c.ToList()));
+		SchoolImprovementPlanConfiguration.Property(x => x.ArrangedBy).HasConversion(converter).Metadata.SetValueComparer(comparer);
 
 		SchoolImprovementPlanConfiguration.Property(x => x.ExpectedEndDate).HasConversion<string>();
 		SchoolImprovementPlanConfiguration.Property(x => x.ConfidenceLevel).HasConversion<string>();
@@ -793,5 +791,27 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		trustKeyPersonRoleConfiguration.ToTable("ApplicationFormTrustKeyPersonRole", DEFAULT_SCHEMA);
 		trustKeyPersonRoleConfiguration.HasKey(a => a.Id);
 		trustKeyPersonRoleConfiguration.Property<int?>("ApplicationFormTrustKeyPersonRoleId").IsRequired(false);
+	}
+}
+
+public class EnumListJsonValueConverter<T> : ValueConverter<List<T>, string> where T : Enum
+{
+	public EnumListJsonValueConverter() : base(
+
+	  v => JsonSerializer
+		.Serialize(v.Select(e => e.ToString()).ToList(), (JsonSerializerOptions)null),
+
+	  v => v.IsNullOrEmpty() ? new List<T>() : JsonSerializer
+		.Deserialize<List<string>>(v , (JsonSerializerOptions)null)
+		.Select(e => (T)Enum.Parse(typeof(T), e)).ToList())
+	{
+	}
+}
+
+public class ListValueComparer<T> : ValueComparer<ICollection<T>>
+{
+	public ListValueComparer() : base((c1, c2) => c1.SequenceEqual(c2),
+	   c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), c => c.ToList())
+	{
 	}
 }

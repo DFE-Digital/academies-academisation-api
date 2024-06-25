@@ -7,11 +7,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SchoolI
 	public record ConversionProjectAddSchoolImprovementPlanCommand(
 		int ProjectId,
 		List<SchoolImprovementPlanArranger> ArrangedBy,
-		string ArrangedByOther,
+		string? ArrangedByOther,
 		string ProvidedBy,
 		DateTime StartDate,
 		SchoolImprovementPlanExpectedEndDate ExpectedEndDate,
-		DateTime ExpectedEndDateOther,
+		DateTime? ExpectedEndDateOther,
 		SchoolImprovementPlanConfidenceLevel ConfidenceLevel,
-		string PlanComments) : IRequest<CommandResult>;
+		string? PlanComments) : IRequest<CommandResult>;
 }

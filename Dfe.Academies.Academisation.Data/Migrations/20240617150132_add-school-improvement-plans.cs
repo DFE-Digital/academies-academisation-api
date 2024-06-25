@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     ArrangedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ArrangedByOther = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ArrangedByOther = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProvidedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpectedEndDate = table.Column<string>(type: "nvarchar(max)", nullable: false),

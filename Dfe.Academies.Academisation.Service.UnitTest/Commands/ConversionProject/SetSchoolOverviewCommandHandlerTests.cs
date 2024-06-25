@@ -60,7 +60,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		public async Task Handle_ReturnsNotFound_WhenProjectDoesNotExist()
 		{
 			var command = CreateValidSetSchoolOverviewCommand();
-			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id))
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, default))
 											.ReturnsAsync(null as Project);
 
 			var result = await _handler.Handle(command, CancellationToken.None);
@@ -73,7 +73,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		{
 			var command = CreateValidSetSchoolOverviewCommand();
 			var existingProject = CreateMockProject();
-			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id))
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, default))
 											.ReturnsAsync(existingProject);
 
 			var result = await _handler.Handle(command, CancellationToken.None);

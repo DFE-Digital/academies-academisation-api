@@ -19,7 +19,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 
 		public async Task<CommandResult> Handle(SetSchoolOverviewCommand request, CancellationToken cancellationToken)
 		{
-			var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id);
+			var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id, cancellationToken);
 
 			if (existingProject is null)
 			{

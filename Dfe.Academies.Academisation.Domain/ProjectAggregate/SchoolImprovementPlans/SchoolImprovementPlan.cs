@@ -8,7 +8,7 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate
 	{
 		public SchoolImprovementPlan(int projectId,
 			List<SchoolImprovementPlanArranger> arrangedBy,
-			string arrangedByOther,
+			string? arrangedByOther,
 			string providedBy,
 			DateTime startDate,
 			SchoolImprovementPlanExpectedEndDate expectedEndDate,
@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate
 		public int ProjectId { get; private set; }
 
 		public List<SchoolImprovementPlanArranger> ArrangedBy { get; private set; }
-		public string ArrangedByOther { get; private set; }
+		public string? ArrangedByOther { get; private set; }
 		public string ProvidedBy { get; private set; }
 		public DateTime StartDate { get; private set; }
 		public SchoolImprovementPlanExpectedEndDate ExpectedEndDate { get; private set; }

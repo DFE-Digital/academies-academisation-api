@@ -668,7 +668,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ArrangedByOther")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConfidenceLevel")

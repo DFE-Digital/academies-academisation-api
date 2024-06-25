@@ -17,7 +17,7 @@ public class SetDeletedAtCommandHandler : IRequestHandler<SetDeletedAtCommand, C
 
 	public async Task<CommandResult> Handle(SetDeletedAtCommand request, CancellationToken cancellationToken)
 	{
-		var existingProject = await _conversionProjectRepository.GetConversionProject(request.ProjectId);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(request.ProjectId, cancellationToken);
 
 		if (existingProject is null)
 		{

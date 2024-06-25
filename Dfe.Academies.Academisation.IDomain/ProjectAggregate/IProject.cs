@@ -50,11 +50,11 @@ public interface IProject
 	void AddNote(string subject, string note, string author, DateTime date);
 	void RemoveNote(int id);
 	void AddSchoolImprovementPlan(List<SchoolImprovementPlanArranger> arrangedBy,
-			string arrangedByOther,
+			string? arrangedByOther,
 			string providedBy,
 			DateTime startDate,
 			SchoolImprovementPlanExpectedEndDate expectedEndDate,
-			DateTime expectedEndDateOther,
+			DateTime? expectedEndDateOther,
 			SchoolImprovementPlanConfidenceLevel confidenceLevel,
-			string planComments);
+			string? planComments);
 }
