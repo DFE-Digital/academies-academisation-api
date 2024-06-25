@@ -20,11 +20,9 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.Service.Behaviours;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
-using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
-using Dfe.Academies.Academisation.Service.DomainEventHandlers;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.Filters;
@@ -104,7 +102,6 @@ builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectReposi
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(OpeningDateChangedDomainEventHandler).Assembly));
 
 
 // Queries and services
@@ -145,8 +142,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).GetTypeInfo().Assembly));
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!));
+
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateLoanCommandHandler).GetTypeInfo().Assembly));
 
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));

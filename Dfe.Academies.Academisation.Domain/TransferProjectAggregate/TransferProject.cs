@@ -53,14 +53,19 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 				{
 					var oldDate = _targetDateForTransfer;
 					_targetDateForTransfer = value;
-					AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, _targetDateForTransfer, DateTime.UtcNow));
+					if (oldDate != null)
+					{
+						AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, _targetDateForTransfer, DateTime.UtcNow));
+					}
 				}
 			}
 		}
 		public DateTime? HtbDate { get; private set; }
+		public DateTime? PreviousAdvisoryBoardDate { get; private set; }
 		public bool? HasTransferFirstDiscussedDate { get; private set; }
 		public bool? HasTargetDateForTransfer { get; private set; }
 		public bool? HasHtbDate { get; private set; }
+		public bool? TransferDatesSectionIsCompleted { get; private set; }
 		public string? ProjectRationale { get; private set; }
 		public string? TrustSponsorRationale { get; private set; }
 		public string? State { get; private set; }
@@ -159,10 +164,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			LegalRequirementsSectionIsCompleted = isCompleted;
 		}
 
-		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer)
+		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted)
 		{
 			HtbDate = advisoryBoardDate;
+			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;
 			TargetDateForTransfer = expectedDateForTransfer;
+			TransferDatesSectionIsCompleted = isCompleted;
 		}
 
 		public void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)

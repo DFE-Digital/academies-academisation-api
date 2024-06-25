@@ -16,8 +16,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		private readonly static string _incomingTrustUkprn = "23456789";
 		private readonly static string _incomingTrustName = "_incomingTrustName";
 
-		private readonly List<TransferringAcademy> _academies = new List<TransferringAcademy>() { 
-			new TransferringAcademy(_incomingTrustUkprn, _incomingTrustName, "academy1", "region", "local authority"), 
+		private readonly List<TransferringAcademy> _academies = new List<TransferringAcademy>() {
+			new TransferringAcademy(_incomingTrustUkprn, _incomingTrustName, "academy1", "region", "local authority"),
 			new TransferringAcademy(_incomingTrustUkprn, _incomingTrustName, "academy2", "region", "local authority") };
 
 		private readonly bool _isFormAMat = true;
@@ -337,9 +337,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Arrange
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var advisoryBoardDate = DateTime.UtcNow;
+			var previousAdvisoryBoardDate = DateTime.UtcNow;
 			var expectedDateForTransfer = DateTime.UtcNow.AddMonths(1);
 			// Act
-			transferProject.SetTransferDates(advisoryBoardDate, expectedDateForTransfer);
+			transferProject.SetTransferDates(advisoryBoardDate, previousAdvisoryBoardDate, expectedDateForTransfer, true);
 
 			// Assert
 			transferProject.HtbDate.Should().Be(advisoryBoardDate);
@@ -450,7 +451,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
-			private List<TransferringAcademy>  _transferringAcademies = new List<TransferringAcademy>() { 
+			private List<TransferringAcademy> _transferringAcademies = new List<TransferringAcademy>() {
 				new TransferringAcademy("11110000", "in trust", "22221111", "", ""),
 				new TransferringAcademy("11110000", "in trust", "33331111", "", ""),
 			};

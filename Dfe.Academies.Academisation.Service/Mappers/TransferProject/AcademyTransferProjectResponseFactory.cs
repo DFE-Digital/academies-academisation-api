@@ -53,7 +53,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				TargetDateForTransfer =
 					model.TargetDateForTransfer?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
 				HtbDate = model.HtbDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+				PreviousAdvisoryBoardDate = model.PreviousAdvisoryBoardDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
 				HasHtbDate = model.HasHtbDate,
+				IsCompleted = model.TransferDatesSectionIsCompleted,
 				HasTargetDateForTransfer = model.HasTargetDateForTransfer,
 				HasTransferFirstDiscussedDate = model.HasTransferFirstDiscussedDate
 			};

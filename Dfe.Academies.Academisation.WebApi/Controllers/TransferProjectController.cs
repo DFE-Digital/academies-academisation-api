@@ -269,7 +269,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			_logger.LogInformation($"Getting transfer project, urn: {urn}");
 
-			var result = await _transferProjectQueryService.GetByUrn(urn).ConfigureAwait(false);
+			AcademyTransferProjectResponse? result = await _transferProjectQueryService.GetByUrn(urn).ConfigureAwait(false);
 
 			return result is null ? NotFound() : Ok(result);
 		}
