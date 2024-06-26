@@ -4,7 +4,6 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
@@ -18,10 +17,10 @@ public class LegacyProjectListGetTests
 	private readonly ProjectController _subject;
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new();
-
+	private readonly IMediator _mediator;
 	public LegacyProjectListGetTests()
 	{
-		_context = new TestProjectContext().CreateContext();
+		_context = new TestProjectContext(_mediator).CreateContext();
 
 		_subject = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 	}

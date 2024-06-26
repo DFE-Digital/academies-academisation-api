@@ -4,6 +4,7 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -15,9 +16,10 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 	private readonly Fixture _fixture = new();
 	private readonly AdvisoryBoardDecisionRepository _repo;
+	private readonly IMediator _mediator;
 	public ConversionAdvisoryBoardDecisionUpdateTests()
 	{
-		_context = new TestAdvisoryBoardDecisionContext().CreateContext();
+		_context = new TestAdvisoryBoardDecisionContext(_mediator).CreateContext();
 		_repo = new AdvisoryBoardDecisionRepository(_context);
 	}
 

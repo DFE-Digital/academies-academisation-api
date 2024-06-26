@@ -51,7 +51,7 @@ public class ApplicationSubmitTests
 	private readonly Mock<IMediator> _mediator;
 	public ApplicationSubmitTests()
 	{
-		_context = new TestApplicationContext().CreateContext();
+		_context = new TestApplicationContext(_mediator.Object).CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationRepo = new ApplicationRepository(_context, _mapper.Object);

@@ -22,6 +22,8 @@
 		string? HighProfileFurtherSpecification { get; }
 		bool? HighProfileShouldBeConsidered { get; }
 		DateTime? HtbDate { get; }
+		DateTime? PreviousAdvisoryBoardDate { get; }
+		bool? TransferDatesSectionIsCompleted { get; }
 		int Id { get; }
 		string? IncomingTrustAgreement { get; }
 		IReadOnlyCollection<IIntendedTransferBenefit> IntendedTransferBenefits { get; }
@@ -57,7 +59,7 @@
 		void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted);
 		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted);
 		void SetStatus(string status);
-		void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer);
+		void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy, List<ReasonChange> reasonsChanged);
 		void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation);
 		void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered, List<string> selectedBenefits, string? otherBenefitValue, bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification, bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification, bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification, bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification, bool? isCompleted);
 		void SetGeneralInformation(string recommendation, string author);

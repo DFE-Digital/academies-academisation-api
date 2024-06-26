@@ -1,23 +1,38 @@
 {
-  "name": "academies-academisation-api",
+  "name": "academies-academisation-api-tests",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automated regression tests for the Academisation API",
   "main": "index.js",
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
-  "keywords": [],
-  "author": "Dan Good",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DFE-Digital/academies-academisation-api.git"
+  },
+  "keywords": [
+    "api",
+    "testing",
+    "cypress"
+  ],
+  "contributors": [
+    "Dan Good",
+    "Chris Sherlock"
+  ],
   "license": "ISC",
-  "dependencies": {
-    "cypress": "^13.0.0",
-    "zaproxy": "^2.0.0-rc.2"
+  "bugs": {
+    "url": "https://github.com/DFE-Digital/academies-academisation-api/issues"
   },
+  "homepage": "https://github.com/DFE-Digital/academies-academisation-api/CypressTests#readme",
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^2.2.1",
+    "cypress": "^13.11.0",
+    "cypress-plugin-api": "^2.11.1",
     "dotenv": "^16.3.1",
-    "eslint": "^8.38.0",
-    "eslint-plugin-cypress": "^3.0.0"
+    "eslint": "^8.57.0",
+    "eslint-plugin-cypress": "^3.0.0",
+    "zaproxy": "^2.0.0-rc.5"
   }
 }

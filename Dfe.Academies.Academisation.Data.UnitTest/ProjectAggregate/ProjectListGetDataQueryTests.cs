@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using MediatR;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate;
@@ -19,10 +18,10 @@ public class ProjectsListGetDataQueryTests
 
 	private readonly ConversionProjectRepository _subject;
 	private readonly AcademisationContext _context;
-
+	private readonly IMediator _mediator;
 	public ProjectsListGetDataQueryTests()
 	{
-		_context = new TestProjectContext().CreateContext();
+		_context = new TestProjectContext(_mediator).CreateContext();
 		_subject = new ConversionProjectRepository(_context, null);
 	}
 
@@ -108,7 +107,7 @@ public class ProjectsListGetDataQueryTests
 	}
 
 
-   [Fact]
+	[Fact]
 	public async Task ProjectsExists_SearchMATProjects__ReturnsMATProjects()
 	{
 		// arrange
@@ -155,7 +154,7 @@ public class ProjectsListGetDataQueryTests
 			if (i % 2 == 0)
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
-			.With(p => p.SchoolName,$"{searchTerm} {i}" )
+			.With(p => p.SchoolName, $"{searchTerm} {i}")
 			.Create();
 
 
@@ -222,7 +221,7 @@ public class ProjectsListGetDataQueryTests
 			(_, Project project) = CreateTestProject();
 
 			User user = new User(Guid.NewGuid(), deliveryOfficer, "dave@dave.com");
-			if (i % 2 == 0) 
+			if (i % 2 == 0)
 			{
 				var projectDetails = _fixture.Build<ProjectDetails>()
 			.With(p => p.AssignedUser, user).Create();
@@ -288,15 +287,15 @@ public class ProjectsListGetDataQueryTests
 		for (int i = 0; i < 6; i++)
 		{
 			(_, Project project) = CreateTestProject(null);
-			if (i < 2) 
+			if (i < 2)
 			{
 
-			User user = new User(Guid.NewGuid(), deliveryOfficers[i], "dave@dave.com");
-			
+				User user = new User(Guid.NewGuid(), deliveryOfficers[i], "dave@dave.com");
+
 				var projectDetails = _fixture.Build<ProjectDetails>()
 			.With(p => p.AssignedUser, user).Create();
 
-			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));	
+				project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
 			}
 			_context.Projects.Add(project);
 		}
@@ -310,7 +309,7 @@ public class ProjectsListGetDataQueryTests
 		Assert.Multiple(
 			() => Assert.Equal(2, projects.Count),
 			() => Assert.Equal(deliveryOfficers[0], projects[0].Details.AssignedUser!.FullName),
-			() => Assert.Equal(deliveryOfficers[1], projects[1].Details.AssignedUser!.FullName)			
+			() => Assert.Equal(deliveryOfficers[1], projects[1].Details.AssignedUser!.FullName)
 		);
 	}
 
@@ -353,7 +352,7 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchProjectsByMultipleRegions__ReturnsProjects()
 	{
 		// arrange
-		string[] regions = { "east", "west"};
+		string[] regions = { "east", "west" };
 		for (int i = 0; i < 6; i++)
 		{
 			(_, Project project) = CreateTestProject(null);
@@ -363,7 +362,7 @@ public class ProjectsListGetDataQueryTests
 			.With(p => p.Region, regions[i])
 			.Create();
 
-			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));	 
+				project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
 			}
 			_context.Projects.Add(project);
 		}
@@ -449,9 +448,9 @@ public class ProjectsListGetDataQueryTests
 	public async Task ProjectsExists_SearchProjectsByAllCriteria__ReturnsProject()
 	{
 		// arrange
-		var ( deliveryOfficer, status, title, urn ) = ( "Dave", "active", "school", 1234 );
+		var (deliveryOfficer, status, title, urn) = ("Dave", "active", "school", 1234);
 
-		User user = new User(Guid.NewGuid(), deliveryOfficer,"dave@dave.com");
+		User user = new User(Guid.NewGuid(), deliveryOfficer, "dave@dave.com");
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -468,7 +467,7 @@ public class ProjectsListGetDataQueryTests
 			.With(p => p.Urn, urn)
 			.Create();
 
-			project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
+				project = AddProjectDetailToProject(projectDetails, DateTime.Now.AddDays(-i));
 
 			}
 			_context.Projects.Add(project);
@@ -495,31 +494,31 @@ public class ProjectsListGetDataQueryTests
 	{
 		// arrange
 		User user = new User(Guid.NewGuid(), "Dave", "dave@dave.com");
-		User emptyUser1 = new User(Guid.NewGuid(),"", "dave@dave1.com");
+		User emptyUser1 = new User(Guid.NewGuid(), "", "dave@dave1.com");
 		User emptyUser2 = new User(Guid.NewGuid(), "", "dave@dave2.com");
 		string[] deliveryOfficers = new[] { "Dave", "Not assigned" };
-		
+
 		(_, Project project1) = CreateTestProject(null);
 		var projectDetails1 = _fixture.Build<ProjectDetails>()
 		.With(p => p.AssignedUser, user).Create();
-			project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now);
-		
-		
+		project1 = AddProjectDetailToProject(projectDetails1, DateTime.Now);
+
+
 		(_, Project project2) = CreateTestProject(null);
-		     var projectDetails2 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser,emptyUser1).Create();
+		var projectDetails2 = _fixture.Build<ProjectDetails>()
+	   .With(p => p.AssignedUser, emptyUser1).Create();
 		project2 = AddProjectDetailToProject(projectDetails2, DateTime.Now.AddDays(-1));
 
 		(_, Project project3) = CreateTestProject(null);
-	        var projectDetails3 = _fixture.Build<ProjectDetails>()
-			.With(p => p.AssignedUser, emptyUser2).Create();
+		var projectDetails3 = _fixture.Build<ProjectDetails>()
+		.With(p => p.AssignedUser, emptyUser2).Create();
 		project3 = AddProjectDetailToProject(projectDetails3, DateTime.Now.AddDays(-2));
 
 		(_, Project project4) = CreateTestProject(null);
 		var projectDetails4 = _fixture.Build<ProjectDetails>().Create();
 		project4 = AddProjectDetailToProject(projectDetails4, DateTime.Now.AddDays(-3));
 
-		await _context.Projects.AddRangeAsync(project1, project2, project3, project4);	
+		await _context.Projects.AddRangeAsync(project1, project2, project3, project4);
 		await _context.SaveChangesAsync();
 
 		// act		
@@ -729,7 +728,7 @@ public class ProjectsListGetDataQueryTests
 
 	private Project AddProjectDetailToProject(ProjectDetails projectDetails, DateTime createdOnDate)
 	{
-	    var newProject = new Project(0, projectDetails, createdOnDate);
+		var newProject = new Project(0, projectDetails, createdOnDate);
 		return newProject;
 	}
 }
