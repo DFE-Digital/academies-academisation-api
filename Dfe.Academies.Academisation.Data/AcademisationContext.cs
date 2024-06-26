@@ -172,6 +172,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<AdvisoryBoardDAORevokedReasonDetails>(ConfigureAdvisoryBoardDecisionDAORevokedReason);
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
+		modelBuilder.Entity<OpeningDateHistory>(ConfigureOpeningDateHistory);
 
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
 		modelBuilder.Entity<TransferProject>(ConfigureTransferProject);
@@ -179,6 +180,24 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<TransferringAcademy>(ConfigureTransferringAcademy);
 
 		base.OnModelCreating(modelBuilder);
+	}
+	private void ConfigureOpeningDateHistory(EntityTypeBuilder<OpeningDateHistory> builder)
+	{
+		builder.ToTable("OpeningDateHistories", DEFAULT_SCHEMA);
+		builder.HasKey(e => e.Id);
+
+		builder.Property(e => e.EntityType).IsRequired();
+		builder.Property(e => e.ChangedAt).IsRequired();
+
+		// Configure ReasonsChanged as a complex type
+		builder.Property(e => e.ReasonsChanged)
+			.HasConversion(
+				v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+				v => JsonSerializer.Deserialize<List<ReasonChange>>(v, (JsonSerializerOptions)null),
+				new ValueComparer<List<ReasonChange>>(
+					(c1, c2) => c1.SequenceEqual(c2),
+					c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+					c => c.ToList()));
 	}
 	private static void ConfigureFormAMatProject(EntityTypeBuilder<FormAMatProject> formAMatProjectConfiguration)
 	{

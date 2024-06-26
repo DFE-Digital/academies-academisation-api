@@ -148,7 +148,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			LegalRequirementsSectionIsCompleted = isCompleted;
 		}
 
-		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy, List<KeyValuePair<string, string>> reasonsChanged)
+		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy = default, List<ReasonChange> reasonsChanged = default)
 		{
 			HtbDate = advisoryBoardDate;
 			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;

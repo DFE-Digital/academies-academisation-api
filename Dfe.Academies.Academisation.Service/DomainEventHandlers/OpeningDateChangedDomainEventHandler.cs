@@ -1,29 +1,34 @@
 ﻿using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using MediatR;
 
-public class OpeningDateChangedDomainEventHandler : INotificationHandler<OpeningDateChangedDomainEvent>
+namespace Dfe.Academies.Academisation.Service.DomainEventHandlers
 {
-	private readonly AcademisationContext _context;
-
-	public OpeningDateChangedDomainEventHandler(AcademisationContext context)
+	public class OpeningDateChangedDomainEventHandler : INotificationHandler<OpeningDateChangedDomainEvent>
 	{
-		_context = context;
-	}
+		private readonly AcademisationContext _context;
 
-	public async Task Handle(OpeningDateChangedDomainEvent notification, CancellationToken cancellationToken)
-	{
-		var historyRecord = new OpeningDateHistory
+		public OpeningDateChangedDomainEventHandler(AcademisationContext context)
 		{
-			EntityId = notification.EntityId,
-			EntityType = notification.EntityType,
-			OldDate = notification.OldDate,
-			NewDate = notification.NewDate,
-			ChangedAt = notification.ChangedAt,
-			ChangedBy = notification.ChangedBy,
-			ReasonsChanged = notification.ReasonsChanged
-		};
+			_context = context;
+		}
 
-		_context.OpeningDateHistories.Add(historyRecord);
-		await _context.SaveChangesAsync(cancellationToken);
+		public async Task Handle(OpeningDateChangedDomainEvent notification, CancellationToken cancellationToken)
+		{
+			var historyRecord = new OpeningDateHistory
+			{
+				EntityId = notification.EntityId,
+				EntityType = notification.EntityType,
+				OldDate = notification.OldDate,
+				NewDate = notification.NewDate,
+				ChangedAt = notification.ChangedAt,
+				ChangedBy = notification.ChangedBy,
+				ReasonsChanged = notification.ReasonsChanged,
+			};
+
+
+			_context.OpeningDateHistories.Add(historyRecord);
+			await _context.SaveChangesAsync(cancellationToken);
+		}
 	}
 }

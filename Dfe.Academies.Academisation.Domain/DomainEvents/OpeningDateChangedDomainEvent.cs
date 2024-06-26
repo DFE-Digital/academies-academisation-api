@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
+using MediatR;
 
 public class OpeningDateChangedDomainEvent : INotification
 {
@@ -8,9 +9,9 @@ public class OpeningDateChangedDomainEvent : INotification
 	public DateTime? NewDate { get; }
 	public DateTime ChangedAt { get; }
 	public string ChangedBy { get; }
-	public List<KeyValuePair<string, string>> ReasonsChanged { get; }
+	public List<ReasonChange> ReasonsChanged { get; }
 
-	public OpeningDateChangedDomainEvent(int entityId, string entityType, DateTime? oldDate, DateTime? newDate, DateTime changedAt, string changedBy, List<KeyValuePair<string, string>> reasonsChanged)
+	public OpeningDateChangedDomainEvent(int entityId, string entityType, DateTime? oldDate, DateTime? newDate, DateTime changedAt, string changedBy, List<ReasonChange> reasonsChanged)
 	{
 		EntityId = entityId;
 		EntityType = entityType;

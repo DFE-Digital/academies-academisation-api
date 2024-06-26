@@ -41,6 +41,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public DateTime? NewDate { get; set; }
 		public DateTime ChangedAt { get; set; }
 		public string ChangedBy { get; set; }
-		public string ReasonForChangeDetails { get; set; }
+		public List<ReasonChange> ReasonsChanged { get; set; }
 	}
 }
