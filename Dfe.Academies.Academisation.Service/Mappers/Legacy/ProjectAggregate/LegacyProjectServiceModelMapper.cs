@@ -146,8 +146,8 @@ internal static class LegacyProjectServiceModelMapper
 
 			Notes = project.Notes?.ToProjectNoteServiceModels().ToList(),
 
+			ProposedConversionDate = project.Details.ProposedConversionDate,
 			ProjectDatesSectionComplete = project.Details.ProjectDatesSectionComplete,
-
 		};
 
 		return serviceModel;

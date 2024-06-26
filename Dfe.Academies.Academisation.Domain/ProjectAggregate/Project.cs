@@ -566,11 +566,12 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	}
 
-	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, bool? projectDatesSectionComplete)
+	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete)
 	{
 		// Update the respective properties in the Details object
 		this.Details.HeadTeacherBoardDate = advisoryBoardDate;
 		this.Details.PreviousHeadTeacherBoardDate = previousAdvisoryBoard;
+		this.Details.ProposedConversionDate = proposedConversionDate;
 		this.Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
 
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified

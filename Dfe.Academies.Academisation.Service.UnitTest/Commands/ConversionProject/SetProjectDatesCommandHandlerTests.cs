@@ -36,6 +36,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 				1,
 				date,
 				date.Value.AddDays(-1),
+				date.Value.AddDays(-3),
 				true
 			);
 		}

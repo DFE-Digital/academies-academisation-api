@@ -31,6 +31,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 			existingProject.SetProjectDates(
 				request.AdvisoryBoardDate,
 				request.PreviousAdvisoryBoard,
+				request.ProposedConversionDate,
 				request.ProjectDatesSectionComplete);
 
 			_conversionProjectRepository.Update(existingProject as Project);

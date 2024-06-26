@@ -35,6 +35,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
 	public DateTime? PreviousHeadTeacherBoardDate { get; set; }
 	public bool? ProjectDatesSectionComplete { get; set; }
+	public DateTime? ProposedConversionDate { get; set; }
 	public string? PreviousHeadTeacherBoardLink { get; init; }
 	public string? TrustReferenceNumber { get => _trustReferenceNumber; init => _trustReferenceNumber = value; }
 	private string? _trustReferenceNumber;
