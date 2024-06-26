@@ -6,7 +6,7 @@ using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregat
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
-using Dfe.Academies.Academisation.Domain.OpeningDateHistory;
+using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;

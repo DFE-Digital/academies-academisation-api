@@ -170,6 +170,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;
 			TargetDateForTransfer = expectedDateForTransfer;
 			TransferDatesSectionIsCompleted = isCompleted;
+			AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, _targetDateForTransfer, DateTime.UtcNow));
 		}
 
 		public void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)

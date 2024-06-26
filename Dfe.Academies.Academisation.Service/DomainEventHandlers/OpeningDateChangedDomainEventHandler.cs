@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Data;
-using Dfe.Academies.Academisation.Domain.OpeningDateHistory;
+using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.DomainEventHandlers
@@ -21,7 +21,8 @@ namespace Dfe.Academies.Academisation.Service.DomainEventHandlers
 				EntityType = notification.EntityType,
 				OldDate = notification.OldDate,
 				NewDate = notification.NewDate,
-				ChangedAt = notification.ChangedAt
+				ChangedAt = notification.ChangedAt,
+				ChangedBy = notification.ChangedBy
 			};
 
 			_context.OpeningDateHistories.Add(historyRecord);
