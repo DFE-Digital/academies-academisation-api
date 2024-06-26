@@ -7,11 +7,10 @@ public class OpeningDateChangedDomainEvent : INotification
 	public DateTime? OldDate { get; }
 	public DateTime? NewDate { get; }
 	public DateTime ChangedAt { get; }
-	public string ChangedBy { get; set; }
-	public string ReasonForChange { get; set; }
-	public string ReasonForChangeDetails { get; set; }
+	public string ChangedBy { get; }
+	public List<KeyValuePair<string, string>> ReasonsChanged { get; }
 
-	public OpeningDateChangedDomainEvent(int entityId, string entityType, DateTime? oldDate, DateTime? newDate, DateTime changedAt, string changedBy, string reasonForChange, string reasonForChangeDetails)
+	public OpeningDateChangedDomainEvent(int entityId, string entityType, DateTime? oldDate, DateTime? newDate, DateTime changedAt, string changedBy, List<KeyValuePair<string, string>> reasonsChanged)
 	{
 		EntityId = entityId;
 		EntityType = entityType;
@@ -19,7 +18,6 @@ public class OpeningDateChangedDomainEvent : INotification
 		NewDate = newDate;
 		ChangedAt = changedAt;
 		ChangedBy = changedBy;
-		ReasonForChange = reasonForChange;
-		ReasonForChangeDetails = reasonForChangeDetails;
+		ReasonsChanged = reasonsChanged;
 	}
 }
