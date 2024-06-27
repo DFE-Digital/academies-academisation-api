@@ -1,6 +1,7 @@
 {
     "plugins": [
-      "cypress"
+      "cypress",
+      "@stylistic"
     ],
     "rules": {
       "cypress/no-assigning-return-values": "error",
@@ -14,6 +15,7 @@
       "cypress/globals": true
     },
     "extends": [
-      "plugin:cypress/recommended"
+      "plugin:cypress/recommended",
+      "plugin:@stylistic/recommended-extends"
     ]
   }
