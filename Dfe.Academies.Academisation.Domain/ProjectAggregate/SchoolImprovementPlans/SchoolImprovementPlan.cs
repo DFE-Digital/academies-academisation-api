@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.Validations;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate
@@ -36,6 +37,18 @@ namespace Dfe.Academies.Academisation.Domain.ProjectAggregate
 		public DateTime? ExpectedEndDateOther { get; private set; }
 		public SchoolImprovementPlanConfidenceLevel ConfidenceLevel { get; private set; }
 		public string? PlanComments { get; private set; }
+
+		public void Update(List<SchoolImprovementPlanArranger> arrangedBy, string? arrangedByOther, string providedBy, DateTime startDate, SchoolImprovementPlanExpectedEndDate expectedEndDate, DateTime? expectedEndDateOther, SchoolImprovementPlanConfidenceLevel confidenceLevel, string? planComments)
+		{
+			ArrangedBy = arrangedBy;
+			ArrangedByOther = arrangedByOther;
+			ProvidedBy = providedBy;
+			StartDate = startDate;
+			ExpectedEndDate = expectedEndDate;
+			ExpectedEndDateOther = expectedEndDateOther;
+			ConfidenceLevel = confidenceLevel;
+			PlanComments = planComments;
+		}
 
 
 	}

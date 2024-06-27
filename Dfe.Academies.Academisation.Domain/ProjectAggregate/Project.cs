@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Collections.Generic;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
@@ -582,5 +583,16 @@ public class Project : Entity, IProject, IAggregateRoot
 		var newSchoolImprovementPan = new SchoolImprovementPlan(Id, arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
 
 		_schoolImprovementPlans.Add(newSchoolImprovementPan);
+	}
+
+	public void UpdateSchoolImprovementPlan(int id, List<SchoolImprovementPlanArranger> arrangedBy, string? arrangedByOther, string providedBy, DateTime startDate, SchoolImprovementPlanExpectedEndDate expectedEndDate, DateTime? expectedEndDateOther, SchoolImprovementPlanConfidenceLevel confidenceLevel, string? planComments)
+	{
+		var schoolImprovementPlan = _schoolImprovementPlans.SingleOrDefault(x => x.Id == id);
+
+		if (schoolImprovementPlan != null)
+		{
+			schoolImprovementPlan.Update(arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
+			
+		}
 	}
 }

@@ -334,8 +334,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("{id:int}/school-improvement-plans")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<List<SchoolImprovementPlanServiceModel>>> GetSchooImprovementPlans(int id, CancellationToken cancellationToken)
-		{ 
+		public async Task<ActionResult<IEnumerable<SchoolImprovementPlanServiceModel>>> GetSchooImprovementPlans(int id, CancellationToken cancellationToken)
+		{
 			var project = await _conversionProjectQueryService.GetConversionProject(id, cancellationToken);
 			if (project == null)
 
@@ -346,6 +346,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var schoolImprovementPlans = await _conversionProjectQueryService.GetSchoolImprovementPlansByConversionProjectId(id, cancellationToken);
 
 			return Ok(schoolImprovementPlans);
+		}
+
+		[HttpPut("{id:int}/school-improvement-plans")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> UpdateSchoolImprovementPlan(
+	int id,
+	ConversionProjectUpdateSchoolImprovementPlanCommand request)
+		{
+			if (request.ProjectId != id)
+			{
+				return BadRequest();
+			}
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
 		}
 	}
 }

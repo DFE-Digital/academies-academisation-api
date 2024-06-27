@@ -57,4 +57,5 @@ public interface IProject
 			DateTime? expectedEndDateOther,
 			SchoolImprovementPlanConfidenceLevel confidenceLevel,
 			string? planComments);
+	void UpdateSchoolImprovementPlan(int id, List<SchoolImprovementPlanArranger> arrangedBy, string? arrangedByOther, string providedBy, DateTime startDate, SchoolImprovementPlanExpectedEndDate expectedEndDate, DateTime? expectedEndDateOther, SchoolImprovementPlanConfidenceLevel confidenceLevel, string? planComments);
 }
