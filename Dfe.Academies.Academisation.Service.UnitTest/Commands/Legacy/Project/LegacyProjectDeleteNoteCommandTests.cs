@@ -63,7 +63,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 
 			Mock.Get(project).Setup(x => x.Notes).Returns(new List<ProjectNote> { note });
 
-			_repo.Setup(x => x.GetConversionProject(It.IsAny<int>())).ReturnsAsync(project);
+			_repo.Setup(x => x.GetConversionProject(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(project);
 
 			var command = System_under_test();
 

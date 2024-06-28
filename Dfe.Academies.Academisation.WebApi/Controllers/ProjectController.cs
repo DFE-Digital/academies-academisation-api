@@ -70,15 +70,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// Returns the project with the specified <paramref name="id"/>.
 		/// </summary>
 		/// <param name="id"></param>
+		/// <param name="cancellationToken"></param>
 		/// <returns><see cref="ConversionProjectServiceModel"/></returns>
 		/// <response code="200">The project with the specified ID was found and returned</response>
 		/// <response code="404">The project with the specified ID was not found</response>
 		[HttpGet("project/{id:int}", Name = "GetLegacyProject")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<ConversionProjectServiceModel>> Get(int id)
+		public async Task<ActionResult<ConversionProjectServiceModel>> Get(int id, CancellationToken cancellationToken)
 		{
-			ConversionProjectServiceModel? result = await _conversionProjectQueryService.GetConversionProject(id);
+			ConversionProjectServiceModel? result = await _conversionProjectQueryService.GetConversionProject(id, cancellationToken);
 			return result is null ? NotFound() : Ok(result);
 		}
 
@@ -88,6 +89,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		/// </summary>
 		/// <param name="id">The ID of the project to update</param>
 		/// <param name="projectUpdate">The partial data describing the changes</param>
+		/// <param name="cancellationToken"></param>
 		/// <exception cref="NotImplementedException"></exception>
 		/// <response code="200">The update was applied successfully and the updated project is returned</response>
 		/// <response code="400">The request failed validation and the errors are returned</response>
@@ -98,13 +100,14 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ConversionProjectServiceModel>> Patch(
 			int id,
-			ConversionProjectServiceModel projectUpdate)
+			ConversionProjectServiceModel projectUpdate,
+			CancellationToken cancellationToken)
 		{
 			CommandResult result = await _mediator.Send(new ConversionProjectUpdateCommand(id, projectUpdate));
 
 			return result switch
 			{
-				CommandSuccessResult => Ok(await _conversionProjectQueryService.GetConversionProject(id)),
+				CommandSuccessResult => Ok(await _conversionProjectQueryService.GetConversionProject(id, cancellationToken)),
 				NotFoundCommandResult => NotFound(),
 				CommandValidationErrorResult validationErrorResult =>
 					BadRequest(validationErrorResult.ValidationErrors),

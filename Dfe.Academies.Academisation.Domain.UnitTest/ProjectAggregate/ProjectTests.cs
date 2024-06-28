@@ -1,5 +1,9 @@
-﻿using AutoFixture;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoFixture;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using FluentAssertions;
 using Moq;
@@ -106,6 +110,59 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 			// Assert
 			project.Details.TrustReferenceNumber.Should().Be(trustReferrenceNumber);
 			project.Details.NameOfTrust.Should().Be(trustName);
+			this.mockRepository.VerifyAll();
+		}
+
+		[Fact]
+		public void AddSchoolImprovemmentPlan_WhenAddingOne_OnePlanIsAddedToCollection()
+		{
+			// Arrange
+			var project = this.CreateProject();
+			var arrangers = new List<SchoolImprovementPlanArranger>() { SchoolImprovementPlanArranger.LocalAuthority };
+			var startDate = DateTime.UtcNow;
+			// Act
+			project.AddSchoolImprovementPlan(arrangers, null, "trust ceo", startDate, SchoolImprovementPlanExpectedEndDate.ToConversion, null, SchoolImprovementPlanConfidenceLevel.High, null);
+
+			// Assert
+			project.SchoolImprovementPlans.Count().Should().Be(1);
+			var addedPlan = project.SchoolImprovementPlans.First();
+			addedPlan.ArrangedBy.Should().BeEquivalentTo(arrangers);
+			addedPlan.ArrangedByOther.Should().BeNull();
+			addedPlan.ProvidedBy.Should().Be("trust ceo");
+			addedPlan.StartDate.Should().Be(startDate);
+			addedPlan.ExpectedEndDate.Should().Be(SchoolImprovementPlanExpectedEndDate.ToConversion);
+			addedPlan.ExpectedEndDateOther.Should().BeNull();
+			addedPlan.ConfidenceLevel.Should().Be(SchoolImprovementPlanConfidenceLevel.High);
+			addedPlan.PlanComments.Should().BeNull();
+
+			this.mockRepository.VerifyAll();
+		}
+
+
+		[Fact]
+		public void UpdateSchoolImprovemmentPlan_WhenUpdatingOne_OnePlanIsUpdatedInCollection()
+		{
+			// Arrange
+			var project = this.CreateProject();
+			var arrangers = new List<SchoolImprovementPlanArranger>() { SchoolImprovementPlanArranger.LocalAuthority };
+			var startDate = DateTime.UtcNow;
+			// Act
+			project.AddSchoolImprovementPlan(arrangers, null, "trust ceo", startDate, SchoolImprovementPlanExpectedEndDate.ToConversion, null, SchoolImprovementPlanConfidenceLevel.High, null);
+			// could really do with been able to mock the collection out, this test is a little brittle
+			project.UpdateSchoolImprovementPlan(0, arrangers, null, "head teacher", startDate.AddDays(1), SchoolImprovementPlanExpectedEndDate.ToAdvisoryBoard, null, SchoolImprovementPlanConfidenceLevel.Medium, "test comments");
+
+			// Assert
+			project.SchoolImprovementPlans.Count().Should().Be(1);
+			var addedPlan = project.SchoolImprovementPlans.First();
+			addedPlan.ArrangedBy.Should().BeEquivalentTo(arrangers);
+			addedPlan.ArrangedByOther.Should().BeNull();
+			addedPlan.ProvidedBy.Should().Be("head teacher");
+			addedPlan.StartDate.Should().Be(startDate.AddDays(1));
+			addedPlan.ExpectedEndDate.Should().Be(SchoolImprovementPlanExpectedEndDate.ToAdvisoryBoard);
+			addedPlan.ExpectedEndDateOther.Should().BeNull();
+			addedPlan.ConfidenceLevel.Should().Be(SchoolImprovementPlanConfidenceLevel.Medium);
+			addedPlan.PlanComments.Should().Be("test comments");
+
 			this.mockRepository.VerifyAll();
 		}
 	}

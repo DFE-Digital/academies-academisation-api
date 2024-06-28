@@ -31,7 +31,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		public async Task Should_return_not_found_command_result_if_the_project_is_unknown()
 		{
 			_repo
-				.Setup(x => x.GetConversionProject(It.IsAny<int>()))
+				.Setup(x => x.GetConversionProject(It.IsAny<int>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((IProject?)null);
 
 			var command = System_under_test();
@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		{
 			IProject project = _fixture.Create<Domain.ProjectAggregate.Project>();
 
-			_repo.Setup(x => x.GetConversionProject(It.IsAny<int>()))
+			_repo.Setup(x => x.GetConversionProject(It.IsAny<int>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(project);
 
 			var command = System_under_test();

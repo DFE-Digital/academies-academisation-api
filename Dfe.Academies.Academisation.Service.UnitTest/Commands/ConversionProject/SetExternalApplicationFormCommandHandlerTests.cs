@@ -42,7 +42,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			var command = new SetFormAMatProjectReferenceCommand(projectId, formAMatProjectId);
 
 			this.mockConversionProjectRepository
-				.Setup(x => x.GetConversionProject(It.IsAny<int>()))
+				.Setup(x => x.GetConversionProject(It.IsAny<int>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((Project)null);
 			this.mockLogger.Setup(logger =>
 			logger.Log(
@@ -81,7 +81,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 						   .Returns(Task.FromResult(1));
 
 			this.mockConversionProjectRepository
-				.Setup(x => x.GetConversionProject(It.IsAny<int>()))
+				.Setup(x => x.GetConversionProject(It.IsAny<int>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(project);
 
 			this.mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Project>()))

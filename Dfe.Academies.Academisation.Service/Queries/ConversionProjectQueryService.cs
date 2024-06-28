@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
 
 namespace Dfe.Academies.Academisation.Service.Queries;
 
@@ -20,9 +21,9 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 		_formAMatProjectRepository = formAMatProjectRepository;
 	}
 
-	public async Task<ConversionProjectServiceModel?> GetConversionProject(int id)
+	public async Task<ConversionProjectServiceModel?> GetConversionProject(int id, CancellationToken cancellationToken)
 	{
-		var project = await this._conversionProjectRepository.GetConversionProject(id).ConfigureAwait(false);
+		var project = await this._conversionProjectRepository.GetConversionProject(id, cancellationToken).ConfigureAwait(false);
 
 		return project?.MapToServiceModel();
 
@@ -108,6 +109,26 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 			new User(project.AssignedUser?.Id ?? Guid.Empty, project.AssignedUser?.FullName ?? string.Empty, project.AssignedUser?.EmailAddress ?? string.Empty),
 			project.ReferenceNumber
 		)).ToList();
+
+		return serviceModels;
+	}
+
+	public async Task<IEnumerable<SchoolImprovementPlanServiceModel>> GetSchoolImprovementPlansByConversionProjectId(int id, CancellationToken cancellationToken)
+	{
+		var project = await _conversionProjectRepository.GetById(id);
+
+		var serviceModels = project.SchoolImprovementPlans.Select(x => new SchoolImprovementPlanServiceModel(
+			x.Id,
+			x.ProjectId,
+			x.ArrangedBy,
+			x.ArrangedByOther,
+			x.ProvidedBy,
+			x.StartDate,
+			x.ExpectedEndDate,
+			x.ExpectedEndDateOther,
+			x.ConfidenceLevel,
+			x.PlanComments,
+			x.CreatedOn));
 
 		return serviceModels;
 	}
