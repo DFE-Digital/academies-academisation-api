@@ -30,7 +30,7 @@ public class LegacyProjectUpdateCommandTests
 	{
 		// Arrange
 		var projectServiceModel = _fixture.Create<ConversionProjectServiceModel>();
-		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync((IProject?)null);
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id, default)).ReturnsAsync((IProject?)null);
 
 		// Act
 		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
@@ -49,7 +49,7 @@ public class LegacyProjectUpdateCommandTests
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
 		project.Setup(m => m.Update(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
 
-		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync(project.Object);		
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id, default)).ReturnsAsync(project.Object);		
 
 		// Act
 		var result = await _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default);
@@ -69,7 +69,7 @@ public class LegacyProjectUpdateCommandTests
 		project.SetupGet(m => m.Details).Returns(_fixture.Create<ProjectDetails>());
 		project.Setup(m => m.Update(It.IsAny<ProjectDetails>())).Returns(validationErrorResult);
 
-		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id)).ReturnsAsync(project.Object);
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id, default)).ReturnsAsync(project.Object);
 
 		// Act & Assert
 		await Assert.ThrowsAsync<NotImplementedException>(() => _subject.Handle(new ConversionProjectUpdateCommand(projectServiceModel.Id, projectServiceModel), default));		
@@ -83,7 +83,7 @@ public class LegacyProjectUpdateCommandTests
 		projectMock.Setup(x => x.Details).Returns(_fixture.Create<ProjectDetails>());
 		var projectServiceModel = _fixture.Create<ConversionProjectServiceModel>();
 		projectMock.Setup(x => x.Update(It.IsAny<ProjectDetails>())).Returns(new CommandSuccessResult());
-		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id))
+		_getDataQueryMock.Setup(x => x.GetConversionProject(projectServiceModel.Id, default))
 			.ReturnsAsync(projectMock.Object);
 
 		// Act

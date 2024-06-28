@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 
 
 namespace Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -15,6 +16,7 @@ public interface IProject
 	DateTime LastModifiedOn { get; }
 
 	public IReadOnlyCollection<IProjectNote> Notes { get; }
+	public IReadOnlyCollection<ISchoolImprovementPlan> SchoolImprovementPlans { get; }
 
 	public ProjectDetails Details { get; }
 
@@ -47,4 +49,13 @@ public interface IProject
 	void SetRoute(string route);
 	void AddNote(string subject, string note, string author, DateTime date);
 	void RemoveNote(int id);
+	void AddSchoolImprovementPlan(List<SchoolImprovementPlanArranger> arrangedBy,
+			string? arrangedByOther,
+			string providedBy,
+			DateTime startDate,
+			SchoolImprovementPlanExpectedEndDate expectedEndDate,
+			DateTime? expectedEndDateOther,
+			SchoolImprovementPlanConfidenceLevel confidenceLevel,
+			string? planComments);
+	void UpdateSchoolImprovementPlan(int id, List<SchoolImprovementPlanArranger> arrangedBy, string? arrangedByOther, string providedBy, DateTime startDate, SchoolImprovementPlanExpectedEndDate expectedEndDate, DateTime? expectedEndDateOther, SchoolImprovementPlanConfidenceLevel confidenceLevel, string? planComments);
 }

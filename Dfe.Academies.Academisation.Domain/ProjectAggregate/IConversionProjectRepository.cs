@@ -9,7 +9,7 @@ public interface IConversionProjectRepository : IRepository<Project>, IGenericRe
 	Task<(IEnumerable<IProject>, int)> SearchProjects(
 	IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default);
 
-	Task<IProject?> GetConversionProject(int id);
+	Task<IProject?> GetConversionProject(int id, CancellationToken cancellationToken);
 
 	Task<ProjectFilterParameters> GetFilterParameters();
 	Task<(IEnumerable<IProject> projects, int totalCount)> SearchProjectsV2(

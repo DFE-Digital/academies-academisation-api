@@ -14,9 +14,10 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<PagedDataResponse<FormAMatProjectServiceModel>?> GetFormAMatProjects(
 		IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, CancellationToken cancellationToken, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
 
-		Task<ConversionProjectServiceModel?> GetConversionProject(int id);
+		Task<ConversionProjectServiceModel?> GetConversionProject(int id, CancellationToken cancellationToken);
 		Task<FormAMatProjectServiceModel> GetFormAMatProjectById(int id, CancellationToken cancellationToken);
 		Task<ProjectFilterParameters> GetFilterParameters();
 		Task<IEnumerable<FormAMatProjectServiceModel>> SearchFormAMatProjectsByTermAsync(string searchTerm, CancellationToken cancellationToken);
+		Task<IEnumerable<SchoolImprovementPlanServiceModel>> GetSchoolImprovementPlansByConversionProjectId(int id, CancellationToken cancellationToken);
 	}
 }
