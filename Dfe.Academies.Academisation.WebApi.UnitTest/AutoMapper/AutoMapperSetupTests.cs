@@ -14,8 +14,8 @@ using Xunit;
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 {
 	public class AutoMapperSetupTests
-	{
-		private MockRepository mockRepository;
+    {
+        private MockRepository mockRepository;
 		private Fixture fixture;
 		private IMapper mapper;
 

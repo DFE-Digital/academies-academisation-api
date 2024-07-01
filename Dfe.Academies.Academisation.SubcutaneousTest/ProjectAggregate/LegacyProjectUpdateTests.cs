@@ -83,7 +83,7 @@ public class ProjectUpdateTests
 		updatedProject.Notes?.Clear();
 
 		// Act
-		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject, default);
 
 		// Assert
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(updateResult);
@@ -109,10 +109,10 @@ public class ProjectUpdateTests
 		updatedProject.Notes?.Clear();
 
 		// Act
-		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject, default);
 		DfeAssert.OkObjectResult(updateResult);
 
-		var getResult = await legacyProjectController.Get(updatedProject.Id);
+		var getResult = await legacyProjectController.Get(updatedProject.Id, default);
 
 		// Assert
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(getResult);
@@ -136,12 +136,12 @@ public class ProjectUpdateTests
 		};
 
 		// Act
-		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject);
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject, default);
 
 		// Assert
 		DfeAssert.OkObjectResult(updateResult);
 
-		var getResult = await legacyProjectController.Get(updatedProject.Id);
+		var getResult = await legacyProjectController.Get(updatedProject.Id, default);
 
 		(_, ConversionProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
 

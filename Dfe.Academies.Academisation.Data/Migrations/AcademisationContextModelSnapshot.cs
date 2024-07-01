@@ -696,6 +696,58 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("Project", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.SchoolImprovementPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ArrangedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ArrangedByOther")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConfidenceLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExpectedEndDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpectedEndDateOther")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PlanComments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProvidedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("SchoolImprovementPlans", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
                 {
                     b.Property<int>("Id")
@@ -2092,6 +2144,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.SchoolImprovementPlan", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", null)
+                        .WithMany("SchoolImprovementPlans")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
                 {
                     b.HasOne("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", null)
@@ -2148,6 +2209,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
                     b.Navigation("Notes");
+
+                    b.Navigation("SchoolImprovementPlans");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", b =>

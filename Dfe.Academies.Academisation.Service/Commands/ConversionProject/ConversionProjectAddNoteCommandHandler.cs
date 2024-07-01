@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 
 		public async Task<CommandResult> Handle(ConversionProjectAddNoteCommand model, CancellationToken cancellationToken)
 		{
-			IProject? project = await _conversionProjectRepository.GetConversionProject(model.ProjectId);
+			IProject? project = await _conversionProjectRepository.GetConversionProject(model.ProjectId, cancellationToken);
 
 			if (project is null)
 			{

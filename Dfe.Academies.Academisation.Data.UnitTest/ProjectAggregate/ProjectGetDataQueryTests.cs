@@ -33,7 +33,7 @@ public class ProjectGetDataQueryTests
 		await _context.SaveChangesAsync();
 
 		// act
-		var result = await _subject.GetConversionProject(newProject.Id);
+		var result = await _subject.GetConversionProject(newProject.Id, default);
 
 		// assert
 		Assert.NotNull(result);

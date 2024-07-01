@@ -17,7 +17,7 @@ public class SetFormAMatProjectReferenceCommandHandler : IRequestHandler<SetForm
 
 	public async Task<CommandResult> Handle(SetFormAMatProjectReferenceCommand request, CancellationToken cancellationToken)
 	{
-		var existingProject = await _conversionProjectRepository.GetConversionProject(request.ProjectId);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(request.ProjectId, cancellationToken);
 
 		if (existingProject is null)
 		{

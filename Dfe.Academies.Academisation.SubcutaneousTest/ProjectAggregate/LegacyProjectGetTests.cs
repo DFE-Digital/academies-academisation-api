@@ -34,7 +34,7 @@ public class ProjectGetTests
 		await _context.SaveChangesAsync();
 
 		// act
-		ActionResult<ConversionProjectServiceModel> result = await _projectController.Get(existingProject.Id);
+		ActionResult<ConversionProjectServiceModel> result = await _projectController.Get(existingProject.Id, default);
 
 		// assert
 		result.Result.Should().BeOfType<OkObjectResult>();

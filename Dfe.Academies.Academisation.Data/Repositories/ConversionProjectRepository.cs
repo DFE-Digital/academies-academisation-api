@@ -1,5 +1,6 @@
 ﻿
 using System.Globalization;
+using System.Linq;
 using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -182,15 +183,16 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return queryable;
 		}
 
-		public async Task<IProject?> GetConversionProject(int id)
+		public async Task<IProject?> GetConversionProject(int id, CancellationToken cancellationToken)
 		{
-			return await this.DefaultIncludes().SingleOrDefaultAsync(x => x.Id == id);
+			return await this.DefaultIncludes().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 		}
 
 		private IQueryable<Project> DefaultIncludes()
 		{
 			var x = _context.Projects
 				.Include(x => x.Notes)
+				.Include(x => x.SchoolImprovementPlans)
 				.AsQueryable();
 
 			return x;
