@@ -65,7 +65,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 		public void CanMap_FormTrust_MapFromDomainToServiceModel()
 		{
 			// Arrange
-			var formTrustDomainObj = this.fixture.Create<IFormTrust>();
+			IFormTrust formTrustDomainObj = this.fixture.Create<IFormTrust>();
 
 			// relying on the all details been set here by autofixture
 			var trustDetails = this.fixture.Create<FormTrustDetails>();

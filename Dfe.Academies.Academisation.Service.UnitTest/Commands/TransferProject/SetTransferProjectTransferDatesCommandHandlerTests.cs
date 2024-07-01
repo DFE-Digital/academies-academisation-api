@@ -33,7 +33,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 				TargetDateForTransfer = DateTime.UtcNow.AddMonths(1)
 			};
 
-			_transferProjectRepositoryMock.Setup(x => x.GetById(It.IsAny<int>()))!
+			_transferProjectRepositoryMock.Setup(x => x.GetByUrn(It.IsAny<int>()))
 				.ReturnsAsync((Domain.TransferProjectAggregate.TransferProject)null);
 
 			// Act
@@ -61,9 +61,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 				HtbDate = DateTime.UtcNow,
 				TargetDateForTransfer = DateTime.UtcNow.AddMonths(1)
 			};
+
 			// Create a transfer project to 'SetTransferDates' to
-			var transferringAcademies = new List<TransferringAcademy>() { new TransferringAcademy("23456789", "in trust", "34567890", "", "") };
+			var transferringAcademies = new List<TransferringAcademy>
+			{
+				new TransferringAcademy("23456789", "in trust", "34567890", "", "")
+			};
 			var transferProject = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", transferringAcademies, false, DateTime.Now);
+
 			// Mock Unit of work and Repository 
 			var unitOfWorkMock = new Mock<IUnitOfWork>();
 			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
@@ -71,9 +76,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			_transferProjectRepositoryMock.Setup(repo => repo.UnitOfWork)
 				.Returns(unitOfWorkMock.Object);
 
-			// Mock GetById to use our Transfer Project from above
+			// Mock GetByUrn to use our Transfer Project from above
 			_transferProjectRepositoryMock.Setup(x => x.GetByUrn(It.IsAny<int>())).ReturnsAsync(transferProject);
-
 
 			// Act
 			var result = await _handler.Handle(command, new CancellationToken(false));
@@ -87,5 +91,113 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			_transferProjectRepositoryMock.Verify(repo => repo.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()), Times.Once);
 		}
 
+		[Fact]
+		public async Task Handle_ShouldFireEvent_WhenTargetDateChanges()
+		{
+			// Arrange
+			var transferringAcademies = new List<TransferringAcademy>
+			{
+				new TransferringAcademy("23456789", "in trust", "34567890", "", "")
+			};
+
+			var project = Domain.TransferProjectAggregate.TransferProject.Create("12345", "Outgoing Trust", transferringAcademies, false, DateTime.UtcNow);
+			project.SetTransferDates(DateTime.UtcNow, DateTime.UtcNow, DateTime.Parse("2023-01-01"), false);
+
+			_transferProjectRepositoryMock.Setup(r => r.GetByUrn(It.IsAny<int>())).ReturnsAsync(project);
+
+			var command = new SetTransferProjectTransferDatesCommand
+			{
+				Urn = 1,
+				TargetDateForTransfer = DateTime.Parse("2023-12-31"),
+				ChangedBy = "TestUser"
+			};
+
+			// Mock Unit of work and Repository 
+			var unitOfWorkMock = new Mock<IUnitOfWork>();
+			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+				.Returns(Task.FromResult(1));  // Return Task<int> with a dummy value
+			_transferProjectRepositoryMock.Setup(repo => repo.UnitOfWork)
+				.Returns(unitOfWorkMock.Object);
+
+			// Act
+			var result = await _handler.Handle(command, CancellationToken.None);
+
+			// Assert
+			result.Should().BeOfType<CommandSuccessResult>();
+			Assert.Single(project.DomainEvents);
+			Assert.IsType<OpeningDateChangedDomainEvent>(project.DomainEvents.First());
+		}
+
+		[Fact]
+		public async Task Handle_ShouldNotFireEvent_WhenOldDateIsNull()
+		{
+			// Arrange
+			var transferringAcademies = new List<TransferringAcademy>
+			{
+				new TransferringAcademy("23456789", "in trust", "34567890", "", "")
+			};
+
+			var project = Domain.TransferProjectAggregate.TransferProject.Create("12345", "Outgoing Trust", transferringAcademies, false, DateTime.UtcNow);
+			project.SetTransferDates(DateTime.UtcNow, DateTime.UtcNow, null, false);
+
+			_transferProjectRepositoryMock.Setup(r => r.GetByUrn(It.IsAny<int>())).ReturnsAsync(project);
+
+			var command = new SetTransferProjectTransferDatesCommand
+			{
+				Urn = 1,
+				TargetDateForTransfer = DateTime.Parse("2023-12-31"),
+				ChangedBy = "TestUser"
+			};
+
+			// Mock Unit of work and Repository 
+			var unitOfWorkMock = new Mock<IUnitOfWork>();
+			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+				.Returns(Task.FromResult(1));  // Return Task<int> with a dummy value
+			_transferProjectRepositoryMock.Setup(repo => repo.UnitOfWork)
+				.Returns(unitOfWorkMock.Object);
+
+			// Act
+			var result = await _handler.Handle(command, CancellationToken.None);
+
+			// Assert
+			result.Should().BeOfType<CommandSuccessResult>();
+			Assert.Null(project.DomainEvents);
+		}
+
+		[Fact]
+		public async Task Handle_ShouldNotFireEvent_WhenDatesDoNotChange()
+		{
+			// Arrange
+			var transferringAcademies = new List<TransferringAcademy>
+			{
+				new TransferringAcademy("23456789", "in trust", "34567890", "", "")
+			};
+
+			var project = Domain.TransferProjectAggregate.TransferProject.Create("12345", "Outgoing Trust", transferringAcademies, false, DateTime.UtcNow);
+			project.SetTransferDates(DateTime.UtcNow, DateTime.UtcNow, DateTime.Parse("2023-12-31"), false);
+
+			_transferProjectRepositoryMock.Setup(r => r.GetByUrn(It.IsAny<int>())).ReturnsAsync(project);
+
+			var command = new SetTransferProjectTransferDatesCommand
+			{
+				Urn = 1,
+				TargetDateForTransfer = DateTime.Parse("2023-12-31"),
+				ChangedBy = "TestUser"
+			};
+
+			// Mock Unit of work and Repository 
+			var unitOfWorkMock = new Mock<IUnitOfWork>();
+			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+				.Returns(Task.FromResult(1));  // Return Task<int> with a dummy value
+			_transferProjectRepositoryMock.Setup(repo => repo.UnitOfWork)
+				.Returns(unitOfWorkMock.Object);
+
+			// Act
+			var result = await _handler.Handle(command, CancellationToken.None);
+
+			// Assert
+			result.Should().BeOfType<CommandSuccessResult>();
+			Assert.Null(project.DomainEvents);
+		}
 	}
 }
