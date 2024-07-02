@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -15,12 +15,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 	{
 		private readonly AcademisationContext _context;
 		private readonly Fixture _fixture = new();
-
+		private readonly IMediator _mediator;
 		private readonly ProjectUpdateDataCommand _subject;
 
 		public ProjectUpdateDataCommandTests()
 		{
-			_context = new TestProjectContext().CreateContext();
+			_context = new TestProjectContext(_mediator).CreateContext();
 			_subject = new ProjectUpdateDataCommand(_context);
 		}
 

@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -20,10 +21,10 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.Service.Behaviours;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
-using Dfe.Academies.Academisation.Service.Commands.Application.Trust;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
+using Dfe.Academies.Academisation.Service.Mappers.OpeningDateHistoryMapper;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using Dfe.Academies.Academisation.WebApi.Filters;
@@ -102,6 +103,9 @@ builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository
 builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
+builder.Services.AddScoped<IOpeningDateHistoryRepository, OpeningDateHistoryRepository>();
+
+
 
 // Queries and services
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
@@ -114,9 +118,11 @@ builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
 
+
 // utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<ICorrelationContext, CorrelationContext>();
+builder.Services.AddAutoMapper(typeof(OpeningDateHistoryMappingProfile).Assembly);
 
 // Factories
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
@@ -141,8 +147,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).GetTypeInfo().Assembly));
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(JoinTrustCommandHandler))!));
+
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateLoanCommandHandler).GetTypeInfo().Assembly));
 
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));

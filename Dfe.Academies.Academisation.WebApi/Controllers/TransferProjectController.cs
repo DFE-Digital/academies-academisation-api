@@ -1,10 +1,12 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
+using Dfe.Academies.Academisation.Service.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TramsDataApi.RequestModels.AcademyTransferProject;
@@ -269,7 +271,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			_logger.LogInformation($"Getting transfer project, urn: {urn}");
 
-			var result = await _transferProjectQueryService.GetByUrn(urn).ConfigureAwait(false);
+			AcademyTransferProjectResponse? result = await _transferProjectQueryService.GetByUrn(urn).ConfigureAwait(false);
 
 			return result is null ? NotFound() : Ok(result);
 		}
@@ -333,6 +335,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+		[HttpGet("{urn}/opening-date-history", Name = "GetOpeningDateHistoryForTransferProject")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<IEnumerable<OpeningDateHistoryDto>>> GetOpeningDateHistoryForTransferProject(int urn, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation($"Getting opening date history for transfer project with urn: {urn}");
 
+			var query = new GetOpeningDateHistoryQuery(nameof(TransferProject), urn);
+			var result = await _mediator.Send(query, cancellationToken);
+
+			if (result is null || !result.Any())
+			{
+				return NotFound();
+			}
+
+			return Ok(result);
+		}
 	}
 }

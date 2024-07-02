@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application.School;
 
 public class DeleteLoanCommandHandler : IRequestHandler<DeleteLoanCommand, CommandResult>
 {
-	private readonly IApplicationRepository _applicationRepository; 
+	private readonly IApplicationRepository _applicationRepository;
 
 	public DeleteLoanCommandHandler(IApplicationRepository applicationRepository)
 	{
@@ -27,8 +27,8 @@ public class DeleteLoanCommandHandler : IRequestHandler<DeleteLoanCommand, Comma
 
 		_applicationRepository.Update(existingApplication);
 
-		
-		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken) 
+
+		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken)
 			? new CommandSuccessResult()
 			: new BadRequestCommandResult();
 	}

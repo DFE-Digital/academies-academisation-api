@@ -5,7 +5,7 @@ using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
-	public class TransferProject : ITransferProject, IAggregateRoot
+	public class TransferProject : Entity, ITransferProject, IAggregateRoot
 	{
 		private TransferProject(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> transferringAcademies, bool? isFormAMat)
 		{
@@ -42,11 +42,14 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? TypeOfTransfer { get; private set; }
 		public string? OtherTransferTypeDescription { get; private set; }
 		public DateTime? TransferFirstDiscussed { get; private set; }
+
 		public DateTime? TargetDateForTransfer { get; private set; }
 		public DateTime? HtbDate { get; private set; }
+		public DateTime? PreviousAdvisoryBoardDate { get; private set; }
 		public bool? HasTransferFirstDiscussedDate { get; private set; }
 		public bool? HasTargetDateForTransfer { get; private set; }
 		public bool? HasHtbDate { get; private set; }
+		public bool? TransferDatesSectionIsCompleted { get; private set; }
 		public string? ProjectRationale { get; private set; }
 		public string? TrustSponsorRationale { get; private set; }
 		public string? State { get; private set; }
@@ -145,11 +148,22 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			LegalRequirementsSectionIsCompleted = isCompleted;
 		}
 
-		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? expectedDateForTransfer)
+		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy = default, List<ReasonChange> reasonsChanged = default)
 		{
 			HtbDate = advisoryBoardDate;
-			TargetDateForTransfer = expectedDateForTransfer;
+			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;
+			if (TargetDateForTransfer != expectedDateForTransfer)
+			{
+				var oldDate = TargetDateForTransfer;
+				TargetDateForTransfer = expectedDateForTransfer;
+				if (oldDate != null)
+				{
+					AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, TargetDateForTransfer, DateTime.UtcNow, changedBy, reasonsChanged));
+				}
+			}
+			TransferDatesSectionIsCompleted = isCompleted;
 		}
+
 
 		public void SetTransferringAcademiesSchoolData(string transferringAcademyUkprn, string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation)
 		{

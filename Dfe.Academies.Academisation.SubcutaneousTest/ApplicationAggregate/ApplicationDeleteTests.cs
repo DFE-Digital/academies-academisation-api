@@ -45,10 +45,10 @@ public class ApplicationDeleteTests
 	private readonly IConversionProjectRepository _conversionRepo;
 	private readonly Mock<IMapper> _mapper = new();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
-	private readonly Mock<IMediator> _mediator;
+	private readonly Mock<IMediator> _mediator = new();
 	public ApplicationDeleteTests()
 	{
-		_context = new TestApplicationContext().CreateContext();
+		_context = new TestApplicationContext(_mediator.Object).CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationRepo = new ApplicationRepository(_context, _mapper.Object);
@@ -85,9 +85,9 @@ public class ApplicationDeleteTests
 				return await applicationUpdateCommandHandler.Handle((ApplicationUpdateCommand)cmd, ct);
 			});
 
-        	var applicationDeleteCommandHandler = new ApplicationDeleteCommandHandler(_applicationRepo);
+		var applicationDeleteCommandHandler = new ApplicationDeleteCommandHandler(_applicationRepo);
 
-        _mediator.Setup(x => x.Send(It.IsAny<ApplicationDeleteCommand>(), It.IsAny<CancellationToken>()))
+		_mediator.Setup(x => x.Send(It.IsAny<ApplicationDeleteCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CommandResult>, CancellationToken>(async (cmd, ct) =>
 			{
 
@@ -133,8 +133,8 @@ public class ApplicationDeleteTests
 		// Act
 		var deleteResult = await applicationController.DeleteApplication(createdPayload.ApplicationId);
 
-        //Assert
-        Assert.IsAssignableFrom<OkObjectResult>(deleteResult);	
+		//Assert
+		Assert.IsAssignableFrom<OkObjectResult>(deleteResult);
 	}
 
 	[Fact]
@@ -147,22 +147,22 @@ public class ApplicationDeleteTests
 			_mediator.Object,
 			_applicationLogger);
 
-		ApplicationCreateCommand applicationCreateRequestModel =  new(
+		ApplicationCreateCommand applicationCreateRequestModel = new(
 			ApplicationType.FormAMat,
 			_fixture.Create<ContributorRequestModel>());
 		var createResult = await applicationController.Post(applicationCreateRequestModel, default);
 
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
-		
+
 		// Act
 		var deleteResult = await applicationController.DeleteApplication(createdPayload.ApplicationId);
 
-        //Assert
-        Assert.IsAssignableFrom<OkObjectResult>(deleteResult);	;
+		//Assert
+		Assert.IsAssignableFrom<OkObjectResult>(deleteResult); ;
 	}
 
-    [Fact]
+	[Fact]
 	public async Task ApplicationNotFound()
 	{
 		// Arrange
@@ -172,14 +172,14 @@ public class ApplicationDeleteTests
 			_mediator.Object,
 			_applicationLogger);
 
-		ApplicationCreateCommand applicationCreateRequestModel =  new(
+		ApplicationCreateCommand applicationCreateRequestModel = new(
 			ApplicationType.FormAMat,
 			_fixture.Create<ContributorRequestModel>());
 		var createResult = await applicationController.Post(applicationCreateRequestModel, default);
 
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
-		
+
 		// Act
 		var deleteResult = await applicationController.DeleteApplication(123);
 
@@ -209,18 +209,18 @@ public class ApplicationDeleteTests
 		Assert.NotNull(gotApplication);
 		// Act
 		var deleteResult = await applicationController.DeleteApplication(createdPayload.ApplicationId);
-		
-		 Assert.IsAssignableFrom<OkObjectResult>(deleteResult);	;
+
+		Assert.IsAssignableFrom<OkObjectResult>(deleteResult); ;
 
 		var deletedApplication = await _applicationQueryService.GetById(createdPayload.ApplicationId);
 
-        //Assert
+		//Assert
 
 		Assert.Null(deletedApplication);
-        
+
 	}
 
-        
+
 }
 
 

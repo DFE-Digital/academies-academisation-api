@@ -1,4 +1,6 @@
-﻿using AutoFixture;
+﻿using System;
+using System.Collections.Generic;
+using AutoFixture;
 using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
@@ -7,8 +9,6 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
@@ -19,12 +19,12 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 		private Fixture fixture;
 		private IMapper mapper;
 
-        public AutoMapperSetupTests()
-        {
-            this.mockRepository = new MockRepository(MockBehavior.Strict);
+		public AutoMapperSetupTests()
+		{
+			this.mockRepository = new MockRepository(MockBehavior.Strict);
 			this.fixture = new Fixture();
-			this.fixture.Customize(new AutoPopulatedMoqPropertiesCustomization());			
-			
+			this.fixture.Customize(new AutoPopulatedMoqPropertiesCustomization());
+
 			var mapperConfig = new MapperConfiguration(cfg =>
 			{
 				cfg.AddProfile<AutoMapperProfile>();
@@ -33,7 +33,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 			// checks the config is valid
 			mapperConfig.AssertConfigurationIsValid();
 
-			mapper =  new Mapper(mapperConfig);
+			mapper = new Mapper(mapperConfig);
 		}
 
 
@@ -65,7 +65,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 		public void CanMap_FormTrust_MapFromDomainToServiceModel()
 		{
 			// Arrange
-			var formTrustDomainObj = this.fixture.Create<IFormTrust>();
+			IFormTrust formTrustDomainObj = this.fixture.Create<IFormTrust>();
 
 			// relying on the all details been set here by autofixture
 			var trustDetails = this.fixture.Create<FormTrustDetails>();
@@ -78,7 +78,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.AutoMapper
 
 			Mock.Get(formTrustDomainObj).Setup(x => x.Id).Returns(10101);
 			Mock.Get(formTrustDomainObj).Setup(x => x.TrustDetails).Returns(trustDetails);
-			Mock.Get(formTrustDomainObj).Setup(x => x.KeyPeople).Returns(new List<ITrustKeyPerson>{keyPerson}.AsReadOnly());
+			Mock.Get(formTrustDomainObj).Setup(x => x.KeyPeople).Returns(new List<ITrustKeyPerson> { keyPerson }.AsReadOnly());
 
 			// Act
 			var result = mapper.Map<ApplicationFormTrustServiceModel>(formTrustDomainObj);

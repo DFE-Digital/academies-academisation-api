@@ -36,14 +36,14 @@ public class SetAdditionalDetailsCommandHandler : IRequestHandler<SetAdditionalD
 			request.ResolutionConsentFolderIdentifier,
 			request.ProtectedCharacteristics,
 			request.FurtherInformation);
-		
+
 		if (result is not CommandSuccessResult)
 		{
 			return result;
 		}
-			
+
 		_applicationRepository.Update(existingApplication);
-		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(new CancellationToken()) 
+		return await _applicationRepository.UnitOfWork.SaveEntitiesAsync(new CancellationToken())
 			? new CommandSuccessResult()
 			: new BadRequestCommandResult();
 	}

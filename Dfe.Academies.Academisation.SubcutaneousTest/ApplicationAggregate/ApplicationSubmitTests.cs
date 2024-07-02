@@ -48,10 +48,10 @@ public class ApplicationSubmitTests
 	private readonly IConversionProjectRepository _conversionRepo;
 	private readonly Mock<IMapper> _mapper = new();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
-	private readonly Mock<IMediator> _mediator;
+	private readonly Mock<IMediator> _mediator = new();
 	public ApplicationSubmitTests()
 	{
-		_context = new TestApplicationContext().CreateContext();
+		_context = new TestApplicationContext(_mediator.Object).CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationRepo = new ApplicationRepository(_context, _mapper.Object);

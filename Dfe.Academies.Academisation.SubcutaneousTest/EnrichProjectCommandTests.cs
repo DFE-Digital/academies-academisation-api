@@ -12,6 +12,7 @@ using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -31,10 +32,10 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		private readonly EstablishmentDto _establishment;
 
 		private readonly Fixture _fixture = new Fixture();
-
+		private readonly IMediator _mediator;
 		public EnrichProjectCommandTests()
 		{
-			_context = new TestProjectContext().CreateContext();
+			_context = new TestProjectContext(_mediator).CreateContext();
 
 			// mock establishment
 			_establishment = _fixture.Create<EstablishmentDto>();
