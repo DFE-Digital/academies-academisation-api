@@ -1,10 +1,12 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Dfe.Academies.Academisation.Service.Commands.FormAMat;
+using Dfe.Academies.Academisation.Service.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -352,6 +354,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 					BadRequest(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException()
 			};
+		}
+
+		[HttpGet("{id}/conversion-date-history", Name = "GetOpeningDateHistoryForConversionProject")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<IEnumerable<OpeningDateHistoryDto>>> GetOpeningDateHistoryForConversionProject(int id, CancellationToken cancellationToken)
+		{
+			var query = new GetOpeningDateHistoryQuery(nameof(Project), id);
+			var result = await _mediator.Send(query, cancellationToken);
+
+			if (result is null || !result.Any())
+			{
+				return NotFound();
+			}
+
+			return Ok(result);
 		}
 
 	}

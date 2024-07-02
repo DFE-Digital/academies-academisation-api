@@ -32,7 +32,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 				request.AdvisoryBoardDate,
 				request.PreviousAdvisoryBoard,
 				request.ProposedConversionDate,
-				request.ProjectDatesSectionComplete);
+				request.ProjectDatesSectionComplete,
+				request.ReasonsChanged,
+				request.ChangedBy);
 
 			_conversionProjectRepository.Update(existingProject as Project);
 			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

@@ -5,12 +5,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 {
 	public class SetProjectDatesCommand : IRequest<CommandResult>
 	{
-		public SetProjectDatesCommand(int id, DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete)
+		public SetProjectDatesCommand(int id, DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, List<ReasonChange>? reasonsChanged, string? changedBy, bool? projectDatesSectionComplete)
 		{
 			Id = id;
 			AdvisoryBoardDate = advisoryBoardDate;
 			PreviousAdvisoryBoard = previousAdvisoryBoard;
 			ProposedConversionDate = proposedConversionDate;
+			ReasonsChanged = reasonsChanged;
+			ChangedBy = changedBy;
 			ProjectDatesSectionComplete = projectDatesSectionComplete;
 		}
 
@@ -18,6 +20,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 		public DateTime? AdvisoryBoardDate { get; set; }
 		public DateTime? PreviousAdvisoryBoard { get; set; }
 		public DateTime? ProposedConversionDate { get; set; }
+		public List<ReasonChange>? ReasonsChanged { get; set; }
+		public string? ChangedBy { get; set; }
 		public bool? ProjectDatesSectionComplete { get; set; }
 	}
 }
