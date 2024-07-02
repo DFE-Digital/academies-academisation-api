@@ -193,6 +193,35 @@ builder.Services.AddApplicationInsightsTelemetry(aiOptions);
 
 var app = builder.Build();
 
+app.UseSecurityHeaders(options =>
+{
+	options.AddFrameOptionsDeny()
+		.AddXssProtectionDisabled()
+		.AddContentTypeOptionsNoSniff()
+		.RemoveServerHeader()
+		.AddContentSecurityPolicy(builder =>
+		{
+			builder.AddDefaultSrc().None();
+		})
+		.AddPermissionsPolicy(builder =>
+		{
+			builder.AddAccelerometer().None();
+			builder.AddAutoplay().None();
+			builder.AddCamera().None();
+			builder.AddEncryptedMedia().None();
+			builder.AddFullscreen().None();
+			builder.AddGeolocation().None();
+			builder.AddGyroscope().None();
+			builder.AddMagnetometer().None();
+			builder.AddMicrophone().None();
+			builder.AddMidi().None();
+			builder.AddPayment().None();
+			builder.AddPictureInPicture().None();
+			builder.AddSyncXHR().None();
+			builder.AddUsb().None();
+		});
+});
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
