@@ -45,7 +45,7 @@ public class ApplicationDeleteTests
 	private readonly IConversionProjectRepository _conversionRepo;
 	private readonly Mock<IMapper> _mapper = new();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
-	private readonly Mock<IMediator> _mediator;
+	private readonly Mock<IMediator> _mediator = new();
 	public ApplicationDeleteTests()
 	{
 		_context = new TestApplicationContext(_mediator.Object).CreateContext();

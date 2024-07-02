@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -14,6 +15,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data;
@@ -164,6 +166,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		modelBuilder.Entity<Project>(ConfigureProject);
 		modelBuilder.Entity<ProjectNote>(ConfigureProjectNotes);
+		modelBuilder.Entity<SchoolImprovementPlan>(ConfigureSchoolImprovementPlans);
 
 		modelBuilder.Entity<ConversionAdvisoryBoardDecision>(ConfigureConversionAdvisoryBoardDecision);
 		modelBuilder.Entity<AdvisoryBoardDeferredReasonDetails>(ConfigureConversionAdvisoryBoardDecisionDeferredReason);
@@ -199,6 +202,21 @@ public class AcademisationContext : DbContext, IUnitOfWork
 					c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
 					c => c.ToList()));
 	}
+
+	private void ConfigureSchoolImprovementPlans(EntityTypeBuilder<SchoolImprovementPlan> SchoolImprovementPlanConfiguration)
+	{
+		var converter = new EnumListJsonValueConverter<SchoolImprovementPlanArranger>();
+		var comparer = new ListValueComparer<SchoolImprovementPlanArranger>();
+
+		SchoolImprovementPlanConfiguration.ToTable("SchoolImprovementPlans", DEFAULT_SCHEMA);
+		SchoolImprovementPlanConfiguration.HasKey(a => a.Id);
+
+		SchoolImprovementPlanConfiguration.Property(x => x.ArrangedBy).HasConversion(converter).Metadata.SetValueComparer(comparer);
+
+		SchoolImprovementPlanConfiguration.Property(x => x.ExpectedEndDate).HasConversion<string>();
+		SchoolImprovementPlanConfiguration.Property(x => x.ConfidenceLevel).HasConversion<string>();
+	}
+
 	private static void ConfigureFormAMatProject(EntityTypeBuilder<FormAMatProject> formAMatProjectConfiguration)
 	{
 		formAMatProjectConfiguration.ToTable("FormAMatProject", DEFAULT_SCHEMA);
@@ -386,6 +404,18 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
 		notesNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		projectConfiguration
+			.HasMany(a => a.SchoolImprovementPlans)
+			.WithOne()
+			.HasForeignKey("ProjectId")
+			.IsRequired();
+
+		var schoolImprovementPlansNavigation = projectConfiguration.Metadata.FindNavigation(nameof(Project.SchoolImprovementPlans));
+		// DDD Patterns comment:
+		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
+		schoolImprovementPlansNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
 
 	}
 
@@ -801,5 +831,27 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		trustKeyPersonRoleConfiguration.ToTable("ApplicationFormTrustKeyPersonRole", DEFAULT_SCHEMA);
 		trustKeyPersonRoleConfiguration.HasKey(a => a.Id);
 		trustKeyPersonRoleConfiguration.Property<int?>("ApplicationFormTrustKeyPersonRoleId").IsRequired(false);
+	}
+}
+
+public class EnumListJsonValueConverter<T> : ValueConverter<List<T>, string> where T : Enum
+{
+	public EnumListJsonValueConverter() : base(
+
+	  v => JsonSerializer
+		.Serialize(v.Select(e => e.ToString()).ToList(), (JsonSerializerOptions)null),
+
+	  v => v.IsNullOrEmpty() ? new List<T>() : JsonSerializer
+		.Deserialize<List<string>>(v , (JsonSerializerOptions)null)
+		.Select(e => (T)Enum.Parse(typeof(T), e)).ToList())
+	{
+	}
+}
+
+public class ListValueComparer<T> : ValueComparer<ICollection<T>>
+{
+	public ListValueComparer() : base((c1, c2) => c1.SequenceEqual(c2),
+	   c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), c => c.ToList())
+	{
 	}
 }

@@ -48,7 +48,7 @@ public class ApplicationSubmitTests
 	private readonly IConversionProjectRepository _conversionRepo;
 	private readonly Mock<IMapper> _mapper = new();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
-	private readonly Mock<IMediator> _mediator;
+	private readonly Mock<IMediator> _mediator = new();
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext(_mediator.Object).CreateContext();
@@ -144,7 +144,7 @@ public class ApplicationSubmitTests
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
 		var projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
-		var projectResult = await projectController.Get(1);
+		var projectResult = await projectController.Get(1, default);
 
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
 

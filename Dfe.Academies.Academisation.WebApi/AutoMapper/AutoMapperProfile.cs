@@ -5,6 +5,9 @@ namespace Dfe.Academies.Academisation.WebApi.AutoMapper
 {
 	public class AutoMapperProfile : Profile
 	{
-		public AutoMapperProfile() => AutoMapperSetup.AddMappings(this);
+		public AutoMapperProfile()
+		{
+			AutoMapperSetup.AddMappings(this);
+		}
 	}
 }

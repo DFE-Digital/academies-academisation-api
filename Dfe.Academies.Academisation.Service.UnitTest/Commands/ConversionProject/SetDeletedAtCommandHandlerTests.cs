@@ -82,7 +82,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 				.Returns(unitOfWorkMock.Object);
 
 			// Mock GetById to use our Project from above
-			mockConversionProjectRepository.Setup(x => x.GetConversionProject(It.Is<int>(x => x == command.ProjectId))).ReturnsAsync(conversionProject);
+			mockConversionProjectRepository.Setup(x => x.GetConversionProject(It.Is<int>(x => x == command.ProjectId), It.IsAny<CancellationToken>())).ReturnsAsync(conversionProject);
 
 			// Act
 			var result = await CreateSetExternalApplicationFormCommandHandler().Handle(command, default);

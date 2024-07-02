@@ -19,7 +19,7 @@ public class SetPerformanceDataCommandHandler : IRequestHandler<SetPerformanceDa
 
 	public async Task<CommandResult> Handle(SetPerformanceDataCommand request, CancellationToken cancellationToken)
 	{
-		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id);
+		var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id, cancellationToken);
 
 		if (existingProject is null)
 		{

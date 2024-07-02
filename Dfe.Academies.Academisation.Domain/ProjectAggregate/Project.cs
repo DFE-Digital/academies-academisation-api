@@ -1,12 +1,12 @@
-﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+﻿using System.Collections.Generic;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
@@ -27,6 +27,11 @@ public class Project : Entity, IProject, IAggregateRoot
 	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
 
 	private readonly List<ProjectNote> _notes = new();
+
+	public IEnumerable<SchoolImprovementPlan> SchoolImprovementPlans => _schoolImprovementPlans.AsReadOnly();
+	IReadOnlyCollection<ISchoolImprovementPlan> IProject.SchoolImprovementPlans => _schoolImprovementPlans.AsReadOnly();
+
+	private readonly List<SchoolImprovementPlan> _schoolImprovementPlans = new();
 
 	public int? FormAMatProjectId { get; private set; }
 	public DateTime? DeletedAt { get; private set; }
@@ -565,6 +570,31 @@ public class Project : Entity, IProject, IAggregateRoot
 		var note = _notes.SingleOrDefault(x => x.Id == id);
 		if (note != null) { _notes.Remove(note); }
 
+	}
+
+	public void AddSchoolImprovementPlan(List<SchoolImprovementPlanArranger> arrangedBy,
+			string? arrangedByOther,
+			string providedBy,
+			DateTime startDate,
+			SchoolImprovementPlanExpectedEndDate expectedEndDate,
+			DateTime? expectedEndDateOther,
+			SchoolImprovementPlanConfidenceLevel confidenceLevel,
+			string? planComments)
+	{
+		var newSchoolImprovementPan = new SchoolImprovementPlan(Id, arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
+
+		_schoolImprovementPlans.Add(newSchoolImprovementPan);
+	}
+
+	public void UpdateSchoolImprovementPlan(int id, List<SchoolImprovementPlanArranger> arrangedBy, string? arrangedByOther, string providedBy, DateTime startDate, SchoolImprovementPlanExpectedEndDate expectedEndDate, DateTime? expectedEndDateOther, SchoolImprovementPlanConfidenceLevel confidenceLevel, string? planComments)
+	{
+		var schoolImprovementPlan = _schoolImprovementPlans.SingleOrDefault(x => x.Id == id);
+
+		if (schoolImprovementPlan != null)
+		{
+			schoolImprovementPlan.Update(arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
+			
+		}
 	}
 
 	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete, List<ReasonChange>? reasonsChanged, string? changedBy = default)

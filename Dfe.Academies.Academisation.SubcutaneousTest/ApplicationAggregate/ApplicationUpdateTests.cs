@@ -28,7 +28,7 @@ public class ApplicationUpdateTests
 
 	private readonly IApplicationQueryService _applicationQueryService;
 	private readonly ILogger<ApplicationController> _applicationLogger;
-	private readonly Mock<IMediator> _mediator;
+	private readonly Mock<IMediator> _mediator = new();
 	private readonly IApplicationFactory _applicationFactory = new ApplicationFactory();
 
 	private readonly AcademisationContext _context;
