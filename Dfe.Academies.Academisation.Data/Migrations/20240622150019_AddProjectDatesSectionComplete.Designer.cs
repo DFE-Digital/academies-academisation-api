@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240622150019_AddProjectDatesSectionComplete")]
+    partial class AddProjectDatesSectionComplete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -622,47 +625,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("FormAMatProject", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate.OpeningDateHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ChangedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EntityType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("NewDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("OldDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReasonsChanged")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OpeningDateHistories", "academisation");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -694,58 +656,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Project", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.SchoolImprovementPlan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ArrangedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ArrangedByOther")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConfidenceLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ExpectedEndDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ExpectedEndDateOther")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PlanComments")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProvidedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("SchoolImprovementPlans", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
@@ -847,9 +757,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<bool?>("IsFormAMat")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool?>("LegalRequirementsSectionIsCompleted")
                         .HasColumnType("bit");
 
@@ -875,9 +782,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("OutgoingTrustUkprn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("PreviousAdvisoryBoardDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ProjectRationale")
                         .HasColumnType("nvarchar(max)");
@@ -909,9 +813,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime?>("TargetDateForTransfer")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool?>("TransferDatesSectionIsCompleted")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("TransferFirstDiscussed")
                         .HasColumnType("datetime2");
@@ -1963,8 +1864,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("PreviousHeadTeacherBoardLink");
 
                             b1.Property<bool?>("ProjectDatesSectionComplete")
-                                .HasColumnType("bit")
-                                .HasColumnName("ProjectDatesSectionComplete");
+                                .HasColumnType("bit");
 
                             b1.Property<string>("ProjectStatus")
                                 .HasColumnType("nvarchar(max)")
@@ -1977,10 +1877,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<DateTime?>("ProposedAcademyOpeningDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedAcademyOpeningDate");
-
-                            b1.Property<DateTime?>("ProposedConversionDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("ProposedConversionDate");
 
                             b1.Property<string>("PublishedAdmissionNumber")
                                 .HasColumnType("nvarchar(max)")
@@ -2152,15 +2048,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.SchoolImprovementPlan", b =>
-                {
-                    b.HasOne("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", null)
-                        .WithMany("SchoolImprovementPlans")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
                 {
                     b.HasOne("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", null)
@@ -2217,8 +2104,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
                     b.Navigation("Notes");
-
-                    b.Navigation("SchoolImprovementPlans");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.TransferProject", b =>

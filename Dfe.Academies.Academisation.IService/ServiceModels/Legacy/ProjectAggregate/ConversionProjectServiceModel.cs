@@ -121,6 +121,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public int? NumberOfSENUnitPlaces { get; set; }
 		public int? NumberOfPost16Places { get; set; }
 		public Guid? ApplicationSharePointId { get; set; }
+		public DateTime? ProposedConversionDate { get; set; }
+		public bool? ProjectDatesSectionComplete { get; set; }
 
 		public bool Equals(ConversionProjectServiceModel? other)
 		{

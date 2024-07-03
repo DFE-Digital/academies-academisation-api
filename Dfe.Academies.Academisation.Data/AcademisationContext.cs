@@ -389,7 +389,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			pd.Property(d => d.ExternalApplicationFormSaved).HasColumnName("ExternalApplicationFormSaved");
 			pd.Property(d => d.ExternalApplicationFormUrl).HasColumnName("ExternalApplicationFormUrl");
 			pd.Property(d => d.IsFormAMat).HasColumnName("IsFormAMat");
-
+			pd.Property(d => d.ProposedConversionDate).HasColumnName("ProposedConversionDate");
+			pd.Property(d => d.ProjectDatesSectionComplete).HasColumnName("ProjectDatesSectionComplete");
 		});
 
 		projectConfiguration.HasQueryFilter(d => !d.DeletedAt.HasValue);

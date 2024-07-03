@@ -8,6 +8,7 @@ using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SchoolImpro
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Dfe.Academies.Academisation.Service.Commands.FormAMat;
 using Dfe.Academies.Academisation.WebApi.Extensions;
+using Dfe.Academies.Academisation.Service.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -389,5 +390,54 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+
+		/// <summary>
+		/// Updates the project with the specified id - Sets the Project Dates using data from the command <paramref name="request"/>
+		/// </summary>
+		/// <param name="id">The ID of the project to update</param>
+		/// <param name="request">the command containing the payload of updates</param>
+		/// <exception cref="NotImplementedException"></exception>
+		/// <response code="200">The update was applied successfully</response>
+		/// <response code="400">The request failed validation and the errors are returned</response>
+		/// <response code="404">The Project with the specified ID was not found</response>
+		[HttpPut("{id:int}/SetProjectDates", Name = "SetProjectDates")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetProjectDates(
+			int id,
+			SetProjectDatesCommand request)
+		{
+			request.Id = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpGet("{id}/conversion-date-history", Name = "GetOpeningDateHistoryForConversionProject")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<IEnumerable<OpeningDateHistoryDto>>> GetOpeningDateHistoryForConversionProject(int id, CancellationToken cancellationToken)
+		{
+			var query = new GetOpeningDateHistoryQuery(nameof(Project), id);
+			var result = await _mediator.Send(query, cancellationToken);
+
+			if (result is null || !result.Any())
+			{
+				return NotFound();
+			}
+
+			return Ok(result);
+		}
+
 	}
 }

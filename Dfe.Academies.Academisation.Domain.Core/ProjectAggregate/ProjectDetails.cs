@@ -16,7 +16,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? ProjectStatus { get; init; }
 	public DateTime? ApplicationReceivedDate { get; init; }
 	public DateTime? AssignedDate { get; init; }
-	public DateTime? HeadTeacherBoardDate { get; init; }
+	public DateTime? HeadTeacherBoardDate { get; set; }
 	public DateTime? BaselineDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateSentDate { get; init; }
 	public DateTime? LocalAuthorityInformationTemplateReturnedDate { get; init; }
@@ -33,7 +33,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public bool? AnnexBFormReceived { get; init; }
 	public string? AnnexBFormUrl { get; init; }
 	public string? PreviousHeadTeacherBoardDateQuestion { get; init; }
-	public DateTime? PreviousHeadTeacherBoardDate { get; init; }
+	public DateTime? PreviousHeadTeacherBoardDate { get; set; }
+	public bool? ProjectDatesSectionComplete { get; set; }
+	public DateTime? ProposedConversionDate { get; set; }
 	public string? PreviousHeadTeacherBoardLink { get; init; }
 	public string? TrustReferenceNumber { get => _trustReferenceNumber; init => _trustReferenceNumber = value; }
 	private string? _trustReferenceNumber;
@@ -115,6 +117,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? ExternalApplicationFormUrl { get; set; }
 	public bool? IsFormAMat { get => _IsFormAMat; init => _IsFormAMat = value; }
 	private bool? _IsFormAMat;
+
 
 	public bool Equals(ProjectDetails? other)
 	{

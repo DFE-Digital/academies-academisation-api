@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
@@ -594,5 +595,27 @@ public class Project : Entity, IProject, IAggregateRoot
 			schoolImprovementPlan.Update(arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
 			
 		}
+	}
+
+	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete, List<ReasonChange>? reasonsChanged, string? changedBy = default)
+	{
+		// Update the respective properties in the Details object
+		this.Details.HeadTeacherBoardDate = advisoryBoardDate;
+		this.Details.PreviousHeadTeacherBoardDate = previousAdvisoryBoard;
+
+		if (this.Details.ProposedConversionDate != proposedConversionDate)
+		{
+			var oldDate = this.Details.ProposedConversionDate;
+			this.Details.ProposedConversionDate = proposedConversionDate;
+			if (oldDate != null)
+			{
+				AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(Project), oldDate, proposedConversionDate, DateTime.UtcNow, changedBy, reasonsChanged));
+			}
+		}
+
+		this.Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
+
+		// Update the LastModifiedOn property to the current time to indicate the object has been modified
+		this.LastModifiedOn = DateTime.UtcNow;
 	}
 }
