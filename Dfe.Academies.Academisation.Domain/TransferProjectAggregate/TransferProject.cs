@@ -158,7 +158,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 				TargetDateForTransfer = expectedDateForTransfer;
 				if (oldDate != null)
 				{
-					AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, TargetDateForTransfer, DateTime.UtcNow, changedBy, reasonsChanged));
+					AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, TargetDateForTransfer, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.Now, "GMT Standard Time"), changedBy, reasonsChanged));
 				}
 			}
 			TransferDatesSectionIsCompleted = isCompleted;
