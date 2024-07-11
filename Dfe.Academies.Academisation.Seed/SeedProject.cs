@@ -69,7 +69,7 @@ public static class SeedProject
 			HeadTeacherBoardDate = DateTime.Now.AddMonths(-2),
 			LocalAuthorityInformationTemplateSentDate = DateTime.Now.AddYears(-2),
 			LocalAuthorityInformationTemplateReturnedDate = DateTime.Now.AddYears(-1),
-			ProposedAcademyOpeningDate = DateTime.Now.AddMonths(3),
+			ProposedConversionDate = DateTime.Now.AddMonths(3),
 			Region = ProjectConsts.Regions[(int)Faker.Number.Between(0, 9)],
 			LocalAuthority = Faker.Address.State(),
 			NameOfTrust = Faker.Company.Name()

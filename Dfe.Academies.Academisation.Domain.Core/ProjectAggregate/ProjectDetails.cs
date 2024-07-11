@@ -45,7 +45,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? SponsorName { get; init; }
 	public string? AcademyTypeAndRoute { get => _academyTypeAndRoute; init => _academyTypeAndRoute = value; }
 	public string? _academyTypeAndRoute;
-	public DateTime? ProposedAcademyOpeningDate { get; init; }
 	public bool? SchoolAndTrustInformationSectionComplete { get; init; }
 	public decimal? ConversionSupportGrantAmount { get; init; }
 	public string? ConversionSupportGrantChangeReason { get; init; }
@@ -140,7 +139,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 			   Nullable.Equals(ApplicationReceivedDate, other.ApplicationReceivedDate) &&
 			   Nullable.Equals(AssignedDate, other.AssignedDate) &&
 			   Nullable.Equals(HeadTeacherBoardDate, other.HeadTeacherBoardDate) &&
-			   Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
+			   Nullable.Equals(ProposedConversionDate, other.ProposedConversionDate) && Nullable.Equals(BaselineDate, other.BaselineDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateSentDate,
 				   other.LocalAuthorityInformationTemplateSentDate) &&
 			   Nullable.Equals(LocalAuthorityInformationTemplateReturnedDate,
@@ -172,7 +171,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 			   string.Equals(SponsorName, other.SponsorName, StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(AcademyTypeAndRoute, other.AcademyTypeAndRoute,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-			   Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) &&
+			   Nullable.Equals(ProposedConversionDate, other.ProposedConversionDate) &&
 			   SchoolAndTrustInformationSectionComplete == other.SchoolAndTrustInformationSectionComplete &&
 			   ConversionSupportGrantAmount == other.ConversionSupportGrantAmount &&
 			   string.Equals(ConversionSupportGrantChangeReason, other.ConversionSupportGrantChangeReason,
@@ -278,7 +277,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(ApplicationReceivedDate);
 		hashCode.Add(AssignedDate);
 		hashCode.Add(HeadTeacherBoardDate);
-		hashCode.Add(ProposedAcademyOpeningDate);
+		hashCode.Add(ProposedConversionDate);
 		hashCode.Add(BaselineDate);
 		hashCode.Add(LocalAuthorityInformationTemplateSentDate);
 		hashCode.Add(Form7Received, StringComparer.InvariantCultureIgnoreCase);
@@ -300,7 +299,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(SponsorReferenceNumber, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(SponsorName, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(AcademyTypeAndRoute, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(ProposedAcademyOpeningDate);
+		hashCode.Add(ProposedConversionDate);
 		hashCode.Add(SchoolAndTrustInformationSectionComplete);
 		hashCode.Add(ConversionSupportGrantAmount);
 		hashCode.Add(ConversionSupportGrantChangeReason, StringComparer.InvariantCultureIgnoreCase);

@@ -1974,13 +1974,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("decimal(18,2)")
                                 .HasColumnName("ProjectedRevenueBalanceAtEndMarchNextYear");
 
-                            b1.Property<DateTime?>("ProposedAcademyOpeningDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("ProposedAcademyOpeningDate");
-
                             b1.Property<DateTime?>("ProposedConversionDate")
                                 .HasColumnType("datetime2")
-                                .HasColumnName("ProposedConversionDate");
+                                .HasColumnName("ProposedAcademyOpeningDate");
 
                             b1.Property<string>("PublishedAdmissionNumber")
                                 .HasColumnType("nvarchar(max)")
