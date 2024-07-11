@@ -100,10 +100,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					.ToList();
 					worksheet.Cell(row, 17).Value = reasons != null ? string.Join(", ", reasons) : "No reasons available";
 				}
-				else
-				{
-
-				}
 
 				row++;
 			}
