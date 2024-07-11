@@ -85,10 +85,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				if (project.AcademyTypeAndRoute?.ToLower().Equals("sponsored") ?? false)
 				{
 					worksheet.Cell(row, 16).Value = project.DaoPackSentDate;
+					worksheet.Cell(row, 17).Value = "Not Revoked";
 				}
 				else
 				{
 					worksheet.Cell(row, 15).Value = advisoryBoardDecision?.AcademyOrderDate;
+					worksheet.Cell(row, 17).Value = "Not applicable";
 				}
 
 				if (project.ProjectStatus?.ToLower() == "dao revoked")
@@ -100,7 +102,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				}
 				else
 				{
-					worksheet.Cell(row, 17).Value = "Not Revoked";
+
 				}
 
 				row++;
