@@ -49,7 +49,7 @@ internal static class LegacyProjectServiceModelMapper
 			AcademyTypeAndRoute = project.Details.AcademyTypeAndRoute,
 			Form7Received = project.Details.Form7Received,
 			Form7ReceivedDate = project.Details.Form7ReceivedDate,
-			ProposedAcademyOpeningDate = project.Details.ProposedAcademyOpeningDate,
+			ProposedConversionDate = project.Details.ProposedConversionDate,
 			SchoolAndTrustInformationSectionComplete = project.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = project.Details.ConversionSupportGrantAmount,  // had to make this nullable or move it to the top
 			ConversionSupportGrantChangeReason = project.Details.ConversionSupportGrantChangeReason,
@@ -146,7 +146,6 @@ internal static class LegacyProjectServiceModelMapper
 
 			Notes = project.Notes?.ToProjectNoteServiceModels().ToList(),
 
-			ProposedConversionDate = project.Details.ProposedConversionDate,
 			ProjectDatesSectionComplete = project.Details.ProjectDatesSectionComplete,
 		};
 

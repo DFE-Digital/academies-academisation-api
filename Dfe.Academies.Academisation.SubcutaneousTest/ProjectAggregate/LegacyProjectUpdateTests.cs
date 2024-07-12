@@ -78,6 +78,7 @@ public class ProjectUpdateTests
 			.With(x => x.KeyStage4PerformanceAdditionalInformation, existingProject.Details.KeyStage4PerformanceAdditionalInformation)
 			.With(x => x.KeyStage5PerformanceAdditionalInformation, existingProject.Details.KeyStage5PerformanceAdditionalInformation)
 			.With(x => x.EducationalAttendanceAdditionalInformation, existingProject.Details.EducationalAttendanceAdditionalInformation)
+			.With(x => x.ProposedConversionDate, existingProject.Details.ProposedConversionDate)
 			.Create();
 
 		updatedProject.Notes?.Clear();
@@ -153,7 +154,7 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.Details.PfiSchemeDetails, getProject.PfiSchemeDetails),
 					() => Assert.Equal(existingProject.Details.Author, getProject.Author),
 					() => Assert.Equal(existingProject.Details.ClearedBy, getProject.ClearedBy),
-					() => Assert.Equal(existingProject.Details.ProposedAcademyOpeningDate, getProject.ProposedAcademyOpeningDate),
+					() => Assert.Equal(existingProject.Details.ProposedConversionDate, getProject.ProposedConversionDate),
 					() => Assert.Equal(existingProject.Details.PublishedAdmissionNumber, getProject.PublishedAdmissionNumber),
 					() => Assert.Equal(existingProject.Details.ViabilityIssues, getProject.ViabilityIssues),
 					() => Assert.Equal(existingProject.Details.FinancialDeficit, getProject.FinancialDeficit),

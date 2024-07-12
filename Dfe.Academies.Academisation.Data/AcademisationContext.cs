@@ -373,7 +373,6 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			pd.Property(d => d.ConversionSupportGrantChangeReason).HasColumnName("ConversionSupportGrantChangeReason");
 			pd.Property(d => d.ConversionSupportGrantAmount).HasColumnName("ConversionSupportGrantAmount");
 			pd.Property(d => d.SchoolAndTrustInformationSectionComplete).HasColumnName("SchoolAndTrustInformationSectionComplete");
-			pd.Property(d => d.ProposedAcademyOpeningDate).HasColumnName("ProposedAcademyOpeningDate");
 			pd.Property(d => d.ClearedBy).HasColumnName("ClearedBy");
 			pd.Property(d => d.AcademyTypeAndRoute).HasColumnName("AcademyTypeAndRoute");
 			pd.Property(d => d.SponsorReferenceNumber).HasColumnName("SponsorReferenceNumber");
@@ -389,7 +388,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			pd.Property(d => d.ExternalApplicationFormSaved).HasColumnName("ExternalApplicationFormSaved");
 			pd.Property(d => d.ExternalApplicationFormUrl).HasColumnName("ExternalApplicationFormUrl");
 			pd.Property(d => d.IsFormAMat).HasColumnName("IsFormAMat");
-			pd.Property(d => d.ProposedConversionDate).HasColumnName("ProposedConversionDate");
+			pd.Property(d => d.ProposedConversionDate).HasColumnName("ProposedAcademyOpeningDate");
 			pd.Property(d => d.ProjectDatesSectionComplete).HasColumnName("ProjectDatesSectionComplete");
 		});
 
