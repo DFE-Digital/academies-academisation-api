@@ -74,7 +74,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			AcademyTypeAndRoute = "Converter",
 			IsFormAMat = false,
 			// Temp hotfix
-			ProposedAcademyOpeningDate = null,
+			ProposedConversionDate = null,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = schoolDetails.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(schoolDetails.LandAndBuildings?.PartOfPfiScheme),
@@ -116,7 +116,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			AcademyTypeAndRoute = "Converter",
 			IsFormAMat = true,
 			// Temp hotfix
-			ProposedAcademyOpeningDate = null,
+			ProposedConversionDate = null,
 			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
@@ -237,7 +237,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute,
 			Form7Received = detailsToUpdate.Form7Received,
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
-			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate,
+			ProposedConversionDate = detailsToUpdate.ProposedConversionDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase),
 			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute),

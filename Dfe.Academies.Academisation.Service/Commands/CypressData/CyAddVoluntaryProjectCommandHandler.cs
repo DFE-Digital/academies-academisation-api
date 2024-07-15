@@ -114,7 +114,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CypressData
 				LocalAuthorityInformationTemplateReturnedDate = new DateTime(2020, 2, 20),
 				RecommendationForProject = "Approve",
 				AcademyTypeAndRoute = "Converter",
-				ProposedAcademyOpeningDate = new DateTime(2025, 2, 20),
+				ProposedConversionDate = new DateTime(2025, 2, 20),
 				ConversionSupportGrantAmount = 25000,
 				PublishedAdmissionNumber = "60673",
 				ViabilityIssues = "No",
