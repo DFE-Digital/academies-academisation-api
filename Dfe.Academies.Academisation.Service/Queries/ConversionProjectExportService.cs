@@ -54,9 +54,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			worksheet.Cell(1, 14).Value = "Part of PFI scheme";
 			worksheet.Cell(1, 15).Value = "Date AO issued";
 			worksheet.Cell(1, 16).Value = "Date dAO issued";
+			worksheet.Cell(1, 17).Value = "DAO Revoked Reasons";
 
 			// Bold headers
-			for (int col = 1; col <= 16; col++)
+			for (int col = 1; col <= 18; col++)
 			{
 				worksheet.Cell(1, col).Style.Font.Bold = true;
 			}
@@ -84,11 +85,22 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				if (project.AcademyTypeAndRoute?.ToLower().Equals("sponsored") ?? false)
 				{
 					worksheet.Cell(row, 16).Value = project.DaoPackSentDate;
+					worksheet.Cell(row, 17).Value = "Not Revoked";
 				}
 				else
 				{
 					worksheet.Cell(row, 15).Value = advisoryBoardDecision?.AcademyOrderDate;
+					worksheet.Cell(row, 17).Value = "Not applicable";
 				}
+
+				if (project.ProjectStatus?.ToLower() == "dao revoked")
+				{
+					var reasons = advisoryBoardDecision?.DAORevokedReasons?
+					.Select(r => $"{r.Reason}: {r.Details}")
+					.ToList();
+					worksheet.Cell(row, 17).Value = reasons != null ? string.Join(", ", reasons) : "No reasons available";
+				}
+
 				row++;
 			}
 
