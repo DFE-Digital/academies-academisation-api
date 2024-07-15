@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "Details_ProjectDatesSectionComplete",
+                name: "ProjectDatesSectionComplete",
                 schema: "academisation",
                 table: "Project",
                 type: "bit",
@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Details_ProjectDatesSectionComplete",
+                name: "ProjectDatesSectionComplete",
                 schema: "academisation",
                 table: "Project");
         }

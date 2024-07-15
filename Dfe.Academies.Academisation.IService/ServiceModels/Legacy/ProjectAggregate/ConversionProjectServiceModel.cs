@@ -48,7 +48,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? SponsorReferenceNumber { get; init; }
 		public string? SponsorName { get; init; }
 		public string? AcademyTypeAndRoute { get; init; }
-		public DateTime? ProposedAcademyOpeningDate { get; init; }
 		public bool? SchoolAndTrustInformationSectionComplete { get; init; }
 		public decimal? ConversionSupportGrantAmount { get; init; }
 		public string? ConversionSupportGrantChangeReason { get; init; }
@@ -177,7 +176,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				   string.Equals(SponsorName, other.SponsorName, StringComparison.InvariantCultureIgnoreCase) &&
 				   string.Equals(AcademyTypeAndRoute, other.AcademyTypeAndRoute,
 					   StringComparison.InvariantCultureIgnoreCase) &&
-				   Nullable.Equals(ProposedAcademyOpeningDate, other.ProposedAcademyOpeningDate) &&
+				   Nullable.Equals(ProposedConversionDate, other.ProposedConversionDate) &&
 				   SchoolAndTrustInformationSectionComplete == other.SchoolAndTrustInformationSectionComplete &&
 				   ConversionSupportGrantAmount == other.ConversionSupportGrantAmount &&
 				   string.Equals(ConversionSupportGrantChangeReason, other.ConversionSupportGrantChangeReason,
@@ -306,7 +305,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(SponsorReferenceNumber, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(SponsorName, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(AcademyTypeAndRoute, StringComparer.InvariantCultureIgnoreCase);
-			hashCode.Add(ProposedAcademyOpeningDate);
+			hashCode.Add(ProposedConversionDate);
 			hashCode.Add(SchoolAndTrustInformationSectionComplete);
 			hashCode.Add(ConversionSupportGrantAmount);
 			hashCode.Add(ConversionSupportGrantChangeReason, StringComparer.InvariantCultureIgnoreCase);

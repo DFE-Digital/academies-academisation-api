@@ -50,7 +50,7 @@ internal static class LegacyProjectDetailsMapper
 			AcademyTypeAndRoute = detailsToUpdate.AcademyTypeAndRoute ?? existingProject.Details.AcademyTypeAndRoute,
 			Form7Received = detailsToUpdate.Form7Received ?? existingProject.Details.Form7Received,
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate ?? existingProject.Details.Form7ReceivedDate,
-			ProposedAcademyOpeningDate = detailsToUpdate.ProposedAcademyOpeningDate ?? existingProject.Details.ProposedAcademyOpeningDate,
+			ProposedConversionDate = existingProject.Details.ProposedConversionDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete ?? existingProject.Details.SchoolAndTrustInformationSectionComplete,
 			ConversionSupportGrantAmount = detailsToUpdate.ConversionSupportGrantAmount ?? existingProject.Details.ConversionSupportGrantAmount,
 			ConversionSupportGrantChangeReason = detailsToUpdate.ConversionSupportGrantChangeReason ?? existingProject.Details.ConversionSupportGrantChangeReason,
