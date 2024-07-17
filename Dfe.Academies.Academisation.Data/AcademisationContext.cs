@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenP
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using MediatR;
@@ -45,6 +46,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<ConversionAdvisoryBoardDecision> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
+	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
@@ -175,6 +177,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<AdvisoryBoardDAORevokedReasonDetails>(ConfigureAdvisoryBoardDecisionDAORevokedReason);
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
+		modelBuilder.Entity<ProjectGroup>(ConfigureProjectGroup);
 		modelBuilder.Entity<OpeningDateHistory>(ConfigureOpeningDateHistory);
 
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
@@ -184,6 +187,20 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		base.OnModelCreating(modelBuilder);
 	}
+
+	private void ConfigureProjectGroup(EntityTypeBuilder<ProjectGroup> builder)
+	{
+		builder.ToTable("ProjectGroups", DEFAULT_SCHEMA);
+		builder.HasKey(e => e.Id);
+
+		builder.OwnsOne(a => a.AssignedUser, a =>
+		{
+			a.Property(p => p.Id).HasColumnName("AssignedUserId");
+			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
+			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+		});
+	}
+
 	private void ConfigureOpeningDateHistory(EntityTypeBuilder<OpeningDateHistory> builder)
 	{
 		builder.ToTable("OpeningDateHistories", DEFAULT_SCHEMA);
