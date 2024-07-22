@@ -22,7 +22,7 @@ public interface IConversionProjectRepository : IRepository<Project>, IGenericRe
 
 	Task<IEnumerable<IProject>?> GetIncompleteProjects();
 
-	Task UpdateProjectsWithProjectGroupIdAsync(List<int> projectsUrns, int? projectGroupId, CancellationToken cancellationToken);
+	Task UpdateProjectsWithProjectGroupIdAsync(List<int> projectsUrns, int? projectGroupId, DateTime lastModifiedOn, CancellationToken cancellationToken);
 	Task<bool> AreProjectsAssociateToAnotherProjectGroupAsync(List<int> projectsUrns, CancellationToken cancellationToken);
 	Task<IEnumerable<IProject>?> GetProjectsByProjectGroupAsync(int projectGroupId, CancellationToken cancellationToken);
 }

@@ -12,6 +12,7 @@ public interface IProject
 	public Guid? SchoolSharePointId { get; }
 	public Guid? ApplicationSharePointId { get; }
 	public int? FormAMatProjectId { get; }
+	public int? ProjectGroupId { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
 

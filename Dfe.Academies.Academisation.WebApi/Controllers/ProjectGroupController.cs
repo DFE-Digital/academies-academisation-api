@@ -1,12 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
-using Dfe.Academies.Academisation.Service.Commands.TransferProject;
-using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.ActionResults;
-using DocumentFormat.OpenXml.Drawing.Spreadsheet;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,7 +40,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost("{urn}/set-project-group", Name = "SetProjectGroup")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> SetProjectGroup(int urn, [FromBody] SetProjectGroupCommand command, CancellationToken cancellationToken)
+		public async Task<IActionResult> SetProjectGroup(string urn, [FromBody] SetProjectGroupCommand command, CancellationToken cancellationToken)
 		{
 			_logger.LogInformation($"Setting project group: {command}");
 			command.Urn = urn;

@@ -19,8 +19,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 
 		public string TrustReference { get; set; }
 
-		public string ReferenceNumber { get; set; }
-
 		public List<int> ConversionsProjects { get; set; }
 	}
 }

@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
 using Xunit;
@@ -24,6 +25,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 		private Mock<IDateTimeProvider> _mockDateTimeProvider;
 		private CreateProjectGroupCommandValidator _validator;
 		private Mock<IConversionProjectRepository> mockCnversionProjectRepository;
+		private Mock<ILogger<CreateProjectGroupCommandHandler>> _mocklogger;
 
 		public CreateProjectGroupCommandHandlerTests()
 		{
@@ -33,6 +35,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockDateTimeProvider = _mockRepository.Create<IDateTimeProvider>();
 			_validator = new CreateProjectGroupCommandValidator();
 			mockCnversionProjectRepository = _mockRepository.Create<IConversionProjectRepository>();
+			_mocklogger  = _mockRepository.Create<ILogger<CreateProjectGroupCommandHandler>>();
 
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockProjectGroupRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
@@ -44,7 +47,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 				_mockProjectGroupRepository.Object,
 				_mockDateTimeProvider.Object,
 				_validator,
-				mockCnversionProjectRepository.Object);
+				mockCnversionProjectRepository.Object,
+				_mocklogger.Object);
 		}
 
 		[Fact]
@@ -71,7 +75,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once);
 			mockCnversionProjectRepository.Verify(x => x.AreProjectsAssociateToAnotherProjectGroupAsync(It.IsAny<List<int>>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Never());
-			mockCnversionProjectRepository.Verify(x => x.UpdateProjectsWithProjectGroupIdAsync(It.IsAny<List<int>>(), It.IsAny<int>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Never());
+			mockCnversionProjectRepository.Verify(x => x.UpdateProjectsWithProjectGroupIdAsync(It.IsAny<List<int>>(), It.IsAny<int>(), It.IsAny<DateTime>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Never());
 		}
 
 		[Fact]
@@ -85,7 +89,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var cancellationToken = CancellationToken.None;
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			mockCnversionProjectRepository.Setup(x => x.AreProjectsAssociateToAnotherProjectGroupAsync(It.Is<List<int>>(x => x == request.ConversionProjectsUrns), It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(false); ;
-			mockCnversionProjectRepository.Setup(x => x.UpdateProjectsWithProjectGroupIdAsync(It.Is<List<int>>(x => x == request.ConversionProjectsUrns), It.IsAny<int>(), It.Is<CancellationToken>(x => x == cancellationToken)));
+			mockCnversionProjectRepository.Setup(x => x.UpdateProjectsWithProjectGroupIdAsync(It.Is<List<int>>(x => x == request.ConversionProjectsUrns), It.IsAny<int>(), It.IsAny<DateTime>(),  It.Is<CancellationToken>(x => x == cancellationToken)));
 
 			// Act
 			var result = await createTransferProjectCommandHandler.Handle(
@@ -99,7 +103,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once);
 			mockCnversionProjectRepository.Verify(x => x.AreProjectsAssociateToAnotherProjectGroupAsync(It.IsAny<List<int>>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once());
-			mockCnversionProjectRepository.Verify(x => x.UpdateProjectsWithProjectGroupIdAsync(It.IsAny<List<int>>(), It.IsAny<int>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once());
+			mockCnversionProjectRepository.Verify(x => x.UpdateProjectsWithProjectGroupIdAsync(It.IsAny<List<int>>(), It.IsAny<int>(), It.IsAny<DateTime>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once());
 		}
 
 		[Fact]

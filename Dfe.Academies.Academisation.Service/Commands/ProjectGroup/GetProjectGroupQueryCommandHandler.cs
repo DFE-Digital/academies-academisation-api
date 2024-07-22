@@ -2,14 +2,16 @@
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class GetProjectGroupQueryCommandHandler(IProjectGroupRepository projectGroupRepository, IMapper mapper, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<GetProjectGroupQueryCommand, ProjectGroupDto?>
+	public class GetProjectGroupQueryCommandHandler(IProjectGroupRepository projectGroupRepository, IMapper mapper, IConversionProjectRepository conversionProjectRepository, ILogger<GetProjectGroupQueryCommandHandler> logger) : IRequestHandler<GetProjectGroupQueryCommand, ProjectGroupDto?>
 	{
 		public async Task<ProjectGroupDto?> Handle(GetProjectGroupQueryCommand message, CancellationToken cancellationToken)
 		{
-			var projectGroup = await projectGroupRepository.GetByReferenceNumber(message.Urn, cancellationToken);
+			logger.LogError($"Getting project group with urn:{message.Urn}");
+			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.Urn, cancellationToken);
 			if (projectGroup == null) {
 				return null;
 			}

@@ -4,6 +4,6 @@ namespace Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate
 {
 	public interface IProjectGroupRepository : IRepository<ProjectGroup>, IGenericRepository<ProjectGroup>
 	{
-		Task<ProjectGroup?> GetByReferenceNumber(string referenceNumber, CancellationToken cancellationToken);
+		Task<ProjectGroup?> GetByReferenceNumberAsync(string referenceNumber, CancellationToken cancellationToken);
 	}
 }

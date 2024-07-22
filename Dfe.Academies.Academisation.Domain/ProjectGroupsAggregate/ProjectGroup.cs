@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate
 
 		public User? AssignedUser { private set; get; }
 
-		public string? ReferenceNumber { private set; get; } 
+		public string? ReferenceNumber { private set; get; }
 
 		public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
 		{
