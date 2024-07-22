@@ -10,7 +10,8 @@ namespace Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate
 		User? AssignedUser { get; }
 
 		DateTime CreatedOn { get; }
-		string ReferenceNumber { get; }
+
+		string? ReferenceNumber { get; }
 
 		void SetAssignedUser(Guid userId, string fullName, string emailAddress);
 		void SetProjectReference(int id);

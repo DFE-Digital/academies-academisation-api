@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
+using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -34,6 +35,9 @@ public class Project : Entity, IProject, IAggregateRoot
 	private readonly List<SchoolImprovementPlan> _schoolImprovementPlans = new();
 
 	public int? FormAMatProjectId { get; private set; }
+
+	public int? ProjectGroupId { get; private set; }
+	public ProjectGroup Group { get; private set; }
 	public DateTime? DeletedAt { get; private set; }
 
 	/// <summary>
