@@ -1,6 +1,5 @@
 ﻿
 using System.Globalization;
-using System.Linq;
 using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -24,7 +23,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public IUnitOfWork UnitOfWork => _context;
 		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default)
 		{
-			IQueryable<Project> queryable = this.dbSet;
+			IQueryable<Project> queryable = dbSet;
 
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
@@ -42,9 +41,27 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
+		public async Task<bool> AreProjectsAssociateToAnotherProjectGroupAsync(List<int> projectsUrns, CancellationToken cancellationToken)
+		{
+			return await dbSet.AsNoTracking().AnyAsync(x => projectsUrns.Contains(x.Details.Urn) && x.ProjectGroupId != null, cancellationToken);
+		}
+
+		public async Task<IEnumerable<IProject>?> GetProjectsByProjectGroupAsync(int projectGroupId, CancellationToken cancellationToken)
+		{
+			return await _context.Projects
+				.Where(p => p.ProjectGroupId == projectGroupId)
+				.ToListAsync(cancellationToken);
+		}
+
+		public async Task UpdateProjectsWithProjectGroupIdAsync(List<int> projectsUrns, int? projectGroupId, CancellationToken cancellationToken)
+		{
+			await dbSet.Where(x => projectsUrns.Contains(x.Details.Urn))
+				.ExecuteUpdateAsync(u => u.SetProperty(p => p.ProjectGroupId, projectGroupId), cancellationToken);
+		}
+
 		public async Task<ProjectFilterParameters> GetFilterParameters()
 		{
-			var advisoryBoardDates = await this.dbSet
+			var advisoryBoardDates = await dbSet
 					.OrderByDescending(p => p.Details.HeadTeacherBoardDate)
 					.AsNoTracking()
 					.Where(p => p.Details.HeadTeacherBoardDate.HasValue)
@@ -55,13 +72,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			ProjectFilterParameters filterParameters = new ProjectFilterParameters
 			{
-				Statuses = (await this.dbSet
+				Statuses = (await dbSet
 					.AsNoTracking()
 					.Select(p => p.Details.ProjectStatus)
 					.Distinct()
 					.OrderBy(p => p)
 					.ToListAsync())!,
-				AssignedUsers = (await this.dbSet
+				AssignedUsers = (await dbSet
 					.OrderByDescending(p => p.Details.AssignedUser.FullName)
 					.AsNoTracking()
 					.Select(p => p.Details.AssignedUser.FullName)
@@ -69,7 +86,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 					.Distinct()
 					.ToListAsync())!,
 
-				LocalAuthorities = (await this.dbSet
+				LocalAuthorities = (await dbSet
 					.OrderByDescending(p => p.Details.LocalAuthority)
 					.AsNoTracking()
 					.Select(p => p.Details.LocalAuthority)
@@ -185,7 +202,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IProject?> GetConversionProject(int id, CancellationToken cancellationToken)
 		{
-			return await this.DefaultIncludes().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 		}
 
 		private IQueryable<Project> DefaultIncludes()
@@ -200,7 +217,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchProjectsV2(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count)
 		{
-			IQueryable<Project> queryable = this.dbSet;
+			IQueryable<Project> queryable = dbSet;
 
 			queryable = FilterByRegion(regions, queryable);
 			queryable = FilterByStatus(states, queryable);
@@ -220,7 +237,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchFormAMatProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
 		{
-			IQueryable<Project> queryable = this.dbSet;
+			IQueryable<Project> queryable = dbSet;
 
 			queryable = FilterFormAMAT(queryable);
 			queryable = FilterByRegion(regions, queryable);
@@ -263,18 +280,18 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<IProject>> GetConversionProjectsThatRequireFormAMatCreation(CancellationToken cancellationToken)
 		{
-			return await this.dbSet.Where(x => !x.FormAMatProjectId.HasValue && x.Details.IsFormAMat.HasValue && x.Details.IsFormAMat.Value).ToListAsync(cancellationToken).ConfigureAwait(false);
+			return await dbSet.Where(x => !x.FormAMatProjectId.HasValue && x.Details.IsFormAMat.HasValue && x.Details.IsFormAMat.Value).ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 		public async Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatId(int? id, CancellationToken cancellationToken)
 		{
-			return await this.dbSet.Where(x => x.FormAMatProjectId == id).ToListAsync(cancellationToken).ConfigureAwait(false);
+			return await dbSet.Where(x => x.FormAMatProjectId == id).ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 
 		public async Task<IEnumerable<IProject>> GetConversionProjectsByFormAMatIds(IEnumerable<int?> ids, CancellationToken cancellationToken)
 		{
 			var formAMatProjectIds = ids.ToList();
 
-			return await this.dbSet.Where(x => formAMatProjectIds.Contains(x.FormAMatProjectId)).ToListAsync(cancellationToken).ConfigureAwait(false);
+			return await dbSet.Where(x => formAMatProjectIds.Contains(x.FormAMatProjectId)).ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

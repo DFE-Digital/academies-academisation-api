@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
 using Xunit;
@@ -20,6 +23,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 		private Mock<IDateTimeProvider> _mockDateTimeProvider;
 		private CreateProjectGroupCommandValidator _validator;
+		private Mock<IConversionProjectRepository> mockCnversionProjectRepository;
 
 		public CreateProjectGroupCommandHandlerTests()
 		{
@@ -28,6 +32,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockProjectGroupRepository = _mockRepository.Create<IProjectGroupRepository>();
 			_mockDateTimeProvider = _mockRepository.Create<IDateTimeProvider>();
 			_validator = new CreateProjectGroupCommandValidator();
+			mockCnversionProjectRepository = _mockRepository.Create<IConversionProjectRepository>();
 
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockProjectGroupRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
@@ -38,11 +43,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			return new CreateProjectGroupCommandHandler(
 				_mockProjectGroupRepository.Object,
 				_mockDateTimeProvider.Object,
-				_validator);
+				_validator,
+				mockCnversionProjectRepository.Object);
 		}
 
 		[Fact]
-		public async Task Handle_ValidCommand_PersistsExpectedProjectGroup()
+		public async Task Handle_ValidCommandWithoutConversions_PersistsExpectedProjectGroup()
 		{
 			var now = DateTime.Now;
 			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
@@ -60,10 +66,40 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReference
-			&& x.ReferenceNumber == request.ReferenceNumber
+			&& x.ReferenceNumber != null
 			&& x.CreatedOn == now)), Times.Once());
 
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once);
+			mockCnversionProjectRepository.Verify(x => x.AreProjectsAssociateToAnotherProjectGroupAsync(It.IsAny<List<int>>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Never());
+			mockCnversionProjectRepository.Verify(x => x.UpdateProjectsWithProjectGroupIdAsync(It.IsAny<List<int>>(), It.IsAny<int>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Never());
+		}
+
+		[Fact]
+		public async Task Handle_ValidCommandWithConversions_PersistsExpectedProjectGroup()
+		{
+			// Arrange
+			var now = DateTime.Now;
+			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
+			var createTransferProjectCommandHandler = CreateProjectGroupCommandHandler();
+			var request = CreateValidCreateTProjectProjectCommand();
+			var cancellationToken = CancellationToken.None;
+			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
+			mockCnversionProjectRepository.Setup(x => x.AreProjectsAssociateToAnotherProjectGroupAsync(It.Is<List<int>>(x => x == request.ConversionProjectsUrns), It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(false); ;
+			mockCnversionProjectRepository.Setup(x => x.UpdateProjectsWithProjectGroupIdAsync(It.Is<List<int>>(x => x == request.ConversionProjectsUrns), It.IsAny<int>(), It.Is<CancellationToken>(x => x == cancellationToken)));
+
+			// Act
+			var result = await createTransferProjectCommandHandler.Handle(
+				request,
+				cancellationToken);
+
+			// Assert
+			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReference
+			&& x.ReferenceNumber != null
+			&& x.CreatedOn == now)), Times.Once());
+
+			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once);
+			mockCnversionProjectRepository.Verify(x => x.AreProjectsAssociateToAnotherProjectGroupAsync(It.IsAny<List<int>>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once());
+			mockCnversionProjectRepository.Verify(x => x.UpdateProjectsWithProjectGroupIdAsync(It.IsAny<List<int>>(), It.IsAny<int>(), It.Is<CancellationToken>(x => x == cancellationToken)), Times.Once());
 		}
 
 		[Fact]
@@ -75,7 +111,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Arrange
 			var createTransferProjectCommandHandler = CreateProjectGroupCommandHandler();
-			var request = new CreateProjectGroupCommand(string.Empty, "3424");
+			var request = new CreateProjectGroupCommand(string.Empty, [3424]);
 			var cancellationToken = CancellationToken.None;
 
 			// Act
@@ -85,20 +121,19 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			Assert.IsType<CommandValidationErrorResult>(result);
-			(result as CommandValidationErrorResult).ValidationErrors.Should().HaveCount(3);
+			(result! as CommandValidationErrorResult).ValidationErrors.Should().HaveCount(2);
 			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReference
-			&& x.ReferenceNumber == request.ReferenceNumber
+			&& x.ReferenceNumber != null
 			&& x.CreatedOn == now)), Times.Never());
 
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Never());
 		}
 
-		private static CreateProjectGroupCommand CreateValidCreateTProjectProjectCommand()
+		private static CreateProjectGroupCommand CreateValidCreateTProjectProjectCommand(bool includeConversions = true)
 		{
 			string trustReference = "11112222";
-			string referenceNumber = "97857253";
 
-			return new CreateProjectGroupCommand(trustReference, referenceNumber);
+			return new CreateProjectGroupCommand(trustReference, includeConversions ? [03823] : []);
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		[Fact]
 		public async Task CreateProjectGroup_ReturnsOk()
 		{
-			var command = new CreateProjectGroupCommand("12345679", "UK3423423");
+			var command = new CreateProjectGroupCommand("12345679", []);
 			_mediatrMock.Setup(x => x.Send(command, new CancellationToken()))
 				.ReturnsAsync(new CommandSuccessResult());
 

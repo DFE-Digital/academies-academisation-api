@@ -34,6 +34,7 @@ public class Project : Entity, IProject, IAggregateRoot
 	private readonly List<SchoolImprovementPlan> _schoolImprovementPlans = new();
 
 	public int? FormAMatProjectId { get; private set; }
+	public int? ProjectGroupId { get; private set; }
 	public DateTime? DeletedAt { get; private set; }
 
 	/// <summary>
@@ -558,6 +559,11 @@ public class Project : Entity, IProject, IAggregateRoot
 	public void SetDeletedAt()
 	{
 		DeletedAt = DateTime.UtcNow;
+	}
+
+	public void SetProjectGroupId(int? projectGroupId)
+	{
+		ProjectGroupId = projectGroupId;
 	}
 
 	public void AddNote(string subject, string note, string author, DateTime date)

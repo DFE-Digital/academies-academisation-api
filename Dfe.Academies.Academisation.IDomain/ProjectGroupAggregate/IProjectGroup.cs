@@ -5,14 +5,19 @@ namespace Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate
 	public interface IProjectGroup
 	{
 		int Id { get; }
+
 		string TrustReference{ get; }
 
 		User? AssignedUser { get; }
 
 		DateTime CreatedOn { get; }
-		string ReferenceNumber { get; }
+
+		string? ReferenceNumber { get; }
 
 		void SetAssignedUser(Guid userId, string fullName, string emailAddress);
+
 		void SetProjectReference(int id);
+
+		void SetProjectGroup(string trustReference, DateTime lastModifiedOnUtc);
 	}
 }
