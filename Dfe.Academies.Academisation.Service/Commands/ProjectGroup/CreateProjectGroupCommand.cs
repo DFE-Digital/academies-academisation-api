@@ -2,10 +2,10 @@
 using Dfe.Academies.Academisation.Core;
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class CreateProjectGroupCommand(string trustReference, List<int> conversionProjects) : IRequest<CommandResult>
+	public class CreateProjectGroupCommand(string trustUrn, List<int> conversionsUrns) : IRequest<CommandResult>
 	{
-		public string TrustReference { get; set; } = trustReference;
+		public string TrustUrn { get; set; } = trustUrn;
 
-		public List<int> ConversionProjectsUrns { get; set; } = conversionProjects;
+		public List<int> ConversionsUrns { get; set; } = conversionsUrns;
 	}
 }

@@ -3,10 +3,10 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class SetProjectGroupCommand : IRequest<CommandResult>
+	public class SetProjectGroupCommand(string trustUrn, List<int> conversionsUrns) : IRequest<CommandResult>
 	{
-		public required string TrustReference { get; set; }
-		public required string Urn { get; set; }
-		public List<int> ConversionProjectsUrns { get; set; }
+		public string TrustUrn { get; set; } = trustUrn;
+		public string Urn { get; set; } = string.Empty;
+		public List<int> ConversionsUrns { get; set; } = conversionsUrns;
 	}
 }

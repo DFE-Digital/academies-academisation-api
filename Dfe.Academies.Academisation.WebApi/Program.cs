@@ -19,11 +19,13 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.Service.Behaviours;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
+using Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
@@ -121,7 +123,7 @@ builder.Services.AddScoped<IAcademiesQueryService, AcademiesQueryService>();
 builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
-
+builder.Services.AddScoped<IProjectGroupQueryService, ProjectGroupQueryService>();
 
 // utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

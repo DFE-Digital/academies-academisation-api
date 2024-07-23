@@ -1,4 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
+using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.WebApi.ActionResults;
 using MediatR;
@@ -9,16 +11,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[Route("project-group")]
 	[ApiController]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-	public class ProjectGroupController : ControllerBase
+	public class ProjectGroupController(IMediator mediator, ILogger<ProjectGroupController> logger, IProjectGroupQueryService projectGroupQueryService) : ControllerBase
 	{
-		private readonly ILogger<ProjectGroupController> _logger;
-		private readonly IMediator _mediator;
-
-		public ProjectGroupController(IMediator mediator, ILogger<ProjectGroupController> logger)
-		{
-			_mediator = mediator;
-			_logger = logger;
-		}
 
 		[HttpPost(Name = "CreateProjectGroup")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
@@ -26,8 +20,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult> CreateProjectGroup(
 			[FromBody] CreateProjectGroupCommand command, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Creating project group: {command}");
-			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			logger.LogInformation($"Creating project group: {command}");
+			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
@@ -42,34 +36,28 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> SetProjectGroup(string urn, [FromBody] SetProjectGroupCommand command, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Setting project group: {command}");
+			logger.LogInformation($"Setting project group: {command}");
 			command.Urn = urn;
-			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
 				CommandSuccessResult => Ok(),
 				NotFoundCommandResult => NotFound(),
-				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				CommandValidationErrorResult validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
 				_ => new InternalServerErrorObjectResult("Error serving request")
 			};
 		}
 
-		[HttpGet("{urn}/get-project-group", Name = "GetProjectGroupById")]
+		[HttpGet("{urn}/get-project-group", Name = "GetProjectGroupByUrn")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<ProjectGroupDto>> GetProjectGroupById(string urn, CancellationToken cancellationToken)
+		public async Task<ActionResult<ProjectGroupServiceModel>> GetProjectGroupByUrn(string urn, CancellationToken cancellationToken)
 		{
-			_logger.LogInformation($"Getting project group with urn: {urn}");
-			var query = new GetProjectGroupQueryCommand(urn);
-			var result = await _mediator.Send(query, cancellationToken);
+			logger.LogInformation($"Getting project group with urn: {urn}");
+			var result = await projectGroupQueryService.GetProjectGroupByUrn(urn, cancellationToken);
 
-			if (result is null)
-			{
-				return NotFound();
-			}
-
-			return result is null? NotFound() : Ok(result);
+			return result is null ? NotFound() : Ok(result);
 		}
 	}
 }

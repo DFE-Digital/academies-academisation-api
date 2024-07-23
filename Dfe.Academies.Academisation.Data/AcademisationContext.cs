@@ -16,6 +16,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 
@@ -52,6 +53,19 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	{
 		SetModifiedAndCreatedDates();
 		return base.SaveChanges();
+	}
+
+	public IExecutionStrategy CreateExecutionStrategy()
+	{
+		return base.Database.CreateExecutionStrategy();
+	}
+	public async Task<IDbContextTransaction> BeginTransactionAsync()
+	{
+		return await base.Database.BeginTransactionAsync();
+	}
+	public async Task CommitTransactionAsync()
+	{
+		await base.Database.CommitTransactionAsync();
 	}
 
 	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

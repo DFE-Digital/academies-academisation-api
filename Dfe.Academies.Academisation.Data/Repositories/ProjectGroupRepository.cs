@@ -21,6 +21,8 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return x;
 		}
 
+		public AcademisationContext Context() => _context;
+
 		public async Task<ProjectGroup?> GetByReferenceNumberAsync(string referenceNumber, CancellationToken cancellationToken) 
 			=> await DefaultIncludes().SingleOrDefaultAsync(x => x.ReferenceNumber == referenceNumber, cancellationToken);
 	}
