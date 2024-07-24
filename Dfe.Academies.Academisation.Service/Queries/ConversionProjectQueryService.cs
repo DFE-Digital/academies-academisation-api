@@ -5,9 +5,6 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
-
 namespace Dfe.Academies.Academisation.Service.Queries;
 
 public class ConversionProjectQueryService : IConversionProjectQueryService
@@ -131,5 +128,15 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 			x.CreatedOn));
 
 		return serviceModels;
+	}
+
+	public async Task<List<ConversionProjectServiceModel>> GetProjectsForGroup(string trustReferenceNumber, CancellationToken cancellationToken)
+	{
+		// get conversion projects
+		var projects = await this._conversionProjectRepository.GetConversionProjectsForGroup(trustReferenceNumber, cancellationToken).ConfigureAwait(false) ?? new List<Project>();
+
+		// get transfer projects will go here
+
+		return projects.Select(x => x.MapToServiceModel()).ToList();
 	}
 }

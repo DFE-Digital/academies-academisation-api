@@ -21,4 +21,5 @@ public interface IConversionProjectRepository : IRepository<Project>, IGenericRe
 	IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates);
 
 	Task<IEnumerable<IProject>?> GetIncompleteProjects();
+	Task<IEnumerable<IProject>> GetConversionProjectsForGroup(string trustReferenceNumber, CancellationToken cancellationToken);
 }
