@@ -171,6 +171,17 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result is null ? NotFound() : Ok(result);
 		}
 
+		[HttpGet("projects-for-group/{trustReferenceNumber}", Name = "GetProjectsForGroup")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<List<ConversionProjectServiceModel>>> GetProjectsForGroup(
+		string trustReferenceNumber, CancellationToken cancellationToken)
+		{
+			List<ConversionProjectServiceModel> result =
+				await _conversionProjectQueryService.GetProjectsForGroup(trustReferenceNumber, cancellationToken);
+			return result is null ? NotFound() : Ok(result);
+		}
+
 		/// <summary>
 		///     Retrieve all form a mat projects matching specified filter conditions
 		/// </summary>
