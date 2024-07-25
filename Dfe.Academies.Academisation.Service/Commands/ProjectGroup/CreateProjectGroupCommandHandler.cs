@@ -25,11 +25,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				return new CreateValidationErrorResult(validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage))); 
 			}
 
-			if (message.ConversionsUrns.Any() && await conversionProjectRepository.AreProjectsAssociateToAnotherProjectGroupAsync(message.ConversionsUrns, cancellationToken))
+			if (message.ConversionsUrns.Any())
 			{
-				logger.LogError($"Validation failed because one or more conversions are part of a different project group:{message}");
-				return new CreateValidationErrorResult([new ValidationError("ConversionsUrns", "One or more conversions are part of a different project group")]);
-			}
+				var converstions = await conversionProjectRepository.GetConversionProjectsForGroup(message.TrustUrn, cancellationToken);
+				if (converstions == null) {
+					logger.LogError($"Validation failed because one or more conversions are part of a different project group:{message}");
+					return new CreateValidationErrorResult([new ValidationError("ConversionsUrns", "One or more conversions are part of a different project group")]);
+				} }
 
 			var typeName = message.GetGenericTypeName();
 			try
