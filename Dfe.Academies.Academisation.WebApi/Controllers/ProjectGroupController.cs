@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpGet("{urn}/get-project-groups", Name = "GetProjectGroups")]
+		[HttpGet("/project-group/get-project-groups", Name = "GetProjectGroups")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedDataResponse<ProjectGroupResponseModel>>> GetProjectGroups(ProjectGroupSearchModel searchModel, CancellationToken cancellationToken)

@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
@@ -46,7 +47,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		private IQueryable<ProjectGroup> FilterByCompaniesHouseNo(string? companiesHouseNo, IQueryable<ProjectGroup> queryable)
 		{
-			if (companiesHouseNo != null)
+			if (!companiesHouseNo.IsNullOrEmpty())
 			{
 				queryable = queryable.Where(p => p.ReferenceNumber == companiesHouseNo);
 			}
@@ -56,12 +57,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		private IQueryable<ProjectGroup> FilterByAcademy(string? academyUkprn, string? academyName, IQueryable<ProjectGroup> queryable)
 		{
-			if (academyUkprn != null)
+			if (!academyUkprn.IsNullOrEmpty())
 			{
 				queryable = queryable.Where(p => p.ReferenceNumber == academyUkprn);
 			}
 
-			if (academyName != null)
+			if (!academyName.IsNullOrEmpty())
 			{
 				queryable = queryable.Where(p => p.ReferenceNumber == academyName);
 			}
@@ -71,7 +72,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		private static IQueryable<ProjectGroup> FilterByUrn(string? urn, IQueryable<ProjectGroup> queryable)
 		{
-			if (urn != null)
+			if (!urn.IsNullOrEmpty())
 			{
 				queryable = queryable.Where(p => p.ReferenceNumber == urn);
 			}
@@ -80,11 +81,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		}
 		private  IQueryable<ProjectGroup> FilterByTrust(string? trustUrn, string? trustName, IQueryable<ProjectGroup> queryable)
 		{
-			if (trustUrn != null)
+			if (!trustUrn.IsNullOrEmpty())
 			{
 				queryable = queryable.Where(p => p.TrustReference == trustUrn);
 			}
-			if (trustName != null)
+			if (!trustName.IsNullOrEmpty())
 			{
 				trustUrn = "todo";
 				queryable = queryable.Where(p => p.TrustReference == trustUrn);
