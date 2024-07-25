@@ -5,11 +5,8 @@ using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.Service.Extensions;
-using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
-using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
-using Azure;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
@@ -38,8 +35,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			{
 				var responseModel = new ProjectGroupResponseModel("", message.TrustUrn, []);
 				var strategy = projectGroupRepository.UnitOfWork.CreateExecutionStrategy();
-				await strategy.ExecuteAsync(async () =>
-				{
+				//await strategy.ExecuteAsync(async () =>
+				//{
 					await using var transaction = await projectGroupRepository.UnitOfWork.BeginTransactionAsync();
 					using (logger.BeginScope(new List<KeyValuePair<string, object>> { new("TransactionContext", transaction.TransactionId) }))
 					{
@@ -58,11 +55,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 						}
 						await projectGroupRepository.UnitOfWork.CommitTransactionAsync();
 
-						var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync([projectGroup.Id], cancellationToken);
+						var conversionsProjects = await conversionProjectRepository.GetConversionProjectsForGroup(message.TrustUrn, cancellationToken);
 
-						responseModel = new ProjectGroupResponseModel(projectGroup.ReferenceNumber!, projectGroup.TrustReference, conversionsProjects!.Select(p => new ConversionsResponseModel(p.Details.Urn, p.Details.SchoolName!)));
+					responseModel = new ProjectGroupResponseModel(projectGroup.ReferenceNumber!, projectGroup.TrustReference, conversionsProjects!.Select(p => new ConversionsResponseModel(p.Details.Urn, p.Details.SchoolName!)));
 					}
-				});
+				//});
 				return new CreateSuccessResult<ProjectGroupResponseModel>(responseModel);
 			}
 			catch (Exception ex) {

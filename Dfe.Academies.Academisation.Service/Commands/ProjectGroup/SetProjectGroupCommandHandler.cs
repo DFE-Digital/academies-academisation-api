@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Extensions;
-using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
@@ -32,34 +31,32 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			try
 			{
 				var strategy = projectGroupRepository.UnitOfWork.CreateExecutionStrategy();
-				await strategy.ExecuteAsync(async () =>
+				await using var transaction = await projectGroupRepository.UnitOfWork.BeginTransactionAsync();
+				using (logger.BeginScope(new List<KeyValuePair<string, object>> { new("TransactionContext", transaction.TransactionId) }))
 				{
-					await using var transaction = await projectGroupRepository.UnitOfWork.BeginTransactionAsync();
-					using (logger.BeginScope(new List<KeyValuePair<string, object>> { new("TransactionContext", transaction.TransactionId) }))
+					logger.LogInformation("Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, message);
+					projectGroup.SetProjectGroup(message.TrustUrn, dateTimeProvider.Now);
+
+					projectGroupRepository.Update(projectGroup);
+					await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+					var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync([projectGroup.Id], cancellationToken);
+					if (conversionsProjects != null && conversionsProjects.Any())
 					{
-						logger.LogInformation("Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, message);
-						projectGroup.SetProjectGroup(message.TrustUrn, dateTimeProvider.Now);
+						logger.LogInformation($"Setting conversions with project group id:{projectGroup.Id}");
 
-						projectGroupRepository.Update(projectGroup);
-						await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+						var removedConversionProjectsUrns = conversionsProjects.Where(x
+							=> !message.ConversionsUrns.Contains(x.ProjectGroupId.GetValueOrDefault())).Select(x => x.Details.Urn).ToList();
+						await conversionProjectRepository.UpdateProjectsWithProjectGroupIdAsync(removedConversionProjectsUrns, null, dateTimeProvider.Now, cancellationToken);
 
-						var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync([projectGroup.Id], cancellationToken);
-						if (conversionsProjects != null && conversionsProjects.Any())
-						{
-							logger.LogInformation($"Setting conversions with project group id:{projectGroup.Id}");
+						var addConversionProjectsUrns = message.ConversionsUrns.Except(removedConversionProjectsUrns).ToList();
+						await conversionProjectRepository.UpdateProjectsWithProjectGroupIdAsync(addConversionProjectsUrns, null, dateTimeProvider.Now, cancellationToken);
 
-							var removedConversionProjectsUrns = conversionsProjects.Where(x
-								=> !message.ConversionsUrns.Contains(x.ProjectGroupId.GetValueOrDefault())).Select(x => x.Details.Urn).ToList();
-							await conversionProjectRepository.UpdateProjectsWithProjectGroupIdAsync(removedConversionProjectsUrns, null, dateTimeProvider.Now, cancellationToken);
-
-							var addConversionProjectsUrns = message.ConversionsUrns.Except(removedConversionProjectsUrns).ToList();
-							await conversionProjectRepository.UpdateProjectsWithProjectGroupIdAsync(addConversionProjectsUrns, null, dateTimeProvider.Now, cancellationToken);
-
-							await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
-						}
-						await projectGroupRepository.UnitOfWork.CommitTransactionAsync();
+						await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
 					}
-				});
+					await projectGroupRepository.UnitOfWork.CommitTransactionAsync();
+				}
+
 				return new CommandSuccessResult();
 			}
 			catch (Exception ex)

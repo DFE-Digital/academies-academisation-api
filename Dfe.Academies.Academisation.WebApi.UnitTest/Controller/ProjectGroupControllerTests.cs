@@ -50,8 +50,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _controller.CreateProjectGroup(command, _cancellationToken);
 
 			// Assert
-			var okObjectResult = Assert.IsType<OkObjectResult>(result);
-			var responseModel = Assert.IsType<ProjectGroupResponseModel>(result.Value);
+			var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
+			var responseModel = Assert.IsType<ProjectGroupResponseModel>(okObjectResult.Value);
 			Assert.Equal(responseModel.Urn, response.Urn);
 			Assert.Equal(responseModel.TrustUrn, response.TrustUrn);
 			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _controller.CreateProjectGroup(command, _cancellationToken);
 
 			// Assert
-			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
+			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result.Result);
 			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
 		}
 

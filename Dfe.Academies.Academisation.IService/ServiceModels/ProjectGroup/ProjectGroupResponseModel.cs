@@ -11,7 +11,7 @@
 
 	public class ConversionsResponseModel(int urn, string? schoolName)
 	{
-		public int urn { get; private set; } = urn;
-		public string? SoolName { get; private set; } = schoolName;
+		public int Urn { get; private set; } = urn;
+		public string? SchoolName { get; private set; } = schoolName;
 	}
 }
