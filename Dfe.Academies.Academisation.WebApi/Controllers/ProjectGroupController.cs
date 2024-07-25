@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	public class ProjectGroupController(IMediator mediator, ILogger<ProjectGroupController> logger, IProjectGroupQueryService projectGroupQueryService) : ControllerBase
 	{
 
-		[HttpPost("/create-project-group", Name = "CreateProjectGroup")]
+		[HttpPost("/project-group/create-project-group", Name = "CreateProjectGroup")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<ProjectGroupResponseModel>> CreateProjectGroup(
