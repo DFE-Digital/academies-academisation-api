@@ -13,6 +13,8 @@ using AutoFixture;
 using System.Linq;
 using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Azure;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -39,15 +41,19 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task CreateProjectGroup_ReturnsOk()
 		{
 			// Arrange
+			var response = new ProjectGroupResponseModel("12312", _trustUrn, []);
 			var command = new CreateProjectGroupCommand(_trustUrn, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
-				.ReturnsAsync(new CommandSuccessResult());
+				.ReturnsAsync(new CreateSuccessResult<ProjectGroupResponseModel>(response));
 
 			// Action
-			var result = await _controller.CreateProjectGroup(command, _cancellationToken) as OkResult;
+			var result = await _controller.CreateProjectGroup(command, _cancellationToken);
 
 			// Assert
-			Assert.Equal(result!.StatusCode, System.Net.HttpStatusCode.OK.GetHashCode());
+			var okObjectResult = Assert.IsType<OkObjectResult>(result);
+			var responseModel = Assert.IsType<ProjectGroupResponseModel>(result.Value);
+			Assert.Equal(responseModel.Urn, response.Urn);
+			Assert.Equal(responseModel.TrustUrn, response.TrustUrn);
 			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
 		}
 
@@ -57,13 +63,13 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// Arrange
 			var command = new CreateProjectGroupCommand(_trustUrn, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
-				.ReturnsAsync(new BadRequestCommandResult());
+				.ReturnsAsync(new CreateValidationErrorResult([new ValidationError("ConversionsUrns", "Validation Error")]));
 
 			// Action
-			var result = await _controller.CreateProjectGroup(command, _cancellationToken) as BadRequestObjectResult;
+			var result = await _controller.CreateProjectGroup(command, _cancellationToken);
 
 			// Assert
-			Assert.Equal(result!.StatusCode, System.Net.HttpStatusCode.BadRequest.GetHashCode());
+			var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
 			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
 		}
 
@@ -123,39 +129,50 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		}
 
 		[Fact]
-		public async Task GetProjectGroupByUrn_ReturnsOk()
+		public async Task GetProjectGroups_ReturnsOk()
 		{
-			// Arrange
-			var projectGroupUrn = "34234233";
-			var projectGroupResponse = new ProjectGroupServiceModel(_trustUrn);
-			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupByUrn(projectGroupUrn, _cancellationToken))
-				.ReturnsAsync(projectGroupResponse);
+			// Arrange 
+			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null, null, null);
+			var projectGroupResponse = new List<ProjectGroupResponseModel> { new(searchModel.Urn!, _trustUrn, []) };
+			var pagingResponse = new PagedDataResponse<ProjectGroupResponseModel>(projectGroupResponse, new PagingResponse()
+			{
+				Page = 1,
+				RecordCount = 1
+			});
+			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken))
+				.ReturnsAsync(pagingResponse);
 
 			// Action
-			var result = await _controller.GetProjectGroupByUrn(projectGroupUrn, _cancellationToken);
+			var result = await _controller.GetProjectGroups(searchModel, _cancellationToken);
 
 			// Assert
 			var okObjectResult = Assert.IsType<OkObjectResult>(result.Result); 
-			var response = Assert.IsType<ProjectGroupServiceModel>(okObjectResult.Value);
-			Assert.Equal(response.ConversionsUrns.Count, projectGroupResponse.ConversionsUrns.Count);
-			Assert.Equal(response.TrustUrn, projectGroupResponse.TrustUrn);
-			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupByUrn(projectGroupUrn, _cancellationToken), Times.Once());
+			var response = Assert.IsType<PagedDataResponse<ProjectGroupResponseModel>>(okObjectResult.Value);
+			Assert.Equal(response.Data.Count(), projectGroupResponse.Count);
+			Assert.Equal(response.Paging.RecordCount, pagingResponse.Paging.RecordCount);
+			Assert.Equal(response.Paging.Page, pagingResponse.Paging.Page);
+			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken), Times.Once());
 		}
 
 		[Fact]
-		public async Task GetProjectGroupByUrn_ReturnsNotFound()
+		public async Task GetProjectGroups_ReturnsNotFound()
 		{
 			// Arrange
-			var projectGroupUrn = "34234233";
-			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupByUrn(projectGroupUrn, _cancellationToken))
-				.ReturnsAsync((ProjectGroupServiceModel?)null);
+			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null, null, null);
+			var pagingResponse = new PagedDataResponse<ProjectGroupResponseModel>([], new PagingResponse()
+			{
+				Page = 1,
+				RecordCount = 1
+			});
+			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken))
+				.ReturnsAsync(pagingResponse);
 
 			// Action
-			var result = await _controller.GetProjectGroupByUrn(projectGroupUrn, _cancellationToken);
+			var result = await _controller.GetProjectGroups(searchModel, _cancellationToken);
 
 			// Assert
 			Assert.IsType<NotFoundResult>(result.Result);
-			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupByUrn(projectGroupUrn, _cancellationToken), Times.Once());
+			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken), Times.Once());
 		}
 	}
 }

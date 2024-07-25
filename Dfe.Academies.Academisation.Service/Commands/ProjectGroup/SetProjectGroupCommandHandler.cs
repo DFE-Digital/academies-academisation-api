@@ -1,16 +1,16 @@
 ﻿using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class SetProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, SetProjectGroupCommandValidator validator, ILogger<SetProjectGroupCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupCommand, CommandResult>
+	public class SetProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, IValidator<SetProjectGroupCommand> validator, ILogger<SetProjectGroupCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupCommand message, CancellationToken cancellationToken)
 		{
@@ -43,7 +43,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 						projectGroupRepository.Update(projectGroup);
 						await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-						var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync(projectGroup.Id, cancellationToken);
+						var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync([projectGroup.Id], cancellationToken);
 						if (conversionsProjects != null && conversionsProjects.Any())
 						{
 							logger.LogInformation($"Setting conversions with project group id:{projectGroup.Id}");

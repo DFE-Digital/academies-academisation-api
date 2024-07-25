@@ -7,6 +7,10 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
+using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
+using Azure;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
@@ -19,18 +23,21 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			if (!validationResult.IsValid)
 			{
 				logger.LogError($"Validation failed while validating the request:{message}");
-				return new CommandValidationErrorResult(validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage))); 
+				return new CreateValidationErrorResult(validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage))); 
 			}
 
-			if (message.ConversionsUrns.Any() && await conversionProjectRepository.AreProjectsAssociateToAnotherProjectGroupAsync(message.ConversionsUrns, cancellationToken))
+			if (message.ConversionsUrns.Any())
 			{
-				logger.LogError($"Validation failed because one or more conversions are part of a different project group:{message}");
-				return new BadRequestCommandResult();
-			}
-					
+				var converstions = await conversionProjectRepository.GetConversionProjectsForGroup(message.TrustUrn, cancellationToken);
+				if (converstions == null) {
+					logger.LogError($"Validation failed because one or more conversions are part of a different project group:{message}");
+					return new CreateValidationErrorResult([new ValidationError("ConversionsUrns", "One or more conversions are part of a different project group")]);
+				} }
+
 			var typeName = message.GetGenericTypeName();
 			try
 			{
+				var responseModel = new ProjectGroupResponseModel("", message.TrustUrn, []);
 				var strategy = projectGroupRepository.UnitOfWork.CreateExecutionStrategy();
 				await strategy.ExecuteAsync(async () =>
 				{
@@ -51,9 +58,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 							await conversionProjectRepository.UpdateProjectsWithProjectGroupIdAsync(message.ConversionsUrns, projectGroup.Id, dateTimeProvider.Now, cancellationToken);
 						}
 						await projectGroupRepository.UnitOfWork.CommitTransactionAsync();
+
+						var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync([projectGroup.Id], cancellationToken);
+
+						responseModel = new ProjectGroupResponseModel(projectGroup.ReferenceNumber!, projectGroup.TrustReference, conversionsProjects!.Select(p => new ConversionsResponseModel(p.Details.Urn, p.Details.SchoolName!)));
 					}
 				});
-				return new CommandSuccessResult();
+				return new CreateSuccessResult<ProjectGroupResponseModel>(responseModel);
 			}
 			catch (Exception ex) {
 				logger.LogError(ex, "Error Handling transaction for {CommandName} ({@Command} - {Error})", typeName, message, ex.Message);
