@@ -46,10 +46,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await dbSet.AsNoTracking().AnyAsync(x => projectsUrns.Contains(x.Details.Urn) && x.ProjectGroupId != null, cancellationToken);
 		}
 
-		public async Task<IEnumerable<IProject>?> GetProjectsByProjectGroupAsync(int projectGroupId, CancellationToken cancellationToken)
+		public async Task<IEnumerable<IProject>?> GetProjectsByProjectGroupAsync(List<int> projectGroupIds, CancellationToken cancellationToken)
 		{
 			return await _context.Projects
-				.Where(p => p.ProjectGroupId == projectGroupId)
+				.Where(p => projectGroupIds.Contains(p.ProjectGroupId.GetValueOrDefault()))
 				.ToListAsync(cancellationToken);
 		}
 
