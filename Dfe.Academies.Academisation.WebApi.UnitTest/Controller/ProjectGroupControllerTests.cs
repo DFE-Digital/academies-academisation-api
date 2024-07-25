@@ -26,7 +26,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		private ProjectGroupController _controller;
 		private readonly Mock<IProjectGroupQueryService> _projectGroupQueryServiceMock;
 		private readonly Fixture _fixture = new();
-		private string _trustUrn;
+		private string _trustReferenceNumber;
+		private string _trustUkprn;
 		public ProjectGroupControllerTests()
 		{
 			_mediatrMock = new Mock<IMediator>();
@@ -34,15 +35,15 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			_cancellationToken = CancellationToken.None;
 			_projectGroupQueryServiceMock = new Mock<IProjectGroupQueryService>();
 			_controller = new ProjectGroupController(_mediatrMock.Object, _loggerMock.Object, _projectGroupQueryServiceMock.Object);
-			_trustUrn = _fixture.Create<string>()[..8];
+			_trustReferenceNumber = _fixture.Create<string>()[..8];
 		}
 
 		[Fact]
 		public async Task CreateProjectGroup_ReturnsOk()
 		{
 			// Arrange
-			var response = new ProjectGroupResponseModel("12312", _trustUrn, []);
-			var command = new CreateProjectGroupCommand(_trustUrn, []);
+			var response = new ProjectGroupResponseModel("12312", _trustReferenceNumber, []);
+			var command = new CreateProjectGroupCommand(_trustReferenceNumber, _trustUkprn, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CreateSuccessResult<ProjectGroupResponseModel>(response));
 
@@ -61,7 +62,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task CreateProjectGroup_ReturnsBadRequest()
 		{
 			// Arrange
-			var command = new CreateProjectGroupCommand(_trustUrn, []);
+			var command = new CreateProjectGroupCommand(_trustReferenceNumber, _trustUkprn, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CreateValidationErrorResult([new ValidationError("ConversionsUrns", "Validation Error")]));
 
@@ -78,7 +79,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// Arrange
 			var urn = "34234233";
-			var command = new SetProjectGroupCommand(_trustUrn, []);
+			var command = new SetProjectGroupCommand(_trustReferenceNumber, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CommandSuccessResult());
 
@@ -96,7 +97,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// Arrange
 			var urn = "34234233";
-			var command = new SetProjectGroupCommand(_trustUrn, []);
+			var command = new SetProjectGroupCommand(_trustReferenceNumber, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new NotFoundCommandResult());
 
@@ -114,7 +115,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// Arrange
 			var urn = "34234233";
 			var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
-			var command = new SetProjectGroupCommand(_trustUrn, []);
+			var command = new SetProjectGroupCommand(_trustReferenceNumber, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationErrors));
 
@@ -133,7 +134,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// Arrange 
 			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null, null, null);
-			var projectGroupResponse = new List<ProjectGroupResponseModel> { new(searchModel.Urn!, _trustUrn, []) };
+			var projectGroupResponse = new List<ProjectGroupResponseModel> { new(searchModel.Urn!, _trustReferenceNumber, []) };
 			var pagingResponse = new PagedDataResponse<ProjectGroupResponseModel>(projectGroupResponse, new PagingResponse()
 			{
 				Page = 1,
