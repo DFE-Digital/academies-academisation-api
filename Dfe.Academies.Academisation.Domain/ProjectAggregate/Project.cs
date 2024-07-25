@@ -550,6 +550,11 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 	}
 
+	public void SetProjectGroupId(int id)
+	{
+		ProjectGroupId = id;
+	}
+
 	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)
 	{
 		Details.SetIncomingTrust(trustReferrenceNumber, trustName);
