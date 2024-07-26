@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Data;
+using System.Text.Json;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
@@ -9,12 +10,14 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenP
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,10 +27,17 @@ public class AcademisationContext : DbContext, IUnitOfWork
 {
 	const string DEFAULT_SCHEMA = "academisation";
 	private IMediator _mediator;
+
+	private IDbContextTransaction _currentTransaction;
+
 	public AcademisationContext(DbContextOptions<AcademisationContext> options, IMediator mediator) : base(options)
 	{
 		_mediator = mediator;
 	}
+	public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
+
+	public bool HasActiveTransaction => _currentTransaction != null;
+
 	public DbSet<OpeningDateHistory> OpeningDateHistories { get; set; }
 
 
@@ -45,11 +55,64 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	public DbSet<ConversionAdvisoryBoardDecision> ConversionAdvisoryBoardDecisions { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
+	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
 		SetModifiedAndCreatedDates();
 		return base.SaveChanges();
+	}
+
+	public IExecutionStrategy CreateExecutionStrategy()
+	{
+		return base.Database.CreateExecutionStrategy();
+	}
+	public async Task<IDbContextTransaction> BeginTransactionAsync()
+	{
+		if (_currentTransaction != null) return null;
+
+		_currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+
+		return _currentTransaction;
+	}
+	public async Task CommitTransactionAsync(IDbContextTransaction transaction)
+	{
+		if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+		if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+
+		try
+		{
+			await SaveChangesAsync();
+			await transaction.CommitAsync();
+		}
+		catch
+		{
+			RollbackTransaction();
+			throw;
+		}
+		finally
+		{
+			if (HasActiveTransaction)
+			{
+				_currentTransaction.Dispose();
+				_currentTransaction = null;
+			}
+		}
+	}
+	public void RollbackTransaction()
+	{
+		try
+		{
+			_currentTransaction?.Rollback();
+		}
+		finally
+		{
+			if (HasActiveTransaction)
+			{
+				_currentTransaction.Dispose();
+				_currentTransaction = null;
+			}
+		}
 	}
 
 	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -175,6 +238,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		modelBuilder.Entity<AdvisoryBoardDAORevokedReasonDetails>(ConfigureAdvisoryBoardDecisionDAORevokedReason);
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
+		modelBuilder.Entity<ProjectGroup>(ConfigureProjectGroup);
 		modelBuilder.Entity<OpeningDateHistory>(ConfigureOpeningDateHistory);
 
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
@@ -184,6 +248,20 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		base.OnModelCreating(modelBuilder);
 	}
+
+	private void ConfigureProjectGroup(EntityTypeBuilder<ProjectGroup> builder)
+	{
+		builder.ToTable("ProjectGroups", DEFAULT_SCHEMA);
+		builder.HasKey(e => e.Id);
+
+		builder.OwnsOne(a => a.AssignedUser, a =>
+		{
+			a.Property(p => p.Id).HasColumnName("AssignedUserId");
+			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
+			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+		});
+	}
+
 	private void ConfigureOpeningDateHistory(EntityTypeBuilder<OpeningDateHistory> builder)
 	{
 		builder.ToTable("OpeningDateHistories", DEFAULT_SCHEMA);

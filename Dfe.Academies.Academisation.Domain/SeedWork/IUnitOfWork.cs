@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace Dfe.Academies.Academisation.Domain.SeedWork;
 
 public interface IUnitOfWork : IDisposable
 {

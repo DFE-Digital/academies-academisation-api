@@ -12,6 +12,7 @@ public interface IProject
 	public Guid? SchoolSharePointId { get; }
 	public Guid? ApplicationSharePointId { get; }
 	public int? FormAMatProjectId { get; }
+	public int? ProjectGroupId { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
 
@@ -46,6 +47,7 @@ public interface IProject
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
 	void SetFormAMatProjectId(int id);
+	void SetProjectGroupId(int? id);
 	void SetRoute(string route);
 	void AddNote(string subject, string note, string author, DateTime date);
 	void RemoveNote(int id);

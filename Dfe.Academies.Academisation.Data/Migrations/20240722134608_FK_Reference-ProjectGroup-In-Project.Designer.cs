@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20240722134608_FK_Reference-ProjectGroup-In-Project")]
+    partial class FK_ReferenceProjectGroupInProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -695,6 +698,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectGroupId");
 
                     b.ToTable("Project", "academisation");
                 });
@@ -1735,6 +1740,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate.ProjectGroup", "Group")
+                        .WithMany()
+                        .HasForeignKey("ProjectGroupId");
+
                     b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.ProjectDetails", "Details", b1 =>
                         {
                             b1.Property<int>("ProjectId")
@@ -2175,6 +2184,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Navigation("Details")
                         .IsRequired();
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.SchoolImprovementPlan", b =>

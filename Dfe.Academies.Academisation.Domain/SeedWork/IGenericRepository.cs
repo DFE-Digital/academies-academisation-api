@@ -14,6 +14,5 @@ namespace Dfe.Academies.Academisation.Domain.SeedWork
 		void Update(TEntity obj);
 		void Delete(int id);
 		void Delete(TEntity entityToDelete);
-
 	}
 }
