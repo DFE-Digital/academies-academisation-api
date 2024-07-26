@@ -47,7 +47,7 @@ public interface IProject
 
 	public void SetPerformanceData(string? keyStage2PerformanceAdditionalInformation, string? keyStage4PerformanceAdditionalInformation, string? keyStage5PerformanceAdditionalInformation, string? educationalAttendanceAdditionalInformation);
 	void SetFormAMatProjectId(int id);
-	void SetProjectGroupId(int id);
+	void SetProjectGroupId(int? id);
 	void SetRoute(string route);
 	void AddNote(string subject, string note, string author, DateTime date);
 	void RemoveNote(int id);

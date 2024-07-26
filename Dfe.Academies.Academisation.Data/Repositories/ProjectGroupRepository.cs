@@ -28,13 +28,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<ProjectGroup?> GetByReferenceNumberAsync(string referenceNumber, CancellationToken cancellationToken) 
 			=> await DefaultIncludes().SingleOrDefaultAsync(x => x.ReferenceNumber == referenceNumber, cancellationToken);
 
-		public async Task<(IEnumerable<IProjectGroup>, int totalcount)> SearchProjectGroups(int page, int count, string? urn, string? trustUrn, string? trustName, string? academyName, string? academyUkprn, string? companiesHouseNo, CancellationToken cancellationToken)
+		public async Task<(IEnumerable<IProjectGroup>, int totalcount)> SearchProjectGroups(int page, int count, string? urn, string? academyName, List<string> trustUrns, CancellationToken cancellationToken)
 		{
 			IQueryable<ProjectGroup> queryable = DefaultIncludes();
 			queryable = FilterByUrn(urn, queryable);
-			queryable = FilterByTrust(trustUrn, trustName, queryable);
-			queryable = FilterByAcademy(academyUkprn, academyName, queryable);
-			queryable = FilterByCompaniesHouseNo(companiesHouseNo, queryable);
+			queryable = FilterByTrust(trustUrns, queryable);
+			queryable = FilterByAcademy(academyName, queryable); 
 
 			var totalProjectGroups = queryable.Count();
 			var projects = await queryable
@@ -45,26 +44,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjectGroups);
 		}
 
-		private IQueryable<ProjectGroup> FilterByCompaniesHouseNo(string? companiesHouseNo, IQueryable<ProjectGroup> queryable)
+		private IQueryable<ProjectGroup> FilterByAcademy(string? academyName, IQueryable<ProjectGroup> queryable)
 		{
-			if (!companiesHouseNo.IsNullOrEmpty())
-			{
-				queryable = queryable.Where(p => p.ReferenceNumber == companiesHouseNo);
-			}
-
-			return queryable;
-		}
-
-		private IQueryable<ProjectGroup> FilterByAcademy(string? academyUkprn, string? academyName, IQueryable<ProjectGroup> queryable)
-		{
-			if (!academyUkprn.IsNullOrEmpty())
-			{
-				queryable = queryable.Where(p => p.ReferenceNumber == academyUkprn);
-			}
 
 			if (!academyName.IsNullOrEmpty())
 			{
-				queryable = queryable.Where(p => p.ReferenceNumber == academyName);
+				queryable = queryable.Where(p => EF.Functions.Like(p.ReferenceNumber, $"%{academyName}%"));
 			}
 
 			return queryable;
@@ -79,16 +64,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return queryable;
 		}
-		private  IQueryable<ProjectGroup> FilterByTrust(string? trustUrn, string? trustName, IQueryable<ProjectGroup> queryable)
+
+		private  IQueryable<ProjectGroup> FilterByTrust(List<string> trustUrns, IQueryable<ProjectGroup> queryable)
 		{
-			if (!trustUrn.IsNullOrEmpty())
+			if (trustUrns.IsNullOrEmpty())
 			{
-				queryable = queryable.Where(p => p.TrustReference == trustUrn);
-			}
-			if (!trustName.IsNullOrEmpty())
-			{
-				trustUrn = "todo";
-				queryable = queryable.Where(p => p.TrustReference == trustUrn);
+				queryable = queryable.Where(p => trustUrns.Contains(p.TrustReference));
 			}
 
 			return queryable;

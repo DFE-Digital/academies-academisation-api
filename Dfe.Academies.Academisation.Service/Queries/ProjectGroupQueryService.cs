@@ -17,8 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 			logger.LogError($"Searching project group with :{searchModel}");
 
 			var(projectGroups, totalCount) = await projectGroupRepository.SearchProjectGroups(searchModel.Page, searchModel.Count, 
-				searchModel.Urn, searchModel.TrustUrn, searchModel.TrustName, searchModel.AcademyName, searchModel.AcademyUkprn,
-				searchModel.CompaniesHouseNo, cancellationToken);
+				searchModel.Urn, searchModel.AcademyName, [searchModel.TrustUrn], cancellationToken);
 
 			var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync(projectGroups.Select(x => x.Id).ToList(), cancellationToken);
 			var response = MapToResponse(projectGroups, conversionsProjects);

@@ -48,14 +48,6 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.ToListAsync(cancellationToken);
 		}
 
-		public async Task UpdateProjectsWithProjectGroupIdAsync(List<int> projectsUrns, int? projectGroupId, DateTime lastModifiedOn, CancellationToken cancellationToken)
-		{
-			await dbSet.Where(x => projectsUrns.Contains(x.Details.Urn))
-				.ExecuteUpdateAsync(u => 
-					u.SetProperty(p => p.ProjectGroupId, projectGroupId)
-					.SetProperty(p => p.LastModifiedOn, lastModifiedOn), cancellationToken);
-		}
-
 		public async Task<ProjectFilterParameters> GetFilterParameters()
 		{
 			var advisoryBoardDates = await dbSet

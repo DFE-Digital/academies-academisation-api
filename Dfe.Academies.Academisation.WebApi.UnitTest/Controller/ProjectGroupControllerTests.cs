@@ -133,7 +133,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task GetProjectGroups_ReturnsOk()
 		{
 			// Arrange 
-			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null, null, null);
+			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null);
 			var projectGroupResponse = new List<ProjectGroupResponseModel> { new(searchModel.Urn!, _trustReferenceNumber, []) };
 			var pagingResponse = new PagedDataResponse<ProjectGroupResponseModel>(projectGroupResponse, new PagingResponse()
 			{
@@ -159,7 +159,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task GetProjectGroups_ReturnsNotFound()
 		{
 			// Arrange
-			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null, null, null);
+			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null);
 			var pagingResponse = new PagedDataResponse<ProjectGroupResponseModel>([], new PagingResponse()
 			{
 				Page = 1,

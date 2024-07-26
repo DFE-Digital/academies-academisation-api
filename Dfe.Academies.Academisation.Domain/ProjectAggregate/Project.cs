@@ -5,7 +5,6 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
@@ -548,11 +547,6 @@ public class Project : Entity, IProject, IAggregateRoot
 		{
 			FormAMatProjectId = id;
 		}
-	}
-
-	public void SetProjectGroupId(int id)
-	{
-		ProjectGroupId = id;
 	}
 
 	public void SetIncomingTrust(string trustReferrenceNumber, string trustName)

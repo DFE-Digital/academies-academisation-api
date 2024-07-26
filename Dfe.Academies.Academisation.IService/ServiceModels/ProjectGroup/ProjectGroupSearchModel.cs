@@ -1,7 +1,7 @@
 ﻿
 namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 {
-	public class ProjectGroupSearchModel(int page, int count, string? urn, string? trustUrn, string? trustName, string? academyName, string? academyUkprn, string? companiesHouseNo)
+	public class ProjectGroupSearchModel(int page, int count, string? urn, string? trustUrn, string? trustName, string? academyName)
 	{
 		public int Page { get; set; } = page;
 		public int Count { get; set; } = count;
@@ -9,8 +9,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 		public string? TrustUrn { get; set; } = trustUrn;
 		public string? TrustName { get; set; } = trustName;
 		public string? AcademyName { get; set; } = academyName;
-		public string? AcademyUkprn { get; set; } = academyUkprn;
-		public string? CompaniesHouseNo { get; set; } = companiesHouseNo;
 
 	}
 }

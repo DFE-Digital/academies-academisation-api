@@ -42,11 +42,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockProjectGroupRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
 			_mockConversionProjectRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
-
-			//mockContext.Setup(x => x.BeginTransactionAsync()).ReturnsAsync((new Mock<IDbContextTransaction>()).Object);
-			//mockContext.Setup(x => x.CommitTransactionAsync()).Returns(Task.CompletedTask);
-			//var mockExecuteStrategy = new Mock<IExecutionStrategy>();
-			//mockContext.Setup(x => x.CreateExecutionStrategy()).Returns(mockExecuteStrategy.Object); 
 		}
 		
 		private CreateProjectGroupCommandHandler CreateProjectGroupCommandHandler()
