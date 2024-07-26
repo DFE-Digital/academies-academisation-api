@@ -36,7 +36,6 @@ public class Project : Entity, IProject, IAggregateRoot
 	public int? FormAMatProjectId { get; private set; }
 
 	public int? ProjectGroupId { get; private set; }
-	public ProjectGroup Group { get; private set; }
 	public DateTime? DeletedAt { get; private set; }
 
 	/// <summary>
