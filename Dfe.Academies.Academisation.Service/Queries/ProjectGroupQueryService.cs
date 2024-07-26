@@ -2,7 +2,7 @@
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
-using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Factories;

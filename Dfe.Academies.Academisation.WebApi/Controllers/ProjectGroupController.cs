@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
+using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<IActionResult> SetProjectGroup(string urn, [FromBody] SetProjectGroupCommand command, CancellationToken cancellationToken)
 		{
 			logger.LogInformation($"Setting project group: {command}");
-			command.Urn = urn;
+			command.GroupReferenceNumber = urn;
 			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
 			return result switch

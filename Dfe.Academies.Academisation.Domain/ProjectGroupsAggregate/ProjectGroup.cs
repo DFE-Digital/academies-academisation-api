@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
 
@@ -8,6 +7,7 @@ namespace Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate
 	public class ProjectGroup : Entity, IProjectGroup, IAggregateRoot
 	{
 		public string TrustReference { private set; get; } = string.Empty;
+		//public string TrustUkprn { private set; get; } = string.Empty;
 
 		public User? AssignedUser { private set; get; }
 
@@ -16,13 +16,6 @@ namespace Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate
 		public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
 		{
 			AssignedUser = new User(userId, fullName, emailAddress);
-			LastModifiedOn = DateTime.UtcNow;
-		}
-
-		public void SetProjects(Guid userId, string fullName, string emailAddress)
-		{
-			AssignedUser = new User(userId, fullName, emailAddress);
-			LastModifiedOn = DateTime.UtcNow;
 		}
 
 		public void SetProjectGroup(string trustReference, DateTime lastModifiedOnUtc)

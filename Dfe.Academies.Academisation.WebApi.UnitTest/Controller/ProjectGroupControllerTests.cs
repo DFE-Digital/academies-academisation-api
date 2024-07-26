@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using AutoFixture;
 using System.Linq;
-using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.Query;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
 			var responseModel = Assert.IsType<ProjectGroupResponseModel>(okObjectResult.Value);
 			Assert.Equal(responseModel.Urn, response.Urn);
-			Assert.Equal(responseModel.TrustUrn, response.TrustUrn);
+			Assert.Equal(responseModel.TrustReferenceNumber, response.TrustReferenceNumber);
 			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
 		}
 

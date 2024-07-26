@@ -1,8 +1,8 @@
 ﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 {
-	public class ProjectGroupResponseModel(string urn, string trustUrn, IEnumerable<ConversionsResponseModel> conversions)
+	public class ProjectGroupResponseModel(string urn, string trustReferenceNumber, IEnumerable<ConversionsResponseModel> conversions)
 	{
-		public string TrustUrn { get; private set; } = trustUrn;
+		public string TrustReferenceNumber { get; private set; } = trustReferenceNumber;
 
 		public string Urn { get; private set; } = urn;
 

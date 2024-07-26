@@ -13,26 +13,26 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupCommand message, CancellationToken cancellationToken)
 		{
-			logger.LogError($"Setting project group with urn:{message.Urn}");
+			logger.LogError($"Setting project group with urn:{message.GroupReferenceNumber}");
 			var validationResult = validator.Validate(message);
 			if (!validationResult.IsValid)
 			{
 				logger.LogError($"Validation failed while setting project group:{message}");
 				return new CommandValidationErrorResult(validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
 			}
-			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.Urn, cancellationToken);
+			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.GroupReferenceNumber, cancellationToken);
 			if (projectGroup == null)
 			{
-				logger.LogError($"Project group is not found with urn:{message.Urn}");
+				logger.LogError($"Project group is not found with urn:{message.GroupReferenceNumber}");
 				return new NotFoundCommandResult();
 			}
-
-			projectGroup.SetProjectGroup(message.TrustUrn, dateTimeProvider.Now);
+			// we need to change this to be the assign user command
+			//projectGroup.SetAssignedUser(message.TrustUrn, dateTimeProvider.Now);
 
 			projectGroupRepository.Update(projectGroup);
 			await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByUrns(message.ConversionsUrns, cancellationToken).ConfigureAwait(false);
+			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIds(message.ConversionsUrns, cancellationToken).ConfigureAwait(false);
 
 			if (conversionProjects != null && conversionProjects.Any())
 			{

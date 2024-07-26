@@ -291,9 +291,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return projects;
 		}
 
-		public async Task<IEnumerable<IProject>> GetConversionProjectsByUrns(IEnumerable<int> urns, CancellationToken cancellationToken)
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByIds(IEnumerable<int> urns, CancellationToken cancellationToken)
 		{
-			var projects = await this.dbSet.Where(x => urns.Contains(x.Details.Urn)).ToListAsync(cancellationToken);
+			var projects = await this.dbSet.Where(x => urns.Contains(x.Id)).ToListAsync(cancellationToken);
 
 			return projects;
 		}
