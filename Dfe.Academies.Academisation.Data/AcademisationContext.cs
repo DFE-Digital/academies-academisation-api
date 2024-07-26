@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Data;
+using System.Text.Json;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
@@ -26,10 +27,17 @@ public class AcademisationContext : DbContext, IUnitOfWork
 {
 	const string DEFAULT_SCHEMA = "academisation";
 	private IMediator _mediator;
+
+	private IDbContextTransaction _currentTransaction;
+
 	public AcademisationContext(DbContextOptions<AcademisationContext> options, IMediator mediator) : base(options)
 	{
 		_mediator = mediator;
 	}
+	public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
+
+	public bool HasActiveTransaction => _currentTransaction != null;
+
 	public DbSet<OpeningDateHistory> OpeningDateHistories { get; set; }
 
 
@@ -61,11 +69,50 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	}
 	public async Task<IDbContextTransaction> BeginTransactionAsync()
 	{
-		return await base.Database.BeginTransactionAsync();
+		if (_currentTransaction != null) return null;
+
+		_currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+
+		return _currentTransaction;
 	}
-	public async Task CommitTransactionAsync()
+	public async Task CommitTransactionAsync(IDbContextTransaction transaction)
 	{
-		await base.Database.CommitTransactionAsync();
+		if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+		if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+
+		try
+		{
+			await SaveChangesAsync();
+			await transaction.CommitAsync();
+		}
+		catch
+		{
+			RollbackTransaction();
+			throw;
+		}
+		finally
+		{
+			if (HasActiveTransaction)
+			{
+				_currentTransaction.Dispose();
+				_currentTransaction = null;
+			}
+		}
+	}
+	public void RollbackTransaction()
+	{
+		try
+		{
+			_currentTransaction?.Rollback();
+		}
+		finally
+		{
+			if (HasActiveTransaction)
+			{
+				_currentTransaction.Dispose();
+				_currentTransaction = null;
+			}
+		}
 	}
 
 	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

@@ -20,7 +20,6 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.Application.School;
 using Dfe.Academies.Academisation.Service.Behaviours;
 using Dfe.Academies.Academisation.Service.Commands.Application.School;
@@ -192,6 +191,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Cre
 
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
 
 builder.Services.AddScoped(typeof(IValidator<UpdateLoanCommand>), typeof(UpdateLoanCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateLoanCommandValidator));

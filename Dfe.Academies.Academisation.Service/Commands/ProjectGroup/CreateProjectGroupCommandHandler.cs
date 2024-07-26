@@ -34,9 +34,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			var conversionsProjectModels = new List<ConversionsResponseModel>();
 
 			// if any  conversion were part of the message add them to the group
-			if (message.ConversionsUrns.Any())
+			if (message.ConversionProjectIds.Any())
 			{
-				var conversionProjects = await conversionProjectRepository.GetConversionProjectsByUrns(message.ConversionsUrns, cancellationToken).ConfigureAwait(false);
+				var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIds(message.ConversionProjectIds, cancellationToken).ConfigureAwait(false);
 
 				if (conversionProjects == null || !conversionProjects.Any())
 				{

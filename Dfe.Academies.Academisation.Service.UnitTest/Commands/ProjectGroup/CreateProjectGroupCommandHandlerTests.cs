@@ -70,7 +70,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
-			Assert.Equal(responseModel.TrustUrn, request.TrustReferenceNumber);
+			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
 			Assert.Equal(responseModel.Urn, expectedProjectGroupReference);
 			Assert.Equal(responseModel.Conversions.Count(), expectedProjects.Count);
 			foreach (var conversion in responseModel.Conversions.Select((Value, Index) => (Value, Index)))
@@ -96,7 +96,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var cancellationToken = CancellationToken.None;
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			var expectedProjects = _fixture.Create<List<Project>>();
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByUrns(request.ConversionsUrns, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionProjectIds, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
 			_mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Project>()));
 
 			// Act
@@ -106,7 +106,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
-			Assert.Equal(responseModel.TrustUrn, request.TrustReferenceNumber);
+			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
 			Assert.Equal(responseModel.Conversions.Count(), expectedProjects.Count);
 			foreach (var conversion in responseModel.Conversions.Select((Value, Index) => (Value, Index)))
 			{
@@ -148,7 +148,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 		private static CreateProjectGroupCommand CreateValidCreateTProjectProjectCommand(bool includeConversions = true)
 		{
-			string trustReference = "11112222";
+			string trustReference = "TR00001";
 			string trustUkprn = "1111333";
 
 			return new CreateProjectGroupCommand(trustReference, trustUkprn, includeConversions ? [03823] : []);
