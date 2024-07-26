@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup
 {
-	public class CreateProjectGroupCommandValidator : AbstractValidator<CreateProjectGroupCommand>
+	public class SetProjectGroupCommandValidator : AbstractValidator<SetProjectGroupCommand>
 	{
-		public CreateProjectGroupCommandValidator()
+		public SetProjectGroupCommandValidator()
 		{
-			RuleFor(x => x.TrustReferenceNumber)
+			RuleFor(x => x.TrustUrn)
 				.NotEmpty().WithMessage("Must specify a trust reference")
 				.Length(8).WithMessage("Trust reference must be length 8")
 				.NotNull().WithMessage("Trust Reference must not be null");

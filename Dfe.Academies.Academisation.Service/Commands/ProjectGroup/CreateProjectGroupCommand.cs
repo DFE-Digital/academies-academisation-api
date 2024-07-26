@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Dfe.Academies.Academisation.Core;
-using System.Runtime.Serialization;
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class CreateProjectGroupCommand(string trustReference, string referenceNumber) : IRequest<CommandResult>
+	public class CreateProjectGroupCommand(string trustReferenceNumber, string trustUkprn, List<int> conversionsUrns) : IRequest<CreateResult>
 	{
-		[DataMember]
-		public string TrustReference { get; set; } = trustReference;
-		[DataMember]
-		public string ReferenceNumber { get; set; } = referenceNumber;
+		public string TrustReferenceNumber { get; set; } = trustReferenceNumber;
+		public string TrustUkprn { get; set; } = trustUkprn;
+
+		public List<int> ConversionsUrns { get; set; } = conversionsUrns;
 	}
 }
