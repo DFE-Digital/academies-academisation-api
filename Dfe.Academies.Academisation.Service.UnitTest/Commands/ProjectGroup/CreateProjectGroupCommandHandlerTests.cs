@@ -24,7 +24,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 		private Mock<IConversionProjectRepository> _mockConversionProjectRepository;
 
 		private Mock<IDateTimeProvider> _mockDateTimeProvider;
-		private CreateProjectGroupCommandValidator _validator;
 		private Mock<ILogger<CreateProjectGroupCommandHandler>> _mocklogger;
 		private readonly Fixture _fixture = new();
 		private CancellationToken _cancellationToken;
@@ -36,7 +35,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockProjectGroupRepository = _mockRepository.Create<IProjectGroupRepository>();
 			_mockDateTimeProvider = _mockRepository.Create<IDateTimeProvider>();
 			_mockConversionProjectRepository = _mockRepository.Create<IConversionProjectRepository>();
-			_validator = new CreateProjectGroupCommandValidator();
 			_mocklogger  = new Mock<ILogger<CreateProjectGroupCommandHandler>>();
 
 			var mockContext = new Mock<IUnitOfWork>();
@@ -49,7 +47,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			return new CreateProjectGroupCommandHandler(
 				_mockProjectGroupRepository.Object,
 				_mockDateTimeProvider.Object,
-				_validator,
 				_mockConversionProjectRepository.Object,
 				_mocklogger.Object);
 		}

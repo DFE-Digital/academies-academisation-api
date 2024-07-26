@@ -9,8 +9,9 @@ using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class CreateProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, CreateProjectGroupCommandValidator validator, IConversionProjectRepository conversionProjectRepository, ILogger<CreateProjectGroupCommandHandler> logger) : IRequestHandler<CreateProjectGroupCommand, CreateResult>
+	public class CreateProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, IConversionProjectRepository conversionProjectRepository, ILogger<CreateProjectGroupCommandHandler> logger) : IRequestHandler<CreateProjectGroupCommand, CreateResult>
 	{
+		private CreateProjectGroupCommandValidator validator = new();
 		public async Task<CreateResult> Handle(CreateProjectGroupCommand message, CancellationToken cancellationToken)
 		{
 			logger.LogError($"Creating project group with urn:{message}");
