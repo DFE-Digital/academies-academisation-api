@@ -14,7 +14,6 @@ using System.Linq;
 using Dfe.Academies.Academisation.IService.Query.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Azure;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -133,14 +132,14 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task GetProjectGroups_ReturnsOk()
 		{
 			// Arrange 
-			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null);
-			var projectGroupResponse = new List<ProjectGroupResponseModel> { new(searchModel.Urn!, _trustReferenceNumber, []) };
+			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null);
+			var projectGroupResponse = new List<ProjectGroupResponseModel> { new(searchModel.ReferenceNumber!, _trustReferenceNumber, []) };
 			var pagingResponse = new PagedDataResponse<ProjectGroupResponseModel>(projectGroupResponse, new PagingResponse()
 			{
 				Page = 1,
 				RecordCount = 1
 			});
-			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken))
+			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.ReferenceNumber == searchModel.ReferenceNumber), _cancellationToken))
 				.ReturnsAsync(pagingResponse);
 
 			// Action
@@ -152,20 +151,20 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			Assert.Equal(response.Data.Count(), projectGroupResponse.Count);
 			Assert.Equal(response.Paging.RecordCount, pagingResponse.Paging.RecordCount);
 			Assert.Equal(response.Paging.Page, pagingResponse.Paging.Page);
-			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken), Times.Once());
+			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.ReferenceNumber == searchModel.ReferenceNumber), _cancellationToken), Times.Once());
 		}
 
 		[Fact]
 		public async Task GetProjectGroups_ReturnsNotFound()
 		{
 			// Arrange
-			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null, null);
+			var searchModel = new ProjectGroupSearchModel(1, 10, "34234233", null, null);
 			var pagingResponse = new PagedDataResponse<ProjectGroupResponseModel>([], new PagingResponse()
 			{
 				Page = 1,
 				RecordCount = 1
 			});
-			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken))
+			_projectGroupQueryServiceMock.Setup(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.ReferenceNumber == searchModel.ReferenceNumber), _cancellationToken))
 				.ReturnsAsync(pagingResponse);
 
 			// Action
@@ -173,7 +172,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 			// Assert
 			Assert.IsType<NotFoundResult>(result.Result);
-			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.Urn == searchModel.Urn), _cancellationToken), Times.Once());
+			_projectGroupQueryServiceMock.Verify(x => x.GetProjectGroupsAsync(It.Is<ProjectGroupSearchModel>(x => x.ReferenceNumber == searchModel.ReferenceNumber), _cancellationToken), Times.Once());
 		}
 	}
 }

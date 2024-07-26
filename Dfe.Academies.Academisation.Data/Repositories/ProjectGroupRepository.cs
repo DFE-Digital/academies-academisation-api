@@ -28,12 +28,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<ProjectGroup?> GetByReferenceNumberAsync(string referenceNumber, CancellationToken cancellationToken) 
 			=> await DefaultIncludes().SingleOrDefaultAsync(x => x.ReferenceNumber == referenceNumber, cancellationToken);
 
-		public async Task<(IEnumerable<IProjectGroup>, int totalcount)> SearchProjectGroups(int page, int count, string? urn, string? academyName, List<string> trustUrns, CancellationToken cancellationToken)
+		public async Task<(IEnumerable<IProjectGroup>, int totalcount)> SearchProjectGroups(int page, int count, string? referenceNumber, IEnumerable<string?>? trustReferences, CancellationToken cancellationToken)
 		{
 			IQueryable<ProjectGroup> queryable = DefaultIncludes();
-			queryable = FilterByUrn(urn, queryable);
-			queryable = FilterByTrust(trustUrns, queryable);
-			queryable = FilterByAcademy(academyName, queryable); 
+			queryable = FilterByReferenceNumber(referenceNumber, queryable);
+			queryable = FilterByTrust(trustReferences, queryable);
 
 			var totalProjectGroups = queryable.Count();
 			var projects = await queryable
@@ -44,32 +43,21 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjectGroups);
 		}
 
-		private IQueryable<ProjectGroup> FilterByAcademy(string? academyName, IQueryable<ProjectGroup> queryable)
+		private static IQueryable<ProjectGroup> FilterByReferenceNumber(string? referenceNumber, IQueryable<ProjectGroup> queryable)
 		{
-
-			if (!academyName.IsNullOrEmpty())
+			if (!referenceNumber.IsNullOrEmpty())
 			{
-				queryable = queryable.Where(p => EF.Functions.Like(p.ReferenceNumber, $"%{academyName}%"));
+				queryable = queryable.Where(p => p.ReferenceNumber == referenceNumber);
 			}
 
 			return queryable;
 		}
 
-		private static IQueryable<ProjectGroup> FilterByUrn(string? urn, IQueryable<ProjectGroup> queryable)
+		private  IQueryable<ProjectGroup> FilterByTrust(IEnumerable<string> trustReferences, IQueryable<ProjectGroup> queryable)
 		{
-			if (!urn.IsNullOrEmpty())
+			if (trustReferences.IsNullOrEmpty())
 			{
-				queryable = queryable.Where(p => p.ReferenceNumber == urn);
-			}
-
-			return queryable;
-		}
-
-		private  IQueryable<ProjectGroup> FilterByTrust(List<string> trustUrns, IQueryable<ProjectGroup> queryable)
-		{
-			if (trustUrns.IsNullOrEmpty())
-			{
-				queryable = queryable.Where(p => trustUrns.Contains(p.TrustReference));
+				queryable = queryable.Where(p => trustReferences.Contains(p.TrustReference));
 			}
 
 			return queryable;

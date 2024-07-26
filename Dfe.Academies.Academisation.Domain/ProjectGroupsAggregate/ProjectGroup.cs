@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
 
@@ -13,6 +14,12 @@ namespace Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate
 		public string? ReferenceNumber { private set; get; }
 
 		public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
+		{
+			AssignedUser = new User(userId, fullName, emailAddress);
+			LastModifiedOn = DateTime.UtcNow;
+		}
+
+		public void SetProjects(Guid userId, string fullName, string emailAddress)
 		{
 			AssignedUser = new User(userId, fullName, emailAddress);
 			LastModifiedOn = DateTime.UtcNow;
