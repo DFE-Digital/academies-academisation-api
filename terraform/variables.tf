@@ -362,3 +362,19 @@ variable "enable_cdn_frontdoor_health_probe" {
   type        = bool
   default     = false
 }
+
+variable "cdn_frontdoor_waf_custom_rules" {
+  description = "Map of all Custom rules you want to apply to the CDN WAF"
+  type = map(object({
+    priority : number,
+    action : string
+    match_conditions : map(object({
+      match_variable : string,
+      match_values : optional(list(string), []),
+      operator : optional(string, "Any"),
+      selector : optional(string, null),
+      negation_condition : optional(bool, false),
+    }))
+  }))
+  default = {}
+}

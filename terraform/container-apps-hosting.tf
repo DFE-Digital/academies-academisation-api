@@ -42,6 +42,7 @@ module "azure_container_apps_hosting" {
   cdn_frontdoor_forwarding_protocol               = local.cdn_frontdoor_forwarding_protocol
   cdn_frontdoor_enable_rate_limiting              = local.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_duration_in_minutes = local.cdn_frontdoor_rate_limiting_duration_in_minutes
+  cdn_frontdoor_waf_custom_rules                  = local.cdn_frontdoor_waf_custom_rules
   cdn_frontdoor_rate_limiting_threshold           = local.cdn_frontdoor_rate_limiting_threshold
   cdn_frontdoor_host_add_response_headers         = local.cdn_frontdoor_host_add_response_headers
   cdn_frontdoor_custom_domains                    = local.cdn_frontdoor_custom_domains
