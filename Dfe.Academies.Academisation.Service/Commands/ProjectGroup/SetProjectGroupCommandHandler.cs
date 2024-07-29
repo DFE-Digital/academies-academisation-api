@@ -9,17 +9,12 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class SetProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, IValidator<SetProjectGroupCommand> validator, ILogger<SetProjectGroupCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupCommand, CommandResult>
+	public class SetProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, ILogger<SetProjectGroupCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupCommand message, CancellationToken cancellationToken)
 		{
 			logger.LogError($"Setting project group with urn:{message.GroupReferenceNumber}");
-			var validationResult = validator.Validate(message);
-			if (!validationResult.IsValid)
-			{
-				logger.LogError($"Validation failed while setting project group:{message}");
-				return new CommandValidationErrorResult(validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
-			}
+
 			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.GroupReferenceNumber, cancellationToken);
 			if (projectGroup == null)
 			{

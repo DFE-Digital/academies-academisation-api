@@ -18,7 +18,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 		private MockRepository _mockRepository;
 		private Mock<IProjectGroupRepository> _mockProjectGroupRepository;
 		private Mock<IDateTimeProvider> _mockDateTimeProvider;
-		private SetProjectGroupCommandValidator _validator;
 		private Mock<IConversionProjectRepository> _mockConversionProjectRepository;
 		private Mock<ILogger<SetProjectGroupCommandHandler>> _mocklogger;
 		private readonly Fixture _fixture = new();
@@ -30,7 +29,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_cancellationToken = CancellationToken.None;
 			_mockProjectGroupRepository = _mockRepository.Create<IProjectGroupRepository>();
 			_mockDateTimeProvider = _mockRepository.Create<IDateTimeProvider>();
-			_validator = new SetProjectGroupCommandValidator();
 			_mockConversionProjectRepository = _mockRepository.Create<IConversionProjectRepository>();
 			_mocklogger = new Mock<ILogger<SetProjectGroupCommandHandler>>();
 
@@ -43,35 +41,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			return new SetProjectGroupCommandHandler(
 				_mockProjectGroupRepository.Object,
 				_mockDateTimeProvider.Object,
-				_validator,
 				_mocklogger.Object,
 				_mockConversionProjectRepository.Object);
-		}
-
-		[Fact]
-		public async Task Handle_InValidCommand_ReturnsCommandValidationErrorResult()
-		{
-			var now = DateTime.Now;
-			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
-			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
-
-			// Arrange
-			var setProjectGroupCommandHandler = SetProjectGroupCommandHandler();
-			var request = new SetProjectGroupCommand(string.Empty, [3424]); 
-
-			// Act
-			var result = await setProjectGroupCommandHandler.Handle(
-				request,
-				_cancellationToken);
-
-			// Assert
-			var validationError = Assert.IsType<CommandValidationErrorResult>(result);
-			validationError.ValidationErrors.Should().HaveCount(2);
-			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustUrn
-			&& x.ReferenceNumber != null
-			&& x.CreatedOn == now)), Times.Never());
-
-			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == _cancellationToken)), Times.Never());
 		}
 
 		[Fact]

@@ -120,32 +120,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Exactly(3));
 			}
 
-		[Fact]
-		public async Task Handle_InValidCommand_ReturnsBadRequest()
-		{
-			// Arrange
-			var now = DateTime.Now;
-			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
-			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
-			var createProjectGroupCommandHandler = CreateProjectGroupCommandHandler();
-			var request = new CreateProjectGroupCommand(string.Empty, string.Empty, [3424]);
-			var cancellationToken = CancellationToken.None;
-
-			// Act
-			var result = await createProjectGroupCommandHandler.Handle(
-				request,
-				cancellationToken);
-
-			// Assert
-			var validationError = Assert.IsType<CreateValidationErrorResult>(result);
-			validationError.ValidationErrors.Should().HaveCount(2);
-			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReferenceNumber
-			&& x.ReferenceNumber != null
-			&& x.CreatedOn == now)), Times.Never());
-
-			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Never());
-		}
-
 		private static CreateProjectGroupCommand CreateValidCreateTProjectProjectCommand(bool includeConversions = true)
 		{
 			string trustReference = "TR00001";

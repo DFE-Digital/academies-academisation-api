@@ -2,7 +2,6 @@
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
-using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
@@ -11,16 +10,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
 	public class CreateProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, IConversionProjectRepository conversionProjectRepository, ILogger<CreateProjectGroupCommandHandler> logger) : IRequestHandler<CreateProjectGroupCommand, CreateResult>
 	{
-		private CreateProjectGroupCommandValidator validator = new();
+		//private CreateProjectGroupCommandValidator validator = new();
 		public async Task<CreateResult> Handle(CreateProjectGroupCommand message, CancellationToken cancellationToken)
 		{
 			logger.LogError($"Creating project group with urn:{message}");
-			var validationResult = validator.Validate(message);
-			if (!validationResult.IsValid)
-			{
-				logger.LogError($"Validation failed while validating the request:{message}");
-				return new CreateValidationErrorResult(validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
-			}
 
 			// create project group
 			var projectGroup = Domain.ProjectGroupsAggregate.ProjectGroup.Create(message.TrustReferenceNumber, dateTimeProvider.Now);
@@ -41,7 +34,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				if (conversionProjects == null || !conversionProjects.Any())
 				{
 					logger.LogError($"No conversion projects found for the urns passed to create the group.");
-					return new CreateValidationErrorResult(validationResult.Errors.Select(r => new ValidationError(r.PropertyName, r.ErrorMessage)));
+					return new CreateValidationErrorResult([new ValidationError("ConversionProjectIds", "No conversion projects found for the urns passed to create the group.")]);
 				}
 
 				foreach (var conversionProject in conversionProjects)
