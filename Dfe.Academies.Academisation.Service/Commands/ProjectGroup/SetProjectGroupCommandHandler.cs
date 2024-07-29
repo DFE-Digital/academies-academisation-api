@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.Core.Utils;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,23 +7,18 @@ using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class SetProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, ILogger<SetProjectGroupCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupCommand, CommandResult>
+	public class SetProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, ILogger<SetProjectGroupCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupCommand message, CancellationToken cancellationToken)
 		{
-			logger.LogError($"Setting project group with urn:{message.GroupReferenceNumber}");
+			logger.LogError($"Setting project group with reference number:{message.GroupReferenceNumber}");
 
 			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.GroupReferenceNumber, cancellationToken);
 			if (projectGroup == null)
 			{
-				logger.LogError($"Project group is not found with urn:{message.GroupReferenceNumber}");
+				logger.LogError($"Project group is not found with reference number:{message.GroupReferenceNumber}");
 				return new NotFoundCommandResult();
 			}
-			// we need to change this to be the assign user command
-			//projectGroup.SetAssignedUser(message.TrustUrn, dateTimeProvider.Now);
-
-			projectGroupRepository.Update(projectGroup);
-			await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIds(message.ConversionProjectIds, cancellationToken).ConfigureAwait(false);
 

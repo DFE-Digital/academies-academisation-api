@@ -14,6 +14,7 @@ using System.Linq;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using System;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -52,7 +53,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// Assert
 			var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
 			var responseModel = Assert.IsType<ProjectGroupResponseModel>(okObjectResult.Value);
-			Assert.Equal(responseModel.Urn, response.Urn);
+			Assert.Equal(responseModel.GroupReferenceNumber, response.GroupReferenceNumber);
 			Assert.Equal(responseModel.TrustReferenceNumber, response.TrustReferenceNumber);
 			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
 		}
@@ -77,31 +78,30 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task SetProjectGroup_ReturnsOk()
 		{
 			// Arrange
-			var urn = "34234233";
-			var command = new SetProjectGroupCommand(_trustReferenceNumber, []);
+			var referenceNumber = "34234233";
+			var command = new SetProjectGroupCommand([]);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CommandSuccessResult());
 
 			// Action
-			var result = await _controller.SetProjectGroup(urn, command, _cancellationToken) as OkResult;
+			var result = await _controller.SetProjectGroup(referenceNumber, command, _cancellationToken) as OkResult;
 
 			// Assert
 			Assert.Equal(result!.StatusCode, System.Net.HttpStatusCode.OK.GetHashCode());
 			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
 		}
 
-
 		[Fact]
 		public async Task SetProjectGroup_ReturnsNotFound()
 		{
 			// Arrange
-			var urn = "34234233";
-			var command = new SetProjectGroupCommand(_trustReferenceNumber, []);
+			var referenceNumber = "34234233";
+			var command = new SetProjectGroupCommand([]);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new NotFoundCommandResult());
 
 			// Action
-			var result = await _controller.SetProjectGroup(urn, command, _cancellationToken) as NotFoundResult;
+			var result = await _controller.SetProjectGroup(referenceNumber, command, _cancellationToken) as NotFoundResult;
 
 			// Assert
 			Assert.Equal(result!.StatusCode, System.Net.HttpStatusCode.NotFound.GetHashCode());
@@ -112,14 +112,77 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task SetProjectGroup_ReturnsBadRequest()
 		{
 			// Arrange
-			var urn = "34234233";
+			var refereneNumber = "34234233";
 			var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
-			var command = new SetProjectGroupCommand(_trustReferenceNumber, []);
+			var command = new SetProjectGroupCommand([]);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationErrors));
 
 			// Action
-			var result = await _controller.SetProjectGroup(urn, command, _cancellationToken);
+			var result = await _controller.SetProjectGroup(refereneNumber, command, _cancellationToken);
+
+			// Assert
+			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+			var validationErrors = Assert.IsAssignableFrom<IEnumerable<ValidationError>>(badRequestResult.Value);
+			Assert.Equal(expectedValidationErrors, validationErrors);
+			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
+		}
+
+		[Fact]
+		public async Task AssignProjectGroupUser_ReturnsNotFound()
+		{
+			// Arrange
+			var referenceNumber = "34234233";
+			var command = new SetProjectGroupAssignUserCommand(Guid.NewGuid(), _fixture.Create<string>(), "fullname@email.com")
+			{
+				GroupReferenceNumber = referenceNumber
+			};
+			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
+				.ReturnsAsync(new NotFoundCommandResult());
+
+			// Action
+			var result = await _controller.AssignProjectGroupUser(referenceNumber, command, _cancellationToken) as NotFoundResult;
+
+			// Assert
+			Assert.Equal(result!.StatusCode, System.Net.HttpStatusCode.NotFound.GetHashCode());
+			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
+		}
+
+		[Fact]
+		public async Task AssignProjectGroupUser_ReturnsOk()
+		{
+			// Arrange
+			var referenceNumber = "34234233";
+			var command = new SetProjectGroupAssignUserCommand(Guid.NewGuid(), _fixture.Create<string>(), "fullname@email.com")
+			{
+				GroupReferenceNumber = referenceNumber
+			};	
+			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			// Action
+			var result = await _controller.AssignProjectGroupUser(referenceNumber, command, _cancellationToken) as OkResult;
+
+			// Assert
+			Assert.Equal(result!.StatusCode, System.Net.HttpStatusCode.OK.GetHashCode());
+			_mediatrMock.Verify(x => x.Send(command, _cancellationToken), Times.Once());
+		}
+
+		[Fact]
+		public async Task AssignProjectGroupUser_ReturnsBadRequest()
+		{
+			// Arrange
+			var referenceNumber = "34234233";
+			var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
+			var command = new SetProjectGroupAssignUserCommand(Guid.NewGuid(), _fixture.Create<string>(), "")
+			{
+				GroupReferenceNumber = referenceNumber
+			};
+			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
+				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationErrors));
+
+			// Action
+			var result = await _controller.AssignProjectGroupUser(referenceNumber, command, _cancellationToken);
 
 			// Assert
 			var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);

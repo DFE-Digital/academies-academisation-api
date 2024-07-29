@@ -200,6 +200,7 @@ builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(Create
 builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typeof(CreateTransferProjectCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateProjectGroupCommand>), typeof(CreateProjectGroupCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<SetProjectGroupCommand>), typeof(SetProjectGroupCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<SetProjectGroupAssignUserCommand>), typeof(SetProjectGroupAssignUserCommandValidator));
 
 builder.Services.AddHostedService<EnrichProjectService>();
 builder.Services.AddHostedService<CreateFormAMatProjectsService>();

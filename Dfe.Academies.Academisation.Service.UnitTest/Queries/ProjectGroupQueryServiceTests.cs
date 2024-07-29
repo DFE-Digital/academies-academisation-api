@@ -55,7 +55,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			Assert.Equal(pageResult.Paging.Page, searchModel.Page);
 			foreach (var data in pageResult.Data)
 			{
-				Assert.Equal(data.Urn, expectedProjectGroup.ReferenceNumber);
+				Assert.Equal(data.GroupReferenceNumber, expectedProjectGroup.ReferenceNumber);
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
 			_mockConversionProjectRepository.Verify(x => x.SearchProjectsV2(null, null, null, null, null, null, searchModel.Page, searchModel.Count), Times.Once());
@@ -86,7 +86,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			Assert.Equal(pageResult.Paging.Page, searchModel.Page);
 			foreach (var data in pageResult.Data)
 			{
-				Assert.Equal(data.Urn, expectedProjectGroup.ReferenceNumber);
+				Assert.Equal(data.GroupReferenceNumber, expectedProjectGroup.ReferenceNumber);
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
 			_mockConversionProjectRepository.Verify(x => x.SearchProjectsV2(null, null, null, null, null, null, searchModel.Page, searchModel.Count), Times.Once());
@@ -117,7 +117,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			Assert.Equal(pageResult.Paging.Page, searchModel.Page);
 			foreach (var data in pageResult.Data)
 			{
-				Assert.Equal(data.Urn, expectedProjectGroup.ReferenceNumber);
+				Assert.Equal(data.GroupReferenceNumber, expectedProjectGroup.ReferenceNumber);
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
 			_mockConversionProjectRepository.Verify(x => x.SearchProjectsV2(null, searchModel.Title, null, null, null, null, searchModel.Page, searchModel.Count), Times.Once());

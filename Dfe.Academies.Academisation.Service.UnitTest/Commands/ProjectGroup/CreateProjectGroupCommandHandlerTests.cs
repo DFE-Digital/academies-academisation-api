@@ -7,9 +7,6 @@ using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
-using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
@@ -71,7 +68,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			// Assert
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
 			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
-			Assert.Equal(responseModel.Urn, expectedProjectGroupReference);
+			Assert.Equal(responseModel.GroupReferenceNumber, expectedProjectGroupReference);
 			Assert.Equal(responseModel.Conversions.Count(), expectedProjects.Count);
 			foreach (var conversion in responseModel.Conversions.Select((Value, Index) => (Value, Index)))
 			{

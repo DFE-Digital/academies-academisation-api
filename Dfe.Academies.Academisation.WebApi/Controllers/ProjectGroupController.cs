@@ -34,13 +34,32 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("{urn}/set-project-group", Name = "SetProjectGroup")]
+		[HttpPut("{referenceNumber}/set-project-group", Name = "SetProjectGroup")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> SetProjectGroup(string urn, [FromBody] SetProjectGroupCommand command, CancellationToken cancellationToken)
+		public async Task<IActionResult> SetProjectGroup(string referenceNumber, [FromBody] SetProjectGroupCommand command, CancellationToken cancellationToken)
 		{
 			logger.LogInformation($"Setting project group: {command}");
-			command.GroupReferenceNumber = urn;
+			command.GroupReferenceNumber = referenceNumber;
+			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
+				_ => new InternalServerErrorObjectResult("Error serving request")
+			};
+		}
+
+
+		[HttpPut("{referenceNumber}/assign-project-group-user", Name = "AssignProjectGroupUser")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<IActionResult> AssignProjectGroupUser(string referenceNumber, [FromBody] SetProjectGroupAssignUserCommand command, CancellationToken cancellationToken)
+		{
+			logger.LogInformation($"Setting project group with user: {command}");
+			command.GroupReferenceNumber = referenceNumber;
 			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
 			return result switch

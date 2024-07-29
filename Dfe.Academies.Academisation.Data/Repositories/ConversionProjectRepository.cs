@@ -285,8 +285,15 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<IProject>> GetConversionProjectsForGroup(string trustReferenceNumber, CancellationToken cancellationToken)
 		{
-			var projects = await this.dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber && 
+			var projects = await dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber && 
 			x.Details.ProjectStatus == "Converter Pre-AO (C)" && x.ProjectGroupId == null).ToListAsync(cancellationToken);
+
+			return projects;
+		}
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByProjectGroupIdAsync(int projectGroupId, CancellationToken cancellationToken)
+		{
+			var projects = await dbSet.Where(x => x.ProjectGroupId == projectGroupId).ToListAsync(cancellationToken);
 
 			return projects;
 		}
