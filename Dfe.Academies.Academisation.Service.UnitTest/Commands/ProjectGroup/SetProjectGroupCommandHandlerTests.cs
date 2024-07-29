@@ -63,7 +63,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			var notFoundCommandResult = Assert.IsType<NotFoundCommandResult>(result);
-			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustUrn
+			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReference
 			&& x.ReferenceNumber != null
 			&& x.CreatedOn == now)), Times.Never());
 
@@ -85,7 +85,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			};
 			_mockProjectGroupRepository.Setup(x => x.Update(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			_mockProjectGroupRepository.Setup(x => x.GetByReferenceNumberAsync(request.GroupReferenceNumber, _cancellationToken)).ReturnsAsync(expectedProjectGroup);
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionsUrns, _cancellationToken)).ReturnsAsync([]);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionProjectIds, _cancellationToken)).ReturnsAsync([]);
 			var setProjectGroupCommandHandler = SetProjectGroupCommandHandler();
 
 			// Act
@@ -95,7 +95,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			var commandSuccessResult = Assert.IsType<CommandSuccessResult>(result); 
-			_mockProjectGroupRepository.Verify(x => x.Update(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustUrn
+			_mockProjectGroupRepository.Verify(x => x.Update(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReference
 			&& x.ReferenceNumber == request.GroupReferenceNumber
 			&& x.LastModifiedOn == now)), Times.Once);
 
@@ -118,7 +118,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			};
 			_mockProjectGroupRepository.Setup(x => x.Update(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			_mockProjectGroupRepository.Setup(x => x.GetByReferenceNumberAsync(request.GroupReferenceNumber, _cancellationToken)).ReturnsAsync(expectedProjectGroup);
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionsUrns, _cancellationToken)).ReturnsAsync(expectedProjects);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionProjectIds, _cancellationToken)).ReturnsAsync(expectedProjects);
 			_mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Domain.ProjectAggregate.Project>()));
 			var setProjectGroupCommandHandler = SetProjectGroupCommandHandler();
 
@@ -129,9 +129,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			var commandSuccessResult = Assert.IsType<CommandSuccessResult>(result);
-			_mockConversionProjectRepository.Verify(x => x.GetConversionProjectsByIds(request.ConversionsUrns, _cancellationToken), Times.Once);
+			_mockConversionProjectRepository.Verify(x => x.GetConversionProjectsByIds(request.ConversionProjectIds, _cancellationToken), Times.Once);
 			_mockConversionProjectRepository.Verify(x => x.Update(It.IsAny<Domain.ProjectAggregate.Project>()), Times.Exactly(expectedProjects.Count));
-			_mockProjectGroupRepository.Verify(x => x.Update(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustUrn
+			_mockProjectGroupRepository.Verify(x => x.Update(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReference
 			&& x.ReferenceNumber == request.GroupReferenceNumber
 			&& x.LastModifiedOn == now)), Times.Once); 
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(_cancellationToken), Times.Exactly(2));
@@ -154,7 +154,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			};
 			_mockProjectGroupRepository.Setup(x => x.Update(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			_mockProjectGroupRepository.Setup(x => x.GetByReferenceNumberAsync(request.GroupReferenceNumber, _cancellationToken)).ReturnsAsync(expectedProjectGroup);
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionsUrns, _cancellationToken)).ReturnsAsync(expectedProjects);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionProjectIds, _cancellationToken)).ReturnsAsync(expectedProjects);
 			_mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Domain.ProjectAggregate.Project>()));
 			var setProjectGroupCommandHandler = SetProjectGroupCommandHandler();
 
@@ -165,9 +165,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 			// Assert
 			var commandSuccessResult = Assert.IsType<CommandSuccessResult>(result);
-			_mockConversionProjectRepository.Verify(x => x.GetConversionProjectsByIds(request.ConversionsUrns, _cancellationToken), Times.Once);
+			_mockConversionProjectRepository.Verify(x => x.GetConversionProjectsByIds(request.ConversionProjectIds, _cancellationToken), Times.Once);
 			_mockConversionProjectRepository.Verify(x => x.Update(It.IsAny<Domain.ProjectAggregate.Project>()), Times.Exactly(expectedProjects.Count));
-			_mockProjectGroupRepository.Verify(x => x.Update(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustUrn
+			_mockProjectGroupRepository.Verify(x => x.Update(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReference
 			&& x.ReferenceNumber == request.GroupReferenceNumber
 			&& x.LastModifiedOn == now)), Times.Once);
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(_cancellationToken), Times.Exactly(2));

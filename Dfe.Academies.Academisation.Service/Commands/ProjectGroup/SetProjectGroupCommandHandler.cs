@@ -4,7 +4,6 @@ using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
-using Dfe.Academies.Academisation.Service.Extensions;
 using FluentValidation;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
@@ -27,14 +26,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			projectGroupRepository.Update(projectGroup);
 			await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIds(message.ConversionsUrns, cancellationToken).ConfigureAwait(false);
+			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIds(message.ConversionProjectIds, cancellationToken).ConfigureAwait(false);
 
 			if (conversionProjects != null && conversionProjects.Any())
 			{
 				logger.LogInformation($"Setting conversions with project group id:{projectGroup.Id}");
 
 				var removedConversionProjects = conversionProjects.Where(x
-					=> !message.ConversionsUrns.Contains(x.Details.Urn)).ToList();
+					=> !message.ConversionProjectIds.Contains(x.Id)).ToList();
 				foreach (var removedConversionProject in removedConversionProjects)
 				{
 					removedConversionProject.SetProjectGroupId(null);
