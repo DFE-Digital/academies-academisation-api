@@ -93,7 +93,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var cancellationToken = CancellationToken.None;
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			var expectedProjects = _fixture.Create<List<Project>>();
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIds(request.ConversionProjectIds, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIdsAsync(request.ConversionProjectIds, 0, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
 			_mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Project>()));
 
 			// Act
@@ -105,6 +105,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
 			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
 			Assert.Equal(responseModel.Conversions.Count(), expectedProjects.Count);
+			Assert.NotEmpty(responseModel.GroupReferenceNumber);
+			Assert.StartsWith(responseModel.GroupReferenceNumber, "GRP_00000000");
 			foreach (var conversion in responseModel.Conversions.Select((Value, Index) => (Value, Index)))
 			{
 				Assert.Equal(conversion.Value.Urn, expectedProjects[conversion.Index].Details.Urn);
@@ -115,7 +117,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			&& x.CreatedOn == now)), Times.Once());
 
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Exactly(3));
-			}
+		}
 
 		private static CreateProjectGroupCommand CreateValidCreateTProjectProjectCommand(bool includeConversions = true)
 		{

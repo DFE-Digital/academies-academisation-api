@@ -255,7 +255,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return queryable;
 		}
 
-		private static IQueryable<Project> FilterByLocalAuthority(IEnumerable<string> localAuthorities, IQueryable<Project> queryable)
+		private static IQueryable<Project> FilterByLocalAuthority(IEnumerable<string>? localAuthorities, IQueryable<Project> queryable)
 		{
 			if (localAuthorities != null && localAuthorities.Any())
 			{
@@ -298,9 +298,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return projects;
 		}
 
-		public async Task<IEnumerable<IProject>> GetConversionProjectsByIds(IEnumerable<int> ids, CancellationToken cancellationToken)
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByIdsAsync(IEnumerable<int> ids, int? projectGroupId = null, CancellationToken cancellationToken = default)
 		{
-			var projects = await this.dbSet.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+			var projects = await dbSet.Where(x => x.ProjectGroupId == projectGroupId || ids.Contains(x.Id)).ToListAsync(cancellationToken);
 
 			return projects;
 		}

@@ -8,7 +8,7 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
-	public class SetProjectGroupAssignUserCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, ILogger<SetProjectGroupAssignUserCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupAssignUserCommand, CommandResult>
+	public class SetProjectGroupAssignUserCommandHandler(IProjectGroupRepository projectGroupRepository, ILogger<SetProjectGroupAssignUserCommandHandler> logger, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<SetProjectGroupAssignUserCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupAssignUserCommand message, CancellationToken cancellationToken)
 		{
@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				}
 			}
 
-			await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+			await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			 

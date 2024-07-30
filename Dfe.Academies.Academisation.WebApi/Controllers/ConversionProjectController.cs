@@ -186,7 +186,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		///     Retrieve all form a mat projects matching specified filter conditions
 		/// </summary>
 		/// <param name="searchModel"><see cref="GetProjectSearchModel"/> describing filtering requirements for the request</param>
-		/// <param name="urn">URN of a specific project to retrieve</param>
+		/// <param name="cancellationToken"></param>
 		/// <remarks>
 		///     Filters are cumulative (AND logic), applied in the following order: by Region, by Status, by URN, by School, by
 		///     Delivery Officer.

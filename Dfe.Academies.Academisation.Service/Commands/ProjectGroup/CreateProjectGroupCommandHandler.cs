@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			// if any  conversion were part of the message add them to the group
 			if (message.ConversionProjectIds.Any())
 			{
-				var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIds(message.ConversionProjectIds, cancellationToken).ConfigureAwait(false);
+				var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIdsAsync(message.ConversionProjectIds, projectGroup.Id, cancellationToken).ConfigureAwait(false);
 
 				if (conversionProjects == null || !conversionProjects.Any())
 				{
