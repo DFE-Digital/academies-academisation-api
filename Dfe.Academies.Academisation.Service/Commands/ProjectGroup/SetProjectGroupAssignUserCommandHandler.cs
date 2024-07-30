@@ -40,7 +40,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				}
 			}
 
-			await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			 
