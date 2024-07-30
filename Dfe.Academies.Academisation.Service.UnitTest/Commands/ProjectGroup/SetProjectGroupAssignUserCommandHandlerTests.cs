@@ -1,7 +1,6 @@
 ﻿
 using AutoFixture;
 using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
@@ -18,8 +17,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 		private Mock<IProjectGroupRepository> _mockProjectGroupRepository;
 		private Mock<IConversionProjectRepository> _mockConversionProjectRepository;
-
-		private Mock<IDateTimeProvider> _mockDateTimeProvider;
 		private Mock<ILogger<SetProjectGroupAssignUserCommandHandler>> _mocklogger;
 		private readonly Fixture _fixture = new();
 		private CancellationToken _cancellationToken;
@@ -30,7 +27,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockRepository = new MockRepository(MockBehavior.Strict);
 
 			_mockProjectGroupRepository = _mockRepository.Create<IProjectGroupRepository>();
-			_mockDateTimeProvider = _mockRepository.Create<IDateTimeProvider>();
 			_mockConversionProjectRepository = _mockRepository.Create<IConversionProjectRepository>();
 			_mocklogger = new Mock<ILogger<SetProjectGroupAssignUserCommandHandler>>();
 
