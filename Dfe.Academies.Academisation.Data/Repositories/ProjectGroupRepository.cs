@@ -64,7 +64,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return queryable;
 		}
 
-		public async Task<List<IProjectGroup>> GetByIds(IEnumerable<int?> projectGroupIds, CancellationToken cancellationToken)
+		public async Task<IEnumerable<IProjectGroup>> GetByIds(IEnumerable<int?> projectGroupIds, CancellationToken cancellationToken)
 		{
 			return await this.dbSet.Where(x => projectGroupIds.Contains(x.Id)).Cast<IProjectGroup>().ToListAsync(cancellationToken).ConfigureAwait(false);
 		}

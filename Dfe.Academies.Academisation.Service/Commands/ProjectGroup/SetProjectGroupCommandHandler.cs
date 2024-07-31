@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				return new NotFoundCommandResult();
 			}
 
-			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIdsAsync(message.ConversionProjectIds, projectGroup.Id, cancellationToken).ConfigureAwait(false);
+			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByProjectGroupIdAsync(projectGroup.Id, cancellationToken).ConfigureAwait(false);
 
 			if (conversionProjects != null && conversionProjects.Any())
 			{

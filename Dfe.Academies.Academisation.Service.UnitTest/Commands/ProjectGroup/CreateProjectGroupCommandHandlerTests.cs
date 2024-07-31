@@ -93,7 +93,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var cancellationToken = CancellationToken.None;
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			var expectedProjects = _fixture.Create<List<Project>>();
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByIdsAsync(request.ConversionProjectIds, 0, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByGroupIdAsync(request.ConversionProjectIds, 0, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
 			_mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Project>()));
 
 			// Act

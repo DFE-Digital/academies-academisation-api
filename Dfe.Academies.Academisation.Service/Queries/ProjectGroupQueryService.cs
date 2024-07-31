@@ -29,23 +29,27 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 			var (projects, totalCount) = await conversionProjectRepository.SearchGroupedProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates);
 
 			var projectGroupAggregates = await projectGroupRepository.GetByIds(projects
-				.Select(x => x.FormAMatProjectId).Distinct(), cancellationToken).ConfigureAwait(false);
+				.Select(x => x.ProjectGroupId).Distinct(), cancellationToken).ConfigureAwait(false);
+
+			if (!states.Any() && string.IsNullOrWhiteSpace(title) && !deliveryOfficers.Any() && !regions.Any() && !localAuthorities.Any() && !advisoryBoardDates.Any()) {
+				projectGroupAggregates = await projectGroupRepository.GetAll();
+			}
 
 			// doing paging here as it has to be at a form a mat level
 			projectGroupAggregates = projectGroupAggregates.OrderByDescending(x => x.CreatedOn).Skip((page - 1) * count)
 					.Take(count).ToList();
 
 			// need to add back in any projects that were filtered out, otherwise the project list indicates there are less projects in the group than there really is
-			projects = projects.Union(await conversionProjectRepository.GetConversionProjectsByProjectGroupIdAsync(projectGroupAggregates.Select(x => x.Id).Cast<int?>(), cancellationToken));
+			projects = projects.Union(await conversionProjectRepository.GetProjectsByProjectGroupIdsAsync(projectGroupAggregates.Select(x => x.Id).Cast<int?>(), cancellationToken));
 
 			var pageResponse = PagingResponseFactory.Create("conversion-projects/FormAMatProjects", page, count, totalCount,
 				new Dictionary<string, object?> {
 				{"states", states},
 				});
 
-			var data = projectGroupAggregates.Select(p => p.MapToFormAMatServiceModel(projects));
+			var data = projectGroupAggregates.Select(p => p.MapToProjectGroupServiceModel(projects));
 
-			return new PagedDataResponse<FormAMatProjectServiceModel>(data,
+			return new PagedDataResponse<ProjectGroupResponseModel>(data,
 				pageResponse);
 		}
 

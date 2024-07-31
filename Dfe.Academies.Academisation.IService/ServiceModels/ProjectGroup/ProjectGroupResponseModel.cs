@@ -12,6 +12,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 		public string? ReferenceNumber { get; init; } = referenceNumber;
 		public User AssignedUser { get; init; } = assignedUser;
 
-		public List<ConversionProjectServiceModel> projects { get; init; };
+		public List<ConversionProjectServiceModel> projects { get; init; }
 	}
 }

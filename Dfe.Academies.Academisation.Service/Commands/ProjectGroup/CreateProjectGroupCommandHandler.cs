@@ -5,6 +5,8 @@ using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
@@ -23,12 +25,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			projectGroup.SetProjectReference(projectGroup.Id);
 			await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-			var conversionsProjectModels = new List<ConversionsResponseModel>();
+			var conversionsProjectModels = new List<ConversionProjectServiceModel>();
 
 			// if any  conversion were part of the message add them to the group
 			if (message.ConversionProjectIds.Any())
 			{
-				var conversionProjects = await conversionProjectRepository.GetConversionProjectsByIdsAsync(message.ConversionProjectIds, projectGroup.Id, cancellationToken).ConfigureAwait(false);
+				var conversionProjects = await conversionProjectRepository.GetConversionProjectsByProjectIds(message.ConversionProjectIds, cancellationToken).ConfigureAwait(false);
 
 				if (conversionProjects == null || !conversionProjects.Any())
 				{
@@ -45,10 +47,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				
 				await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-				conversionsProjectModels = conversionProjects.Select(p => new ConversionsResponseModel(p.Details.Urn, p.Details.SchoolName!)).ToList();
+				conversionsProjectModels = conversionProjects.Select(p => p.MapToServiceModel()).ToList();
 			}
-		
-			var responseModel = new ProjectGroupResponseModel(projectGroup.ReferenceNumber!, projectGroup.TrustReference, conversionsProjectModels);
+
+			var responseModel = new ProjectGroupResponseModel(projectGroup.Id, projectGroup.ReferenceNumber!, projectGroup.TrustReference, null, null) {
+				projects = conversionsProjectModels
+			};
 
 			return new CreateSuccessResult<ProjectGroupResponseModel>(responseModel);
 

@@ -19,9 +19,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			dbSet.Add(obj);
 		}
 
-		public Task<IEnumerable<TEntity>> GetAll()
+		public async Task<IEnumerable<TEntity>> GetAll()
 		{
-			throw new NotImplementedException();
+			return await dbSet.ToListAsync().ConfigureAwait(false);
 		}
 
 		public async Task<TEntity> GetById(int id)

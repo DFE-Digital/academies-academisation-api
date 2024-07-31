@@ -133,7 +133,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 	public async Task<List<ConversionProjectServiceModel>> GetProjectsForGroup(string trustReferenceNumber, CancellationToken cancellationToken)
 	{
 		// get conversion projects
-		var projects = await this._conversionProjectRepository.GetConversionProjectsForGroup(trustReferenceNumber, cancellationToken).ConfigureAwait(false) ?? new List<Project>();
+		var projects = await this._conversionProjectRepository.GetConversionProjectsForNewGroup(trustReferenceNumber, cancellationToken).ConfigureAwait(false) ?? new List<Project>();
 
 		// get transfer projects will go here
 

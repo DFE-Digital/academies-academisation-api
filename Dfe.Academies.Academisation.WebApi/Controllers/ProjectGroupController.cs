@@ -72,15 +72,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpGet("/project-group/get-project-groups", Name = "GetProjectGroups")]
+		[HttpPost("/project-group/get-project-groups", Name = "GetProjectGroups")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedDataResponse<ProjectGroupResponseModel>>> GetProjectGroups(ConversionProjectSearchModel? searchModel, CancellationToken cancellationToken)
 		{
-			PagedDataResponse<FormAMatProjectServiceModel>? result =
-	await projectGroupQueryService.GetProjectGroupsAsync(searchModel!.StatusQueryString, searchModel.TitleFilter,
-		searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, cancellationToken,
-		searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
+			PagedDataResponse<ProjectGroupResponseModel>? result =
+				await projectGroupQueryService.GetProjectGroupsAsync(searchModel!.StatusQueryString, searchModel.TitleFilter,
+					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, cancellationToken,
+					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
 
 			return result is null ? NotFound() : Ok(result);
 		}
