@@ -12,12 +12,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupAssignUserCommand message, CancellationToken cancellationToken)
 		{
-			logger.LogInformation("Setting project group with reference number: {0}", message.GroupReferenceNumber);
+			logger.LogInformation("Setting project group with reference number: {value}", message.GroupReferenceNumber);
 
 			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.GroupReferenceNumber, cancellationToken);
 			if (projectGroup == null)
 			{
-				logger.LogError("Project group is not found with reference number:{0}", message.GroupReferenceNumber);
+				logger.LogError("Project group is not found with reference number:{value}", message.GroupReferenceNumber);
 				return new NotFoundCommandResult();
 			}
 			projectGroup.SetAssignedUser(message.UserId, message.FullName, message.EmailAddress);
@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			{
 				if (conversionProject is null)
 				{
-					logger.LogError("Conversion project not found with project group id: {0}", projectGroup.Id);
+					logger.LogError("Conversion project not found with project group id: {value}", projectGroup.Id);
 					return new NotFoundCommandResult();
 				}
 				if (conversionProject.Details.AssignedUser == null)
