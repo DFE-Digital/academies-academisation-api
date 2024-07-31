@@ -32,7 +32,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 
 				if (conversionProjects == null || !conversionProjects.Any())
 				{
-					logger.LogError("No conversion projects found for the urns passed to create the group.");
+					logger.LogError("No conversion projects found for the {0} Ids passed to create the group.", message.ConversionProjectIds);
 					return new CreateValidationErrorResult([new ValidationError("ConversionProjectIds", "No conversion projects found for the urns passed to create the group.")]);
 				}
 
