@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult<ProjectGroupResponseModel>> CreateProjectGroup(
 			[FromBody] CreateProjectGroupCommand command, CancellationToken cancellationToken)
 		{
-			logger.LogInformation($"Creating project group: {command}");
+			logger.LogInformation("Creating project group: {0}", command);
 			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
 			return result switch
@@ -39,7 +39,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> SetProjectGroup(string referenceNumber, [FromBody] SetProjectGroupCommand command, CancellationToken cancellationToken)
 		{
-			logger.LogInformation($"Setting project group: {command}");
+			logger.LogInformation("Setting project group: {0}", command);
 			command.GroupReferenceNumber = referenceNumber;
 			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
 
@@ -58,7 +58,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<IActionResult> AssignProjectGroupUser(string referenceNumber, [FromBody] SetProjectGroupAssignUserCommand command, CancellationToken cancellationToken)
 		{
-			logger.LogInformation($"Setting project group with user: {command}");
+			logger.LogInformation("Setting project group with user: {0}", command);
 			command.GroupReferenceNumber = referenceNumber;
 			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
 

@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockProjectGroupRepository = _mockRepository.Create<IProjectGroupRepository>();
 			_mockConversionProjectRepository = _mockRepository.Create<IConversionProjectRepository>();
 			_mocklogger = new Mock<ILogger<SetProjectGroupAssignUserCommandHandler>>();
-
+			_cancellationToken = CancellationToken.None;
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockProjectGroupRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
 			_mockConversionProjectRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);

@@ -10,7 +10,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
 	public class CreateProjectGroupCommandHandler(IProjectGroupRepository projectGroupRepository, IDateTimeProvider dateTimeProvider, IConversionProjectRepository conversionProjectRepository, ILogger<CreateProjectGroupCommandHandler> logger) : IRequestHandler<CreateProjectGroupCommand, CreateResult>
 	{
-		//private CreateProjectGroupCommandValidator validator = new();
 		public async Task<CreateResult> Handle(CreateProjectGroupCommand message, CancellationToken cancellationToken)
 		{
 			logger.LogError($"Creating project group with urn:{message}");
@@ -41,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				{
 					conversionProject.SetProjectGroupId(projectGroup.Id);
 
-					conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
+					conversionProjectRepository.Update((Domain.ProjectAggregate.Project)conversionProject);
 				}
 				
 				await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

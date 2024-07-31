@@ -34,7 +34,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		}
 
 		[Fact]
-		public void GetProjectGroupsAsync_WithReferenceNumber_ShouldReturnResult()
+		public async Task GetProjectGroupsAsync_WithReferenceNumber_ShouldReturnResultAsync()
 		{
 			// Arrange
 			var searchModel = new ProjectGroupSearchModel(1, 1, "GRP_0987372", null, null);
@@ -47,10 +47,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 
 			// Action
-			var result = _projectGroupQueryService.GetProjectGroupsAsync(searchModel, _cancellationToken);
+			var result = await _projectGroupQueryService.GetProjectGroupsAsync(searchModel, _cancellationToken);
 
 			//Assert
-			var pageResult = Assert.IsType<PagedDataResponse<ProjectGroupResponseModel>>(result.Result);
+			var pageResult = Assert.IsType<PagedDataResponse<ProjectGroupResponseModel>>(result);
 			Assert.Equal(pageResult.Paging.RecordCount, searchModel.Count);
 			Assert.Equal(pageResult.Paging.Page, searchModel.Page);
 			foreach (var data in pageResult.Data)
@@ -65,7 +65,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		}
 
 		[Fact]
-		public void GetProjectGroupsAsync_WithTrustReference_ShouldReturnResult()
+		public async Task GetProjectGroupsAsync_WithTrustReference_ShouldReturnResult()
 		{
 			// Arrange
 			var searchModel = new ProjectGroupSearchModel(1, 1, null, "83639876", null);
@@ -78,10 +78,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 
 			// Action
-			var result = _projectGroupQueryService.GetProjectGroupsAsync(searchModel, _cancellationToken);
+			var result = await _projectGroupQueryService.GetProjectGroupsAsync(searchModel, _cancellationToken);
 
 			//Assert
-			var pageResult = Assert.IsType<PagedDataResponse<ProjectGroupResponseModel>>(result.Result);
+			var pageResult = Assert.IsType<PagedDataResponse<ProjectGroupResponseModel>>(result);
 			Assert.Equal(pageResult.Paging.RecordCount, searchModel.Count);
 			Assert.Equal(pageResult.Paging.Page, searchModel.Page);
 			foreach (var data in pageResult.Data)
@@ -96,7 +96,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		}
 
 		[Fact]
-		public void GetProjectGroupsAsync_WithTitle_ShouldReturnResult()
+		public async Task GetProjectGroupsAsync_WithTitle_ShouldReturnResult()
 		{
 			// Arrange
 			var searchModel = new ProjectGroupSearchModel(1, 1, null, null, "title");
@@ -109,10 +109,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 
 			// Action
-			var result = _projectGroupQueryService.GetProjectGroupsAsync(searchModel, _cancellationToken);
+			var result = await _projectGroupQueryService.GetProjectGroupsAsync(searchModel, _cancellationToken);
 
 			//Assert
-			var pageResult = Assert.IsType<PagedDataResponse<ProjectGroupResponseModel>>(result.Result);
+			var pageResult = Assert.IsType<PagedDataResponse<ProjectGroupResponseModel>>(result);
 			Assert.Equal(pageResult.Paging.RecordCount, searchModel.Count);
 			Assert.Equal(pageResult.Paging.Page, searchModel.Page);
 			foreach (var data in pageResult.Data)
