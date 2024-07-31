@@ -96,6 +96,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return queryable;
 		}
 
+		private static IQueryable<Project> FilterGroupedProjects(IQueryable<Project> queryable)
+		{
+			queryable = queryable.Where(p => p.ProjectGroupId != null);
+
+			return queryable;
+		}
+
 		public async Task<IEnumerable<IProject>?> GetIncompleteProjects()
 		{
 			var createdProjectState = await _context.Projects
@@ -243,6 +250,25 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
+		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchGroupedProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+		{
+			IQueryable<Project> queryable = dbSet;
+
+			queryable = FilterGroupedProjects(queryable);
+			queryable = FilterByRegion(regions, queryable);
+			queryable = FilterByStatus(states, queryable);
+			queryable = FilterByKeyword(title, queryable);
+			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
+			queryable = FilterByLocalAuthority(localAuthorities, queryable);
+			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
+
+			var totalProjects = queryable.Select(p => p.ProjectGroupId).Distinct().Count();
+			var projects = await queryable
+				.OrderByDescending(acp => acp.CreatedOn).ToListAsync();
+
+			return (projects, totalProjects);
+		}
+
 		private IQueryable<Project> FilterByAdvisoryBoardDates(IEnumerable<string>? advisoryBoardDates, IQueryable<Project> queryable)
 		{
 			if (advisoryBoardDates != null && advisoryBoardDates.Any())
@@ -291,9 +317,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return projects;
 		}
 
-		public async Task<IEnumerable<IProject>> GetConversionProjectsByProjectGroupIdAsync(int projectGroupId, CancellationToken cancellationToken)
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByProjectGroupIdsAsync(IEnumerable<int?> ids, CancellationToken cancellationToken)
 		{
-			var projects = await dbSet.Where(x => x.ProjectGroupId == projectGroupId).ToListAsync(cancellationToken);
+			var projects = await dbSet.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
 
 			return projects;
 		}

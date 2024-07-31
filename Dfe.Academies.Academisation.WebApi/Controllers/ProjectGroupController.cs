@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
+using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.ActionResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -74,11 +75,14 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("/project-group/get-project-groups", Name = "GetProjectGroups")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<PagedDataResponse<ProjectGroupResponseModel>>> GetProjectGroups(ProjectGroupSearchModel searchModel, CancellationToken cancellationToken)
+		public async Task<ActionResult<PagedDataResponse<ProjectGroupResponseModel>>> GetProjectGroups(ConversionProjectSearchModel? searchModel, CancellationToken cancellationToken)
 		{
-			var result = await projectGroupQueryService.GetProjectGroupsAsync(searchModel, cancellationToken);
+			PagedDataResponse<FormAMatProjectServiceModel>? result =
+	await projectGroupQueryService.GetProjectGroupsAsync(searchModel!.StatusQueryString, searchModel.TitleFilter,
+		searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, cancellationToken,
+		searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
 
-			return result is null || result.Data.IsNullOrEmpty() ? NotFound() : Ok(result);
+			return result is null ? NotFound() : Ok(result);
 		}
 	}
 }

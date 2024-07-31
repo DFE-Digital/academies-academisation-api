@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -61,6 +62,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			}
 
 			return queryable;
+		}
+
+		public async Task<List<IProjectGroup>> GetByIds(IEnumerable<int?> projectGroupIds, CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => projectGroupIds.Contains(x.Id)).Cast<IProjectGroup>().ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

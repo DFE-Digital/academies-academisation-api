@@ -1,17 +1,17 @@
-﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
+﻿using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+
+namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 {
-	public class ProjectGroupResponseModel(string referenceNumber, string trustReferenceNumber, IEnumerable<ConversionsResponseModel> conversions)
+	public class ProjectGroupResponseModel(int id, string referenceNumber, string trustReferenceNumber, string trustName, User assignedUser)
 	{
-		public string TrustReferenceNumber { get; private set; } = trustReferenceNumber;
+		public int Id { get; init; } = id;
+		public string TrustReferenceNumber { get; init; } = trustReferenceNumber;
 
-		public string GroupReferenceNumber { get; private set; } = referenceNumber;
+		public string TrustName { get; init ; } = trustName;
 
-		public IEnumerable<ConversionsResponseModel> Conversions { get; set; } = conversions;
-	}
+		public string? ReferenceNumber { get; init; } = referenceNumber;
+		public User AssignedUser { get; init; } = assignedUser;
 
-	public class ConversionsResponseModel(int urn, string? schoolName)
-	{
-		public int Urn { get; private set; } = urn;
-		public string? SchoolName { get; private set; } = schoolName;
+		public List<ConversionProjectServiceModel> projects { get; init; };
 	}
 }
