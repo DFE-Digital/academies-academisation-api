@@ -34,7 +34,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 					_ => new InternalServerErrorObjectResult("Error serving request")
 				};
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return default;
 			}

@@ -38,7 +38,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 			// Arrange
 			var project = this.CreateProject();
 			bool ExternalApplicationFormSaved = false;
-			string ExternalApplicationFormUrl = null;
+			var ExternalApplicationFormUrl = _fixture.Create<string>();
 
 			// Act
 			project.SetExternalApplicationForm(

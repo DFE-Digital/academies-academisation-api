@@ -70,12 +70,12 @@ public class ProjectUpdateTests
 		result.Should().Be(expected);
 	}
 
-	public static IEnumerable<object[]> TypeUnchangedData => new List<object[]>
-		{
-			new object[] { "fast track", "fast track", 70000m, 70000m , false, "primary" },
-			new object[] { "intermediate", "intermediate", 90000m, 90000m, false, "primary" },
-			new object[] { "full", "full", 110000m, 110000m, false , "primary" }
-		};
+	public static IEnumerable<object[]> TypeUnchangedData =>
+		[
+			["fast track", "fast track", 70000m, 70000m , false, "primary"],
+			["intermediate", "intermediate", 90000m, 90000m, false, "primary"],
+			["full", "full", 110000m, 110000m, false , "primary"]
+		];
 
 	[Theory]
 	[MemberData(nameof(TypeUnchangedData))]
@@ -84,12 +84,12 @@ public class ProjectUpdateTests
 		var result = Project.CalculateDefaultSponsoredGrant(existingType, newType, currentAmount, amountChangedFromDefault, phase);
 		result.Should().Be(expected);
 	}
-	public static IEnumerable<object[]> DefaultWantedCheckedData => new List<object[]>
-	{
-		new object[] { "fast track", "fast track", 80000m, 70000m , true, "primary" },
-		new object[] { "intermediate", "intermediate", 70000m, 90000m, true , "primary" },
-		new object[] { "full", "full", 100000m, 110000m, true , "primary" }
-	};
+	public static IEnumerable<object[]> DefaultWantedCheckedData =>
+	[
+		["fast track", "fast track", 80000m, 70000m , true, "primary"],
+		["intermediate", "intermediate", 70000m, 90000m, true , "primary"],
+		["full", "full", 100000m, 110000m, true , "primary"]
+	];
 
 	[Theory]
 	[MemberData(nameof(DefaultWantedCheckedData))]
@@ -99,47 +99,47 @@ public class ProjectUpdateTests
 		result.Should().Be(expected);
 	}
 
-	public static IEnumerable<object[]> EmptyExistingTypeData => new List<object[]>
-		{
-			new object[] { null, "fast track", null, 70000m, false, "primary"},
-			new object[] { null, "intermediate", null, 90000m, false , "primary" },
-			new object[] { null, "full", null, 110000m, false , "primary" }
-		};
+	public static IEnumerable<object[]> EmptyExistingTypeData =>
+		[
+			["fast track", 70000m, false, "primary"],
+			["intermediate", 90000m, false , "primary"],
+			["full", 110000m, false , "primary"]
+		];
 
 	[Theory]
 	[MemberData(nameof(EmptyExistingTypeData))]
-	public void CalculateDefaultSponsoredGrant_EmptyExistingType_ReturnsNewDefault(string existingType, string newType, decimal? currentAmount, decimal? expected, bool amountChangedFromDefault, string? phase)
+	public void CalculateDefaultSponsoredGrant_EmptyExistingType_ReturnsNewDefault(string newType, decimal? expected, bool amountChangedFromDefault, string? phase)
 	{
-		var result = Project.CalculateDefaultSponsoredGrant(existingType, newType, currentAmount, amountChangedFromDefault, phase);
+		var result = Project.CalculateDefaultSponsoredGrant(null, newType, null, amountChangedFromDefault, phase);
 		result.Should().Be(expected);
 	}
-	public static IEnumerable<object[]> EmptyExistingTypeDataSecondary => new List<object[]>
-	{
-		new object[] { null, "fast track", null, 80000m, false, "secondary"},
-		new object[] { null, "intermediate", null, 115000m, false , "secondary" },
-		new object[] { null, "full", null, 150000m, false , "secondary" }
-	};
+	public static IEnumerable<object[]> EmptyExistingTypeDataSecondary =>
+	[
+		["fast track", 80000m, false, "secondary"],
+		["intermediate", 115000m, false , "secondary"],
+		["full", 150000m, false , "secondary"]
+	];
 
 	[Theory]
 	[MemberData(nameof(EmptyExistingTypeDataSecondary))]
-	public void CalculateDefaultSponsoredGrantSecondary_EmptyExistingType_ReturnsNewDefault(string existingType, string newType, decimal? currentAmount, decimal? expected, bool amountChangedFromDefault, string? phase)
+	public void CalculateDefaultSponsoredGrantSecondary_EmptyExistingType_ReturnsNewDefault(string newType, decimal? expected, bool amountChangedFromDefault, string? phase)
 	{
-		var result = Project.CalculateDefaultSponsoredGrant(existingType, newType, currentAmount, amountChangedFromDefault, phase);
+		var result = Project.CalculateDefaultSponsoredGrant(null, newType, null, amountChangedFromDefault, phase);
 		result.Should().Be(expected);
 	}
 
-	public static IEnumerable<object[]> NullNewTypeData => new List<object[]>
-		{
-			new object[] { "fast track", null, 70000m, 70000m , false , "primary" },
-			new object[] { "intermediate", null, 90000m, 90000m, false , "primary" },
-			new object[] { "full", null, 110000m, 110000m, false , "primary" }
-		};
+	public static IEnumerable<object[]> NullNewTypeData =>
+		[
+			["fast track", 70000m, 70000m , false , "primary"],
+			["intermediate", 90000m, 90000m, false , "primary"],
+			["full", 110000m, 110000m, false , "primary"]
+		];
 
 	[Theory]
 	[MemberData(nameof(NullNewTypeData))]
-	public void CalculateDefaultSponsoredGrant_NullNewType_ReturnsCurrentAmount(string existingType, string newType, decimal? currentAmount, decimal? expected, bool amountChangedFromDefault, string? phase)
+	public void CalculateDefaultSponsoredGrant_NullNewType_ReturnsCurrentAmount(string existingType, decimal? currentAmount, decimal? expected, bool amountChangedFromDefault, string? phase)
 	{
-		var result = Project.CalculateDefaultSponsoredGrant(existingType, newType, currentAmount, amountChangedFromDefault, phase);
+		var result = Project.CalculateDefaultSponsoredGrant(existingType, null, currentAmount, amountChangedFromDefault, phase);
 		result.Should().Be(expected);
 	}
 
@@ -156,16 +156,16 @@ public class ProjectUpdateTests
 		result.Should().Be(expected);
 	}
 
-	public static IEnumerable<object[]> NullExistingAndNewTypeData => new List<object[]>
-		{
-			new object[] { null, null, 50000m, 50000m, false, "primary" }
-		};
+	public static IEnumerable<object[]> NullExistingAndNewTypeData =>
+		[
+			[50000m, 50000m, false, "primary"]
+		];
 
 	[Theory]
 	[MemberData(nameof(NullExistingAndNewTypeData))]
-	public void CalculateDefaultSponsoredGrant_NullExistingAndNewType_ReturnsCurrentAmount(string existingType, string newType, decimal? currentAmount, decimal? expected, bool amountChangedFromDefault, string? phase)
+	public void CalculateDefaultSponsoredGrant_NullExistingAndNewType_ReturnsCurrentAmount(decimal? currentAmount, decimal? expected, bool amountChangedFromDefault, string? phase)
 	{
-		var result = Project.CalculateDefaultSponsoredGrant(existingType, newType, currentAmount, amountChangedFromDefault, phase);
+		var result = Project.CalculateDefaultSponsoredGrant(null, null, currentAmount, amountChangedFromDefault, phase);
 		result.Should().Be(expected);
 	}
 }

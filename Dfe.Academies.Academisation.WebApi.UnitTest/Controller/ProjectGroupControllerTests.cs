@@ -36,6 +36,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			_projectGroupQueryServiceMock = new Mock<IProjectGroupQueryService>();
 			_controller = new ProjectGroupController(_mediatrMock.Object, _loggerMock.Object, _projectGroupQueryServiceMock.Object);
 			_trustReferenceNumber = _fixture.Create<string>()[..8];
+			_trustUkprn = _fixture.Create<string>()[..8];
 		}
 
 		[Fact]
