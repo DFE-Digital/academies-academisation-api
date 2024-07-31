@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 	{
 		public async Task<CreateResult> Handle(CreateProjectGroupCommand message, CancellationToken cancellationToken)
 		{
-			logger.LogError($"Creating project group with urn:{message}");
+			logger.LogInformation("Creating project group with urn: {0}", message);
 
 			// create project group
 			var projectGroup = Domain.ProjectGroupsAggregate.ProjectGroup.Create(message.TrustReferenceNumber, dateTimeProvider.Now);
@@ -32,7 +32,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 
 				if (conversionProjects == null || !conversionProjects.Any())
 				{
-					logger.LogError($"No conversion projects found for the urns passed to create the group.");
+					logger.LogError("No conversion projects found for the urns passed to create the group.");
 					return new CreateValidationErrorResult([new ValidationError("ConversionProjectIds", "No conversion projects found for the urns passed to create the group.")]);
 				}
 

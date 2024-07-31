@@ -11,7 +11,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupCommand message, CancellationToken cancellationToken)
 		{
-			logger.LogError($"Setting project group with reference number:{message.GroupReferenceNumber}");
+			logger.LogInformation($"Setting project group with reference number:{message.GroupReferenceNumber}");
 
 			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.GroupReferenceNumber, cancellationToken);
 			if (projectGroup == null)
@@ -31,14 +31,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				foreach (var removedConversionProject in removedConversionProjects)
 				{
 					removedConversionProject.SetProjectGroupId(null);
-					conversionProjectRepository.Update(removedConversionProject as Domain.ProjectAggregate.Project);
+					conversionProjectRepository.Update((Domain.ProjectAggregate.Project)removedConversionProject);
 				}
 
 				var addConversionProjects = conversionProjects.Except(removedConversionProjects).ToList();
 				foreach (var addConversionProject in addConversionProjects)
 				{
 					addConversionProject.SetProjectGroupId(projectGroup.Id);
-					conversionProjectRepository.Update(addConversionProject as Domain.ProjectAggregate.Project);
+					conversionProjectRepository.Update((Domain.ProjectAggregate.Project)addConversionProject);
 				}
 
 				await conversionProjectRepository.UnitOfWork.SaveChangesAsync();

@@ -12,7 +12,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupAssignUserCommand message, CancellationToken cancellationToken)
 		{
-			logger.LogError("Setting project group with reference number: {0}", message.GroupReferenceNumber);
+			logger.LogInformation("Setting project group with reference number: {0}", message.GroupReferenceNumber);
 
 			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.GroupReferenceNumber, cancellationToken);
 			if (projectGroup == null)

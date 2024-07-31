@@ -15,7 +15,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 	{
 		public async Task<PagedDataResponse<ProjectGroupResponseModel>?> GetProjectGroupsAsync(ProjectGroupSearchModel searchModel, CancellationToken cancellationToken)
 		{
-			logger.LogError($"Searching project group with :{searchModel}");
+			logger.LogInformation("Searching project group with :{0}", searchModel);
 
 			var (conversionProjects, _) = await conversionProjectRepository.SearchProjectsV2(null, searchModel.Title, null, null, null, null, searchModel.Page, searchModel.Count);
 			var (projectGroups, totalCount) = await projectGroupRepository.SearchProjectGroups(searchModel.Page, searchModel.Count,
