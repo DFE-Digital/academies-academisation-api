@@ -11,12 +11,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 	{
 		public async Task<CommandResult> Handle(SetProjectGroupCommand message, CancellationToken cancellationToken)
 		{
-			logger.LogInformation($"Setting project group with reference number:{message.GroupReferenceNumber}");
+			logger.LogInformation("Setting project group with reference number:{value}", message.GroupReferenceNumber);
 
 			var projectGroup = await projectGroupRepository.GetByReferenceNumberAsync(message.GroupReferenceNumber, cancellationToken);
 			if (projectGroup == null)
 			{
-				logger.LogError($"Project group is not found with reference number:{message.GroupReferenceNumber}");
+				logger.LogError("Project group is not found with reference number:{value}", message.GroupReferenceNumber);
 				return new NotFoundCommandResult();
 			}
 
@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 
 			if (conversionProjects != null && conversionProjects.Any())
 			{
-				logger.LogInformation($"Setting conversions with project group id:{projectGroup.Id}");
+				logger.LogInformation("Setting conversions with project group id:{value}", projectGroup.Id);
 
 				var removedConversionProjects = conversionProjects.Where(x
 					=> !message.ConversionProjectIds.Contains(x.Id)).ToList();

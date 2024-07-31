@@ -218,13 +218,14 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 			VerifyNotFoundHttpStatus(result);
 		}
-		private void VerifyOkHttpStatus(OkResult? result)
+
+		private static void VerifyOkHttpStatus(OkResult? result)
 		{
 			Assert.NotNull(result);
 			Assert.Equal(result.StatusCode, HttpStatusCode.OK.GetHashCode());
 		}
 
-		private void VerifyNotFoundHttpStatus(NotFoundResult? result)
+		private static void VerifyNotFoundHttpStatus(NotFoundResult? result)
 		{
 			Assert.NotNull(result);
 			Assert.Equal(result.StatusCode, HttpStatusCode.NotFound.GetHashCode());
