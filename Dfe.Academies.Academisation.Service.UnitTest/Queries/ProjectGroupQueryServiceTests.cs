@@ -42,8 +42,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedProject = _fixture.Create<Domain.ProjectAggregate.Project>();
 			expectedProject.SetProjectGroupId(expectedProjectGroup.Id);
 			_mockConversionProjectRepository.Setup(x => x.SearchProjectsV2(null, null, null, null, null, null, searchModel.Page, searchModel.Count)).ReturnsAsync(([], 0));
-			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.Page, searchModel.Count, searchModel.ReferenceNumber, new List<string?>(), _cancellationToken))
-				.ReturnsAsync(([expectedProjectGroup], searchModel.Count));
+			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.ReferenceNumber, _cancellationToken))
+				.ReturnsAsync([expectedProjectGroup]);
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 
 			// Action
@@ -59,7 +59,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
 			_mockConversionProjectRepository.Verify(x => x.SearchProjectsV2(null, null, null, null, null, null, searchModel.Page, searchModel.Count), Times.Once());
-			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.Page, searchModel.Count, searchModel.ReferenceNumber, new List<string>(), _cancellationToken), Times.Once());
+			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.ReferenceNumber, _cancellationToken), Times.Once());
 			_mockConversionProjectRepository.Verify(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken), Times.Once());
 
 		}
@@ -73,8 +73,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedProject = _fixture.Create<Domain.ProjectAggregate.Project>();
 			expectedProject.SetProjectGroupId(expectedProjectGroup.Id);
 			_mockConversionProjectRepository.Setup(x => x.SearchProjectsV2(null, null, null, null, null, null, searchModel.Page, searchModel.Count)).ReturnsAsync(([], 0));
-			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.Page, searchModel.Count, searchModel.ReferenceNumber, new List<string?>() { searchModel.TrustReference}, _cancellationToken))
-				.ReturnsAsync(([expectedProjectGroup], searchModel.Count));
+			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.TrustReference, _cancellationToken))
+				.ReturnsAsync([expectedProjectGroup]);
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 
 			// Action
@@ -90,7 +90,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
 			_mockConversionProjectRepository.Verify(x => x.SearchProjectsV2(null, null, null, null, null, null, searchModel.Page, searchModel.Count), Times.Once());
-			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.Page, searchModel.Count, searchModel.ReferenceNumber, new List<string?>() { searchModel.TrustReference }, _cancellationToken), Times.Once());
+			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.TrustReference, _cancellationToken), Times.Once());
 			_mockConversionProjectRepository.Verify(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken), Times.Once());
 
 		}
@@ -104,8 +104,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedProject = _fixture.Create<Domain.ProjectAggregate.Project>();
 			expectedProject.SetProjectGroupId(expectedProjectGroup.Id);
 			_mockConversionProjectRepository.Setup(x => x.SearchProjectsV2(null,searchModel.Title, null, null, null, null, searchModel.Page, searchModel.Count)).ReturnsAsync(([expectedProject], 1));
-			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.Page, searchModel.Count, searchModel.ReferenceNumber, new List<string?>() { expectedProject.Details.TrustReferenceNumber }, _cancellationToken))
-				.ReturnsAsync(([expectedProjectGroup], searchModel.Count));
+			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(expectedProject.Details.TrustReferenceNumber, _cancellationToken))
+				.ReturnsAsync([expectedProjectGroup]);
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 
 			// Action
@@ -121,7 +121,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
 			_mockConversionProjectRepository.Verify(x => x.SearchProjectsV2(null, searchModel.Title, null, null, null, null, searchModel.Page, searchModel.Count), Times.Once());
-			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.Page, searchModel.Count, searchModel.ReferenceNumber, new List<string?>() { expectedProject.Details.TrustReferenceNumber }, _cancellationToken), Times.Once());
+			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(expectedProject.Details.TrustReferenceNumber, _cancellationToken), Times.Once());
 			_mockConversionProjectRepository.Verify(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken), Times.Once());
 
 		}
