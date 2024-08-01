@@ -15,7 +15,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 {
 	public class ProjectGroupQueryService(IProjectGroupRepository projectGroupRepository, IConversionProjectRepository conversionProjectRepository, ILogger<ProjectGroupQueryService> logger) : IProjectGroupQueryService
 	{
-		public async Task<PagedDataResponse<ProjectGroupResponseModel>?> GetProjectGroupsAsync(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, CancellationToken cancellationToken, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+		public async Task<PagedDataResponse<ProjectGroupResponseModel>?> GetProjectGroupsAsync(IEnumerable<string>? states, string? title, 
+			IEnumerable<string>? deliveryOfficers,  IEnumerable<string>? regions, 
+			IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count,CancellationToken cancellationToken)
 		{
 			//var (conversionProjects, _) = await conversionProjectRepository.SearchProjectsV2(null, searchModel.Title, null, null, null, null, searchModel.Page, searchModel.Count);
 			//var (projectGroups, totalCount) = await projectGroupRepository.SearchProjectGroups(searchModel.Page, searchModel.Count,
@@ -40,9 +42,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 					.Take(count).ToList();
 
 			// need to add back in any projects that were filtered out, otherwise the project list indicates there are less projects in the group than there really is
-			projects = projects.Union(await conversionProjectRepository.GetProjectsByProjectGroupIdsAsync(projectGroupAggregates.Select(x => x.Id).Cast<int?>(), cancellationToken));
+			projects = projects.Union(await conversionProjectRepository.GetProjectsByProjectGroupIdsAsync(projectGroupAggregates.Select(x => x.Id).Cast<int>(), cancellationToken));
 
-			var pageResponse = PagingResponseFactory.Create("conversion-projects/FormAMatProjects", page, count, totalCount,
+			var pageResponse = PagingResponseFactory.Create("project-groups/groups", page, count, totalCount,
 				new Dictionary<string, object?> {
 				{"states", states},
 				});
@@ -52,13 +54,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 			return new PagedDataResponse<ProjectGroupResponseModel>(data,
 				pageResponse);
 		}
-
-		//private IEnumerable<ProjectGroupResponseModel> MapToResponse(IEnumerable<IProjectGroup> projectGroups, IEnumerable<IProject>? conversionsProjects)
-		//{
-		//	return projectGroups.Select(x => new ProjectGroupResponseModel(x.ReferenceNumber!, x.TrustReference,
-		//			conversionsProjects == null ? [] : conversionsProjects.Where(c => c.ProjectGroupId.GetValueOrDefault() == x.Id)
-		//			.Select(p => new ConversionsResponseModel(p.Details.Urn, p.Details.SchoolName!)))).ToList();
-		//}
 
 		private IEnumerable<string?> CombineTrustReferences(IEnumerable<string?> trustReferences, string? trustReference)
 		{

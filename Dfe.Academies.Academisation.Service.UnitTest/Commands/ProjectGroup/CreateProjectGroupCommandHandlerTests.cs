@@ -57,7 +57,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			var createTransferProjectCommandHandler = CreateProjectGroupCommandHandler();
-			var request = CreateValidCreateTProjectProjectCommand(false);
+			var request = CreateValidCreateProjectProjectCommand(false);
 			var expectedProjectGroupReference = "GRP_00000000";
 
 			// Act
@@ -68,9 +68,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			// Assert
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
 			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
-			Assert.Equal(responseModel.GroupReferenceNumber, expectedProjectGroupReference);
-			Assert.Equal(responseModel.Conversions.Count(), expectedProjects.Count);
-			foreach (var conversion in responseModel.Conversions.Select((Value, Index) => (Value, Index)))
+			Assert.Equal(responseModel.ReferenceNumber, expectedProjectGroupReference);
+			Assert.Equal(responseModel.projects.Count(), expectedProjects.Count);
+			foreach (var conversion in responseModel.projects.Select((Value, Index) => (Value, Index)))
 			{
 				Assert.Equal(conversion.Value.Urn, expectedProjects[conversion.Index].Details.Urn);
 				Assert.Equal(conversion.Value.SchoolName, expectedProjects[conversion.Index].Details.SchoolName);
@@ -89,11 +89,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var now = DateTime.Now;
 			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
 			var createTransferProjectCommandHandler = CreateProjectGroupCommandHandler();
-			var request = CreateValidCreateTProjectProjectCommand();
+			var request = CreateValidCreateProjectProjectCommand();
 			var cancellationToken = CancellationToken.None;
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			var expectedProjects = _fixture.Create<List<Project>>();
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByGroupIdAsync(request.ConversionProjectIds, 0, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByProjectIds(request.ConversionProjectIds, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
 			_mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Project>()));
 
 			// Act
@@ -104,10 +104,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			// Assert
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
 			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
-			Assert.Equal(responseModel.Conversions.Count(), expectedProjects.Count);
-			Assert.NotEmpty(responseModel.GroupReferenceNumber);
-			Assert.StartsWith(responseModel.GroupReferenceNumber, "GRP_00000000");
-			foreach (var conversion in responseModel.Conversions.Select((Value, Index) => (Value, Index)))
+			Assert.Equal(responseModel.projects.Count(), expectedProjects.Count);
+			Assert.NotEmpty(responseModel.ReferenceNumber);
+			Assert.StartsWith(responseModel.ReferenceNumber, "GRP_00000000");
+			foreach (var conversion in responseModel.projects.Select((Value, Index) => (Value, Index)))
 			{
 				Assert.Equal(conversion.Value.Urn, expectedProjects[conversion.Index].Details.Urn);
 				Assert.Equal(conversion.Value.SchoolName, expectedProjects[conversion.Index].Details.SchoolName);
@@ -119,12 +119,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Exactly(3));
 		}
 
-		private static CreateProjectGroupCommand CreateValidCreateTProjectProjectCommand(bool includeConversions = true)
+		private static CreateProjectGroupCommand CreateValidCreateProjectProjectCommand(bool includeConversions = true)
 		{
 			string trustReference = "TR00001";
 			string trustUkprn = "1111333";
+			string trustName = "Test trust";
 
-			return new CreateProjectGroupCommand(trustReference, trustUkprn, includeConversions ? [03823] : []);
+			return new CreateProjectGroupCommand(trustName, trustReference, trustUkprn, includeConversions ? [03823] : []);
 		}
 	}
 }

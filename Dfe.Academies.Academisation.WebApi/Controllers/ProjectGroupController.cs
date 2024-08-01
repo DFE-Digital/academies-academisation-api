@@ -79,8 +79,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			PagedDataResponse<ProjectGroupResponseModel>? result =
 				await projectGroupQueryService.GetProjectGroupsAsync(searchModel!.StatusQueryString, searchModel.TitleFilter,
-					searchModel.DeliveryOfficerQueryString, searchModel.Page, searchModel.Count, cancellationToken,
-					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
+					searchModel.DeliveryOfficerQueryString,
+					searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString, 
+					searchModel.Page, searchModel.Count, cancellationToken);
 
 			return result is null ? NotFound() : Ok(result);
 		}

@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup
 		{
 			RuleFor(x => x.TrustReferenceNumber)
 				.NotEmpty().WithMessage("Must specify a trust reference")
-				.Length(8).WithMessage("Trust reference must be length 8")
+				.Length(7).WithMessage("Trust reference must be length 7")
 				.NotNull().WithMessage("Trust Reference must not be null");
 		}
 	}

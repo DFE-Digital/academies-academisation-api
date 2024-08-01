@@ -25,6 +25,6 @@ public interface IConversionProjectRepository : IRepository<Project>, IGenericRe
 
 	// Project Group methods
 	Task<IEnumerable<IProject>> GetConversionProjectsForNewGroup(string trustReferenceNumber, CancellationToken cancellationToken);
-	Task<IEnumerable<IProject>> GetProjectsByProjectGroupIdsAsync(IEnumerable<int?> projectGroupIds, CancellationToken cancellationToken);
+	Task<IEnumerable<IProject>> GetProjectsByProjectGroupIdsAsync(IEnumerable<int> projectGroupIds, CancellationToken cancellationToken);
 	Task<IEnumerable<IProject>> GetConversionProjectsByProjectGroupIdAsync(int? projectGroupId, CancellationToken cancellationToken = default);
 }

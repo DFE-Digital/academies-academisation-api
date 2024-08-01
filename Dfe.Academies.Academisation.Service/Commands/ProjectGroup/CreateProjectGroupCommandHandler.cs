@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 			logger.LogInformation("Creating project group with urn: {value}", message);
 
 			// create project group
-			var projectGroup = Domain.ProjectGroupsAggregate.ProjectGroup.Create(message.TrustReferenceNumber, dateTimeProvider.Now);
+			var projectGroup = Domain.ProjectGroupsAggregate.ProjectGroup.Create(message.TrustReferenceNumber, message.TrustUkprn, message.TrustName, dateTimeProvider.Now);
 			
 			projectGroupRepository.Insert(projectGroup);
 			await projectGroupRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
