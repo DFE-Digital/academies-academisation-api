@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+﻿using Dfe.Academies.Academisation.Data.Repositories;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
@@ -14,6 +15,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 {
 	public class ProjectGroupQueryService(IProjectGroupRepository projectGroupRepository, IConversionProjectRepository conversionProjectRepository, ILogger<ProjectGroupQueryService> logger) : IProjectGroupQueryService
 	{
+		public async Task<ProjectGroupResponseModel> GetProjectGroupById(int id, CancellationToken cancellationToken)
+		{
+			var projectGroup = await projectGroupRepository.GetById(id);
+			var relatedProjects = await conversionProjectRepository.GetConversionProjectsByProjectGroupIdAsync(projectGroup.Id, cancellationToken).ConfigureAwait(false);
+
+			return projectGroup.MapToProjectGroupServiceModel(relatedProjects);
+		}
+
 		public async Task<PagedDataResponse<ProjectGroupResponseModel>?> GetProjectGroupsAsync(IEnumerable<string>? states, string? title,
 			IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions,
 			IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count, CancellationToken cancellationToken)
@@ -34,7 +43,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 				projectGroupAggregates = await projectGroupRepository.GetByIds(projectAggregates
 					.Select(x => x.ProjectGroupId).Distinct(), cancellationToken).ConfigureAwait(false);
 
-				if (!string.IsNullOrWhiteSpace(title)) {
+				if (!string.IsNullOrWhiteSpace(title))
+				{
 					projectGroupAggregates = projectGroupAggregates.Union(await projectGroupRepository.SearchProjectGroups(title, cancellationToken));
 				}
 			}

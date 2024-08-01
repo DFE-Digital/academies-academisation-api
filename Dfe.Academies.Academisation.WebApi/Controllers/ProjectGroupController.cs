@@ -85,5 +85,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result is null ? NotFound() : Ok(result);
 		}
+
+		[HttpGet("{id:int}", Name = "GetProjectGrouptById")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<ProjectGroupResponseModel>> GetFormAMatProjectById(int id, CancellationToken cancellationToken)
+		{
+			var project = await projectGroupQueryService.GetProjectGroupById(id, cancellationToken);
+
+			if (project == null)
+			{
+				return NotFound($"Project group with ID {id} not found.");
+			}
+
+			return Ok(project);
+		}
 	}
 }
