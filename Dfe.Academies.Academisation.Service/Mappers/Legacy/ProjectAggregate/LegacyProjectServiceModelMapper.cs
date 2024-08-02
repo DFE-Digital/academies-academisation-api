@@ -165,11 +165,9 @@ internal static class LegacyProjectServiceModelMapper
 
 	internal static ProjectGroupResponseModel MapToProjectGroupServiceModel(this IProjectGroup projectGroup, IEnumerable<IProject> projects)
 	{
-		var trustName = projects.FirstOrDefault()?.Details.NameOfTrust;
-
-		ProjectGroupResponseModel serviceModel = new(projectGroup.Id, projectGroup.ReferenceNumber, projectGroup.TrustReference, trustName, new User(projectGroup.AssignedUser?.Id ?? Guid.Empty, projectGroup.AssignedUser?.FullName ?? string.Empty, projectGroup.AssignedUser?.EmailAddress ?? string.Empty))
+		ProjectGroupResponseModel serviceModel = new(projectGroup.Id, projectGroup.ReferenceNumber, projectGroup.TrustReference, projectGroup.TrustName, projectGroup.TrustUkprn, new User(projectGroup.AssignedUser?.Id ?? Guid.Empty, projectGroup.AssignedUser?.FullName ?? string.Empty, projectGroup.AssignedUser?.EmailAddress ?? string.Empty))
 		{
-			projects = projects.Where(x => x.FormAMatProjectId == projectGroup.Id).Select(p => p.MapToServiceModel()).ToList()
+			projects = projects.Where(x => x.ProjectGroupId == projectGroup.Id).Select(p => p.MapToServiceModel()).ToList()
 		};
 		return serviceModel;
 	}

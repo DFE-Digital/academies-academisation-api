@@ -7,6 +7,8 @@ namespace Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate
 		int Id { get; }
 
 		string TrustReference{ get; }
+		string TrustName{ get; }
+		string TrustUkprn{ get; }
 
 		User? AssignedUser { get; }
 

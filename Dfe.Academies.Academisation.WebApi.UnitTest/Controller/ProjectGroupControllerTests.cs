@@ -43,7 +43,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task CreateProjectGroup_ReturnsOk()
 		{
 			// Arrange
-			var response = new ProjectGroupResponseModel(1, "12312", _trustReferenceNumber, "trustName", null);
+			var response = new ProjectGroupResponseModel(1, "12312", _trustReferenceNumber, "trustName", null, null);
 			var command = new CreateProjectGroupCommand("trustName", _trustReferenceNumber, _trustUkprn, []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CreateSuccessResult<ProjectGroupResponseModel>(response));

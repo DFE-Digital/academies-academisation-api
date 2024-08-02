@@ -15,41 +15,53 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 {
 	public class ProjectGroupQueryService(IProjectGroupRepository projectGroupRepository, IConversionProjectRepository conversionProjectRepository, ILogger<ProjectGroupQueryService> logger) : IProjectGroupQueryService
 	{
-		public async Task<PagedDataResponse<ProjectGroupResponseModel>?> GetProjectGroupsAsync(IEnumerable<string>? states, string? title, 
-			IEnumerable<string>? deliveryOfficers,  IEnumerable<string>? regions, 
-			IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count,CancellationToken cancellationToken)
+		public async Task<ProjectGroupResponseModel> GetProjectGroupById(int id, CancellationToken cancellationToken)
 		{
-			//var (conversionProjects, _) = await conversionProjectRepository.SearchProjectsV2(null, searchModel.Title, null, null, null, null, searchModel.Page, searchModel.Count);
-			//var (projectGroups, totalCount) = await projectGroupRepository.SearchProjectGroups(searchModel.Page, searchModel.Count,
-			//	searchModel.ReferenceNumber, CombineTrustReferences(conversionProjects.Select(x => x.Details.TrustReferenceNumber), searchModel.TrustReference), cancellationToken);
+			var projectGroup = await projectGroupRepository.GetById(id);
+			var relatedProjects = await conversionProjectRepository.GetConversionProjectsByProjectGroupIdAsync(projectGroup.Id, cancellationToken).ConfigureAwait(false);
 
-			//var conversionsProjects = await conversionProjectRepository.GetProjectsByProjectGroupAsync(projectGroups.Select(x => x.Id).ToList(), cancellationToken);
-			//var response = MapToResponse(projectGroups, conversionsProjects);
+			return projectGroup.MapToProjectGroupServiceModel(relatedProjects);
+		}
 
-			//var pageResponse = PagingResponseFactory.Create("project-groups/groups", searchModel.Page, searchModel.Count, totalCount, []);
-			//return new PagedDataResponse<ProjectGroupResponseModel>(response, pageResponse);
-			var (projects, totalCount) = await conversionProjectRepository.SearchGroupedProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates);
+		public async Task<PagedDataResponse<ProjectGroupResponseModel>?> GetProjectGroupsAsync(IEnumerable<string>? states, string? title,
+			IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions,
+			IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates, int page, int count, CancellationToken cancellationToken)
+		{
+			IEnumerable<IProjectGroup> projectGroupAggregates = new List<IProjectGroup>();
+			IEnumerable<IProject> projectAggregates = new List<IProject>();
 
-			var projectGroupAggregates = await projectGroupRepository.GetByIds(projects
-				.Select(x => x.ProjectGroupId).Distinct(), cancellationToken).ConfigureAwait(false);
-
-			if (!states.Any() && string.IsNullOrWhiteSpace(title) && !deliveryOfficers.Any() && !regions.Any() && !localAuthorities.Any() && !advisoryBoardDates.Any()) {
+			// No project filters return all groups
+			if (!states.Any() && string.IsNullOrWhiteSpace(title) && !deliveryOfficers.Any() && !regions.Any() && !localAuthorities.Any() && !advisoryBoardDates.Any())
+			{
 				projectGroupAggregates = await projectGroupRepository.GetAll();
 			}
+			else
+			{
+				//get project groups based on filters
+				(projectAggregates, _) = await conversionProjectRepository.SearchGroupedProjects(states, title, deliveryOfficers, regions, localAuthorities, advisoryBoardDates);
 
-			// doing paging here as it has to be at a form a mat level
+				projectGroupAggregates = await projectGroupRepository.GetByIds(projectAggregates
+					.Select(x => x.ProjectGroupId).Distinct(), cancellationToken).ConfigureAwait(false);
+
+				if (!string.IsNullOrWhiteSpace(title))
+				{
+					projectGroupAggregates = projectGroupAggregates.Union(await projectGroupRepository.SearchProjectGroups(title, cancellationToken));
+				}
+			}
+
+			// doing paging here as it has to be at a group level
 			projectGroupAggregates = projectGroupAggregates.OrderByDescending(x => x.CreatedOn).Skip((page - 1) * count)
 					.Take(count).ToList();
 
 			// need to add back in any projects that were filtered out, otherwise the project list indicates there are less projects in the group than there really is
-			projects = projects.Union(await conversionProjectRepository.GetProjectsByProjectGroupIdsAsync(projectGroupAggregates.Select(x => x.Id).Cast<int>(), cancellationToken));
+			projectAggregates = projectAggregates.Union(await conversionProjectRepository.GetProjectsByProjectGroupIdsAsync(projectGroupAggregates.Select(x => x.Id).Cast<int>(), cancellationToken));
 
-			var pageResponse = PagingResponseFactory.Create("project-groups/groups", page, count, totalCount,
+			var pageResponse = PagingResponseFactory.Create("project-groups/groups", page, count, projectGroupAggregates.Count(),
 				new Dictionary<string, object?> {
 				{"states", states},
 				});
 
-			var data = projectGroupAggregates.Select(p => p.MapToProjectGroupServiceModel(projects));
+			var data = projectGroupAggregates.Select(p => p.MapToProjectGroupServiceModel(projectAggregates));
 
 			return new PagedDataResponse<ProjectGroupResponseModel>(data,
 				pageResponse);
