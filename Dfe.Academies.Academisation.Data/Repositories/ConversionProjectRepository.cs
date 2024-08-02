@@ -333,5 +333,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			.Where(p => projectGroupIds.Contains(p.ProjectGroupId.GetValueOrDefault()))
 			.ToListAsync(cancellationToken);
 		}
+
+		public async Task<IEnumerable<IProject>> GetProjectsByIdsOrProjectGroupIAsync(IEnumerable<int> projectIds, int? projectGroupId, CancellationToken cancellationToken)
+		{
+			return await dbSet
+			.Where(p => p.ProjectGroupId == projectGroupId || projectIds.Contains(p.ProjectGroupId.GetValueOrDefault()))
+			.ToListAsync(cancellationToken);
+		}
 	}
 }
