@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -28,39 +29,35 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<ProjectGroup?> GetByReferenceNumberAsync(string referenceNumber, CancellationToken cancellationToken) 
 			=> await DefaultIncludes().SingleOrDefaultAsync(x => x.ReferenceNumber == referenceNumber, cancellationToken);
 
-		public async Task<(IEnumerable<IProjectGroup>, int totalcount)> SearchProjectGroups(int page, int count, string? referenceNumber, IEnumerable<string?>? trustReferences, CancellationToken cancellationToken)
+		public async Task<IEnumerable<IProjectGroup>> SearchProjectGroups(string searchTerm, CancellationToken cancellationToken)
 		{
 			IQueryable<ProjectGroup> queryable = DefaultIncludes();
-			queryable = FilterByReferenceNumber(referenceNumber, queryable);
-			queryable = FilterByTrust(trustReferences, queryable);
+			queryable = FilterBySearchTerm(searchTerm, queryable);
 
-			var totalProjectGroups = queryable.Count();
 			var projects = await queryable
 				.OrderByDescending(acp => acp.CreatedOn)
-				.Skip((page - 1) * count)
-				.Take(count).ToListAsync(cancellationToken);
+				.ToListAsync(cancellationToken);
 
-			return (projects, totalProjectGroups);
+			return projects;
 		}
 
-		private static IQueryable<ProjectGroup> FilterByReferenceNumber(string? referenceNumber, IQueryable<ProjectGroup> queryable)
+		private static IQueryable<ProjectGroup> FilterBySearchTerm(string searchTerm, IQueryable<ProjectGroup> queryable)
 		{
-			if (!referenceNumber.IsNullOrEmpty())
+			if (!searchTerm.IsNullOrEmpty())
 			{
-				queryable = queryable.Where(p => p.ReferenceNumber == referenceNumber);
+				searchTerm = searchTerm.ToLower();
+				queryable = queryable.Where(p => (p.ReferenceNumber != null && p.ReferenceNumber.ToLower().Contains(searchTerm)) || 
+				p.TrustReference.ToLower().Contains(searchTerm) ||
+				p.TrustUkprn.ToLower().Contains(searchTerm) ||
+				p.TrustName.ToLower().Contains(searchTerm));
 			}
 
 			return queryable;
 		}
 
-		private  IQueryable<ProjectGroup> FilterByTrust(IEnumerable<string> trustReferences, IQueryable<ProjectGroup> queryable)
+		public async Task<IEnumerable<IProjectGroup>> GetByIds(IEnumerable<int?> projectGroupIds, CancellationToken cancellationToken)
 		{
-			if (trustReferences.IsNullOrEmpty())
-			{
-				queryable = queryable.Where(p => trustReferences.Contains(p.TrustReference));
-			}
-
-			return queryable;
+			return await this.dbSet.Where(x => projectGroupIds.Contains(x.Id)).Cast<IProjectGroup>().ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

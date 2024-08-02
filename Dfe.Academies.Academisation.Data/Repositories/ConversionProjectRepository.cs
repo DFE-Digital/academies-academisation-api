@@ -41,13 +41,6 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
-		public async Task<IEnumerable<IProject>?> GetProjectsByProjectGroupAsync(List<int> projectGroupIds, CancellationToken cancellationToken)
-		{
-			return await _context.Projects
-				.Where(p => projectGroupIds.Contains(p.ProjectGroupId.GetValueOrDefault()))
-				.ToListAsync(cancellationToken);
-		}
-
 		public async Task<ProjectFilterParameters> GetFilterParameters()
 		{
 			var advisoryBoardDates = await dbSet
@@ -92,6 +85,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		private static IQueryable<Project> FilterFormAMAT(IQueryable<Project> queryable)
 		{
 			queryable = queryable.Where(p => p.FormAMatProjectId != null);
+
+			return queryable;
+		}
+
+		private static IQueryable<Project> FilterGroupedProjects(IQueryable<Project> queryable)
+		{
+			queryable = queryable.Where(p => p.ProjectGroupId != null);
 
 			return queryable;
 		}
@@ -243,6 +243,25 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
+		public async Task<(IEnumerable<IProject> projects, int totalCount)> SearchGroupedProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, IEnumerable<string>? regions, IEnumerable<string>? localAuthorities, IEnumerable<string>? advisoryBoardDates)
+		{
+			IQueryable<Project> queryable = dbSet;
+
+			queryable = FilterGroupedProjects(queryable);
+			queryable = FilterByRegion(regions, queryable);
+			queryable = FilterByStatus(states, queryable);
+			queryable = FilterByKeyword(title, queryable);
+			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
+			queryable = FilterByLocalAuthority(localAuthorities, queryable);
+			queryable = FilterByAdvisoryBoardDates(advisoryBoardDates, queryable);
+
+			var totalProjects = queryable.Select(p => p.ProjectGroupId).Distinct().Count();
+			var projects = await queryable
+				.OrderByDescending(acp => acp.CreatedOn).ToListAsync();
+
+			return (projects, totalProjects);
+		}
+
 		private IQueryable<Project> FilterByAdvisoryBoardDates(IEnumerable<string>? advisoryBoardDates, IQueryable<Project> queryable)
 		{
 			if (advisoryBoardDates != null && advisoryBoardDates.Any())
@@ -255,7 +274,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return queryable;
 		}
 
-		private static IQueryable<Project> FilterByLocalAuthority(IEnumerable<string> localAuthorities, IQueryable<Project> queryable)
+		private static IQueryable<Project> FilterByLocalAuthority(IEnumerable<string>? localAuthorities, IQueryable<Project> queryable)
 		{
 			if (localAuthorities != null && localAuthorities.Any())
 			{
@@ -283,19 +302,36 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await dbSet.Where(x => formAMatProjectIds.Contains(x.FormAMatProjectId)).ToListAsync(cancellationToken).ConfigureAwait(false);
 		}
 
-		public async Task<IEnumerable<IProject>> GetConversionProjectsForGroup(string trustReferenceNumber, CancellationToken cancellationToken)
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByProjectIds(IEnumerable<int> ids, CancellationToken cancellationToken)
 		{
-			var projects = await this.dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber && 
+			var projectIds = ids.ToList();
+
+			return await dbSet.Where(x => projectIds.Contains(x.Id)).ToListAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsForNewGroup(string trustReferenceNumber, CancellationToken cancellationToken)
+		{
+			var projects = await dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber && 
 			x.Details.ProjectStatus == "Converter Pre-AO (C)" && x.ProjectGroupId == null).ToListAsync(cancellationToken);
 
 			return projects;
 		}
 
-		public async Task<IEnumerable<IProject>> GetConversionProjectsByIds(IEnumerable<int> urns, CancellationToken cancellationToken)
+		// Project Groups
+
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByProjectGroupIdAsync(int? projectGroupId, CancellationToken cancellationToken)
 		{
-			var projects = await this.dbSet.Where(x => urns.Contains(x.Id)).ToListAsync(cancellationToken);
+			var projects = await dbSet.Where(x => x.ProjectGroupId == projectGroupId).ToListAsync(cancellationToken);
 
 			return projects;
+		}
+
+		public async Task<IEnumerable<IProject>> GetProjectsByProjectGroupIdsAsync(IEnumerable<int> projectGroupIds, CancellationToken cancellationToken)
+		{
+			return await dbSet
+			.Where(p => projectGroupIds.Contains(p.ProjectGroupId.GetValueOrDefault()))
+			.ToListAsync(cancellationToken);
 		}
 	}
 }

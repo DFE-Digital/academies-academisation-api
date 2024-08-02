@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Core;
@@ -32,8 +33,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.UpdateLoan(command) as OkResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.OK);
+
+			VerifyOkHttpStatus(result);
 		}
 		
 		[Fact]
@@ -46,8 +47,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.UpdateLoan(command) as NotFoundResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
+
+			VerifyNotFoundHttpStatus(result);
 		}
 		
 		[Fact]
@@ -60,8 +61,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object,_mediatrMock.Object);
 
 			var result = await sut.CreateLoan(command) as OkResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.OK);
+
+			VerifyOkHttpStatus(result);
 		}
 		
 		[Fact]
@@ -74,8 +75,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.CreateLoan(command) as NotFoundResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
+
+			VerifyNotFoundHttpStatus(result);
 		}
 		
 		[Fact]
@@ -88,8 +89,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.DeleteLoan(command) as OkResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.OK);
+
+			VerifyOkHttpStatus(result);
 		}
 		
 		[Fact]
@@ -102,8 +103,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.DeleteLoan(command) as NotFoundResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
+
+			VerifyNotFoundHttpStatus(result);
 		}
 		
 		[Fact]
@@ -116,10 +117,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.UpdateLease(command) as OkResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.OK);
+
+			VerifyOkHttpStatus(result);
 		}
-		
+
 		[Fact]
 		public async Task UpdateLease_ReturnsNotFound()
 		{
@@ -130,8 +131,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.UpdateLease(command) as NotFoundResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
+
+			VerifyNotFoundHttpStatus(result);
 		}
 		
 		[Fact]
@@ -144,8 +145,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.CreateLease(command) as OkResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.OK);
+
+			VerifyOkHttpStatus(result);
 		}
 		
 		[Fact]
@@ -158,8 +159,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.CreateLease(command) as NotFoundResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
+
+			VerifyNotFoundHttpStatus(result);
 		}
 		
 		[Fact]
@@ -172,8 +173,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.DeleteLease(command) as OkResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.OK);
+
+			VerifyOkHttpStatus(result);
 		}
 		
 		[Fact]
@@ -186,10 +187,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.DeleteLease(command) as NotFoundResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
+
+			VerifyNotFoundHttpStatus(result);
 		}
-		
+
 		[Fact]
 		public async Task SetAdditionalDetails_ReturnsOk()
 		{
@@ -200,8 +201,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.SetAdditionalDetails(command) as OkResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.OK);
+
+			VerifyOkHttpStatus(result);
 		}
 		
 		[Fact]
@@ -214,9 +215,20 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var sut = new SchoolController(_loggerMock.Object, _mediatrMock.Object);
 
 			var result = await sut.SetAdditionalDetails(command) as NotFoundResult;
-			
-			Assert.Equal(result.StatusCode, (int)System.Net.HttpStatusCode.NotFound);
+
+			VerifyNotFoundHttpStatus(result);
 		}
-		
+
+		private static void VerifyOkHttpStatus(OkResult? result)
+		{
+			Assert.NotNull(result);
+			Assert.Equal(result.StatusCode, HttpStatusCode.OK.GetHashCode());
+		}
+
+		private static void VerifyNotFoundHttpStatus(NotFoundResult? result)
+		{
+			Assert.NotNull(result);
+			Assert.Equal(result.StatusCode, HttpStatusCode.NotFound.GetHashCode());
+		}
 	}
 }

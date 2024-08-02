@@ -1,6 +1,8 @@
 ﻿using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using User = Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate.User;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
@@ -160,6 +162,16 @@ internal static class LegacyProjectServiceModelMapper
 		};
 		return serviceModel;
 	}
+
+	internal static ProjectGroupResponseModel MapToProjectGroupServiceModel(this IProjectGroup projectGroup, IEnumerable<IProject> projects)
+	{
+		ProjectGroupResponseModel serviceModel = new(projectGroup.Id, projectGroup.ReferenceNumber, projectGroup.TrustReference, projectGroup.TrustName, projectGroup.TrustUkprn, new User(projectGroup.AssignedUser?.Id ?? Guid.Empty, projectGroup.AssignedUser?.FullName ?? string.Empty, projectGroup.AssignedUser?.EmailAddress ?? string.Empty))
+		{
+			projects = projects.Where(x => x.ProjectGroupId == projectGroup.Id).Select(p => p.MapToServiceModel()).ToList()
+		};
+		return serviceModel;
+	}
+
 	private static IEnumerable<ConversionProjectDeleteNote> ToProjectNoteServiceModels(this IEnumerable<IProjectNote>? notes)
 	{
 		if (notes is null) return Enumerable.Empty<ConversionProjectDeleteNote>();

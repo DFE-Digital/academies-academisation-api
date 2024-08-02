@@ -143,7 +143,7 @@ public class Application : DynamicsApplicationEntity, IApplication, IAggregateRo
 			if (schools.Any(x => x.Id == school.Id))
 			{
 				var schoolUpdate = schools.SingleOrDefault(x => x.Id == school.Id);
-				school.Update(schoolUpdate);
+				school.Update(schoolUpdate!);
 
 			}
 

@@ -6,8 +6,9 @@ namespace Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate
 {
 	public class ProjectGroup : Entity, IProjectGroup, IAggregateRoot
 	{
+		public string TrustName { private set; get; } = string.Empty;
 		public string TrustReference { private set; get; } = string.Empty;
-		//public string TrustUkprn { private set; get; } = string.Empty;
+		public string TrustUkprn { private set; get; } = string.Empty;
 
 		public User? AssignedUser { private set; get; }
 
@@ -24,14 +25,16 @@ namespace Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate
 			LastModifiedOn = lastModifiedOnUtc;
 		}
 
-		public static ProjectGroup Create(string trustReference, DateTime createdOn)
+		public static ProjectGroup Create(string trustReference, string trustUkprn, string trustName, DateTime createdOn)
 		{
-			return new ProjectGroup(trustReference, createdOn);
+			return new ProjectGroup(trustReference, trustUkprn, trustName, createdOn);
 		}
 
-		private ProjectGroup(string trustReference, DateTime createdOn)
+		private ProjectGroup(string trustReference, string trustUkprn, string trustName, DateTime createdOn)
 		{
-			TrustReference = trustReference; 
+			TrustReference = trustReference;
+			TrustUkprn = trustUkprn;
+			TrustName = trustName;
 			CreatedOn = createdOn;
 		}
 

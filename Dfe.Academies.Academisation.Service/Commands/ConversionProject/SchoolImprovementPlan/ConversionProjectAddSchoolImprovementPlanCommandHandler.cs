@@ -31,7 +31,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SchoolI
 
 			project.AddSchoolImprovementPlan(message.ArrangedBy, message.ArrangedByOther, message.ProvidedBy, message.StartDate, message.ExpectedEndDate, message.ExpectedEndDateOther, message.ConfidenceLevel, message.PlanComments);
 
-			_conversionProjectRepository.Update(project as Project);
+			_conversionProjectRepository.Update((Project)project);
 
 			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

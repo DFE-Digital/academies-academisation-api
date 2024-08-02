@@ -62,7 +62,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority") };
+			var academies = new List<TransferringAcademy>() { new(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority") };
 
 			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
@@ -90,7 +90,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
+			var academies = new List<TransferringAcademy>() { new (incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
 			bool isFormAMat = false;
 			DateTime createdOn = DateTime.Now;
 
@@ -114,11 +114,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void CreateTransferProject_WithNullOutgoingTrustUkprn_ThrowsArgumentNullException()
 		{
 			// Arrange      
-			string outgoingTrustUkprn = "11112222";
 			string outgoingTrustName = "outgoingTrustName";
 			string incomingTrustUkprn = "11110000";
 			string incomingTrustName = "incomingTrustName";
-			List<TransferringAcademy> academies = new List<TransferringAcademy>() { new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
+			var academies = new List<TransferringAcademy>() { new (incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority"), new TransferringAcademy(incomingTrustUkprn, incomingTrustName, "33331111", "region", "local authority") };
 			bool isFormAMat = true;
 			DateTime createdOn = DateTime.Now;
 
@@ -134,7 +133,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		[Fact]
 		public void SetTransferProjectRationale_WithValidParameters_SetsCorrectProperties()
 		{
-			Fixture fixture = new Fixture();
+			var fixture = new Fixture();
 
 			// Arrange      
 			TransferProject result = CreateValidTransferProject();
@@ -264,8 +263,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		[ClassData(typeof(CreationArgumentExceptionTestData))]
 		public void CreateTransferProject_WithTestData_ThrowsArgumentExceptions(string outgoingTrustUkprn, string outgoingTrustName, List<TransferringAcademy> academies, bool? isFormAMat, DateTime createdOn, Type exType)
 		{
-			// Arrange      
-			dynamic exception;
+			// Arrange    
 			// Act
 			if (exType == typeof(ArgumentException))
 			{
@@ -371,7 +369,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.SetTransferringAcademyGeneralInformation("academy1", "No", "Details", "12", "Details", "20.5", "Distance details", "Yes", "10");
 
 			// Assert
-			Assert.Equal("No", actual: transferProject.TransferringAcademies.FirstOrDefault().PFIScheme);
+			Assert.Equal("No", actual: transferProject.TransferringAcademies.FirstOrDefault()!.PFIScheme);
 		}
 
 		[Fact]
@@ -384,8 +382,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.SetTransferringAcademyGeneralInformation("academy1", "No", "Details", "12", "Distance Details", "No", "Yes", "Independant", "100");
 
 			// Assert
-			Assert.Equal("12", actual: transferProject.TransferringAcademies.FirstOrDefault().DistanceFromAcademyToTrustHq);
-			Assert.Equal("Distance Details", actual: transferProject.TransferringAcademies.FirstOrDefault().DistanceFromAcademyToTrustHqDetails);
+			Assert.Equal("12", actual: transferProject.TransferringAcademies.FirstOrDefault()!.DistanceFromAcademyToTrustHq);
+			Assert.Equal("Distance Details", actual: transferProject.TransferringAcademies.FirstOrDefault()!.DistanceFromAcademyToTrustHqDetails);
 		}
 
 		[Fact]
@@ -398,7 +396,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.SetTransferringAcademyGeneralInformation("academy1", "No", "Details", "12", "Distance Details", "No", "Yes", "Independant", "100");
 
 			// Assert
-			Assert.Equal("No", actual: transferProject.TransferringAcademies.FirstOrDefault().ViabilityIssues);
+			Assert.Equal("No", actual: transferProject.TransferringAcademies.FirstOrDefault()!.ViabilityIssues);
 		}
 
 		[Fact]
@@ -411,7 +409,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.SetTransferringAcademyGeneralInformation("academy1", "No", "Details", "12", "Distance Details", "No", "Yes", "Independant", "100");
 
 			// Assert
-			Assert.Equal("Yes", actual: transferProject.TransferringAcademies.FirstOrDefault().FinancialDeficit);
+			Assert.Equal("Yes", actual: transferProject.TransferringAcademies.FirstOrDefault()!.FinancialDeficit);
 		}
 
 		[Fact]
@@ -424,7 +422,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.SetTransferringAcademyGeneralInformation("academy1", "No", "Details", "12", "Distance Details", "No", "Yes", "Independant", "100");
 
 			// Assert
-			Assert.Equal("Independant", actual: transferProject.TransferringAcademies.FirstOrDefault().MPNameAndParty);
+			Assert.Equal("Independant", actual: transferProject.TransferringAcademies.FirstOrDefault()!.MPNameAndParty);
 		}
 
 		[Fact]
@@ -437,7 +435,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			transferProject.SetTransferringAcademyGeneralInformation("academy1", "No", "Details", "12", "Distance Details", "No", "Yes", "Independant", "100");
 
 			// Assert
-			Assert.Equal("100", actual: transferProject.TransferringAcademies.FirstOrDefault().PublishedAdmissionNumber);
+			Assert.Equal("100", actual: transferProject.TransferringAcademies.FirstOrDefault()!.PublishedAdmissionNumber);
 		}
 
 		[Fact]

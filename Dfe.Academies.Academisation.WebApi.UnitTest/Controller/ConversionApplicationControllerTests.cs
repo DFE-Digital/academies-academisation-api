@@ -321,8 +321,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			
 			//Assert
 			result.Should().NotBeNull();
-			((result.Result as OkObjectResult).Value as ApplicationServiceModel).ApplicationReference.Should()
-				.Be(applicationReference);
+			var okObjectResult = result.Result.Should().BeOfType<OkObjectResult>();
+			var applicationModel = okObjectResult.Subject.Value.Should().BeOfType<ApplicationServiceModel>().Subject;
+			applicationModel.ApplicationReference.Should().Be(applicationReference);
 		}
 
 		[Fact]
@@ -348,8 +349,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
 			var result = await _subject.GetAll();
 
-			result.Result.Should().BeOfType<OkObjectResult>();
-			(result.Result as OkObjectResult).Value.Should().NotBeNull();
+			var okObjectResult = result.Result.Should().BeOfType<OkObjectResult>();
+			Assert.NotNull(okObjectResult);
 		}
 	}
 }

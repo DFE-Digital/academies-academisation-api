@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
         {
 			// Arrange
 			var expectedProjects = _fixture.Create<List<Project>>();
-			mockConversionProjectRepository.Setup(m => m.GetConversionProjectsForGroup(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedProjects);
+			mockConversionProjectRepository.Setup(m => m.GetConversionProjectsForNewGroup(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedProjects);
 			var service = this.CreateService();
 
 			// Act
