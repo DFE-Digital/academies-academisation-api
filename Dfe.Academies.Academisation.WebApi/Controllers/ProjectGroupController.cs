@@ -89,7 +89,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("{id:int}", Name = "GetProjectGrouptById")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<ProjectGroupResponseModel>> GetFormAMatProjectById(int id, CancellationToken cancellationToken)
+		public async Task<ActionResult<ProjectGroupResponseModel>> GetProjectGrouptById(int id, CancellationToken cancellationToken)
 		{
 			var project = await projectGroupQueryService.GetProjectGroupById(id, cancellationToken);
 
