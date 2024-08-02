@@ -21,6 +21,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 		public async Task CreateProjectGroup_ShouldCreateSuccessfully()
 		{
 			// Arrange
+			var notExpectedId = 0;
 			var command = new CreateProjectGroupCommand(Fixture.Create<string>()[..15], Fixture.Create<string>()[..7], Fixture.Create<string>()[..10], []);
 
 			// Action
@@ -28,8 +29,9 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			var response = await httpResponseMessage.ConvertResponseToTypeAsync<ProjectGroupResponseModel>();
-			Assert.Equal(response.TrustName, command.TrustName);
+			Assert.Null(response.TrustName);
 			Assert.NotEmpty(response.ReferenceNumber!);
+			Assert.NotEqual(response.Id, notExpectedId);
 			Assert.Equal(response.TrustReferenceNumber, command.TrustReferenceNumber);
 		}
 	}
