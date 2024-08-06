@@ -10,7 +10,8 @@ jobs:
   image-build-test:
     name: Image build test
     runs-on: ubuntu-latest
-
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -19,4 +20,4 @@ jobs:
         run: |
           cp .env.development.local.example .env.development.local
           cp .env.database.example .env.database
-          docker-compose -f docker-compose.yml -p app build --secrets github_token: ${{ secrets.GITHUB_TOKEN }}
+          docker compose -f docker-compose.yml -p app build
