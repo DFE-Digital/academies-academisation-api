@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
+﻿using System.Xml;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 
 namespace Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 
@@ -41,6 +42,8 @@ public class SchoolDetails
 		// application pre-support grant
 		PayFundsTo? SchoolSupportGrantFundsPaidTo = null,
 		bool? ConfirmPaySupportGrantToSchool = null,
+		bool? SchoolSupportGrantJoiningInAGroup = null,
+		bool? SchoolSupportGrantBankDetailsProvided = null,
 		// consultation details
 		bool? SchoolHasConsultedStakeholders = null,
 		string? SchoolPlanToConsultStakeholders = null,
@@ -83,6 +86,8 @@ public class SchoolDetails
 		this.CapacityAssumptions = CapacityAssumptions;
 		this.CapacityPublishedAdmissionsNumber = CapacityPublishedAdmissionsNumber;
 		this.SchoolSupportGrantFundsPaidTo = SchoolSupportGrantFundsPaidTo;
+		this.SchoolSupportGrantJoiningInAGroup = SchoolSupportGrantJoiningInAGroup;
+		this.SchoolSupportGrantBankDetailsProvided = SchoolSupportGrantBankDetailsProvided;
 		this.ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool;
 		this.SchoolHasConsultedStakeholders = SchoolHasConsultedStakeholders;
 		this.SchoolPlanToConsultStakeholders = SchoolPlanToConsultStakeholders;
@@ -124,6 +129,8 @@ public class SchoolDetails
 	public int? CapacityPublishedAdmissionsNumber { get; init; }
 	public PayFundsTo? SchoolSupportGrantFundsPaidTo { get; init; }
 	public bool? ConfirmPaySupportGrantToSchool { get; init; }
+	public bool? SchoolSupportGrantJoiningInAGroup { get; init; }
+	public bool? SchoolSupportGrantBankDetailsProvided { get; init; }
 	public bool? SchoolHasConsultedStakeholders { get; init; }
 	public string? SchoolPlanToConsultStakeholders { get; init; }
 	public bool? FinanceOngoingInvestigations { get; init; }
@@ -146,7 +153,7 @@ public class SchoolDetails
 		// future pupil numbers
 		out int? ProjectedPupilNumbersYear1, out int? ProjectedPupilNumbersYear2, out int? ProjectedPupilNumbersYear3, out string? CapacityAssumptions, out int? CapacityPublishedAdmissionsNumber,
 		// application pre-support grant
-		out PayFundsTo? SchoolSupportGrantFundsPaidTo, out bool? ConfirmPaySupportGrantToSchool,
+		out PayFundsTo? SchoolSupportGrantFundsPaidTo, out bool? ConfirmPaySupportGrantToSchool, out bool? SchoolSupportGrantJoiningInAGroup, out bool? SchoolSupportGrantBankDetailsProvided,
 		// consultation details
 		out bool? SchoolHasConsultedStakeholders, out string? SchoolPlanToConsultStakeholders,
 		// Finances Investigations
@@ -185,6 +192,8 @@ public class SchoolDetails
 		CapacityPublishedAdmissionsNumber = this.CapacityPublishedAdmissionsNumber;
 		SchoolSupportGrantFundsPaidTo = this.SchoolSupportGrantFundsPaidTo;
 		ConfirmPaySupportGrantToSchool = this.ConfirmPaySupportGrantToSchool;
+		SchoolSupportGrantJoiningInAGroup = this.SchoolSupportGrantJoiningInAGroup;
+		SchoolSupportGrantBankDetailsProvided = this.SchoolSupportGrantBankDetailsProvided;
 		SchoolHasConsultedStakeholders = this.SchoolHasConsultedStakeholders;
 		SchoolPlanToConsultStakeholders = this.SchoolPlanToConsultStakeholders;
 		FinanceOngoingInvestigations = this.FinanceOngoingInvestigations;

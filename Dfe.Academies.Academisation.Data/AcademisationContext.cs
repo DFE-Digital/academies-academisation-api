@@ -670,8 +670,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		{
 			sd.Property(d => d.ApproverContactEmail).HasColumnName("ApproverContactEmail");
 			sd.Property(d => d.ApproverContactName).HasColumnName("ApproverContactName");
-			sd.Property(d => d.CapacityAssumptions).HasColumnName("CapacityAssumptions");
-			sd.Property(d => d.CapacityPublishedAdmissionsNumber).HasColumnName("CapacityPublishedAdmissionsNumber");
+			sd.Property(d => d.CapacityAssumptions).HasColumnName("CapacityAssumptions");		
 			sd.Property(d => d.ConfirmPaySupportGrantToSchool).HasColumnName("ConfirmPaySupportGrantToSchool");
 			sd.Property(d => d.ContactChairEmail).HasColumnName("ContactChairEmail");
 			sd.Property(d => d.ContactChairName).HasColumnName("ContactChairName");
@@ -688,7 +687,12 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			sd.Property(d => d.ApplicationJoinTrustReason).HasColumnName("JoinTrustReason");
 			sd.Property(d => d.Urn).HasColumnName("Urn");
 			sd.Property(d => d.SchoolName).HasColumnName("SchoolName");
+
+			sd.Property(d => d.CapacityPublishedAdmissionsNumber).HasColumnName("CapacityPublishedAdmissionsNumber");
 			sd.Property(d => d.SchoolSupportGrantFundsPaidTo).HasColumnName("SupportGrantFundsPaidTo");
+			sd.Property(d => d.SchoolSupportGrantJoiningInAGroup).HasColumnName("SchoolSupportGrantJoiningInAGroup");
+			sd.Property(d => d.SchoolSupportGrantBankDetailsProvided).HasColumnName("SchoolSupportGrantBankDetailsProvided");
+
 			sd.Property(d => d.SchoolPlanToConsultStakeholders).HasColumnName("SchoolPlanToConsultStakeholders");
 
 			sd.Property(d => d.FinanceOngoingInvestigations).HasColumnName("FinanceOngoingInvestigations");

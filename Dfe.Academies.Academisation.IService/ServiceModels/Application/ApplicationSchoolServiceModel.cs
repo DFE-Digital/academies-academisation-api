@@ -9,9 +9,9 @@ public record ApplicationSchoolServiceModel(
 	string SchoolName,
 	LandAndBuildingsServiceModel? LandAndBuildings,
 	// additional information - split up
-	string? TrustBenefitDetails, 
-	string? OfstedInspectionDetails, 
-	bool? Safeguarding, 
+	string? TrustBenefitDetails,
+	string? OfstedInspectionDetails,
+	bool? Safeguarding,
 	string? LocalAuthorityReorganisationDetails,
 	string? LocalAuthorityClosurePlanDetails,
 	string? DioceseName,
@@ -24,7 +24,7 @@ public record ApplicationSchoolServiceModel(
 	string? ResolutionConsentFolderIdentifier,
 	SchoolEqualitiesProtectedCharacteristics? ProtectedCharacteristics,
 	string? FurtherInformation,
-	
+
 	// finances
 	FinancialYearServiceModel? PreviousFinancialYear,
 	FinancialYearServiceModel? CurrentFinancialYear,
@@ -38,7 +38,7 @@ public record ApplicationSchoolServiceModel(
 	string? AdditionalInformation = null,
 	EqualityImpact? EqualitiesImpactAssessmentCompleted = null,
 	string? EqualitiesImpactAssessmentDetails = null, // two possible very long proforma string? answers here - maybe this should be a bool
-	// contact details
+													  // contact details
 	string? SchoolConversionContactHeadName = null,
 	string? SchoolConversionContactHeadEmail = null,
 	string? SchoolConversionContactHeadTel = null,
@@ -79,8 +79,12 @@ public record ApplicationSchoolServiceModel(
 	bool? DeclarationBodyAgree = null,
 	bool? DeclarationIAmTheChairOrHeadteacher = null,
 	string? DeclarationSignedByName = null,
-	string? SchoolConversionReasonsForJoining = null, 
+	string? SchoolConversionReasonsForJoining = null,
 	bool? HasLoans = null,
 	bool? HasLeases = null,
 	Guid? EntityId = null
-);
+)
+{
+	public bool? SchoolSupportGrantJoiningInAGroup { get; set; }
+	public bool? SchoolSupportGrantBankDetailsProvided { get; set; }
+}
