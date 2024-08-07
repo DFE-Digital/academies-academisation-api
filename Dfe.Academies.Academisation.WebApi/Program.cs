@@ -41,7 +41,6 @@ using Dfe.Academisation.CorrelationIdMiddleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
