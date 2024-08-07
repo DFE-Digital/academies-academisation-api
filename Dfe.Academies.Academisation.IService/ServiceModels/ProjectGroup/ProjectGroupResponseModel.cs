@@ -2,7 +2,7 @@
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 {
-	public class ProjectGroupResponseModel(int id, string referenceNumber, string trustReferenceNumber, string trustName, string trustUkprn, User assignedUser)
+	public class ProjectGroupResponseModel(int id, string referenceNumber, string trustReferenceNumber, string trustName, string trustUkprn, User assignedUser, List<ConversionProjectServiceModel> projects)
 	{
 		public int Id { get; init; } = id;
 		public string TrustReferenceNumber { get; init; } = trustReferenceNumber;
@@ -13,6 +13,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 		public string? ReferenceNumber { get; init; } = referenceNumber;
 		public User AssignedUser { get; init; } = assignedUser;
 
-		public List<ConversionProjectServiceModel> projects { get; init; }
+		public List<ConversionProjectServiceModel> Projects { get; init; } = projects;
 	}
 }

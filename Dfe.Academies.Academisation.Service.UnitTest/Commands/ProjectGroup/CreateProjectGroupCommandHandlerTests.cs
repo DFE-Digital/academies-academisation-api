@@ -69,8 +69,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
 			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
 			Assert.Equal(responseModel.ReferenceNumber, expectedProjectGroupReference);
-			Assert.Equal(responseModel.projects.Count(), expectedProjects.Count);
-			foreach (var conversion in responseModel.projects.Select((Value, Index) => (Value, Index)))
+			Assert.Equal(responseModel.Projects.Count(), expectedProjects.Count);
+			foreach (var conversion in responseModel.Projects.Select((Value, Index) => (Value, Index)))
 			{
 				Assert.Equal(conversion.Value.Urn, expectedProjects[conversion.Index].Details.Urn);
 				Assert.Equal(conversion.Value.SchoolName, expectedProjects[conversion.Index].Details.SchoolName);
@@ -104,10 +104,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			// Assert
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
 			Assert.Equal(responseModel.TrustReferenceNumber, request.TrustReferenceNumber);
-			Assert.Equal(responseModel.projects.Count(), expectedProjects.Count);
-			Assert.NotEmpty(responseModel.ReferenceNumber);
+			Assert.Equal(responseModel.Projects.Count(), expectedProjects.Count);
+			Assert.NotEmpty(responseModel.ReferenceNumber!);
 			Assert.StartsWith(responseModel.ReferenceNumber, "GRP_00000000");
-			foreach (var conversion in responseModel.projects.Select((Value, Index) => (Value, Index)))
+			foreach (var conversion in responseModel.Projects.Select((Value, Index) => (Value, Index)))
 			{
 				Assert.Equal(conversion.Value.Urn, expectedProjects[conversion.Index].Details.Urn);
 				Assert.Equal(conversion.Value.SchoolName, expectedProjects[conversion.Index].Details.SchoolName);

@@ -13,9 +13,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService
 {
-	public class ProjectGroupQueryService(IProjectGroupRepository projectGroupRepository, IConversionProjectRepository conversionProjectRepository, ILogger<ProjectGroupQueryService> logger) : IProjectGroupQueryService
+	public class ProjectGroupQueryService(IProjectGroupRepository projectGroupRepository, IConversionProjectRepository conversionProjectRepository) : IProjectGroupQueryService
 	{
-		public async Task<ProjectGroupResponseModel> GetProjectGroupById(int id, CancellationToken cancellationToken)
+		public async Task<ProjectGroupResponseModel> GetProjectGroupByIdAsync(int id, CancellationToken cancellationToken)
 		{
 			var projectGroup = await projectGroupRepository.GetById(id);
 			var relatedProjects = await conversionProjectRepository.GetConversionProjectsByProjectGroupIdAsync(projectGroup.Id, cancellationToken).ConfigureAwait(false);

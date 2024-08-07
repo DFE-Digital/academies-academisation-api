@@ -3,7 +3,6 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -14,7 +13,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 	{
 		private Mock<IProjectGroupRepository> _mockProjectGroupRepository;
 		private Mock<IConversionProjectRepository> _mockConversionProjectRepository;
-		private Mock<ILogger<ProjectGroupQueryService>> _mockLogger;
 		private ProjectGroupQueryService _projectGroupQueryService;
 		private CancellationToken _cancellationToken;
 		private readonly Fixture _fixture;
@@ -23,12 +21,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		{
 			_mockProjectGroupRepository = new Mock<IProjectGroupRepository>();
 			_mockConversionProjectRepository = new Mock<IConversionProjectRepository>();
-			_mockLogger = new Mock<ILogger<ProjectGroupQueryService>>();
 			_fixture = new();
 			_projectGroupQueryService = new ProjectGroupQueryService(
 				_mockProjectGroupRepository.Object,
-				_mockConversionProjectRepository.Object,
-				_mockLogger.Object
+				_mockConversionProjectRepository.Object
 			);
 			_cancellationToken = CancellationToken.None;
 		}
@@ -42,7 +38,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedProject = _fixture.Create<Domain.ProjectAggregate.Project>();
 			expectedProject.SetProjectGroupId(expectedProjectGroup.Id);
 			var emptyList = new List<string>();
-			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.ReferenceNumber, _cancellationToken))
+			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.ReferenceNumber!, _cancellationToken))
 				.ReturnsAsync([expectedProjectGroup]);
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 
@@ -58,7 +54,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				Assert.Equal(data.ReferenceNumber, expectedProjectGroup.ReferenceNumber);
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
-			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.ReferenceNumber, _cancellationToken), Times.Once());
+			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.ReferenceNumber!, _cancellationToken), Times.Once());
 			_mockConversionProjectRepository.Verify(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken), Times.Once());
 
 		}
@@ -71,7 +67,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedProjectGroup = _fixture.Create<ProjectGroup>();
 			var expectedProject = _fixture.Create<Domain.ProjectAggregate.Project>();
 			expectedProject.SetProjectGroupId(expectedProjectGroup.Id);
-			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.TrustReference, _cancellationToken))
+			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.TrustReference!, _cancellationToken))
 				.ReturnsAsync([expectedProjectGroup]);
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 			var emptyList = new List<string>();
@@ -87,7 +83,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				Assert.Equal(data.ReferenceNumber, expectedProjectGroup.ReferenceNumber);
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
-			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.TrustReference, _cancellationToken), Times.Once());
+			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.TrustReference!, _cancellationToken), Times.Once());
 			_mockConversionProjectRepository.Verify(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken), Times.Once());
 
 		}
@@ -100,7 +96,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			var expectedProjectGroup = _fixture.Create<ProjectGroup>();
 			var expectedProject = _fixture.Create<Domain.ProjectAggregate.Project>();
 			expectedProject.SetProjectGroupId(expectedProjectGroup.Id);
-			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.Title, _cancellationToken))
+			_mockProjectGroupRepository.Setup(x => x.SearchProjectGroups(searchModel.Title!, _cancellationToken))
 				.ReturnsAsync([expectedProjectGroup]);
 			_mockConversionProjectRepository.Setup(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken)).ReturnsAsync([expectedProject]);
 			var emptyList = new List<string>();
@@ -116,9 +112,36 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				Assert.Equal(data.ReferenceNumber, expectedProjectGroup.ReferenceNumber);
 				Assert.Equal(data.TrustReferenceNumber, expectedProjectGroup.TrustReference);
 			}
-			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.Title, _cancellationToken), Times.Once());
+			_mockProjectGroupRepository.Verify(x => x.SearchProjectGroups(searchModel.Title!, _cancellationToken), Times.Once());
 			_mockConversionProjectRepository.Verify(x => x.GetProjectsByProjectGroupIdsAsync(new List<int> { expectedProjectGroup.Id }, _cancellationToken), Times.Once());
+		}
 
+		[Fact]
+		public async Task GetProjectGroupByIdAsync_WithId_ShouldReturnResult()
+		{
+			// Arrange 
+			var expectedProjectGroup = _fixture.Create<ProjectGroup>();
+			var expectedProject = _fixture.Create<Domain.ProjectAggregate.Project>();
+			expectedProject.SetProjectGroupId(expectedProjectGroup.Id);
+			_mockProjectGroupRepository.Setup(x => x.GetById(expectedProjectGroup.Id))
+				.ReturnsAsync(expectedProjectGroup);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByProjectGroupIdAsync(expectedProjectGroup.Id, _cancellationToken)).ReturnsAsync([expectedProject]);
+
+			// Action
+			var result = await _projectGroupQueryService.GetProjectGroupByIdAsync(expectedProjectGroup.Id, _cancellationToken);
+
+			//Assert
+			var responseModel = Assert.IsType<ProjectGroupResponseModel>(result);
+			Assert.Equal(responseModel.TrustName, expectedProjectGroup.TrustName);
+			Assert.Equal(responseModel.ReferenceNumber, expectedProjectGroup.ReferenceNumber);
+			Assert.Equal(responseModel.Id, expectedProjectGroup.Id);
+			foreach (var project in responseModel.Projects)
+			{
+				Assert.Equal(project.Id, expectedProject.Id);
+				Assert.Equal(project.NameOfTrust, expectedProject.Details.NameOfTrust);
+			}
+			_mockProjectGroupRepository.Verify(x => x.GetById(expectedProjectGroup.Id), Times.Once());
+			_mockConversionProjectRepository.Verify(x => x.GetConversionProjectsByProjectGroupIdAsync(expectedProjectGroup.Id, _cancellationToken), Times.Once());
 		}
 	}
 }

@@ -7,22 +7,25 @@ namespace Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup
 	{
 		public SetProjectGroupAssignUserCommandValidator()
 		{
+			
 			RuleFor(x => x.GroupReferenceNumber)
 				.NotEmpty().WithMessage("Must specify a group reference number")
-				.NotNull().WithMessage("Trust Reference must not be null");
-
+				.NotNull().WithMessage("Group Reference number must not be null");
+			/*
 			RuleFor(x => x.FullName)
-				.NotEmpty().WithMessage("Full name must not be empty");
+				.NotEmpty()
+				.When(x => x.UserId != null && !string.IsNullOrEmpty(x.EmailAddress))
+				.WithMessage("Full name must not be empty");
 
 			RuleFor(x => x.UserId)
-				.NotEmpty().WithMessage("Full name must not be empty");
-
-			RuleFor(x => x.FullName)
-				.NotEmpty().WithMessage("Full name must not be empty");
+				.NotEmpty()
+				.When(x => !string.IsNullOrEmpty(x.FullName) && !string.IsNullOrEmpty(x.EmailAddress))
+				.WithMessage("Full name must not be empty");
 
 			RuleFor(x => x.EmailAddress)
-				.NotEmpty().WithMessage("Email address must not be empty")
-				.EmailAddress().WithMessage("Must be a valid email address.");
+				.NotEmpty()
+				.When(x => x.UserId != null && !string.IsNullOrEmpty(x.FullName))
+				.EmailAddress().WithMessage("Must be a valid email address.");*/
 		}
 	}
 }
