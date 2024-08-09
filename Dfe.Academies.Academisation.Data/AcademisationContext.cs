@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
@@ -661,6 +662,9 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	void ConfigureSchool(EntityTypeBuilder<School> schoolConfiguration)
 	{
+		var converter = new JsonValueConverter<IEnumerable<SchoolInGroup>?>();
+		var comparer = new JsonValueComparer<IEnumerable<SchoolInGroup>?>();
+
 		schoolConfiguration.ToTable("ApplicationSchool", DEFAULT_SCHEMA);
 		schoolConfiguration.HasKey(a => a.Id);
 		schoolConfiguration.Property<int?>("ConversionApplicationId")
@@ -670,7 +674,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		{
 			sd.Property(d => d.ApproverContactEmail).HasColumnName("ApproverContactEmail");
 			sd.Property(d => d.ApproverContactName).HasColumnName("ApproverContactName");
-			sd.Property(d => d.CapacityAssumptions).HasColumnName("CapacityAssumptions");		
+			sd.Property(d => d.CapacityAssumptions).HasColumnName("CapacityAssumptions");
 			sd.Property(d => d.ConfirmPaySupportGrantToSchool).HasColumnName("ConfirmPaySupportGrantToSchool");
 			sd.Property(d => d.ContactChairEmail).HasColumnName("ContactChairEmail");
 			sd.Property(d => d.ContactChairName).HasColumnName("ContactChairName");
@@ -692,7 +696,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			sd.Property(d => d.SchoolSupportGrantFundsPaidTo).HasColumnName("SupportGrantFundsPaidTo");
 			sd.Property(d => d.SchoolSupportGrantJoiningInAGroup).HasColumnName("SchoolSupportGrantJoiningInAGroup");
 			sd.Property(d => d.SchoolSupportGrantBankDetailsProvided).HasColumnName("SchoolSupportGrantBankDetailsProvided");
-
+			sd.Property(d => d.SchoolsInGroup).HasColumnName("SchoolsInGroup").HasConversion(converter).Metadata.SetValueComparer(comparer);
 			sd.Property(d => d.SchoolPlanToConsultStakeholders).HasColumnName("SchoolPlanToConsultStakeholders");
 
 			sd.Property(d => d.FinanceOngoingInvestigations).HasColumnName("FinanceOngoingInvestigations");
@@ -924,7 +928,7 @@ public class EnumListJsonValueConverter<T> : ValueConverter<List<T>, string> whe
 		.Serialize(v.Select(e => e.ToString()).ToList(), (JsonSerializerOptions)null),
 
 	  v => v.IsNullOrEmpty() ? new List<T>() : JsonSerializer
-		.Deserialize<List<string>>(v , (JsonSerializerOptions)null)
+		.Deserialize<List<string>>(v, (JsonSerializerOptions)null)
 		.Select(e => (T)Enum.Parse(typeof(T), e)).ToList())
 	{
 	}
@@ -937,3 +941,24 @@ public class ListValueComparer<T> : ValueComparer<ICollection<T>>
 	{
 	}
 }
+public class JsonValueConverter<T> : ValueConverter<T, string>
+{
+	public JsonValueConverter(JsonSerializerOptions options = null) : base(
+		v => v == null ? null : JsonSerializer.Serialize(v, options),
+		v => v == null ? default : JsonSerializer.Deserialize<T>(v, options))
+	{
+	}
+}
+public class JsonValueComparer<T> : ValueComparer<T>
+{
+	public JsonValueComparer(JsonSerializerOptions options = null) : base(
+		(c1, c2) =>
+			c1 == null && c2 == null || c1 != null && c2 != null && JsonSerializer.Serialize(c1, options) == JsonSerializer.Serialize(c2, options),
+		c => c == null ? 0 : JsonSerializer.Serialize(c, options).GetHashCode(),
+		c => c == null ? default : JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(c, options), options))
+	{
+	}
+}
+
+
+

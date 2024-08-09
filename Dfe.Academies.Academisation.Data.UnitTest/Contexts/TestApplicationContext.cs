@@ -64,6 +64,7 @@ public class TestApplicationContext : TestAcademisationContext
 					ms.Details.CapacityPublishedAdmissionsNumber, ms.Details.SchoolSupportGrantFundsPaidTo,
 					ms.Details.ConfirmPaySupportGrantToSchool,
 					ms.Details.SchoolSupportGrantJoiningInAGroup, ms.Details.SchoolSupportGrantBankDetailsProvided,
+					ms.Details.SchoolsInGroup,
 					ms.Details.SchoolHasConsultedStakeholders,
 					ms.Details.SchoolPlanToConsultStakeholders, ms.Details.FinanceOngoingInvestigations,
 					ms.Details.FinancialInvestigationsExplain, ms.Details.FinancialInvestigationsTrustAware,

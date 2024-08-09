@@ -44,6 +44,7 @@ public class SchoolDetails
 		bool? ConfirmPaySupportGrantToSchool = null,
 		bool? SchoolSupportGrantJoiningInAGroup = null,
 		bool? SchoolSupportGrantBankDetailsProvided = null,
+		IEnumerable<SchoolInGroup> SchoolsInGroup = null,
 		// consultation details
 		bool? SchoolHasConsultedStakeholders = null,
 		string? SchoolPlanToConsultStakeholders = null,
@@ -88,6 +89,7 @@ public class SchoolDetails
 		this.SchoolSupportGrantFundsPaidTo = SchoolSupportGrantFundsPaidTo;
 		this.SchoolSupportGrantJoiningInAGroup = SchoolSupportGrantJoiningInAGroup;
 		this.SchoolSupportGrantBankDetailsProvided = SchoolSupportGrantBankDetailsProvided;
+		this.SchoolsInGroup = SchoolsInGroup;
 		this.ConfirmPaySupportGrantToSchool = ConfirmPaySupportGrantToSchool;
 		this.SchoolHasConsultedStakeholders = SchoolHasConsultedStakeholders;
 		this.SchoolPlanToConsultStakeholders = SchoolPlanToConsultStakeholders;
@@ -131,6 +133,7 @@ public class SchoolDetails
 	public bool? ConfirmPaySupportGrantToSchool { get; init; }
 	public bool? SchoolSupportGrantJoiningInAGroup { get; init; }
 	public bool? SchoolSupportGrantBankDetailsProvided { get; init; }
+	public IEnumerable<SchoolInGroup>? SchoolsInGroup { get; init; }
 	public bool? SchoolHasConsultedStakeholders { get; init; }
 	public string? SchoolPlanToConsultStakeholders { get; init; }
 	public bool? FinanceOngoingInvestigations { get; init; }

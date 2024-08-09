@@ -87,4 +87,5 @@ public record ApplicationSchoolServiceModel(
 {
 	public bool? SchoolSupportGrantJoiningInAGroup { get; set; }
 	public bool? SchoolSupportGrantBankDetailsProvided { get; set; }
+	public IEnumerable<SchoolInGroup>? SchoolsInGroup { get; set; }
 }
