@@ -18,6 +18,12 @@ public class ApiKeyAuthenticationMiddleware
 	}
 	public async Task InvokeAsync(HttpContext context)
 	{
+		// Bypass API Key requirement for health check route
+		if (context.Request.Path == "/healthcheck") {
+			await _next(context);
+			return;
+		}
+
 		if (!context.Request.Headers.TryGetValue(ApiKeyHeader, out var requestApiKey))
 		{
 			context.Response.StatusCode = StatusCodes.Status401Unauthorized;
