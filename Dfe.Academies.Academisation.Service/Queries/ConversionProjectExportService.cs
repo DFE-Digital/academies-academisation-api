@@ -96,7 +96,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				if (project.ProjectStatus?.ToLower() == "dao revoked")
 				{
 					var reasons = advisoryBoardDecision?.DAORevokedReasons?
-					.Select(r => $"{r.Reason}: {r.Details}")
+					.Select(r => $"{r.Reason}")
 					.ToList();
 					worksheet.Cell(row, 17).Value = reasons != null ? string.Join(", ", reasons) : "No reasons available";
 				}
