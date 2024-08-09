@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using FluentValidation;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 {
@@ -20,7 +21,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				return new NotFoundCommandResult();
 			}
 
-			var conversionProjects = await conversionProjectRepository.GetConversionProjectsByProjectGroupIdAsync(projectGroup.Id, cancellationToken).ConfigureAwait(false);
+			var projects = await conversionProjectRepository.GetProjectsByIdsAsync(message.ConversionProjectIds, cancellationToken).ConfigureAwait(false);
+			var groupConversionProjects = await conversionProjectRepository.GetConversionProjectsByProjectGroupIdAsync(projectGroup.Id, cancellationToken).ConfigureAwait(false);
+			var conversionProjects = GetConversionProjects(projects, groupConversionProjects);
 
 			if (conversionProjects != null && conversionProjects.Any())
 			{
@@ -44,6 +47,27 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
 			}
 			return new CommandSuccessResult();
+		}
+
+		private IEnumerable<IProject> GetConversionProjects(IEnumerable<IProject> conversionProjects, IEnumerable<IProject> groupConversionProjects)
+		{
+			var projects = new List<IProject>();
+			if (conversionProjects == null && !conversionProjects!.Any() && groupConversionProjects == null && !groupConversionProjects!.Any())
+			{
+				return Enumerable.Empty<IProject>();
+			}
+
+			if (conversionProjects != null && conversionProjects.Any())
+			{
+				projects.AddRange(conversionProjects);
+			}
+
+			if (groupConversionProjects != null && groupConversionProjects.Any())
+			{
+				projects.AddRange(groupConversionProjects);
+			}
+
+			return projects;
 		}
 	}
 }

@@ -50,9 +50,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				conversionsProjectModels = conversionProjects.Select(p => p.MapToServiceModel()).ToList();
 			}
 
-			var responseModel = new ProjectGroupResponseModel(projectGroup.Id, projectGroup.ReferenceNumber!, projectGroup.TrustReference, null, null, null) {
-				projects = conversionsProjectModels
-			};
+			var responseModel = new ProjectGroupResponseModel(projectGroup.Id, projectGroup.ReferenceNumber!, projectGroup.TrustReference, null, null, null, conversionsProjectModels);
 
 			return new CreateSuccessResult<ProjectGroupResponseModel>(responseModel);
 

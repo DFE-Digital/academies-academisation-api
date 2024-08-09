@@ -45,11 +45,11 @@ public class ProjectUpdateTests
 		_legacyProjectGetQuery = new ConversionProjectQueryService(conversionProjectRepository, formAMatProjectRepository);
 		var services = new ServiceCollection();
 
-		services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(ConversionProjectUpdateCommandHandler))));
+		services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(ConversionProjectUpdateCommandHandler))!));
 		services.AddScoped(x => conversionProjectRepository);
 		services.AddScoped(x => projectUpdateDataCommand);
 
-		_mediatr = services.BuildServiceProvider().GetService<IMediator>();
+		_mediatr = services.BuildServiceProvider().GetService<IMediator>()!;
 	}
 
 

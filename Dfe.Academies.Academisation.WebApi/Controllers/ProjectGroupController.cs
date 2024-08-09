@@ -91,7 +91,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ProjectGroupResponseModel>> GetProjectGrouptById(int id, CancellationToken cancellationToken)
 		{
-			var project = await projectGroupQueryService.GetProjectGroupById(id, cancellationToken);
+			var project = await projectGroupQueryService.GetProjectGroupByIdAsync(id, cancellationToken);
 
 			if (project == null)
 			{
