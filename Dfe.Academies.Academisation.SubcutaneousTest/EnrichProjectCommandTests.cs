@@ -26,16 +26,15 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		private readonly AcademisationContext _context;
 		private readonly Mock<IHttpClientFactory> _httpClientFactory;
 		private readonly Mock<IAcademiesApiClientFactory> _academiesApiClientFactory;
-		private readonly MockHttpMessageHandler _mockHttpMessageHandler = new MockHttpMessageHandler();
+		private readonly MockHttpMessageHandler _mockHttpMessageHandler = new();
 		private readonly EnrichProjectCommand _subject;
 
 		private readonly EstablishmentDto _establishment;
 
-		private readonly Fixture _fixture = new Fixture();
-		private readonly IMediator _mediator;
+		private readonly Fixture _fixture = new();
 		public EnrichProjectCommandTests()
 		{
-			_context = new TestProjectContext(_mediator).CreateContext();
+			_context = new TestProjectContext(new Mock<IMediator>().Object).CreateContext();
 
 			// mock establishment
 			_establishment = _fixture.Create<EstablishmentDto>();

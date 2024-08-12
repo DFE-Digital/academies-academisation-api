@@ -9,7 +9,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Utils
 		{
 			PropertyNameCaseInsensitive = true,
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+			IncludeFields = true
 		};
 
 		internal static async Task<T> ConvertResponseToTypeAsync<T>(this HttpResponseMessage httpResponseMessage)

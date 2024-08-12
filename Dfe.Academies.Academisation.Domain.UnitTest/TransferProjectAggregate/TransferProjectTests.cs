@@ -123,7 +123,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 			// Act
 			Assert.Throws<ArgumentNullException>(() => TransferProject.Create(
-				null,
+				null!,
 				outgoingTrustName,
 				academies,
 				isFormAMat,
@@ -456,15 +456,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 			public IEnumerator<object[]> GetEnumerator()
 			{
-				yield return new object[] { null, "out trust", _transferringAcademies, false, DateTime.Now, typeof(ArgumentNullException) };
+				yield return new object[] { null!, "out trust", _transferringAcademies, false, DateTime.Now, typeof(ArgumentNullException) };
 				yield return new object[] { string.Empty, "out trust", _transferringAcademies, false, DateTime.Now, typeof(ArgumentException) };
 
-				yield return new object[] { "11112222", "out trust", null, false, DateTime.Now, typeof(ArgumentNullException) };
+				yield return new object[] { "11112222", "out trust", null!, false, DateTime.Now, typeof(ArgumentNullException) };
 				yield return new object[] { "11112222", "out trust", new List<TransferringAcademy>(), false, DateTime.Now, typeof(ArgumentException) };
 
 				yield return new object[] { "11112222", "out trust", _transferringAcademies, false, DateTime.MinValue, typeof(ArgumentOutOfRangeException) };
 				yield return new object[] { "11112222", "out trust", _transferringAcademies, false, DateTime.MaxValue, typeof(ArgumentOutOfRangeException) };
-				yield return new object[] { "11112222", "out trust", _transferringAcademies, false, null, typeof(ArgumentOutOfRangeException) };
+				yield return new object[] { "11112222", "out trust", _transferringAcademies, false, null!, typeof(ArgumentOutOfRangeException) };
 			}
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

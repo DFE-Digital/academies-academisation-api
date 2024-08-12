@@ -276,6 +276,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result is null ? NotFound() : Ok(result);
 		}
 
+
 		[HttpGet("GetTransferProjects", Name = "GetTransferProjects")]
 		public async Task<ActionResult<AcademyTransferProjectResponse>> GetTransferProjects(
 		[FromQuery] string? title,
@@ -351,6 +352,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			}
 
 			return Ok(result);
+		}
+
+		[HttpGet("{ukprn}/get-transfers-by-incoming-trust", Name = "GetTransfersByIncomingTrust")]
+		public async Task<ActionResult<IEnumerable<AcademyTransferProjectResponse>>> GetTransfersByincomingTrust(string ukprn, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Getting transfer projects by incoming trust ukprn: {value}", ukprn);
+
+			var result = await _transferProjectQueryService.GetTransferProjectsByIncomingTrustUkprn(ukprn, cancellationToken);
+
+			return result is null ? NotFound() : Ok(result);
 		}
 	}
 }

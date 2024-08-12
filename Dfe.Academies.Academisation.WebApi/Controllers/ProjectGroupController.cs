@@ -8,7 +8,6 @@ using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.ActionResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -25,7 +24,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			[FromBody] CreateProjectGroupCommand command, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Creating project group: {value}", command);
-			var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
+			var result = await mediator.Send(command, cancellationToken);
 
 			return result switch
 			{

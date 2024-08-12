@@ -8,7 +8,6 @@ using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.Service.UnitTest.Mocks;
 using Dfe.Academies.Contracts.V4.Establishments;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -18,23 +17,19 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 	{
 		IAcademiesQueryService _establishmentRepo = new Mock<IAcademiesQueryService>().Object;
 		IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository = new Mock<IAdvisoryBoardDecisionRepository>().Object;
-		IServiceScopeFactory _serviceScope = new Mock<IServiceScopeFactory>().Object;
-
+		private Mock<ITransferProjectRepository> _mockTransferProjectRepository;
+		private TransferProjectQueryService _service;
 		public TransferProjectQueryServiceTests()
 		{
-
+			_mockTransferProjectRepository = new Mock<ITransferProjectRepository>();
+			_service = new TransferProjectQueryService(_mockTransferProjectRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
 		}
 
 		[Fact]
 		public async Task GetByUrn_ShouldReturnExpectedResponse()
 		{
-			// Mocking the Dependencies
-			var mockRepository = new Mock<ITransferProjectRepository>();
-
+			// Arrange
 			var dummyUrn = 1;
-
-
-			// Create a TransferProject
 			var transferringAcademies = new List<TransferringAcademy>() { 
 				new TransferringAcademy("23456789", "in trust", "34567890", "", "") ,
 				new TransferringAcademy("23456789", "in trust", "34567891", "", "")
@@ -47,33 +42,21 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				false,
 				DateTime.Now
 			);
-
-
-			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult((ITransferProject?)dummyTransferProject));
-
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
-
-			// Setting up Test Data
+			_mockTransferProjectRepository.Setup(repo => repo.GetByUrn(It.IsAny<int>())).Returns(Task.FromResult((ITransferProject?)dummyTransferProject));
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
 
-			// Testing the Method
-			var result = await service.GetByUrn(dummyUrn);
+			// Action
+			var result = await _service.GetByUrn(dummyUrn);
 
-			// Assertion
+			// Assert
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
 		[Fact]
 		public async Task GetById_ShouldReturnExpectedResponse()
 		{
-			// Mocking the Dependencies
-			var mockRepository = new Mock<ITransferProjectRepository>();
-
+			// Arrange
 			var dummyId = 1;
-
-
-			// Create a TransferProject
 			var transferringAcademies = new List<TransferringAcademy>() {
 				new TransferringAcademy("23456789", "in trust", "34567890", "", "") ,
 				new TransferringAcademy("23456789", "in trust", "34567891", "", "")
@@ -86,38 +69,29 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				false,
 				DateTime.Now
 			);
-
-			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
-
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
-
-			// Setting up Test Data
+			_mockTransferProjectRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
 
-			// Testing the Method
-			var result = await service.GetById(dummyId);
+			// Action
+			var result = await _service.GetById(dummyId);
 
-			// Assertion
+			// Assert
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
 		[Fact]
 		public async Task GetExportedTransferProjects_ShouldReturnExpectedResponse()
 		{
-			// Mocking the Dependencies
-			var mockRepository = new Mock<ITransferProjectRepository>();
+			// Arrange
 			var mockAcademiesQueryService = new Mock<IAcademiesQueryService>();
 			var (mockServiceScopeFactory, mockAdvisoryBoardDecisionGetDataByProjectIdQuery) = MockServiceScopeFactory.CreateMock<IAdvisoryBoardDecisionRepository>();
 
-			// Mocking the data
 			var mockDecision = new Mock<IConversionAdvisoryBoardDecision>();
 
 			var mockTransferProject = new MockTransferProject("dummyOutgoingTrustUkprn", "dummyOutgoingTrustName", new List<MockTransferAcademyRecord>() {
 				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1", "dummyRegion", "dummyLocalAuthority")
 			}).CreateMock();
 
-			// Mock establishment data
 			var establishmentDto = new EstablishmentDto
 			{
 				Ukprn = "dummyOutgoingAcademyUkprn1",
@@ -127,51 +101,43 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				EstablishmentType = new NameAndCodeDto { Name = "Type1" },
 				Gor = new NameAndCodeDto { Name = "Region1" }
 			};
-
-
-			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>()))
+			_mockTransferProjectRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>()))
 						  .ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
-
-			// Set up behavior for methods
 			mockAdvisoryBoardDecisionGetDataByProjectIdQuery
 				.Setup(query => query.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 				.ReturnsAsync(mockDecision.Object);
 
 			mockAcademiesQueryService
 				.Setup(service => service.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>()))
-				.ReturnsAsync(new List<EstablishmentDto> { establishmentDto });
-
+				.ReturnsAsync([establishmentDto]);
 			var service = new TransferProjectQueryService(
-				mockRepository.Object,
+				_mockTransferProjectRepository.Object,
 				mockAcademiesQueryService.Object,
 				mockAdvisoryBoardDecisionGetDataByProjectIdQuery.Object
 			);
-
-			// Setting up Test Data
 			var dummyProjects = new List<ExportedTransferProjectModel>
-	{
-		new ExportedTransferProjectModel
-		{
-			Id = 0,
-			IncomingTrustName = "dummyIncomingTrustName1",
-			IncomingTrustUkprn = "dummyIncomingTrustUkprn1",
-			OutgoingTrustName = "dummyOutgoingTrustName",
-			OutgoingTrustUKPRN = "dummyOutgoingTrustUkprn",
-			LocalAuthority = "Local Authority1",
-			Region = "Region1",
-			SchoolName = "Dummy Academy",
-			SchoolType = "Type1",
-			Urn = "123456",
-			PFI = " "
-		}
-	};
+			{
+				new()
+				{
+					Id = 0,
+					IncomingTrustName = "dummyIncomingTrustName1",
+					IncomingTrustUkprn = "dummyIncomingTrustUkprn1",
+					OutgoingTrustName = "dummyOutgoingTrustName",
+					OutgoingTrustUKPRN = "dummyOutgoingTrustUkprn",
+					LocalAuthority = "Local Authority1",
+					Region = "Region1",
+					SchoolName = "Dummy Academy",
+					SchoolType = "Type1",
+					Urn = "123456",
+					PFI = " "
+				}
+			};
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 1);
 
-			// Testing the Method
-			var result = await service.GetExportedTransferProjects(Enumerable.Empty<string>(), string.Empty, Enumerable.Empty<string>(), 1, 10);
+			// Action
+			var result = await service.GetExportedTransferProjects([], string.Empty, [], 1, 10);
 
-			// Assertion
+			// Assert
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
@@ -179,39 +145,30 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		[Fact]
 		public async Task GetExportedTransferProjects_ShouldReturnNoResultsWhenFiltered()
 		{
-			// Mocking the Dependencies
-			var mockRepository = new Mock<ITransferProjectRepository>();
-
-			// Mocking the data
+			// Arrange
 			var mockTransferProject = new MockTransferProject("dummyOutgoingTrustUkprn", "dummyOutgoingTrustName", new List<MockTransferAcademyRecord>() {
 				new("dummyIncomingTrustUkprn1", "dummyOutgoingAcademyUkprn1", "dummyIncomingTrustName1","dummyRegion", "dummyLocalAuthority")
 			}).CreateMock();
 
 			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
+			_mockTransferProjectRepository.Setup(repo => repo.GetAllTransferProjects()).ReturnsAsync(new List<ITransferProject>() { mockTransferProject.Object });
 
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
-
-			// Setting up Test Data
 			var dummyProjects = new List<ExportedTransferProjectModel>();
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 0);
 
-			// Testing the Method
-			var result = await service.GetExportedTransferProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>());
+			// Action
+			var result = await _service.GetExportedTransferProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>());
 
-			// Assertion
+			// Assert
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
 		[Fact]
 		public async Task GetExportedTransferProjectsWithMultipleAcademies_ShouldReturnExpectedResponse()
 		{
-			// Mocking the Dependencies
-			var mockRepository = new Mock<ITransferProjectRepository>();
+			// Arrange
 			var mockAcademiesQueryService = new Mock<IAcademiesQueryService>();
 			var (mockServiceScopeFactory, mockAdvisoryBoardDecisionRepository) = MockServiceScopeFactory.CreateMock<IAdvisoryBoardDecisionRepository>();
-
-			// Mocking the data
 			var mockDecision = new Mock<IConversionAdvisoryBoardDecision>();
 			var mockTransferProject = new MockTransferProject("dummyOutgoingTrustUkprn", "dummyOutgoingTrustName", new List<MockTransferAcademyRecord>() {
 
@@ -219,67 +176,62 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				new("dummyIncomingTrustUkprn2", "dummyOutgoingAcademyUkprn2", "dummyIncomingTrustName2", "dummyRegion", "dummyLocalAuthority")
 			}).CreateMock();
 
-			// Mock the setup to return the dummy project
-			mockRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
+			_mockTransferProjectRepository.Setup(repo => repo.SearchProjects(It.IsAny<IEnumerable<string>>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((new List<ITransferProject>() { mockTransferProject.Object }, 1));
 
-			// Set up behavior for methods
 			mockAdvisoryBoardDecisionRepository
 				.Setup(query => query.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 				.ReturnsAsync(mockDecision.Object);
 
-			List<EstablishmentDto> establishments = new List<EstablishmentDto>()
-	{
-		new EstablishmentDto() { Name = "dummyAcademy1", LocalAuthorityName = "dummyLocalAuthority1", Ukprn = "dummyOutgoingAcademyUkprn1" },
-		new EstablishmentDto() { Name = "dummyAcademy2", Ukprn = "dummyOutgoingAcademyUkprn2" }
-	};
+			var establishments = new List<EstablishmentDto>()
+			{
+				new() { Name = "dummyAcademy1", LocalAuthorityName = "dummyLocalAuthority1", Ukprn = "dummyOutgoingAcademyUkprn1" },
+				new() { Name = "dummyAcademy2", Ukprn = "dummyOutgoingAcademyUkprn2" }
+			};
 
 			mockAcademiesQueryService.Setup(academiesQueryService => academiesQueryService.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>()))
 					.ReturnsAsync(establishments);
-
 			var service = new TransferProjectQueryService(
-				mockRepository.Object,
+				_mockTransferProjectRepository.Object,
 				mockAcademiesQueryService.Object,
 				mockAdvisoryBoardDecisionRepository.Object
 			);
 
-			// Setting up Test Data
 			var dummyProjects = new List<ExportedTransferProjectModel>
-	{
-		new ExportedTransferProjectModel
-		{
-			Id = 0,
-			IncomingTrustName = "dummyIncomingTrustName1",
-			IncomingTrustUkprn = "dummyIncomingTrustUkprn1",
-			OutgoingTrustName = "dummyOutgoingTrustName",
-			OutgoingTrustUKPRN = "dummyOutgoingTrustUkprn",
-			LocalAuthority = "dummyLocalAuthority1",
-			Region = null,
-			SchoolName = "dummyAcademy1",
-			SchoolType = null,
-			Urn = null,
-			PFI = " "
-		},
-		new ExportedTransferProjectModel
-		{
-			Id = 0,
-			IncomingTrustName = "dummyIncomingTrustName1",
-			IncomingTrustUkprn = "dummyIncomingTrustUkprn1",
-			OutgoingTrustName = "dummyOutgoingTrustName",
-			OutgoingTrustUKPRN = "dummyOutgoingTrustUkprn",
-			LocalAuthority = null,
-			Region = null,
-			SchoolName = "dummyAcademy2",
-			SchoolType = null,
-			Urn = null,
-			PFI = " "
-		}
-	};
+			{
+				new()
+				{
+					Id = 0,
+					IncomingTrustName = "dummyIncomingTrustName1",
+					IncomingTrustUkprn = "dummyIncomingTrustUkprn1",
+					OutgoingTrustName = "dummyOutgoingTrustName",
+					OutgoingTrustUKPRN = "dummyOutgoingTrustUkprn",
+					LocalAuthority = "dummyLocalAuthority1",
+					Region = null,
+					SchoolName = "dummyAcademy1",
+					SchoolType = null,
+					Urn = null,
+					PFI = " "
+				},
+				new() {
+					Id = 0,
+					IncomingTrustName = "dummyIncomingTrustName1",
+					IncomingTrustUkprn = "dummyIncomingTrustUkprn1",
+					OutgoingTrustName = "dummyOutgoingTrustName",
+					OutgoingTrustUKPRN = "dummyOutgoingTrustUkprn",
+					LocalAuthority = null,
+					Region = null,
+					SchoolName = "dummyAcademy2",
+					SchoolType = null,
+					Urn = null,
+					PFI = " "
+				}
+			};
 			var expectedResponse = new PagedResultResponse<ExportedTransferProjectModel>(dummyProjects, 2);
 
-			// Testing the Method
+			// Action
 			var result = await service.GetExportedTransferProjects(Enumerable.Empty<string>(), null, Enumerable.Empty<string>(), 1, 10);
 
-			// Assertion
+			// Assert
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
@@ -287,48 +239,43 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		[Fact]
 		public async Task GetProjects_ReturnsFilteredProjects()
 		{
-			// Arrange
-			var mockRepository = new Mock<ITransferProjectRepository>();
-			var service = new TransferProjectQueryService(mockRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
-
+			// Arrange 
 			var states = new List<string> { "Active", "Completed" };
 			var title = "Project X";
 			var deliveryOfficers = new List<string> { "Officer A" };
 			var page = 1;
 			var count = 10;
 
-			// Sample data setup
 			var transferrinAcademies1 = new List<TransferringAcademy>() { new TransferringAcademy("inUkprn1", "In Trust 1", "ukprn1", "", "") };
 			var transferrinAcademies2 = new List<TransferringAcademy>() { new TransferringAcademy("inUkprn2", "In Trust 2", "ukprn2", "", "") };
 			var dummyProjects = new List<TransferProject>
-	{
-		TransferProject.Create("outUkprn1", "Out Trust 1", transferrinAcademies1, false, DateTime.UtcNow),
-		TransferProject.Create("outUkprn2", "Out Trust 2", transferrinAcademies2, false, DateTime.UtcNow)
-	};
+			{
+				TransferProject.Create("outUkprn1", "Out Trust 1", transferrinAcademies1, false, DateTime.UtcNow),
+				TransferProject.Create("outUkprn2", "Out Trust 2", transferrinAcademies2, false, DateTime.UtcNow)
+			};
 
-			// Expected data setup
 			var expectedData = dummyProjects.Select(p => new AcademyTransferProjectSummaryResponse
 			{
 				ProjectUrn = p.Urn.ToString(),
-				ProjectReference = p.ProjectReference,
+				ProjectReference = p.ProjectReference!,
 				OutgoingTrustUkprn = p.OutgoingTrustUkprn,
-				OutgoingTrustName = p.OutgoingTrustName,
-				Status = p.Status,
+				OutgoingTrustName = p.OutgoingTrustName!,
+				Status = p.Status!,
 				TransferringAcademies = p.TransferringAcademies.Select(a => new TransferringAcademyDto
 				{
 					IncomingTrustName = a.IncomingTrustName,
 					IncomingTrustUkprn = a.IncomingTrustUkprn,
 					OutgoingAcademyUkprn = a.OutgoingAcademyUkprn,
 				}).ToList(),
-				AssignedUser = null,
+				AssignedUser = null!,
 				IsFormAMat = false
 			});
 
-			mockRepository.Setup(repo => repo.SearchProjects(states, title, deliveryOfficers, page, count))
+			_mockTransferProjectRepository.Setup(repo => repo.SearchProjects(states, title, deliveryOfficers, page, count))
 				.ReturnsAsync((dummyProjects, 2));  // 2 represents the total count of items
 
-			// Act
-			var result = await service.GetProjects(states, title, deliveryOfficers, page, count);
+			// Action
+			var result = await _service.GetProjects(states, title, deliveryOfficers, page, count);
 
 			// Assert
 			result.Should().NotBeNull();
@@ -337,5 +284,47 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			result.Paging.RecordCount.Should().Be(2);
 		}
 
+		[Fact]
+		public async Task GetTransferProjectsByIncomingTrustUkprn_ShouldReturnTranferProjects()
+		{
+			// Arrange
+			var trustUrn = "23456789";
+			var dummyTransferProject = TransferProject.Create(
+				"dummyOutgoingTrustUkprn",
+				"out trust",
+				[
+					new TransferringAcademy(trustUrn, "in trust", "34567890", "", ""),
+					new TransferringAcademy(trustUrn, "in trust", "34567891", "", "")
+				],
+				false,
+				DateTime.Now
+			);
+			var cancelationToken = CancellationToken.None;
+			_mockTransferProjectRepository.Setup(repo => repo.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken))
+				.ReturnsAsync([(ITransferProject?)dummyTransferProject!]);
+			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
+
+			// Action
+			var result = await _service.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken);
+
+			// Assert
+			result.Should().BeEquivalentTo([expectedResponse]);
+		}
+		[Fact]
+		public async Task GetTransferProjectsByIncomingTrustUkprn_ShouldReturnNoTranferProject()
+		{
+			// Arrange
+			var trustUrn = "123213";
+			var cancelationToken = CancellationToken.None;
+			_mockTransferProjectRepository.Setup(repo => repo.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken))
+				.ReturnsAsync([]);
+			var service = new TransferProjectQueryService(_mockTransferProjectRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
+
+			// Action
+			var result = await service.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken);
+
+			// Assert
+			result.Should().BeEmpty();
+		}
 	}
 }

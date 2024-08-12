@@ -17,12 +17,11 @@ public class LegacyProjectListGetTests
 	private readonly ProjectController _subject;
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new();
-	private readonly IMediator _mediator;
 	public LegacyProjectListGetTests()
 	{
-		_context = new TestProjectContext(_mediator).CreateContext();
+		_context = new TestProjectContext(new Mock<IMediator>().Object).CreateContext();
 
-		_subject = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		_subject = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null!), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 	}
 
 	[Fact]
