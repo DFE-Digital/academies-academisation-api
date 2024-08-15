@@ -266,6 +266,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 					IncomingTrustName = a.IncomingTrustName,
 					IncomingTrustUkprn = a.IncomingTrustUkprn,
 					OutgoingAcademyUkprn = a.OutgoingAcademyUkprn,
+					Region = a.Region,
+					LocalAuthority = a.LocalAuthority
 				}).ToList(),
 				AssignedUser = null!,
 				IsFormAMat = false
@@ -301,14 +303,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			);
 			var cancelationToken = CancellationToken.None;
 			_mockTransferProjectRepository.Setup(repo => repo.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken))
-				.ReturnsAsync([(ITransferProject?)dummyTransferProject!]);
-			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
+				.ReturnsAsync([(dummyTransferProject!)]);
+			var expectedResponse = _service.AcademyTransferProjectSummaryResponse([dummyTransferProject]);
 
 			// Action
 			var result = await _service.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken);
 
 			// Assert
-			result.Should().BeEquivalentTo([expectedResponse]);
+			result.Should().BeEquivalentTo(expectedResponse);
 		}
 		[Fact]
 		public async Task GetTransferProjectsByIncomingTrustUkprn_ShouldReturnNoTranferProject()

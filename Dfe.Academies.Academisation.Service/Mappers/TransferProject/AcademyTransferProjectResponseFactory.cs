@@ -10,9 +10,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 		{
 			if (model == null)
 			{
-				return null;
+				return null!;
 			}
-
+			
 			var transferringAcademies = model.TransferringAcademies
 				.Select(a => new TransferringAcademyDto
 				{
@@ -31,7 +31,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 					ViabilityIssues = a.ViabilityIssues,
 					FinancialDeficit = a.FinancialDeficit,
 					MPNameAndParty = a.MPNameAndParty,
-					PublishedAdmissionNumber = a.PublishedAdmissionNumber
+					PublishedAdmissionNumber = a.PublishedAdmissionNumber,
+					LocalAuthority = a.LocalAuthority,
+					Region = a.Region
 				})
 				.ToList();
 
@@ -95,9 +97,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 			{
 				Id = model.Id,
 				ProjectUrn = model.Urn.ToString(),
-				ProjectReference = model.ProjectReference,
+				ProjectReference = model.ProjectReference!,
 				OutgoingTrustUkprn = model.OutgoingTrustUkprn,
-				OutgoingTrustName = model.OutgoingTrustName,
+				OutgoingTrustName = model.OutgoingTrustName!,
 				TransferringAcademies = transferringAcademies,
 				Features = features,
 				Dates = dates,

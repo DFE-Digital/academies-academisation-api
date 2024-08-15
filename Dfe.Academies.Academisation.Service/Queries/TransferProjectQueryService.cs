@@ -8,7 +8,6 @@ using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 using Dfe.Academies.Contracts.V4.Establishments;
-using static System.Net.WebRequestMethods;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -45,12 +44,10 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public async Task<PagedResultResponse<AcademyTransferProjectSummaryResponse>> GetTransferProjects(int page, int count, int? urn,
 		string title)
 		{
-			IEnumerable<ITransferProject> transferProjects = FilterByUrn(
-			await _transferProjectRepository.GetAllTransferProjects(), urn).ToList();
+			var transferProjects = FilterByUrn(await _transferProjectRepository.GetAllTransferProjects(), urn).ToList();
 
 			//the logic retrieving the trust data goes here
-			IEnumerable<AcademyTransferProjectSummaryResponse> projects =
-				FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
+			var projects = FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
 
 			// remove any projects without an outgoing trust.
 			projects = projects
@@ -231,7 +228,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							FinancialDeficit = ta.FinancialDeficit,
 							ViabilityIssues = ta.ViabilityIssues,
 							MPNameAndParty = ta.MPNameAndParty,
-							PublishedAdmissionNumber = ta.PublishedAdmissionNumber
+							PublishedAdmissionNumber = ta.PublishedAdmissionNumber,
+							LocalAuthority = ta.LocalAuthority,
+							Region = ta.Region,
 						};
 					}).ToList(),
 					IsFormAMat = x.IsFormAMat
@@ -239,14 +238,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			});
 		}
 
-		public async Task<IEnumerable<AcademyTransferProjectResponse>?> GetTransferProjectsByIncomingTrustUkprn(string ukprn, CancellationToken cancellationToken)
+		public async Task<IEnumerable<AcademyTransferProjectSummaryResponse>?> GetTransferProjectsByIncomingTrustUkprn(string ukprn, CancellationToken cancellationToken)
 		{
 			var transferProjects = await _transferProjectRepository.GetTransferProjectsByIncomingTrustUkprn(ukprn, cancellationToken);
-			var transers = new List<AcademyTransferProjectResponse>();
-			foreach (var transferProject in transferProjects) {
-				transers.Add(AcademyTransferProjectResponseFactory.Create(transferProject!));
-			}
-			return transers;
+
+			return AcademyTransferProjectSummaryResponse(transferProjects);
 		}
 	}
 

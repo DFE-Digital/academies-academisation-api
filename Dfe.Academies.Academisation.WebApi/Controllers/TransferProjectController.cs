@@ -355,7 +355,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		}
 
 		[HttpGet("{ukprn}/get-transfers-by-incoming-trust", Name = "GetTransfersByIncomingTrust")]
-		public async Task<ActionResult<IEnumerable<AcademyTransferProjectResponse>>> GetTransfersByincomingTrust(string ukprn, CancellationToken cancellationToken)
+		public async Task<ActionResult<IEnumerable<AcademyTransferProjectSummaryResponse>>> GetTransfersByincomingTrust(string ukprn, CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Getting transfer projects by incoming trust ukprn: {value}", ukprn);
 
