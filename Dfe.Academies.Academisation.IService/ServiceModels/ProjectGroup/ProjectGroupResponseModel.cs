@@ -3,7 +3,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 {
-	public class ProjectGroupResponseModel(int id, string referenceNumber, string trustReferenceNumber, string trustName, string trustUkprn, User assignedUser, List<ConversionProjectServiceModel> projects, List<AcademyTransferProjectResponse>? transfers = null)
+	public class ProjectGroupResponseModel(int id, string referenceNumber, string trustReferenceNumber, string trustName, string trustUkprn, User assignedUser, List<ConversionProjectServiceModel> projects)
 	{
 		public int Id { get; init; } = id;
 		public string TrustReferenceNumber { get; init; } = trustReferenceNumber;
@@ -16,6 +16,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 
 		public List<ConversionProjectServiceModel> Projects { get; init; } = projects;
 
-		public List<AcademyTransferProjectResponse>? Transfers { get; init; } = transfers;
+		public List<AcademyTransferProjectResponse>? Transfers { get; set; }
 	}
 }

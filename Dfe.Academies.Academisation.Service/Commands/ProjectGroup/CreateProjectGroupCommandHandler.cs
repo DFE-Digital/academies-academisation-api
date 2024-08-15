@@ -59,7 +59,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				transfersProjectsResponse = await UpdateTransferProjectsWithGroupId(projectGroup.Id, transferProjects, cancellationToken);
 			}
 
-			var responseModel = new ProjectGroupResponseModel(projectGroup.Id, projectGroup.ReferenceNumber!, projectGroup.TrustReference, projectGroup.TrustName, projectGroup.TrustUkprn, null!, conversionsProjectModels, transfersProjectsResponse);
+			var responseModel = new ProjectGroupResponseModel(projectGroup.Id, projectGroup.ReferenceNumber!, projectGroup.TrustReference, projectGroup.TrustName, projectGroup.TrustUkprn, null!, conversionsProjectModels)
+			{
+				Transfers = transfersProjectsResponse
+			};
 
 			return new CreateSuccessResult<ProjectGroupResponseModel>(responseModel);
 

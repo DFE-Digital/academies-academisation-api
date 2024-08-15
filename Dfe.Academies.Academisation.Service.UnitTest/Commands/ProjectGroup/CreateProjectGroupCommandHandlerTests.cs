@@ -138,7 +138,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 				includeTransfers ? [1234] : []);
 		}
 
-		private ITransferProject GetTransferProject(string incomingTrustUkprn)
+		private Domain.TransferProjectAggregate.TransferProject GetTransferProject(string incomingTrustUkprn)
 		{
 			var transferAcademy = new TransferringAcademy(incomingTrustUkprn, "in trust", _fixture.Create<string>()[..8], "region", "local authority");
 			var transferringAcademies = new List<TransferringAcademy>() { transferAcademy };

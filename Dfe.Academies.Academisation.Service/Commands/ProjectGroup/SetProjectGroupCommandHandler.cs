@@ -117,14 +117,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.ProjectGroup
 				return Enumerable.Empty<ITransferProject>();
 			}
 
-			if (transferProjects != null && transferProjects.Any())
+			if (transferProjects!.Any())
 			{
-				projects.AddRange(transferProjects);
+				projects.AddRange(transferProjects!);
 			}
 
-			if (groupTransferProjects != null && groupTransferProjects.Any())
+			if (groupTransferProjects!.Any())
 			{
-				projects.AddRange(groupTransferProjects);
+				projects.AddRange(groupTransferProjects!);
 			}
 
 			return projects;
