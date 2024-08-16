@@ -20,14 +20,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
 		}
 
-		public async Task<IEnumerable<ITransferProject>> GetTransferProjectsByIncomingTrustUkprn(string ukprn, CancellationToken cancellationToken)
-			=> await dbSet.Include(x => x.TransferringAcademies)
-				.Include(x=> x.IntendedTransferBenefits)
-				.Where(x => x.TransferringAcademies.Any(a => a.IncomingTrustUkprn == ukprn) && x.Status == null && x.ProjectGroupId == null).ToListAsync(cancellationToken);
-
+		public async Task<IEnumerable<ITransferProject>> GetTransfersProjectsForGroup(string ukprn, CancellationToken cancellationToken) 
+			=> await DefaultIncludes().Where(x => x.TransferringAcademies.Any(a => a.IncomingTrustUkprn == ukprn)
+				&& x.Status == null && x.ProjectGroupId == null).ToListAsync(cancellationToken);
 		public async Task<IEnumerable<ITransferProject>> GetTransferProjectsByIdsAsync(List<int> ids, CancellationToken cancellationToken)
-			=> await dbSet.Include(x => x.TransferringAcademies)
-			.Include(x => x.IntendedTransferBenefits)
+			=> await DefaultIncludes()
 			.Where(x => ids.Contains(x.Id) && x.ProjectGroupId == null).ToListAsync(cancellationToken);
 
 		public async Task<(IEnumerable<ITransferProject>, int totalcount)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)

@@ -1,4 +1,6 @@
-﻿using AutoFixture;
+﻿using System.Web.Http.Results;
+using AutoFixture;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
@@ -6,6 +8,7 @@ using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.SubcutaneousTest.Utils;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
@@ -210,6 +213,34 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			var dbTransferProject = await _context.TransferProjects.AsNoTracking().FirstOrDefaultAsync(x => x.ProjectGroupId == projectGroup.Id);
 			Assert.NotNull(dbTransferProject);
 			Assert.Equal(dbTransferProject.ProjectGroupId, projectGroup.Id);
+		}
+
+		[Fact]
+		public async Task DeleteProjectGroup_ShouldDeleteSuccessfully()
+		{
+			// Arrange
+			var projectGroup = await CreateProjectGroup();
+
+			// Action
+			var httpResponseMessage = await _client.DeleteAsync($"project-group/{projectGroup.ReferenceNumber}", CancellationToken);
+
+			Assert.True(httpResponseMessage.IsSuccessStatusCode); 
+			var dbProjectGroup = await _context.ProjectGroups.AsNoTracking().FirstOrDefaultAsync(x => x.ReferenceNumber == projectGroup.ReferenceNumber);
+			Assert.Null(dbProjectGroup);
+		}
+
+		[Fact]
+		public async Task DeleteProjectGroup_ShouldReturnNotFoundOnNotFindingGroup()
+		{
+			// Arrange
+			var referenceNumber = Fixture.Create<string>()[..10];
+
+			// Action
+			var httpResponseMessage = await _client.DeleteAsync($"project-group/{referenceNumber}", CancellationToken);
+		
+			// Assert 
+			Assert.False(httpResponseMessage.IsSuccessStatusCode);
+			Assert.Equal(httpResponseMessage!.StatusCode.GetHashCode(), System.Net.HttpStatusCode.NotFound.GetHashCode());
 		}
 	}
 }

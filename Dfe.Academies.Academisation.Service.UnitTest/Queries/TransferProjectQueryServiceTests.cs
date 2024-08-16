@@ -287,7 +287,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		}
 
 		[Fact]
-		public async Task GetTransferProjectsByIncomingTrustUkprn_ShouldReturnTranferProjects()
+		public async Task GetTransfersProjectsForGroup_ShouldReturnTranferProjects()
 		{
 			// Arrange
 			var trustUrn = "23456789";
@@ -302,28 +302,28 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				DateTime.Now
 			);
 			var cancelationToken = CancellationToken.None;
-			_mockTransferProjectRepository.Setup(repo => repo.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken))
+			_mockTransferProjectRepository.Setup(repo => repo.GetTransfersProjectsForGroup(trustUrn, cancelationToken))
 				.ReturnsAsync([(dummyTransferProject!)]);
 			var expectedResponse = _service.AcademyTransferProjectSummaryResponse([dummyTransferProject]);
 
 			// Action
-			var result = await _service.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken);
+			var result = await _service.GetTransfersProjectsForGroup(trustUrn, cancelationToken);
 
 			// Assert
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 		[Fact]
-		public async Task GetTransferProjectsByIncomingTrustUkprn_ShouldReturnNoTranferProject()
+		public async Task GetTransfersProjectsForGroup_ShouldReturnNoTranferProject()
 		{
 			// Arrange
 			var trustUrn = "123213";
 			var cancelationToken = CancellationToken.None;
-			_mockTransferProjectRepository.Setup(repo => repo.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken))
+			_mockTransferProjectRepository.Setup(repo => repo.GetTransfersProjectsForGroup(trustUrn, cancelationToken))
 				.ReturnsAsync([]);
 			var service = new TransferProjectQueryService(_mockTransferProjectRepository.Object, _establishmentRepo, _advisoryBoardDecisionRepository);
 
 			// Action
-			var result = await service.GetTransferProjectsByIncomingTrustUkprn(trustUrn, cancelationToken);
+			var result = await service.GetTransfersProjectsForGroup(trustUrn, cancelationToken);
 
 			// Assert
 			result.Should().BeEmpty();

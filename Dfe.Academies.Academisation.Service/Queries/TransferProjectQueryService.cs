@@ -238,9 +238,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			});
 		}
 
-		public async Task<IEnumerable<AcademyTransferProjectSummaryResponse>?> GetTransferProjectsByIncomingTrustUkprn(string ukprn, CancellationToken cancellationToken)
+		public async Task<IEnumerable<AcademyTransferProjectSummaryResponse>?> GetTransfersProjectsForGroup(string ukprn, CancellationToken cancellationToken)
 		{
-			var transferProjects = await _transferProjectRepository.GetTransferProjectsByIncomingTrustUkprn(ukprn, cancellationToken);
+			var transferProjects = await _transferProjectRepository.GetTransfersProjectsForGroup(ukprn, cancellationToken);
 
 			return AcademyTransferProjectSummaryResponse(transferProjects);
 		}

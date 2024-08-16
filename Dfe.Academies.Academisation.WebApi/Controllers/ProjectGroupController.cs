@@ -99,5 +99,20 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return Ok(project);
 		}
+
+		[HttpDelete("{referenceNumber}", Name = "DeleteProjectGroupByReference")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<ProjectGroupResponseModel>> DeleteProjectGroupByReference(string referenceNumber, CancellationToken cancellationToken)
+		{
+			var result = await mediator.Send(new DeleteProjectGroupCommand(referenceNumber), cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				_ => new InternalServerErrorObjectResult("Error serving request")
+			};
+		}
 	}
 }

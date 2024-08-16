@@ -354,12 +354,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return Ok(result);
 		}
 
-		[HttpGet("{ukprn}/get-transfers-by-incoming-trust", Name = "GetTransfersByIncomingTrust")]
-		public async Task<ActionResult<IEnumerable<AcademyTransferProjectSummaryResponse>>> GetTransfersByincomingTrust(string ukprn, CancellationToken cancellationToken)
+		[HttpGet("{ukprn}/get-transfers-for-group", Name = "GetTransfersProjectsForGroup")]
+		public async Task<ActionResult<IEnumerable<AcademyTransferProjectSummaryResponse>>> GetTransfersProjectsForGroup(string ukprn, CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Getting transfer projects by incoming trust ukprn: {value}", ukprn);
 
-			var result = await _transferProjectQueryService.GetTransferProjectsByIncomingTrustUkprn(ukprn, cancellationToken);
+			var result = await _transferProjectQueryService.GetTransfersProjectsForGroup(ukprn, cancellationToken);
 
 			return result is null ? NotFound() : Ok(result);
 		}
