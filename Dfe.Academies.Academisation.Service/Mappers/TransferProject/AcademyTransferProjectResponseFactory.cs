@@ -10,9 +10,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 		{
 			if (model == null)
 			{
-				return null;
+				return null!;
 			}
-
+			
 			var transferringAcademies = model.TransferringAcademies
 				.Select(a => new TransferringAcademyDto
 				{
@@ -31,29 +31,31 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 					ViabilityIssues = a.ViabilityIssues,
 					FinancialDeficit = a.FinancialDeficit,
 					MPNameAndParty = a.MPNameAndParty,
-					PublishedAdmissionNumber = a.PublishedAdmissionNumber
+					PublishedAdmissionNumber = a.PublishedAdmissionNumber,
+					LocalAuthority = a.LocalAuthority,
+					Region = a.Region
 				})
 				.ToList();
 
 			var features = new AcademyTransferProjectFeaturesResponse
 			{
-				WhoInitiatedTheTransfer = model.WhoInitiatedTheTransfer,
+				WhoInitiatedTheTransfer = model.WhoInitiatedTheTransfer!,
 				SpecificReasonsForTransfer = model.SpecificReasonsForTransfer.ToList(),
 				RddOrEsfaIntervention = model.RddOrEsfaIntervention,
-				RddOrEsfaInterventionDetail = model.RddOrEsfaInterventionDetail,
-				TypeOfTransfer = model.TypeOfTransfer,
-				OtherTransferTypeDescription = model.OtherTransferTypeDescription,
+				RddOrEsfaInterventionDetail = model.RddOrEsfaInterventionDetail!,
+				TypeOfTransfer = model.TypeOfTransfer!,
+				OtherTransferTypeDescription = model.OtherTransferTypeDescription!,
 				IsCompleted = model.FeatureSectionIsCompleted
 			};
 
 			var dates = new AcademyTransferProjectDatesResponse
 			{
 				TransferFirstDiscussed =
-					model.TransferFirstDiscussed?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+					model.TransferFirstDiscussed?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)!,
 				TargetDateForTransfer =
-					model.TargetDateForTransfer?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
-				HtbDate = model.HtbDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
-				PreviousAdvisoryBoardDate = model.PreviousAdvisoryBoardDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+					model.TargetDateForTransfer?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)!,
+				HtbDate = model.HtbDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)!,
+				PreviousAdvisoryBoardDate = model.PreviousAdvisoryBoardDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)!,
 				HasHtbDate = model.HasHtbDate,
 				IsCompleted = model.TransferDatesSectionIsCompleted,
 				HasTargetDateForTransfer = model.HasTargetDateForTransfer,
@@ -62,7 +64,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 
 			var intendedTransferBenefits = new IntendedTransferBenefitResponse
 			{
-				OtherBenefitValue = model.OtherBenefitValue,
+				OtherBenefitValue = model.OtherBenefitValue!,
 				SelectedBenefits = model.IntendedTransferBenefits
 					.Select(b => b.SelectedBenefit).ToList()
 			};
@@ -72,22 +74,22 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				HighProfile = new BenefitConsideredFactorResponse
 				{
 					ShouldBeConsidered = model.HighProfileShouldBeConsidered,
-					FurtherSpecification = model.HighProfileFurtherSpecification
+					FurtherSpecification = model.HighProfileFurtherSpecification!
 				},
 				ComplexLandAndBuilding = new BenefitConsideredFactorResponse
 				{
 					ShouldBeConsidered = model.ComplexLandAndBuildingShouldBeConsidered,
-					FurtherSpecification = model.ComplexLandAndBuildingFurtherSpecification
+					FurtherSpecification = model.ComplexLandAndBuildingFurtherSpecification!
 				},
 				FinanceAndDebt = new BenefitConsideredFactorResponse
 				{
 					ShouldBeConsidered = model.FinanceAndDebtShouldBeConsidered,
-					FurtherSpecification = model.FinanceAndDebtFurtherSpecification
+					FurtherSpecification = model.FinanceAndDebtFurtherSpecification!
 				},
 				OtherRisks = new BenefitConsideredFactorResponse
 				{
 					ShouldBeConsidered = model.OtherRisksShouldBeConsidered,
-					FurtherSpecification = model.OtherRisksFurtherSpecification
+					FurtherSpecification = model.OtherRisksFurtherSpecification!
 				}
 			};
 
@@ -95,9 +97,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 			{
 				Id = model.Id,
 				ProjectUrn = model.Urn.ToString(),
-				ProjectReference = model.ProjectReference,
+				ProjectReference = model.ProjectReference!,
 				OutgoingTrustUkprn = model.OutgoingTrustUkprn,
-				OutgoingTrustName = model.OutgoingTrustName,
+				OutgoingTrustName = model.OutgoingTrustName!,
 				TransferringAcademies = transferringAcademies,
 				Features = features,
 				Dates = dates,
@@ -111,21 +113,21 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				},
 				LegalRequirements = new AcademyTransferProjectLegalRequirementsResponse
 				{
-					IncomingTrustAgreement = model.IncomingTrustAgreement,
-					DiocesanConsent = model.DiocesanConsent,
-					OutgoingTrustConsent = model.OutgoingTrustConsent,
+					IncomingTrustAgreement = model.IncomingTrustAgreement!,
+					DiocesanConsent = model.DiocesanConsent!,
+					OutgoingTrustConsent = model.OutgoingTrustConsent!,
 					IsCompleted = model.LegalRequirementsSectionIsCompleted,
 				},
 				Rationale = new AcademyTransferProjectRationaleResponse
 				{
-					ProjectRationale = model.ProjectRationale,
-					TrustSponsorRationale = model.TrustSponsorRationale,
+					ProjectRationale = model.ProjectRationale!,
+					TrustSponsorRationale = model.TrustSponsorRationale!,
 					IsCompleted = model.RationaleSectionIsCompleted
 				},
 				GeneralInformation = new AcademyTransferProjectGeneralInformationResponse
 				{
-					Author = model.Author,
-					Recommendation = model.Recommendation
+					Author = model.Author!,
+					Recommendation = model.Recommendation!
 				},
 				AssignedUser = string.IsNullOrWhiteSpace(model.AssignedUserEmailAddress)
 				? null
@@ -135,8 +137,8 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 					EmailAddress = model.AssignedUserEmailAddress,
 					Id = model.AssignedUserId
 				},
-				State = model.State,
-				Status = model.Status,
+				State = model.State!,
+				Status = model.Status!,
 				IsFormAMat = model.IsFormAMat
 			};
 		}

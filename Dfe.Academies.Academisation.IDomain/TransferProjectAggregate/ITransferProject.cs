@@ -68,5 +68,7 @@
 		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber);
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
 		void SetDeletedAt();
+		void SetProjectGroupId(int? projectGroupId);
+		void SetId(int id);
 	}
 }

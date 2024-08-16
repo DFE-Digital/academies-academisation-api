@@ -78,7 +78,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? AssignedUserFullName { get; private set; }
 		public string? AssignedUserEmailAddress { get; private set; }
 		public Guid? AssignedUserId { get; private set; }
-		public bool? IsFormAMat { get; private set; }
+		public bool? IsFormAMat { get; set; }
+		public int? ProjectGroupId { get; private set; }
 
 		public DateTime? DeletedAt { get; set; }
 
@@ -117,6 +118,16 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ProjectRationale = projectRationale;
 			TrustSponsorRationale = trustSponsorRationale;
 			RationaleSectionIsCompleted = isCompleted;
+		}
+
+		public void SetProjectGroupId(int? projectGroupId)
+		{
+			ProjectGroupId = projectGroupId;
+		}
+
+		public void SetId(int id)
+		{
+			Id = id;
 		}
 
 		public void SetGeneralInformation(string recommendation, string author)

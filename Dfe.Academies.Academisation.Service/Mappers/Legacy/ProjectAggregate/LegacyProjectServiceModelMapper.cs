@@ -158,7 +158,7 @@ internal static class LegacyProjectServiceModelMapper
 	{
 		FormAMatProjectServiceModel serviceModel = new(formAMatProject.Id, formAMatProject.ProposedTrustName, formAMatProject.ApplicationReference, new User(formAMatProject.AssignedUser?.Id ?? Guid.Empty, formAMatProject.AssignedUser?.FullName ?? string.Empty, formAMatProject.AssignedUser?.EmailAddress ?? string.Empty), formAMatProject?.ReferenceNumber ?? string.Empty)
 		{
-			projects = projects.Where(x => x.FormAMatProjectId == formAMatProject.Id).Select(p => p.MapToServiceModel()).ToList()
+			projects = projects.Where(x => x.FormAMatProjectId == formAMatProject!.Id).Select(p => p.MapToServiceModel()).ToList()
 		};
 		return serviceModel;
 	}

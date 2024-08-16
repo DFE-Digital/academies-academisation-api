@@ -1,5 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate; 
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +19,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
 		}
+
+		public async Task<IEnumerable<ITransferProject>> GetTransfersProjectsForGroup(string ukprn, CancellationToken cancellationToken) 
+			=> await DefaultIncludes().Where(x => x.TransferringAcademies.Any(a => a.IncomingTrustUkprn == ukprn)
+				&& x.Status == null && x.ProjectGroupId == null).ToListAsync(cancellationToken);
+		public async Task<IEnumerable<ITransferProject>> GetTransferProjectsByIdsAsync(List<int> ids, CancellationToken cancellationToken)
+			=> await DefaultIncludes()
+			.Where(x => ids.Contains(x.Id) && x.ProjectGroupId == null).ToListAsync(cancellationToken);
+
 		public async Task<(IEnumerable<ITransferProject>, int totalcount)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
 		{
 			IQueryable<TransferProject> queryable = DefaultIncludes();
@@ -102,6 +110,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return await DefaultIncludes().ToListAsync();
 		}
+
+		public async Task<IEnumerable<ITransferProject>> GetProjectsByProjectGroupIdAsync(int? projectGroupId, CancellationToken cancellationToken)
+			=> await dbSet.Where(x => x.ProjectGroupId == projectGroupId).ToListAsync(cancellationToken);
 
 		private IQueryable<TransferProject> DefaultIncludes()
 		{

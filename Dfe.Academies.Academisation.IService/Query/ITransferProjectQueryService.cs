@@ -7,6 +7,7 @@ namespace Dfe.Academies.Academisation.IService.Query
 	{
 		Task<AcademyTransferProjectResponse?> GetByUrn(int Urn);
 		Task<AcademyTransferProjectResponse?> GetById(int id);
+		Task<IEnumerable<AcademyTransferProjectSummaryResponse>?> GetTransfersProjectsForGroup(string ukprn, CancellationToken cancellationToken);
 		Task<PagedResultResponse<AcademyTransferProjectSummaryResponse>> GetTransferProjects(int page, int count, int? urn,
 		string title);
 		Task<PagedDataResponse<AcademyTransferProjectSummaryResponse>?> GetProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count);

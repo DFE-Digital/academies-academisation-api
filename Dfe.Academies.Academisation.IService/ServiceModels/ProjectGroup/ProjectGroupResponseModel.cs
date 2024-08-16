@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 {
@@ -14,5 +15,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup
 		public User AssignedUser { get; init; } = assignedUser;
 
 		public List<ConversionProjectServiceModel> Projects { get; init; } = projects;
+
+		public List<AcademyTransferProjectResponse>? Transfers { get; set; }
 	}
 }

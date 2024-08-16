@@ -5,6 +5,8 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Microsoft.Extensions.Logging;
@@ -19,7 +21,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 
 		private Mock<IProjectGroupRepository> _mockProjectGroupRepository;
 		private Mock<IConversionProjectRepository> _mockConversionProjectRepository;
-
+		private Mock<ITransferProjectRepository> _mockTransferProjectRepository;
 		private Mock<IDateTimeProvider> _mockDateTimeProvider;
 		private Mock<ILogger<CreateProjectGroupCommandHandler>> _mocklogger;
 		private readonly Fixture _fixture = new();
@@ -28,7 +30,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 		public CreateProjectGroupCommandHandlerTests()
 		{
 			_mockRepository = new MockRepository(MockBehavior.Strict);
-
+			_mockTransferProjectRepository = _mockRepository.Create<ITransferProjectRepository>();
 			_mockProjectGroupRepository = _mockRepository.Create<IProjectGroupRepository>();
 			_mockDateTimeProvider = _mockRepository.Create<IDateTimeProvider>();
 			_mockConversionProjectRepository = _mockRepository.Create<IConversionProjectRepository>();
@@ -37,6 +39,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockProjectGroupRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
 			_mockConversionProjectRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
+			_mockTransferProjectRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
 		}
 		
 		private CreateProjectGroupCommandHandler CreateProjectGroupCommandHandler()
@@ -45,11 +48,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 				_mockProjectGroupRepository.Object,
 				_mockDateTimeProvider.Object,
 				_mockConversionProjectRepository.Object,
-				_mocklogger.Object);
+				_mocklogger.Object,
+				_mockTransferProjectRepository.Object);
 		}
 
 		[Fact]
-		public async Task Handle_ValidCommandWithoutConversions_PersistsExpectedProjectGroup()
+		public async Task Handle_ValidCommandWithoutConversionsAndTransfers_PersistsExpectedProjectGroup()
 		{
 			// Arrange
 			var now = DateTime.Now;
@@ -57,7 +61,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			var createTransferProjectCommandHandler = CreateProjectGroupCommandHandler();
-			var request = CreateValidCreateProjectProjectCommand(false);
+			var request = CreateValidCreateProjectProjectCommand(false, false);
 			var expectedProjectGroupReference = "GRP_00000000";
 
 			// Act
@@ -83,23 +87,26 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 		}
 
 		[Fact]
-		public async Task Handle_ValidCommandWithConversions_PersistsExpectedProjectGroup()
+		public async Task Handle_ValidCommandWithConversionsAndTransfer_PersistsExpectedProjectGroup()
 		{
 			// Arrange
 			var now = DateTime.Now;
 			_mockDateTimeProvider.Setup(x => x.Now).Returns(now);
 			var createTransferProjectCommandHandler = CreateProjectGroupCommandHandler();
 			var request = CreateValidCreateProjectProjectCommand();
-			var cancellationToken = CancellationToken.None;
+			var expectedTransferProject = GetTransferProject(request.TrustUkprn);
 			_mockProjectGroupRepository.Setup(x => x.Insert(It.IsAny<Domain.ProjectGroupsAggregate.ProjectGroup>()));
 			var expectedProjects = _fixture.Create<List<Project>>();
-			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByProjectIds(request.ConversionProjectIds, It.Is<CancellationToken>(x => x == cancellationToken))).ReturnsAsync(expectedProjects);
+			_mockConversionProjectRepository.Setup(x => x.GetConversionProjectsByProjectIds(request.ConversionProjectIds, It.Is<CancellationToken>(x => x == _cancellationToken))).ReturnsAsync(expectedProjects);
 			_mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Project>()));
+			_mockTransferProjectRepository.Setup(x => x.GetTransferProjectsByIdsAsync(request.TransferProjectIds!, _cancellationToken))
+				.ReturnsAsync([expectedTransferProject]);
+			_mockTransferProjectRepository.Setup(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));
 
 			// Act
 			var result = await createTransferProjectCommandHandler.Handle(
 				request,
-				cancellationToken);
+				_cancellationToken);
 
 			// Assert
 			var responseModel = Assert.IsType<CreateSuccessResult<ProjectGroupResponseModel>>(result).Payload;
@@ -115,17 +122,28 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ProjectGroup
 			_mockProjectGroupRepository.Verify(x => x.Insert(It.Is<Domain.ProjectGroupsAggregate.ProjectGroup>(x => x.TrustReference == request.TrustReferenceNumber
 			&& x.ReferenceNumber != null
 			&& x.CreatedOn == now)), Times.Once());
-
-			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == cancellationToken)), Times.Exactly(3));
+			_mockTransferProjectRepository.Verify(x => x.GetTransferProjectsByIdsAsync(request.TransferProjectIds!, _cancellationToken), Times.Once);
+			_mockTransferProjectRepository.Verify(x => x.Update(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()), Times.Once);
+			_mockProjectGroupRepository.Verify(x => x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(x => x == _cancellationToken)), Times.Exactly(4));
 		}
 
-		private static CreateProjectGroupCommand CreateValidCreateProjectProjectCommand(bool includeConversions = true)
+		private static CreateProjectGroupCommand CreateValidCreateProjectProjectCommand(bool includeConversions = true, bool includeTransfers = true)
 		{
 			string trustReference = "TR00001";
 			string trustUkprn = "1111333";
 			string trustName = "Test trust";
 
-			return new CreateProjectGroupCommand(trustName, trustReference, trustUkprn, includeConversions ? [03823] : []);
+			return new CreateProjectGroupCommand(trustName, trustReference, trustUkprn,
+				includeConversions ? [03823] : [],
+				includeTransfers ? [1234] : []);
+		}
+
+		private Domain.TransferProjectAggregate.TransferProject GetTransferProject(string incomingTrustUkprn)
+		{
+			var transferAcademy = new TransferringAcademy(incomingTrustUkprn, "in trust", _fixture.Create<string>()[..8], "region", "local authority");
+			var transferringAcademies = new List<TransferringAcademy>() { transferAcademy };
+
+			return Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", transferringAcademies, false, DateTime.Now);
 		}
 	}
 }

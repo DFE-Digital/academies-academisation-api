@@ -1,7 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -141,6 +140,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		///     Adds a new conversion project
 		/// </summary>
 		/// <param name="project">The model holding the data required to create a new conversion</param>
+		/// <param name="cancellationToken"></param>
 		/// <response code="201">The project has been added</response>
 		[HttpPost("project/new-conversion-project")]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]

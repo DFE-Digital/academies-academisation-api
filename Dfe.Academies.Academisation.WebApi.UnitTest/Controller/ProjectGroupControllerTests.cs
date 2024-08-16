@@ -43,8 +43,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task CreateProjectGroup_ReturnsOk()
 		{
 			// Arrange
-			var response = new ProjectGroupResponseModel(1, "12312", _trustReferenceNumber, "trustName", null, null, null);
-			var command = new CreateProjectGroupCommand("trustName", _trustReferenceNumber, _trustUkprn, []);
+			var response = new ProjectGroupResponseModel(1, "12312", _trustReferenceNumber, "trustName", null!, null!, null!);
+			var command = new CreateProjectGroupCommand("trustName", _trustReferenceNumber, _trustUkprn, [], null);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CreateSuccessResult<ProjectGroupResponseModel>(response));
 
@@ -63,7 +63,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task CreateProjectGroup_ReturnsBadRequest()
 		{
 			// Arrange
-			var command = new CreateProjectGroupCommand(_trustReferenceNumber, _trustUkprn, "trustName", []);
+			var command = new CreateProjectGroupCommand(_trustReferenceNumber, _trustUkprn, "trustName", [], null);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CreateValidationErrorResult([new ValidationError("ConversionsUrns", "Validation Error")]));
 
@@ -80,7 +80,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// Arrange
 			var referenceNumber = "34234233";
-			var command = new SetProjectGroupCommand([]);
+			var command = new SetProjectGroupCommand([], []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CommandSuccessResult());
 
@@ -97,7 +97,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			// Arrange
 			var referenceNumber = "34234233";
-			var command = new SetProjectGroupCommand([]);
+			var command = new SetProjectGroupCommand([], []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new NotFoundCommandResult());
 
@@ -115,7 +115,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			// Arrange
 			var refereneNumber = "34234233";
 			var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
-			var command = new SetProjectGroupCommand([]);
+			var command = new SetProjectGroupCommand([], []);
 			_mediatrMock.Setup(x => x.Send(command, _cancellationToken))
 				.ReturnsAsync(new CommandValidationErrorResult(expectedValidationErrors));
 

@@ -18,12 +18,11 @@ public class ProjectGetTests
 	private readonly ProjectController _projectController;
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new();
-	private readonly IMediator _mediator;
 	public ProjectGetTests()
-	{
-		_context = new TestProjectContext(_mediator).CreateContext();
+	{ 
+		_context = new TestProjectContext(new Mock<IMediator>().Object).CreateContext();
 
-		_projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		_projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null!), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
 	}
 
 	[Fact]
