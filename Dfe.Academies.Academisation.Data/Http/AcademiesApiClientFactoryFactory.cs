@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.Data.Http
 		public HttpClient Create(ICorrelationContext correlationContext)
 		{
 			var httpClient = _httpClientFactory.CreateClient("AcademiesApi");
-			httpClient.DefaultRequestHeaders.Add(Dfe.Academisation.CorrelationIdMiddleware.Keys.HeaderKey, correlationContext.CorrelationId.ToString());
+			httpClient.DefaultRequestHeaders.Add(Keys.HeaderKey, correlationContext.CorrelationId.ToString());
 			return httpClient;
 		}
 	}

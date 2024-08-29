@@ -1,26 +1,19 @@
 ﻿using ClosedXML.Excel;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Extensions;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
-	public class ConversionProjectExportService : IConversionProjectExportService
+	public class ConversionProjectExportService(
+		IConversionProjectQueryService conversionProjectQueryService,
+		IAdvisoryBoardDecisionQueryService advisoryBoardDecisionQueryService
+			) : IConversionProjectExportService
 	{
-		private readonly IConversionProjectQueryService _conversionProjectQueryService;
-		private readonly IAdvisoryBoardDecisionQueryService _advisoryBoardDecisionQueryService;
-
-		public ConversionProjectExportService(
-			IConversionProjectQueryService conversionProjectQueryService,
-			IAdvisoryBoardDecisionQueryService advisoryBoardDecisionQueryService
-			)
-		{
-			_conversionProjectQueryService = conversionProjectQueryService;
-			_advisoryBoardDecisionQueryService = advisoryBoardDecisionQueryService;
-		}
 
 		public async Task<Stream?> ExportProjectsToSpreadsheet(ConversionProjectSearchModel searchModel)
 		{
-			var result = await _conversionProjectQueryService.GetProjectsV2(searchModel.StatusQueryString, searchModel.TitleFilter,
+			var result = await conversionProjectQueryService.GetProjectsV2(searchModel.StatusQueryString, searchModel.TitleFilter,
 				searchModel.DeliveryOfficerQueryString, 1, int.MaxValue, searchModel.RegionQueryString, searchModel.LocalAuthoritiesQueryString, searchModel.AdvisoryBoardDatesQueryString);
 
 			if (result?.Data == null || !result.Data.Any())
@@ -49,15 +42,17 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			worksheet.Cell(1, 9).Value = "Advisory Board Date";
 			worksheet.Cell(1, 10).Value = "Decision Date";
 			worksheet.Cell(1, 11).Value = "Status";
-			worksheet.Cell(1, 12).Value = "Assigned To";
-			worksheet.Cell(1, 13).Value = "Academy Type and Route";
-			worksheet.Cell(1, 14).Value = "Part of PFI scheme";
-			worksheet.Cell(1, 15).Value = "Date AO issued";
-			worksheet.Cell(1, 16).Value = "Date dAO issued";
-			worksheet.Cell(1, 17).Value = "DAO Revoked Reasons";
+			worksheet.Cell(1, 12).Value = "Decision maker's name";
+			worksheet.Cell(1, 13).Value = "Decision maker's role";
+			worksheet.Cell(1, 14).Value = "Assigned To";
+			worksheet.Cell(1, 15).Value = "Academy Type and Route";
+			worksheet.Cell(1, 16).Value = "Part of PFI scheme";
+			worksheet.Cell(1, 17).Value = "Date AO issued";
+			worksheet.Cell(1, 18).Value = "Date dAO issued";
+			worksheet.Cell(1, 19).Value = "DAO Revoked Reasons";
 
 			// Bold headers
-			for (int col = 1; col <= 18; col++)
+			for (int col = 1; col <= 20; col++)
 			{
 				worksheet.Cell(1, col).Style.Font.Bold = true;
 			}
@@ -75,22 +70,24 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 8).Value = project.Region;
 				worksheet.Cell(row, 9).Value = project.HeadTeacherBoardDate;
 
-				var advisoryBoardDecision = await _advisoryBoardDecisionQueryService.GetByProjectId(project.Id);
+				var advisoryBoardDecision = await advisoryBoardDecisionQueryService.GetByProjectId(project.Id);
 				worksheet.Cell(row, 10).Value = advisoryBoardDecision?.AdvisoryBoardDecisionDate;
 				worksheet.Cell(row, 11).Value = project.ProjectStatus;
-				worksheet.Cell(row, 12).Value = project.AssignedUser?.FullName;
-				worksheet.Cell(row, 13).Value = project.AcademyTypeAndRoute;
-				worksheet.Cell(row, 14).Value = project.PartOfPfiScheme;
+				worksheet.Cell(row, 12).Value = advisoryBoardDecision?.DecisionMakerName;
+				worksheet.Cell(row, 13).Value = advisoryBoardDecision?.DecisionMadeBy.ToString();
+				worksheet.Cell(row, 14).Value = project.AssignedUser?.FullName;
+				worksheet.Cell(row, 15).Value = project.AcademyTypeAndRoute;
+				worksheet.Cell(row, 16).Value = project.PartOfPfiScheme;
 
 				if (project.AcademyTypeAndRoute?.ToLower().Equals("sponsored") ?? false)
 				{
-					worksheet.Cell(row, 16).Value = project.DaoPackSentDate;
-					worksheet.Cell(row, 17).Value = "Not Revoked";
+					worksheet.Cell(row, 18).Value = project.DaoPackSentDate;
+					worksheet.Cell(row, 19).Value = "Not Revoked";
 				}
 				else
 				{
-					worksheet.Cell(row, 15).Value = advisoryBoardDecision?.AcademyOrderDate;
-					worksheet.Cell(row, 17).Value = "Not applicable";
+					worksheet.Cell(row, 17).Value = advisoryBoardDecision?.AcademyOrderDate;
+					worksheet.Cell(row, 19).Value = "Not applicable";
 				}
 
 				if (project.ProjectStatus?.ToLower() == "dao revoked")
@@ -98,7 +95,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					var reasons = advisoryBoardDecision?.DAORevokedReasons?
 					.Select(r => $"{r.Reason}: {r.Details}")
 					.ToList();
-					worksheet.Cell(row, 17).Value = reasons != null ? string.Join(", ", reasons) : "No reasons available";
+					worksheet.Cell(row, 19).Value = reasons != null ? string.Join(", ", reasons) : "No reasons available";
 				}
 
 				row++;
