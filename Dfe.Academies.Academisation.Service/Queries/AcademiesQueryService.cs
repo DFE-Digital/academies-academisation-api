@@ -82,11 +82,11 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			if (!response.IsSuccessStatusCode)
 			{
 				_logger.LogError("Request for establishments failed , statuscode - {statusCode}", response!.StatusCode);
-				return null;
+				return null!;
 			}
 			var establishments = await response.Content.ReadFromJsonAsync<IEnumerable<EstablishmentDto>>();
 
-			return establishments;
+			return establishments!;
 		}
 	}
 }

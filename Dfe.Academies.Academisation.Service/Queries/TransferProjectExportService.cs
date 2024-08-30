@@ -7,35 +7,28 @@ namespace Dfe.Academies.Academisation.Service.Queries
 {
 	internal record SpreadsheetFields(string header, string value);
 
-	public class TransferProjectExportService : ITransferProjectExportService
+	public class TransferProjectExportService(ITransferProjectQueryService transferProjectQueryService, IAdvisoryBoardDecisionQueryService advisoryBoardDecisionQueryService) : ITransferProjectExportService
 	{
-		private readonly ITransferProjectQueryService _transferProjectQueryService;
-
-		public TransferProjectExportService(ITransferProjectQueryService transferProjectQueryService)
-		{
-			_transferProjectQueryService = transferProjectQueryService;
-		}
-
 		public async Task<Stream?> ExportTransferProjectsToSpreadsheet(GetProjectSearchModel searchModel)
 		{
-			var result = await _transferProjectQueryService.GetExportedTransferProjects(searchModel.StatusQueryString, searchModel.TitleFilter, searchModel.DeliveryOfficerQueryString, searchModel.Page, int.MaxValue);
+			var result = await transferProjectQueryService.GetExportedTransferProjects(searchModel.StatusQueryString, searchModel.TitleFilter, searchModel.DeliveryOfficerQueryString, searchModel.Page, int.MaxValue);
 
 			if (result?.Results == null || !result.Results.Any())
 			{
-				return null;
+				return null; 
 			}
 
 			var projects = result.Results;
 			return await GenerateSpreadsheet(projects);
 		}
 
-		private static Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
+		private async Task<Stream> GenerateSpreadsheet(IEnumerable<ExportedTransferProjectModel> projects)
 		{
-			string[] headers = new[]{
+			string[] headers = [
 				"Academy", "URN", "Academy Type", "Incoming Trust", "Incoming Trust UKPRN","Outgoing Trust", "Outgoing Trust UKPRN", "Local Authority", "Region",
-				"Advisory Board Date", "Decision Date", "Status", "Assigned To", "Reason for transfer", "Type of transfer",
+				"Advisory Board Date", "Decision Date", "Status", "Decision maker's name", "Decision maker's role", "Assigned To", "Reason for transfer", "Type of transfer",
 				"Proposed academy transfer date", "PFI (Private Finance Initiative)"
-			};
+			];
 
 			var workbook = new XLWorkbook();
 			var worksheet = workbook.Worksheets.Add("Projects");
@@ -49,6 +42,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			int row = 2;
 			foreach (var project in projects)
 			{
+				var advisoryBoardDecision = await advisoryBoardDecisionQueryService.GetByProjectId(project.Id, true);
 				worksheet.Cell(row, 1).Value = project.SchoolName;
 				worksheet.Cell(row, 2).Value = project.Urn;
 				worksheet.Cell(row, 3).Value = project.SchoolType;
@@ -61,11 +55,13 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				worksheet.Cell(row, 10).Value = project.AdvisoryBoardDate;
 				worksheet.Cell(row, 11).Value = project.DecisionDate;
 				worksheet.Cell(row, 12).Value = project.Status;
-				worksheet.Cell(row, 13).Value = project.AssignedUserFullName;
-				worksheet.Cell(row, 14).Value = project.TransferReason;
-				worksheet.Cell(row, 15).Value = project.TransferType;
-				worksheet.Cell(row, 16).Value = project.ProposedAcademyTransferDate;
-				worksheet.Cell(row, 17).Value = project.PFI;
+				worksheet.Cell(row, 13).Value = advisoryBoardDecision?.DecisionMakerName;
+				worksheet.Cell(row, 14).Value = advisoryBoardDecision?.DecisionMadeBy.ToString();
+				worksheet.Cell(row, 15).Value = project.AssignedUserFullName;
+				worksheet.Cell(row, 16).Value = project.TransferReason;
+				worksheet.Cell(row, 17).Value = project.TransferType;
+				worksheet.Cell(row, 18).Value = project.ProposedAcademyTransferDate;
+				worksheet.Cell(row, 19).Value = project.PFI;
 				row++;
 			}
 			worksheet.Columns().AdjustToContents();
@@ -73,7 +69,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			workbook.SaveAs(stream);
 			stream.Position = 0;
 
-			return Task.FromResult<Stream>(stream);
+			return stream;
 		}
 	}
 }

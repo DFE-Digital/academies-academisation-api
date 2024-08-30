@@ -129,25 +129,27 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							.Select(ta => ta.OutgoingAcademyUkprn)
 							.Distinct()
 							.ToList();
-
-			var establishments = await _establishmentRepository.GetBulkEstablishmentsByUkprn(ukprns);
-
-			foreach (var transferProject in atp)
+			if (ukprns.Count != 0)
 			{
+				var establishments = await _establishmentRepository.GetBulkEstablishmentsByUkprn(ukprns);
 
-				if (transferProject == null)
+				foreach (var transferProject in atp)
 				{
-					continue;
-				}
 
-				var _ukprns = transferProject.TransferringAcademies.Select(ta => ta.OutgoingAcademyUkprn);
-				var establishmentsForTheseAcademies = establishments.Where(e => _ukprns.Contains(e.Ukprn));
-				foreach (var transferringEstablishment in establishmentsForTheseAcademies)
-				{
-					var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
-					var transferringAcademy = transferProject.TransferringAcademies.Where(s => s.OutgoingAcademyUkprn == transferringEstablishment.Ukprn).Single();
-					var project = MapProject(transferProject, transferringEstablishment, decision, $"{transferringAcademy.PFIScheme} {transferringAcademy.PFISchemeDetails}");
-					projects.Add(project);
+					if (transferProject == null)
+					{
+						continue;
+					}
+
+					var _ukprns = transferProject.TransferringAcademies.Select(ta => ta.OutgoingAcademyUkprn);
+					var establishmentsForTheseAcademies = establishments.Where(e => _ukprns.Contains(e.Ukprn));
+					foreach (var transferringEstablishment in establishmentsForTheseAcademies)
+					{
+						var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
+						var transferringAcademy = transferProject.TransferringAcademies.Where(s => s.OutgoingAcademyUkprn == transferringEstablishment.Ukprn).Single();
+						var project = MapProject(transferProject, transferringEstablishment, decision, $"{transferringAcademy.PFIScheme} {transferringAcademy.PFISchemeDetails}");
+						projects.Add(project);
+					}
 				}
 			}
 

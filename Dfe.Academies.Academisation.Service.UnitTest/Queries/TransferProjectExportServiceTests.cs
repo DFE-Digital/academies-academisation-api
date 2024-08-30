@@ -11,11 +11,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 	{
 		private readonly Mock<ITransferProjectQueryService> _mockTransferProjectQueryService;
 		private readonly TransferProjectExportService _service;
+		private readonly Mock<IAdvisoryBoardDecisionQueryService> _mockAdvisoryBoardDecisionQueryService;
 
 		public TransferProjectExportServiceTests()
 		{
 			_mockTransferProjectQueryService = new Mock<ITransferProjectQueryService>();
-			_service = new TransferProjectExportService(_mockTransferProjectQueryService.Object);
+			_mockAdvisoryBoardDecisionQueryService = new Mock<IAdvisoryBoardDecisionQueryService>();
+			_service = new TransferProjectExportService(_mockTransferProjectQueryService.Object, _mockAdvisoryBoardDecisionQueryService.Object);
 		}
 
 		[Fact]
