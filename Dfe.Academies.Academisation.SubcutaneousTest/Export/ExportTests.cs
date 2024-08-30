@@ -99,7 +99,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 
 			VerifyWorkSheetHeaders(await httpResponseMessage.Content.ReadAsByteArrayAsync(), headers);
 		}
-		private void VerifyWorkSheetHeaders(byte[] workSheetByteArray,  List<string> headers)
+		private static void VerifyWorkSheetHeaders(byte[] workSheetByteArray,  List<string> headers)
 		{
 			using var stream = new MemoryStream(workSheetByteArray);
 			using var workbook = new XLWorkbook(stream);
