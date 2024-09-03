@@ -41,7 +41,6 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 
 		protected Fixture Fixture => _fixture;
 
-
 		protected AcademisationContext GetDBContext()
 		{
 			_dbContext.Database.EnsureDeleted();

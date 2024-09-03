@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.Core.Utils;
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;

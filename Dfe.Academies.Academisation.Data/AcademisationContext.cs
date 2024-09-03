@@ -13,6 +13,7 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Domain.UserRoleAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -56,6 +57,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
+	public DbSet<UserRole> UserRoles { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
@@ -239,6 +241,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
 		modelBuilder.Entity<ProjectGroup>(ConfigureProjectGroup);
+		modelBuilder.Entity<UserRole>(ConfigureUserRole);
 		modelBuilder.Entity<OpeningDateHistory>(ConfigureOpeningDateHistory);
 
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
@@ -252,6 +255,19 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	private void ConfigureProjectGroup(EntityTypeBuilder<ProjectGroup> builder)
 	{
 		builder.ToTable("ProjectGroups", DEFAULT_SCHEMA);
+		builder.HasKey(e => e.Id);
+
+		builder.OwnsOne(a => a.AssignedUser, a =>
+		{
+			a.Property(p => p.Id).HasColumnName("AssignedUserId");
+			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
+			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+		});
+	}
+
+	private void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
+	{
+		builder.ToTable("UserRoles", DEFAULT_SCHEMA);
 		builder.HasKey(e => e.Id);
 
 		builder.OwnsOne(a => a.AssignedUser, a =>
