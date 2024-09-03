@@ -13,6 +13,7 @@ using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Domain.UserRoleAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -23,17 +24,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data;
 
-public class AcademisationContext : DbContext, IUnitOfWork
+public class AcademisationContext(DbContextOptions<AcademisationContext> options, IMediator mediator) : DbContext(options), IUnitOfWork
 {
 	const string DEFAULT_SCHEMA = "academisation";
-	private IMediator _mediator;
-
 	private IDbContextTransaction _currentTransaction;
 
-	public AcademisationContext(DbContextOptions<AcademisationContext> options, IMediator mediator) : base(options)
-	{
-		_mediator = mediator;
-	}
 	public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
 	public bool HasActiveTransaction => _currentTransaction != null;
@@ -56,6 +51,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
+	public DbSet<UserRole> UserRoles { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
@@ -69,7 +65,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	}
 	public async Task<IDbContextTransaction> BeginTransactionAsync()
 	{
-		if (_currentTransaction != null) return null;
+		if (_currentTransaction != null) return null!;
 
 		_currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
@@ -110,7 +106,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			if (HasActiveTransaction)
 			{
 				_currentTransaction.Dispose();
-				_currentTransaction = null;
+				_currentTransaction = null!;
 			}
 		}
 	}
@@ -143,7 +139,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		var tasks = domainEvents
 			.Select(async (domainEvent) =>
 			{
-				await _mediator.Publish(domainEvent);
+				await mediator.Publish(domainEvent);
 			});
 
 		await Task.WhenAll(tasks);
@@ -239,6 +235,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
 		modelBuilder.Entity<ProjectGroup>(ConfigureProjectGroup);
+		modelBuilder.Entity<UserRole>(ConfigureUserRole);
 		modelBuilder.Entity<OpeningDateHistory>(ConfigureOpeningDateHistory);
 
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
@@ -262,6 +259,19 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		});
 	}
 
+	private void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
+	{
+		builder.ToTable("UserRoles", DEFAULT_SCHEMA);
+		builder.HasKey(e => e.Id);
+
+		builder.OwnsOne(a => a.AssignedUser, a =>
+		{
+			a.Property(p => p.Id).HasColumnName("AssignedUserId");
+			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
+			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+		});
+	}
+
 	private void ConfigureOpeningDateHistory(EntityTypeBuilder<OpeningDateHistory> builder)
 	{
 		builder.ToTable("OpeningDateHistories", DEFAULT_SCHEMA);
@@ -273,8 +283,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		// Configure ReasonsChanged as a complex type
 		builder.Property(e => e.ReasonsChanged)
 			.HasConversion(
-				v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-				v => JsonSerializer.Deserialize<List<ReasonChange>>(v, (JsonSerializerOptions)null),
+				v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
+				v => JsonSerializer.Deserialize<List<ReasonChange>>(v, (JsonSerializerOptions)null!),
 				new ValueComparer<List<ReasonChange>>(
 					(c1, c2) => c1.SequenceEqual(c2),
 					c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
@@ -354,8 +364,8 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.SetPropertyAccessMode(PropertyAccessMode.Field);
 
 		transferProject.Property(x => x.SpecificReasonsForTransfer).HasConversion(
-		v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-		v => v.IsNullOrEmpty() ? new List<string>() : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null),
+		v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
+		v => v.IsNullOrEmpty() ? new List<string>() : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null!),
 		new ValueComparer<IReadOnlyCollection<string>>(
 			(c1, c2) => c1.SequenceEqual(c2),
 			c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
@@ -530,7 +540,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.IsRequired();
 
 		var withdrawnNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.WithdrawnReasons));
-		withdrawnNav.SetPropertyAccessMode(PropertyAccessMode.Field);
+		withdrawnNav!.SetPropertyAccessMode(PropertyAccessMode.Field);
 
 		ConversionAdvisoryBoardDecisionConfiguration
 			.HasMany(a => a.DeferredReasons)
@@ -539,7 +549,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.IsRequired();
 
 		var deferredNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.DeferredReasons));
-		deferredNav.SetPropertyAccessMode(PropertyAccessMode.Field);
+		deferredNav!.SetPropertyAccessMode(PropertyAccessMode.Field);
 
 		ConversionAdvisoryBoardDecisionConfiguration
 			.HasMany(a => a.DeclinedReasons)
@@ -548,7 +558,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 			.IsRequired();
 
 		var declineNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.DeclinedReasons));
-		declineNav.SetPropertyAccessMode(PropertyAccessMode.Field);
+		declineNav!.SetPropertyAccessMode(PropertyAccessMode.Field);
 
 		ConversionAdvisoryBoardDecisionConfiguration
 	.HasMany(a => a.DaoRevokedReasons)
@@ -557,7 +567,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 	.IsRequired();
 
 		var daoRevokedNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.DaoRevokedReasons));
-		daoRevokedNav.SetPropertyAccessMode(PropertyAccessMode.Field);
+		daoRevokedNav!.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	private static void ConfigureConversionAdvisoryBoardDecisionDeferredReason(EntityTypeBuilder<AdvisoryBoardDeferredReasonDetails> ConversionAdvisoryBoardDecisionDeferredReasonConfiguration)
@@ -656,7 +666,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		var contributorNavigation = applicationConfiguration.Metadata.FindNavigation(nameof(Application.Contributors));
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
-		contributorNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+		contributorNavigation!.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	void ConfigureSchool(EntityTypeBuilder<School> schoolConfiguration)
@@ -807,7 +817,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		var leaseNavigation = schoolConfiguration.Metadata.FindNavigation(nameof(School.Leases));
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
-		leaseNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+		leaseNavigation!.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	void ConfigureContributor(EntityTypeBuilder<Contributor> contributorConfiguration)
@@ -863,7 +873,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		var navigation = formTrustConfiguration.Metadata.FindNavigation(nameof(FormTrust.KeyPeople));
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
-		navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+		navigation!.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	void ConfigureJoinTrust(EntityTypeBuilder<JoinTrust> joinTrustConfiguration)
@@ -901,7 +911,7 @@ public class AcademisationContext : DbContext, IUnitOfWork
 		var navigation = trustKeyPersonConfiguration.Metadata.FindNavigation(nameof(TrustKeyPerson.Roles));
 		// DDD Patterns comment:
 		//Set as Field (New since EF 1.1) to access the OrderItem collection property through its field
-		navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+		navigation!.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	void ConfigureTrustKeyPersonRole(EntityTypeBuilder<TrustKeyPersonRole> trustKeyPersonRoleConfiguration)
@@ -917,10 +927,10 @@ public class EnumListJsonValueConverter<T> : ValueConverter<List<T>, string> whe
 	public EnumListJsonValueConverter() : base(
 
 	  v => JsonSerializer
-		.Serialize(v.Select(e => e.ToString()).ToList(), (JsonSerializerOptions)null),
+		.Serialize(v.Select(e => e.ToString()).ToList(), (JsonSerializerOptions)null!),
 
 	  v => v.IsNullOrEmpty() ? new List<T>() : JsonSerializer
-		.Deserialize<List<string>>(v , (JsonSerializerOptions)null)
+		.Deserialize<List<string>>(v, (JsonSerializerOptions)null!)
 		.Select(e => (T)Enum.Parse(typeof(T), e)).ToList())
 	{
 	}
@@ -928,8 +938,8 @@ public class EnumListJsonValueConverter<T> : ValueConverter<List<T>, string> whe
 
 public class ListValueComparer<T> : ValueComparer<ICollection<T>>
 {
-	public ListValueComparer() : base((c1, c2) => c1.SequenceEqual(c2),
-	   c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), c => c.ToList())
+	public ListValueComparer() : base((c1, c2) => c1!.SequenceEqual(c2!),
+	   c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())), c => c.ToList())
 	{
 	}
 }

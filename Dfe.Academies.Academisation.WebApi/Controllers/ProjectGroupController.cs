@@ -2,9 +2,7 @@
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
-using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
-using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
-using Dfe.Academies.Academisation.Service.Queries;
+using Dfe.Academies.Academisation.Service.Commands.ProjectGroup; 
 using Dfe.Academies.Academisation.WebApi.ActionResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
