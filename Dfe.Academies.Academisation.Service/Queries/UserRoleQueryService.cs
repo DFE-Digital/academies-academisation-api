@@ -16,13 +16,18 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			var userRoles = await userRoleRepository.SearchUsersAsync(searchTerm, roleId, cancellationToken);
 
-			var pageResponse = PagingResponseFactory.Create("user-role/users", page, count, userRoles.Count(),
-				new Dictionary<string, object?> { });
+			var pageResponse = PagingResponseFactory.Create("user-role/users", page, count, userRoles.Count(), []);
 
 			var data =  userRoles.Select(userRole 
-				=> new UserRoleModel(userRole.RoleId, userRole.AssignedUser!.FullName, userRole.AssignedUser!.EmailAddress)).ToList();
+				=> new UserRoleModel(GetRoleIdEnum(userRole.RoleId), userRole.AssignedUser!.FullName, userRole.AssignedUser!.EmailAddress)).ToList();
 
 			return new PagedDataResponse<UserRoleModel>(data, pageResponse);
 		}
-	}
+		private static RoleId GetRoleIdEnum(string roleId)
+		{
+			return roleId == RoleId.Manager.GetStringValue()
+				? RoleId.Manager : roleId == RoleId.SuperAdmin.GetStringValue()
+				? RoleId.SuperAdmin : RoleId.Standard;
+		}
+	} 
 }

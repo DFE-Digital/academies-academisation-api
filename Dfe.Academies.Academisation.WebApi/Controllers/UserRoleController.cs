@@ -1,10 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.ProjectGroup;
-using Dfe.Academies.Academisation.IService.ServiceModels.UserRole;
-using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate; 
+using Dfe.Academies.Academisation.IService.ServiceModels.UserRole; 
 using Dfe.Academies.Academisation.Service.Commands.UserRole;
 using Dfe.Academies.Academisation.WebApi.ActionResults;
 using MediatR;

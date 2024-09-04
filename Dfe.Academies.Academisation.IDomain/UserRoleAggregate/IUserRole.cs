@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.IDomain.UserRoleAggregate
 	public interface IUserRole
 	{
 		int Id { get; }
-		RoleId RoleId { get; }
+		string RoleId { get; }
 		public User? AssignedUser { get; }
 		bool IsEnabled { get; }
 		void SetAssignedUser(Guid userId, string fullName, string emailAddress);

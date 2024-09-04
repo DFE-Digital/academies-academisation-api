@@ -1,5 +1,4 @@
-﻿
-using Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.UserRole; 
 

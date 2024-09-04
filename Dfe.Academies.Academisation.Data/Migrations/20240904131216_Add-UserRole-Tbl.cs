@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUserRoleEntity : Migration
+    public partial class AddUserRoleTbl : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssignedUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AssignedUserFullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AssignedUserEmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),

@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
+using Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate;
 using Dfe.Academies.Academisation.Domain.UserRoleAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.UserRole
 		{
 			logger.LogInformation("Creating user role: {value}", message);
 
-			var userRole = new Domain.UserRoleAggregate.UserRole(message.RoleId, message.IsEnabled, dateTimeProvider.Now);
+			var userRole = new Domain.UserRoleAggregate.UserRole(message.RoleId.GetStringValue(), message.IsEnabled, dateTimeProvider.Now);
 			userRole.SetAssignedUser(message.UserId, message.FullName, message.EmailAddress);
 
 			userRoleRepository.Insert(userRole);

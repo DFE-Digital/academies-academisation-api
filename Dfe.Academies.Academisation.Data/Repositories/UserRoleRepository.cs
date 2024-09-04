@@ -32,8 +32,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<List<RoleCapability>> GetUserRoleCapabilitiesAsync(string email, CancellationToken cancellationToken)
 		{
+			var user = await DefaultIncludes().FirstOrDefaultAsync();
 			var userRole = await DefaultIncludes().FirstOrDefaultAsync(x => x.AssignedUser!.EmailAddress == email, cancellationToken);
-			return userRole == null ? [] : Roles.GetRoleCapabilities(userRole.RoleId);
+			return userRole == null ? Roles.GetRoleCapabilities(RoleId.Standard.GetStringValue()) : Roles.GetRoleCapabilities(userRole.RoleId);
 		}
 		private static IQueryable<UserRole> FilterBySearchTerm(string? searchTerm, IQueryable<UserRole> queryable)
 		{
@@ -51,7 +52,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			if (roleId != null)
 			{
-				queryable = queryable.Where(p => p.RoleId == roleId);
+				queryable = queryable.Where(p => p.RoleId == roleId.Value.GetStringValue());
 			}
 
 			return queryable;

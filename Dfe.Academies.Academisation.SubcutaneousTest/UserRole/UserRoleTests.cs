@@ -36,7 +36,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			var userRole = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.AssignedUser!.EmailAddress == command.EmailAddress); 
 			Assert.NotNull(userRole);
-			Assert.Equal(userRole.RoleId, command.RoleId);
+			Assert.Equal(userRole.RoleId, command.RoleId.GetStringValue());
 			Assert.Equal(userRole.IsEnabled, command.IsEnabled);
 			Assert.Equal(userRole.AssignedUser!.FullName, command.FullName);
 			Assert.Equal(userRole.AssignedUser!.Id, command.UserId);
@@ -78,7 +78,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			var dbUserRole = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.AssignedUser!.EmailAddress == userRole.AssignedUser!.EmailAddress);
 			Assert.NotNull(dbUserRole);
-			Assert.Equal(dbUserRole!.RoleId, command.RoleId);
+			Assert.Equal(dbUserRole!.RoleId, command.RoleId.GetStringValue());
 			Assert.Equal(dbUserRole.IsEnabled, command.IsEnabled);
 		}
 
@@ -143,32 +143,21 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			var httpResponseMessage = await _client.GetAsync($"user-role/{userRole.AssignedUser!.EmailAddress}", CancellationToken);
 
 			// Assert
-			Assert.True(httpResponseMessage.IsSuccessStatusCode);
-			Assert.Equal(httpResponseMessage.StatusCode.GetHashCode(), HttpStatusCode.OK.GetHashCode());
-			var roleCapabilitiesModel = await httpResponseMessage.ConvertResponseToEnumTypeAsync<RoleCapabilitiesModel>();
-
-			for (int i = 0; i < capabilities.Count; i++)
-			{
-				Assert.Equal(capabilities[i], roleCapabilitiesModel.Capabilities[i]);
-			}
+			await VerifyRoleCapabilities(httpResponseMessage, capabilities);
 		}
 
 		[Fact]
-		public async Task GetUserRoleCapabilities_ShouldReturnNotFound()
+		public async Task GetUserRoleCapabilities_ShouldReturnStandardRoleCapabilitiesIfUserDoesNotExists()
 		{
 			// Arrange
 			var email = $"{Fixture.Create<string>()}@notfound.com";
-			var errorMessage = $"User role capabilities with {email} email not found.";
+			var capabilities = Roles.GetRoleCapabilities(RoleId.Standard.GetStringValue());
 
 			// Action
 			var httpResponseMessage = await _client.GetAsync($"user-role/{email}", CancellationToken);
 
 			// Assert
-			Assert.False(httpResponseMessage.IsSuccessStatusCode);
-			Assert.Equal(httpResponseMessage.StatusCode.GetHashCode(), HttpStatusCode.NotFound.GetHashCode());
-			var responseMessage = await httpResponseMessage.Content.ReadAsStringAsync();
-
-			Assert.Equal(responseMessage, errorMessage);
+			await VerifyRoleCapabilities(httpResponseMessage, capabilities);
 		}
 
 		[Theory]
@@ -193,20 +182,32 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			usersModel.Data.ToList().ForEach(user =>
 			{
 				Assert.Equal(user.Email, userRole.AssignedUser!.EmailAddress);
-				Assert.Equal(user.FullName, userRole.AssignedUser!.FullName);
-				Assert.Equal(user.RoleId, userRole.RoleId);
+				Assert.Equal(user.FullName, userRole.AssignedUser!.FullName); 
+				Assert.Equal(user.RoleId.GetStringValue(), userRole.RoleId);
 			});
 		}
 
 		private async Task<IUserRole> CreateUserRole(string fullName = "Full Name", string emailAddress = "first.lastname@email.com")
 		{
-			var userRole = new Domain.UserRoleAggregate.UserRole(RoleId.Standard, true, DateTime.Now);
+			var userRole = new Domain.UserRoleAggregate.UserRole(RoleId.Standard.GetStringValue(), true, DateTime.Now);
 			userRole.SetAssignedUser(Guid.NewGuid(), fullName, emailAddress);
 
 			_context.UserRoles.Add(userRole);
 			await _context.SaveChangesAsync(CancellationToken);
 
 			return userRole;
+		}
+
+		private static async Task VerifyRoleCapabilities(HttpResponseMessage httpResponseMessage, List<RoleCapability> capabilities)
+		{
+			Assert.True(httpResponseMessage.IsSuccessStatusCode);
+			Assert.Equal(httpResponseMessage.StatusCode.GetHashCode(), HttpStatusCode.OK.GetHashCode());
+			var roleCapabilitiesModel = await httpResponseMessage.ConvertResponseToEnumTypeAsync<RoleCapabilitiesModel>();
+
+			for (int i = 0; i < capabilities.Count; i++)
+			{
+				Assert.Equal(capabilities[i], roleCapabilitiesModel.Capabilities[i]);
+			}
 		}
 	}
 }
