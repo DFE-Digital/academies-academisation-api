@@ -3,11 +3,9 @@ namespace Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate
 {
 	public enum RoleCapability
 	{
-		ConversionAdministrator,
-		TransferAdministrator,
-		FromAMatAdministrator,
-		GroupAdministrator,
-		DeleteProject,
+		DeleteTransferProject,
+		DeleteGroupProject,
+		DeleteConversionProject,
 		UserAdministrator
 	}
 	public class Roles
@@ -24,17 +22,15 @@ namespace Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate
 		private static List<RoleCapability> StandardRoleCapabilities()
 		{
 			return [
-				RoleCapability.ConversionAdministrator,
-				RoleCapability.TransferAdministrator,
-				RoleCapability.GroupAdministrator,
-				RoleCapability.FromAMatAdministrator,
+				RoleCapability.DeleteGroupProject
 			];
 		}
 
 		private static List<RoleCapability> ManagerRoleCapabilities()
 		{
 			return StandardRoleCapabilities().Concat([
-				RoleCapability.DeleteProject
+				RoleCapability.DeleteConversionProject,
+				RoleCapability.DeleteTransferProject
 			]).Distinct().ToList();
 		}
 
