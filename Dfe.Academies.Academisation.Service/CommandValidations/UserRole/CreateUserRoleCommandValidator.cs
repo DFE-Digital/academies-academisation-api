@@ -9,7 +9,7 @@ namespace Dfe.Academies.Academisation.Service.CommandValidations.UserRole
 		{
 			RuleFor(x => x.FullName)
 				.NotEmpty().WithMessage("Full name must not be empty")
-				.NotNull().WithMessage("Full name must not be null"); ;
+				.NotNull().WithMessage("Full name must not be null");
 
 			RuleFor(x => x.UserId)
 				.NotNull().WithMessage("User Id cannot be null.")

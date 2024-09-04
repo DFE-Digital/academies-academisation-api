@@ -26,8 +26,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		private static RoleId GetRoleIdEnum(string roleId)
 		{
 			return roleId == RoleId.Manager.GetStringValue()
-				? RoleId.Manager : roleId == RoleId.SuperAdmin.GetStringValue()
-				? RoleId.SuperAdmin : RoleId.Standard;
+				? RoleId.Manager : (roleId == RoleId.SuperAdmin.GetStringValue()
+				? RoleId.SuperAdmin : RoleId.Standard);
 		}
 	} 
 }

@@ -38,8 +38,8 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			if (!searchTerm.IsNullOrEmpty())
 			{
 				searchTerm = searchTerm!.ToLower();
-				queryable = queryable.Where(p => (p.AssignedUser != null && p.AssignedUser.EmailAddress.ToLower().Contains(searchTerm)) ||
-				p.AssignedUser!.FullName.ToLower().Contains(searchTerm));
+				queryable = queryable.Where(p => (p.AssignedUser != null && p.AssignedUser.EmailAddress.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
+				p.AssignedUser!.FullName.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase));
 			}
 
 			return queryable;
