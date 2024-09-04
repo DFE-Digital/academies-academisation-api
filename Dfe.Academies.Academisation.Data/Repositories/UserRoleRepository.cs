@@ -7,11 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
-	public class UserRoleRepository : GenericRepository<UserRole>, IUserRoleRepository
+	public class UserRoleRepository(AcademisationContext context) : GenericRepository<UserRole>(context), IUserRoleRepository
 	{
-		private readonly AcademisationContext _context;
-		public UserRoleRepository(AcademisationContext context) : base(context) 
-			=> _context = context ?? throw new ArgumentNullException(nameof(context));
+		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
 		public IUnitOfWork UnitOfWork => _context;
 
@@ -32,7 +30,6 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<List<RoleCapability>> GetUserRoleCapabilitiesAsync(string email, CancellationToken cancellationToken)
 		{
-			var user = await DefaultIncludes().FirstOrDefaultAsync();
 			var userRole = await DefaultIncludes().FirstOrDefaultAsync(x => x.AssignedUser!.EmailAddress == email, cancellationToken);
 			return userRole == null ? Roles.GetRoleCapabilities(RoleId.Standard.GetStringValue()) : Roles.GetRoleCapabilities(userRole.RoleId);
 		}

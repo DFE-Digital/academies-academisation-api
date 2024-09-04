@@ -1,7 +1,4 @@
-﻿using Dfe.Academies.Academisation.WebApi.Options;
-using Microsoft.Extensions.Options;
-
-namespace Dfe.Academies.Academisation.WebApi.Middleware
+﻿namespace Dfe.Academies.Academisation.WebApi.Middleware
 {
 	public class CypressKeyValidator : ICypressKeyValidator
 	{
