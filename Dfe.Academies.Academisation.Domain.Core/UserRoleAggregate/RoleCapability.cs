@@ -8,13 +8,13 @@ namespace Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate
 		DeleteConversionProject,
 		UserAdministrator
 	}
-	public class Roles
+	public static class Roles
 	{
 		public static List<RoleCapability> GetRoleCapabilities(string roleId)
 		{
 			return roleId == RoleId.SuperAdmin.GetStringValue()
-				? SuperAdminRoleCapabilities() : roleId == RoleId.Manager.GetStringValue()
-				? ManagerRoleCapabilities() : StandardRoleCapabilities();
+				? SuperAdminRoleCapabilities() : (roleId == RoleId.Manager.GetStringValue()
+				? ManagerRoleCapabilities() : StandardRoleCapabilities());
 		}
 		private static List<RoleCapability> StandardRoleCapabilities()
 		{

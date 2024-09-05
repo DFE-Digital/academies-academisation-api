@@ -7,9 +7,9 @@ namespace Dfe.Academies.Academisation.Domain.UserRoleAggregate
 {
 	public class UserRole : Entity, IUserRole, IAggregateRoot
 	{
-		public string RoleId { private set; get; } = string.Empty;
+		public string RoleId { private set; get; }
 		public User? AssignedUser { private set; get; }
-		public bool IsEnabled { private set; get; } = true;
+		public bool IsEnabled { private set; get; }
 
 		public UserRole(string roleId, bool isEnabled, DateTime createdOn)
 		{ 

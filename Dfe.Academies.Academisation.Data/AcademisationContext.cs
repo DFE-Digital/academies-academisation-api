@@ -27,6 +27,10 @@ namespace Dfe.Academies.Academisation.Data;
 public class AcademisationContext(DbContextOptions<AcademisationContext> options, IMediator mediator) : DbContext(options), IUnitOfWork
 {
 	const string DEFAULT_SCHEMA = "academisation";
+	const string Assigned_User_Id = "AssignedUserId";
+	const string Assigned_User_Email_Address = "AssignedUserEmailAddress";
+	const string Assigned_User_Full_Name = "AssignedUserFullName";
+
 	private IDbContextTransaction _currentTransaction;
 
 	public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
@@ -253,22 +257,22 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 
 		builder.OwnsOne(a => a.AssignedUser, a =>
 		{
-			a.Property(p => p.Id).HasColumnName("AssignedUserId");
-			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
-			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+			a.Property(p => p.Id).HasColumnName(Assigned_User_Id);
+			a.Property(p => p.EmailAddress).HasColumnName(Assigned_User_Email_Address);
+			a.Property(p => p.FullName).HasColumnName(Assigned_User_Full_Name);
 		});
 	}
 
-	private void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
+	private static void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
 	{
 		builder.ToTable("UserRoles", DEFAULT_SCHEMA);
 		builder.HasKey(e => e.Id);
 
 		builder.OwnsOne(a => a.AssignedUser, a =>
 		{
-			a.Property(p => p.Id).HasColumnName("AssignedUserId");
-			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
-			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+			a.Property(p => p.Id).HasColumnName(Assigned_User_Id);
+			a.Property(p => p.EmailAddress).HasColumnName(Assigned_User_Email_Address);
+			a.Property(p => p.FullName).HasColumnName(Assigned_User_Full_Name);
 		});
 	}
 
@@ -312,9 +316,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 
 		formAMatProjectConfiguration.OwnsOne(a => a.AssignedUser, a =>
 		{
-			a.Property(p => p.Id).HasColumnName("AssignedUserId");
-			a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
-			a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+			a.Property(p => p.Id).HasColumnName(Assigned_User_Id);
+			a.Property(p => p.EmailAddress).HasColumnName(Assigned_User_Email_Address);
+			a.Property(p => p.FullName).HasColumnName(Assigned_User_Full_Name);
 		});
 	}
 
@@ -409,9 +413,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			pd.Property(d => d.FoundationConsent).HasColumnName("FoundationConsent").HasConversion<string>(); ;
 			pd.OwnsOne(a => a.AssignedUser, a =>
 			{
-				a.Property(p => p.Id).HasColumnName("AssignedUserId");
-				a.Property(p => p.EmailAddress).HasColumnName("AssignedUserEmailAddress");
-				a.Property(p => p.FullName).HasColumnName("AssignedUserFullName");
+				a.Property(p => p.Id).HasColumnName(Assigned_User_Id);
+				a.Property(p => p.EmailAddress).HasColumnName(Assigned_User_Email_Address);
+				a.Property(p => p.FullName).HasColumnName(Assigned_User_Full_Name);
 			});
 			pd.Property(d => d.KeyStage5PerformanceAdditionalInformation).HasColumnName("KeyStage5PerformanceAdditionalInformation");
 			pd.Property(d => d.KeyStage4PerformanceAdditionalInformation).HasColumnName("KeyStage4PerformanceAdditionalInformation");
