@@ -1,12 +1,13 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
+using Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate;
 using Dfe.Academies.Academisation.Domain.UserRoleAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.UserRole
 {
-	public class SetUserRoleCommandHandler(IUserRoleRepository userRoleRepository, IDateTimeProvider dateTimeProvider, ILogger<CreateUserRoleCommandHandler> logger) : IRequestHandler<SetUserRoleCommand, CommandResult>
+	public class SetUserRoleCommandHandler(IUserRoleRepository userRoleRepository, IDateTimeProvider dateTimeProvider, ILogger<CreateUserRoleCommandHandler> logger, IRoleInfo roleInfo) : IRequestHandler<SetUserRoleCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(SetUserRoleCommand message, CancellationToken cancellationToken)
 		{
@@ -17,7 +18,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.UserRole
 			{
 				return new NotFoundCommandResult();
 			}
-			userRole.SetRole(message.RoleId, dateTimeProvider.Now, message.IsEnabled);
+			userRole.SetRole(roleInfo.GetId(message.RoleId), dateTimeProvider.Now, message.IsEnabled);
 
 			userRoleRepository.Update((Domain.UserRoleAggregate.UserRole)userRole);
 			await userRoleRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

@@ -22,9 +22,9 @@ namespace Dfe.Academies.Academisation.Domain.UserRoleAggregate
 			AssignedUser = new User(userId, fullName, emailAddress);
 		}
 
-		public void SetRole(RoleId roleId, DateTime lastModifiedOn, bool isEnabled = true)
+		public void SetRole(string roleId, DateTime lastModifiedOn, bool isEnabled = true)
 		{
-			RoleId = roleId.GetStringValue();
+			RoleId = roleId;
 			IsEnabled = isEnabled;
 			LastModifiedOn = lastModifiedOn;
 		}

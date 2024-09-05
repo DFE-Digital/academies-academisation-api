@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -49,6 +50,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Linq;
+using Microsoft.IdentityModel.Tokens;
+using DocumentFormat.OpenXml.InkML;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +68,7 @@ builder.Services
 	.AddNewtonsoftJson(options =>
 	{
 		options.SerializerSettings.Converters.Add(new StringEnumConverter(typeof(CamelCaseNamingStrategy)));
-		options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+		options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
 		options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 	});
 
@@ -227,16 +235,30 @@ builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 	}
 });
 
+builder.Services.AddSingleton<IRoleInfo>(provider =>
+{
+	var roleIds = builder.Configuration.GetSection("RoleIds")
+			.AsEnumerable()
+			.Where(x => !string.IsNullOrWhiteSpace(x.Value))
+			.ToDictionary(x => x.Key.Replace("RoleIds:", ""), x => x.Value);
+	if (roleIds == null || roleIds.Count == 0)
+	{
+		throw new InvalidOperationException("RoleIds configuration is not properly configured.");
+	}
+	return new RoleInfo(roleIds!);
+});
+
 
 builder.Services.AddApplicationInsightsTelemetry();
-var aiOptions = new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions();
+var aiOptions = new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions
+{
+	// Disables adaptive sampling.
+	EnableAdaptiveSampling = false,
 
-// Disables adaptive sampling.
-aiOptions.EnableAdaptiveSampling = false;
-
-// Disables QuickPulse (Live Metrics stream).
-aiOptions.EnableQuickPulseMetricStream = false;
-aiOptions.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+	// Disables QuickPulse (Live Metrics stream).
+	EnableQuickPulseMetricStream = false,
+	ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"]
+};
 builder.Services.AddApplicationInsightsTelemetry(aiOptions);
 
 var app = builder.Build();

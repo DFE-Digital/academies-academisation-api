@@ -8,6 +8,7 @@ using Dfe.Academies.Academisation.WebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Dfe.Academies.Academisation.SubcutaneousTest.Utils;
 using Dfe.Academies.Academisation.IService.ServiceModels.UserRole;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 {
@@ -15,11 +16,13 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 	{
 		private readonly HttpClient _client;
 		private readonly AcademisationContext _context;
+		private readonly IRoleInfo _roleInfo;
 
 		public UserRoleTests()
 		{
 			_client = CreateClient();
 			_context = GetDBContext();
+			_roleInfo = ServiceProvider.GetRequiredService<IRoleInfo>();
 		}
 
 		[Fact]
@@ -36,7 +39,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			var userRole = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.AssignedUser!.EmailAddress == command.EmailAddress); 
 			Assert.NotNull(userRole);
-			Assert.Equal(userRole.RoleId, command.RoleId.GetStringValue());
+			Assert.Equal(userRole.RoleId, _roleInfo.GetId(command.RoleId));
 			Assert.Equal(userRole.IsEnabled, command.IsEnabled);
 			Assert.Equal(userRole.AssignedUser!.FullName, command.FullName);
 			Assert.Equal(userRole.AssignedUser!.Id, command.UserId);
@@ -78,7 +81,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			var dbUserRole = await _context.UserRoles.AsNoTracking().FirstOrDefaultAsync(x => x.AssignedUser!.EmailAddress == userRole.AssignedUser!.EmailAddress);
 			Assert.NotNull(dbUserRole);
-			Assert.Equal(dbUserRole!.RoleId, command.RoleId.GetStringValue());
+			Assert.Equal(dbUserRole!.RoleId, _roleInfo.GetId(command.RoleId));
 			Assert.Equal(dbUserRole.IsEnabled, command.IsEnabled);
 		}
 
@@ -137,7 +140,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 		{
 			// Arrange 
 			var userRole = await CreateUserRole();
-			var capabilities = Roles.GetRoleCapabilities(userRole.RoleId);
+			var capabilities = Roles.GetRoleCapabilities(_roleInfo.GetEnum(userRole.RoleId));
 
 			// Action
 			var httpResponseMessage = await _client.GetAsync($"user-role/{userRole.AssignedUser!.EmailAddress}", CancellationToken);
@@ -151,7 +154,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 		{
 			// Arrange
 			var email = $"{Fixture.Create<string>()}@notfound.com";
-			var capabilities = Roles.GetRoleCapabilities(RoleId.Standard.GetStringValue());
+			var capabilities = Roles.GetRoleCapabilities(RoleId.Standard);
 
 			// Action
 			var httpResponseMessage = await _client.GetAsync($"user-role/{email}", CancellationToken);
@@ -183,13 +186,13 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			{
 				Assert.Equal(user.Email, userRole.AssignedUser!.EmailAddress);
 				Assert.Equal(user.FullName, userRole.AssignedUser!.FullName); 
-				Assert.Equal(user.RoleId.GetStringValue(), userRole.RoleId);
+				Assert.Equal(_roleInfo.GetId(user.RoleId), userRole.RoleId);
 			});
 		}
 
 		private async Task<IUserRole> CreateUserRole(string fullName = "Full Name", string emailAddress = "first.lastname@email.com")
 		{
-			var userRole = new Domain.UserRoleAggregate.UserRole(RoleId.Standard.GetStringValue(), true, DateTime.Now);
+			var userRole = new Domain.UserRoleAggregate.UserRole(_roleInfo.GetId(RoleId.Standard), true, DateTime.Now);
 			userRole.SetAssignedUser(Guid.NewGuid(), fullName, emailAddress);
 
 			_context.UserRoles.Add(userRole);

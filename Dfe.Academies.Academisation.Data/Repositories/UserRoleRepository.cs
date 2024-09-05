@@ -7,9 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
-	public class UserRoleRepository(AcademisationContext context) : GenericRepository<UserRole>(context), IUserRoleRepository
+	public class UserRoleRepository(AcademisationContext context, IRoleInfo roleInfo) : GenericRepository<UserRole>(context), IUserRoleRepository
 	{
 		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
+		private readonly IRoleInfo _roleInfo = roleInfo ?? throw new ArgumentNullException(nameof(roleInfo));	
 
 		public IUnitOfWork UnitOfWork => _context;
 
@@ -31,25 +32,26 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<List<RoleCapability>> GetUserRoleCapabilitiesAsync(string email, CancellationToken cancellationToken)
 		{
 			var userRole = await DefaultIncludes().FirstOrDefaultAsync(x => x.AssignedUser!.EmailAddress == email, cancellationToken);
-			return userRole == null ? Roles.GetRoleCapabilities(RoleId.Standard.GetStringValue()) : Roles.GetRoleCapabilities(userRole.RoleId);
+			return userRole == null ? Roles.GetRoleCapabilities(RoleId.Standard) : Roles.GetRoleCapabilities(_roleInfo.GetEnum(userRole.RoleId));
 		}
 		private static IQueryable<UserRole> FilterBySearchTerm(string? searchTerm, IQueryable<UserRole> queryable)
 		{
 			if (!searchTerm.IsNullOrEmpty())
 			{
 				searchTerm = searchTerm!.ToLower();
-				queryable = queryable.Where(p => (p.AssignedUser != null && p.AssignedUser.EmailAddress.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
-				p.AssignedUser!.FullName.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase));
+				queryable = queryable.Where(p => (p.AssignedUser != null && p.AssignedUser.EmailAddress.Contains(searchTerm)) ||
+				p.AssignedUser!.FullName.Contains(searchTerm));
 			}
 
 			return queryable;
 		}
 
-		private static IQueryable<UserRole> FilterByRoleId(RoleId? roleId, IQueryable<UserRole> queryable)
+		private IQueryable<UserRole> FilterByRoleId(RoleId? roleId, IQueryable<UserRole> queryable)
 		{
 			if (roleId != null)
 			{
-				queryable = queryable.Where(p => p.RoleId == roleId.Value.GetStringValue());
+				var id = _roleInfo.GetId(roleId.Value);
+				queryable = queryable.Where(p => p.RoleId == id);
 			}
 
 			return queryable;

@@ -7,13 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.UserRole
 {
-	public class CreateUserRoleCommandHandler(IUserRoleRepository userRoleRepository, IDateTimeProvider dateTimeProvider, ILogger<CreateUserRoleCommandHandler> logger) : IRequestHandler<CreateUserRoleCommand, CommandResult>
+	public class CreateUserRoleCommandHandler(IUserRoleRepository userRoleRepository, IDateTimeProvider dateTimeProvider, IRoleInfo roleInfo, ILogger<CreateUserRoleCommandHandler> logger) : IRequestHandler<CreateUserRoleCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(CreateUserRoleCommand message, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Creating user role: {value}", message);
 
-			var userRole = new Domain.UserRoleAggregate.UserRole(message.RoleId.GetStringValue(), message.IsEnabled, dateTimeProvider.Now);
+			var userRole = new Domain.UserRoleAggregate.UserRole(roleInfo.GetId(message.RoleId), message.IsEnabled, dateTimeProvider.Now);
 			userRole.SetAssignedUser(message.UserId, message.FullName, message.EmailAddress);
 
 			userRoleRepository.Insert(userRole);

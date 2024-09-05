@@ -10,6 +10,6 @@ namespace Dfe.Academies.Academisation.IDomain.UserRoleAggregate
 		public User? AssignedUser { get; }
 		bool IsEnabled { get; }
 		void SetAssignedUser(Guid userId, string fullName, string emailAddress);
-		void SetRole(RoleId roleId, DateTime lastModifiedOn, bool isEnabled = true);
+		void SetRole(string roleId, DateTime lastModifiedOn, bool isEnabled = true);
 	}
 }

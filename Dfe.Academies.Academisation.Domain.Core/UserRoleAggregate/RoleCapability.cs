@@ -10,10 +10,10 @@ namespace Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate
 	}
 	public static class Roles
 	{
-		public static List<RoleCapability> GetRoleCapabilities(string roleId)
+		public static List<RoleCapability> GetRoleCapabilities(RoleId roleId)
 		{
-			return roleId == RoleId.SuperAdmin.GetStringValue()
-				? SuperAdminRoleCapabilities() : (roleId == RoleId.Manager.GetStringValue()
+			return roleId == RoleId.SuperAdmin
+				? SuperAdminRoleCapabilities() : (roleId == RoleId.Manager
 				? ManagerRoleCapabilities() : StandardRoleCapabilities());
 		}
 		private static List<RoleCapability> StandardRoleCapabilities()

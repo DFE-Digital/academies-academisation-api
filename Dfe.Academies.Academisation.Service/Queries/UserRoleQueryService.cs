@@ -7,7 +7,7 @@ using Dfe.Academies.Academisation.Service.Factories;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
-	public class UserRoleQueryService(IUserRoleRepository userRoleRepository): IUserRoleQueryService
+	public class UserRoleQueryService(IUserRoleRepository userRoleRepository, IRoleInfo roleInfo): IUserRoleQueryService
 	{
 		public async Task<RoleCapabilitiesModel> GetUserRoleCapabilitiesAsync(string email, CancellationToken cancellationToken)
 			=> new RoleCapabilitiesModel(await userRoleRepository.GetUserRoleCapabilitiesAsync(email, cancellationToken));
@@ -19,15 +19,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			var pageResponse = PagingResponseFactory.Create("user-role/users", page, count, userRoles.Count(), []);
 
 			var data =  userRoles.Select(userRole 
-				=> new UserRoleModel(GetRoleIdEnum(userRole.RoleId), userRole.AssignedUser!.FullName, userRole.AssignedUser!.EmailAddress)).ToList();
+				=> new UserRoleModel(roleInfo.GetEnum(userRole.RoleId), userRole.AssignedUser!.FullName, userRole.AssignedUser!.EmailAddress)).ToList();
 
 			return new PagedDataResponse<UserRoleModel>(data, pageResponse);
-		}
-		private static RoleId GetRoleIdEnum(string roleId)
-		{
-			return roleId == RoleId.Manager.GetStringValue()
-				? RoleId.Manager : (roleId == RoleId.SuperAdmin.GetStringValue()
-				? RoleId.SuperAdmin : RoleId.Standard);
 		}
 	} 
 }
