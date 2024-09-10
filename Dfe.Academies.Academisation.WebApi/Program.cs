@@ -213,6 +213,7 @@ builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 	{
 		client.BaseAddress = new Uri(url);
 		client.DefaultRequestHeaders.Add("ApiKey", configuration.GetValue<string>("AcademiesApiKey"));
+		client.DefaultRequestHeaders.Add("User-Agent", "AcademisationApi/1.0");
 	}
 	else
 	{
