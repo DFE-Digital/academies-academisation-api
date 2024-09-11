@@ -44,7 +44,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 			services.AddDbContext<AcademisationContext>(options => options.UseSqlite(_connection));
 
 			var optionsConfig = Options.Create<AuthenticationConfig>(new() { ApiKeys = new List<string> { _authKey } });
-			services.AddScoped<IOptions<AuthenticationConfig>>(_ => optionsConfig);
+			services.AddScoped(_ => optionsConfig);
 
 			var serviceProvider = services.BuildServiceProvider();
 
@@ -61,7 +61,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		_dbContext.AddRange(new Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision(
 			1,
 			new AdvisoryBoardDecisionDetails(1000, null, AdvisoryBoardDecision.Approved, true, "TestData", System.DateTime.UtcNow.AddMonths(-1), System.DateTime.UtcNow.AddMonths(-1), DecisionMadeBy.DirectorGeneral, "John Smith"),
-			null, null, null, null, new(2022, 02, 02),
+			null!, null!, null!, null, new(2022, 02, 02),
 			new(2022, 02, 02)
 			));
 

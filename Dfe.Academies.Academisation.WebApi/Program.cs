@@ -9,11 +9,13 @@ using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.UserRoleAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Domain.UserRoleAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
@@ -27,8 +29,10 @@ using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
+using Dfe.Academies.Academisation.Service.Commands.UserRole;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
+using Dfe.Academies.Academisation.Service.CommandValidations.UserRole;
 using Dfe.Academies.Academisation.Service.Mappers.OpeningDateHistoryMapper;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
@@ -46,6 +50,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Linq;
+using Microsoft.IdentityModel.Tokens;
+using DocumentFormat.OpenXml.InkML;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +68,7 @@ builder.Services
 	.AddNewtonsoftJson(options =>
 	{
 		options.SerializerSettings.Converters.Add(new StringEnumConverter(typeof(CamelCaseNamingStrategy)));
-		options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+		options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
 		options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 	});
 
@@ -112,6 +123,7 @@ builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectReposi
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 builder.Services.AddScoped<IOpeningDateHistoryRepository, OpeningDateHistoryRepository>();
+builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 
 
@@ -126,6 +138,7 @@ builder.Services.AddScoped<ITrustQueryService, TrustQueryService>();
 builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQueryService>();
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
 builder.Services.AddScoped<IProjectGroupQueryService, ProjectGroupQueryService>();
+builder.Services.AddScoped<IUserRoleQueryService, UserRoleQueryService>();
 
 // utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -199,6 +212,8 @@ builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(Create
 builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typeof(CreateTransferProjectCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateProjectGroupCommand>), typeof(CreateProjectGroupCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<SetProjectGroupCommand>), typeof(SetProjectGroupCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<CreateUserRoleCommand>), typeof(CreateUserRoleCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<SetUserRoleCommand>), typeof(SetUserRoleCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<SetProjectGroupAssignUserCommand>), typeof(SetProjectGroupAssignUserCommandValidator));
 
 builder.Services.AddHostedService<EnrichProjectService>();
@@ -220,16 +235,30 @@ builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 	}
 });
 
+builder.Services.AddSingleton<IRoleInfo>(provider =>
+{
+	var roleIds = builder.Configuration.GetSection("RoleIds")
+			.AsEnumerable()
+			.Where(x => !string.IsNullOrWhiteSpace(x.Value))
+			.ToDictionary(x => x.Key.Replace("RoleIds:", ""), x => x.Value);
+	if (roleIds == null || roleIds.Count == 0)
+	{
+		throw new InvalidOperationException("RoleIds configuration is not properly configured.");
+	}
+	return new RoleInfo(roleIds!);
+});
+
 
 builder.Services.AddApplicationInsightsTelemetry();
-var aiOptions = new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions();
+var aiOptions = new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions
+{
+	// Disables adaptive sampling.
+	EnableAdaptiveSampling = false,
 
-// Disables adaptive sampling.
-aiOptions.EnableAdaptiveSampling = false;
-
-// Disables QuickPulse (Live Metrics stream).
-aiOptions.EnableQuickPulseMetricStream = false;
-aiOptions.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+	// Disables QuickPulse (Live Metrics stream).
+	EnableQuickPulseMetricStream = false,
+	ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"]
+};
 builder.Services.AddApplicationInsightsTelemetry(aiOptions);
 
 var app = builder.Build();
