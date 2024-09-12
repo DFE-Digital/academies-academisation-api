@@ -105,6 +105,12 @@ variable "container_scale_http_concurrency" {
   default     = 10
 }
 
+variable "container_min_replicas" {
+  description = "Container min replicas"
+  type        = number
+  default     = 1
+}
+
 variable "enable_mssql_database" {
   description = "Set to true to create an Azure SQL server/database, with a private endpoint within the virtual network"
   type        = bool
