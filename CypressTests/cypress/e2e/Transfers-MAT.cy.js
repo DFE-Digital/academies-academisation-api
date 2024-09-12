@@ -600,11 +600,11 @@ describe('Academisation API Testing - Transfers MAT Projects', () => {
       expect(response.body.benefits.anyRisks).to.be.true
 
       // CHECK SCHOOL ADDITIONAL DETAILS RETURNING CORRECTLY IN RESPONSE
-      expect(response.body.transferringAcademies[0].pupilNumbersAdditionalInformation).to.equal('pupilNumbersAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].latestOfstedReportAdditionalInformation).to.equal('latestOfstedReportAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage2PerformanceAdditionalInformation).to.equal('keyStage2PerformanceAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage4PerformanceAdditionalInformation).to.equal('KeyStage4PerformanceAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage5PerformanceAdditionalInformation).to.equal('keyStage5PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].pupilNumbersAdditionalInformation).to.equal('pupilNumbersAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].latestOfstedReportAdditionalInformation).to.equal('latestOfstedReportAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage2PerformanceAdditionalInformation).to.equal('keyStage2PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage4PerformanceAdditionalInformation).to.equal('KeyStage4PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage5PerformanceAdditionalInformation).to.equal('keyStage5PerformanceAdditionalInformation value')
       cy.log(URN)
     })
   })
@@ -696,11 +696,11 @@ describe('Academisation API Testing - Transfers MAT Projects', () => {
       expect(response.body.benefits.isCompleted).to.be.true
       expect(response.body.benefits.anyRisks).to.be.true
 
-      expect(response.body.transferringAcademies[0].pupilNumbersAdditionalInformation).to.equal('pupilNumbersAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].latestOfstedReportAdditionalInformation).to.equal('latestOfstedReportAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage2PerformanceAdditionalInformation).to.equal('keyStage2PerformanceAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage4PerformanceAdditionalInformation).to.equal('KeyStage4PerformanceAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage5PerformanceAdditionalInformation).to.equal('keyStage5PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].pupilNumbersAdditionalInformation).to.equal('pupilNumbersAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].latestOfstedReportAdditionalInformation).to.equal('latestOfstedReportAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage2PerformanceAdditionalInformation).to.equal('keyStage2PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage4PerformanceAdditionalInformation).to.equal('KeyStage4PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage5PerformanceAdditionalInformation).to.equal('keyStage5PerformanceAdditionalInformation value')
 
       // CHECKING THE NEW SET TRUST RETURNS HERE
       expect(response.body.generalInformation).to.have.property('recommendation', 'recommendationString value')
@@ -796,11 +796,11 @@ describe('Academisation API Testing - Transfers MAT Projects', () => {
       expect(response.body.benefits.isCompleted).to.be.true
       expect(response.body.benefits.anyRisks).to.be.true
 
-      expect(response.body.transferringAcademies[0].pupilNumbersAdditionalInformation).to.equal('pupilNumbersAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].latestOfstedReportAdditionalInformation).to.equal('latestOfstedReportAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage2PerformanceAdditionalInformation).to.equal('keyStage2PerformanceAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage4PerformanceAdditionalInformation).to.equal('KeyStage4PerformanceAdditionalInformation value')
-      expect(response.body.transferringAcademies[0].keyStage5PerformanceAdditionalInformation).to.equal('keyStage5PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].pupilNumbersAdditionalInformation).to.equal('pupilNumbersAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].latestOfstedReportAdditionalInformation).to.equal('latestOfstedReportAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage2PerformanceAdditionalInformation).to.equal('keyStage2PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage4PerformanceAdditionalInformation).to.equal('KeyStage4PerformanceAdditionalInformation value')
+      expect(response.body.transferringAcademies[1].keyStage5PerformanceAdditionalInformation).to.equal('keyStage5PerformanceAdditionalInformation value')
 
       expect(response.body.generalInformation).to.have.property('recommendation', 'recommendationString value')
       expect(response.body.generalInformation).to.have.property('author', 'authorString value')
