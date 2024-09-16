@@ -16,8 +16,8 @@
 		{
 			switch (GetEnum(roleId))
 			{
-				case RoleId.Support:
-					return SupportRoleCapabilities();
+				case RoleId.SuperAdmin:
+					return SuperAdminRoleCapabilities();
 				case RoleId.ConversionCreation:
 					return ConversionCreationRoleCapabilities();
 				case RoleId.TransferCreation:
@@ -34,7 +34,7 @@
 				RoleCapability.CreateConversionProject
 			];
 
-		private static List<RoleCapability> SupportRoleCapabilities() 
+		private static List<RoleCapability> SuperAdminRoleCapabilities() 
 			=> ConversionCreationRoleCapabilities().Concat(TransferCreationRoleCapabilities()).Concat([
 				RoleCapability.DeleteConversionProject,
 				RoleCapability.DeleteTransferProject
