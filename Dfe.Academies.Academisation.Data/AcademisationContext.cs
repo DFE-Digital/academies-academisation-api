@@ -12,8 +12,7 @@ using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.Domain.UserRoleAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate; 
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -55,7 +54,6 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
-	public DbSet<UserRole> UserRoles { get; set; } = null!;
 
 	public override int SaveChanges()
 	{
@@ -239,7 +237,6 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
 		modelBuilder.Entity<ProjectGroup>(ConfigureProjectGroup);
-		modelBuilder.Entity<UserRole>(ConfigureUserRole);
 		modelBuilder.Entity<OpeningDateHistory>(ConfigureOpeningDateHistory);
 
 		// Replicatiing functionality to generate urn, this will have to be ofset as part of the migration when we go live
@@ -253,19 +250,6 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 	private void ConfigureProjectGroup(EntityTypeBuilder<ProjectGroup> builder)
 	{
 		builder.ToTable("ProjectGroups", DEFAULT_SCHEMA);
-		builder.HasKey(e => e.Id);
-
-		builder.OwnsOne(a => a.AssignedUser, a =>
-		{
-			a.Property(p => p.Id).HasColumnName(Assigned_User_Id);
-			a.Property(p => p.EmailAddress).HasColumnName(Assigned_User_Email_Address);
-			a.Property(p => p.FullName).HasColumnName(Assigned_User_Full_Name);
-		});
-	}
-
-	private static void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
-	{
-		builder.ToTable("UserRoles", DEFAULT_SCHEMA);
 		builder.HasKey(e => e.Id);
 
 		builder.OwnsOne(a => a.AssignedUser, a =>
