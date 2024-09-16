@@ -1,6 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate;
 
-namespace Dfe.Academies.Academisation.IService.ServiceModels.UserRole
+namespace Dfe.Academies.Academisation.IService.ServiceModels.RoleCapabilities
 {
 	public class RoleCapabilitiesModel(List<RoleCapability> capabilities)
 	{

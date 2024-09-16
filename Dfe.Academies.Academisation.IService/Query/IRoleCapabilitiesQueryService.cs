@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.IService.ServiceModels.UserRole; 
+﻿using Dfe.Academies.Academisation.IService.ServiceModels.RoleCapabilities; 
 
 namespace Dfe.Academies.Academisation.IService.Query
 {

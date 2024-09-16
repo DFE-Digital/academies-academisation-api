@@ -1,10 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Net.Http.Json;
-using Microsoft.Extensions.Options;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Azure;
-using Dfe.Academies.Academisation.IService.ServiceModels.UserRole;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.Utils
 {

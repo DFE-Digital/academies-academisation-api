@@ -1,6 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate; 
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.ServiceModels.UserRole;
+using Dfe.Academies.Academisation.IService.ServiceModels.RoleCapabilities;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {

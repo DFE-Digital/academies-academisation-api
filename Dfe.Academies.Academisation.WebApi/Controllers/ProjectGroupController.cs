@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
-	[Route("project-group")]
+	[Route("project-group/")]
 	[ApiController]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	public class ProjectGroupController(IMediator mediator, ILogger<ProjectGroupController> logger, IProjectGroupQueryService projectGroupQueryService) : ControllerBase
 	{
 
-		[HttpPost("/project-group/create-project-group", Name = "CreateProjectGroup")]
+		[HttpPost("create-project-group", Name = "CreateProjectGroup")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult<ProjectGroupResponseModel>> CreateProjectGroup(
@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPost("/project-group/get-project-groups", Name = "GetProjectGroups")]
+		[HttpPost("get-project-groups", Name = "GetProjectGroups")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<PagedDataResponse<ProjectGroupResponseModel>>> GetProjectGroups(ConversionProjectSearchModel? searchModel, CancellationToken cancellationToken)

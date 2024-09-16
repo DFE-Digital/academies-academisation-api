@@ -26,15 +26,15 @@
 					return [];
 			}
 		}
-		private List<RoleCapability> TransferCreationRoleCapabilities() => [
+		private static List<RoleCapability> TransferCreationRoleCapabilities() => [
 				RoleCapability.CreateTransferProject
 			];
 
-		private List<RoleCapability> ConversionCreationRoleCapabilities() => [
+		private static List<RoleCapability> ConversionCreationRoleCapabilities() => [
 				RoleCapability.CreateConversionProject
 			];
 
-		private List<RoleCapability> SupportRoleCapabilities() 
+		private static List<RoleCapability> SupportRoleCapabilities() 
 			=> ConversionCreationRoleCapabilities().Concat(TransferCreationRoleCapabilities()).Concat([
 				RoleCapability.DeleteConversionProject,
 				RoleCapability.DeleteTransferProject

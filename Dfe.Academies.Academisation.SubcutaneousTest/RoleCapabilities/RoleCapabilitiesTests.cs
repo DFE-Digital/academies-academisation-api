@@ -1,17 +1,17 @@
 ﻿using System.Net;
 using Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate;
 using Dfe.Academies.Academisation.SubcutaneousTest.Utils;
-using Dfe.Academies.Academisation.IService.ServiceModels.UserRole;
+using Dfe.Academies.Academisation.IService.ServiceModels.RoleCapabilities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
+namespace Dfe.Academies.Academisation.SubcutaneousTest.RoleCapabilities
 {
-	public class UserRoleTests : ApiIntegrationTestBase
+	public class RoleCapabilitiesTests : ApiIntegrationTestBase
 	{
 		private readonly HttpClient _client;
 		private readonly IRoleInfo _roleInfo;
 
-		public UserRoleTests()
+		public RoleCapabilitiesTests()
 		{
 			_client = CreateClient();
 			_roleInfo = ServiceProvider.GetRequiredService<IRoleInfo>();
@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.UserRole
 			roles.ToList().ForEach(role => capabilities.AddRange(_roleInfo.GetRoleCapabilities(role)));
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync($"role-capabilities/capabilities", roles, CancellationToken);
+			var httpResponseMessage = await _client.PostAsJsonAsync("role-capabilities/capabilities", roles, CancellationToken);
 
 			// Assert
 			await VerifyRoleCapabilities(httpResponseMessage, capabilities.Distinct().ToList());
