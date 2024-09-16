@@ -177,7 +177,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 						new ("AcademiesApiKey", "f6cbde5b-1252-4439-864c-16956af671d2"),
 						new ("RoleIds:ConversionCreation",  "ConversionCreation"),
 						new ("RoleIds:TransferCreation",  "TransferCreation"),
-						new ("RoleIds:Support",  "Support")
+						new ("RoleIds:SuperAdmin",  "SuperAdmin")
 				};
 				configBuilder.AddInMemoryCollection(inMemorySettings!);
 			});

@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.RoleCapabilities
 		[Theory]
 		[InlineData("ConversionCreation")]
 		[InlineData("ConversionCreation", "TransferCreation")]
-		[InlineData("ConversionCreation", "TransferCreation", "Support")]
+		[InlineData("ConversionCreation", "TransferCreation", "SuperAdmin")]
 		public async Task GetUserRoleCapabilities_ShouldReturnCapabilities(params string[] roles)
 		{
 			// Arrange   
