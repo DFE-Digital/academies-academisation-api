@@ -175,9 +175,9 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 						new ("AuthenticationConfig:ApiKeys:0", apiKey),
 						new ("AcademiesUrl", "https://localhost:2730"),
 						new ("AcademiesApiKey", "f6cbde5b-1252-4439-864c-16956af671d2"),
-						new ("RoleIds:Manager",  "71eaea6e-44e2-45b4-bc1b-7542b38200b3"),
-						new ("RoleIds:Standard",  "e9f6ef60-0b4d-439a-ba98-52d11c4d6737"),
-						new ("RoleIds:SuperAdmin",  "f61975e2-8669-4524-89e1-e970ca792f03")
+						new ("RoleIds:ConversionCreation",  "ConversionCreation"),
+						new ("RoleIds:TransferCreation",  "TransferCreation"),
+						new ("RoleIds:SuperAdmin",  "SuperAdmin")
 				};
 				configBuilder.AddInMemoryCollection(inMemorySettings!);
 			});
