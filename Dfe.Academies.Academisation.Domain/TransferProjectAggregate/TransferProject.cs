@@ -143,12 +143,14 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted)
+		public void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer,
+			string transferType, bool? isCompleted, string otherTransferTypeDescription)
 		{
 			WhoInitiatedTheTransfer = whoInitiatedTheTransfer;
 			_specificReasonsForTransfer = specificReasonsForTransfer;
 			TypeOfTransfer = transferType;
 			FeatureSectionIsCompleted = isCompleted;
+			OtherTransferTypeDescription = otherTransferTypeDescription;
 		}
 
 		public void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted)

@@ -305,7 +305,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var reasons = new List<string>() { specficReasons };
 			// Act
-			transferProject.SetFeatures(whoInitiated, reasons, transferType, isCompleted);
+			transferProject.SetFeatures(whoInitiated, reasons, transferType, isCompleted, otherTransferTypeDescription);
 
 			// Assert
 			transferProject.WhoInitiatedTheTransfer.Should().Be(whoInitiated);
