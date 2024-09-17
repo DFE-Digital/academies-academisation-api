@@ -21,11 +21,32 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.RoleCapabilities
 		[InlineData("ConversionCreation")]
 		[InlineData("ConversionCreation", "TransferCreation")]
 		[InlineData("ConversionCreation", "TransferCreation", "SuperAdmin")]
+		[InlineData("NoRole")]
+		[InlineData("NoRole", "")]
 		public async Task GetUserRoleCapabilities_ShouldReturnCapabilities(params string[] roles)
 		{
 			// Arrange   
 			var capabilities = new List<RoleCapability>();
 			roles.ToList().ForEach(role => capabilities.AddRange(_roleInfo.GetRoleCapabilities(role)));
+
+			// Action
+			var httpResponseMessage = await _client.PostAsJsonAsync("role-capabilities/capabilities", roles, CancellationToken);
+
+			// Assert
+			await VerifyRoleCapabilities(httpResponseMessage, capabilities.Distinct().ToList());
+		}
+
+		[Fact]
+		public async Task GetUserRoleCapabilities_WithSuperAdmin_ShouldReturnAllCapabilities()
+		{
+			// Arrange
+			var roles = new List<string> { "SuperAdmin" };
+			var capabilities = new List<RoleCapability> {
+				RoleCapability.CreateConversionProject,
+				RoleCapability.CreateTransferProject,
+				RoleCapability.DeleteConversionProject,
+				RoleCapability.DeleteTransferProject
+			};
 
 			// Action
 			var httpResponseMessage = await _client.PostAsJsonAsync("role-capabilities/capabilities", roles, CancellationToken);

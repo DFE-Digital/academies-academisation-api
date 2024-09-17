@@ -17,11 +17,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			logger.LogInformation("Getting roles capablities with roles: {roles}", roles);
 			var roleCapabiltiesModel = userRoleQueryService.GetRolesCapabilitiesAsync(roles);
 
-			if (roleCapabiltiesModel == null || roleCapabiltiesModel.Capabilities.Count == 0)
-			{
-				return NotFound($"User role capabilities with {roles} email not found.");
-			}
-
 			return Ok(roleCapabiltiesModel);
 		}
 	}
