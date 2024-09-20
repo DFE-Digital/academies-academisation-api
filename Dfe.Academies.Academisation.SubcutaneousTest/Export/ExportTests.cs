@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels;
@@ -7,28 +6,21 @@ using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAgg
 using ClosedXML.Excel;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate; 
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate; 
+using Dfe.Academies.Academisation.Service.Extensions;
+using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
+using Dfe.Academies.Contracts.V4.Establishments;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 {
 	public class ExportTests : ApiIntegrationTestBase
-	{
-		private readonly HttpClient _client;
-		private readonly AcademisationContext _context;
-
-		public ExportTests()
-		{
-			_client = CreateClient();
-			_context = GetDBContext();
-		}
-
+	{ 
 		[Fact]
 		public async Task ExportProjectsToSpreadsheet_ReturnsNotFound_WhenNoProjectsFound()
 		{
 			// Arrange
 			var searchModel = new ConversionProjectSearchModel(1, 10, "", null!, null!, null!, null!, null!);
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("export/export-projects", searchModel, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("export/export-projects", searchModel, CancellationToken);
 
 			Assert.False(httpResponseMessage.IsSuccessStatusCode);
 			Assert.Equal(httpResponseMessage.StatusCode.GetHashCode(), System.Net.HttpStatusCode.NotFound.GetHashCode());
@@ -42,7 +34,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 			var searchModel = new ConversionProjectSearchModel(1, 10, expectedProject.Details.NameOfTrust, null!, null!, null!, null!, null!);
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("export/export-projects", searchModel, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("export/export-projects", searchModel, CancellationToken);
 
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			Assert.Equal(httpResponseMessage.StatusCode.GetHashCode(), System.Net.HttpStatusCode.OK.GetHashCode());
@@ -67,23 +59,34 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 			var searchModel = new GetProjectSearchModel(1, 10, Fixture.Create<string>()[..10], null!, null!, null!, null!);
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("export/export-transfer-projects", searchModel, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("export/export-transfer-projects", searchModel, CancellationToken);
 
 			Assert.False(httpResponseMessage.IsSuccessStatusCode);
 			Assert.Equal(httpResponseMessage.StatusCode.GetHashCode(), System.Net.HttpStatusCode.NotFound.GetHashCode());
 		}
 
-		[Fact(Skip = "Unable to mock academies API ")] 
+		[Fact()] 
 		public async Task ExportTransferProjectsToSpreadsheet_ReturnsProjectsStream_WhenProjectsFound()
 		{
 			// Arrange
 			var incomingTrustName = Fixture.Create<string>()[..10];
 			var expectedProject = await CreateTransferProjects(incomingTrustName);
+
+			AddGetWithJsonResponse<IEnumerable<EstablishmentDto>>($"/v4/establishments/ukprn/bulk", [
+				new()
+				{
+					Ukprn = expectedProject.OutgoingTrustUkprn,
+					Name = Fixture.Create<string>()[..10] ,
+					EstablishmentType = new NameAndCodeDto{ Name = "Name", Code = "code"},
+					Gor = new NameAndCodeDto{ Code = "GorCode", Name= "GorName"}
+				}
+			]);
 			var searchModel = new GetProjectSearchModel(1, 10, incomingTrustName, null!, null!, null!, null!);
-
+			var s = _mockApiServer;
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("export/export-transfer-projects", searchModel, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("export/export-transfer-projects", searchModel, CancellationToken);
 
+			//Assert
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			Assert.Equal(httpResponseMessage.StatusCode.GetHashCode(), System.Net.HttpStatusCode.OK.GetHashCode());
 
@@ -98,7 +101,9 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 			};
 
 			VerifyWorkSheetHeaders(await httpResponseMessage.Content.ReadAsByteArrayAsync(), headers);
+			Reset();
 		}
+
 		private static void VerifyWorkSheetHeaders(byte[] workSheetByteArray,  List<string> headers)
 		{
 			using var stream = new MemoryStream(workSheetByteArray);
@@ -120,8 +125,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 				.Without(x => x.Id)
 				.Create();
 
-			_context.Projects.Add(project);
-			await _context.SaveChangesAsync();
+			_dbContext.Projects.Add(project);
+			await _dbContext.SaveChangesAsync();
 
 			await CreateConversionAdvisoryBoardDecisions(project.Id);
 
@@ -144,8 +149,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 				new AdvisoryBoardDecisionDetails(conversionProjectId, transferProjectId, AdvisoryBoardDecision.Withdrawn, false, "Approved", now, now,
 				DecisionMadeBy.DeputyDirector, "Paull Smith"), null!, null!, advisoryBoardDeclinedReasonDetails, null, now, now);
 
-			_context.ConversionAdvisoryBoardDecisions.Add(conversionAdvisoryBoardDecision);
-			await _context.SaveChangesAsync();
+			_dbContext.ConversionAdvisoryBoardDecisions.Add(conversionAdvisoryBoardDecision);
+			await _dbContext.SaveChangesAsync();
 		}
 
 		private async Task<ITransferProject> CreateTransferProjects(string incomingTrustUkprn)
@@ -155,8 +160,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 			var transferringAcademies = new List<TransferringAcademy>() { transferAcademy };
 
 			var transferProject = TransferProject.Create(outgoingTrustUkprn, "out trust", transferringAcademies, false, DateTime.Now);
-			_context.TransferProjects.Add(transferProject);
-			await _context.SaveChangesAsync();
+			_dbContext.TransferProjects.Add(transferProject);
+			await _dbContext.SaveChangesAsync();
 
 			await CreateConversionAdvisoryBoardDecisions(transferProject.Id, true);
 

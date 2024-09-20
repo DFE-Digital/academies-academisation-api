@@ -1,14 +1,12 @@
 ﻿using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Encodings.Web;
-using System.Text.Json;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.WebApi;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Contracts.V4.Establishments;
-using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -17,36 +15,44 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using WireMock.Matchers;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
+using WireMock.Util;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest
 {
-	public class ApiIntegrationTestBase
+	public abstract class ApiIntegrationTestBase : IDisposable
 	{
+		private static int _currentPort = 5080;
+		private static readonly object Sync = new();
 		private readonly Fixture _fixture;
-		protected readonly string _apiKey; 
-		private HttpClient _httpClient;
-		private IMediator _mediator;
-		private AcademisationContext _dbContext;
-		public ApiIntegrationTestBase() {
+		protected readonly string _apiKey;
+		protected HttpClient _httpClient;
+		protected AcademisationContext _dbContext;
+		protected readonly WireMockServer _mockApiServer;
+		public ApiIntegrationTestBase()
+		{
+			int port = AllocateNext();
 			_fixture = new();
 			_apiKey = Guid.NewGuid().ToString();
-			_httpClient = Build();
-			_mediator = ServiceProvider.GetRequiredService<IMediator>();
-			_dbContext = ServiceProvider.GetRequiredService<AcademisationContext>();
+			_mockApiServer = WireMockServer.Start(port);
+			_httpClient =Build();
+			_dbContext = GetDbContext();
 		}
-
-		protected HttpClient CreateClient() { return _httpClient; }
 
 		private WebApplicationFactory<Program> WebAppFactory { get; set; } = new();
 
 		protected Fixture Fixture => _fixture;
 
-		protected AcademisationContext GetDBContext()
+		protected AcademisationContext GetDbContext()
 		{
-			_dbContext.Database.EnsureDeleted();
-			_dbContext.Database.EnsureCreated();
-			return _dbContext;
-
+			var dbContext = ServiceProvider.GetRequiredService<AcademisationContext>();
+			dbContext.Database.EnsureDeleted();
+			dbContext.Database.EnsureCreated();
+			return dbContext;
 		}
 		protected static CancellationToken CancellationToken => CancellationToken.None;
 
@@ -57,8 +63,12 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 				return WebAppFactory.Services;
 			}
 		}
-
-		protected ApiIntegrationTestBase GetHttpClient => this;
+		void IDisposable.Dispose() 
+		{
+			_httpClient?.Dispose();
+			_mockApiServer?.Stop();
+			_mockApiServer?.Dispose();
+		} 
 
 		private HttpClient Build()
 		{
@@ -165,7 +175,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 				options.UseSqlite(connection);
 			});
 		}
-		private static void ConfigureAppConfiguration(IWebHostBuilder builder, string apiKey)
+		private void ConfigureAppConfiguration(IWebHostBuilder builder, string apiKey)
 		{
 			builder.ConfigureAppConfiguration((context, configBuilder) =>
 			{
@@ -173,7 +183,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 				var inMemorySettings = new List<KeyValuePair<string, string>>
 					{
 						new ("AuthenticationConfig:ApiKeys:0", apiKey),
-						new ("AcademiesUrl", "https://localhost:2730"),
+						new ("AcademiesUrl", _mockApiServer.Url!),
 						new ("AcademiesApiKey", "f6cbde5b-1252-4439-864c-16956af671d2"),
 						new ("RoleIds:ConversionCreation",  "ConversionCreation"),
 						new ("RoleIds:TransferCreation",  "TransferCreation"),
@@ -181,6 +191,108 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 				};
 				configBuilder.AddInMemoryCollection(inMemorySettings!);
 			});
+		}
+
+		protected void AddGetWithJsonResponse<TResponseBody>(string path, TResponseBody responseBody)
+		{
+			_mockApiServer
+			 .Given(Request.Create()
+				.WithPath(path)
+				.UsingGet())
+			 .RespondWith(Response.Create()
+				.WithStatusCode(200)
+				.WithHeader("Content-Type", "application/json")
+				.WithBody(JsonConvert.SerializeObject(responseBody)));
+		}
+
+
+		protected void AddPatchWithJsonRequest<TRequestBody, TResponseBody>(string path, TRequestBody requestBody, TResponseBody responseBody)
+		{
+			_mockApiServer
+			   .Given(Request.Create()
+				  .WithPath(path)
+				  .WithBody(new JsonMatcher(JsonConvert.SerializeObject(requestBody), true))
+				  .UsingPatch())
+			   .RespondWith(Response.Create()
+				  .WithStatusCode(200)
+				  .WithHeader("Content-Type", "application/json")
+				  .WithBody(JsonConvert.SerializeObject(responseBody)));
+		}
+
+		protected void AddApiCallWithBodyDelegate<TResponseBody>(string path, Func<IBodyData, bool> bodyDelegate, TResponseBody responseBody, HttpMethod verb = null!)
+		{
+			_mockApiServer
+			   .Given(Request.Create()
+				  .WithPath(path)
+				  .WithBody(bodyDelegate!)
+				  .UsingMethod(verb == null ? HttpMethod.Post.ToString() : verb.ToString()))
+			   .RespondWith(Response.Create()
+				  .WithStatusCode(200)
+				  .WithHeader("Content-Type", "application/json")
+				  .WithBody(JsonConvert.SerializeObject(responseBody)));
+		}
+
+		protected void AddPutWithJsonRequest<TRequestBody, TResponseBody>(string path, TRequestBody requestBody, TResponseBody responseBody)
+		{
+			_mockApiServer
+			   .Given(Request.Create()
+				  .WithPath(path)
+				  .WithBody(new JsonMatcher(JsonConvert.SerializeObject(requestBody), true))
+				  .UsingPut())
+			   .RespondWith(Response.Create()
+				  .WithStatusCode(200)
+				  .WithHeader("Content-Type", "application/json")
+				  .WithBody(JsonConvert.SerializeObject(responseBody)));
+		}
+
+		protected void AddPostWithJsonRequest<TRequestBody, TResponseBody>(string path, TRequestBody requestBody, TResponseBody responseBody)
+		{
+			_mockApiServer
+			   .Given(Request.Create()
+				  .WithPath(path)
+				  .WithBody(new JsonMatcher(JsonConvert.SerializeObject(requestBody), true))
+				  .UsingPost())
+			   .RespondWith(Response.Create()
+				  .WithStatusCode(200)
+				  .WithHeader("Content-Type", "application/json")
+				  .WithBody(JsonConvert.SerializeObject(responseBody)));
+		}
+
+		protected void AddAnyPostWithJsonRequest<TResponseBody>(string path, TResponseBody responseBody)
+		{
+			_mockApiServer
+			   .Given(Request.Create()
+				  .WithPath(path)
+				  .UsingPost())
+			   .RespondWith(Response.Create()
+				  .WithStatusCode(200)
+				  .WithHeader("Content-Type", "application/json")
+				  .WithBody(JsonConvert.SerializeObject(responseBody)));
+		}
+
+		protected void AddErrorResponse(string path, string method)
+		{
+			_mockApiServer
+			   .Given(Request.Create()
+				  .WithPath(path)
+				  .UsingMethod(method))
+			   .RespondWith(Response.Create()
+				  .WithStatusCode(500));
+		}
+
+		protected void Reset()
+		{
+			_mockApiServer.Reset();
+		}
+
+		private static int AllocateNext()
+		{
+			lock (Sync)
+			{
+				int next = _currentPort;
+				_currentPort++;
+				return next;
+			}
 		}
 	}
 }
