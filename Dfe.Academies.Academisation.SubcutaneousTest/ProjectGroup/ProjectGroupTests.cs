@@ -1,5 +1,4 @@
 ﻿using AutoFixture; 
-using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
@@ -12,15 +11,6 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 {
 	public class ProjectGroupTests : ApiIntegrationTestBase
 	{
-		private readonly HttpClient _client;
-		private readonly AcademisationContext _context;
-
-		public ProjectGroupTests()
-		{
-			_client = CreateClient();
-			_context = GetDBContext();
-		}
-
 		[Fact]
 		public async Task CreateProjectGroup_ShouldCreateSuccessfully()
 		{
@@ -29,7 +19,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			var command = new CreateProjectGroupCommand(Fixture.Create<string>()[..15], Fixture.Create<string>()[..7], Fixture.Create<string>()[..10], [], []);
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("project-group/create-project-group",command, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("project-group/create-project-group",command, CancellationToken);
 
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
 			var response = await httpResponseMessage.ConvertResponseToTypeAsync<ProjectGroupResponseModel>();
@@ -49,7 +39,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			var command = new CreateProjectGroupCommand(Fixture.Create<string>()[..15], Fixture.Create<string>()[..7], Fixture.Create<string>()[..10], [], []);
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("project-group/create-project-group", command, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("project-group/create-project-group", command, CancellationToken);
 
 			//Assert
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
@@ -60,7 +50,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			Assert.Equal(response.Projects.Count, command.ConversionProjectIds.Count);
 			Assert.Equal(response.Transfers?.Count, command.TransferProjectIds?.Count);
 			Assert.Equal(response.TrustReferenceNumber, command.TrustReferenceNumber);
-			var projectGroup = await _context.ProjectGroups.FirstOrDefaultAsync(x => x.ReferenceNumber == response.ReferenceNumber);
+			var projectGroup = await _dbContext.ProjectGroups.FirstOrDefaultAsync(x => x.ReferenceNumber == response.ReferenceNumber);
 			Assert.NotNull(projectGroup);
 		}
 		
@@ -74,7 +64,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			var command = new CreateProjectGroupCommand(Fixture.Create<string>()[..15], Fixture.Create<string>()[..7], trustUkprn, [conversionProject.Id], [transferProject.Id]);
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("project-group/create-project-group", command, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("project-group/create-project-group", command, CancellationToken);
 
 			//Assert 
 			await VerifyProjectGroupAsync(httpResponseMessage, trustUkprn); 
@@ -90,7 +80,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			var command = new SetProjectGroupCommand([conversionProject.Id], [transferProject.Id]);
 
 			// Action
-			var httpResponseMessage = await _client.PutAsJsonAsync($"project-group/{projectGroup.ReferenceNumber}/set-project-group", command, CancellationToken);
+			var httpResponseMessage = await _httpClient.PutAsJsonAsync($"project-group/{projectGroup.ReferenceNumber}/set-project-group", command, CancellationToken);
 
 			// Assert
 			await VerifyProjectGroupAsync(httpResponseMessage, projectGroup.TrustUkprn);
@@ -105,11 +95,11 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			var command = new SetProjectGroupAssignUserCommand(Guid.NewGuid(), "Firstname", "first@email.com");
 
 			// Action
-			var httpResponseMessage = await _client.PutAsJsonAsync($"project-group/{projectGroup.ReferenceNumber}/assign-project-group-user", command, CancellationToken);
+			var httpResponseMessage = await _httpClient.PutAsJsonAsync($"project-group/{projectGroup.ReferenceNumber}/assign-project-group-user", command, CancellationToken);
 
 			// Assert
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
-			var dbProjectGroup = await _context.ProjectGroups.AsNoTracking().FirstAsync(x => x.TrustUkprn == projectGroup.TrustUkprn);
+			var dbProjectGroup = await _dbContext.ProjectGroups.AsNoTracking().FirstAsync(x => x.TrustUkprn == projectGroup.TrustUkprn);
 			Assert.NotNull(dbProjectGroup);
 			Assert.Equal(dbProjectGroup.AssignedUser!.FullName, command.FullName);
 			Assert.Equal(dbProjectGroup.AssignedUser!.EmailAddress, command.EmailAddress); 
@@ -125,31 +115,59 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 			var command = new SetProjectGroupCommand(conversionProjects.Skip(1).Select(x=>x.Id).ToList(), transferProjects.Skip(1).Select(x => x.Id).ToList());
 
 			// Action
-			var httpResponseMessage = await _client.PutAsJsonAsync($"project-group/{projectGroup.ReferenceNumber}/set-project-group", command, CancellationToken);
+			var httpResponseMessage = await _httpClient.PutAsJsonAsync($"project-group/{projectGroup.ReferenceNumber}/set-project-group", command, CancellationToken);
 
 			// Assert
 			Assert.True(httpResponseMessage.IsSuccessStatusCode); 
-			var addedConversionProject = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == command.ConversionProjectIds.First());
+			var addedConversionProject = await _dbContext.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == command.ConversionProjectIds.First());
 			Assert.NotNull(addedConversionProject);
 			Assert.Equal(addedConversionProject.ProjectGroupId, projectGroup.Id);
 
-			var addedTransferProject = await _context.TransferProjects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == command.TransferProjectIds!.First());
+			var addedTransferProject = await _dbContext.TransferProjects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == command.TransferProjectIds!.First());
 			Assert.NotNull(addedTransferProject);
 			Assert.Equal(addedTransferProject.ProjectGroupId, projectGroup.Id);
 
-			var removedConversionProject = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == conversionProjects.First().Id);
+			var removedConversionProject = await _dbContext.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == conversionProjects.First().Id);
 			Assert.NotNull(removedConversionProject);
 			Assert.Null(removedConversionProject.ProjectGroupId);
 
-			var removedTransferProject = await _context.TransferProjects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == transferProjects.First().Id);
+			var removedTransferProject = await _dbContext.TransferProjects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == transferProjects.First().Id);
 			Assert.NotNull(removedTransferProject);
 			Assert.Null(removedTransferProject.ProjectGroupId);
+		}
+
+		[Fact]
+		public async Task DeleteProjectGroup_ShouldDeleteSuccessfully()
+		{
+			// Arrange
+			var projectGroup = await CreateProjectGroup();
+
+			// Action
+			var httpResponseMessage = await _httpClient.DeleteAsync($"project-group/{projectGroup.ReferenceNumber}", CancellationToken);
+
+			Assert.True(httpResponseMessage.IsSuccessStatusCode); 
+			var dbProjectGroup = await _dbContext.ProjectGroups.AsNoTracking().FirstOrDefaultAsync(x => x.ReferenceNumber == projectGroup.ReferenceNumber);
+			Assert.Null(dbProjectGroup);
+		}
+
+		[Fact]
+		public async Task DeleteProjectGroup_ShouldReturnNotFoundOnNotFindingGroup()
+		{
+			// Arrange
+			var referenceNumber = Fixture.Create<string>()[..10];
+
+			// Action
+			var httpResponseMessage = await _httpClient.DeleteAsync($"project-group/{referenceNumber}", CancellationToken);
+		
+			// Assert 
+			Assert.False(httpResponseMessage.IsSuccessStatusCode);
+			Assert.Equal(httpResponseMessage!.StatusCode.GetHashCode(), System.Net.HttpStatusCode.NotFound.GetHashCode());
 		}
 
 		private async Task<List<Project>> CreateConversionProjects(int count = 1, int? projectGroupId = null)
 		{
 			var projects = new List<Project>();
-			for (int i = 0; i < count; i++) 
+			for (int i = 0; i < count; i++)
 			{
 				var project = Fixture.Build<Project>()
 				.Without(x => x.Id)
@@ -157,8 +175,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 
 				project.SetProjectGroupId(projectGroupId);
 
-				_context.Projects.Add(project);
-				await _context.SaveChangesAsync();
+				_dbContext.Projects.Add(project);
+				await _dbContext.SaveChangesAsync();
 				projects.Add(project);
 			}
 			return projects;
@@ -175,10 +193,10 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 
 				var transferProject = TransferProject.Create(outgoingTrustUkprn, "out trust", transferringAcademies, false, DateTime.Now);
 				transferProject.SetProjectGroupId(projectGroupId);
-				_context.TransferProjects.Add(transferProject);
-				await _context.SaveChangesAsync();
+				_dbContext.TransferProjects.Add(transferProject);
+				await _dbContext.SaveChangesAsync();
 
-				projects.Add(await _context.TransferProjects.AsNoTracking().FirstAsync(x =>  x.OutgoingTrustUkprn == outgoingTrustUkprn));
+				projects.Add(await _dbContext.TransferProjects.AsNoTracking().FirstAsync(x => x.OutgoingTrustUkprn == outgoingTrustUkprn));
 			}
 			return projects;
 		}
@@ -194,50 +212,22 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectGroup
 				projectGroup.SetAssignedUser(Guid.NewGuid(), "Full Name", "First@email.com");
 			}
 			projectGroup.SetProjectReference(1);
-			_context.ProjectGroups.Add(projectGroup);
-			await _context.SaveChangesAsync();
-			return await _context.ProjectGroups.AsNoTracking().FirstAsync(x => x.TrustUkprn == projectGroup.TrustUkprn);
+			_dbContext.ProjectGroups.Add(projectGroup);
+			await _dbContext.SaveChangesAsync();
+			return await _dbContext.ProjectGroups.AsNoTracking().FirstAsync(x => x.TrustUkprn == projectGroup.TrustUkprn);
 		}
 
 		private async Task VerifyProjectGroupAsync(HttpResponseMessage httpResponseMessage, string trustUkprn)
 		{
 			Assert.True(httpResponseMessage.IsSuccessStatusCode);
-			var projectGroup = await _context.ProjectGroups.FirstAsync(x => x.TrustUkprn == trustUkprn);
-			var dbConversionProject = await _context.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.ProjectGroupId == projectGroup.Id);
+			var projectGroup = await _dbContext.ProjectGroups.FirstAsync(x => x.TrustUkprn == trustUkprn);
+			var dbConversionProject = await _dbContext.Projects.AsNoTracking().FirstOrDefaultAsync(x => x.ProjectGroupId == projectGroup.Id);
 			Assert.NotNull(dbConversionProject);
 			Assert.Equal(dbConversionProject.ProjectGroupId, projectGroup.Id);
 
-			var dbTransferProject = await _context.TransferProjects.AsNoTracking().FirstOrDefaultAsync(x => x.ProjectGroupId == projectGroup.Id);
+			var dbTransferProject = await _dbContext.TransferProjects.AsNoTracking().FirstOrDefaultAsync(x => x.ProjectGroupId == projectGroup.Id);
 			Assert.NotNull(dbTransferProject);
 			Assert.Equal(dbTransferProject.ProjectGroupId, projectGroup.Id);
-		}
-
-		[Fact]
-		public async Task DeleteProjectGroup_ShouldDeleteSuccessfully()
-		{
-			// Arrange
-			var projectGroup = await CreateProjectGroup();
-
-			// Action
-			var httpResponseMessage = await _client.DeleteAsync($"project-group/{projectGroup.ReferenceNumber}", CancellationToken);
-
-			Assert.True(httpResponseMessage.IsSuccessStatusCode); 
-			var dbProjectGroup = await _context.ProjectGroups.AsNoTracking().FirstOrDefaultAsync(x => x.ReferenceNumber == projectGroup.ReferenceNumber);
-			Assert.Null(dbProjectGroup);
-		}
-
-		[Fact]
-		public async Task DeleteProjectGroup_ShouldReturnNotFoundOnNotFindingGroup()
-		{
-			// Arrange
-			var referenceNumber = Fixture.Create<string>()[..10];
-
-			// Action
-			var httpResponseMessage = await _client.DeleteAsync($"project-group/{referenceNumber}", CancellationToken);
-		
-			// Assert 
-			Assert.False(httpResponseMessage.IsSuccessStatusCode);
-			Assert.Equal(httpResponseMessage!.StatusCode.GetHashCode(), System.Net.HttpStatusCode.NotFound.GetHashCode());
 		}
 	}
 }

@@ -8,12 +8,10 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.RoleCapabilities
 {
 	public class RoleCapabilitiesTests : ApiIntegrationTestBase
 	{
-		private readonly HttpClient _client;
 		private readonly IRoleInfo _roleInfo;
 
 		public RoleCapabilitiesTests()
-		{
-			_client = CreateClient();
+		{ 
 			_roleInfo = ServiceProvider.GetRequiredService<IRoleInfo>();
 		}
 
@@ -30,7 +28,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.RoleCapabilities
 			roles.ToList().ForEach(role => capabilities.AddRange(_roleInfo.GetRoleCapabilities(role)));
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("role-capabilities/capabilities", roles, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("role-capabilities/capabilities", roles, CancellationToken);
 
 			// Assert
 			await VerifyRoleCapabilities(httpResponseMessage, capabilities.Distinct().ToList());
@@ -49,7 +47,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.RoleCapabilities
 			};
 
 			// Action
-			var httpResponseMessage = await _client.PostAsJsonAsync("role-capabilities/capabilities", roles, CancellationToken);
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync("role-capabilities/capabilities", roles, CancellationToken);
 
 			// Assert
 			await VerifyRoleCapabilities(httpResponseMessage, capabilities.Distinct().ToList());
