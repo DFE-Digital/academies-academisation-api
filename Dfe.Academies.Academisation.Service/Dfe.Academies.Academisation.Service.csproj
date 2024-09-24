@@ -24,7 +24,7 @@
     <PackageReference Include="ClosedXML" Version="0.102.3" />
     <PackageReference Include="Dfe.Academies.Contracts" Version="1.0.10" />
     <PackageReference Include="Dfe.Academisation.ExtensionMethods" Version="2.0.0" />
-    <PackageReference Include="MediatR" Version="12.4.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 
 </Project>
