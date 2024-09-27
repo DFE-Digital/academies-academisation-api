@@ -56,7 +56,8 @@
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
 		void AssignUser(Guid userId, string userEmail, string userFullName);
-		void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted);
+		void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType,
+			bool? isCompleted, string requestOtherTransferTypeDescription);
 		void SetLegalRequirements(string outgoingTrustResolution, string incomingTrustAgreement, string diocesanConsent, bool? isCompleted);
 		void SetStatus(string status);
 		void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy, List<ReasonChange> reasonsChanged);

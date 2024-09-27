@@ -10,5 +10,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 		public List<string> SpecificReasonsForTransfer { get; set; }
 		public string TypeOfTransfer { get; set; }
 		public bool? IsCompleted { get; set; }
+		
+		public string OtherTransferTypeDescription { get; set; }
 	}
 }
