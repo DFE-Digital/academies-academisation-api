@@ -340,5 +340,18 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			.Where(p => projectIds.Contains(p.Id))
 			.ToListAsync(cancellationToken);
 		}
+
+		public async Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
+		{
+			var decisions = context.ConversionAdvisoryBoardDecisions.Where(x => x.AdvisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
+
+			var projects = decisions.Join(
+				this.dbSet.Where(proj => proj.CompleteProjectId == null),
+				decision => decision.AdvisoryBoardDecisionDetails.ConversionProjectId,
+				project => project.Id,
+				(decision, project) => new { project });
+
+			return await projects.Select(x => x.project).ToListAsync(cancellationToken);
+		}
 	}
 }

@@ -48,6 +48,8 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public ProjectDetails Details { get; private set; }
 
+	public Guid? CompleteProjectId { get; private set; }
+
 	// Create from A2b 
 	public static CreateResult Create(IApplication application)
 	{

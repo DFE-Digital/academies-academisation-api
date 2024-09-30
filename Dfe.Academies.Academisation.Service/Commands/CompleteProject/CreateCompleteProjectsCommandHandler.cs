@@ -2,6 +2,7 @@
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.IService.Query;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -10,15 +11,15 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 	public class CreateCompleteProjectsCommandHandler : IRequestHandler<CreateCompleteProjectsCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
-		private readonly IFormAMatProjectRepository _formAMatProjectRepository;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly ILogger<CreateCompleteProjectsCommandHandler> _logger;
 
-		public CreateCompleteProjectsCommandHandler(IConversionProjectRepository conversionProjectRepository, IFormAMatProjectRepository formAMatProjectRepository, IDateTimeProvider dateTimeProvider,
+		public CreateCompleteProjectsCommandHandler(
+			IConversionProjectRepository conversionProjectRepository,
+			IDateTimeProvider dateTimeProvider,
 			ILogger<CreateCompleteProjectsCommandHandler> logger)
 		{
 			_conversionProjectRepository = conversionProjectRepository;
-			_formAMatProjectRepository = formAMatProjectRepository;
 			_dateTimeProvider = dateTimeProvider;
 			_logger = logger;
 		}
@@ -26,7 +27,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		public async Task<CommandResult> Handle(CreateCompleteProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
-			var conversionProjects = await _conversionProjectRepository.GetConversionProjectsThatRequireFormAMatCreation(cancellationToken).ConfigureAwait(false);
+			// find prjects with approved decisions that have not been sent - use returned complete project Id
+
+			// for each project send to complete
+
+			// we will need a http client with a connection to complete so appsettings changes
+
+			var conversionProjects = await _conversionProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
 			if (conversionProjects == null || !conversionProjects.Any())
 			{
@@ -36,17 +43,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 			foreach (var conversionProject in conversionProjects)
 			{
-				var formAMat = await _formAMatProjectRepository.GetByApplicationReference(conversionProject.Details.ApplicationReferenceNumber, cancellationToken).ConfigureAwait(false);
-				if (formAMat == null)
-				{
-					// create formAMat
-					formAMat = FormAMatProject.Create(conversionProject.Details.NameOfTrust, conversionProject.Details.ApplicationReferenceNumber, _dateTimeProvider.Now);
-					_formAMatProjectRepository.Insert(formAMat as FormAMatProject);
-					await _formAMatProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-				}
+				// populate the complete dto 
 
-				conversionProject.SetFormAMatProjectId(formAMat.Id);
-
+				// send to complete, get the response and set the CompleteProjectId
 				_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
 			}
 

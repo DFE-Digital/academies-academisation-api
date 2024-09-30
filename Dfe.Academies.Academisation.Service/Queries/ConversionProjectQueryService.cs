@@ -1,6 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Factories;
@@ -11,11 +12,16 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 {
 	private readonly IConversionProjectRepository _conversionProjectRepository;
 	private readonly IFormAMatProjectRepository _formAMatProjectRepository;
+	private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
 
-	public ConversionProjectQueryService(IConversionProjectRepository conversionProjectRepository, IFormAMatProjectRepository formAMatProjectRepository)
+	public ConversionProjectQueryService(
+		IConversionProjectRepository conversionProjectRepository, 
+		IFormAMatProjectRepository formAMatProjectRepository,
+		IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
 	{
 		_conversionProjectRepository = conversionProjectRepository;
 		_formAMatProjectRepository = formAMatProjectRepository;
+		_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
 	}
 
 	public async Task<ConversionProjectServiceModel?> GetConversionProject(int id, CancellationToken cancellationToken)
@@ -138,5 +144,11 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 		// get transfer projects will go here
 
 		return projects.Select(x => x.MapToServiceModel()).ToList();
+	}
+
+	public async Task<IEnumerable<int>> GetProjectIdsToSendToComplete(CancellationToken cancellationToken)
+	{
+		var decisions = await _advisoryBoardDecisionRepository
+		var projects = await _conversionProjectRepository.
 	}
 }
