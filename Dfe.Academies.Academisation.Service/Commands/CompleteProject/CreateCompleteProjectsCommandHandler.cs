@@ -1,59 +1,85 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using System.Net;
+using System.Net.Http.Json;
+using System.Text;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
+using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
+using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
 	public class CreateCompleteProjectsCommandHandler : IRequestHandler<CreateCompleteProjectsCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
+		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
 		private readonly IDateTimeProvider _dateTimeProvider;
+		private readonly ICompleteApiClientFactory _completeApiClientFactory;
 		private readonly ILogger<CreateCompleteProjectsCommandHandler> _logger;
+		private ICorrelationContext _correlationContext;
 
 		public CreateCompleteProjectsCommandHandler(
 			IConversionProjectRepository conversionProjectRepository,
+			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
+			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
+			ICorrelationContext correlationContext,
 			ILogger<CreateCompleteProjectsCommandHandler> logger)
 		{
 			_conversionProjectRepository = conversionProjectRepository;
+			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
+			_completeApiClientFactory = completeApiClientFactory;
 			_dateTimeProvider = dateTimeProvider;
+			_correlationContext = correlationContext;
 			_logger = logger;
 		}
 
 		public async Task<CommandResult> Handle(CreateCompleteProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
-			// find prjects with approved decisions that have not been sent - use returned complete project Id
-
-			// for each project send to complete
-
-			// we will need a http client with a connection to complete so appsettings changes
-
+			var client = _completeApiClientFactory.Create(_correlationContext);
+			
 			var conversionProjects = await _conversionProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
 			if (conversionProjects == null || !conversionProjects.Any())
 			{
-				_logger.LogInformation($"No conversion projects found which require form a mat projects creating.");
+				_logger.LogInformation($"No conversion projects found.");
 				return new NotFoundCommandResult();
 			}
 
 			foreach (var conversionProject in conversionProjects)
 			{
-				// populate the complete dto 
 
-				// send to complete, get the response and set the CompleteProjectId
-				_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
+				var decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
+					
+				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails);
+				
+				var json = JsonConvert.SerializeObject(completeObject);
+				
+				var response = await client.PostAsJsonAsync($"api/v1/projects/conversions",json);
+				
+				if (response.StatusCode == HttpStatusCode.OK){
+					
+					var responseString = await response.Content.ReadAsStringAsync();
+
+					dynamic result = JsonConvert.DeserializeObject(responseString);
+
+					conversionProject.SetCompleteProjectId(result.conversionProjectId);
+
+					_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
+				}
 			}
-
-
+			
 			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-
-
-			// returning 'CommandSuccessResult', client will have to retrieve the updated transfer project to refresh data
+			
 			return new CommandSuccessResult();
 		}
 	}

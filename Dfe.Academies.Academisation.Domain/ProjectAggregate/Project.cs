@@ -328,7 +328,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
-
+        
 		Details.SetPerformanceData(detailsToUpdate.KeyStage2PerformanceAdditionalInformation, detailsToUpdate.KeyStage4PerformanceAdditionalInformation, detailsToUpdate.KeyStage5PerformanceAdditionalInformation, detailsToUpdate.EducationalAttendanceAdditionalInformation);
 		Details.SetIsFormAMat(detailsToUpdate.IsFormAMat);
 
@@ -561,6 +561,11 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		DeletedAt = DateTime.UtcNow;
 	}
+	
+	public void SetCompleteProjectId(Guid completeProjectId)
+	{
+		CompleteProjectId = completeProjectId;
+	}
 
 	public void SetProjectGroupId(int? projectGroupId)
 	{
@@ -625,4 +630,5 @@ public class Project : Entity, IProject, IAggregateRoot
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
+	
 }

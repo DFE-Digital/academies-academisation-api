@@ -148,7 +148,8 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 
 	public async Task<IEnumerable<int>> GetProjectIdsToSendToComplete(CancellationToken cancellationToken)
 	{
-		var decisions = await _advisoryBoardDecisionRepository
-		var projects = await _conversionProjectRepository.
+		//var decisions = await _advisoryBoardDecisionRepository
+		//var projects = await _conversionProjectRepository.
+		return null;
 	}
 }

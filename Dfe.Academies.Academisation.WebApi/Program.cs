@@ -136,6 +136,7 @@ builder.Services.AddAutoMapper(typeof(OpeningDateHistoryMappingProfile).Assembly
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
 builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
+builder.Services.AddScoped<ICompleteApiClientFactory, CompleteApiClientFactory>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 
 //Validators
@@ -204,6 +205,7 @@ builder.Services.AddScoped(typeof(IValidator<SetProjectGroupAssignUserCommand>),
 builder.Services.AddHostedService<EnrichProjectService>();
 builder.Services.AddHostedService<CreateFormAMatProjectsService>();
 builder.Services.AddHostedService<SetFormAMatProjectReferenceNumbersService>();
+builder.Services.AddHostedService<CreateCompleteProjectsService>();
 
 builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 {
@@ -218,6 +220,22 @@ builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 	else
 	{
 		sp.GetRequiredService<ILogger<Program>>().LogError("Academies API http client not configured.");
+	}
+});
+
+builder.Services.AddHttpClient("CompleteApi", (sp, client) =>
+{
+	var configuration = sp.GetRequiredService<IConfiguration>();
+	var url = configuration.GetValue<string?>("CompleteUrl");
+	if (!string.IsNullOrEmpty(url))
+	{
+		client.BaseAddress = new Uri(url);
+		client.DefaultRequestHeaders.Add("ApiKey", configuration.GetValue<string>("CompleteApiKey"));
+		//client.DefaultRequestHeaders.Add("User-Agent", "CompleteApi/1.0");
+	}
+	else
+	{
+		sp.GetRequiredService<ILogger<Program>>().LogError("Complete API http client not configured.");
 	}
 });
 
