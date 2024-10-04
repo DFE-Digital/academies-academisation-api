@@ -15,7 +15,7 @@ internal static class CompleteProjectsServiceModelMapper
 		
 		
 		return new CompleteProjectsServiceModel(
-			127488,
+			project.Details.Urn,
 			"01/12/2023 00:00:00",
 			
 			conditions,
@@ -25,7 +25,7 @@ internal static class CompleteProjectsServiceModelMapper
 			"createdByFullName",
 			"createdByFullName",
 			project.Id,
-			project.ProjectGroupId.ToString(),
+			"",
 			10061064
 		);
 	}

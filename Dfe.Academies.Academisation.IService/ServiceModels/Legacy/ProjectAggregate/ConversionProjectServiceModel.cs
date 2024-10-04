@@ -122,6 +122,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public Guid? ApplicationSharePointId { get; set; }
 		public DateTime? ProposedConversionDate { get; set; }
 		public bool? ProjectDatesSectionComplete { get; set; }
+		public bool IsReadOnly { get; set; }
 
 		public bool Equals(ConversionProjectServiceModel? other)
 		{
@@ -248,7 +249,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 				   Equals(AssignedUser, other.AssignedUser) &&
 									  string.Equals(ExternalApplicationFormUrl,
 					   other.ExternalApplicationFormUrl, StringComparison.InvariantCultureIgnoreCase) &&
-					   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved;
+					   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved &&
+					   IsReadOnly == other.IsReadOnly;
 		}
 
 		public override bool Equals(object? obj)
@@ -363,6 +365,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(CreatedOn);
 			hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(ExternalApplicationFormSaved);
+			hashCode.Add(IsReadOnly);
 			return hashCode.ToHashCode();
 		}
 	}

@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
 using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
@@ -62,17 +63,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					
 				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails);
 				
-				var json = JsonConvert.SerializeObject(completeObject);
-				
-				var response = await client.PostAsJsonAsync($"api/v1/projects/conversions",json);
+				var response = await client.PostAsJsonAsync($"projects/conversions", completeObject, cancellationToken);
 				
 				if (response.StatusCode == HttpStatusCode.OK){
 					
-					var responseString = await response.Content.ReadAsStringAsync();
+					var successResponse = await response.Content.ReadFromJsonAsync<CreateProjectSuccessResponse>(); ;
 
-					dynamic result = JsonConvert.DeserializeObject(responseString);
-
-					conversionProject.SetCompleteProjectId(result.conversion_project_id);
+					conversionProject.SetCompleteProjectId(successResponse.conversion_project_id);
 
 					_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
 				}

@@ -231,7 +231,7 @@ builder.Services.AddHttpClient("CompleteApi", (sp, client) =>
 	{
 		client.BaseAddress = new Uri(url);
 		client.DefaultRequestHeaders.Add("ApiKey", configuration.GetValue<string>("CompleteApiKey"));
-		//client.DefaultRequestHeaders.Add("User-Agent", "CompleteApi/1.0");
+		client.DefaultRequestHeaders.Add("User-Agent", "AcademisationApi/1.0");
 	}
 	else
 	{
