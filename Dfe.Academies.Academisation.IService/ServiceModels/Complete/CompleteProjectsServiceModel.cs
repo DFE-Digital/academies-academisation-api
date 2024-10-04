@@ -18,6 +18,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Complete
 		string? created_by_last_name,
 		int prepare_id,
 		string group_id,
-		int incoming_trust_ukpr);
+		int incoming_trust_ukprn);
 
 }

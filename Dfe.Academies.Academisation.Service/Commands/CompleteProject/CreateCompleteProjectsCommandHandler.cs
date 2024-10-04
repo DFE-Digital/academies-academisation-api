@@ -72,7 +72,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 					dynamic result = JsonConvert.DeserializeObject(responseString);
 
-					conversionProject.SetCompleteProjectId(result.conversionProjectId);
+					conversionProject.SetCompleteProjectId(result.conversion_project_id);
 
 					_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
 				}

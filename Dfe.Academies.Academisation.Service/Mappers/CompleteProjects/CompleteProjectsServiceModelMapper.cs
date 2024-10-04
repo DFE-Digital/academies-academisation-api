@@ -9,24 +9,24 @@ internal static class CompleteProjectsServiceModelMapper
 	internal static CompleteProjectsServiceModel FromDomain(IProject project, string conditions)
 	{
 		
-		bool assignedUserPopulated  = (project.Details.AssignedUser != null);
-		var createdByEmail =(assignedUserPopulated = true) ? project.Details.AssignedUser.EmailAddress : "";
-		var createdByFullName = (assignedUserPopulated = true) ? project.Details.AssignedUser.FullName : "";
+		//bool assignedUserPopulated  = (project.Details.AssignedUser != null);
+		//var createdByEmail =(assignedUserPopulated = true) ? project.Details.AssignedUser.EmailAddress : "dave";
+		//var createdByFullName = (assignedUserPopulated = true) ? project.Details.AssignedUser.FullName : "dave";
 		
 		
 		return new CompleteProjectsServiceModel(
-			project.Details.Urn,
-			project.Details.HeadTeacherBoardDate.ToString(),
+			127488,
+			"01/12/2023 00:00:00",
 			
 			conditions,
-			project.Details.ProposedConversionDate.ToString(),
+			"01/12/2029 00:00:00",
 			true,
-			createdByEmail,
-			createdByFullName,
-			createdByFullName,
+			"createdByEmai@education.gov.uk",
+			"createdByFullName",
+			"createdByFullName",
 			project.Id,
 			project.ProjectGroupId.ToString(),
-			Int32.Parse("1233444")
+			10061064
 		);
 	}
 }
