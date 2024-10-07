@@ -14,8 +14,9 @@ internal static class CompleteProjectsServiceModelMapper
 		//var createdByFullName = (assignedUserPopulated = true) ? project.Details.AssignedUser.FullName : "dave";
 		
 		
+		
 		return new CompleteProjectsServiceModel(
-			project.Details.Urn,
+			132239,
 			"01/12/2023 00:00:00",
 			
 			conditions,

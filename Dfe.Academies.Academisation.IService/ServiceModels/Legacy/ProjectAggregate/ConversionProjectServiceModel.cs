@@ -13,6 +13,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 
 		public int Id { get; init; }
 		public int? Urn { get; init; }
+		
+		public int? TrustUkprn { get; init; }
 
 		public int? FormAMatProjectId { get; init; }
 		public Guid? SchoolSharePointId { get; init; }

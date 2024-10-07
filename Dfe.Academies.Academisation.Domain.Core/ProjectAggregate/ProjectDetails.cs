@@ -9,6 +9,8 @@
 public class ProjectDetails : IEquatable<ProjectDetails>
 {
 	public int Urn { get; init; }
+	public int? TrustUkprn { get => _trustUkprn; init => _trustUkprn = value; }
+	private int? _trustUkprn;
 	public int? IfdPipelineId { get; init; }
 	public string? SchoolName { get; init; }
 	public string? LocalAuthority { get; init; }

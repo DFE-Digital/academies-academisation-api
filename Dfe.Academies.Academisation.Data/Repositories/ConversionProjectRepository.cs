@@ -99,7 +99,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<IEnumerable<IProject>?> GetIncompleteProjects()
 		{
 			var createdProjectState = await _context.Projects
-				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType))
+				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType)|| (p.Details.TrustUkprn == null && p.Details.IsFormAMat == false))
 				.ToListAsync();
 
 			return createdProjectState;

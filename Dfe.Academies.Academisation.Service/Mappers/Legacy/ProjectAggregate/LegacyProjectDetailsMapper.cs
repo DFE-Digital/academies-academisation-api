@@ -17,6 +17,7 @@ internal static class LegacyProjectDetailsMapper
 		var details = new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn ?? existingProject.Details.Urn,
+			TrustUkprn = detailsToUpdate.TrustUkprn ?? existingProject.Details.TrustUkprn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId ?? existingProject.Details.IfdPipelineId,
 			SchoolName = detailsToUpdate.SchoolName ?? existingProject.Details.SchoolName,
 			LocalAuthority = detailsToUpdate.LocalAuthority ?? existingProject.Details.LocalAuthority,
