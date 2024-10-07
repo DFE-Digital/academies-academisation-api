@@ -206,6 +206,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		Details = new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn,
+			TrustUkprn = detailsToUpdate.TrustUkprn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId,
 			SchoolName = detailsToUpdate.SchoolName,
 			LocalAuthority = detailsToUpdate.LocalAuthority,
