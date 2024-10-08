@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 						var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
 						try
-						{
+						{ 
 							await mediator.Send(new CreateCompleteProjectsCommand(), stoppingToken);
 						}
 						catch (Exception ex)

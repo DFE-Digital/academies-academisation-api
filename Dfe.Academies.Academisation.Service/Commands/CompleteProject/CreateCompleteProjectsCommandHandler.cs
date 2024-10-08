@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Query;
@@ -22,6 +23,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
+		private readonly IProjectGroupRepository _projectGroupRepository;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly ICompleteApiClientFactory _completeApiClientFactory;
 		private readonly ILogger<CreateCompleteProjectsCommandHandler> _logger;
@@ -30,6 +32,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		public CreateCompleteProjectsCommandHandler(
 			IConversionProjectRepository conversionProjectRepository,
 			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
+			IProjectGroupRepository projectGroupRepository,
 			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
 			ICorrelationContext correlationContext,
@@ -37,6 +40,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		{
 			_conversionProjectRepository = conversionProjectRepository;
 			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
+			_projectGroupRepository = projectGroupRepository;
 			_completeApiClientFactory = completeApiClientFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_correlationContext = correlationContext;
@@ -58,24 +62,46 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 			foreach (var conversionProject in conversionProjects)
 			{
-
+                
+				
+				
 				var decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
-					
-				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails);
+
+				string? groupReferenceNumber = null;
+				
+				if (conversionProject.ProjectGroupId != null)
+				{
+					var group= await _projectGroupRepository.GetById((int)conversionProject.ProjectGroupId);
+					groupReferenceNumber = group.ReferenceNumber;
+				}
+				
+				
+				
+				
+				
+				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,groupReferenceNumber);
 				
 				var response = await client.PostAsJsonAsync($"projects/conversions", completeObject, cancellationToken);
 				
-				if (response.StatusCode == HttpStatusCode.OK){
+				if (response.StatusCode == HttpStatusCode.Created){
 					
 					var successResponse = await response.Content.ReadFromJsonAsync<CreateProjectSuccessResponse>(); ;
 
 					conversionProject.SetCompleteProjectId(successResponse.conversion_project_id);
 
 					_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
+					
+					await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+					
+				}
+
+				else
+				{
+					_logger.LogInformation("Error In completing conversion project with project urn: {project} due to Status code {code}",completeObject.urn, response.StatusCode);
 				}
 			}
 			
-			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+			
 			
 			return new CommandSuccessResult();
 		}
