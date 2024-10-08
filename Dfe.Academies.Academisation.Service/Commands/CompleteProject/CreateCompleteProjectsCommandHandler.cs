@@ -93,6 +93,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					
 					await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 					
+					_logger.LogInformation("Success completing conversion project with project urn: {project} with Status code 201 ",completeObject.urn);
 				}
 
 				else
