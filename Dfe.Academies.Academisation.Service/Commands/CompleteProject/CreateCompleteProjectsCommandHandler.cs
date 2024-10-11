@@ -69,8 +69,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 			foreach (var conversionProject in conversionProjects)
 			{
-                
-				
 				
 				var decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
 
@@ -78,13 +76,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				
 				if (conversionProject.ProjectGroupId != null)
 				{
-					var group= await _projectGroupRepository.GetById((int)conversionProject.ProjectGroupId);
+					var group = await _projectGroupRepository.GetById((int)conversionProject.ProjectGroupId);
 					groupReferenceNumber = group.ReferenceNumber;
 				}
-				
-				
-				
-				
 				
 				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,groupReferenceNumber);
 				
@@ -92,7 +86,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				
 				if (response.IsSuccessStatusCode){
 					
-					var successResponse = await response.Content.ReadFromJsonAsync<CreateProjectSuccessResponse>(); ;
+					var successResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectSuccessResponse>(); ;
 
 					conversionProject.SetCompleteProjectId(successResponse.conversion_project_id);
 
@@ -105,11 +99,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 				else
 				{
-					_logger.LogInformation("Error In completing conversion project with project urn: {project} due to Status code {code}",completeObject.urn, response.StatusCode);
+					var errorResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
+					var errorResponseMessage = errorResponse.GetAllErrors();
+					_logger.LogInformation("Error In completing conversion project with project urn: {project} due to Status code {code} and Complete Validation Errors:" + errorResponseMessage,completeObject.urn, response.StatusCode);
 				}
 			}
-			
-			
 			
 			return new CommandSuccessResult();
 		}
