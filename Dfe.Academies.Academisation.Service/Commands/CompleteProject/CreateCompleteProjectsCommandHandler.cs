@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
 			var retryPolicy = Policy.Handle<HttpRequestException>() // Handle HttpRequestException
-									.OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode) // Retry if response is not successful
+									.OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode && r.StatusCode != HttpStatusCode.BadRequest) // Retry if response is not successful
 									.WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
 			(exception, timeSpan, retryCount, context) => { 
 				_logger.LogInformation($"Retry {retryCount} after {timeSpan.Seconds} seconds due to: {exception?.Exception?.Message}");
