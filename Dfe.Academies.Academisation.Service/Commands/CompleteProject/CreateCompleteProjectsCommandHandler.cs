@@ -16,6 +16,7 @@ using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
@@ -51,7 +52,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
-			
+			var retryPolicy = Policy.Handle<HttpRequestException>() // Handle HttpRequestException
+									.OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode) // Retry if response is not successful
+									.WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+			(exception, timeSpan, retryCount, context) => { 
+				_logger.LogInformation($"Retry {retryCount} after {timeSpan.Seconds} seconds due to: {exception?.Exception?.Message}");
+			});
+
 			var conversionProjects = await _conversionProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
 			if (conversionProjects == null || !conversionProjects.Any())
@@ -81,9 +88,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				
 				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,groupReferenceNumber);
 				
-				var response = await client.PostAsJsonAsync($"projects/conversions", completeObject, cancellationToken);
+				var response = await retryPolicy.ExecuteAsync(() => client.PostAsJsonAsync($"projects/conversions", completeObject, cancellationToken));
 				
-				if (response.StatusCode == HttpStatusCode.Created){
+				if (response.IsSuccessStatusCode){
 					
 					var successResponse = await response.Content.ReadFromJsonAsync<CreateProjectSuccessResponse>(); ;
 
