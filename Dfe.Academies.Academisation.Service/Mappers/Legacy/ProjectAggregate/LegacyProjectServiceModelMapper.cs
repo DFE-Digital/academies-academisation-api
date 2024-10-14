@@ -150,7 +150,7 @@ internal static class LegacyProjectServiceModelMapper
 
 			ProjectDatesSectionComplete = project.Details.ProjectDatesSectionComplete,
 			// if we have sent the project to complete then the project is readonly
-			IsReadOnly = project.CompleteProjectId != null,
+			IsReadOnly = project.IsReadOnly,
 		};
 
 		return serviceModel;

@@ -7,6 +7,7 @@ using Moq;
 using Xunit;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 {
@@ -16,23 +17,25 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 
         private Mock<IConversionProjectRepository> mockConversionProjectRepository;
         private Mock<IFormAMatProjectRepository> mockFormAMatProjectRepository;
+		private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository = new();
 		private readonly Fixture _fixture = new();
 
 			
 		public ConversionProjectQueryServiceTests()
         {
-            this.mockRepository = new MockRepository(MockBehavior.Strict);
+            mockRepository = new MockRepository(MockBehavior.Strict);
 
-            this.mockConversionProjectRepository = this.mockRepository.Create<IConversionProjectRepository>();
-            this.mockFormAMatProjectRepository = this.mockRepository.Create<IFormAMatProjectRepository>();
+            mockConversionProjectRepository = mockRepository.Create<IConversionProjectRepository>();
+            mockFormAMatProjectRepository = mockRepository.Create<IFormAMatProjectRepository>();
+			_mockAdvisoryBoardDecisionRepository = mockRepository.Create<IAdvisoryBoardDecisionRepository>();
 			_fixture.Customize(new AutoMoqCustomization());
         }
 
         private ConversionProjectQueryService CreateService()
         {
             return new ConversionProjectQueryService(
-                this.mockConversionProjectRepository.Object,
-                this.mockFormAMatProjectRepository.Object);
+                mockConversionProjectRepository.Object,
+                mockFormAMatProjectRepository.Object, _mockAdvisoryBoardDecisionRepository.Object);
         }
 
         [Fact]
@@ -41,7 +44,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Arrange
 			var expectedProjects = _fixture.Create<List<Project>>();
 			mockConversionProjectRepository.Setup(m => m.GetConversionProjectsForNewGroup(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedProjects);
-			var service = this.CreateService();
+			var service = CreateService();
 
 			// Act
 			var result = await service.GetProjectsForGroup("trustReferenceNumber", default);
@@ -52,7 +55,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				() => Assert.Equivalent(expectedProjects[1].MapToServiceModel(), result![1]),
 				() => Assert.Equivalent(expectedProjects[2].MapToServiceModel(), result![2]));
           
-            this.mockRepository.VerifyAll();
+            mockRepository.VerifyAll();
         }
     }
 }

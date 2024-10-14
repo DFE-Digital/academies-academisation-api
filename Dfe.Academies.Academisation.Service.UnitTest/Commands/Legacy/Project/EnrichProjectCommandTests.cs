@@ -73,7 +73,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 		{
 			var project = _fixture.Create<Domain.ProjectAggregate.Project>();
 			_conversionProjectRepository.Setup(m => m.GetIncompleteProjects())
-				.ReturnsAsync(new List<IProject> { project });
+				.ReturnsAsync([project]);
 
 			_establishmentGetDataQuery.Setup(m => m.GetEstablishment(It.IsAny<int>()))
 				.ReturnsAsync(_fixture.Create<EstablishmentDto>());

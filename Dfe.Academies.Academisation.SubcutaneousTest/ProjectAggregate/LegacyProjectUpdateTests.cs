@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
@@ -16,6 +17,7 @@ using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.ProjectAggregate;
 
@@ -29,20 +31,22 @@ public class ProjectUpdateTests
 	// service
 	private readonly IConversionProjectQueryService _legacyProjectGetQuery;
 	private IMediator _mediatr;
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository;
 
 
 	public ProjectUpdateTests()
 	{
+		_mockAdvisoryBoardDecisionRepository = new();
 		_context = new TestProjectContext(_mediatr).CreateContext();
 
 
 		// data
-		IConversionProjectRepository conversionProjectRepository = new ConversionProjectRepository(_context, null);
+		IConversionProjectRepository conversionProjectRepository = new ConversionProjectRepository(_context);
 		IFormAMatProjectRepository formAMatProjectRepository = new FormAMatProjectRepository(_context);
 		IProjectUpdateDataCommand projectUpdateDataCommand = new ProjectUpdateDataCommand(_context);
 
 		// service
-		_legacyProjectGetQuery = new ConversionProjectQueryService(conversionProjectRepository, formAMatProjectRepository);
+		_legacyProjectGetQuery = new ConversionProjectQueryService(conversionProjectRepository, formAMatProjectRepository, _mockAdvisoryBoardDecisionRepository.Object);
 		var services = new ServiceCollection();
 
 		services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(ConversionProjectUpdateCommandHandler))!));

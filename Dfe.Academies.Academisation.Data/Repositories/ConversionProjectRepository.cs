@@ -1,6 +1,5 @@
 ﻿
 using System.Globalization;
-using AutoMapper;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
@@ -9,16 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
-	public class ConversionProjectRepository : GenericRepository<Project>, IConversionProjectRepository
+	public class ConversionProjectRepository(AcademisationContext context) : GenericRepository<Project>(context), IConversionProjectRepository
 	{
-		private readonly IMapper _mapper;
-		private readonly AcademisationContext _context;
-
-		public ConversionProjectRepository(AcademisationContext context, IMapper mapper) : base(context)
-		{
-			_context = context ?? throw new ArgumentNullException(nameof(context));
-			_mapper = mapper;
-		}
+		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
 		public IUnitOfWork UnitOfWork => _context;
 		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default)
@@ -339,6 +331,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await dbSet
 			.Where(p => projectIds.Contains(p.Id))
 			.ToListAsync(cancellationToken);
+		}
+		public async Task SetProjectReadOnly(int id, bool isReadOnly, CancellationToken cancellationToken)
+		{
+			var project = await dbSet.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+			if (project != null) {
+				project.SetIsReadOnly(isReadOnly);
+			}
 		}
 
 		public async Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)

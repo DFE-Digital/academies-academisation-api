@@ -50,6 +50,8 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public Guid? CompleteProjectId { get; private set; }
 
+	public bool IsReadOnly { get; set; } = false;
+
 	// Create from A2b 
 	public static CreateResult Create(IApplication application)
 	{
@@ -566,6 +568,10 @@ public class Project : Entity, IProject, IAggregateRoot
 	public void SetCompleteProjectId(Guid completeProjectId)
 	{
 		CompleteProjectId = completeProjectId;
+	}
+	public void SetIsReadOnly(bool isReadOnly)
+	{
+		IsReadOnly = isReadOnly;
 	}
 
 	public void SetProjectGroupId(int? projectGroupId)

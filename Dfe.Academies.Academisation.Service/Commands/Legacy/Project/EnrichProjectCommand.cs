@@ -14,51 +14,37 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 {
-	public class EnrichProjectCommand : IEnrichProjectCommand
+	public class EnrichProjectCommand(
+		ILogger<EnrichProjectCommand> logger,
+		IConversionProjectRepository conversionProjectRepository,
+		IAcademiesQueryService establishmentRepository,
+		IProjectUpdateDataCommand projectUpdateDataCommand) : IEnrichProjectCommand
 	{
-		private readonly ILogger<EnrichProjectCommand> _logger;
-		private readonly IConversionProjectRepository _conversionProjectRepository;
-		private readonly IAcademiesQueryService _establishmentRepository;
-		private readonly IProjectUpdateDataCommand _projectUpdateDataCommand;
-
-		public EnrichProjectCommand(
-			ILogger<EnrichProjectCommand> logger,
-			IConversionProjectRepository conversionProjectRepository,
-			IAcademiesQueryService establishmentRepository,
-			IProjectUpdateDataCommand projectUpdateDataCommand)
-		{
-			_logger = logger;
-			_conversionProjectRepository = conversionProjectRepository;
-			_establishmentRepository = establishmentRepository;
-			_projectUpdateDataCommand = projectUpdateDataCommand;
-			
-		}
-
 		public async Task Execute()
 		{
-			var incompleteProjects = await _conversionProjectRepository.GetIncompleteProjects();
+			var incompleteProjects = await conversionProjectRepository.GetIncompleteProjects();
 
 			if (incompleteProjects == null || !incompleteProjects.Any())
 			{
-				_logger.LogInformation("No projects requiring enrichment found.");
+				logger.LogInformation("No projects requiring enrichment found.");
 				return;
 			}
 			
 			foreach (var project in incompleteProjects)
 			{
-				EstablishmentDto? school = await _establishmentRepository.GetEstablishment(project.Details.Urn);
-				TrustDto trust = await _establishmentRepository.GetTrustByReferenceNumber(project.Details.TrustReferenceNumber);
+				EstablishmentDto? school = await establishmentRepository.GetEstablishment(project.Details.Urn);
+				TrustDto trust = await establishmentRepository.GetTrustByReferenceNumber(project.Details.TrustReferenceNumber);
 				
 				
 				if (school == null)
 				{
-					_logger.LogWarning("No schools found for project - {project}, urn - {urn}", project.Id, project.Details.Urn);
+					logger.LogWarning("No schools found for project - {project}, urn - {urn}", project.Id, project.Details.Urn);
 					continue;
 				}
 				
 				if (trust == null)
 				{
-					_logger.LogWarning("No trusts found for project - {project}, urn - {urn}", project.Id, project.Details.Urn);
+					logger.LogWarning("No trusts found for project - {project}, urn - {urn}", project.Id, project.Details.Urn);
 					continue;
 				}
 
@@ -74,9 +60,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 
 				project.Update(LegacyProjectDetailsMapper.MapNonEmptyFields(projectChanges, project));
 
-				await _projectUpdateDataCommand.Execute(project);
+				await projectUpdateDataCommand.Execute(project);
 
-				_logger.LogInformation("Project {project} updated", project.Id);
+				logger.LogInformation("Project {project} updated", project.Id);
 			}
 		}
 	}

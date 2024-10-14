@@ -14,6 +14,7 @@ public interface IProject
 	public int? FormAMatProjectId { get; }
 	public int? ProjectGroupId { get; } 
 	public Guid? CompleteProjectId { get; }
+	public bool IsReadOnly { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
 

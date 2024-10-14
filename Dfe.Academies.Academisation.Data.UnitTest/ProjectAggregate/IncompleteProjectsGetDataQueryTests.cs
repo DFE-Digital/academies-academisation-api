@@ -17,13 +17,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		private readonly Fixture _fixture = new();
 
 		private readonly ConversionProjectRepository _subject;
-		private readonly AcademisationContext _context;
-		private Mock<IMapper> _mockMapper = new Mock<IMapper>();
+		private readonly AcademisationContext _context; 
 		private readonly IMediator _mediator;
 		public IncompleteProjectsGetDataQueryTests()
 		{
 			_context = new TestProjectContext(_mediator).CreateContext();
-			_subject = new ConversionProjectRepository(_context, _mockMapper.Object);
+			_subject = new ConversionProjectRepository(_context);
 		}
 
 		[Fact]

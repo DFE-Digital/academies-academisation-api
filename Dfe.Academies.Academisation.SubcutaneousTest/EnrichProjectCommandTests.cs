@@ -54,7 +54,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			// create command
 			_subject = new EnrichProjectCommand(
 				Mock.Of<ILogger<EnrichProjectCommand>>(),
-				new ConversionProjectRepository(_context, Mock.Of<IMapper>()),
+				new ConversionProjectRepository(_context),
 				new AcademiesQueryService(Mock.Of<ILogger<AcademiesQueryService>>(), _academiesApiClientFactory.Object, correlationContext),
 				new ProjectUpdateDataCommand(_context));
 		}

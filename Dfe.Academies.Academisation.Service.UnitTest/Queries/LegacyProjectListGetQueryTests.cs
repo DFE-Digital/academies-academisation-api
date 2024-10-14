@@ -3,6 +3,7 @@ using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -19,11 +20,12 @@ public class LegacyProjectListGetQueryTests
 	private readonly Mock<IConversionProjectRepository> _query = new();
 	private readonly Mock<IFormAMatProjectRepository> _formAMatQuery = new();
 	private readonly Fixture _fixture = new();
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository = new();
 
 	public LegacyProjectListGetQueryTests()
 	{
 		_fixture.Customize(new AutoMoqCustomization());
-		_subject = new(_query.Object, _formAMatQuery.Object);
+		_subject = new(_query.Object, _formAMatQuery.Object, _mockAdvisoryBoardDecisionRepository.Object);
 	}
 
 	[Fact]

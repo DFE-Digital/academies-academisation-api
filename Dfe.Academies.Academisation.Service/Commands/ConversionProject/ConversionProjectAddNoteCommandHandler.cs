@@ -5,19 +5,11 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 {
-	public class ConversionProjectAddNoteCommandHandler : IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>
+	public class ConversionProjectAddNoteCommandHandler(IConversionProjectRepository conversionProjectRepository) : IRequestHandler<ConversionProjectAddNoteCommand, CommandResult>
 	{
-		private readonly IConversionProjectRepository _conversionProjectRepository;
-
-
-		public ConversionProjectAddNoteCommandHandler(IConversionProjectRepository conversionProjectRepository)
-		{
-			_conversionProjectRepository = conversionProjectRepository;
-		}
-
 		public async Task<CommandResult> Handle(ConversionProjectAddNoteCommand model, CancellationToken cancellationToken)
 		{
-			IProject? project = await _conversionProjectRepository.GetConversionProject(model.ProjectId, cancellationToken);
+			IProject? project = await conversionProjectRepository.GetConversionProject(model.ProjectId, cancellationToken);
 
 			if (project is null)
 			{
@@ -29,7 +21,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 					model.Author,
 					model.Date);
 
-			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+			await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			return new CommandSuccessResult();
 
