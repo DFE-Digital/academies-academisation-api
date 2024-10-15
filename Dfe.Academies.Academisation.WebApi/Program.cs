@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
@@ -114,6 +115,7 @@ builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectReposi
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 builder.Services.AddScoped<IOpeningDateHistoryRepository, OpeningDateHistoryRepository>();
+builder.Services.AddScoped<ICompleteTransmissionLogRepository, CompleteTransmissionLogRepository>();
 
 // Queries and services
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();

@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
@@ -25,6 +26,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
 		private readonly IProjectGroupRepository _projectGroupRepository;
+		private readonly ICompleteTransmissionLogRepository _completeTransmissionLogRepository;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly ICompleteApiClientFactory _completeApiClientFactory;
 		private readonly ILogger<CreateCompleteProjectsCommandHandler> _logger;
@@ -34,6 +36,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			IConversionProjectRepository conversionProjectRepository,
 			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 			IProjectGroupRepository projectGroupRepository,
+			ICompleteTransmissionLogRepository completeTransmissionLogRepository,
 			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
 			ICorrelationContext correlationContext,
@@ -42,6 +45,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_conversionProjectRepository = conversionProjectRepository;
 			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
 			_projectGroupRepository = projectGroupRepository;
+			_completeTransmissionLogRepository = completeTransmissionLogRepository;
 			_completeApiClientFactory = completeApiClientFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_correlationContext = correlationContext;
@@ -95,6 +99,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 					
 					_logger.LogInformation("Success completing conversion project with project urn: {project} with Status code 201 ",completeObject.urn);
+
+					_completeTransmissionLogRepository.Insert(CompleteTransmissionLog.CreateConversionProjectLog(conversionProject.Id, true, successResponse.conversion_project_id.ToString(), _dateTimeProvider.Now));
+					await _completeTransmissionLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 				}
 
 				else
@@ -102,6 +109,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					var errorResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
 					var errorResponseMessage = errorResponse.GetAllErrors();
 					_logger.LogInformation("Error In completing conversion project with project urn: {project} due to Status code {code} and Complete Validation Errors:" + errorResponseMessage,completeObject.urn, response.StatusCode);
+					
+					_completeTransmissionLogRepository.Insert(CompleteTransmissionLog.CreateConversionProjectLog(conversionProject.Id, false, errorResponseMessage, _dateTimeProvider.Now));
+					await _completeTransmissionLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 				}
 			}
 			

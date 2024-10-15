@@ -3,6 +3,7 @@ using System.Text.Json;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
+using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
@@ -12,7 +13,7 @@ using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate; 
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -51,6 +52,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 	public DbSet<Project> Projects { get; set; } = null!;
 	public DbSet<ProjectNote> ProjectNotes { get; set; } = null!;
 	public DbSet<ConversionAdvisoryBoardDecision> ConversionAdvisoryBoardDecisions { get; set; } = null!;
+	public DbSet<CompleteTransmissionLog> CompleteTransmissionLogs { get; set; } = null!;
 
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
@@ -244,7 +246,15 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		modelBuilder.Entity<IntendedTransferBenefit>(ConfigureTransferProjectIntendedTransferBenefit);
 		modelBuilder.Entity<TransferringAcademy>(ConfigureTransferringAcademy);
 
+		modelBuilder.Entity<CompleteTransmissionLog>(ConfigureCompleteTransmissionLog);
+
 		base.OnModelCreating(modelBuilder);
+	}
+
+	private static void ConfigureCompleteTransmissionLog(EntityTypeBuilder<CompleteTransmissionLog> completeTransmissionLogConfiguration)
+	{
+		completeTransmissionLogConfiguration.ToTable("CompleteTransmissionLog", DEFAULT_SCHEMA);
+		completeTransmissionLogConfiguration.HasKey(x => x.Id);
 	}
 
 	private void ConfigureProjectGroup(EntityTypeBuilder<ProjectGroup> builder)

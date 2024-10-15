@@ -1,10 +1,12 @@
 ﻿
 using System.Globalization;
+using System.Net.Http.Headers;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
@@ -91,7 +93,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<IEnumerable<IProject>?> GetIncompleteProjects()
 		{
 			var createdProjectState = await _context.Projects
-				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType)|| (p.Details.TrustUkprn == null && p.Details.IsFormAMat == false))
+				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType) || (p.Details.TrustUkprn == null && p.Details.IsFormAMat == false))
 				.ToListAsync();
 
 			return createdProjectState;
@@ -303,7 +305,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<IProject>> GetConversionProjectsForNewGroup(string trustReferenceNumber, CancellationToken cancellationToken)
 		{
-			var projects = await dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber && 
+			var projects = await dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber &&
 			x.Details.ProjectStatus == "Converter Pre-AO (C)" && x.ProjectGroupId == null).ToListAsync(cancellationToken);
 
 			return projects;
@@ -335,7 +337,8 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task SetProjectReadOnly(int id, bool isReadOnly, CancellationToken cancellationToken)
 		{
 			var project = await dbSet.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-			if (project != null) {
+			if (project != null)
+			{
 				project.SetIsReadOnly(isReadOnly);
 			}
 		}
@@ -348,9 +351,25 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				this.dbSet.Where(proj => proj.CompleteProjectId == null),
 				decision => decision.AdvisoryBoardDecisionDetails.ConversionProjectId,
 				project => project.Id,
-				(decision, project) => new { project });
+				(decision, project) => project);
 
-			return await projects.Select(x => x.project).ToListAsync(cancellationToken);
+			var filteredProjects =
+
+			projects
+			.GroupJoin(context.CompleteTransmissionLogs,
+			 project => project.Id,
+			 log => log.ConversionProjectId,
+			 (project, log) => new { project, log })
+			.SelectMany(
+				x => x.log.DefaultIfEmpty(),
+				(x, log) => new
+				{
+					x.project,
+					log
+				}
+				);
+
+			return await filteredProjects.Where(x => x.log == null).Select(x => x.project).ToListAsync(cancellationToken);
 		}
 	}
 }
