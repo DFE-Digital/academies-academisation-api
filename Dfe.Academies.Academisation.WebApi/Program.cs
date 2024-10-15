@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Configuration;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
@@ -205,7 +206,11 @@ builder.Services.AddScoped(typeof(IValidator<SetProjectGroupAssignUserCommand>),
 builder.Services.AddHostedService<EnrichProjectService>();
 builder.Services.AddHostedService<CreateFormAMatProjectsService>();
 builder.Services.AddHostedService<SetFormAMatProjectReferenceNumbersService>();
-builder.Services.AddHostedService<CreateCompleteProjectsService>();
+
+if (builder.Configuration.GetValue<bool>("SendProjectsToComplete"))
+{
+	builder.Services.AddHostedService<CreateCompleteProjectsService>();
+}
 
 builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 {
