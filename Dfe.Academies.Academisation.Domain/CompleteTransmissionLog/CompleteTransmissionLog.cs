@@ -15,18 +15,20 @@ namespace Dfe.Academies.Academisation.Domain.CompleteTransmissionLog
 		}
 
 		public int? TransferProjectId { get; private set;  }
+		public int? TransferringAcademyId { get; private set; }
 		public int? ConversionProjectId { get; private set;  }
+		public Guid? CompleteProjectId { get; private set; }
 
 		public bool IsSuccess { get; private set; }
 		public string Response { get; private set; }
 
-		public static CompleteTransmissionLog CreateConversionProjectLog(int projectId, bool isSuccess, string response, DateTime createdOn)
+		public static CompleteTransmissionLog CreateConversionProjectLog(int projectId, Guid? completeProjectId, bool isSuccess, string response, DateTime createdOn)
 		{
-			return new CompleteTransmissionLog(isSuccess, response, createdOn) { ConversionProjectId = projectId };
+			return new CompleteTransmissionLog(isSuccess, response, createdOn) { ConversionProjectId = projectId, CompleteProjectId = completeProjectId };
 		}
-		public static CompleteTransmissionLog CreateTransferProjectLog(int projectId, bool isSuccess, string response, DateTime createdOn)
+		public static CompleteTransmissionLog CreateTransferProjectLog(int projectId, int transferringAcdemyId, Guid? completeProjectId, bool isSuccess, string response, DateTime createdOn)
 		{
-			return new CompleteTransmissionLog(isSuccess, response, createdOn) { TransferProjectId = projectId };
+			return new CompleteTransmissionLog(isSuccess, response, createdOn) { TransferProjectId = projectId, TransferringAcademyId = transferringAcdemyId, CompleteProjectId = completeProjectId };
 		}
 	}
 }

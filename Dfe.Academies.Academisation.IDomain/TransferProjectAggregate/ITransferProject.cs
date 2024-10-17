@@ -73,6 +73,6 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetProjectGroupId(int? projectGroupId);
 		void SetId(int id);
 		
-		void SetCompleteProjectId(Guid completeProjectId);
+		void SetProjectSentToComplete(string transferingAcademyUkprn);
 	}
 }

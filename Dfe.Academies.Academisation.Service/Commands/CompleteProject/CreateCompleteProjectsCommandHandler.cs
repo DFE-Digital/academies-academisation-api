@@ -59,7 +59,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			var retryPolicy = Policy.Handle<HttpRequestException>() // Handle HttpRequestException
 									.OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode && r.StatusCode != HttpStatusCode.BadRequest) // Retry if response is not successful
 									.WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-			(exception, timeSpan, retryCount, context) => { 
+			(exception, timeSpan, retryCount, context) =>
+			{
 				_logger.LogInformation($"Retry {retryCount} after {timeSpan.Seconds} seconds due to: {exception?.Exception?.Message}");
 			});
 
@@ -73,48 +74,46 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 			foreach (var conversionProject in conversionProjects)
 			{
-				
+
 				var decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
 
 				string? groupReferenceNumber = null;
-				
+
 				if (conversionProject.ProjectGroupId != null)
 				{
 					var group = await _projectGroupRepository.GetById((int)conversionProject.ProjectGroupId);
 					groupReferenceNumber = group.ReferenceNumber;
 				}
-				
-				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,groupReferenceNumber);
-				
+
+				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails, groupReferenceNumber);
+
 				var response = await retryPolicy.ExecuteAsync(() => client.PostAsJsonAsync($"projects/conversions", completeObject, cancellationToken));
-				
-				if (response.IsSuccessStatusCode){
-					
-					var successResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectSuccessResponse>(); ;
+				Guid? completeProjectId = null;
+				var responseMessage = string.Empty;
 
-					conversionProject.SetCompleteProjectId(successResponse.conversion_project_id);
+				if (response.IsSuccessStatusCode)
+				{
+					var successResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectSuccessResponse>();
+					completeProjectId = successResponse.conversion_project_id;
 
-					_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
-					
-					await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-					
-					_logger.LogInformation("Success completing conversion project with project urn: {project} with Status code 201 ",completeObject.urn);
-
-					_completeTransmissionLogRepository.Insert(CompleteTransmissionLog.CreateConversionProjectLog(conversionProject.Id, true, successResponse.conversion_project_id.ToString(), _dateTimeProvider.Now));
-					await _completeTransmissionLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+					_logger.LogInformation("Success completing conversion project with project urn: {project} with Status code 201 ", completeObject.urn);
 				}
-
 				else
 				{
 					var errorResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
-					var errorResponseMessage = errorResponse.GetAllErrors();
-					_logger.LogInformation("Error In completing conversion project with project urn: {project} due to Status code {code} and Complete Validation Errors:" + errorResponseMessage,completeObject.urn, response.StatusCode);
-					
-					_completeTransmissionLogRepository.Insert(CompleteTransmissionLog.CreateConversionProjectLog(conversionProject.Id, false, errorResponseMessage, _dateTimeProvider.Now));
-					await _completeTransmissionLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+					responseMessage = errorResponse.GetAllErrors();
+					_logger.LogInformation("Error In completing conversion project with project urn: {project} due to Status code {code} and Complete Validation Errors:" + responseMessage, completeObject.urn, response.StatusCode);
 				}
+
+				conversionProject.SetProjectSentToComplete();
+				_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
+				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+				_completeTransmissionLogRepository.Insert(CompleteTransmissionLog.CreateConversionProjectLog(conversionProject.Id, completeProjectId, response.IsSuccessStatusCode, responseMessage, _dateTimeProvider.Now));
+				await _completeTransmissionLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
 			}
-			
+
 			return new CommandSuccessResult();
 		}
 	}

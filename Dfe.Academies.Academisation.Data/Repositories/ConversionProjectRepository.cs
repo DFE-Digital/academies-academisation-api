@@ -345,31 +345,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			var decisions = context.ConversionAdvisoryBoardDecisions.Where(x => x.AdvisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
-
-			var projects = decisions.Join(
-				this.dbSet.Where(proj => proj.CompleteProjectId == null),
-				decision => decision.AdvisoryBoardDecisionDetails.ConversionProjectId,
-				project => project.Id,
-				(decision, project) => project);
-
-			var filteredProjects =
-
-			projects
-			.GroupJoin(context.CompleteTransmissionLogs,
-			 project => project.Id,
-			 log => log.ConversionProjectId,
-			 (project, log) => new { project, log })
-			.SelectMany(
-				x => x.log.DefaultIfEmpty(),
-				(x, log) => new
-				{
-					x.project,
-					log
-				}
-				);
-
-			return await filteredProjects.Where(x => x.log == null).Select(x => x.project).ToListAsync(cancellationToken);
+			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
+			!proj.FormAMatProjectId.HasValue &&
+			proj.IsReadOnly).ToListAsync(cancellationToken);
 		}
 	}
 }

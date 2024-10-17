@@ -48,7 +48,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public ProjectDetails Details { get; private set; }
 
-	public Guid? CompleteProjectId { get; private set; }
+	public bool ProjectSentToComplete { get; private set; } = false;
 
 	public bool IsReadOnly { get; set; } = false;
 
@@ -565,9 +565,9 @@ public class Project : Entity, IProject, IAggregateRoot
 		DeletedAt = DateTime.UtcNow;
 	}
 	
-	public void SetCompleteProjectId(Guid completeProjectId)
+	public void SetProjectSentToComplete()
 	{
-		CompleteProjectId = completeProjectId;
+		ProjectSentToComplete = true;
 	}
 	public void SetIsReadOnly(bool isReadOnly)
 	{
