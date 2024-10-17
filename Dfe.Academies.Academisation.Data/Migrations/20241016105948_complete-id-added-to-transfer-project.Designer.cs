@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20241016105948_complete-id-added-to-transfer-project")]
+    partial class completeidaddedtotransferproject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -415,38 +418,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ApplicationFormTrustKeyPersonRole", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.CompleteTransmissionLog.CompleteTransmissionLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ConversionProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsSuccess")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Response")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TransferProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CompleteTransmissionLog", "academisation");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", b =>
                 {
                     b.Property<int>("Id")
@@ -719,9 +690,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<int?>("FormAMatProjectId")
                         .HasColumnType("int")
                         .HasColumnName("FormAMatProjectId");
-
-                    b.Property<bool>("IsReadOnly")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");

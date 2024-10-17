@@ -42,7 +42,18 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 						}
 						catch (Exception ex)
 						{
-							_logger.LogError("Error enriching project", ex);
+							_logger.LogError("Error enriching conversions complete project", ex);
+						}
+
+						await Task.Delay(_delayInMilliseconds, stoppingToken);
+						
+						try
+						{ 
+							await mediator.Send(new CreateTransfersCompleteProjectsCommand(), stoppingToken);
+						}
+						catch (Exception ex)
+						{
+							_logger.LogError("Error enriching transfers complete project", ex);
 						}
 
 						await Task.Delay(_delayInMilliseconds, stoppingToken);

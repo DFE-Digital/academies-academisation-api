@@ -32,6 +32,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Complete
 					ValidationErrors.PrepareId?.Select(e => $"prepare_id: {e.Error}"),
 					ValidationErrors.GroupId?.Select(e => $"group_id: {e.Error}"),
 					ValidationErrors.IncomingTrustUkprn?.Select(e => $"incoming_trust_ukprn: {e.Error}"),
+					ValidationErrors.InadequateOfsted?.Select(e => $"inadequate_ofsted: {e.Error}"),
+					ValidationErrors.FinancialSafeguardingGovernanceIssues?.Select(e => $"financial_safeguarding_governance_issues: {e.Error}"),
+					ValidationErrors.OutgoingTrustToClose?.Select(e => $"outgoing_trust_to_close: {e.Error}"),
+					ValidationErrors.OutgoingTrustUkprn?.Select(e => $"outgoing_trust_to_close: {e.Error}"),
 					
 				};
 
@@ -90,6 +94,22 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Complete
         [JsonPropertyName("incoming_trust_ukprn")]
 		
         public List<ErrorDetail> IncomingTrustUkprn { get; set; }
+        
+        [JsonPropertyName("inadequate_ofsted")]
+		
+        public List<ErrorDetail> InadequateOfsted { get; set; }
+		
+        [JsonPropertyName("financial_safeguarding_governance_issues")]
+		
+        public List<ErrorDetail> FinancialSafeguardingGovernanceIssues{ get; set; }
+		
+        [JsonPropertyName("outgoing_trust_to_close")]
+        
+        public List<ErrorDetail> OutgoingTrustToClose { get; set; }
+        
+        [JsonPropertyName("outgoing_trust_ukprn")]
+		
+        public List<ErrorDetail> OutgoingTrustUkprn { get; set; }
 	}
 
 	public class ErrorDetail

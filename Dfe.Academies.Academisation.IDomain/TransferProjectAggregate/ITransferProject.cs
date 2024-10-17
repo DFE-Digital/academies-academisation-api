@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
+﻿using System.Collections;
+
+namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 {
 	public interface ITransferProject
 	{
@@ -70,5 +72,7 @@
 		void SetDeletedAt();
 		void SetProjectGroupId(int? projectGroupId);
 		void SetId(int id);
+		
+		void SetCompleteProjectId(Guid completeProjectId);
 	}
 }
