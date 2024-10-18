@@ -28,6 +28,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public int Id { get; private set; }
 		public int Urn { get; private set; }
+	
 		public string? ProjectReference { get; private set; }
 		public string OutgoingTrustUkprn { get; private set; }
 		public string? OutgoingTrustName { get; private set; }
@@ -270,5 +271,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			DeletedAt = DateTime.UtcNow;
 		}
 
+		public void SetProjectSentToComplete(string transferingAcademyUkprn)
+		{
+			var transferingAcademy = _transferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferingAcademyUkprn);
+
+			transferingAcademy.SetProjectSentToComplete();
+		}
+
+		
 	}
 }

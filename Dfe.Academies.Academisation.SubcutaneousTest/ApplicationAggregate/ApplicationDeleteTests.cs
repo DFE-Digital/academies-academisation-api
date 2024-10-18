@@ -52,7 +52,7 @@ public class ApplicationDeleteTests
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationRepo = new ApplicationRepository(_context, _mapper.Object);
-		_conversionRepo = new ConversionProjectRepository(_context, _mapper.Object);
+		_conversionRepo = new ConversionProjectRepository(_context);
 		_applicationQueryService = new ApplicationQueryService(_applicationRepo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;

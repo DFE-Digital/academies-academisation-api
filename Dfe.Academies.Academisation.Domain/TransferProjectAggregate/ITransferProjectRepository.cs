@@ -12,5 +12,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		Task<IEnumerable<ITransferProject>> GetTransferProjectsByIdsAsync(List<int> ids, CancellationToken cancellationToken);
 		Task<(IEnumerable<ITransferProject>, int totalcount)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count);
 		Task<IEnumerable<ITransferProject>> GetProjectsByProjectGroupIdAsync(int? projectGroupId, CancellationToken cancellationToken);
+		
+		Task<IEnumerable<ITransferProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken);
 	}
 }

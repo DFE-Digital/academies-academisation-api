@@ -130,5 +130,18 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return results;
 		}
+		
+		public async Task<IEnumerable<ITransferProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
+		{
+			var decisions = context.ConversionAdvisoryBoardDecisions.Where(x => x.AdvisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
+
+			var projects = decisions.Join(
+				this.dbSet.Include(y => y.TransferringAcademies).Where(proj => proj.TransferringAcademies.Any(x => !x.ProjectSentToComplete)),
+				decision => decision.AdvisoryBoardDecisionDetails.TransferProjectId,
+				project => project.Id,
+				(decision, project) => new { project });
+
+			return await projects.Where(y => y.project.IsFormAMat != true).Select(x => x.project).ToListAsync(cancellationToken);
+		}
 	}
 }

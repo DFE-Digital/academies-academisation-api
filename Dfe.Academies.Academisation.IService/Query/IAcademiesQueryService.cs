@@ -9,6 +9,7 @@ namespace Dfe.Academies.Academisation.IService.Query
         Task<EstablishmentDto?> GetEstablishmentByUkprn(string ukprn);
         Task<EstablishmentDto?> GetEstablishment(int urn);
 		Task<TrustDto?> GetTrust(string ukprn);
+		Task<TrustDto?> GetTrustByReferenceNumber(string trustReferenceNumber);
 		Task<IEnumerable<EstablishmentDto>> GetBulkEstablishmentsByUkprn(IEnumerable<string> ukprns);
 	}
 }

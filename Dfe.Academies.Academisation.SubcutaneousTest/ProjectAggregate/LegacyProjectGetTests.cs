@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
@@ -18,11 +19,12 @@ public class ProjectGetTests
 	private readonly ProjectController _projectController;
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new();
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository;
 	public ProjectGetTests()
 	{ 
 		_context = new TestProjectContext(new Mock<IMediator>().Object).CreateContext();
-
-		_projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null!), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		_mockAdvisoryBoardDecisionRepository = new();
+		_projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context), new FormAMatProjectRepository(_context), _mockAdvisoryBoardDecisionRepository.Object), Mock.Of<IMediator>());
 	}
 
 	[Fact]
@@ -48,6 +50,7 @@ public class ProjectGetTests
 		.Excluding(x => x.IsFormAMat)
 		.Excluding(x => x.ApplicationSharePointId)
 		.Excluding(x => x.SchoolSharePointId)
+		.Excluding(x => x.IsReadOnly)
 		);
 
 		existingProject.Id.Should().Be(serviceModel.Id);

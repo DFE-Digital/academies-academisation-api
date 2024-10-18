@@ -22,7 +22,7 @@ public class ProjectsListGetDataQueryTests
 	public ProjectsListGetDataQueryTests()
 	{
 		_context = new TestProjectContext(_mediator).CreateContext();
-		_subject = new ConversionProjectRepository(_context, null);
+		_subject = new ConversionProjectRepository(_context);
 	}
 
 	[Fact]

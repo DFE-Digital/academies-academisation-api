@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using MediatR;
@@ -17,10 +18,12 @@ public class LegacyProjectGetStatusesTests
 	private readonly ProjectController _projectController;
 	private readonly AcademisationContext _context;
 	private readonly Fixture _fixture = new(); 
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository;
 	public LegacyProjectGetStatusesTests()
 	{
+		_mockAdvisoryBoardDecisionRepository = new();
 		_context = new TestProjectContext(new Mock<IMediator>().Object).CreateContext();
-		_projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null!), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		_projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context), new FormAMatProjectRepository(_context), _mockAdvisoryBoardDecisionRepository.Object), Mock.Of<IMediator>());
 	}
 
 	[Fact]

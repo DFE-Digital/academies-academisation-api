@@ -23,6 +23,8 @@
 		string? Region { get; }
 		string? LocalAuthority { get; }
 
+		bool ProjectSentToComplete { get;  }
+
 		void SetSchoolAdditionalData(string latestOfstedReportAdditionalInformation, string pupilNumbersAdditionalInformation, string keyStage2PerformanceAdditionalInformation, string keyStage4PerformanceAdditionalInformation, string keyStage5PerformanceAdditionalInformation);
 
 		void SetIncomingTrust(string incomingTrustName, string? incomingTrustUkprn);

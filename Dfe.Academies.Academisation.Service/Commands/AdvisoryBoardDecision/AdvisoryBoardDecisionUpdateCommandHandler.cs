@@ -1,4 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Data.Repositories;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
@@ -7,16 +9,8 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 
-public class AdvisoryBoardDecisionUpdateCommandHandler : IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>
+public class AdvisoryBoardDecisionUpdateCommandHandler(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>
 {
-	private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
-
-	public AdvisoryBoardDecisionUpdateCommandHandler(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
-	{
-		_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
-	}
-
-
 	public async Task<CommandResult> Handle(AdvisoryBoardDecisionUpdateCommand command, CancellationToken cancellationToken)
 	{
 		if (command.AdvisoryBoardDecisionId == default)
@@ -24,7 +18,7 @@ public class AdvisoryBoardDecisionUpdateCommandHandler : IRequestHandler<Advisor
 			return new BadRequestCommandResult();
 		}
 
-		var existingDecision = await _advisoryBoardDecisionRepository.GetAdvisoryBoardDecisionById(command.AdvisoryBoardDecisionId);
+		var existingDecision = await advisoryBoardDecisionRepository.GetAdvisoryBoardDecisionById(command.AdvisoryBoardDecisionId);
 
 		if (existingDecision is null)
 		{
@@ -43,7 +37,7 @@ public class AdvisoryBoardDecisionUpdateCommandHandler : IRequestHandler<Advisor
 			command.DecisionMakerName
 		);
 
-		var result = existingDecision.Update(details, command.DeferredReasons, command.DeclinedReasons, command.WithdrawnReasons, command.DAORevokedReasons);
+		var result = existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, command.DAORevokedReasons!);
 
 		return result switch
 		{
@@ -55,11 +49,25 @@ public class AdvisoryBoardDecisionUpdateCommandHandler : IRequestHandler<Advisor
 
 	private async Task<CommandResult> ExecuteDataCommand(IConversionAdvisoryBoardDecision decision, CancellationToken cancellationToken)
 	{
-		_advisoryBoardDecisionRepository.Update(decision as ConversionAdvisoryBoardDecision);
+		advisoryBoardDecisionRepository.Update(decision as ConversionAdvisoryBoardDecision);
 
+		await advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-		await _advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+		await SetProjectReadOnlyAsync(decision.AdvisoryBoardDecisionDetails);
 
 		return new CommandSuccessResult();
+	}
+	private async Task SetProjectReadOnlyAsync(AdvisoryBoardDecisionDetails advisoryBoardDecisionDetails)
+	{
+		if (advisoryBoardDecisionDetails != null)
+		{
+			var project = await conversionProjectRepository.GetById(advisoryBoardDecisionDetails.ConversionProjectId.GetValueOrDefault());
+			if (project != null)
+			{
+				project.SetIsReadOnly(advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
+				conversionProjectRepository.Update(project);
+				await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
+			}
+		}
 	}
 }

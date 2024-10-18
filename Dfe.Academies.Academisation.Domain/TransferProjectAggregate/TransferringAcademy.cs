@@ -19,6 +19,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public int Id { get; private set; }
 		public int TransferProjectId { get; private set; }
+		public bool ProjectSentToComplete { get; private set; } = false;
 		public string OutgoingAcademyUkprn { get; private set; }
 		public string? IncomingTrustUkprn { get; private set; }
 		public string? IncomingTrustName { get; private set; }
@@ -75,6 +76,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			FinancialDeficit = financialDeficit;
 			MPNameAndParty = mpNameAndParty;
 			PublishedAdmissionNumber = publishedAdmissionNumber;
+		}
+
+		public void SetProjectSentToComplete()
+		{
+			ProjectSentToComplete = true;
 		}
 	}
 }

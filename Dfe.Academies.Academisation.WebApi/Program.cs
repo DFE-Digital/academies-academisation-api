@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Configuration;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
@@ -8,6 +9,7 @@ using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate;
 using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
@@ -113,6 +115,7 @@ builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectReposi
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
 builder.Services.AddScoped<IAdvisoryBoardDecisionRepository, AdvisoryBoardDecisionRepository>();
 builder.Services.AddScoped<IOpeningDateHistoryRepository, OpeningDateHistoryRepository>();
+builder.Services.AddScoped<ICompleteTransmissionLogRepository, CompleteTransmissionLogRepository>();
 
 // Queries and services
 builder.Services.AddScoped<IApplicationSubmissionService, ApplicationSubmissionService>();
@@ -136,6 +139,7 @@ builder.Services.AddAutoMapper(typeof(OpeningDateHistoryMappingProfile).Assembly
 builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAdvisoryBoardDecisionFactory>();
 builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
+builder.Services.AddScoped<ICompleteApiClientFactory, CompleteApiClientFactory>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 
 //Validators
@@ -205,6 +209,11 @@ builder.Services.AddHostedService<EnrichProjectService>();
 builder.Services.AddHostedService<CreateFormAMatProjectsService>();
 builder.Services.AddHostedService<SetFormAMatProjectReferenceNumbersService>();
 
+if (builder.Configuration.GetValue<bool>("SendProjectsToComplete"))
+{
+	builder.Services.AddHostedService<CreateCompleteProjectsService>();
+}
+
 builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 {
 	var configuration = sp.GetRequiredService<IConfiguration>();
@@ -218,6 +227,22 @@ builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 	else
 	{
 		sp.GetRequiredService<ILogger<Program>>().LogError("Academies API http client not configured.");
+	}
+});
+
+builder.Services.AddHttpClient("CompleteApi", (sp, client) =>
+{
+	var configuration = sp.GetRequiredService<IConfiguration>();
+	var url = configuration.GetValue<string?>("CompleteUrl");
+	if (!string.IsNullOrEmpty(url))
+	{
+		client.BaseAddress = new Uri(url);
+		client.DefaultRequestHeaders.Add("ApiKey", configuration.GetValue<string>("CompleteApiKey"));
+		client.DefaultRequestHeaders.Add("User-Agent", "AcademisationApi/1.0");
+	}
+	else
+	{
+		sp.GetRequiredService<ILogger<Program>>().LogError("Complete API http client not configured.");
 	}
 });
 

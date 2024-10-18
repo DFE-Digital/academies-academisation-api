@@ -6,13 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
-	public class AdvisoryBoardDecisionRepository : GenericRepository<ConversionAdvisoryBoardDecision>, IAdvisoryBoardDecisionRepository
+	public class AdvisoryBoardDecisionRepository(AcademisationContext context) : GenericRepository<ConversionAdvisoryBoardDecision>(context), IAdvisoryBoardDecisionRepository
 	{
-		private readonly AcademisationContext _context;
-		public AdvisoryBoardDecisionRepository(AcademisationContext context) : base(context)
-		{
-			_context = context ?? throw new ArgumentNullException(nameof(context));
-		}
+		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
 		public IUnitOfWork UnitOfWork => _context;
 

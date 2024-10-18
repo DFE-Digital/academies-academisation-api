@@ -20,7 +20,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		public ProjectStatusesDataQueryTests()
 		{
 			_context = new TestProjectContext(_mediator).CreateContext();
-			_subject = new ConversionProjectRepository(_context, null);
+			_subject = new ConversionProjectRepository(_context);
 		}
 
 		[Fact]

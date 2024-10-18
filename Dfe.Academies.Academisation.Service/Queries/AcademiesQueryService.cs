@@ -66,6 +66,21 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return trust;
 		}
 
+		public async Task<TrustDto?> GetTrustByReferenceNumber(string trustReferenceNumber)
+		{
+			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var response = await client.GetAsync($"/v4/trust/trustReferenceNumber/{trustReferenceNumber}");
+
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.LogError("Request for trust failed for trustReferenceNumber - {trustReferenceNumber}, statuscode - {statusCode}", trustReferenceNumber, response!.StatusCode);
+				return null;
+			}
+			var trust = await response.Content.ReadFromJsonAsync<TrustDto>();
+
+			return trust;
+		}
+
 		public async Task<IEnumerable<EstablishmentDto>> GetBulkEstablishmentsByUkprn(IEnumerable<string> ukprns)
 		{
 			var client = _academiesApiClientFactory.Create(_correlationContext);

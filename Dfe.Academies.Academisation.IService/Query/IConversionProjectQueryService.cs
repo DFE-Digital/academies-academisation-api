@@ -20,5 +20,7 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<IEnumerable<FormAMatProjectServiceModel>> SearchFormAMatProjectsByTermAsync(string searchTerm, CancellationToken cancellationToken);
 		Task<IEnumerable<SchoolImprovementPlanServiceModel>> GetSchoolImprovementPlansByConversionProjectId(int id, CancellationToken cancellationToken);
 		Task<List<ConversionProjectServiceModel>> GetProjectsForGroup(string trustReferenceNumber, CancellationToken cancellationToken);
+		Task<IEnumerable<int>> GetProjectIdsToSendToComplete(CancellationToken cancellationToken);
+
 	}
 }

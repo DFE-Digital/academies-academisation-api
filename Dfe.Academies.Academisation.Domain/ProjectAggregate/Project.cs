@@ -48,6 +48,10 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public ProjectDetails Details { get; private set; }
 
+	public bool ProjectSentToComplete { get; private set; } = false;
+
+	public bool IsReadOnly { get; set; } = false;
+
 	// Create from A2b 
 	public static CreateResult Create(IApplication application)
 	{
@@ -204,6 +208,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		Details = new ProjectDetails
 		{
 			Urn = detailsToUpdate.Urn,
+			TrustUkprn = detailsToUpdate.TrustUkprn,
 			IfdPipelineId = detailsToUpdate.IfdPipelineId,
 			SchoolName = detailsToUpdate.SchoolName,
 			LocalAuthority = detailsToUpdate.LocalAuthority,
@@ -326,7 +331,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
-
+        
 		Details.SetPerformanceData(detailsToUpdate.KeyStage2PerformanceAdditionalInformation, detailsToUpdate.KeyStage4PerformanceAdditionalInformation, detailsToUpdate.KeyStage5PerformanceAdditionalInformation, detailsToUpdate.EducationalAttendanceAdditionalInformation);
 		Details.SetIsFormAMat(detailsToUpdate.IsFormAMat);
 
@@ -559,6 +564,15 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		DeletedAt = DateTime.UtcNow;
 	}
+	
+	public void SetProjectSentToComplete()
+	{
+		ProjectSentToComplete = true;
+	}
+	public void SetIsReadOnly(bool isReadOnly)
+	{
+		IsReadOnly = isReadOnly;
+	}
 
 	public void SetProjectGroupId(int? projectGroupId)
 	{
@@ -623,4 +637,5 @@ public class Project : Entity, IProject, IAggregateRoot
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
+	
 }

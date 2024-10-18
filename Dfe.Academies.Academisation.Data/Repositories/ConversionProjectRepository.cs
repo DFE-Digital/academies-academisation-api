@@ -1,24 +1,18 @@
 ﻿
 using System.Globalization;
-using AutoMapper;
+using System.Net.Http.Headers;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
-	public class ConversionProjectRepository : GenericRepository<Project>, IConversionProjectRepository
+	public class ConversionProjectRepository(AcademisationContext context) : GenericRepository<Project>(context), IConversionProjectRepository
 	{
-		private readonly IMapper _mapper;
-		private readonly AcademisationContext _context;
-
-		public ConversionProjectRepository(AcademisationContext context, IMapper mapper) : base(context)
-		{
-			_context = context ?? throw new ArgumentNullException(nameof(context));
-			_mapper = mapper;
-		}
+		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
 		public IUnitOfWork UnitOfWork => _context;
 		public async Task<(IEnumerable<IProject>, int)> SearchProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count, int? urn, IEnumerable<string>? regions = default, IEnumerable<string>? applicationReferences = default)
@@ -99,7 +93,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<IEnumerable<IProject>?> GetIncompleteProjects()
 		{
 			var createdProjectState = await _context.Projects
-				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType))
+				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType) || (p.Details.TrustUkprn == null && p.Details.IsFormAMat == false))
 				.ToListAsync();
 
 			return createdProjectState;
@@ -311,7 +305,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<IProject>> GetConversionProjectsForNewGroup(string trustReferenceNumber, CancellationToken cancellationToken)
 		{
-			var projects = await dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber && 
+			var projects = await dbSet.Where(x => x.Details.TrustReferenceNumber == trustReferenceNumber &&
 			x.Details.ProjectStatus == "Converter Pre-AO (C)" && x.ProjectGroupId == null).ToListAsync(cancellationToken);
 
 			return projects;
@@ -339,6 +333,21 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await dbSet
 			.Where(p => projectIds.Contains(p.Id))
 			.ToListAsync(cancellationToken);
+		}
+		public async Task SetProjectReadOnly(int id, bool isReadOnly, CancellationToken cancellationToken)
+		{
+			var project = await dbSet.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+			if (project != null)
+			{
+				project.SetIsReadOnly(isReadOnly);
+			}
+		}
+
+		public async Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
+			!proj.FormAMatProjectId.HasValue &&
+			proj.IsReadOnly).ToListAsync(cancellationToken);
 		}
 	}
 }

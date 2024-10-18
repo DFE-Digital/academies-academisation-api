@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
@@ -8,24 +9,15 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 
-public class AdvisoryBoardDecisionCreateCommandHandler : IRequestHandler<AdvisoryBoardDecisionCreateCommand, CreateResult>
+public class AdvisoryBoardDecisionCreateCommandHandler(IConversionAdvisoryBoardDecisionFactory factory,
+	IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<AdvisoryBoardDecisionCreateCommand, CreateResult>
 {
-	private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
-	private readonly IConversionAdvisoryBoardDecisionFactory _factory;
-
-	public AdvisoryBoardDecisionCreateCommandHandler(IConversionAdvisoryBoardDecisionFactory factory,
-		IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
-	{
-		_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
-		_factory = factory;
-	}
-
 	public async Task<CreateResult> Handle(AdvisoryBoardDecisionCreateCommand request, CancellationToken cancellationToken)
 	{
-		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons = request.DeferredReasons ?? new List<AdvisoryBoardDeferredReasonDetails>();
-		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons = request.DeclinedReasons ?? new List<AdvisoryBoardDeclinedReasonDetails>();
-		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons = request.WithdrawnReasons ?? new List<AdvisoryBoardWithdrawnReasonDetails>();
-		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons = request.DAORevokedReasons ?? new List<AdvisoryBoardDAORevokedReasonDetails>();
+		var deferredReasons = request.DeferredReasons ?? [];
+		var declinedReasons = request.DeclinedReasons ?? [];
+		var withdrawnReasons = request.WithdrawnReasons ?? [];
+		var daoRevokedReasons = request.DAORevokedReasons ?? [];
 
 		var details = new AdvisoryBoardDecisionDetails(
 			request.ConversionProjectId,
@@ -39,7 +31,7 @@ public class AdvisoryBoardDecisionCreateCommandHandler : IRequestHandler<Advisor
 			request.DecisionMakerName
 		);
 
-		var result = _factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
+		var result = factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
 
 		return result switch
 		{
@@ -54,10 +46,24 @@ public class AdvisoryBoardDecisionCreateCommandHandler : IRequestHandler<Advisor
 	private async Task<CreateResult> ExecuteDataCommand(
 		CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult, CancellationToken cancellationToken)
 	{
-		_advisoryBoardDecisionRepository.Insert(successResult.Payload as ConversionAdvisoryBoardDecision);
+		advisoryBoardDecisionRepository.Insert(successResult.Payload as ConversionAdvisoryBoardDecision);
 
-		await _advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-
+		await advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+		await SetProjectReadOnlyAsync(successResult.Payload.AdvisoryBoardDecisionDetails);
 		return successResult.MapToPayloadType(ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain);
+	}
+
+	private async Task SetProjectReadOnlyAsync(AdvisoryBoardDecisionDetails advisoryBoardDecisionDetails)
+	{
+		if (advisoryBoardDecisionDetails != null)
+		{
+			var project = await conversionProjectRepository.GetById(advisoryBoardDecisionDetails.ConversionProjectId.GetValueOrDefault());
+			if (project != null)
+			{
+				project.SetIsReadOnly(advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
+				conversionProjectRepository.Update(project);
+				await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
+			}
+		}
 	}
 }

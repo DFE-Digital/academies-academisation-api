@@ -415,6 +415,44 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ApplicationFormTrustKeyPersonRole", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.CompleteTransmissionLog.CompleteTransmissionLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("CompleteProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ConversionProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Response")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TransferProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TransferringAcademyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompleteTransmissionLog", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", b =>
                 {
                     b.Property<int>("Id")
@@ -685,11 +723,17 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("FormAMatProjectId");
 
+                    b.Property<bool>("IsReadOnly")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ProjectGroupId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ProjectSentToComplete")
+                        .HasColumnType("bit");
 
                     b.Property<Guid?>("SchoolSharePointId")
                         .HasColumnType("uniqueidentifier");
@@ -1023,6 +1067,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("PFISchemeDetails")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ProjectSentToComplete")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PublishedAdmissionNumber")
                         .HasColumnType("nvarchar(max)");
@@ -2110,6 +2157,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("TrustReferenceNumber")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TrustReferenceNumber");
+
+                            b1.Property<int?>("TrustUkprn")
+                                .HasColumnType("int");
 
                             b1.Property<int>("Urn")
                                 .HasColumnType("int")

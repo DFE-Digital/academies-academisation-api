@@ -11,6 +11,7 @@ using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.Services;
@@ -49,13 +50,14 @@ public class ApplicationSubmitTests
 	private readonly Mock<IMapper> _mapper = new();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
 	private readonly Mock<IMediator> _mediator = new();
+	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository = new();
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext(_mediator.Object).CreateContext();
 
 		_applicationSubmissionService = new ApplicationSubmissionService(_projectFactory, _DateTimeProvider.Object);
 		_applicationRepo = new ApplicationRepository(_context, _mapper.Object);
-		_conversionRepo = new ConversionProjectRepository(_context, _mapper.Object);
+		_conversionRepo = new ConversionProjectRepository(_context);
 		_applicationQueryService = new ApplicationQueryService(_applicationRepo, _mapper.Object);
 		_trustQueryService = new TrustQueryService(_context, _mapper.Object);
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
@@ -143,7 +145,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		var projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context), new FormAMatProjectRepository(_context), _mockAdvisoryBoardDecisionRepository.Object), Mock.Of<IMediator>());
 		var projectResult = await projectController.Get(1, default);
 
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
@@ -194,7 +196,7 @@ public class ApplicationSubmitTests
 
 		Assert.Equal(ApplicationStatus.Submitted, getPayload.ApplicationStatus);
 
-		var projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context, null), new FormAMatProjectRepository(_context)), Mock.Of<IMediator>());
+		var projectController = new ProjectController(new ConversionProjectQueryService(new ConversionProjectRepository(_context), new FormAMatProjectRepository(_context), _mockAdvisoryBoardDecisionRepository.Object), Mock.Of<IMediator>());
 		var projectResults = await projectController.GetProjects(new GetProjectSearchModel(1, 3, null, null, null, null, new[] { $"A2B_{createdPayload.ApplicationReference!}" }));
 
 		(_, PagedDataResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
