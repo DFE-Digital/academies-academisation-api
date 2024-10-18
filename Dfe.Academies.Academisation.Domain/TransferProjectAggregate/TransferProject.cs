@@ -28,7 +28,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public int Id { get; private set; }
 		public int Urn { get; private set; }
-	
+		public bool IsReadOnly { get; private set; } = false;
+
 		public string? ProjectReference { get; private set; }
 		public string OutgoingTrustUkprn { get; private set; }
 		public string? OutgoingTrustName { get; private set; }
@@ -278,6 +279,9 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			transferingAcademy.SetProjectSentToComplete();
 		}
 
-		
+		public void SetIsReadOnly(bool isReadOnly)
+		{
+			IsReadOnly = isReadOnly;
+		}
 	}
 }
