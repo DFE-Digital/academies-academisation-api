@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
-	public class CreateTransfersCompleteProjectsCommand : IRequest<CommandResult>
+	public class CreateCompleteConversionProjectsCommand : IRequest<CommandResult>
 	{
 	}
 }

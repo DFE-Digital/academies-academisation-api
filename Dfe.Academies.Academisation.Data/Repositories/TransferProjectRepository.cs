@@ -137,5 +137,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return await projects.Where(y => y.IsFormAMat != true).ToListAsync(cancellationToken);
 		}
+
+		public async Task<IEnumerable<ITransferProject>> GetFormAMatProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
+		{
+			var projects = this.dbSet.Include(y => y.TransferringAcademies).Where(proj => proj.TransferringAcademies.Any(x => !x.ProjectSentToComplete) && proj.IsReadOnly);
+
+			return await projects.Where(y => y.IsFormAMat == true).ToListAsync(cancellationToken);
+		}
 	}
 }

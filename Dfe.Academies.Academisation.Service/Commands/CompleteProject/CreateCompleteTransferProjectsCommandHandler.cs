@@ -22,7 +22,7 @@ using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
-	public class CreateTransfersCompleteProjectsCommandHandler : IRequestHandler<CreateTransfersCompleteProjectsCommand, CommandResult>
+	public class CreateCompleteTransferProjectsCommandHandler : IRequestHandler<CreateCompleteTransferProjectsCommand, CommandResult>
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
@@ -31,10 +31,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		private readonly IAcademiesQueryService _academiesQueryService;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly ICompleteApiClientFactory _completeApiClientFactory;
-		private readonly ILogger<CreateTransfersCompleteProjectsCommandHandler> _logger;
+		private readonly ILogger<CreateCompleteTransferProjectsCommandHandler> _logger;
 		private ICorrelationContext _correlationContext;
 
-		public CreateTransfersCompleteProjectsCommandHandler(
+		public CreateCompleteTransferProjectsCommandHandler(
 			ITransferProjectRepository transferProjectRepository,
 			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 			IAcademiesQueryService academiesQueryService,
@@ -43,7 +43,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
 			ICorrelationContext correlationContext,
-			ILogger<CreateTransfersCompleteProjectsCommandHandler> logger)
+			ILogger<CreateCompleteTransferProjectsCommandHandler> logger)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
@@ -56,7 +56,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(CreateTransfersCompleteProjectsCommand request,
+		public async Task<CommandResult> Handle(CreateCompleteTransferProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
@@ -93,7 +93,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				var decision = await _advisoryBoardDecisionRepository.GetTransferProjectDecsion(transferringAcademy.TransferProjectId);
 				var establishment = establishments.Single(x => x.Ukprn == transferringAcademy.Ukprn);
 
-				var transferObject = CompleteProjectsServiceModelMapper.FromDomain(transferProject,
+				var transferObject = CompleteTransferProjectServiceModelMapper.FromDomain(transferProject,
 					decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails, establishment.Urn);
 
 				var response =

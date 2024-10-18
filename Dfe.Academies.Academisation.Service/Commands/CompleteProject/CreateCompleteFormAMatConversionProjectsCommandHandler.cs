@@ -1,27 +1,22 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
-using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
 using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
-	public class CreateConversionsCompleteProjectsCommandHandler : IRequestHandler<CreateConversionsCompleteProjectsCommand, CommandResult>
+	public class CreateCompleteFormAMatConversionProjectsCommandHandler : IRequestHandler<CreateCompleteConversionProjectsCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
@@ -29,10 +24,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		private readonly ICompleteTransmissionLogRepository _completeTransmissionLogRepository;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly ICompleteApiClientFactory _completeApiClientFactory;
-		private readonly ILogger<CreateConversionsCompleteProjectsCommandHandler> _logger;
+		private readonly ILogger<CreateCompleteConversionProjectsCommandHandler> _logger;
 		private ICorrelationContext _correlationContext;
 
-		public CreateConversionsCompleteProjectsCommandHandler(
+		public CreateCompleteFormAMatConversionProjectsCommandHandler(
 			IConversionProjectRepository conversionProjectRepository,
 			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 			IProjectGroupRepository projectGroupRepository,
@@ -40,7 +35,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
 			ICorrelationContext correlationContext,
-			ILogger<CreateConversionsCompleteProjectsCommandHandler> logger)
+			ILogger<CreateCompleteConversionProjectsCommandHandler> logger)
 		{
 			_conversionProjectRepository = conversionProjectRepository;
 			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
@@ -52,7 +47,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(CreateConversionsCompleteProjectsCommand request,
+		public async Task<CommandResult> Handle(CreateCompleteConversionProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
@@ -85,9 +80,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					groupReferenceNumber = group.ReferenceNumber;
 				}
 
-				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails, groupReferenceNumber);
+				var completeObject = CompleteConversionProjectServiceModelMapper.FormAMatFromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails, groupReferenceNumber);
 
-				var response = await retryPolicy.ExecuteAsync(() => client.PostAsJsonAsync($"projects/conversions", completeObject, cancellationToken));
+				var response = await retryPolicy.ExecuteAsync(() => client.PostAsJsonAsync($"projects/conversions/form-a-mat", completeObject, cancellationToken));
 				Guid? completeProjectId = null;
 				var responseMessage = string.Empty;
 

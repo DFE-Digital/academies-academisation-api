@@ -349,5 +349,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			!proj.FormAMatProjectId.HasValue &&
 			proj.IsReadOnly).ToListAsync(cancellationToken);
 		}
+
+		public async Task<IEnumerable<IProject>> GetFormAMatProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
+			proj.FormAMatProjectId.HasValue &&
+			proj.IsReadOnly).ToListAsync(cancellationToken);
+		}
 	}
 }
