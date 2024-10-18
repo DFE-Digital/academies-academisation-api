@@ -8,9 +8,11 @@ using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Contracts.V4.Establishments;
+using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +32,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		private readonly EnrichProjectCommand _subject;
 
 		private readonly EstablishmentDto _establishment;
+		private readonly TrustDto _trust;
 
 		private readonly Fixture _fixture = new();
 		public EnrichProjectCommandTests()
@@ -38,6 +41,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 
 			// mock establishment
 			_establishment = _fixture.Create<EstablishmentDto>();
+			_trust = _fixture.Build<TrustDto>().With(x => x.Ukprn, "101101").Create();
 			_httpClientFactory = new Mock<IHttpClientFactory>();
 
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
@@ -63,15 +67,23 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		public async Task SomeProjectsAreIncomplete__ForKnownEstablishment__EnrichIncompleteProjectsWithMissingData()
 		{
 			// Arrange
-			var (project1, project2, project3) = (CreateProject(), CreateProject(), CreateProject("Bristol", "South West"));
+			var (project1, project2, project3) = (CreateProject(), CreateProject(), CreateProject("Bristol", "South West", 101101));
 			_context.Projects.AddRange(project1, project2, project3);
 
 			await _context.SaveChangesAsync();
 
 			_mockHttpMessageHandler.When($"http://localhost/v4/establishment/urn/{project1.Details.Urn}")
 					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
+
 			_mockHttpMessageHandler.When($"http://localhost/v4/establishment/urn/{project2.Details.Urn}")
 					.Respond("application/json", JsonConvert.SerializeObject(_establishment));
+
+			_mockHttpMessageHandler.When($"http://localhost/v4/trust/trustReferenceNumber/{project1.Details.TrustReferenceNumber}")
+		.Respond("application/json", JsonConvert.SerializeObject(_trust));
+
+			_mockHttpMessageHandler.When($"http://localhost/v4/trust/trustReferenceNumber/{project2.Details.TrustReferenceNumber}")
+					.Respond("application/json", JsonConvert.SerializeObject(_trust));
+
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
 			httpClient.BaseAddress = new Uri("http://localhost");
 			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
@@ -103,6 +115,10 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			await _context.SaveChangesAsync();
 
 			_mockHttpMessageHandler.When($"http://localhost/v4/establishment/urn/*").Respond(HttpStatusCode.NotFound);
+
+			_mockHttpMessageHandler.When($"http://localhost/v4/trust/trustReferenceNumber/*").Respond(HttpStatusCode.NotFound);
+
+
 			var httpClient = _mockHttpMessageHandler.ToHttpClient();
 			httpClient.BaseAddress = new Uri("http://localhost");
 			_httpClientFactory.Setup(m => m.CreateClient("AcademiesApi")).Returns(httpClient);
@@ -122,7 +138,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			);
 		}
 
-		private Project CreateProject(string? la = null, string? region = null)
+		private Project CreateProject(string? la = null, string? region = null, int? trustUkprn = null)
 		{
 			var project = _fixture.Create<Project>();
 
@@ -130,6 +146,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 							.With(p => p.LocalAuthority, la)
 							.With(p => p.Urn, project.Details.Urn)
 							.With(p => p.Region, region)
+							.With(p => p.TrustUkprn, trustUkprn)
 							.Create();
 
 			project.Update(projectDetails);

@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Contracts.V4.Establishments;
+using Dfe.Academies.Contracts.V4.Trusts;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
@@ -59,6 +60,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 				.ReturnsAsync(_fixture.Create<EstablishmentDto>())
 				.ReturnsAsync(_fixture.Create<EstablishmentDto>());
 
+			_establishmentGetDataQuery.Setup(m => m.GetTrustByReferenceNumber(It.IsAny<string>()))
+				.ReturnsAsync(_fixture.Build<TrustDto>().With(x => x.Ukprn, "101010").Create());
+
 			await _subject.Execute();
 
 			Assert.Multiple(
@@ -77,6 +81,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.Legacy.Project
 
 			_establishmentGetDataQuery.Setup(m => m.GetEstablishment(It.IsAny<int>()))
 				.ReturnsAsync(_fixture.Create<EstablishmentDto>());
+
+			_establishmentGetDataQuery.Setup(m => m.GetTrustByReferenceNumber(It.IsAny<string>()))
+				.ReturnsAsync(_fixture.Build<TrustDto>().With(x => x.Ukprn, "101010").Create());
 
 			await _subject.Execute();
 

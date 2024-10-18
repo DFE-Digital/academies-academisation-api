@@ -50,6 +50,7 @@ public class ProjectGetTests
 		.Excluding(x => x.IsFormAMat)
 		.Excluding(x => x.ApplicationSharePointId)
 		.Excluding(x => x.SchoolSharePointId)
+		.Excluding(x => x.IsReadOnly)
 		);
 
 		existingProject.Id.Should().Be(serviceModel.Id);

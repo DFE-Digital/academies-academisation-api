@@ -77,6 +77,7 @@ public class ProjectUpdateTests
 			.With(p => p.Id, existingProject.Id)
 			.With(p => p.Urn, existingProject.Details.Urn)
 			.With(p => p.ExternalApplicationFormSaved, existingProject.Details.ExternalApplicationFormSaved)
+			.With(p => p.IsReadOnly, existingProject.IsReadOnly)
 			// excluded from update so need to be set for equality to assert
 			.With(x => x.KeyStage2PerformanceAdditionalInformation, existingProject.Details.KeyStage2PerformanceAdditionalInformation)
 			.With(x => x.KeyStage4PerformanceAdditionalInformation, existingProject.Details.KeyStage4PerformanceAdditionalInformation)
