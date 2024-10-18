@@ -9,7 +9,10 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 
-public class AdvisoryBoardDecisionUpdateCommandHandler(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, IConversionProjectRepository conversionProjectRepository) : IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>
+public class AdvisoryBoardDecisionUpdateCommandHandler(
+	IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, 
+	IConversionProjectRepository conversionProjectRepository,
+	ITransferProjectRepository transferProjectRepository) : IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>
 {
 	public async Task<CommandResult> Handle(AdvisoryBoardDecisionUpdateCommand command, CancellationToken cancellationToken)
 	{
@@ -59,7 +62,17 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(IAdvisoryBoardDecisionRep
 	}
 	private async Task SetProjectReadOnlyAsync(AdvisoryBoardDecisionDetails advisoryBoardDecisionDetails)
 	{
-		if (advisoryBoardDecisionDetails != null)
+		if (advisoryBoardDecisionDetails.TransferProjectId != null)
+		{
+			var project = await transferProjectRepository.GetById(advisoryBoardDecisionDetails.TransferProjectId.GetValueOrDefault());
+			if (project != null)
+			{
+				project.SetIsReadOnly(advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
+				transferProjectRepository.Update(project);
+				await transferProjectRepository.UnitOfWork.SaveChangesAsync();
+			}
+		}
+		else
 		{
 			var project = await conversionProjectRepository.GetById(advisoryBoardDecisionDetails.ConversionProjectId.GetValueOrDefault());
 			if (project != null)

@@ -21,7 +21,7 @@ using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
-	public class CreateCompleteProjectsCommandHandler : IRequestHandler<CreateCompleteProjectsCommand, CommandResult>
+	public class CreateConversionsCompleteProjectsCommandHandler : IRequestHandler<CreateConversionsCompleteProjectsCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
@@ -29,10 +29,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		private readonly ICompleteTransmissionLogRepository _completeTransmissionLogRepository;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly ICompleteApiClientFactory _completeApiClientFactory;
-		private readonly ILogger<CreateCompleteProjectsCommandHandler> _logger;
+		private readonly ILogger<CreateConversionsCompleteProjectsCommandHandler> _logger;
 		private ICorrelationContext _correlationContext;
 
-		public CreateCompleteProjectsCommandHandler(
+		public CreateConversionsCompleteProjectsCommandHandler(
 			IConversionProjectRepository conversionProjectRepository,
 			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 			IProjectGroupRepository projectGroupRepository,
@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
 			ICorrelationContext correlationContext,
-			ILogger<CreateCompleteProjectsCommandHandler> logger)
+			ILogger<CreateConversionsCompleteProjectsCommandHandler> logger)
 		{
 			_conversionProjectRepository = conversionProjectRepository;
 			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(CreateCompleteProjectsCommand request,
+		public async Task<CommandResult> Handle(CreateConversionsCompleteProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);

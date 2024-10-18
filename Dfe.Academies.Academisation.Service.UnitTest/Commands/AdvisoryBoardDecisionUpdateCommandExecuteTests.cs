@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿using AutoFixture;
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
@@ -18,6 +19,8 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockRepo = new();
 	private readonly Mock<IConversionAdvisoryBoardDecision> _mockDecision = new();
 	private readonly Mock<IConversionProjectRepository> _mockConversionProjectRepository = new();
+	private readonly Mock<ITransferProjectRepository> _mockTransferProjectRepository = new();
+	private readonly Fixture _fixture = new();
 	public AdvisoryBoardDecisionUpdateCommandExecuteTests()
 	{
 		var mockContext = new Mock<IUnitOfWork>();
@@ -28,7 +31,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	public async Task AdvisoryBoardDecisionIdIsDefault___ReturnsBadResult()
 	{
 		//Arrange
-		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object);
 
 		//Act
 		var result = await target.Handle(new(), default);
@@ -40,7 +43,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	[Fact]
 	public async Task DataQueryReturnsNull__ReturnsCommandNotFoundResult()
 	{
-		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object);
 
 		//Act
 		var result = await target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default);
@@ -61,7 +64,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 			.Setup(d => d.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object);
 
 		//Act & Assert
 		await Assert.ThrowsAsync<NotImplementedException>(() => target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default));
@@ -78,7 +81,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 			.Setup(q => q.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object);
 
 		//Act
 		_ = await target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default);
@@ -94,11 +97,13 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 
+		_mockDecision.Setup(d => d.AdvisoryBoardDecisionDetails).Returns(_fixture.Build<AdvisoryBoardDecisionDetails>().With(x => x.TransferProjectId, 1).Create());
+
 		_mockRepo
 			.Setup(q => q.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object);
 
 		//Act
 		_ = await target.Handle(new() { AdvisoryBoardDecisionId = 1}, default);
@@ -114,12 +119,12 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 		_mockDecision
 			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
-
+		_mockDecision.Setup(d => d.AdvisoryBoardDecisionDetails).Returns(_fixture.Build<AdvisoryBoardDecisionDetails>().With(x => x.TransferProjectId, 1).Create());
 		_mockRepo
 			.Setup(q => q.GetAdvisoryBoardDecisionById(It.IsAny<int>()))
 			.ReturnsAsync(_mockDecision.Object);
 
-		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object);
+		var target = new AdvisoryBoardDecisionUpdateCommandHandler(_mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object);
 
 		//Act
 		var result = await target.Handle(new() { AdvisoryBoardDecisionId = 1 }, default);

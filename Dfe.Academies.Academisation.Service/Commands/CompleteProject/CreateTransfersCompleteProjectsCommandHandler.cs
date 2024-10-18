@@ -123,8 +123,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 				transferProject.SetProjectSentToComplete(transferringAcademy.Ukprn);
 
-				_transferProjectRepository.Update(
-				transferProject as Domain.TransferProjectAggregate.TransferProject);
+				_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 
 				await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

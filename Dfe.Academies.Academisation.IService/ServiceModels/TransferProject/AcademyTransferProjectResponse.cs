@@ -5,7 +5,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
     {
 		public int Id { get; set; }
         public string ProjectUrn { get; set; }
-
+		public bool IsReadOnly { get; set; }
         public string ProjectReference { get; set; }
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
