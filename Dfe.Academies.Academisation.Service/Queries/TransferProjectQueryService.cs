@@ -235,7 +235,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							Region = ta.Region,
 						};
 					}).ToList(),
-					IsFormAMat = x.IsFormAMat
+					IsFormAMat = x.IsFormAMat,
+					IsReadOnly = x.IsReadOnly,
 				};
 			});
 		}

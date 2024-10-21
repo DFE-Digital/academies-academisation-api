@@ -139,7 +139,8 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				},
 				State = model.State!,
 				Status = model.Status!,
-				IsFormAMat = model.IsFormAMat
+				IsFormAMat = model.IsFormAMat,
+				IsReadOnly = model.IsReadOnly,
 			};
 		}
 	}

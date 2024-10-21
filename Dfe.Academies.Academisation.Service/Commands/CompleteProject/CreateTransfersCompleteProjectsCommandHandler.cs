@@ -118,17 +118,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					var errorResponse =
 						await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
 					responseMessage = errorResponse.GetAllErrors();
-					_logger.LogInformation("Error In completing conversion project with project urn: {project} for transfering academy: {urn} due to Status code {code} and Complete Validation Errors:" + responseMessage, transferProject.Urn, response.StatusCode);
+					_logger.LogInformation("Error In completing conversion project with project urn: {project} for transfering academy: {urn} due to Status code {code} and Complete Validation Errors:" + responseMessage, transferProject.Urn, establishment.Urn, response.StatusCode);
 				}
 
 				transferProject.SetProjectSentToComplete(transferringAcademy.Ukprn);
 
-				_transferProjectRepository.Update(
-				transferProject as Domain.TransferProjectAggregate.TransferProject);
+				_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 
 				await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-				_completeTransmissionLogRepository.Insert(CompleteTransmissionLog.CreateTransferProjectLog(transferProject.Id, transferringAcademy.Id, completeProjectId, true, responseMessage, _dateTimeProvider.Now));
+				_completeTransmissionLogRepository.Insert(CompleteTransmissionLog.CreateTransferProjectLog(transferProject.Id, transferringAcademy.Id, completeProjectId, response.IsSuccessStatusCode, responseMessage, _dateTimeProvider.Now));
 				await _completeTransmissionLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			}
 
