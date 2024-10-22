@@ -32,6 +32,7 @@ using Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
+using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.OpeningDateHistoryMapper;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.AutoMapper;
@@ -141,6 +142,7 @@ builder.Services.AddScoped<IConversionAdvisoryBoardDecisionFactory, ConversionAd
 builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactoryFactory>();
 builder.Services.AddScoped<ICompleteApiClientFactory, CompleteApiClientFactory>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
+builder.Services.AddScoped<IPollyPolicyFactory, PollyPolicyFactory>();
 
 //Validators
 builder.Services.AddSingleton<ICypressKeyValidator, CypressKeyValidator>();

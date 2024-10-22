@@ -78,8 +78,9 @@ internal static class CompleteTransferProjectServiceModelMapper
 			firstName,
 			lastName,
 			project.Id,
+			// Transfer projects aren't currently added to groups
 			null,
-			// Need the trust reference number, proposed trsut name is held in the incoming trust name field
+			// Need the trust reference number, proposed trust name is held in the incoming trust name field
 			"TrustReferenceNumber",
 			incomingName			
 		);

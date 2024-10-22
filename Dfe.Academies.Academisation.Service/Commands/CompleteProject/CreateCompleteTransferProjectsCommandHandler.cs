@@ -13,6 +13,7 @@ using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
+using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
@@ -33,6 +34,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		private readonly ICompleteApiClientFactory _completeApiClientFactory;
 		private readonly ILogger<CreateCompleteTransferProjectsCommandHandler> _logger;
 		private ICorrelationContext _correlationContext;
+		private readonly IPollyPolicyFactory _pollyPolicyFactory;
 
 		public CreateCompleteTransferProjectsCommandHandler(
 			ITransferProjectRepository transferProjectRepository,
@@ -43,6 +45,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
 			ICorrelationContext correlationContext,
+			IPollyPolicyFactory pollyPolicyFactory,
 			ILogger<CreateCompleteTransferProjectsCommandHandler> logger)
 		{
 			_transferProjectRepository = transferProjectRepository;
@@ -53,6 +56,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_completeApiClientFactory = completeApiClientFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_correlationContext = correlationContext;
+			_pollyPolicyFactory = pollyPolicyFactory;
 			_logger = logger;
 		}
 
@@ -60,13 +64,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
-			var retryPolicy = Policy.Handle<HttpRequestException>() // Handle HttpRequestException
-						.OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode && r.StatusCode != HttpStatusCode.BadRequest) // Retry if response is not successful
-						.WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-			(exception, timeSpan, retryCount, context) =>
-			{
-				_logger.LogInformation($"Retry {retryCount} after {timeSpan.Seconds} seconds due to: {exception?.Exception?.Message}");
-			});
+			var retryPolicy = _pollyPolicyFactory.GetCompleteHttpClientRetryPolicy(_logger);
 
 			var transferProjects = await _transferProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
@@ -110,7 +108,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					completeProjectId = successResponse.conversion_project_id;
 
 					_logger.LogInformation(
-						"Success completing conversion project with project urn: {project} with Status code 201 ",
+						"Success sending transfer project to complete with project urn: {project} with Status code 201 ",
 						transferProject.Urn);
 				}
 				else
@@ -118,7 +116,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					var errorResponse =
 						await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
 					responseMessage = errorResponse.GetAllErrors();
-					_logger.LogInformation("Error In completing conversion project with project urn: {project} for transfering academy: {urn} due to Status code {code} and Complete Validation Errors:" + responseMessage, transferProject.Urn, establishment.Urn, response.StatusCode);
+					_logger.LogInformation("Error sending transfer project to complete with project urn: {project} for transfering academy: {urn} due to Status code {code} and Complete Validation Errors:" + responseMessage, transferProject.Urn, establishment.Urn, response.StatusCode);
 				}
 
 				transferProject.SetProjectSentToComplete(transferringAcademy.Ukprn);
