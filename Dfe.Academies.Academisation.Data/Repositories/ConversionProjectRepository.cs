@@ -1,12 +1,11 @@
 ﻿
 using System.Globalization;
-using System.Net.Http.Headers;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
 {
@@ -355,6 +354,29 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await this.dbSet.Where(proj => !proj.ProjectSentToCompleteDate.HasValue &&
 			proj.FormAMatProjectId.HasValue &&
 			proj.IsReadOnly).ToListAsync(cancellationToken);
+		}
+
+		public async Task CreateFormAMatProject(IProject project)
+		{
+			string? trustReferenceNumber;
+
+			// This has been written to allow the integration tests to run as they use sqlite
+			if (context.Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+			{
+				trustReferenceNumber = $"TR{project.Id:D5}"; ;
+			}
+			else
+			{
+				var p = new SqlParameter("@result", System.Data.SqlDbType.Int);
+				p.Direction = System.Data.ParameterDirection.Output;
+
+				await context.Database.ExecuteSqlRawAsync($"set @result = NEXT VALUE FOR {AcademisationContext.DEFAULT_SCHEMA}.TrustReferenceNumberSeq", p);
+				trustReferenceNumber = $"TR{(int)p.Value:D5}";
+			}
+
+			project.SetIncomingTrust(trustReferenceNumber, project.Details.NameOfTrust);
+
+			Insert(project as Project);
 		}
 	}
 }

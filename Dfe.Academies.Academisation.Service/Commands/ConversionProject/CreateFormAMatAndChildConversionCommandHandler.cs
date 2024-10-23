@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 				var project = successResult.Payload;
 
 				project.SetFormAMatProjectId(newFormAMat.Id);
-				_conversionProjectRepository.Insert((Project)project);
+				await _conversionProjectRepository.CreateFormAMatProject(project);
 				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			}
 

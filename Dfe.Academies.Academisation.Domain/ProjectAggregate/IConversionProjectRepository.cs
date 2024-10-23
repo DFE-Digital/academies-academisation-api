@@ -30,4 +30,6 @@ public interface IConversionProjectRepository : IRepository<Project>, IGenericRe
 	Task<IEnumerable<IProject>> GetProjectsByIdsAsync(IEnumerable<int> projectIds, CancellationToken cancellationToken);
 	Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken);
 	Task<IEnumerable<IProject>> GetFormAMatProjectsToSendToCompleteAsync(CancellationToken cancellationToken);
+
+	Task CreateFormAMatProject(IProject project);
 }
