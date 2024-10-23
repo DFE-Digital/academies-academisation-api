@@ -345,14 +345,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
+			return await this.dbSet.Where(proj => !proj.ProjectSentToCompleteDate.HasValue &&
 			!proj.FormAMatProjectId.HasValue &&
 			proj.IsReadOnly).ToListAsync(cancellationToken);
 		}
 
 		public async Task<IEnumerable<IProject>> GetFormAMatProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
+			return await this.dbSet.Where(proj => !proj.ProjectSentToCompleteDate.HasValue &&
 			proj.FormAMatProjectId.HasValue &&
 			proj.IsReadOnly).ToListAsync(cancellationToken);
 		}

@@ -48,7 +48,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public ProjectDetails Details { get; private set; }
 
-	public bool ProjectSentToComplete { get; private set; } = false;
+	public DateTime? ProjectSentToCompleteDate { get; private set; } = null;
 
 	public bool IsReadOnly { get; set; } = false;
 
@@ -565,9 +565,9 @@ public class Project : Entity, IProject, IAggregateRoot
 		DeletedAt = DateTime.UtcNow;
 	}
 	
-	public void SetProjectSentToComplete()
+	public void SetProjectSentToCompleteDate(DateTime dateSent)
 	{
-		ProjectSentToComplete = true;
+		ProjectSentToCompleteDate = dateSent;
 	}
 	public void SetIsReadOnly(bool isReadOnly)
 	{
