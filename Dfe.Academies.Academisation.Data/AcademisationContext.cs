@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.Data;
 
 public class AcademisationContext(DbContextOptions<AcademisationContext> options, IMediator mediator) : DbContext(options), IUnitOfWork
 {
-	const string DEFAULT_SCHEMA = "academisation";
+	public const string DEFAULT_SCHEMA = "academisation";
 	const string Assigned_User_Id = "AssignedUserId";
 	const string Assigned_User_Email_Address = "AssignedUserEmailAddress";
 	const string Assigned_User_Full_Name = "AssignedUserFullName";
@@ -247,6 +247,14 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		modelBuilder.Entity<TransferringAcademy>(ConfigureTransferringAcademy);
 
 		modelBuilder.Entity<CompleteTransmissionLog>(ConfigureCompleteTransmissionLog);
+
+		if (this.Database.ProviderName != "Microsoft.EntityFrameworkCore.Sqlite")
+		{
+			// Trust refernce number sequence
+			modelBuilder.HasSequence<int>("TrustReferenceNumberSeq", schema: DEFAULT_SCHEMA)
+				.StartsAt(1)
+				.IncrementsBy(1);
+		}
 
 		base.OnModelCreating(modelBuilder);
 	}

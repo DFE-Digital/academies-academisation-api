@@ -1,27 +1,21 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using System.Text;
+﻿using System.Net.Http.Json;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
-using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
+using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
-	public class CreateConversionsCompleteProjectsCommandHandler : IRequestHandler<CreateConversionsCompleteProjectsCommand, CommandResult>
+	public class CreateCompleteConversionProjectsCommandHandler : IRequestHandler<CreateCompleteConversionProjectsCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
@@ -29,10 +23,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		private readonly ICompleteTransmissionLogRepository _completeTransmissionLogRepository;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly ICompleteApiClientFactory _completeApiClientFactory;
-		private readonly ILogger<CreateConversionsCompleteProjectsCommandHandler> _logger;
+		private readonly ILogger<CreateCompleteConversionProjectsCommandHandler> _logger;
 		private ICorrelationContext _correlationContext;
+		private readonly IPollyPolicyFactory _pollyPolicyFactory;
 
-		public CreateConversionsCompleteProjectsCommandHandler(
+		public CreateCompleteConversionProjectsCommandHandler(
 			IConversionProjectRepository conversionProjectRepository,
 			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 			IProjectGroupRepository projectGroupRepository,
@@ -40,7 +35,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			ICompleteApiClientFactory completeApiClientFactory,
 			IDateTimeProvider dateTimeProvider,
 			ICorrelationContext correlationContext,
-			ILogger<CreateConversionsCompleteProjectsCommandHandler> logger)
+			IPollyPolicyFactory pollyPolicyFactory,
+			ILogger<CreateCompleteConversionProjectsCommandHandler> logger)
 		{
 			_conversionProjectRepository = conversionProjectRepository;
 			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
@@ -49,20 +45,15 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_completeApiClientFactory = completeApiClientFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_correlationContext = correlationContext;
+			_pollyPolicyFactory = pollyPolicyFactory;
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(CreateConversionsCompleteProjectsCommand request,
+		public async Task<CommandResult> Handle(CreateCompleteConversionProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
-			var retryPolicy = Policy.Handle<HttpRequestException>() // Handle HttpRequestException
-									.OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode && r.StatusCode != HttpStatusCode.BadRequest) // Retry if response is not successful
-									.WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-			(exception, timeSpan, retryCount, context) =>
-			{
-				_logger.LogInformation($"Retry {retryCount} after {timeSpan.Seconds} seconds due to: {exception?.Exception?.Message}");
-			});
+			var retryPolicy = _pollyPolicyFactory.GetCompleteHttpClientRetryPolicy(_logger);
 
 			var conversionProjects = await _conversionProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
@@ -74,7 +65,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 			foreach (var conversionProject in conversionProjects)
 			{
-
 				var decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
 
 				string? groupReferenceNumber = null;
@@ -85,7 +75,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					groupReferenceNumber = group.ReferenceNumber;
 				}
 
-				var completeObject = CompleteProjectsServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails, groupReferenceNumber);
+				var completeObject = CompleteConversionProjectServiceModelMapper.FromDomain(conversionProject, decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails, groupReferenceNumber);
 
 				var response = await retryPolicy.ExecuteAsync(() => client.PostAsJsonAsync($"projects/conversions", completeObject, cancellationToken));
 				Guid? completeProjectId = null;
@@ -96,16 +86,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					var successResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectSuccessResponse>();
 					completeProjectId = successResponse.conversion_project_id;
 
-					_logger.LogInformation("Success completing conversion project with project urn: {project} with Status code 201 ", completeObject.urn);
+					_logger.LogInformation("Success sending conversion project to complete with project urn: {project} with Status code 201 ", completeObject.urn);
 				}
 				else
 				{
 					var errorResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
 					responseMessage = errorResponse.GetAllErrors();
-					_logger.LogInformation("Error In completing conversion project with project urn: {project} due to Status code {code} and Complete Validation Errors:" + responseMessage, completeObject.urn, response.StatusCode);
+					_logger.LogInformation("Error sending conversion project to complete with project urn: {project} due to Status code {code} and Complete Validation Errors:" + responseMessage, completeObject.urn, response.StatusCode);
 				}
 
-				conversionProject.SetProjectSentToComplete();
+				conversionProject.SetProjectSentToCompleteDate(_dateTimeProvider.Now);
 				_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
 				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

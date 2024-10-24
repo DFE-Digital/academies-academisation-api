@@ -82,5 +82,9 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		{
 			ProjectSentToComplete = true;
 		}
+
+		public static TransferringAcademy Create(int transferProjectId, string? incomingTrustUkprn, string? incomingTrustName, string outgoingAcademyUkprn, string? region, string? localAuthority) {
+			return new TransferringAcademy(incomingTrustUkprn, incomingTrustName, outgoingAcademyUkprn, region, localAuthority) { TransferProjectId = transferProjectId };
+		}
 	}
 }

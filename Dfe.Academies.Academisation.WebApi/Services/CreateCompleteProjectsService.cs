@@ -38,8 +38,8 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 
 						try
 						{ 
-							await mediator.Send(new CreateConversionsCompleteProjectsCommand(), stoppingToken);
-							await mediator.Send(new CreateTransfersCompleteProjectsCommand(), stoppingToken);
+							await mediator.Send(new CreateCompleteConversionProjectsCommand(), stoppingToken);
+							await mediator.Send(new CreateCompleteTransferProjectsCommand(), stoppingToken);
 						}
 						catch (Exception ex)
 						{
@@ -50,7 +50,7 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 						
 						try
 						{ 
-							await mediator.Send(new CreateTransfersCompleteProjectsCommand(), stoppingToken);
+							await mediator.Send(new CreateCompleteTransferProjectsCommand(), stoppingToken);
 						}
 						catch (Exception ex)
 						{
