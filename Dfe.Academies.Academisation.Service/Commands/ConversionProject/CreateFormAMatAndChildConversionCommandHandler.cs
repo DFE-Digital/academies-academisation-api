@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 				string.Empty,
 				_dateTimeProvider.Now);
 
-			_formAMatProjectRepository.Insert(newFormAMat);
+			await _formAMatProjectRepository.CreateFormAMatProjectWithTrustReferenceNumber(newFormAMat);
 			await _formAMatProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			// Update FAM project with its reference and persist the update
@@ -52,7 +52,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject
 				var project = successResult.Payload;
 
 				project.SetFormAMatProjectId(newFormAMat.Id);
-				await _conversionProjectRepository.CreateFormAMatProject(project);
+				project.SetIncomingTrust(newFormAMat.TrustReferenceNumber, newFormAMat.ProposedTrustName);
+				_conversionProjectRepository.Insert(project as Project);
 				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			}
 

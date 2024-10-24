@@ -18,6 +18,8 @@ namespace Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate
 		public User? AssignedUser { get; private set; }
 		public string? ReferenceNumber { get; private set; }
 
+		public string? TrustReferenceNumber { get; private set; }
+
 		public static FormAMatProject Create(string proposedTrustName, string applicationReference, DateTime createdOn)
 		{
 			return new FormAMatProject(proposedTrustName, applicationReference, createdOn) { };
@@ -41,6 +43,11 @@ namespace Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate
 
 			// Set the ReferenceNumber property with the formatted string
 			this.ReferenceNumber = $"FAM_{paddedId}";
+		}
+
+		public void SetTrustReferenceNumber(string trustReferenceNumber)
+		{
+			TrustReferenceNumber = trustReferenceNumber;
 		}
 	}
 }

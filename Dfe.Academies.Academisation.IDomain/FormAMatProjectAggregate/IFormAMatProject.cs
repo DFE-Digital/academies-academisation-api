@@ -13,7 +13,10 @@ namespace Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate
 		DateTime CreatedOn { get; }
 		string ReferenceNumber { get; }
 
+		string? TrustReferenceNumber { get; }
+
 		void SetAssignedUser(Guid userId, string fullName, string emailAddress);
 		void SetProjectReference(int id);
+		void SetTrustReferenceNumber(string trustReferenceNumber);
 	}
 }
