@@ -51,9 +51,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			// Assert
 			Assert.IsType<CommandSuccessResult>(result);
 
-			_formAMatProjectRepositoryMock.Verify(x => x.Insert(It.IsAny<FormAMatProject>()), Times.Once);
+			_formAMatProjectRepositoryMock.Verify(x => x.CreateFormAMatProjectWithTrustReferenceNumber(It.IsAny<FormAMatProject>()), Times.Once);
 			_formAMatProjectRepositoryMock.Verify(x => x.Update(It.IsAny<FormAMatProject>()), Times.Once);
-			_conversionProjectRepositoryMock.Verify(x => x.CreateFormAMatProject(It.IsAny<Project>()), Times.Once);
+			_conversionProjectRepositoryMock.Verify(x => x.Insert(It.IsAny<Project>()), Times.Once);
 		}
 
 		private void SetupDateTimeProviderMock()

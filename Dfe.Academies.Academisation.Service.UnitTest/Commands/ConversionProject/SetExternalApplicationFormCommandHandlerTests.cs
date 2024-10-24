@@ -2,6 +2,7 @@
 using AutoFixture.AutoMoq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using FluentAssertions;
@@ -16,6 +17,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		private readonly MockRepository mockRepository;
 
 		private readonly Mock<IConversionProjectRepository> mockConversionProjectRepository;
+		private readonly Mock<IFormAMatProjectRepository> mockFormAMatRepository;
 		private readonly Mock<ILogger<SetFormAMatProjectReferenceCommandHandler>> mockLogger;
 
 		public SetFormAMatProjectReferenceCommandHandlerTests()
@@ -23,6 +25,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			this.mockRepository = new MockRepository(MockBehavior.Strict);
 
 			this.mockConversionProjectRepository = this.mockRepository.Create<IConversionProjectRepository>();
+			this.mockFormAMatRepository = this.mockRepository.Create<IFormAMatProjectRepository>();
 			this.mockLogger = this.mockRepository.Create<ILogger<SetFormAMatProjectReferenceCommandHandler>>();
 		}
 
@@ -30,6 +33,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		{
 			return new SetFormAMatProjectReferenceCommandHandler(
 				this.mockConversionProjectRepository.Object,
+				this.mockFormAMatRepository.Object,
 				this.mockLogger.Object);
 		}
 
@@ -76,6 +80,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			var formAMatProjectId = 2;
 			var command = new SetFormAMatProjectReferenceCommand(projectId, formAMatProjectId);
 			var project = fixture.Create<Project>();
+			var formAMatProject = fixture.Create<FormAMatProject>();
 			var mockUnitOfWork = new Mock<IUnitOfWork>();
 			mockUnitOfWork.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
 						   .Returns(Task.FromResult(1));
@@ -83,6 +88,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			this.mockConversionProjectRepository
 				.Setup(x => x.GetConversionProject(It.IsAny<int>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(project);
+
+			this.mockFormAMatRepository
+				.Setup(x => x.GetById(It.Is<int>(x => x == formAMatProjectId)))
+				.ReturnsAsync(formAMatProject);
 
 			this.mockConversionProjectRepository.Setup(x => x.Update(It.IsAny<Project>()))
 				.Verifiable(); // Setup for Update method
