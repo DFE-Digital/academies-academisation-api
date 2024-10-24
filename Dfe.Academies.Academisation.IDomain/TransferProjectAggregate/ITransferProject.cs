@@ -5,7 +5,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 	public interface ITransferProject
 	{
 		bool? AnyRisks { get; }
-		bool IsReadOnly { get; }
+		DateTime? ReadOnlyDate { get; }
 		string? AssignedUserEmailAddress { get; }
 		string? AssignedUserFullName { get; }
 		Guid? AssignedUserId { get; }
@@ -75,6 +75,6 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetId(int id);
 		
 		void SetProjectSentToComplete(string transferingAcademyUkprn);
-		void SetIsReadOnly(bool isReadOnly);
+		void SetIsReadOnly(DateTime date);
 	}
 }

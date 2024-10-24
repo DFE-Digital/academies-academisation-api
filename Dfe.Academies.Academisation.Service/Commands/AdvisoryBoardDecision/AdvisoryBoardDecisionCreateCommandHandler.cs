@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
@@ -11,9 +12,10 @@ namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 
 public class AdvisoryBoardDecisionCreateCommandHandler(
 	IConversionAdvisoryBoardDecisionFactory factory,
-	IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, 
+	IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 	IConversionProjectRepository conversionProjectRepository,
-	ITransferProjectRepository transferProjectRepository) : IRequestHandler<AdvisoryBoardDecisionCreateCommand, CreateResult>
+	ITransferProjectRepository transferProjectRepository,
+	IDateTimeProvider dateTimeProvider) : IRequestHandler<AdvisoryBoardDecisionCreateCommand, CreateResult>
 {
 	public async Task<CreateResult> Handle(AdvisoryBoardDecisionCreateCommand request, CancellationToken cancellationToken)
 	{
@@ -65,7 +67,10 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 				var project = await transferProjectRepository.GetById(advisoryBoardDecisionDetails.TransferProjectId.GetValueOrDefault());
 				if (project != null)
 				{
-					project.SetIsReadOnly(advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
+					if (advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved)
+					{ 
+						project.SetIsReadOnly(dateTimeProvider.Now); 
+					}
 					transferProjectRepository.Update(project);
 					await transferProjectRepository.UnitOfWork.SaveChangesAsync();
 				}
@@ -75,7 +80,10 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 				var project = await conversionProjectRepository.GetById(advisoryBoardDecisionDetails.ConversionProjectId.GetValueOrDefault());
 				if (project != null)
 				{
-					project.SetIsReadOnly(advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved);
+					if (advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved)
+					{
+						project.SetIsReadOnly(dateTimeProvider.Now);
+					}
 					conversionProjectRepository.Update(project);
 					await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
 				}

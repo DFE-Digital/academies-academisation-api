@@ -133,14 +133,14 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		
 		public async Task<IEnumerable<ITransferProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			var projects = this.dbSet.Include(y => y.TransferringAcademies).Where(proj => proj.TransferringAcademies.Any(x => !x.ProjectSentToComplete) && proj.IsReadOnly);
+			var projects = this.dbSet.Include(y => y.TransferringAcademies).Where(proj => proj.TransferringAcademies.Any(x => !x.ProjectSentToComplete) && proj.ReadOnlyDate.HasValue);
 
 			return await projects.Where(y => y.IsFormAMat != true).ToListAsync(cancellationToken);
 		}
 
 		public async Task<IEnumerable<ITransferProject>> GetFormAMatProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			var projects = this.dbSet.Include(y => y.TransferringAcademies).Where(proj => proj.TransferringAcademies.Any(x => !x.ProjectSentToComplete) && proj.IsReadOnly);
+			var projects = this.dbSet.Include(y => y.TransferringAcademies).Where(proj => proj.TransferringAcademies.Any(x => !x.ProjectSentToComplete) && proj.ReadOnlyDate.HasValue);
 
 			return await projects.Where(y => y.IsFormAMat == true).ToListAsync(cancellationToken);
 		}

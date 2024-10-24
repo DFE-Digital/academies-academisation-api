@@ -13,5 +13,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
         public AssignedUserResponse AssignedUser { get; set; }
 		public bool? IsFormAMat { get; set; }
 		public bool IsReadOnly { get; set; }
-    }
+		public DateTime? ProjectSentToCompleteDate { get; set; }
+	}
 }

@@ -98,7 +98,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					_logger.LogInformation("Error sending conversion project to complete with project urn: {project} due to Status code {code} and Complete Validation Errors:" + responseMessage, completeObject.urn, response.StatusCode);
 				}
 
-				conversionProject.SetProjectSentToCompleteDate(_dateTimeProvider.Now);
+				conversionProject.SetProjectSentToComplete();
 				_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
 				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

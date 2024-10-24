@@ -20,5 +20,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
         public string State { get; set; }
         public string Status { get; set; }
 		public bool? IsFormAMat { get; set; }
-    }
+		public DateTime? ProjectSentToCompleteDate { get; set; }
+	}
 }

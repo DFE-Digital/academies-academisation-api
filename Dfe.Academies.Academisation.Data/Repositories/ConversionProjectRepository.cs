@@ -333,27 +333,27 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			.Where(p => projectIds.Contains(p.Id))
 			.ToListAsync(cancellationToken);
 		}
-		public async Task SetProjectReadOnly(int id, bool isReadOnly, CancellationToken cancellationToken)
-		{
-			var project = await dbSet.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-			if (project != null)
-			{
-				project.SetIsReadOnly(isReadOnly);
-			}
-		}
+		//public async Task SetProjectReadOnly(int id, bool isReadOnly, CancellationToken cancellationToken)
+		//{
+		//	var project = await dbSet.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+		//	if (project != null)
+		//	{
+		//		project.SetIsReadOnly(isReadOnly);
+		//	}
+		//}
 
 		public async Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			return await this.dbSet.Where(proj => !proj.ProjectSentToCompleteDate.HasValue &&
+			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
 			!proj.FormAMatProjectId.HasValue &&
-			proj.IsReadOnly).ToListAsync(cancellationToken);
+			proj.ReadOnlyDate.HasValue).ToListAsync(cancellationToken);
 		}
 
 		public async Task<IEnumerable<IProject>> GetFormAMatProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			return await this.dbSet.Where(proj => !proj.ProjectSentToCompleteDate.HasValue &&
+			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
 			proj.FormAMatProjectId.HasValue &&
-			proj.IsReadOnly).ToListAsync(cancellationToken);
+			proj.ReadOnlyDate.HasValue).ToListAsync(cancellationToken);
 		}
 
 		public async Task CreateFormAMatProject(IProject project)
