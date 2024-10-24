@@ -125,6 +125,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public DateTime? ProposedConversionDate { get; set; }
 		public bool? ProjectDatesSectionComplete { get; set; }
 		public bool IsReadOnly { get; set; }
+		
+		public DateTime? ProjectSentToCompleteDate { get; set; }
+		
+		
 
 		public bool Equals(ConversionProjectServiceModel? other)
 		{
@@ -252,7 +256,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 									  string.Equals(ExternalApplicationFormUrl,
 					   other.ExternalApplicationFormUrl, StringComparison.InvariantCultureIgnoreCase) &&
 					   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved &&
-					   IsReadOnly == other.IsReadOnly;
+					   IsReadOnly == other.IsReadOnly &&
+				   ProjectSentToCompleteDate == other.ProjectSentToCompleteDate;
 		}
 
 		public override bool Equals(object? obj)
@@ -368,6 +373,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 			hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);
 			hashCode.Add(ExternalApplicationFormSaved);
 			hashCode.Add(IsReadOnly);
+			hashCode.Add(ProjectSentToCompleteDate);
 			return hashCode.ToHashCode();
 		}
 	}
