@@ -17,7 +17,7 @@ using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
-	public class CreateCompleteFormAMatConversionProjectsCommandHandler : IRequestHandler<CreateCompleteConversionProjectsCommand, CommandResult>
+	public class CreateCompleteFormAMatConversionProjectsCommandHandler : IRequestHandler<CreateCompleteFormAMatConversionProjectsCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(CreateCompleteConversionProjectsCommand request,
+		public async Task<CommandResult> Handle(CreateCompleteFormAMatConversionProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
