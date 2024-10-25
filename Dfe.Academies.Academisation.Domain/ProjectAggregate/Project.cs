@@ -48,9 +48,9 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public ProjectDetails Details { get; private set; }
 
-	public DateTime? ProjectSentToCompleteDate { get; private set; } = null;
+	public DateTime? ReadOnlyDate { get; private set; } = null;
 
-	public bool IsReadOnly { get; set; } = false;
+	public bool ProjectSentToComplete { get; set; } = false;
 
 	// Create from A2b 
 	public static CreateResult Create(IApplication application)
@@ -565,13 +565,13 @@ public class Project : Entity, IProject, IAggregateRoot
 		DeletedAt = DateTime.UtcNow;
 	}
 	
-	public void SetProjectSentToCompleteDate(DateTime dateSent)
+	public void SetProjectSentToComplete()
 	{
-		ProjectSentToCompleteDate = dateSent;
+		ProjectSentToComplete = true;
 	}
-	public void SetIsReadOnly(bool isReadOnly)
+	public void SetIsReadOnly(DateTime date)
 	{
-		IsReadOnly = isReadOnly;
+		ReadOnlyDate = date;
 	}
 
 	public void SetProjectGroupId(int? projectGroupId)

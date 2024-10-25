@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
@@ -236,7 +237,8 @@ namespace Dfe.Academies.Academisation.Service.Queries
 						};
 					}).ToList(),
 					IsFormAMat = x.IsFormAMat,
-					IsReadOnly = x.IsReadOnly,
+					IsReadOnly = x.ReadOnlyDate.HasValue,
+					ProjectSentToCompleteDate = x.ReadOnlyDate,
 				};
 			});
 		}

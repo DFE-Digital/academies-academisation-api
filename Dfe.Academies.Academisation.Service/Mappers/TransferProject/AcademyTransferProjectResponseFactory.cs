@@ -140,7 +140,8 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				State = model.State!,
 				Status = model.Status!,
 				IsFormAMat = model.IsFormAMat,
-				IsReadOnly = model.IsReadOnly,
+				IsReadOnly = model.ReadOnlyDate.HasValue,
+				ProjectSentToCompleteDate = model.ReadOnlyDate
 			};
 		}
 	}

@@ -17,7 +17,7 @@ using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
-	public class CreateCompleteFormAMatConversionProjectsCommandHandler : IRequestHandler<CreateCompleteConversionProjectsCommand, CommandResult>
+	public class CreateCompleteFormAMatConversionProjectsCommandHandler : IRequestHandler<CreateCompleteFormAMatConversionProjectsCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(CreateCompleteConversionProjectsCommand request,
+		public async Task<CommandResult> Handle(CreateCompleteFormAMatConversionProjectsCommand request,
 			CancellationToken cancellationToken)
 		{
 			var client = _completeApiClientFactory.Create(_correlationContext);
@@ -98,7 +98,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					_logger.LogInformation("Error sending conversion project to complete with project urn: {project} due to Status code {code} and Complete Validation Errors:" + responseMessage, completeObject.urn, response.StatusCode);
 				}
 
-				conversionProject.SetProjectSentToCompleteDate(_dateTimeProvider.Now);
+				conversionProject.SetProjectSentToComplete();
 				_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
 				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

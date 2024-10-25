@@ -53,7 +53,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 			lastName,
 			project.Id,
 			groupReferenceNumber,
-			// proposed trust name is held in the name of trust field, trust reference number is not available as it stands
+			// proposed trust name is held in the name of trust field
 			project.Details.TrustReferenceNumber,
 			project.Details.NameOfTrust
 		);

@@ -90,7 +90,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 		public async Task Handle_NoConversionProjectsFound_ReturnsNotFoundCommandResult()
 		{
 			// Arrange
-			var command = _fixture.Create<CreateCompleteConversionProjectsCommand>();
+			var command = _fixture.Create<CreateCompleteFormAMatConversionProjectsCommand>();
 			_mockConversionProjectRepository.Setup(repo => repo.GetProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()))
 				.ReturnsAsync((IEnumerable<IProject>)null);
 
@@ -123,7 +123,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Arrange
 			_fixture.Customize<ProjectDetails>(x => x.With(x => x.AssignedUser, new User(Guid.NewGuid(), "TestFirst TestLast", "test@test.com")));
 
-			var command = _fixture.Create<CreateCompleteConversionProjectsCommand>();
+			var command = _fixture.Create<CreateCompleteFormAMatConversionProjectsCommand>();
 			var conversionProjects = _fixture.CreateMany<IProject>().ToList();
 			var advisoryDecision = _fixture.Create<ConversionAdvisoryBoardDecision>();
 			var successResponse = _fixture.Create<CreateCompleteProjectSuccessResponse>();
@@ -171,7 +171,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Arrange
 			_fixture.Customize<ProjectDetails>(x => x.With(x => x.AssignedUser, new User(Guid.NewGuid(), "TestFirst TestLast", "test@test.com")));
 
-			var command = _fixture.Create<CreateCompleteConversionProjectsCommand>();
+			var command = _fixture.Create<CreateCompleteFormAMatConversionProjectsCommand>();
 			var conversionProjects = _fixture.CreateMany<IProject>().ToList();
 			var advisoryDecision = _fixture.Create<ConversionAdvisoryBoardDecision>();
 			var errorResponse = _fixture.Create<CreateCompleteProjectErrorResponse>();

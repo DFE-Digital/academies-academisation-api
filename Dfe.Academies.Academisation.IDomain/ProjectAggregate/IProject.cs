@@ -13,8 +13,8 @@ public interface IProject
 	public Guid? ApplicationSharePointId { get; }
 	public int? FormAMatProjectId { get; }
 	public int? ProjectGroupId { get; } 
-	public DateTime? ProjectSentToCompleteDate { get; }
-	public bool IsReadOnly { get; }
+	public DateTime? ReadOnlyDate { get; }
+	public bool ProjectSentToComplete { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
 
@@ -64,7 +64,7 @@ public interface IProject
 	void UpdateSchoolImprovementPlan(int id, List<SchoolImprovementPlanArranger> arrangedBy, string? arrangedByOther, string providedBy, DateTime startDate, SchoolImprovementPlanExpectedEndDate expectedEndDate, DateTime? expectedEndDateOther, SchoolImprovementPlanConfidenceLevel confidenceLevel, string? planComments);
 
 	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete, List<ReasonChange>? reasonsChanged, string? changedBy);
-	void SetProjectSentToCompleteDate(DateTime dateSent);
+	void SetProjectSentToComplete();
 	
 	
 }

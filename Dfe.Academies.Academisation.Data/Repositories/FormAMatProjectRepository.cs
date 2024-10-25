@@ -1,6 +1,9 @@
 ﻿using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
@@ -44,6 +47,28 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.ToListAsync(cancellationToken);
 		}
 
+		public async Task CreateFormAMatProjectWithTrustReferenceNumber(IFormAMatProject formAMatProject)
+		{
+			string? trustReferenceNumber;
+
+			// This has been written to allow the integration tests to run as they use sqlite
+			if (context.Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+			{
+				trustReferenceNumber = $"TR{formAMatProject.Id:D5}"; ;
+			}
+			else
+			{
+				var p = new SqlParameter("@result", System.Data.SqlDbType.Int);
+				p.Direction = System.Data.ParameterDirection.Output;
+
+				await context.Database.ExecuteSqlRawAsync($"set @result = NEXT VALUE FOR {AcademisationContext.DEFAULT_SCHEMA}.TrustReferenceNumberSeq", p);
+				trustReferenceNumber = $"TR{(int)p.Value:D5}";
+			}
+
+			formAMatProject.SetTrustReferenceNumber(trustReferenceNumber);
+
+			Insert(formAMatProject as FormAMatProject);
+		}
 	}
 }
 
