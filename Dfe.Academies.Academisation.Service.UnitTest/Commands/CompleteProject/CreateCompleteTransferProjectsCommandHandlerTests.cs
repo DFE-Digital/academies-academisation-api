@@ -156,7 +156,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			}
 
 			var advisoryDecision = _fixture.Create<ConversionAdvisoryBoardDecision>();
-			var successResponse = _fixture.Create<CreateCompleteProjectSuccessResponse>();
+			var successResponse = _fixture.Create<CreateCompleteConversionProjectSuccessResponse>();
 			var projectGroup = _fixture.Create<Domain.ProjectGroupsAggregate.ProjectGroup>();
 			var mockContext = new Mock<IUnitOfWork>();
 

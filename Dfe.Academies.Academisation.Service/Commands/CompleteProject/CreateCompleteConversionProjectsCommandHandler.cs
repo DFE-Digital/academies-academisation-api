@@ -83,7 +83,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 				if (response.IsSuccessStatusCode)
 				{
-					var successResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectSuccessResponse>();
+					var successResponse = await response.Content.ReadFromJsonAsync<CreateCompleteConversionProjectSuccessResponse>();
 					completeProjectId = successResponse.conversion_project_id;
 
 					_logger.LogInformation("Success sending conversion project to complete with project urn: {project} with Status code 201 ", completeObject.urn);

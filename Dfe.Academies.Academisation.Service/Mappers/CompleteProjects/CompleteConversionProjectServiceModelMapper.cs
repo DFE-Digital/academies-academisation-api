@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
+﻿using System;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
@@ -22,7 +23,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 			project.Details.HeadTeacherBoardDate.ToString(),
 			conditions,
 			project.Details.ProposedConversionDate.ToString(),
-			true,
+			project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
 			email,
 			firstName,
 			lastName,
@@ -47,7 +48,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 			project.Details.HeadTeacherBoardDate.ToString(),
 			conditions,
 			project.Details.ProposedConversionDate.ToString(),
-			true,
+			project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
 			email,
 			firstName,
 			lastName,
