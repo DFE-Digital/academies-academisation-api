@@ -41,6 +41,7 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 							await mediator.Send(new CreateCompleteConversionProjectsCommand(), stoppingToken);
 							await mediator.Send(new CreateCompleteTransferProjectsCommand(), stoppingToken);
 							await mediator.Send(new CreateCompleteFormAMatConversionProjectsCommand(), stoppingToken);
+							//await mediator.Send(new CreateCompleteFormAMatTransferProjectsCommand(), stoppingToken);
 						}
 						catch (Exception ex)
 						{
