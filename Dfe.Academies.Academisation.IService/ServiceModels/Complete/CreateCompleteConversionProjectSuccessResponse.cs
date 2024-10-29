@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.Complete
 {
-	public record CreateCompleteProjectSuccessResponse (Guid conversion_project_id)
+	public record CreateCompleteConversionProjectSuccessResponse (Guid conversion_project_id)
 	{
 	}
 }

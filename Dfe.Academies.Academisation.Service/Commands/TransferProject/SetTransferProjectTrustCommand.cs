@@ -8,5 +8,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 	{
 		public string ProjectName { get; set; }
 		public string? IncomingTrustUKPRN { get; set; }
+		public string? IncomingTrustReferenceNumber { get; set; }
 	}
 }
