@@ -29,25 +29,19 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 			foreach (var project in incompleteProjects)
 			{
 				EstablishmentDto? school = await establishmentRepository.GetEstablishment(project.Details.Urn);
+				// trust could be null here for sposored conversion that do not have a preferred trust
 				TrustDto trust = await establishmentRepository.GetTrustByReferenceNumber(project.Details.TrustReferenceNumber);
-				
-				
+								
 				if (school == null)
 				{
 					logger.LogWarning("No schools found for project - {project}, urn - {urn}", project.Id, project.Details.Urn);
-					continue;
-				}
-				
-				if (trust == null)
-				{
-					logger.LogWarning("No trusts found for project - {project}, urn - {urn}", project.Id, project.Details.Urn);
 					continue;
 				}
 
 				var projectChanges = new ConversionProjectServiceModel(project.Id, project.Details.Urn)
 				{
 				
-					TrustUkprn = Int32.Parse(trust.Ukprn),
+					TrustUkprn = int.TryParse(trust?.Ukprn, out var ukprn) ? ukprn : null,
 					LocalAuthority = school.LocalAuthorityName,
 					Region = school.Gor.Name,
 					SchoolPhase = school.PhaseOfEducation.Name,
