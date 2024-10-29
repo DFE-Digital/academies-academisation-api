@@ -92,7 +92,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<IEnumerable<IProject>?> GetIncompleteProjects()
 		{
 			var createdProjectState = await _context.Projects
-				.Where(p => string.IsNullOrEmpty(p.Details.LocalAuthority) || string.IsNullOrEmpty(p.Details.Region) || string.IsNullOrEmpty(p.Details.SchoolPhase) || string.IsNullOrEmpty(p.Details.SchoolType) || (p.Details.TrustUkprn == null && p.Details.IsFormAMat == false))
+				.Where(p => 
+				string.IsNullOrEmpty(p.Details.LocalAuthority) || 
+				string.IsNullOrEmpty(p.Details.Region) || 
+				string.IsNullOrEmpty(p.Details.SchoolPhase) || 
+				string.IsNullOrEmpty(p.Details.SchoolType) || 
+				// we need projects that have a trust associated that aren't form a mat that require a trust ukprn
+				(p.Details.TrustUkprn == null && p.Details.IsFormAMat == false && p.Details.TrustReferenceNumber != null))
 				.ToListAsync();
 
 			return createdProjectState;

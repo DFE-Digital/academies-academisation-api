@@ -1,15 +1,11 @@
-﻿using System.Net.Http.Json;
-using Dfe.Academies.Academisation.Data.Http;
-using Dfe.Academies.Academisation.Data.ProjectAggregate;
+﻿using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Academisation.IService.ServiceModels.Academies;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
 using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academies.Contracts.V4.Trusts;
-using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
