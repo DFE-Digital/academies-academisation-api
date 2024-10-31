@@ -7,5 +7,6 @@ namespace Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate
 		CreateTransferProject, 
 		DeleteConversionProject,
 		DeleteTransferProject,
+		AddIncomingTrustReferenceNumber
 	}
 }
