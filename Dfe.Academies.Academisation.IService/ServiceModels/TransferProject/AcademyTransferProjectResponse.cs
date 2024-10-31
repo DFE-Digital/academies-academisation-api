@@ -21,5 +21,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
         public string Status { get; set; }
 		public bool? IsFormAMat { get; set; }
 		public DateTime? ProjectSentToCompleteDate { get; set; }
+		
+		public string? IncomingTrustReferenceNumber { get; set; }
 	}
 }

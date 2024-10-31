@@ -43,7 +43,8 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.RoleCapabilities
 				RoleCapability.CreateConversionProject,
 				RoleCapability.CreateTransferProject,
 				RoleCapability.DeleteConversionProject,
-				RoleCapability.DeleteTransferProject
+				RoleCapability.DeleteTransferProject,
+				RoleCapability.AddIncomingTrustReferenceNumber
 			};
 
 			// Action
