@@ -23,7 +23,6 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string OutgoingAcademyUkprn { get; private set; }
 		public string? IncomingTrustUkprn { get; private set; }
 		public string? IncomingTrustName { get; private set; }
-
 		public string? Region { get; private set; }
 		public string? LocalAuthority { get; private set; }
 
@@ -84,7 +83,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		}
 
 		public static TransferringAcademy Create(int transferProjectId, string? incomingTrustUkprn, string? incomingTrustName, string outgoingAcademyUkprn, string? region, string? localAuthority) {
-			return new TransferringAcademy(incomingTrustUkprn, incomingTrustName, outgoingAcademyUkprn, region, localAuthority) { TransferProjectId = transferProjectId };
+			return new TransferringAcademy(incomingTrustUkprn, incomingTrustName,outgoingAcademyUkprn, region, localAuthority) { TransferProjectId = transferProjectId };
 		}
 	}
 }

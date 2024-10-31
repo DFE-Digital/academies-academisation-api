@@ -5,6 +5,7 @@
 		int Id { get; }
 		string? IncomingTrustUkprn { get; }
 		string? IncomingTrustName { get; }
+		
 		string? KeyStage2PerformanceAdditionalInformation { get; }
 		string? KeyStage4PerformanceAdditionalInformation { get; }
 		string? KeyStage5PerformanceAdditionalInformation { get; }
