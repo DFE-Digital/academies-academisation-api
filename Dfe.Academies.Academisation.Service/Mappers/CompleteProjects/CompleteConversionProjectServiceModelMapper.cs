@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
@@ -20,9 +21,9 @@ internal static class CompleteConversionProjectServiceModelMapper
 		
 		return new CompleteConversionProjectServiceModel(
 			project.Details.Urn,
-			project.Details.HeadTeacherBoardDate.ToString(),
+			project.Details.HeadTeacherBoardDate?.ToString(new CultureInfo("en-GB")),
 			conditions,
-			project.Details.ProposedConversionDate.ToString(),
+			project.Details.ProposedConversionDate?.ToString(new CultureInfo("en-GB")),
 			project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
 			email,
 			firstName,
@@ -45,9 +46,9 @@ internal static class CompleteConversionProjectServiceModelMapper
 
 		return new CompleteFormAMatConversionProjectServiceModel(
 			project.Details.Urn,
-			project.Details.HeadTeacherBoardDate.ToString(),
+			project.Details.HeadTeacherBoardDate?.ToString(new CultureInfo("en-GB")),
 			conditions,
-			project.Details.ProposedConversionDate.ToString(),
+			project.Details.ProposedConversionDate?.ToString(new CultureInfo("en-GB")),
 			project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
 			email,
 			firstName,
