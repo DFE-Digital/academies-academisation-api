@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
+﻿using System.Globalization;
+using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
@@ -29,9 +30,9 @@ internal static class CompleteTransferProjectServiceModelMapper
 		
 		return new CompleteTransferProjectServiceModel(
 			int.Parse(urn),
-			project.HtbDate.ToString(),
+			project.HtbDate?.ToString(new CultureInfo("en-GB")),
 			conditions,
-			project.TargetDateForTransfer.ToString(),
+			project.TargetDateForTransfer?.ToString(new CultureInfo("en-GB")),
 			inadequeteOfsted,
 			financialSafeGuardingOrGovernanceIssues,
 			outGoingTrustToClose,
@@ -67,9 +68,9 @@ internal static class CompleteTransferProjectServiceModelMapper
 
 		return new CompleteFormAMatTransferProjectServiceModel(
 			int.Parse(urn),
-			project.HtbDate.ToString(),
+			project.HtbDate?.ToString(new CultureInfo("en-GB")),
 			conditions,
-			project.TargetDateForTransfer.ToString(),
+			project.TargetDateForTransfer?.ToString(new CultureInfo("en-GB")),
 			inadequeteOfsted,
 			financialSafeGuardingOrGovernanceIssues,
 			int.Parse(project.OutgoingTrustUkprn),
