@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 
 			foreach (var academy in transferProject?.TransferringAcademies)
 			{
-				transferProject.SetAcademyIncomingTrust(academy.Id, request.ProjectName, request.IncomingTrustUKPRN);
+				transferProject.SetAcademyIncomingTrust(academy.Id, request.ProjectName, request.IncomingTrustReferenceNumber,request.IncomingTrustUKPRN);
 			}
 
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

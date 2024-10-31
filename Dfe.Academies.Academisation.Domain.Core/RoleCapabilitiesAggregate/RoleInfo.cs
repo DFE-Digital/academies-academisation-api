@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate
+﻿namespace Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate
 {
 	public interface IRoleInfo
 	{
@@ -44,7 +42,8 @@ namespace Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate
 		private static List<RoleCapability> SuperAdminRoleCapabilities() 
 			=> ConversionCreationRoleCapabilities().Concat(TransferCreationRoleCapabilities()).Concat([
 				RoleCapability.DeleteConversionProject,
-				RoleCapability.DeleteTransferProject
+				RoleCapability.DeleteTransferProject,
+				RoleCapability.AddIncomingTrustReferenceNumber
 			]).Distinct().ToList();
 	}
 }

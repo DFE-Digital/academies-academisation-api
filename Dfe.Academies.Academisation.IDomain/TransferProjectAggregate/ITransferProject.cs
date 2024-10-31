@@ -55,6 +55,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		string? WhoInitiatedTheTransfer { get; }
 		IReadOnlyCollection<string> SpecificReasonsForTransfer { get; }
 		bool? IsFormAMat { get; }
+		string? IncomingTrustReferenceNumber { get; }
 
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
@@ -67,7 +68,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetBenefitsAndRisks(bool? anyRisks, bool? equalitiesImpactAssessmentConsidered, List<string> selectedBenefits, string? otherBenefitValue, bool? highProfileShouldBeConsidered, string? highProfileFurtherSpecification, bool? complexLandAndBuildingShouldBeConsidered, string? complexLandAndBuildingFurtherSpecification, bool? financeAndDebtShouldBeConsidered, string? financeAndDebtFurtherSpecification, bool? otherRisksShouldBeConsidered, string? otherRisksFurtherSpecification, bool? isCompleted);
 		void SetGeneralInformation(string recommendation, string author);
 		void SetOutgoingTrustName(string outgoingTrustName);
-		void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN);
+		void SetAcademyIncomingTrust(int academyId, string incomingTrustName,string incomingTrustReferenceNumber, string? incomingTrustUKPRN);
 		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber);
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
 		void SetDeletedAt();

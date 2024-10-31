@@ -82,6 +82,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public Guid? AssignedUserId { get; private set; }
 		public bool? IsFormAMat { get; set; }
 		public int? ProjectGroupId { get; private set; }
+		
+		public string? IncomingTrustReferenceNumber { get; private set; }
 
 		public DateTime? DeletedAt { get; set; }
 
@@ -239,14 +241,17 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			OutgoingTrustName = outgoingTrustName;
 		}
 
-		public void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustUKPRN)
+		public void SetAcademyIncomingTrust(int academyId, string incomingTrustName,string? incomingTrustReferenceNumber, string? incomingTrustUKPRN)
 		{
+
+			IncomingTrustReferenceNumber = incomingTrustReferenceNumber;
+			
 			var transferringAcademy = TransferringAcademies.SingleOrDefault(x => x.Id == academyId);
 
 			if (transferringAcademy != null)
 			{
 
-				transferringAcademy.SetIncomingTrust(incomingTrustName, incomingTrustUKPRN);
+				transferringAcademy.SetIncomingTrust(incomingTrustName,incomingTrustUKPRN);
 
 			}
 		}
@@ -284,5 +289,6 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ReadOnlyDate = date;
 
 		}
+		
 	}
 }

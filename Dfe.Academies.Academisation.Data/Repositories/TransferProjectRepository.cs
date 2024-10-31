@@ -142,7 +142,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			var projects = this.dbSet.Include(y => y.TransferringAcademies).Where(proj => proj.TransferringAcademies.Any(x => !x.ProjectSentToComplete) && proj.ReadOnlyDate.HasValue);
 
-			return await projects.Where(y => y.IsFormAMat == true).ToListAsync(cancellationToken);
+			return await projects.Where(y => y.IsFormAMat == true && y.IncomingTrustReferenceNumber != null).ToListAsync(cancellationToken);
 		}
 	}
 }
