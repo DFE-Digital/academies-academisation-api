@@ -41,18 +41,17 @@ namespace Dfe.Academies.Academisation.Service.Commands.FormAMat
 				{
 					// create formAMat
 					formAMat = FormAMatProject.Create(conversionProject.Details.NameOfTrust, conversionProject.Details.ApplicationReferenceNumber, _dateTimeProvider.Now);
-					_formAMatProjectRepository.Insert(formAMat as FormAMatProject);
+					_formAMatProjectRepository.CreateFormAMatProjectWithTrustReferenceNumber(formAMat);
 					await _formAMatProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 				}
 
 				conversionProject.SetFormAMatProjectId(formAMat.Id);
+				conversionProject.SetIncomingTrust(formAMat.TrustReferenceNumber, conversionProject.Details.NameOfTrust);
 
 				_conversionProjectRepository.Update(conversionProject as Domain.ProjectAggregate.Project);
 			}
 
-
 			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-
 
 			// returning 'CommandSuccessResult', client will have to retrieve the updated transfer project to refresh data
 			return new CommandSuccessResult();
