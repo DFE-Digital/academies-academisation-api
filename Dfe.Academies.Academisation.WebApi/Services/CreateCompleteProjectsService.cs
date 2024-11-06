@@ -1,5 +1,5 @@
-﻿using Dfe.Academies.Academisation.Service.Commands.CompleteProject;
-using Dfe.Academies.Academisation.Service.Commands.FormAMat;
+﻿using System.Security.Cryptography;
+using Dfe.Academies.Academisation.Service.Commands.CompleteProject;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
 
@@ -16,11 +16,16 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 		{
 			_logger = logger;
 			_factory = factory;
-			_delayInMilliseconds = config.GetValue<int?>("DatabasePollingDelay") ?? 10_000;
+			_delayInMilliseconds = config.GetValue<int?>("SendProjectsToCompletePollingDelay") ?? 60_000;
 		}
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
+			// delay start to prevent runtime colisions 
+			var startDelayInSeconds = GetSecureRandomDelay(1, 60);
+
+			await Task.Delay(startDelayInSeconds * 1000, stoppingToken);
+
 			while (!stoppingToken.IsCancellationRequested)
 			{
 				using (var scope = _factory.CreateScope())
@@ -45,24 +50,27 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 						}
 						catch (Exception ex)
 						{
-							_logger.LogError("Error enriching conversions complete project", ex);
+							_logger.LogError("Error creating complete projects", ex);
 						}
 
-						await Task.Delay(_delayInMilliseconds, stoppingToken);
-						
-						try
-						{ 
-							await mediator.Send(new CreateCompleteTransferProjectsCommand(), stoppingToken);
-						}
-						catch (Exception ex)
-						{
-							_logger.LogError("Error enriching transfers complete project", ex);
-						}
-
-						await Task.Delay(_delayInMilliseconds, stoppingToken);
+						await Task.Delay(_delayInMilliseconds, stoppingToken);					
 					}
 				}
 			}
+		}
+
+		private int GetSecureRandomDelay(int minValue, int maxValue)
+		{
+			// Use RandomNumberGenerator to securely generate a random delay in the specified range
+			byte[] randomNumber = new byte[4];
+			using (var rng = RandomNumberGenerator.Create())
+			{
+				rng.GetBytes(randomNumber);
+			}
+			// Convert bytes to a positive integer
+			int randomValue = Math.Abs(BitConverter.ToInt32(randomNumber, 0));
+			// Scale the random value to the specified range
+			return (randomValue % (maxValue - minValue + 1)) + minValue;
 		}
 	}
 }
