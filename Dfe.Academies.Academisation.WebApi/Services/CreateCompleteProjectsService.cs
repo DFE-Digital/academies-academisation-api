@@ -16,11 +16,16 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 		{
 			_logger = logger;
 			_factory = factory;
-			_delayInMilliseconds = GetSecureRandomDelay(1000, 30000) + config.GetValue<int?>("SendProjectsToCompletePollingDelay") ?? 60_000;
+			_delayInMilliseconds = config.GetValue<int?>("SendProjectsToCompletePollingDelay") ?? 60_000;
 		}
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
+			// delay start to prevent runtime colisions 
+			var startDelayInMilliseconds = GetSecureRandomDelay(1000, 60000);
+
+			await Task.Delay(startDelayInMilliseconds, stoppingToken);
+
 			while (!stoppingToken.IsCancellationRequested)
 			{
 				using (var scope = _factory.CreateScope())
