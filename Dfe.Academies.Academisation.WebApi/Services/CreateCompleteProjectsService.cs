@@ -1,5 +1,5 @@
-﻿using Dfe.Academies.Academisation.Service.Commands.CompleteProject;
-using Dfe.Academies.Academisation.Service.Commands.FormAMat;
+﻿using System.Security.Cryptography;
+using Dfe.Academies.Academisation.Service.Commands.CompleteProject;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using MediatR;
 
@@ -16,7 +16,7 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 		{
 			_logger = logger;
 			_factory = factory;
-			_delayInMilliseconds = config.GetValue<int?>("DatabasePollingDelay") ?? 10_000;
+			_delayInMilliseconds = GetSecureRandomDelay(1000, 30000) + config.GetValue<int?>("SendProjectsToCompletePollingDelay") ?? 60_000;
 		}
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -45,24 +45,27 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 						}
 						catch (Exception ex)
 						{
-							_logger.LogError("Error enriching conversions complete project", ex);
+							_logger.LogError("Error creating complete projects", ex);
 						}
 
-						await Task.Delay(_delayInMilliseconds, stoppingToken);
-						
-						try
-						{ 
-							await mediator.Send(new CreateCompleteTransferProjectsCommand(), stoppingToken);
-						}
-						catch (Exception ex)
-						{
-							_logger.LogError("Error enriching transfers complete project", ex);
-						}
-
-						await Task.Delay(_delayInMilliseconds, stoppingToken);
+						await Task.Delay(_delayInMilliseconds, stoppingToken);					
 					}
 				}
 			}
+		}
+
+		private int GetSecureRandomDelay(int minValue, int maxValue)
+		{
+			// Use RandomNumberGenerator to securely generate a random delay in the specified range
+			byte[] randomNumber = new byte[4];
+			using (var rng = RandomNumberGenerator.Create())
+			{
+				rng.GetBytes(randomNumber);
+			}
+			// Convert bytes to a positive integer
+			int randomValue = Math.Abs(BitConverter.ToInt32(randomNumber, 0));
+			// Scale the random value to the specified range
+			return (randomValue % (maxValue - minValue + 1)) + minValue;
 		}
 	}
 }

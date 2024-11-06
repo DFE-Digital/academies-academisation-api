@@ -261,7 +261,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			Assert.IsType<CommandSuccessResult>(result);
 
 			// Verifying that the logger was called for the "Success sending conversion" case
-			_mockLogger.Verify(x => x.Log(LogLevel.Information,
+			_mockLogger.Verify(x => x.Log(LogLevel.Error,
 				// We're checking for an Information log
 				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Error sending transfer project to complete with project urn")),
 				// Check if the message contains the expected string

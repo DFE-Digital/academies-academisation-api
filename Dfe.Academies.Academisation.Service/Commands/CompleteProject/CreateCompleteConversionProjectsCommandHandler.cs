@@ -92,7 +92,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				{
 					var errorResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
 					responseMessage = errorResponse.GetAllErrors();
-					_logger.LogInformation("Error sending conversion project to complete with project urn: {project} due to Status code {code} and Complete Validation Errors:" + responseMessage, completeObject.urn, response.StatusCode);
+					_logger.LogError("Error sending conversion project to complete with project urn: {project} due to Status code {code} and Complete Validation Errors:" + responseMessage, completeObject.urn, response.StatusCode);
 				}
 
 				conversionProject.SetProjectSentToComplete();

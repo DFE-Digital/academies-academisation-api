@@ -108,7 +108,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					var errorResponse =
 						await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>();
 					responseMessage = errorResponse.GetAllErrors();
-					_logger.LogInformation("Error sending transfer project to complete with project urn: {project} for transfering academy: {urn} due to Status code {code} and Complete Validation Errors:" + responseMessage, transferProject.Urn, establishment.Urn, response.StatusCode);
+					_logger.LogError("Error sending transfer project to complete with project urn: {project} for transfering academy: {urn} due to Status code {code} and Complete Validation Errors:" + responseMessage, transferProject.Urn, establishment.Urn, response.StatusCode);
 				}
 
 				transferProject.SetProjectSentToComplete(transferringAcademy.Ukprn);
