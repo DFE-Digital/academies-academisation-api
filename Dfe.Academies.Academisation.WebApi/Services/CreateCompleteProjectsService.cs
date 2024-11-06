@@ -22,9 +22,9 @@ namespace Dfe.Academies.Academisation.WebApi.Services
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
 			// delay start to prevent runtime colisions 
-			var startDelayInMilliseconds = GetSecureRandomDelay(1000, 60000);
+			var startDelayInSeconds = GetSecureRandomDelay(1, 60);
 
-			await Task.Delay(startDelayInMilliseconds, stoppingToken);
+			await Task.Delay(startDelayInSeconds * 1000, stoppingToken);
 
 			while (!stoppingToken.IsCancellationRequested)
 			{
