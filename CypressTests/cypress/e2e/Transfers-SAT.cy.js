@@ -772,7 +772,7 @@ describe('Academisation API Testing - Transfers SAT Projects', () => {
       expect(response.body.generalInformation).to.have.property('author', 'authorString value')
 
       // CHECK ASSIGNED USER WE SET COMES BACK IN GET RESPONSE
-      expect(response.body.assignedUser).to.have.property('fullName', 'userFullName value')
+      expect(response.body.assignedUser).to.have.property('fullName', 'Daniel Good')
       expect(response.body.assignedUser).to.have.property('emailAddress', 'userEmail@useremailval.com')
       expect(response.body.assignedUser).to.have.property('id', '3fa85f64-5717-4562-b3fc-2c963f66afa6')
 
