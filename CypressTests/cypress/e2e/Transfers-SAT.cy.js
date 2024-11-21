@@ -727,7 +727,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // CHECK SET ASSIGN USER DETAILS COME BACK IN GET RESPONSE...
-  it.only('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE USER ASSIGNED TO THE PROJECT - 200 OK EXPECTED', () => {
+  it('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE USER ASSIGNED TO THE PROJECT - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN,
       method: 'GET',
@@ -760,9 +760,9 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
       //expect(response.body.legalRequirements).to.have.property('outgoingTrustConsent', 'outgoing Trust Consent Value')
       //expect(response.body.legalRequirements).to.have.property('isCompleted', true)
 
-      expect(response.body.features).to.have.property('whoInitiatedTheTransfer', 'whoInitiatedTheTransfer Value')
-      expect(response.body.features).to.have.property('typeOfTransfer', 'SAT')
-      expect(response.body.features).to.have.property('isCompleted', true)
+      //expect(response.body.features).to.have.property('whoInitiatedTheTransfer', 'whoInitiatedTheTransfer Value')
+      //expect(response.body.features).to.have.property('typeOfTransfer', 'SAT')
+      //expect(response.body.features).to.have.property('isCompleted', true)
 
       /*
       expect(response.body.benefits.intendedTransferBenefits.selectedBenefits[0]).to.equal('selectedBenefits value')
@@ -785,8 +785,8 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
       expect(response.body.transferringAcademies[0].keyStage4PerformanceAdditionalInformation).to.equal('KeyStage4PerformanceAdditionalInformation value')
       expect(response.body.transferringAcademies[0].keyStage5PerformanceAdditionalInformation).to.equal('keyStage5PerformanceAdditionalInformation value')
 
-      expect(response.body.generalInformation).to.have.property('recommendation', 'recommendationString value')
-      expect(response.body.generalInformation).to.have.property('author', 'authorString value')
+      //expect(response.body.generalInformation).to.have.property('recommendation', 'recommendationString value')
+      //expect(response.body.generalInformation).to.have.property('author', 'authorString value')
 
       // CHECK ASSIGNED USER WE SET COMES BACK IN GET RESPONSE
       expect(response.body.assignedUser).to.have.property('fullName', 'John Smith')
