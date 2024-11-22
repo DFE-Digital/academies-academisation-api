@@ -1,7 +1,7 @@
 const AuthorisedUserCanSetFeaturesPayload
 = {
   urn: Cypress.env('URN'),
-  typeOfTransfer: 'typeOfTransfer Value',
+  typeOfTransfer: 'SAT',
   whoInitiatedTheTransfer: 'whoInitiatedTheTransfer Value',
   specificReasonsForTransfer: ['specificReasonsForTransfer Value'],
   isCompleted: true,

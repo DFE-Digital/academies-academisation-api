@@ -1,7 +1,9 @@
+const transferringACADEMYOutgoingUkprn = 10034661
+const incomingTrustUkprn = 10059669
 const AuthorisedUserCanSetAdditionalSchoolDataPayload
 = {
   urn: Cypress.env('URN'),
-  transferringAcademyUkprn: 10066876,
+  transferringAcademyUkprn: transferringACADEMYOutgoingUkprn,
   latestOfstedReportAdditionalInformation: 'latestOfstedReportAdditionalInformation value',
   pupilNumbersAdditionalInformation: 'pupilNumbersAdditionalInformation value',
   keyStage2PerformanceAdditionalInformation: 'keyStage2PerformanceAdditionalInformation value',
