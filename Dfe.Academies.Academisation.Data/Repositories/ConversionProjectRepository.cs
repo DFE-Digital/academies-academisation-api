@@ -98,7 +98,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				string.IsNullOrEmpty(p.Details.SchoolPhase) || 
 				string.IsNullOrEmpty(p.Details.SchoolType) || 
 				// we need projects that have a trust associated that aren't form a mat that require a trust ukprn
-				(p.Details.TrustUkprn == null && p.Details.IsFormAMat == null && p.Details.TrustReferenceNumber != null)
+				(p.Details.TrustUkprn == null && p.Details.IsFormAMat == false && p.Details.TrustReferenceNumber != null)
 				&& p.DeletedAt == null)
 				.ToListAsync();
 
