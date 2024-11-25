@@ -414,3 +414,9 @@ variable "cdn_frontdoor_vdp_destination_hostname" {
   type        = string
   default     = "vdp.security.education.gov.uk"
 }
+
+variable "container_port" {
+  description = "Container port"
+  type        = number
+  default     = 8080
+}
