@@ -13,4 +13,5 @@ public record ApplicationServiceModel(
 	DateTime? ApplicationSubmittedDate,
 	string? ApplicationReference,
 	Guid EntityId,
-	DateTime? DeletedAt);
+	DateTime? DeletedAt,
+	DateTime? CreatedOn);
