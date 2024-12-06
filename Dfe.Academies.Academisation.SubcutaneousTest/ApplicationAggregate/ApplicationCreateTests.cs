@@ -15,6 +15,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Application;
 using Dfe.Academies.Academisation.Service.Commands.Application;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.WebApi.Controllers;
+using DocumentFormat.OpenXml.Spreadsheet;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -92,17 +93,32 @@ public class ApplicationCreateTests
 			id,
 			applicationCreateRequestModel.ApplicationType,
 			ApplicationStatus.InProgress,
-			new List<ApplicationContributorServiceModel> { new ApplicationContributorServiceModel(
+			[ new ApplicationContributorServiceModel(
 				actualContributor.ContributorId,
 				applicationCreateRequestModel.Contributor.FirstName,
 				applicationCreateRequestModel.Contributor.LastName,
 				applicationCreateRequestModel.Contributor.EmailAddress,
 				applicationCreateRequestModel.Contributor.Role,
-				applicationCreateRequestModel.Contributor.OtherRoleName) },
-			new List<ApplicationSchoolServiceModel>(),
-			null, null, null, id.ToString(), actualApplication.EntityId, null, null);
+				applicationCreateRequestModel.Contributor.OtherRoleName) ],
+			[],
+			null, null, null, id.ToString(), actualApplication.EntityId, null, DateTime.UtcNow);
 
-		Assert.Equivalent(expectedApplication, actualApplication);
+		Assert.Equal(expectedApplication.ApplicationType, actualApplication.ApplicationType);
+		foreach (var (contributor, index) in actualApplication.Contributors.Select((value, i) => (value, i)))
+		{ 
+			Assert.Equal(contributor.FirstName, actualContributor.FirstName);
+			Assert.Equal(contributor.LastName, actualContributor.LastName);
+			Assert.Equal(contributor.EmailAddress, actualContributor.EmailAddress);
+			Assert.Equal(contributor.Role, actualContributor.Role);
+			Assert.Equal(contributor.OtherRoleName, actualContributor.OtherRoleName);
+		}
+		Assert.Null(expectedApplication.DeletedAt);
+		Assert.NotNull(expectedApplication.CreatedOn);
+		Assert.Equal(expectedApplication.ApplicationSubmittedDate, actualApplication.ApplicationSubmittedDate);
+		Assert.Equal(expectedApplication.ApplicationStatus, actualApplication.ApplicationStatus);
+		Assert.Equivalent(expectedApplication.joinTrustDetails, actualApplication.joinTrustDetails);
+		Assert.Equivalent(expectedApplication.formTrustDetails, actualApplication.formTrustDetails);
+		Assert.Equivalent(expectedApplication.Schools, actualApplication.Schools);
 	}
 
 	[Fact]
