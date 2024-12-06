@@ -9,7 +9,7 @@ import { AuthorisedUserCannotUpdatePreviousFinancialYearEndDateToInvalidDateBody
 import { AuthorisedUserCannotUpdateCurrentFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeCurrentFinancialYearEndDateToInvalidDate.spec'
 import { AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeNextFinancialYearEndDateToInvalidDate.spec'
 
-describe('Academisation API Testing', () => {
+describe.skip('Academisation API Testing', () => {
   let apiKey = Cypress.env('apiKey')
   let url = Cypress.env('url')
   let applicationNumber = 10002

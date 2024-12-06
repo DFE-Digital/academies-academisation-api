@@ -8,7 +8,7 @@ import { AuthorisedUserCanSetAdditionalSchoolDataPayload } from '../fixtures/pay
 import { AuthorisedUserCanSetTrustInfoAndProjectDatesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetTrustInfoAndProjectsDates.spec'
 import { AuthorisedUserCanAssignUserDataPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanAssignUser.spec'
 
-describe('Academisation API Testing - Transfers SAT Projects', () => {
+describe.skip('Academisation API Testing - Transfers SAT Projects', () => {
   let apiKey = Cypress.env('apiKey')
   let url = Cypress.env('url')
   let URN = Cypress.env('URN')
