@@ -97,8 +97,6 @@ builder.Services.AddSwaggerGen(config =>
 	if (File.Exists(descriptionsPath)) config.IncludeXmlComments(descriptionsPath);
 });
 
-builder.Services.AddHealthChecks();
-
 builder.Services.AddOptions<AuthenticationConfig>();
 var apiKeysConfiguration = builder.Configuration.GetSection("AuthenticationConfig");
 builder.Services.Configure<AuthenticationConfig>(apiKeysConfiguration);
@@ -156,6 +154,9 @@ builder.Services.AddDbContext<AcademisationContext>(options =>
 #endif
 	}
 );
+
+builder.Services.AddHealthChecks()
+	.AddDbContextCheck<AcademisationContext>("Academisation Database");
 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<SwaggerOptions>();
