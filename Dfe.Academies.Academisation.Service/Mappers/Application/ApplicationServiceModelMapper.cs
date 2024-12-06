@@ -21,6 +21,7 @@ internal static class ApplicationServiceModelMapper
 			application.ApplicationSubmittedDate,
 			application.ApplicationReference,
 			application.EntityId,
-			application.DeletedAt);
+			application.DeletedAt,
+			application.CreatedOn);
 	}
 }
