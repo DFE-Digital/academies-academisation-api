@@ -1,4 +1,4 @@
-name: Run Cypress tests
+name: Cypress Tests using Cypress Docker Image
 
 on:
   workflow_call:
@@ -21,38 +21,38 @@ on:
 concurrency:
   group: ${{ github.workflow }}
 
-env:
-  NODE_VERSION: 18.x
-
 jobs:
   cypress-tests:
     name: Run Cypress tests
-    if: inputs.environment == 'test' || inputs.environment == 'development'
-    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    strategy:
+      matrix:
+        browser: [
+          "edge"
+        ]
+    container:
+      image: cypress/browsers:22.12.0
     defaults:
       run:
         working-directory: CypressTests
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
-      - name: Setup node.js
-        uses: actions/setup-node@v4
+      - name: Run
+        uses: cypress-io/github-action@v6
+        env:
+          CYPRESS_apiKey: ${{ secrets.API_KEY }}
+          CYPRESS_url: ${{ secrets.URL }}
         with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Npm install
-        run: npm install
-
-      - name: Run cypress
-        run: npm run cy:run -- --env apiKey=${{ secrets.API_KEY }},url=${{ secrets.URL }}
+          browser: ${{ matrix.browser }}
+          working-directory: CypressTests
 
       - name: Upload artifacts
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-           name: screenshots-${{ inputs.environment }}
+           name: screenshots-${{ inputs.environment }}-${{ matrix.browser }}
            path: CypressTests/cypress/screenshots
