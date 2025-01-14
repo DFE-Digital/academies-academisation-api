@@ -17,6 +17,7 @@ public interface IProject
 	public bool ProjectSentToComplete { get; }
 	DateTime CreatedOn { get; }
 	DateTime LastModifiedOn { get; }
+	DateTime LockedUntil { get; }
 
 	public IReadOnlyCollection<IProjectNote> Notes { get; }
 	public IReadOnlyCollection<ISchoolImprovementPlan> SchoolImprovementPlans { get; }

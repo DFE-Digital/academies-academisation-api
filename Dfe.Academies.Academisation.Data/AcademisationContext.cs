@@ -384,6 +384,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		projectConfiguration.HasKey(x => x.Id);
 		projectConfiguration.Property(d => d.CreatedOn).HasColumnName("CreatedOn");
 		projectConfiguration.Property(d => d.FormAMatProjectId).HasColumnName("FormAMatProjectId");
+		projectConfiguration.Property(d => d.LockedUntil).HasDefaultValueSql("GETUTCDATE()");
 		projectConfiguration.OwnsOne(x => x.Details, pd =>
 		{
 			pd.Property(d => d.ViabilityIssues).HasColumnName("ViabilityIssues");

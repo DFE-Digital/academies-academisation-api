@@ -341,9 +341,19 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public async Task<IEnumerable<IProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
 		{
-			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
+			var projects = await this.dbSet.Where(proj => !proj.ProjectSentToComplete &&
 			!proj.FormAMatProjectId.HasValue &&
-			proj.ReadOnlyDate.HasValue).ToListAsync(cancellationToken);
+			proj.ReadOnlyDate.HasValue && proj.LockedUntil < DateTime.UtcNow).ToListAsync(cancellationToken);
+
+			// Lock rows for update
+			foreach (var project in projects)
+			{
+				project.SetLockedUntil(DateTime.UtcNow.AddMinutes(5));
+			}
+
+			await this.context.SaveChangesAsync(cancellationToken);
+
+			return projects;
 		}
 
 		public async Task<IEnumerable<IProject>> GetFormAMatProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
