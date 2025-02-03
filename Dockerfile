@@ -23,29 +23,26 @@ RUN ["dotnet", "restore", "Dfe.Academies.Academisation.WebApi"]
 RUN ["dotnet", "build", "Dfe.Academies.Academisation.WebApi", "--no-restore", "-c", "Release"]
 RUN ["dotnet", "publish", "Dfe.Academies.Academisation.WebApi", "--no-build", "-o", "/app"]
 
-RUN ["dotnet", "new", "tool-manifest"]
-RUN ["dotnet", "tool", "install", "dotnet-ef", "--version", "8.0.11"]
-RUN ["mkdir", "-p", "/app/SQL"]
-RUN ["dotnet", "restore", "Dfe.Academies.Academisation.WebApi"]
-RUN ["dotnet", "build", "Dfe.Academies.Academisation.WebApi", "--no-restore"]
-RUN ["dotnet", "ef", "migrations", "script", "--output", "/app/SQL/DbMigrationScript.sql", "--idempotent", "-p", "/build/Dfe.Academies.Academisation.Data", "-s", "/build/Dfe.Academies.Academisation.WebApi", "-c", "AcademisationContext", "--no-build"]
-RUN ["touch", "/app/SQL/DbMigrationScriptOutput.txt"]
+# Generate an Entity Framework bundle
+FROM build AS efbuilder
+ENV PATH=$PATH:/root/.dotnet/tools
+RUN ["mkdir", "/sql"]
+RUN ["dotnet", "tool", "install", "--global", "dotnet-ef"]
+RUN ["dotnet", "ef", "migrations", "bundle", "-r", "linux-x64", "-p", "Dfe.Academies.Academisation.Data", "-s", "Dfe.Academies.Academisation.WebApi", "-c", "AcademisationContext", "--configuration", "Release", "--no-build", "-o", "/sql/migratedb"]
 
-# Install SQL tools to allow migrations to be run
-FROM "mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-azurelinux3.0" AS base
-RUN curl "https://packages.microsoft.com/config/rhel/9/prod.repo" | tee /etc/yum.repos.d/mssql-release.repo
-ENV ACCEPT_EULA=Y
-RUN ["tdnf", "update"]
-RUN ["tdnf", "install", "-y", "mssql-tools18"]
-RUN ["tdnf", "clean", "all"]
+# Create a runtime environment for Entity Framework
+FROM "mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-azurelinux3.0" AS initcontainer
+WORKDIR /sql
+COPY --from=efbuilder /app/appsettings.json /Dfe.Academies.Academisation/
+COPY --from=efbuilder /sql /sql
+RUN chown "$APP_UID" "/sql" -R
+USER $APP_UID
 
 # Build a runtime environment
-FROM base AS runtime
+FROM "mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-azurelinux3.0" AS final
 WORKDIR /app
 LABEL org.opencontainers.image.source="https://github.com/DFE-Digital/academies-academisation-api"
 COPY --from=build /app /app
 COPY ./script/webapi-docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN ["chmod", "+x", "/app/docker-entrypoint.sh"]
-RUN ["touch", "/app/SQL/DbMigrationScriptOutput.txt"]
-RUN chown "$APP_UID" "/app/SQL" -R
 USER $APP_UID
