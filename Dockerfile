@@ -38,7 +38,7 @@ COPY --from=efbuilder /sql /sql
 RUN chown "$APP_UID" "/sql" -R
 USER $APP_UID
 
-# Install SQL tools to allow migrations to be run
+# Build a runtime environment
 FROM "mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-azurelinux3.0" AS final
 WORKDIR /app
 LABEL org.opencontainers.image.source="https://github.com/DFE-Digital/academies-academisation-api"
