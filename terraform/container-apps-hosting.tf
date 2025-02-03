@@ -71,4 +71,7 @@ module "azure_container_apps_hosting" {
   existing_network_watcher_resource_group_name = local.existing_network_watcher_resource_group_name
 
   alarm_log_ingestion_gb_per_day = local.alarm_log_ingestion_gb_per_day
+  enable_init_container          = local.enable_init_container
+  init_container_image           = local.init_container_image
+  init_container_command         = local.init_container_command
 }
