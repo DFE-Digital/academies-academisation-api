@@ -66,8 +66,6 @@ describe('Academisation API Testing', () => {
   })
 
   it('GET - Verify An UNAUTHORISED USER CANNOT Retreive An Application - 401 UNAUTHORISED EXPECTED', function () {
-    cy.skipWhen(url.includes('d01'), this)
-
     cy.api({
       method: 'GET',
       url: url + '/application/' + applicationNumber,
@@ -222,8 +220,6 @@ describe('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An UNAUTHORISED USER CANNOT Update An Application - 401 UNAUTHORISED EXPECTED', function () {
-    cy.skipWhen(url.includes('d01'), this)
-
     cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,

@@ -10,8 +10,6 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   let trustKeyPersonNumber = 0
 
   it('POST - Verify An UnAuthorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', function () {
-    cy.skipWhen(url.includes('d01'), this)
-
     cy.api({
       method: 'POST',
       url: url + '/application/' + applicationNumber + '/form-trust/key-person',
@@ -59,8 +57,6 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   })
 
   it('GET - Verify An UNAuthorised User Is UNAble To GET FAM-Trust Key PERSONS - Form-Trust Key-PersonS - 401 UNAUTHORISED Expected', function () {
-    cy.skipWhen(url.includes('d01'), this)
-
     cy.api({
       method: 'GET',
       url: url + '/application/' + applicationNumber + '/form-trust/key-person',
@@ -90,8 +86,6 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   })
 
   it('GET - Verify An UNAuthorised User Is UNAble To GET FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', function () {
-    cy.skipWhen(url.includes('d01'), this)
-
     cy.api({
       method: 'GET',
       url: url + '/application/' + applicationNumber + '/form-trust/key-person' + '/' + 105,
@@ -120,7 +114,6 @@ describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   })
 
   it('PUT - Verify An UNAuthorised User Is UNAble To UPDATE a FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', function () {
-    cy.skipWhen(url.includes('d01'), this)
 
     cy.log(JSON.stringify('Id = ' + Cypress.env('responseIDForRequest')))
     cy.api({
