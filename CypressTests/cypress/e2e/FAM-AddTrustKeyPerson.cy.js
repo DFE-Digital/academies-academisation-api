@@ -3,7 +3,7 @@ import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtu
 import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB.spec'
 import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson.spec'
 
-describe.skip('Academisation API Testing - FAM - Add Trust Key Person', () => {
+describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   let apiKey = Cypress.env('apiKey')
   let url = Cypress.env('url')
   let applicationNumber = 10038

@@ -8,7 +8,7 @@ import { AuthorisedUserCanSetAdditionalSchoolDataPayload } from '../fixtures/pay
 import { AuthorisedUserCanSetTrustInfoAndProjectDatesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetTrustInfoAndProjectsDates.spec'
 import { AuthorisedUserCanAssignUserDataPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanAssignUser.spec'
 
-describe.skip('Academisation API Testing - Transfers SAT Projects', () => {
+describe('Academisation API Testing - Transfers SAT Projects', () => {
   let apiKey = Cypress.env('apiKey')
   let url = Cypress.env('url')
   let URN = Cypress.env('URN')
@@ -268,7 +268,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // TRY TO SET LEGAL REQUIREMENTS IN PUT REQUEST
-  it.skip('PUT - Verify An Authorised User Can SET-LEGAL REQUIREMENTS On New SAT Transfer We Created - 200 OK EXPECTED', () => {
+  it('PUT - Verify An Authorised User Can SET-LEGAL REQUIREMENTS On New SAT Transfer We Created - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN + '/set-legal-requirements',
       method: 'PUT',
@@ -285,7 +285,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // CHECK UPDATED LEGAL REQUIREMENTS COME BACK CORRECTLY IN GET RESPONSE
-  it.skip('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED LEGAL REQUIREMENTS - 200 OK EXPECTED', () => {
+  it('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED LEGAL REQUIREMENTS - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN,
       method: 'GET',
@@ -342,7 +342,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // TRY TO SET FEATURES IN PUT REQUEST
-  it.skip('PUT - Verify An Authorised User Can SET-FEATURES On New SAT Transfer We Created - 200 OK EXPECTED', () => {
+  it('PUT - Verify An Authorised User Can SET-FEATURES On New SAT Transfer We Created - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN + '/set-features',
       method: 'PUT',
@@ -359,7 +359,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // CHECK UPDATED FEATURES COME BACK CORRECTLY IN GET RESPONSE
-  it.skip('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED FEATURES - 200 OK EXPECTED', () => {
+  it('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED FEATURES - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN,
       method: 'GET',
@@ -420,7 +420,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // TRY TO SET BENEFITS IN PUT REQUEST
-  it.skip('PUT - Verify An Authorised User Can SET-BENEFITS On New SAT Transfer We Created - 200 OK EXPECTED', () => {
+  it('PUT - Verify An Authorised User Can SET-BENEFITS On New SAT Transfer We Created - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN + '/set-benefits',
       method: 'PUT',
@@ -437,7 +437,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // CHECK SET BENEFITS IN GET RESPONSE...
-  it.skip('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED BENEFITS - 200 OK EXPECTED', () => {
+  it('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED BENEFITS - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN,
       method: 'GET',
@@ -610,7 +610,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // TRY TO SET TRUST GENERAL INFO
-  it.skip('PUT - Verify An Authorised User Can SET-SCHOOL-TRUST-GENERAL-INFORMATION On New SAT Transfer We Created - 200 OK EXPECTED', () => {
+  it('PUT - Verify An Authorised User Can SET-SCHOOL-TRUST-GENERAL-INFORMATION On New SAT Transfer We Created - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN + '/set-general-information',
       method: 'PUT',
@@ -627,7 +627,7 @@ it('PUT - Verify An Authorised User Can SET-RATIONALE On New SAT Transfer We Cre
   })
 
   // CHECK SET TRUST INFO IN GET RESPONSE...
-  it.skip('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED SCHOOL ADDITIONAL DATA - 200 OK EXPECTED', () => {
+  it('GET - Verify An Authorised User Can GET THE New SAT Transfer We Created WITH THE UPDATED SCHOOL ADDITIONAL DATA - 200 OK EXPECTED', () => {
     cy.api({
       url: url + '/transfer-project/' + URN,
       method: 'GET',
