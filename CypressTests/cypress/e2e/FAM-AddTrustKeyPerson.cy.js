@@ -6,7 +6,7 @@ import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../
 describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   let apiKey = Cypress.env('apiKey')
   let url = Cypress.env('url')
-  let applicationNumber = 10038
+  let applicationNumber = url.includes('test') ? 10491 : 10038;
   let trustKeyPersonNumber = 0
 
   it('POST - Verify An UnAuthorised User Is Unable To Create New FAM-Trust Key Person - Form-Trust Key-Person - 401 UNAUTHORISED Expected', function () {
