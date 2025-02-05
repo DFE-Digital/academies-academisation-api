@@ -1,18 +1,18 @@
-import { UnauthorisedUserCannotUpdatePayload } from '../fixtures/payloads/UnauthorisedUserCannotUpdateBody.spec'
-import { AuthorisedUserCanUpdatePayload } from '../fixtures/payloads/AuthorisedUserCanUpdate.spec'
-import { AuthorisedUserCannotUpdateTheirContributorsEmailToAnotherEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToAnotherEmail.spec'
-import { AuthorisedUserCannotUpdateTheirContributorsEmailToInvalidEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToInvalidEmail.spec'
-import { AuthorisedUserCannotUpdateWorksPlannedDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeWorksPlannedDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateSacreExemptionEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeSacreExemptionEndDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBody.spec'
-import { AuthorisedUserCannotUpdatePreviousFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangePreviousFinancialYearEndDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateCurrentFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeCurrentFinancialYearEndDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeNextFinancialYearEndDateToInvalidDate.spec'
+import { UnauthorisedUserCannotUpdatePayload } from '../fixtures/payloads/UnauthorisedUserCannotUpdateBody'
+import { AuthorisedUserCanUpdatePayload } from '../fixtures/payloads/AuthorisedUserCanUpdate'
+import { AuthorisedUserCannotUpdateTheirContributorsEmailToAnotherEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToAnotherEmail'
+import { AuthorisedUserCannotUpdateTheirContributorsEmailToInvalidEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToInvalidEmail'
+import { AuthorisedUserCannotUpdateWorksPlannedDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeWorksPlannedDateToInvalidDate'
+import { AuthorisedUserCannotUpdateSacreExemptionEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeSacreExemptionEndDateToInvalidDate'
+import { AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBody'
+import { AuthorisedUserCannotUpdatePreviousFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangePreviousFinancialYearEndDateToInvalidDate'
+import { AuthorisedUserCannotUpdateCurrentFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeCurrentFinancialYearEndDateToInvalidDate'
+import { AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeNextFinancialYearEndDateToInvalidDate'
 
-describe.skip('Academisation API Testing', () => {
+describe('Academisation API Testing', () => {
   let apiKey = Cypress.env('apiKey')
   let url = Cypress.env('url')
-  let applicationNumber = 10002
+  let applicationNumber = url.includes('test') ? 281 : 10002;
   let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})Z?$/
 
@@ -66,8 +66,6 @@ describe.skip('Academisation API Testing', () => {
   })
 
   it('GET - Verify An UNAUTHORISED USER CANNOT Retreive An Application - 401 UNAUTHORISED EXPECTED', function () {
-    cy.skipWhen(url.includes('d01'), this)
-
     cy.api({
       method: 'GET',
       url: url + '/application/' + applicationNumber,
@@ -222,8 +220,6 @@ describe.skip('Academisation API Testing', () => {
   })
 
   it('PUT - Verify An UNAUTHORISED USER CANNOT Update An Application - 401 UNAUTHORISED EXPECTED', function () {
-    cy.skipWhen(url.includes('d01'), this)
-
     cy.api({
       method: 'PUT',
       url: url + '/application/' + applicationNumber,
