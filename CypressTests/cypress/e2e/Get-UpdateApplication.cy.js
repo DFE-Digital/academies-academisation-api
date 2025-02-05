@@ -1,13 +1,13 @@
 import { UnauthorisedUserCannotUpdatePayload } from '../fixtures/payloads/UnauthorisedUserCannotUpdateBody.spec'
 import { AuthorisedUserCanUpdatePayload } from '../fixtures/payloads/AuthorisedUserCanUpdate.spec'
-import { AuthorisedUserCannotUpdateTheirContributorsEmailToAnotherEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToAnotherEmail.spec'
-import { AuthorisedUserCannotUpdateTheirContributorsEmailToInvalidEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToInvalidEmail.spec'
-import { AuthorisedUserCannotUpdateWorksPlannedDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeWorksPlannedDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateSacreExemptionEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeSacreExemptionEndDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBody.spec'
-import { AuthorisedUserCannotUpdatePreviousFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangePreviousFinancialYearEndDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateCurrentFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeCurrentFinancialYearEndDateToInvalidDate.spec'
-import { AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeNextFinancialYearEndDateToInvalidDate.spec'
+import { AuthorisedUserCannotUpdateTheirContributorsEmailToAnotherEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToAnotherEmail'
+import { AuthorisedUserCannotUpdateTheirContributorsEmailToInvalidEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToInvalidEmail'
+import { AuthorisedUserCannotUpdateWorksPlannedDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeWorksPlannedDateToInvalidDate'
+import { AuthorisedUserCannotUpdateSacreExemptionEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeSacreExemptionEndDateToInvalidDate'
+import { AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBody'
+import { AuthorisedUserCannotUpdatePreviousFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangePreviousFinancialYearEndDateToInvalidDate'
+import { AuthorisedUserCannotUpdateCurrentFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeCurrentFinancialYearEndDateToInvalidDate'
+import { AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeNextFinancialYearEndDateToInvalidDate'
 
 describe('Academisation API Testing', () => {
   let apiKey = Cypress.env('apiKey')

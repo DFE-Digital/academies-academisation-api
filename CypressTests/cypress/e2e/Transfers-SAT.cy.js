@@ -1,12 +1,12 @@
-import { AuthorisedUserCanCreateNewSATTransferPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanCreateNewSATTransfer.spec'
-import { AuthorisedUserCanSetRationalePayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetRationale.spec'
-import { AuthorisedUserCanSetTransferDatesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetTransferDates.spec'
-import { AuthorisedUserCanSetLegalRequirementsPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetLegalRequirements.spec'
-import { AuthorisedUserCanSetFeaturesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetFeatures.spec'
-import { AuthorisedUserCanSetBenefitsPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetBenefits.spec'
-import { AuthorisedUserCanSetAdditionalSchoolDataPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetAdditionalSchoolData.spec'
-import { AuthorisedUserCanSetTrustInfoAndProjectDatesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetTrustInfoAndProjectsDates.spec'
-import { AuthorisedUserCanAssignUserDataPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanAssignUser.spec'
+import { AuthorisedUserCanCreateNewSATTransferPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanCreateNewSATTransfer'
+import { AuthorisedUserCanSetRationalePayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetRationale'
+import { AuthorisedUserCanSetTransferDatesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetTransferDates'
+import { AuthorisedUserCanSetLegalRequirementsPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetLegalRequirements'
+import { AuthorisedUserCanSetFeaturesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetFeatures'
+import { AuthorisedUserCanSetBenefitsPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetBenefits'
+import { AuthorisedUserCanSetAdditionalSchoolDataPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetAdditionalSchoolData'
+import { AuthorisedUserCanSetTrustInfoAndProjectDatesPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanSetTrustInfoAndProjectsDates'
+import { AuthorisedUserCanAssignUserDataPayload } from '../fixtures/payloads/Transfers/AuthorisedUserCanAssignUser'
 
 describe('Academisation API Testing - Transfers SAT Projects', () => {
   let apiKey = Cypress.env('apiKey')

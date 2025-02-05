@@ -1,7 +1,7 @@
-import { AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCanCreateNewFAMTrustKeyPerson.spec'
-import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCanUpdateNewFAMTrustKeyPerson.spec'
-import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB.spec'
-import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson.spec'
+import { AuthorisedUserCanCreateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCanCreateNewFAMTrustKeyPerson'
+import { AuthorisedUserCanUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCanUpdateNewFAMTrustKeyPerson'
+import { AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOBBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/AuthorisedUserCannotCreateNewFAMTrustKeyPersonWITHINVALIDDOB'
+import { UnauthorisedUserCannotUpdateNewFAMTrustKeyPersonBodyPayload } from '../fixtures/payloads/FAM-TrustKeyPerson/UnauthorisedUserCannotUpdateNewFAMTrustKeyPerson'
 
 describe('Academisation API Testing - FAM - Add Trust Key Person', () => {
   let apiKey = Cypress.env('apiKey')
