@@ -1,5 +1,5 @@
-import { UnauthorisedUserCannotUpdatePayload } from '../fixtures/payloads/UnauthorisedUserCannotUpdateBody.spec'
-import { AuthorisedUserCanUpdatePayload } from '../fixtures/payloads/AuthorisedUserCanUpdate.spec'
+import { UnauthorisedUserCannotUpdatePayload } from '../fixtures/payloads/UnauthorisedUserCannotUpdateBody'
+import { AuthorisedUserCanUpdatePayload } from '../fixtures/payloads/AuthorisedUserCanUpdate'
 import { AuthorisedUserCannotUpdateTheirContributorsEmailToAnotherEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToAnotherEmail'
 import { AuthorisedUserCannotUpdateTheirContributorsEmailToInvalidEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToInvalidEmail'
 import { AuthorisedUserCannotUpdateWorksPlannedDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeWorksPlannedDateToInvalidDate'
