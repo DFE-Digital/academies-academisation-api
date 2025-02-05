@@ -1,6 +1,8 @@
+let url = Cypress.env('url');
+let applicationNumber = url.includes('test') ? 281 : 10002;
 const AuthorisedUserCanUpdatePayload
 = {
-  applicationId: 10002,
+  applicationId: applicationNumber,
   applicationType: 'joinAMat',
   applicationStatus: 'inProgress',
   contributors: [

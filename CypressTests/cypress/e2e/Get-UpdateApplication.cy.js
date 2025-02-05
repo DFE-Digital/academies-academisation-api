@@ -12,7 +12,7 @@ import { AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayl
 describe('Academisation API Testing', () => {
   let apiKey = Cypress.env('apiKey')
   let url = Cypress.env('url')
-  let applicationNumber = 10002
+  let applicationNumber = url.includes('test') ? 281 : 10002;
   let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   let getDateTimestampFormatRegex = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})Z?$/
 
