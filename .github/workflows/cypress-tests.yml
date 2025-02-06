@@ -56,3 +56,21 @@ jobs:
         with:
            name: screenshots-${{ inputs.environment }}-${{ matrix.browser }}
            path: CypressTests/cypress/screenshots
+      - name: Generate report
+        if: always()
+        run: |
+          mkdir mochareports
+          npm run generate:html:report
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-${{ inputs.environment }}-${{ matrix.browser }}
+          path: Dfe.ManageFreeSchoolProjects/Dfe.ManageFreeSchoolProjects.CypressTests/mochareports
+
+      - name: Report results
+        if: always()
+        run: npm run cy:notify -- --custom-text="Environment ${{ inputs.environment }}, See more information https://github.com/DFE-Digital/manage-free-schools-projects/actions/runs/${{github.run_id}}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
