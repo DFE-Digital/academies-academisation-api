@@ -29,10 +29,13 @@
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.2.1",
     "cypress": "^13.11.0",
+    "cypress-multi-reporters": "^2.0.5",
     "cypress-plugin-api": "^2.11.1",
+    "cypress-slack-reporter": "^1.5.4",
     "dotenv": "^16.3.1",
     "eslint": "^8.57.1",
     "eslint-plugin-cypress": "^3.0.0",
+    "mochawesome-merge": "^5.0.0",
     "zaproxy": "^2.0.0-rc.5"
   }
 }
