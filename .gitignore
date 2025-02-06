@@ -397,3 +397,4 @@ ZAP-Report.html
 # Cypress
 */cypress/screenshots
 */cypress/videos
+*/cypress/reports
