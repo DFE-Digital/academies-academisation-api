@@ -169,3 +169,21 @@ Further details about Cypress can be found here: https://docs.cypress.io/api/tab
 Nothing formal, but been using the following pattern:
 
 AB#105435 - conversion target date - store whether target date has been chosen - 'description of this commit'
+
+## Linting Sonar rules
+
+Include the following extension in your IDE installation: [SonarQube for IDE](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)
+
+Update your [settings.json file](https://code.visualstudio.com/docs/getstarted/settings#_settings-json-file) to include the following
+
+```json
+"sonarlint.connectedMode.connections.sonarcloud": [   
+    {
+        "connectionId": "DfE",
+        "organizationKey": "dfe-digital",
+        "disableNotifications": false
+    }   
+]
+```
+
+Then follow [these steps](https://youtu.be/m8sAdYCIWhY) to connect to the SonarCloud instance.
