@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.16.6"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.17.1"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -74,4 +74,6 @@ module "azure_container_apps_hosting" {
   enable_init_container          = local.enable_init_container
   init_container_image           = local.init_container_image
   init_container_command         = local.init_container_command
+
+  enable_monitoring_traces = local.enable_monitoring_traces
 }
