@@ -74,4 +74,6 @@ module "azure_container_apps_hosting" {
   enable_init_container          = local.enable_init_container
   init_container_image           = local.init_container_image
   init_container_command         = local.init_container_command
+
+  enable_monitoring_traces = local.enable_monitoring_traces
 }

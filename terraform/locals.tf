@@ -68,4 +68,5 @@ locals {
   enable_init_container                           = var.enable_init_container
   init_container_image                            = var.init_container_image
   init_container_command                          = var.init_container_command
+  enable_monitoring_traces                        = var.enable_monitoring_traces
 }
