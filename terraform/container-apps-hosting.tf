@@ -76,4 +76,9 @@ module "azure_container_apps_hosting" {
   init_container_command         = local.init_container_command
 
   enable_monitoring_traces = local.enable_monitoring_traces
+
+  enable_worker_container       = local.enable_worker_container
+  worker_container_command      = local.worker_container_command
+  worker_container_min_replicas = local.worker_container_min_replicas
+  worker_container_max_replicas = local.worker_container_max_replicas
 }
