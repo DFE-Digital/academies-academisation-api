@@ -2,14 +2,8 @@ name: .NET
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-      - 'Dfe.Academies.*/**'
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
-    types: [ opened, synchronize, reopened ]
-    paths:
-      - 'Dfe.Academies.*/**'
 
 env:
   JAVA_VERSION: 21
