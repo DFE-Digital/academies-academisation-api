@@ -466,3 +466,27 @@ variable "enable_monitoring_traces" {
   type        = bool
   default     = true
 }
+
+variable "enable_worker_container" {
+  description = "Conditionally launch a worker container. This container uses the same image and environment variables as the default container app, but allows a different container command to be run. The worker container does not expose any ports."
+  type        = bool
+  default     = false
+}
+
+variable "worker_container_command" {
+  description = "Container command for the Worker container. `enable_worker_container` must be set to true for this to have any effect."
+  type        = list(string)
+  default     = []
+}
+
+variable "worker_container_min_replicas" {
+  description = "Worker container min replicas"
+  type        = number
+  default     = 1
+}
+
+variable "worker_container_max_replicas" {
+  description = "Worker ontainer max replicas"
+  type        = number
+  default     = 1
+}
