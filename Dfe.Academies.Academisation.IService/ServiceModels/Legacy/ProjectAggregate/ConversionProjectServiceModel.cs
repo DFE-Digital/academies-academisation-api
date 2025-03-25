@@ -109,6 +109,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 		public string? EducationalAttendanceAdditionalInformation { get; init; }
 
+		public Likelyhood? HowLikelyImpactProtectedCharacteristics { get; init; }
+		public string? WhatWillBeDoneToReduceImpact { get; init; }
 		public User? AssignedUser { get; init; }
 		public ICollection<ConversionProjectDeleteNote>? Notes { get; set; }
 		public DateTime CreatedOn { get; set; }

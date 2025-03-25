@@ -210,7 +210,44 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.Details.ConversionSupportGrantType, getProject.ConversionSupportGrantType),
 					() => Assert.Equal(existingProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant, getProject.ConversionSupportGrantEnvironmentalImprovementGrant),
 					() => Assert.Equal(existingProject.Details.ConversionSupportGrantAmountChanged, getProject.ConversionSupportGrantAmountChanged),
-					() => Assert.Equal(existingProject.Details.ProjectStatus, getProject.ProjectStatus)
+					() => Assert.Equal(existingProject.Details.ProjectStatus, getProject.ProjectStatus),
+					() => Assert.Equal(existingProject.Details.WhatWillBeDoneToReduceImpact, getProject.WhatWillBeDoneToReduceImpact),
+					() => Assert.Equal(existingProject.Details.HowLikelyImpactProtectedCharacteristics, getProject.HowLikelyImpactProtectedCharacteristics)
+		);
+	}
+
+	[Fact]
+	public async Task ProjectExists___UpdateMyFields()
+	{
+		// Arrange
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, _mediatr);
+		var existingProject = _fixture.Create<Project>();
+
+		await _context.Projects.AddAsync(existingProject);
+		await _context.SaveChangesAsync();
+
+		var updatedProject = new ConversionProjectServiceModel(existingProject.Id, existingProject.Details.Urn)
+		{
+			ProjectStatus = "TestStatus",
+			WhatWillBeDoneToReduceImpact = "Nothing",
+			HowLikelyImpactProtectedCharacteristics = Likelyhood.Likely,
+		};
+
+		// Act
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject, default);
+
+		// Assert
+		DfeAssert.OkObjectResult(updateResult);
+
+		var getResult = await legacyProjectController.Get(updatedProject.Id, default);
+
+		(_, ConversionProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
+
+		//existingProject.Details.ProjectStatus = updatedProject.Details.ProjectStatus;
+
+		Assert.Multiple(
+					() => Assert.Equal(updatedProject.WhatWillBeDoneToReduceImpact, getProject.WhatWillBeDoneToReduceImpact),
+					() => Assert.Equal(updatedProject.HowLikelyImpactProtectedCharacteristics, getProject.HowLikelyImpactProtectedCharacteristics)
 		);
 	}
 }

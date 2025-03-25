@@ -328,6 +328,9 @@ public class Project : Entity, IProject, IAggregateRoot
 			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers,
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
 
+			HowLikelyImpactProtectedCharacteristics = detailsToUpdate.HowLikelyImpactProtectedCharacteristics,
+			WhatWillBeDoneToReduceImpact = detailsToUpdate.WhatWillBeDoneToReduceImpact,
+
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};

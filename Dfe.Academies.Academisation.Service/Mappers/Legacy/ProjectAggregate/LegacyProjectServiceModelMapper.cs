@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.IDomain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectGroupAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
@@ -141,6 +142,10 @@ internal static class LegacyProjectServiceModelMapper
 			KeyStage4PerformanceAdditionalInformation = project.Details.KeyStage4PerformanceAdditionalInformation,
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
 			EducationalAttendanceAdditionalInformation = project.Details.EducationalAttendanceAdditionalInformation,
+
+			// Public sector equality duty fields
+			HowLikelyImpactProtectedCharacteristics = project.Details.HowLikelyImpactProtectedCharacteristics,
+			WhatWillBeDoneToReduceImpact = project.Details.WhatWillBeDoneToReduceImpact,
 
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null
