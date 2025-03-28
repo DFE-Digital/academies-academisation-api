@@ -30,7 +30,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 
 			transferProject.SetPublicSectorEqualityDuty(request.HowLikelyImpactProtectedCharacteristics,
 											   request.WhatWillBeDoneToReduceImpact!,
-											   request?.IsCompleted);
+											   request.IsCompleted);
 
 			_transferProjectRepository.Update((transferProject as Domain.TransferProjectAggregate.TransferProject)!);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
