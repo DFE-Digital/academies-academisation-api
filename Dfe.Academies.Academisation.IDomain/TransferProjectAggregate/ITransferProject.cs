@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 {
@@ -56,7 +57,9 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		IReadOnlyCollection<string> SpecificReasonsForTransfer { get; }
 		bool? IsFormAMat { get; }
 		string? IncomingTrustReferenceNumber { get; }
-
+		Likelyhood? HowLikelyImpactProtectedCharacteristics { get; }
+		string? WhatWillBeDoneToReduceImpact { get; }
+		bool? PublicSectorEqualityDutySectionIsCompleted { get; }
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
 		void AssignUser(Guid userId, string userEmail, string userFullName);
@@ -74,8 +77,8 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetDeletedAt();
 		void SetProjectGroupId(int? projectGroupId);
 		void SetId(int id);
-		
 		void SetProjectSentToComplete(string transferingAcademyUkprn);
 		void SetIsReadOnly(DateTime date);
+		void SetPublicSectorEqualityDuty(Likelyhood likelyhood, string reduceImpact, bool? isCompleted);
 	}
 }

@@ -45,6 +45,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	private string? _nameOfTrust;
 	public string? SponsorReferenceNumber { get; init; }
 	public string? SponsorName { get; init; }
+	public Likelyhood? HowLikelyImpactProtectedCharacteristics { get; init; }
+	public string? WhatWillBeDoneToReduceImpact { get; init; }
+	public bool? PublicSectorEqualityDutySectionComplete { get; init; }
 	public string? AcademyTypeAndRoute { get => _academyTypeAndRoute; init => _academyTypeAndRoute = value; }
 	public string? _academyTypeAndRoute;
 	public bool? SchoolAndTrustInformationSectionComplete { get; init; }
@@ -117,8 +120,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public bool? ExternalApplicationFormSaved { get; set; }
 	public string? ExternalApplicationFormUrl { get; set; }
 	public bool? IsFormAMat { get => _IsFormAMat; init => _IsFormAMat = value; }
-	private bool? _IsFormAMat;
 
+
+	private bool? _IsFormAMat;
 
 	public bool Equals(ProjectDetails? other)
 	{
@@ -244,7 +248,11 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser) &&
 				string.Equals(ExternalApplicationFormUrl, other.ExternalApplicationFormUrl,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-				   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved;
+				   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved &&
+				HowLikelyImpactProtectedCharacteristics == other.HowLikelyImpactProtectedCharacteristics &&
+				string.Equals(WhatWillBeDoneToReduceImpact, other.WhatWillBeDoneToReduceImpact,
+				 StringComparison.InvariantCultureIgnoreCase) &&
+				PublicSectorEqualityDutySectionComplete == other.PublicSectorEqualityDutySectionComplete;
 	}
 
 	public override bool Equals(object? obj)
@@ -359,7 +367,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(AssignedUser);
 		hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ExternalApplicationFormSaved);
-
 		return hashCode.ToHashCode();
 	}
 

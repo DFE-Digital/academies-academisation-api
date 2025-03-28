@@ -137,6 +137,11 @@ internal static class LegacyProjectDetailsMapper
 			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers ?? existingProject.Details.YearThreeProjectedPupilNumbers,
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation ?? existingProject.Details.SchoolPupilForecastsAdditionalInformation,
 
+			// Public sector equality duty fields
+
+			HowLikelyImpactProtectedCharacteristics = detailsToUpdate.HowLikelyImpactProtectedCharacteristics ?? detailsToUpdate.HowLikelyImpactProtectedCharacteristics,
+			WhatWillBeDoneToReduceImpact = detailsToUpdate.WhatWillBeDoneToReduceImpact ?? detailsToUpdate.WhatWillBeDoneToReduceImpact,
+			PublicSectorEqualityDutySectionComplete = detailsToUpdate.PublicSectorEqualityDutySectionComplete ?? detailsToUpdate.PublicSectorEqualityDutySectionComplete,
 			// assigned user
 			AssignedUser = detailsToUpdate.AssignedUser != null
 				? MapServiceUser(detailsToUpdate.AssignedUser)

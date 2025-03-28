@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20250320142421_add-psed-fields")]
+    partial class addpsedfields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -924,9 +927,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<bool?>("HighProfileShouldBeConsidered")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("HowLikelyImpactProtectedCharacteristics")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("HtbDate")
                         .HasColumnType("datetime2");
 
@@ -980,9 +980,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("ProjectReference")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("PublicSectorEqualityDutySectionIsCompleted")
-                        .HasColumnType("bit");
-
                     b.Property<bool?>("RationaleSectionIsCompleted")
                         .HasColumnType("bit");
 
@@ -1025,9 +1022,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<int>("Urn")
                         .HasColumnType("int");
-
-                    b.Property<string>("WhatWillBeDoneToReduceImpact")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WhoInitiatedTheTransfer")
                         .HasColumnType("nvarchar(max)");
@@ -2088,10 +2082,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<DateTime?>("ProposedConversionDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedAcademyOpeningDate");
-
-                            b1.Property<bool?>("PublicSectorEqualityDutySectionComplete")
-                                .HasColumnType("bit")
-                                .HasColumnName("PublicSectorEqualityDutySectionComplete");
 
                             b1.Property<string>("PublishedAdmissionNumber")
                                 .HasColumnType("nvarchar(max)")
