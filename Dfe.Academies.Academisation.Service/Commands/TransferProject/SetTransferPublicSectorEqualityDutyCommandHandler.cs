@@ -10,9 +10,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 	: IRequestHandler<SetTransferPublicSectorEqualityDutyCommand, CommandResult>
 	{
 		private readonly ITransferProjectRepository _transferProjectRepository;
-		private readonly ILogger<SetTransferPublicSectorEqualityDutyCommand> _logger;
+		private readonly ILogger<SetTransferPublicSectorEqualityDutyCommandHandler> _logger;
 
-		public SetTransferPublicSectorEqualityDutyCommandHandler(ITransferProjectRepository transferProjectRepository, ILogger<SetTransferPublicSectorEqualityDutyCommand> logger)
+		public SetTransferPublicSectorEqualityDutyCommandHandler(ITransferProjectRepository transferProjectRepository, ILogger<SetTransferPublicSectorEqualityDutyCommandHandler> logger)
 		{
 			_transferProjectRepository = transferProjectRepository;
 			_logger = logger;
@@ -29,8 +29,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 			}
 
 			transferProject.SetPublicSectorEqualityDuty(request.HowLikelyImpactProtectedCharacteristics,
-											   request.WhatWillBeDoneToReduceImpact,
-											   request.IsCompleted);
+											   request.WhatWillBeDoneToReduceImpact!,
+											   request?.IsCompleted);
 
 			_transferProjectRepository.Update((transferProject as Domain.TransferProjectAggregate.TransferProject)!);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
