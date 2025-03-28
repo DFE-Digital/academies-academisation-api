@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 
 			if (transferProject == null)
 			{
-				_logger.LogError($"transfer project not found with urn:{request.Urn}");
+				_logger.LogError("transfer project not found with urn:{Urn}", request.Urn);
 				return new NotFoundCommandResult();
 			}
 
@@ -32,7 +32,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 											   request.WhatWillBeDoneToReduceImpact,
 											   request.IsCompleted);
 
-			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
+			_transferProjectRepository.Update((transferProject as Domain.TransferProjectAggregate.TransferProject)!);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			// returning this, client will have to retrieve the updated transfer project to refresh data
