@@ -47,6 +47,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? SponsorName { get; init; }
 	public Likelyhood? HowLikelyImpactProtectedCharacteristics { get; init; }
 	public string? WhatWillBeDoneToReduceImpact { get; init; }
+	public bool? PublicSectorEqualityDutySectionComplete { get; init; }
 	public string? AcademyTypeAndRoute { get => _academyTypeAndRoute; init => _academyTypeAndRoute = value; }
 	public string? _academyTypeAndRoute;
 	public bool? SchoolAndTrustInformationSectionComplete { get; init; }
@@ -119,6 +120,8 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public bool? ExternalApplicationFormSaved { get; set; }
 	public string? ExternalApplicationFormUrl { get; set; }
 	public bool? IsFormAMat { get => _IsFormAMat; init => _IsFormAMat = value; }
+
+
 	private bool? _IsFormAMat;
 
 	public bool Equals(ProjectDetails? other)
@@ -247,9 +250,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 				   StringComparison.InvariantCultureIgnoreCase) &&
 				   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved &&
 				HowLikelyImpactProtectedCharacteristics == other.HowLikelyImpactProtectedCharacteristics &&
-				string.Equals(WhatWillBeDoneToReduceImpact, other.WhatWillBeDoneToReduceImpact, 
-				 StringComparison.InvariantCultureIgnoreCase);
-				
+				string.Equals(WhatWillBeDoneToReduceImpact, other.WhatWillBeDoneToReduceImpact,
+				 StringComparison.InvariantCultureIgnoreCase) &&
+				PublicSectorEqualityDutySectionComplete == other.PublicSectorEqualityDutySectionComplete;
 	}
 
 	public override bool Equals(object? obj)

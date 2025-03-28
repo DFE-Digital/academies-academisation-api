@@ -129,6 +129,12 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 					Author = model.Author!,
 					Recommendation = model.Recommendation!
 				},
+				PublicSectorEqualityDuty = new AcademyTransferPublicSectorEqualityDutyResponse
+				{
+					HowLikelyImpactProtectedCharacteristics = model.HowLikelyImpactProtectedCharacteristics,
+					WhatWillBeDoneToReduceImpact = model.WhatWillBeDoneToReduceImpact,
+					IsCompleted = model.PublicSectorEqualityDutySectionIsCompleted
+				},
 				AssignedUser = string.IsNullOrWhiteSpace(model.AssignedUserEmailAddress)
 				? null
 				: new AssignedUserResponse

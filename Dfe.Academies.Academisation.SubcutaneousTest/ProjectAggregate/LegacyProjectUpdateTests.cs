@@ -212,7 +212,8 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.Details.ConversionSupportGrantAmountChanged, getProject.ConversionSupportGrantAmountChanged),
 					() => Assert.Equal(existingProject.Details.ProjectStatus, getProject.ProjectStatus),
 					() => Assert.Equal(existingProject.Details.WhatWillBeDoneToReduceImpact, getProject.WhatWillBeDoneToReduceImpact),
-					() => Assert.Equal(existingProject.Details.HowLikelyImpactProtectedCharacteristics, getProject.HowLikelyImpactProtectedCharacteristics)
+					() => Assert.Equal(existingProject.Details.HowLikelyImpactProtectedCharacteristics, getProject.HowLikelyImpactProtectedCharacteristics),
+					() => Assert.Equal(existingProject.Details.PublicSectorEqualityDutySectionComplete, getProject.PublicSectorEqualityDutySectionComplete)
 		);
 	}
 

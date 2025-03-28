@@ -246,6 +246,27 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpPut("{urn}/set-public-sector-equality-duty", Name = "SetTransferPublicSectorEqualityDuty")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult> SetTransferPublicSectorEqualityDuty(int urn,
+		[FromBody] SetTransferPublicSectorEqualityDutyCommand command, CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Setting transfer project public sector equality duty");
+
+			command.Urn = urn;
+			var result = await _mediator.Send(command, cancellationToken).ConfigureAwait(false);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPut("{urn}/assign-user", Name = "AssignUser")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]

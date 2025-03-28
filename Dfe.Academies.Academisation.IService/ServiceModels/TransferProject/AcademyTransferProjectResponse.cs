@@ -23,5 +23,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 		public DateTime? ProjectSentToCompleteDate { get; set; }
 		
 		public string? IncomingTrustReferenceNumber { get; set; }
+		public AcademyTransferPublicSectorEqualityDutyResponse PublicSectorEqualityDuty { get; set; }
 	}
 }

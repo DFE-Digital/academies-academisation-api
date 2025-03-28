@@ -486,6 +486,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			pd.Property(d => d.ProjectDatesSectionComplete).HasColumnName("ProjectDatesSectionComplete");
 			pd.Property(d => d.HowLikelyImpactProtectedCharacteristics).HasColumnName("HowLikelyImpactProtectedCharacteristics");
 			pd.Property(d => d.WhatWillBeDoneToReduceImpact).HasColumnName("WhatWillBeDoneToReduceImpact");
+			pd.Property(d => d.PublicSectorEqualityDutySectionComplete).HasColumnName("PublicSectorEqualityDutySectionComplete");
 		});
 
 		projectConfiguration.HasQueryFilter(d => !d.DeletedAt.HasValue);

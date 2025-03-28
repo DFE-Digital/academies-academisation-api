@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Ardalis.GuardClauses;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 
@@ -82,7 +83,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public Guid? AssignedUserId { get; private set; }
 		public bool? IsFormAMat { get; set; }
 		public int? ProjectGroupId { get; private set; }
-		
+		public Likelyhood? HowLikelyImpactProtectedCharacteristics { get; private set; }
+		public string? WhatWillBeDoneToReduceImpact { get; private set; }
+		public bool? PublicSectorEqualityDutySectionIsCompleted { get; private set; }
+
 		public string? IncomingTrustReferenceNumber { get; private set; }
 
 		public DateTime? DeletedAt { get; set; }
@@ -289,6 +293,12 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ReadOnlyDate = date;
 
 		}
-		
+
+		public void SetPublicSectorEqualityDuty(Likelyhood likelyhood, string reduceImpact, bool? isCompleted)
+		{
+			HowLikelyImpactProtectedCharacteristics = likelyhood;
+			WhatWillBeDoneToReduceImpact = reduceImpact;
+			PublicSectorEqualityDutySectionIsCompleted = isCompleted;
+		}
 	}
 }

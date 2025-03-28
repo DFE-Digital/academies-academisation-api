@@ -146,6 +146,7 @@ internal static class LegacyProjectServiceModelMapper
 			// Public sector equality duty fields
 			HowLikelyImpactProtectedCharacteristics = project.Details.HowLikelyImpactProtectedCharacteristics,
 			WhatWillBeDoneToReduceImpact = project.Details.WhatWillBeDoneToReduceImpact,
+			PublicSectorEqualityDutySectionComplete = project.Details.PublicSectorEqualityDutySectionComplete,
 
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null

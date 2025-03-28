@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using FluentAssertions;
 using Xunit;
@@ -149,6 +150,26 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			result.ProjectRationale.Should().Be(projectRationale);
 			result.TrustSponsorRationale.Should().Be(trustSponsorRationale);
 		}
+
+		[Fact]
+		public void SetTransferProjectPublicSectorEqualityDuty_WithValidParameters_SetsCorrectProperties()
+		{
+			var fixture = new Fixture();
+
+			// Arrange      
+			TransferProject result = CreateValidTransferProject();
+			var howLikely = fixture.Create<Likelyhood>();
+			var reduceImpact = fixture.Create<string>();
+			var isCompleted = fixture.Create<bool>();
+
+			//Act
+			result.SetPublicSectorEqualityDuty(howLikely, reduceImpact, isCompleted);
+
+			//Assert
+			result.HowLikelyImpactProtectedCharacteristics.Should().Be(howLikely);
+			result.WhatWillBeDoneToReduceImpact.Should().Be(reduceImpact);
+		}
+
 		[Fact]
 		public void SetTransferProjectTrustInformationAndProjectDates_WithValidParameters_SetsCorrectProperties()
 		{

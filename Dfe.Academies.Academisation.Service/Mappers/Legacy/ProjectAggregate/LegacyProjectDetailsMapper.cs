@@ -141,7 +141,7 @@ internal static class LegacyProjectDetailsMapper
 
 			HowLikelyImpactProtectedCharacteristics = detailsToUpdate.HowLikelyImpactProtectedCharacteristics ?? detailsToUpdate.HowLikelyImpactProtectedCharacteristics,
 			WhatWillBeDoneToReduceImpact = detailsToUpdate.WhatWillBeDoneToReduceImpact ?? detailsToUpdate.WhatWillBeDoneToReduceImpact,
-
+			PublicSectorEqualityDutySectionComplete = detailsToUpdate.PublicSectorEqualityDutySectionComplete ?? detailsToUpdate.PublicSectorEqualityDutySectionComplete,
 			// assigned user
 			AssignedUser = detailsToUpdate.AssignedUser != null
 				? MapServiceUser(detailsToUpdate.AssignedUser)
