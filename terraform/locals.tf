@@ -69,4 +69,8 @@ locals {
   init_container_image                            = var.init_container_image
   init_container_command                          = var.init_container_command
   enable_monitoring_traces                        = var.enable_monitoring_traces
+  enable_worker_container                         = var.enable_worker_container
+  worker_container_command                        = var.worker_container_command
+  worker_container_min_replicas                   = var.worker_container_min_replicas
+  worker_container_max_replicas                   = var.worker_container_max_replicas
 }
