@@ -399,6 +399,12 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			pd.Property(d => d.RationaleForProject).HasColumnName("RationaleForProject");
 			pd.Property(d => d.SchoolPerformanceAdditionalInformation).HasColumnName("SchoolPerformanceAdditionalInformation");
 			pd.Property(d => d.SchoolOverviewSectionComplete).HasColumnName("SchoolOverviewSectionComplete");
+
+			// Public sector equality duty
+			pd.Property(d => d.PublicEqualityDutyImpact).HasColumnName("PublicEqualityDutyImpact");
+			pd.Property(d => d.PublicEqualityDutyReduceImpactReason).HasColumnName("PublicEqualityDutyReduceImpactReason");
+			pd.Property(d => d.PublicEqualityDutySectionComplete).HasColumnName("PublicEqualityDutySectionComplete");
+
 			pd.Property(d => d.MemberOfParliamentNameAndParty).HasColumnName("MemberOfParliamentNameAndParty");
 			pd.Property(d => d.DistanceFromSchoolToTrustHeadquartersAdditionalInformation).HasColumnName("DistanceFromSchoolToTrustHeadquartersAdditionalInformation");
 			pd.Property(d => d.DistanceFromSchoolToTrustHeadquarters).HasColumnName("DistanceFromSchoolToTrustHeadquarters");

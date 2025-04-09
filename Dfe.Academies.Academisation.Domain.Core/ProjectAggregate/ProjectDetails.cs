@@ -112,6 +112,14 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? KeyStage4PerformanceAdditionalInformation { get; private set; }
 	public string? KeyStage5PerformanceAdditionalInformation { get; private set; }
 	public string? EducationalAttendanceAdditionalInformation { get; private set; }
+
+	// Public sector equality duty
+	public string? PublicEqualityDutyImpact { get; set; }
+	public string? PublicEqualityDutyReduceImpactReason { get; set; }
+
+	public bool? PublicEqualityDutySectionComplete { get; set; }
+
+
 	public User? AssignedUser { get; set; }
 
 	public bool? ExternalApplicationFormSaved { get; set; }

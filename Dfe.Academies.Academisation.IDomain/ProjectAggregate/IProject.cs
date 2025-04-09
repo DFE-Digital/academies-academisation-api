@@ -27,6 +27,9 @@ public interface IProject
 
 	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl);
 	public void SetIncomingTrust(string trustReferrenceNumber, string trustName);
+
+	public void SetPublicEqualityDuty(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete);
+
 	public void SetSchoolOverview(
 		string publishedAdmissionNumber,
 		string viabilityIssues,
