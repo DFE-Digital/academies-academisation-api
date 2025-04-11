@@ -116,7 +116,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	// Public sector equality duty
 	public string? PublicEqualityDutyImpact { get; set; }
 	public string? PublicEqualityDutyReduceImpactReason { get; set; }
-
 	public bool? PublicEqualityDutySectionComplete { get; set; }
 
 

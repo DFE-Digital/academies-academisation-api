@@ -57,6 +57,11 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		bool? IsFormAMat { get; }
 		string? IncomingTrustReferenceNumber { get; }
 
+		// Public sector equality duty
+		public string? PublicEqualityDutyImpact { get; }
+		public string? PublicEqualityDutyReduceImpactReason { get; }
+		public bool? PublicEqualityDutySectionComplete { get; }
+
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
 		void AssignUser(Guid userId, string userEmail, string userFullName);
@@ -71,6 +76,8 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetAcademyIncomingTrust(int academyId, string incomingTrustName,string incomingTrustReferenceNumber, string? incomingTrustUKPRN);
 		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber);
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
+
+		void SetPublicEqualityDuty(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete);
 		void SetDeletedAt();
 		void SetProjectGroupId(int? projectGroupId);
 		void SetId(int id);

@@ -342,6 +342,11 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		transferProject.HasKey(x => x.Id);
 		transferProject.Property(p => p.Id).UseIdentityColumn(10003000, 1);
 
+		// Public sector equality duty
+		transferProject.Property(d => d.PublicEqualityDutyImpact).HasColumnName("PublicEqualityDutyImpact");
+		transferProject.Property(d => d.PublicEqualityDutyReduceImpactReason).HasColumnName("PublicEqualityDutyReduceImpactReason");
+		transferProject.Property(d => d.PublicEqualityDutySectionComplete).HasColumnName("PublicEqualityDutySectionComplete");
+
 		transferProject.HasQueryFilter(d => !d.DeletedAt.HasValue);
 
 		transferProject

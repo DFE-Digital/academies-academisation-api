@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands
 {
-    public class SetConversionPublicEqualityDutyCommandHandler : IRequestHandler<SetPublicEqualityDutyCommand, CommandResult>
+    public class SetConversionPublicEqualityDutyCommandHandler : IRequestHandler<SetConversionPublicEqualityDutyCommand, CommandResult>
 	{
 		private readonly IConversionProjectRepository _conversionProjectRepository;
 		private readonly ILogger<SetConversionPublicEqualityDutyCommandHandler> _logger;
@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 			_logger = logger;
 		}
 
-		public async Task<CommandResult> Handle(SetPublicEqualityDutyCommand request, CancellationToken cancellationToken)
+		public async Task<CommandResult> Handle(SetConversionPublicEqualityDutyCommand request, CancellationToken cancellationToken)
 		{
 			var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id, cancellationToken);
 

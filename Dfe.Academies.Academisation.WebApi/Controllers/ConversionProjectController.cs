@@ -236,11 +236,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("{id:int}/SetPublicEqualityDuty", Name = "SetPublicEqualityDuty")]
+		[HttpPut("{id:int}/public-equality-duty", Name = "SetConversionPublicEqualityDuty")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> SetPublicEqualityDuty(int id, SetPublicEqualityDutyCommand request)
+		public async Task<ActionResult> SetPublicEqualityDuty(int id, SetConversionPublicEqualityDutyCommand request)
 		{
 			request.Id = id;
 

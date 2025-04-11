@@ -5,6 +5,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
 	public interface ITransferProjectRepository : IRepository<TransferProject>, IGenericRepository<TransferProject>
 	{
+		Task<ITransferProject?> GetTransferProjectById(int id, CancellationToken cancellationToken);
 		public Task<ITransferProject?> GetByUrn(int urn);
 		public Task<IEnumerable<ITransferProject?>> GetAllTransferProjects();
 		public Task<IEnumerable<ITransferProject?>> GetIncompleteProjects();

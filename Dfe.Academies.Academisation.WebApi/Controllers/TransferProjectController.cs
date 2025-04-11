@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Commands.Application;
+using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.Queries;
 using MediatR;
@@ -69,6 +70,27 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpPut("{urn:int}/public-equality-duty", Name = "SetTransferPublicEqualityDuty")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetTransferPublicEqualityDuty(int urn, SetTransferPublicEqualityDutyCommand request)
+		{
+			request.Urn = urn;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPut("{urn}/set-transfer-dates", Name = "SetTransferProjectTransferDates")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -188,6 +210,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
 		[HttpPut("{urn}/set-school-additional-data", Name = "SetSchoolAdditionalData")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -207,11 +230,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
 		[HttpPut("{urn}/set-academy-general-information", Name = "SetTransferringAcademyGeneralInformation")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public async Task<ActionResult> SetTransferringAcademyGeneralInformation(int urn,
-	[FromBody] SetTransferringAcademyGeneralInformationCommand command, CancellationToken cancellationToken)
+		[FromBody] SetTransferringAcademyGeneralInformationCommand command, CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Setting transferring academy general information");
 
@@ -246,6 +270,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
 		[HttpPut("{urn}/assign-user", Name = "AssignUser")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -298,6 +323,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return Ok(result);
 		}
+
 		/// <summary>
 		///     Retrieve all projects matching specified filter conditions
 		/// </summary>
@@ -336,6 +362,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
 		[HttpGet("{urn}/opening-date-history", Name = "GetOpeningDateHistoryForTransferProject")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]

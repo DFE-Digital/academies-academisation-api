@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands
 {
-    public class SetPublicEqualityDutyCommand : IRequest<CommandResult>
+    public class SetConversionPublicEqualityDutyCommand : IRequest<CommandResult>
 	{
-		public SetPublicEqualityDutyCommand(int id,
+		public SetConversionPublicEqualityDutyCommand(int id,
 			string publicEqualityDutyImpact,
 			string publicEqualityDutyReduceImpactReason,
 			bool publicEqualityDutySectionComplete)

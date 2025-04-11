@@ -15,6 +15,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public IUnitOfWork UnitOfWork => _context;
 
+		public async Task<ITransferProject?> GetTransferProjectById(int id, CancellationToken cancellationToken)
+		{
+			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+		}
+
 		public async Task<ITransferProject?> GetByUrn(int urn)
 		{
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
