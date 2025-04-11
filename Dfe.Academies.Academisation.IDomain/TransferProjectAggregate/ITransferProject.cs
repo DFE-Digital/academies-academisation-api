@@ -60,7 +60,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		// Public sector equality duty
 		public string PublicEqualityDutyImpact { get; }
 		public string PublicEqualityDutyReduceImpactReason { get; }
-		public bool? PublicEqualityDutySectionComplete { get; }
+		public bool PublicEqualityDutySectionComplete { get; }
 
 		void GenerateUrn(int? urnOverride = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
