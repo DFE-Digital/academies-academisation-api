@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -20,16 +21,19 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 		{
 			var existingProject = await _transferProjectRepository.GetTransferProjectById(request.Urn, cancellationToken);
 
-			if (existingProject is null)
+			if (existingProject != null)
 			{
-				_logger.LogError($"transfer project not found with Urn:{request.Urn}");
+				existingProject.SetPublicEqualityDuty(request.PublicEqualityDutyImpact, request.PublicEqualityDutyReduceImpactReason, request.PublicEqualityDutySectionComplete);
+				_transferProjectRepository.Update((Domain.TransferProjectAggregate.TransferProject)existingProject);
+
+				await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+			}
+			else
+			{
+				var message = $"transfer project not found with Urn:{request.Urn}";
+				_logger.LogError(message);
 				return new NotFoundCommandResult();
 			}
-
-			existingProject.SetPublicEqualityDuty(request.PublicEqualityDutyImpact, request.PublicEqualityDutyReduceImpactReason, request.PublicEqualityDutySectionComplete);
-
-			_transferProjectRepository.Update(existingProject as Domain.TransferProjectAggregate.TransferProject);
-			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
 			return new CommandSuccessResult();
 		}

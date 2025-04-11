@@ -21,16 +21,19 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 		{
 			var existingProject = await _conversionProjectRepository.GetConversionProject(request.Id, cancellationToken);
 
-			if (existingProject is null)
+			if (existingProject != null)
 			{
-				_logger.LogError($"conversion project not found with id:{request.Id}");
+				existingProject.SetPublicEqualityDuty(request.PublicEqualityDutyImpact, request.PublicEqualityDutyReduceImpactReason, request.PublicEqualityDutySectionComplete);
+				_conversionProjectRepository.Update((Project)existingProject);
+
+				await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+			}
+			else
+			{
+				var message = $"conversion project not found with id:{request.Id}";
+				_logger.LogError(message);
 				return new NotFoundCommandResult();
 			}
-
-			existingProject.SetPublicEqualityDuty(request.PublicEqualityDutyImpact, request.PublicEqualityDutyReduceImpactReason, request.PublicEqualityDutySectionComplete);
-
-			_conversionProjectRepository.Update(existingProject as Project);
-			await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
 			return new CommandSuccessResult();
 		}

@@ -25,8 +25,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 		public string? IncomingTrustReferenceNumber { get; set; }
 
 		// Public sector equality duty
-		public string PublicEqualityDutyImpact { get; set; }
-		public string PublicEqualityDutyReduceImpactReason { get; set; }
+		public string? PublicEqualityDutyImpact { get; set; }
+		public string? PublicEqualityDutyReduceImpactReason { get; set; }
 		public bool? PublicEqualityDutySectionComplete { get; set; }
 	}
 }
