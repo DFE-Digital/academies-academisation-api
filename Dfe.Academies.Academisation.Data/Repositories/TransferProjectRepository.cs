@@ -15,11 +15,6 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public IUnitOfWork UnitOfWork => _context;
 
-		public async Task<ITransferProject?> GetTransferProjectById(int id, CancellationToken cancellationToken)
-		{
-			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
-		}
-
 		public async Task<ITransferProject?> GetByUrn(int urn)
 		{
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.Urn == urn);
@@ -44,6 +39,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
 
 			var totalProjects = queryable.Count();
+
 			List<TransferProject> projects = await queryable
 				.OrderByDescending(acp => acp.CreatedOn)
 				.Skip((page - 1) * count)

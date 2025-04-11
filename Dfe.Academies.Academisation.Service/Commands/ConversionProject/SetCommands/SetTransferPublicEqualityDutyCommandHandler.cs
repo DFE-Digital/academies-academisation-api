@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 
 		public async Task<CommandResult> Handle(SetTransferPublicEqualityDutyCommand request, CancellationToken cancellationToken)
 		{
-			var existingProject = await _transferProjectRepository.GetTransferProjectById(request.Urn, cancellationToken);
+			var existingProject = await _transferProjectRepository.GetByUrn(request.Urn);
 
 			if (existingProject != null)
 			{
