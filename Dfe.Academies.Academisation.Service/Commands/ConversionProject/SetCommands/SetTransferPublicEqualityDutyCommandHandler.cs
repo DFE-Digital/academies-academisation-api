@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -30,8 +29,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 			}
 			else
 			{
-				var message = $"transfer project not found with Urn:{request.Urn}";
-				_logger.LogError(message);
+				_logger.LogError("transfer project not found with Urn:{Urn}", request.Urn);
+
 				return new NotFoundCommandResult();
 			}
 

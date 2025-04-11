@@ -30,8 +30,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 			}
 			else
 			{
-				var message = $"conversion project not found with id:{request.Id}";
-				_logger.LogError(message);
+				_logger.LogError("conversion project not found with id:{Id}", request.Id);
 				return new NotFoundCommandResult();
 			}
 

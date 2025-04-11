@@ -86,9 +86,9 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? IncomingTrustReferenceNumber { get; private set; }
 
 		// Public sector equality duty
-		public string? PublicEqualityDutyImpact { get; set; }
-		public string? PublicEqualityDutyReduceImpactReason { get; set; }
-		public bool? PublicEqualityDutySectionComplete { get; set; }
+		public string PublicEqualityDutyImpact { get; set; }
+		public string PublicEqualityDutyReduceImpactReason { get; set; }
+		public bool PublicEqualityDutySectionComplete { get; set; }
 
 		public DateTime? DeletedAt { get; set; }
 
