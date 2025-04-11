@@ -142,8 +142,10 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				IsFormAMat = model.IsFormAMat,
 				IsReadOnly = model.ReadOnlyDate.HasValue,
 				ProjectSentToCompleteDate = model.ReadOnlyDate,
-				IncomingTrustReferenceNumber = model.IncomingTrustReferenceNumber
-				
+				IncomingTrustReferenceNumber = model.IncomingTrustReferenceNumber,
+				PublicEqualityDutyImpact = model.PublicEqualityDutyImpact,
+				PublicEqualityDutyReduceImpactReason = model.PublicEqualityDutyReduceImpactReason,
+				PublicEqualityDutySectionComplete = model.PublicEqualityDutySectionComplete
 			};
 		}
 	}

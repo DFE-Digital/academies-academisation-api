@@ -39,6 +39,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			queryable = FilterByDeliveryOfficer(deliveryOfficers, queryable);
 
 			var totalProjects = queryable.Count();
+
 			List<TransferProject> projects = await queryable
 				.OrderByDescending(acp => acp.CreatedOn)
 				.Skip((page - 1) * count)

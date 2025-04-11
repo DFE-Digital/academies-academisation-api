@@ -142,6 +142,11 @@ internal static class LegacyProjectServiceModelMapper
 			KeyStage5PerformanceAdditionalInformation = project.Details.KeyStage5PerformanceAdditionalInformation,
 			EducationalAttendanceAdditionalInformation = project.Details.EducationalAttendanceAdditionalInformation,
 
+			// Public sector equality duty
+			PublicEqualityDutyImpact = project.Details.PublicEqualityDutyImpact,
+			PublicEqualityDutyReduceImpactReason = project.Details.PublicEqualityDutyReduceImpactReason,
+			PublicEqualityDutySectionComplete = project.Details.PublicEqualityDutySectionComplete,
+
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null
 				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress),

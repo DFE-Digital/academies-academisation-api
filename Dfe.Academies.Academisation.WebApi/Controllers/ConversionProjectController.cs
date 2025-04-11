@@ -7,7 +7,6 @@ using Dfe.Academies.Academisation.Service.Commands.ConversionProject;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SchoolImprovementPlan;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
 using Dfe.Academies.Academisation.Service.Commands.FormAMat;
-using Dfe.Academies.Academisation.WebApi.Extensions;
 using Dfe.Academies.Academisation.Service.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -222,6 +221,26 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult> SetSchoolOverview(
 			int id,
 			SetSchoolOverviewCommand request)
+		{
+			request.Id = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/public-equality-duty", Name = "SetConversionPublicEqualityDuty")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetPublicEqualityDuty(int id, SetConversionPublicEqualityDutyCommand request)
 		{
 			request.Id = id;
 

@@ -85,6 +85,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		
 		public string? IncomingTrustReferenceNumber { get; private set; }
 
+		// Public sector equality duty
+		public string? PublicEqualityDutyImpact { get; set; }
+		public string? PublicEqualityDutyReduceImpactReason { get; set; }
+		public bool? PublicEqualityDutySectionComplete { get; set; }
+
 		public DateTime? DeletedAt { get; set; }
 
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
@@ -270,6 +275,13 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		{
 			var transferringAcademy = TransferringAcademies.Single(x => x.OutgoingAcademyUkprn == transferringAcademyUkprn) ?? throw new InvalidOperationException();
 			transferringAcademy.SetGeneralInformation(pfiScheme, pfiSchemeDetails, distanceFromAcademyToTrustHq, distanceFromAcademyToTrustHqDetails, viabilityIssues, financialDeficit, mpNameAndParty, publishedAdmissionNumber);
+		}
+
+		public void SetPublicEqualityDuty(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete)
+		{
+			PublicEqualityDutyImpact = publicEqualityDutyImpact;
+			PublicEqualityDutyReduceImpactReason = publicEqualityDutyReduceImpactReason;
+			PublicEqualityDutySectionComplete = publicEqualityDutySectionComplete;
 		}
 
 		public void SetDeletedAt()

@@ -109,6 +109,11 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? KeyStage5PerformanceAdditionalInformation { get; init; }
 		public string? EducationalAttendanceAdditionalInformation { get; init; }
 
+		// Public sector equality duty
+		public string? PublicEqualityDutyImpact { get; set; }
+		public string? PublicEqualityDutyReduceImpactReason { get; set; }
+		public bool? PublicEqualityDutySectionComplete { get; init; }
+
 		public User? AssignedUser { get; init; }
 		public ICollection<ConversionProjectDeleteNote>? Notes { get; set; }
 		public DateTime CreatedOn { get; set; }
