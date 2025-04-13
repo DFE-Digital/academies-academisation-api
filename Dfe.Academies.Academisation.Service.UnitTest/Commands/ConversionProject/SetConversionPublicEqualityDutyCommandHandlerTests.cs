@@ -15,7 +15,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
     {
 		private readonly Mock<IConversionProjectRepository> _mockConversionProjectRepository;
 		private readonly Mock<ILogger<SetConversionPublicEqualityDutyCommandHandler>> _mockLogger;
-		private readonly IRequestHandler<SetConversionPublicEqualityDutyCommand, CommandResult> _handler;
+		public readonly SetConversionPublicEqualityDutyCommandHandler _handler;
 
 		public SetConversionPublicEqualityDutyCommandHandlerTests()
 		{
@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			_handler = new SetConversionPublicEqualityDutyCommandHandler(_mockConversionProjectRepository.Object, _mockLogger.Object);
 		}
 
-		private SetConversionPublicEqualityDutyCommand CreateValidSetConversionPublicEqualityDutyCommand()
+		private static SetConversionPublicEqualityDutyCommand CreateValidSetConversionPublicEqualityDutyCommand()
 		{
 			return new SetConversionPublicEqualityDutyCommand(
 				id: 1,
@@ -39,7 +39,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			);
 		}
 
-		private Project CreateMockProject()
+		private static Project CreateMockProject()
 		{
 			var projectDetails = new ProjectDetails();
 			return new Project(1, projectDetails);

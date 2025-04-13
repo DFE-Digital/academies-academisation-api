@@ -44,7 +44,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			);
 		}
 
-		private SetConversionPublicEqualityDutyCommand CreateValidSetPublicEqualityDutyCommand()
+		private static SetConversionPublicEqualityDutyCommand CreateValidSetPublicEqualityDutyCommand()
 		{
 			return new SetConversionPublicEqualityDutyCommand(
 				id: 1,
