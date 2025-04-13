@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			_controller = new TransferProjectController(_mockMediator.Object, _mockTransferProjectQueryService.Object, _loggerMock.Object);
 		}
 
-		private SetTransferPublicEqualityDutyCommand CreateValidSetPublicEqualityDutyCommand()
+		private static SetTransferPublicEqualityDutyCommand CreateValidSetPublicEqualityDutyCommand()
 		{
 			return new SetTransferPublicEqualityDutyCommand(
 				urn: 1001,
