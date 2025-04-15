@@ -44,6 +44,16 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			);
 		}
 
+		private static SetConversionPublicEqualityDutyCommand CreateValidSetPublicEqualityDutyCommand()
+		{
+			return new SetConversionPublicEqualityDutyCommand(
+				id: 1,
+				publicEqualityDutyImpact: "Likely",
+				publicEqualityDutyReduceImpactReason: "Likely test reason",
+				publicEqualityDutySectionComplete: true
+			);
+		}
+
 		[Fact]
 		public async Task SetSchoolOverview_ReturnsOk_WhenUpdateIsSuccessful()
 		{
@@ -68,6 +78,29 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			Assert.IsType<NotFoundResult>(result);
 		}
 
+		[Fact]
+		public async Task SetPublicEqualityDuty_ReturnsOk_WhenUpdateIsSuccessful()
+		{
+			var request = CreateValidSetPublicEqualityDutyCommand();
 
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetConversionPublicEqualityDutyCommand>(), default))
+						 .ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetPublicEqualityDuty(request.Id, request);
+
+			Assert.IsType<OkResult>(result);
+		}
+
+		[Fact]
+		public async Task SetPublicEqualityDuty_ReturnsNotFound_WhenProjectNotFound()
+		{
+			var request = CreateValidSetPublicEqualityDutyCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetConversionPublicEqualityDutyCommand>(), default))
+						 .ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetPublicEqualityDuty(request.Id, request);
+
+			Assert.IsType<NotFoundResult>(result);
+		}
 	}
 }

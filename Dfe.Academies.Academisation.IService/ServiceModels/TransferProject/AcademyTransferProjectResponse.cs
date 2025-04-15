@@ -23,5 +23,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 		public DateTime? ProjectSentToCompleteDate { get; set; }
 		
 		public string? IncomingTrustReferenceNumber { get; set; }
+
+		// Public sector equality duty
+		public string? PublicEqualityDutyImpact { get; set; }
+		public string? PublicEqualityDutyReduceImpactReason { get; set; }
+		public bool? PublicEqualityDutySectionComplete { get; set; }
 	}
 }

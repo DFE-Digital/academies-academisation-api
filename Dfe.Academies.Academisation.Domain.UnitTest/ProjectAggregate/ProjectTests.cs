@@ -6,6 +6,7 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenPlans;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using FluentAssertions;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
@@ -62,6 +63,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 
 			// Assert
 			project.Details.AcademyTypeAndRoute.Should().Be(route);
+		}
+
+		[Fact]
+		public void SetPublicEqualityDuty_ValidRoute_UpdatesRoute()
+		{
+			// Arrange
+			var project = this.CreateProject();
+
+			string publicEqualityDutyImpact = "Likely";
+			string publicEqualityDutyReduceImpactReason = "Likely reason";
+			bool publicEqualityDutySectionComplete = true;
+
+			// Act
+			project.SetPublicEqualityDuty(publicEqualityDutyImpact, publicEqualityDutyReduceImpactReason, publicEqualityDutySectionComplete);
+
+			// Assert
+			project.Details.PublicEqualityDutyImpact.Should().Be(publicEqualityDutyImpact);
+			project.Details.PublicEqualityDutyReduceImpactReason.Should().Be(publicEqualityDutyReduceImpactReason);
+			project.Details.PublicEqualityDutySectionComplete.Should().Be(publicEqualityDutySectionComplete);
 		}
 
 		[Fact]

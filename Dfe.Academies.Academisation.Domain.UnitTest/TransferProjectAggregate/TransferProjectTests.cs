@@ -359,6 +359,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Assert
 			transferProject.Status.Should().Be(status);
 		}
+
+		[Theory]
+		[InlineData("Likely", "Likely reason", true)]
+		[InlineData("Unlikely", "", true)]
+		[InlineData("Some impact", "Some impact reason", true)]
+		public void SetPublicEqualityDuty_WithValidParameters_SetsPropertiesCorrectly(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete)
+		{
+			// Arrange
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+
+			// Act
+			transferProject.SetPublicEqualityDuty(publicEqualityDutyImpact, publicEqualityDutyReduceImpactReason, publicEqualityDutySectionComplete);
+
+			// Assert
+			transferProject.PublicEqualityDutyImpact.Should().Be(publicEqualityDutyImpact);
+			transferProject.PublicEqualityDutyReduceImpactReason.Should().Be(publicEqualityDutyReduceImpactReason);
+			transferProject.PublicEqualityDutySectionComplete.Should().Be(publicEqualityDutySectionComplete);
+		}
+
 		[Fact]
 		public void SetTransferringAcademyGeneralInformation_ValidData_SetsPFIScheme()
 		{

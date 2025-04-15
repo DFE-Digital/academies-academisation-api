@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20250405082841_add_public_duty_equality_columns")]
+    partial class add_public_duty_equality_columns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -976,15 +979,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("ProjectReference")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PublicEqualityDutyImpact")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PublicEqualityDutyReduceImpactReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("PublicEqualityDutySectionComplete")
-                        .HasColumnType("bit");
 
                     b.Property<bool?>("RationaleSectionIsCompleted")
                         .HasColumnType("bit");
@@ -2086,16 +2080,13 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("ProposedAcademyOpeningDate");
 
                             b1.Property<string>("PublicEqualityDutyImpact")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PublicEqualityDutyImpact");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("PublicEqualityDutyReduceImpactReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PublicEqualityDutyReduceImpactReason");
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<bool?>("PublicEqualityDutySectionComplete")
-                                .HasColumnType("bit")
-                                .HasColumnName("PublicEqualityDutySectionComplete");
+                                .HasColumnType("bit");
 
                             b1.Property<string>("PublishedAdmissionNumber")
                                 .HasColumnType("nvarchar(max)")

@@ -319,6 +319,11 @@ public class Project : Entity, IProject, IAggregateRoot
 			SchoolBudgetInformationAdditionalInformation = detailsToUpdate.SchoolBudgetInformationAdditionalInformation,
 			SchoolBudgetInformationSectionComplete = detailsToUpdate.SchoolBudgetInformationSectionComplete,
 
+			// Public sector equality duty
+			PublicEqualityDutyImpact = detailsToUpdate.PublicEqualityDutyImpact,
+			PublicEqualityDutyReduceImpactReason = detailsToUpdate.PublicEqualityDutyReduceImpactReason,
+			PublicEqualityDutySectionComplete = detailsToUpdate.PublicEqualityDutySectionComplete,
+
 			// pupil schools forecast
 			YearOneProjectedCapacity = detailsToUpdate.YearOneProjectedCapacity,
 			YearOneProjectedPupilNumbers = detailsToUpdate.YearOneProjectedPupilNumbers,
@@ -533,6 +538,14 @@ public class Project : Entity, IProject, IAggregateRoot
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
+
+	public void SetPublicEqualityDuty(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete)
+	{
+		Details.PublicEqualityDutyImpact = publicEqualityDutyImpact;
+		Details.PublicEqualityDutyReduceImpactReason = publicEqualityDutyReduceImpactReason;
+		Details.PublicEqualityDutySectionComplete = publicEqualityDutySectionComplete;
+	}
+
 	public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
 	{
 		// Update the respective properties in the Details object
@@ -555,6 +568,7 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		Details.SetIncomingTrust(trustReferrenceNumber, trustName);
 	}
+
 	public void SetRoute(string route)
 	{
 		Details.SetRoute(route);
