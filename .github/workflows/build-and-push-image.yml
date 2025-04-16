@@ -162,3 +162,4 @@ jobs:
     secrets:
       API_KEY: ${{ secrets.API_KEY }}
       URL: ${{ secrets.URL }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
