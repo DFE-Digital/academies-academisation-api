@@ -66,7 +66,7 @@ RUN mkdir /sql && \
 # ==============================================
 # Entity Framework: Migration Runner
 # ==============================================
-FROM "mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-azurelinux3.0" AS initcontainer
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-azurelinux3.0 AS initcontainer
 WORKDIR /sql
 COPY --from=efbuilder /app/appsettings.json /Dfe.Academies.Academisation/
 COPY --from=efbuilder /sql /sql
