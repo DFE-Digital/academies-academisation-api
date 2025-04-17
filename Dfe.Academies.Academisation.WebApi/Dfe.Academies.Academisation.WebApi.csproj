@@ -28,6 +28,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.14" />
     <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.24.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
   </ItemGroup>
 
@@ -38,7 +40,7 @@
     <ProjectReference Include="..\Dfe.Academies.Academisation.IService\Dfe.Academies.Academisation.IService.csproj" />
     <ProjectReference Include="..\Dfe.Academies.Academisation.Service\Dfe.Academies.Academisation.Service.csproj" />
   </ItemGroup>
-	
+
 	<ItemGroup>
 		<InternalsVisibleTo Include="Dfe.Academies.Academisation.IntegrationTest" />
 	</ItemGroup>

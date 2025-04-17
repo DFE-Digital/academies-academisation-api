@@ -1,7 +1,5 @@
-﻿using System.Configuration;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.Http;
@@ -44,12 +42,14 @@ using Dfe.Academies.Academisation.WebApi.Swagger;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using FluentValidation;
 using MediatR;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,21 +66,13 @@ builder.Services
 	});
 
 // logging
-builder.Host.ConfigureLogging((context, logging) =>
+builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 {
-	logging.AddConfiguration(context.Configuration.GetSection("Logging"));
-
-	logging.ClearProviders();
-
-	logging.AddJsonConsole(options =>
-	{
-		options.IncludeScopes = true;
-		options.TimestampFormat = "hh:mm:ss ";
-		options.JsonWriterOptions = new JsonWriterOptions
-		{
-			Indented = true,
-		};
-	});
+    loggerConfiguration
+        .ReadFrom.Configuration(context.Configuration)
+        .WriteTo.ApplicationInsights(services.GetRequiredService<TelemetryConfiguration>(), TelemetryConverter.Traces)
+        .Enrich.FromLogContext()
+        .WriteTo.Console();
 });
 
 builder.Services.AddEndpointsApiExplorer();
