@@ -111,6 +111,11 @@ internal static class LegacyProjectDetailsMapper
 			RisksAndIssues = detailsToUpdate.RisksAndIssues ?? existingProject.Details.RisksAndIssues,
 			RisksAndIssuesSectionComplete = detailsToUpdate.RisksAndIssuesSectionComplete ?? existingProject.Details.RisksAndIssuesSectionComplete,
 
+			// Public sector equality duty
+			PublicEqualityDutyImpact = existingProject.Details.PublicEqualityDutyImpact,
+			PublicEqualityDutyReduceImpactReason = existingProject.Details.PublicEqualityDutyReduceImpactReason,
+			PublicEqualityDutySectionComplete = existingProject.Details.PublicEqualityDutySectionComplete,
+
 			// legal requirements
 			Consultation = detailsToUpdate.Consultation ?? existingProject.Details.Consultation,
 			GoverningBodyResolution = detailsToUpdate.GoverningBodyResolution ?? existingProject.Details.GoverningBodyResolution,
