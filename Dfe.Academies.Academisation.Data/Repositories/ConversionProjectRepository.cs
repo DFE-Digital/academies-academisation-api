@@ -1,10 +1,8 @@
-﻿
-using System.Globalization;
+﻿using System.Globalization;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dfe.Academies.Academisation.Data.Repositories
@@ -37,11 +35,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public async Task<ProjectFilterParameters> GetFilterParameters()
 		{
 			var advisoryBoardDates = await dbSet
-					.OrderByDescending(p => p.Details.HeadTeacherBoardDate)
 					.AsNoTracking()
 					.Where(p => p.Details.HeadTeacherBoardDate.HasValue)
-					.Select(p => new { p.Details.HeadTeacherBoardDate.Value.Year, p.Details.HeadTeacherBoardDate.Value.Month })
+					.Select(p => p.Details.HeadTeacherBoardDate)
 					.Distinct()
+					.OrderByDescending(d => d)
+					.Select(d => new { d!.Value.Year, d!.Value.Month })
 					.ToListAsync()
 					.ConfigureAwait(false);
 
