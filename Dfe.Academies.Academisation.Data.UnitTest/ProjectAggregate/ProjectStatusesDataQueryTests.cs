@@ -114,7 +114,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			var results = await _subject.GetFilterParameters();
 
 			// Assert
-			Assert.True(results.AdvisoryBoardDates?.Count == 3);
+			Assert.Equal(3, results.AdvisoryBoardDates?.Count);
 			
 
 			var date1 = DateTime.ParseExact(results.AdvisoryBoardDates![0], "MMM yy", CultureInfo.InvariantCulture);
