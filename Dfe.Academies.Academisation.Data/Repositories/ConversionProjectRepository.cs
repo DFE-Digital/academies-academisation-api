@@ -68,7 +68,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 					.Distinct()
 					.ToListAsync())!,
 
-				AdvisoryBoardDates = advisoryBoardDates.Select(x => new DateTime(x.Year, x.Month, 1).ToString("MMM yy")).ToList()
+				AdvisoryBoardDates = advisoryBoardDates.Distinct().Select(x => new DateTime(x.Year, x.Month, 1).ToString("MMM yy")).ToList()
 			};
 
 			return filterParameters;

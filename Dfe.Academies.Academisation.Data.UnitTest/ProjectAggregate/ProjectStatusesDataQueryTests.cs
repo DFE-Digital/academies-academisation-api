@@ -99,17 +99,24 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				.With(p => p.HeadTeacherBoardDate, new DateTime(2026, 11, 19, 0, 0, 0, DateTimeKind.Utc)).Create();
 
 			var projectDetails3 = _fixture.Build<ProjectDetails>()
+				.With(p => p.HeadTeacherBoardDate, new DateTime(2026, 11, 12, 0, 0, 0, DateTimeKind.Utc)).Create();
+
+			var projectDetails4 = _fixture.Build<ProjectDetails>()
 				.With(p => p.HeadTeacherBoardDate, new DateTime(2025, 3, 25, 0, 0, 0, DateTimeKind.Utc)).Create();
 
 			_context.Projects.Add(new Project(1, projectDetails1));
 			_context.Projects.Add(new Project(2, projectDetails2));
 			_context.Projects.Add(new Project(3, projectDetails3));
+			_context.Projects.Add(new Project(4, projectDetails4));
 
 			await _context.SaveChangesAsync();
 
 			var results = await _subject.GetFilterParameters();
 
 			// Assert
+			Assert.Equal(3, results.AdvisoryBoardDates?.Count);
+			
+
 			var date1 = DateTime.ParseExact(results.AdvisoryBoardDates![0], "MMM yy", CultureInfo.InvariantCulture);
 			var date2 = DateTime.ParseExact(results.AdvisoryBoardDates![1], "MMM yy", CultureInfo.InvariantCulture);
 			var date3 = DateTime.ParseExact(results.AdvisoryBoardDates![2], "MMM yy", CultureInfo.InvariantCulture);
