@@ -39,9 +39,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			worksheet.Cell(1, 6).Value = "Incoming Trust Reference Number";
 			worksheet.Cell(1, 7).Value = "Local Authority";
 			worksheet.Cell(1, 8).Value = "Region";
-			worksheet.Cell(1, 9).Value = "Proposed Decision Date";
+			worksheet.Cell(1, 9).Value = "Advisory Board Date";
 			worksheet.Cell(1, 10).Value = "Decision Date";
-			worksheet.Cell(1, 11).Value = "Pre-Decision";
+			worksheet.Cell(1, 11).Value = "Status";
 			worksheet.Cell(1, 12).Value = "Decision maker's name";
 			worksheet.Cell(1, 13).Value = "Decision maker's role";
 			worksheet.Cell(1, 14).Value = "Assigned To";

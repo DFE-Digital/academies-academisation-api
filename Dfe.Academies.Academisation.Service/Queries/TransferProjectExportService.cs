@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			string[] headers = [
 				"Academy", "URN", "Academy Type", "Incoming Trust", "Incoming Trust UKPRN","Outgoing Trust", "Outgoing Trust UKPRN", "Local Authority", "Region",
-				"Proposed Decision Date", "Decision Date", "Pre-Decision", "Decision maker's name", "Decision maker's role", "Assigned To", "Reason for transfer", "Type of transfer",
+				"Advisory Board Date", "Decision Date", "Status", "Decision maker's name", "Decision maker's role", "Assigned To", "Reason for transfer", "Type of transfer",
 				"Proposed academy transfer date", "PFI (Private Finance Initiative)"
 			];
 
