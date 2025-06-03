@@ -4,9 +4,9 @@ using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.Data.Http;
+using Dfe.Academies.Academisation.Service.Queries.Models;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -99,6 +99,29 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				_logger.LogError("Request for establishments failed , statuscode - {statusCode}", response!.StatusCode);
 				return null!;
 			}
+			var establishments = await response.Content.ReadFromJsonAsync<IEnumerable<EstablishmentDto>>();
+
+			return establishments!;
+		}
+
+		public async Task<IEnumerable<EstablishmentDto>> PostBulkEstablishmentsByUkprns(IEnumerable<string> ukprns)
+		{
+			var client = _academiesApiClientFactory.Create(_correlationContext);
+
+			// the model here
+			var request = new UkprnRequestModel
+			{ 
+				Ukprns = ukprns
+			};
+
+			var response = await client.PostAsJsonAsync("v4/establishments/bulk/ukprns", request);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.LogError("Request for establishments failed , statuscode - {StatusCode}", response!.StatusCode);
+				return null!;
+			}
+
 			var establishments = await response.Content.ReadFromJsonAsync<IEnumerable<EstablishmentDto>>();
 
 			return establishments!;

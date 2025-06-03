@@ -108,7 +108,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				.ReturnsAsync(mockDecision.Object);
 
 			mockAcademiesQueryService
-				.Setup(service => service.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>()))
+				.Setup(service => service.PostBulkEstablishmentsByUkprns(It.IsAny<IEnumerable<string>>()))
 				.ReturnsAsync([establishmentDto]);
 			var service = new TransferProjectQueryService(
 				_mockTransferProjectRepository.Object,
@@ -188,8 +188,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				new() { Name = "dummyAcademy2", Ukprn = "dummyOutgoingAcademyUkprn2" }
 			};
 
-			mockAcademiesQueryService.Setup(academiesQueryService => academiesQueryService.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>()))
+			mockAcademiesQueryService.Setup(academiesQueryService => academiesQueryService.PostBulkEstablishmentsByUkprns(It.IsAny<IEnumerable<string>>()))
 					.ReturnsAsync(establishments);
+
 			var service = new TransferProjectQueryService(
 				_mockTransferProjectRepository.Object,
 				mockAcademiesQueryService.Object,
