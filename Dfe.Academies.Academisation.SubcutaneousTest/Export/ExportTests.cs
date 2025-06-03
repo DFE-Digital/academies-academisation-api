@@ -6,9 +6,9 @@ using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAgg
 using ClosedXML.Excel;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate; 
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Contracts.V4.Establishments;
+using Dfe.Academies.Academisation.Service.Queries.Models;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 {
@@ -72,15 +72,31 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 			var incomingTrustName = Fixture.Create<string>()[..10];
 			var expectedProject = await CreateTransferProjects(incomingTrustName);
 
-			AddGetWithJsonResponse<IEnumerable<EstablishmentDto>>($"/v4/establishments/ukprn/bulk", [
-				new()
-				{
-					Ukprn = expectedProject.OutgoingTrustUkprn,
-					Name = Fixture.Create<string>()[..10] ,
-					EstablishmentType = new NameAndCodeDto{ Name = "Name", Code = "code"},
-					Gor = new NameAndCodeDto{ Code = "GorCode", Name= "GorName"}
-				}
-			]);
+			var ukprnRequest = new UkprnRequestModel
+			{
+				Ukprns = ["OutgoingAcademyUkprn"]
+			};
+
+			var establishments = new List<EstablishmentDto>
+			{
+				Fixture.Create<EstablishmentDto>(),
+				Fixture.Create<EstablishmentDto>()
+			};
+
+			AddPostWithJsonRequest<UkprnRequestModel, IEnumerable<EstablishmentDto>>($"/v4/establishments/bulk/ukprns",
+				ukprnRequest,
+				[
+					new()
+					{
+						Ukprn = expectedProject.OutgoingTrustUkprn,
+						Name = Fixture.Create<string>()[..10] ,
+						EstablishmentType = new NameAndCodeDto{ Name = "Name", Code = "code"},
+						Gor = new NameAndCodeDto{ Code = "GorCode", Name= "GorName"}
+					}
+				]
+			);
+
+
 			var searchModel = new GetProjectSearchModel(1, 10, incomingTrustName, null!, null!, null!, null!);
 			var s = _mockApiServer;
 			// Action
