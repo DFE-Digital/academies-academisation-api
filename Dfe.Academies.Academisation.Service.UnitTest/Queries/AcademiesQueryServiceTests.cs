@@ -21,7 +21,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 		private readonly Mock<ILogger<AcademiesQueryService>> _mockLogger;
 		private readonly Mock<IAcademiesApiClientFactory> _academiesApiClientFactory;
 
-		private readonly ICorrelationContext _correlationContext;
+		private readonly CorrelationContext _correlationContext;
 
 		private readonly AcademiesQueryService _service;
 
