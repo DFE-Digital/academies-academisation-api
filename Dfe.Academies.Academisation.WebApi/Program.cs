@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Data.ProjectAggregate;
 using Dfe.Academies.Academisation.Data.Repositories;
+using Dfe.Academies.Academisation.Data.Summary;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
@@ -14,6 +15,7 @@ using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
+using Dfe.Academies.Academisation.Domain.Summary;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -120,6 +122,7 @@ builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQuerySer
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
 builder.Services.AddScoped<IProjectGroupQueryService, ProjectGroupQueryService>();
 builder.Services.AddScoped<IRoleCapabilitiesQueryService, RoleCapabilitiesQueryService>();
+builder.Services.AddScoped<ISummaryDataService, SummaryDataService>();
 
 // utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
