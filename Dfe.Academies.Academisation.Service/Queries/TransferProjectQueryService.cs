@@ -253,5 +253,4 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return AcademyTransferProjectSummaryResponse(transferProjects);
 		}
 	}
-
 }

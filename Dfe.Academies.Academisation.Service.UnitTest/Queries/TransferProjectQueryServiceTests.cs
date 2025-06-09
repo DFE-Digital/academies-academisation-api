@@ -141,7 +141,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
-
 		[Fact]
 		public async Task GetExportedTransferProjects_ShouldReturnNoResultsWhenFiltered()
 		{
@@ -236,7 +235,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
 
-
 		[Fact]
 		public async Task GetProjects_ReturnsFilteredProjects()
 		{
@@ -313,6 +311,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 			// Assert
 			result.Should().BeEquivalentTo(expectedResponse);
 		}
+		
 		[Fact]
 		public async Task GetTransfersProjectsForGroup_ShouldReturnNoTranferProject()
 		{

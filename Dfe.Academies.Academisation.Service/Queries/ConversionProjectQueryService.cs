@@ -64,7 +64,7 @@ public class ConversionProjectQueryService : IConversionProjectQueryService
 			new Dictionary<string, object?> {
 				{"states", states},
 			});
-
+	
 		var data = projects.Select(p => p.MapToServiceModel());
 
 		return new PagedDataResponse<ConversionProjectServiceModel>(data,
