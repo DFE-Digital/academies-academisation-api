@@ -1,5 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+﻿using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
@@ -132,7 +131,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							.ToList();
 			if (ukprns.Count != 0)
 			{
-				var establishments = await _establishmentRepository.GetBulkEstablishmentsByUkprn(ukprns);
+				var establishments = await _establishmentRepository.PostBulkEstablishmentsByUkprns(ukprns);
 
 				foreach (var transferProject in atp)
 				{
@@ -143,13 +142,17 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					}
 
 					var _ukprns = transferProject.TransferringAcademies.Select(ta => ta.OutgoingAcademyUkprn);
-					var establishmentsForTheseAcademies = establishments.Where(e => _ukprns.Contains(e.Ukprn));
-					foreach (var transferringEstablishment in establishmentsForTheseAcademies)
+
+					if (establishments != null)
 					{
-						var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
-						var transferringAcademy = transferProject.TransferringAcademies.Where(s => s.OutgoingAcademyUkprn == transferringEstablishment.Ukprn).Single();
-						var project = MapProject(transferProject, transferringEstablishment, decision, $"{transferringAcademy.PFIScheme} {transferringAcademy.PFISchemeDetails}");
-						projects.Add(project);
+						var establishmentsForTheseAcademies = establishments.Where(e => _ukprns.Contains(e.Ukprn));
+						foreach (var transferringEstablishment in establishmentsForTheseAcademies)
+						{
+							var decision = decisions.SingleOrDefault(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == transferProject.Id);
+							var transferringAcademy = transferProject.TransferringAcademies.Single(s => s.OutgoingAcademyUkprn == transferringEstablishment.Ukprn);
+							var project = MapProject(transferProject, transferringEstablishment, decision, $"{transferringAcademy.PFIScheme} {transferringAcademy.PFISchemeDetails}");
+							projects.Add(project);
+						}
 					}
 				}
 			}
@@ -250,5 +253,4 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			return AcademyTransferProjectSummaryResponse(transferProjects);
 		}
 	}
-
 }
