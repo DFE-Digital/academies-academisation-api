@@ -152,8 +152,6 @@ public class ProjectUpdateTests
 
 		(_, ConversionProjectServiceModel getProject) = DfeAssert.OkObjectResult(getResult);
 
-		//existingProject.Details.ProjectStatus = updatedProject.Details.ProjectStatus;
-
 		Assert.Multiple(
 					() => Assert.Equal(existingProject.Details.HeadTeacherBoardDate, getProject.HeadTeacherBoardDate),
 					() => Assert.Equal(existingProject.Details.PartOfPfiScheme, getProject.PartOfPfiScheme),
