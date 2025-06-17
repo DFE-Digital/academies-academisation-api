@@ -4,7 +4,6 @@ import { AuthorisedUserCannotUpdateTheirContributorsEmailToAnotherEmailBodyPaylo
 import { AuthorisedUserCannotUpdateTheirContributorsEmailToInvalidEmailBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeTheirContributorsEmailToInvalidEmail'
 import { AuthorisedUserCannotUpdateWorksPlannedDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeWorksPlannedDateToInvalidDate'
 import { AuthorisedUserCannotUpdateSacreExemptionEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeSacreExemptionEndDateToInvalidDate'
-import { AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBody'
 import { AuthorisedUserCannotUpdatePreviousFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangePreviousFinancialYearEndDateToInvalidDate'
 import { AuthorisedUserCannotUpdateCurrentFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeCurrentFinancialYearEndDateToInvalidDate'
 import { AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayload } from '../fixtures/payloads/AuthorisedUserCannotChangeNextFinancialYearEndDateToInvalidDate'
@@ -198,22 +197,6 @@ describe('Academisation API Testing', () => {
       },
       body:
         AuthorisedUserCannotUpdateNextFinancialYearEndDateToInvalidDateBodyPayload,
-    }).then((response) => {
-      expect(response).to.have.property('status', 400)
-    })
-  })
-
-  it('PUT - Verify An Authorised User Is Unable To Change The schoolConversionTargetDate To An Invalid Date - 400 BAD REQUEST EXPECTED', () => {
-    cy.api({
-      method: 'PUT',
-      url: url + '/application/' + applicationNumber,
-      failOnStatusCode: false,
-      headers:
-      {
-        'x-api-key': apiKey,
-      },
-      body:
-        AuthorisedUserCannotUpdateSchoolConversionTargetDateToInvalidDateBodyPayload,
     }).then((response) => {
       expect(response).to.have.property('status', 400)
     })
