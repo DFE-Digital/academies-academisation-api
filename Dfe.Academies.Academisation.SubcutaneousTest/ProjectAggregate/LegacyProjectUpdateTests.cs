@@ -56,7 +56,6 @@ public class ProjectUpdateTests
 		_mediatr = services.BuildServiceProvider().GetService<IMediator>()!;
 	}
 
-
 	[Fact]
 	public async Task ProjectExists___FullProjectIsUpdated()
 	{
@@ -66,6 +65,7 @@ public class ProjectUpdateTests
 		var existingProjectDetails = _fixture.Build<ProjectDetails>()
 			.With(x => x.ExternalApplicationFormSaved, true)
 			.With(x => x.ExternalApplicationFormUrl, "test//url")
+			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 23, 59, 58, DateTimeKind.Utc)) // before support grant deadline
 			.Create();
 
 		var existingProject = new Project(101, existingProjectDetails);
@@ -98,6 +98,45 @@ public class ProjectUpdateTests
 		Assert.True(updatedProject.Equals(project));
 	}
 
+	[Fact]
+	public async Task ProjectPatch_When_Application_Received_After_SupportGrant_Deadline_Should_Have_No_SuportGrant_Data_Recorded()
+	{
+		// Arrange
+		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, _mediatr);
+
+		var existingProjectDetails = _fixture.Build<ProjectDetails>()
+			.With(x => x.ExternalApplicationFormSaved, true)
+			.With(x => x.ExternalApplicationFormUrl, "test//url")
+			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 21, 0, 0, 0, DateTimeKind.Utc)) // after support grant deadline
+			.Create();
+
+		var existingProject = new Project(101, existingProjectDetails);
+
+		await _context.Projects.AddAsync(existingProject);
+		await _context.SaveChangesAsync();
+
+		var updatedProject = _fixture.Build<ConversionProjectServiceModel>()
+			.With(p => p.Id, existingProject.Id)
+			.With(p => p.Urn, existingProject.Details.Urn)
+			.With(p => p.ExternalApplicationFormSaved, existingProject.Details.ExternalApplicationFormSaved)
+			.With(p => p.IsReadOnly, existingProject.ReadOnlyDate.HasValue)
+			.With(p => p.ProjectSentToCompleteDate, existingProject.ReadOnlyDate)
+			.Create();
+
+		updatedProject.Notes?.Clear();
+
+		// Act
+		var updateResult = await legacyProjectController.Patch(updatedProject.Id, updatedProject, default);
+
+		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(updateResult);
+
+		Assert.Null(project.ConversionSupportGrantAmount);
+		Assert.Null(project.ConversionSupportGrantChangeReason);
+		Assert.Null(project.ConversionSupportGrantType);
+		Assert.Null(project.ConversionSupportGrantEnvironmentalImprovementGrant);
+		Assert.Null(project.ConversionSupportGrantAmountChanged);
+		Assert.Null(project.ConversionSupportGrantNumberOfSites);
+	}
 
 	[Fact]
 	public async Task ProjectExists_FullProjectIsReturnedOnGet()
