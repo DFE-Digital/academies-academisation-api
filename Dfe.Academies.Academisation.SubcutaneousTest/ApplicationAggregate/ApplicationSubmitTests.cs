@@ -213,7 +213,6 @@ public class ApplicationSubmitTests
 		() => Assert.Equal(type, project.AcademyTypeAndRoute),
 		() => Assert.Equal(isFormAMat, project.IsFormAMat),
 		() => Assert.Null(project.ProposedConversionDate),
-		() => Assert.Equal(25000.0m, project.ConversionSupportGrantAmount),
 		() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
 		() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
 		() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),

@@ -79,7 +79,6 @@ public class Project : Entity, IProject, IAggregateRoot
 			IsFormAMat = false,
 			// Temp hotfix
 			ProposedConversionDate = null,
-			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = schoolDetails.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(schoolDetails.LandAndBuildings?.PartOfPfiScheme),
 			FinancialDeficit = ToYesNoString(IsDeficit(schoolDetails.CurrentFinancialYear?.CapitalCarryForwardStatus)),
@@ -121,7 +120,6 @@ public class Project : Entity, IProject, IAggregateRoot
 			IsFormAMat = true,
 			// Temp hotfix
 			ProposedConversionDate = null,
-			ConversionSupportGrantAmount = 25000,
 			PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
 			FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
@@ -171,7 +169,6 @@ public class Project : Entity, IProject, IAggregateRoot
 			NameOfTrust = project.Trust?.Name,
 			IsFormAMat = project.IsFormAMat,
 			AcademyTypeAndRoute = DetermineRoute(project),
-			ConversionSupportGrantAmount = 25000,
 			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
 			LocalAuthority = project.School?.LocalAuthorityName,
 			Region = project.School?.Region
