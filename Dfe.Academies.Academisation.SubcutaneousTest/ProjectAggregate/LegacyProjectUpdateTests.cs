@@ -65,7 +65,6 @@ public class ProjectUpdateTests
 		var existingProjectDetails = _fixture.Build<ProjectDetails>()
 			.With(x => x.ExternalApplicationFormSaved, true)
 			.With(x => x.ExternalApplicationFormUrl, "test//url")
-			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 23, 59, 58, DateTimeKind.Utc)) // before support grant deadline
 			.Create();
 
 		var existingProject = new Project(101, existingProjectDetails);
@@ -79,6 +78,7 @@ public class ProjectUpdateTests
 			.With(p => p.ExternalApplicationFormSaved, existingProject.Details.ExternalApplicationFormSaved)
 			.With(p => p.IsReadOnly, existingProject.ReadOnlyDate.HasValue)
 			.With(p => p.ProjectSentToCompleteDate, existingProject.ReadOnlyDate)
+			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 15, 0, 0, DateTimeKind.Utc)) // before support grant deadline
 			// excluded from update so need to be set for equality to assert
 			.With(x => x.KeyStage2PerformanceAdditionalInformation, existingProject.Details.KeyStage2PerformanceAdditionalInformation)
 			.With(x => x.KeyStage4PerformanceAdditionalInformation, existingProject.Details.KeyStage4PerformanceAdditionalInformation)
@@ -107,7 +107,6 @@ public class ProjectUpdateTests
 		var existingProjectDetails = _fixture.Build<ProjectDetails>()
 			.With(x => x.ExternalApplicationFormSaved, true)
 			.With(x => x.ExternalApplicationFormUrl, "test//url")
-			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 21, 0, 0, 0, DateTimeKind.Utc)) // after support grant deadline
 			.Create();
 
 		var existingProject = new Project(101, existingProjectDetails);
@@ -121,6 +120,7 @@ public class ProjectUpdateTests
 			.With(p => p.ExternalApplicationFormSaved, existingProject.Details.ExternalApplicationFormSaved)
 			.With(p => p.IsReadOnly, existingProject.ReadOnlyDate.HasValue)
 			.With(p => p.ProjectSentToCompleteDate, existingProject.ReadOnlyDate)
+			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 21, 5, 0, 0, DateTimeKind.Utc)) // after support grant deadline
 			.Create();
 
 		updatedProject.Notes?.Clear();

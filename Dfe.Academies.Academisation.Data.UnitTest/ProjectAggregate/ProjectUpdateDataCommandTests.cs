@@ -43,7 +43,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				.With(p => p.Urn, updatedProject.Details.Urn)
 				.With(x => x.ExternalApplicationFormSaved, true)
 				.With(x => x.ExternalApplicationFormUrl, "test//url")
-				.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 23, 59, 58, DateTimeKind.Utc)) // before support grant deadline
+				.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 18, 0, 0, DateTimeKind.Utc)) // before support grant deadline
 				.Create();
 
 
