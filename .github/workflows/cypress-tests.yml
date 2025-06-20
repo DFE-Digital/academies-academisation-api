@@ -34,7 +34,7 @@ jobs:
           "edge"
         ]
     container:
-      image: cypress/browsers:22.12.0@sha256:ff80ec791ccabc178cc2a7e33e7b76a92d19992a75efe23939fe19b75319cd53
+      image: cypress/browsers:22.15.1@sha256:753c6dd8dc176c2eb9e9a622146d2c260e308e86eb62ce2b3e6f12e7d67d7b13
     defaults:
       run:
         working-directory: CypressTests
