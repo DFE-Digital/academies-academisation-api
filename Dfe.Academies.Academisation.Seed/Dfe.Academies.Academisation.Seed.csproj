@@ -12,9 +12,9 @@
     <PackageReference Include="AutoFixture" Version="4.18.1" />
     <PackageReference Include="FakerDotNet" Version="1.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.14" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.17" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.6" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
   </ItemGroup>
 
