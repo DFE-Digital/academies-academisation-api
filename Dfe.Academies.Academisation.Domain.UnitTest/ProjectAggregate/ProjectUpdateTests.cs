@@ -23,7 +23,9 @@ public class ProjectUpdateTests
 		var updatedProject = _fixture.Build<ProjectDetails>()
 			.With(x => x.ExternalApplicationFormSaved, true)
 			.With(x => x.ExternalApplicationFormUrl, "test//url")
-			.With(p => p.Urn, initialProject.Urn).Without(x => x.ConversionSupportGrantChangeReason).Create();
+			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 23, 59, 58, DateTimeKind.Utc)) // before support grant deadline
+			.With(p => p.Urn, initialProject.Urn).Without(x => x.ConversionSupportGrantChangeReason)
+			.Create();
 
 		// Act
 		var result = sut.Update(updatedProject);
@@ -39,7 +41,10 @@ public class ProjectUpdateTests
 	public void Update_WithDifferentUrn__ReturnsCommandValidationErrorResult_AndDoesNotUpdateProjectDetails()
 	{
 		// Arrange
-		var existingProject = _fixture.Create<ProjectDetails>();
+		ProjectDetails existingProject = _fixture.Build<ProjectDetails>()
+				.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 18, 0, 0, DateTimeKind.Utc)) // before support grant deadline
+				.Create();
+
 		var sut = new Project(1, existingProject);
 		var updatedProject = new ProjectDetails { Urn = 1 };
 

@@ -192,6 +192,20 @@ public class Project : Entity, IProject, IAggregateRoot
 		Details.SetPerformanceData(keyStage2PerformanceAdditionalInformation, keyStage4PerformanceAdditionalInformation, keyStage5PerformanceAdditionalInformation, educationalAttendanceAdditionalInformation);
 	}
 
+	private static bool IsBeforeSupportGrantDeadline(DateTime? applicationReceivedDate)
+	{
+		bool isBefore = false;
+
+		var deadline = new DateTime(2024, 12, 20, 23, 59, 59, DateTimeKind.Utc);
+
+		if (applicationReceivedDate != null && applicationReceivedDate <= deadline)
+		{
+			isBefore = true;
+		}
+
+		return isBefore;
+	}
+
 	public CommandResult Update(ProjectDetails detailsToUpdate)
 	{
 		if (Details.Urn != detailsToUpdate.Urn)
@@ -201,6 +215,8 @@ public class Project : Entity, IProject, IAggregateRoot
 				new("Urn", "Urn in update model must match existing record")
 			});
 		}
+
+		var isBeforeSupportGrantDeadline = IsBeforeSupportGrantDeadline(detailsToUpdate.ApplicationReceivedDate);
 
 		Details = new ProjectDetails
 		{
@@ -241,12 +257,12 @@ public class Project : Entity, IProject, IAggregateRoot
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedConversionDate = detailsToUpdate.ProposedConversionDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
-			ConversionSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase),
-			ConversionSupportGrantChangeReason = NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute),
-			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
-			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
-			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
-			ConversionSupportGrantNumberOfSites = detailsToUpdate.ConversionSupportGrantNumberOfSites,
+			ConversionSupportGrantAmount = isBeforeSupportGrantDeadline ? CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase) : null,
+			ConversionSupportGrantChangeReason = isBeforeSupportGrantDeadline ? NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute) : null,
+			ConversionSupportGrantType = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantType : null,
+			ConversionSupportGrantEnvironmentalImprovementGrant = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant : null,
+			ConversionSupportGrantAmountChanged = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantAmountChanged : null,
+			ConversionSupportGrantNumberOfSites = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantNumberOfSites : null,
 			Region = detailsToUpdate.Region,
 
 			// Annex B
@@ -333,7 +349,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
-        
+
 		Details.SetPerformanceData(detailsToUpdate.KeyStage2PerformanceAdditionalInformation, detailsToUpdate.KeyStage4PerformanceAdditionalInformation, detailsToUpdate.KeyStage5PerformanceAdditionalInformation, detailsToUpdate.EducationalAttendanceAdditionalInformation);
 		Details.SetIsFormAMat(detailsToUpdate.IsFormAMat);
 
