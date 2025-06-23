@@ -130,7 +130,7 @@ public class ProjectUpdateTests
 
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(updateResult);
 
-		Assert.Null(project.ConversionSupportGrantAmount);
+		Assert.Equal(0, project.ConversionSupportGrantAmount);
 		Assert.Null(project.ConversionSupportGrantChangeReason);
 		Assert.Null(project.ConversionSupportGrantType);
 		Assert.Null(project.ConversionSupportGrantEnvironmentalImprovementGrant);

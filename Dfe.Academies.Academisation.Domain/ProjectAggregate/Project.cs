@@ -79,6 +79,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			IsFormAMat = false,
 			// Temp hotfix
 			ProposedConversionDate = null,
+			ConversionSupportGrantAmount = 0,
 			PublishedAdmissionNumber = schoolDetails.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(schoolDetails.LandAndBuildings?.PartOfPfiScheme),
 			FinancialDeficit = ToYesNoString(IsDeficit(schoolDetails.CurrentFinancialYear?.CapitalCarryForwardStatus)),
@@ -120,6 +121,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			IsFormAMat = true,
 			// Temp hotfix
 			ProposedConversionDate = null,
+			ConversionSupportGrantAmount = 0,
 			PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
 			FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
@@ -133,8 +135,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
 			YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3
-		})
-			.ToList();
+		}).ToList();
 
 		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails) { ApplicationSharePointId = application.EntityId, SchoolSharePointId = application.Schools.Single(x => x.Details.Urn == projectDetails.Urn).EntityId }).ToList();
 		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
@@ -169,6 +170,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			NameOfTrust = project.Trust?.Name,
 			IsFormAMat = project.IsFormAMat,
 			AcademyTypeAndRoute = DetermineRoute(project),
+			ConversionSupportGrantAmount = 0,
 			PartOfPfiScheme = ToYesNoString(project.School?.PartOfPfiScheme) ?? "No",
 			LocalAuthority = project.School?.LocalAuthorityName,
 			Region = project.School?.Region
@@ -257,7 +259,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedConversionDate = detailsToUpdate.ProposedConversionDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
-			ConversionSupportGrantAmount = isBeforeSupportGrantDeadline ? CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase) : null,
+			ConversionSupportGrantAmount = isBeforeSupportGrantDeadline ? CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase) : 0,
 			ConversionSupportGrantChangeReason = isBeforeSupportGrantDeadline ? NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute) : null,
 			ConversionSupportGrantType = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantType : null,
 			ConversionSupportGrantEnvironmentalImprovementGrant = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant : null,
