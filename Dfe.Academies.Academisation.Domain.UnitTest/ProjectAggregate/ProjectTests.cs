@@ -113,9 +113,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate
 			project.FormAMatProjectId.Should().BeNull(); // Since the route is not "Form a Mat", the ID should not be set
 		}
 
-
-
-
 		[Fact]
 		public void SetIncomingTrust_StateUnderTest_ExpectedBehavior()
 		{

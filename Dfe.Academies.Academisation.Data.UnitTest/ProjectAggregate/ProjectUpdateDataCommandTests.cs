@@ -89,7 +89,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			await _subject.Execute(updatedProject);
 
 			// assert
-			Assert.Null(updatedProject.Details.ConversionSupportGrantAmount);
+			Assert.Equal(0, updatedProject.Details.ConversionSupportGrantAmount);
 			Assert.Null(updatedProject.Details.ConversionSupportGrantChangeReason);
 			Assert.Null(updatedProject.Details.ConversionSupportGrantType);
 			Assert.Null(updatedProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant);
