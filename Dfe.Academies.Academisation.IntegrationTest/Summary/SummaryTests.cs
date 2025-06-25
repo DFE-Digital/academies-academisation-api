@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
@@ -24,11 +25,10 @@ namespace Dfe.Academies.Academisation.IntegrationTest.Summary
 		}
 
 		[Fact]
-		public async void Get_WhenProjectFound___ReturnsOk_AndDecisionIsRetrievedFromDatabase()
+		public async Task Get_WhenProjectFound___ReturnsOk_AndDecisionIsRetrievedFromDatabase()
 		{
 			const string testEmail = "a@b.com";
 
-			const int conversionProjectId = 1000;
 			var client = _factory.CreateClient();
 			
 			_fixture.Customize<ProjectDetails>(
@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.IntegrationTest.Summary
 			{
 				Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 				Assert.NotNull(result.Result);
-				Assert.Equal(testEmail, result.Result.First().ConversionsSummary.AssignedUserEmailAddress);
+				Assert.Equal(testEmail, result.Result.First().ConversionsSummary?.AssignedUserEmailAddress);
 			});
 		}
 

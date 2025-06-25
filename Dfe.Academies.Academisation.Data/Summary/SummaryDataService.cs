@@ -1,11 +1,12 @@
-﻿using Dfe.Academies.Academisation.Domain.Summary;
+﻿using Dfe.Academies.Academisation.Data.Migrations;
+using Dfe.Academies.Academisation.Domain.Summary;
 
 namespace Dfe.Academies.Academisation.Data.Summary
 {
 	public class SummaryDataService(AcademisationContext context) : ISummaryDataService
 	{
 		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
-
+		
         public Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat)
         {
             IEnumerable<ProjectSummaryIntermediate> conversionQuery = [];
@@ -13,10 +14,13 @@ namespace Dfe.Academies.Academisation.Data.Summary
 
             if (includeConversions)
             {
-				conversionQuery = _context.Projects
-	                .Where(x => x.Details.ProjectStatus == "Converter Pre-AO (C)" || x.Details.ProjectStatus == "Deferred")
-                    .Where(x => (x.Details.AssignedUser != null ? x.Details.AssignedUser.EmailAddress : null) == email)
-					.Select(x => new ProjectSummaryIntermediate
+                conversionQuery = _context.Projects
+                    .Where(x =>
+                        (x.Details.ProjectStatus == "Converter Pre-AO (C)" || x.Details.ProjectStatus == "Deferred") &&
+                        x.Details.AssignedUser != null &&
+                        x.Details.AssignedUser.EmailAddress == email
+                    )
+                    .Select(x => new ProjectSummaryIntermediate
                     {
                         Id = x.Id,
                         Urn = x.Details.Urn,
@@ -43,7 +47,7 @@ namespace Dfe.Academies.Academisation.Data.Summary
             {
                 transferQuery = _context.TransferProjects
                     .Where(x => x.AssignedUserEmailAddress == email)
-					.Select(x => new
+                    .Select(x => new
                     {
                         x.Id,
                         x.Urn,
@@ -83,20 +87,22 @@ namespace Dfe.Academies.Academisation.Data.Summary
             }
 
             var projectSummaries = conversionQuery
-	            .Concat(transferQuery)
-	            .Select(x => new ProjectSummary
-	            {
-		            Id = x.Id,
-		            Urn = x.Urn,
-		            CreatedOn = x.CreatedOn,
-		            LastModifiedOn = x.LastModifiedOn,
-		            ConversionsSummary = x.ConversionsSummary,
-		            TransfersSummary = x.TransfersSummary
-	            });
+                .Concat(transferQuery)
+                .Select(x => new ProjectSummary
+                {
+                    Id = x.Id,
+                    Urn = x.Urn,
+                    CreatedOn = x.CreatedOn,
+                    LastModifiedOn = x.LastModifiedOn,
+                    ConversionsSummary = x.ConversionsSummary,
+                    TransfersSummary = x.TransfersSummary
+                });
 
             return Task.FromResult(projectSummaries);
         }
+
    	}
+	
 	public class ProjectSummaryIntermediate
 	{
 		public int Id { get; set; }
