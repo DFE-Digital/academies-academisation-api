@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using MediatR;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
@@ -35,6 +36,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 
 		public SummaryDataServiceTests()
 		{
+			_mediator = new Mock<IMediator>().Object;
 			_context = new TestProjectContext(_mediator).CreateContext();
 			_subject = new SummaryDataService(_context);
 
@@ -67,7 +69,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 			
 			Assert.Single(result);
 			Assert.Equal(newProject.Id, result[0].Id);
-			Assert.Equal(testEmail, result[0].ConversionsSummary.AssignedUserEmailAddress);
+			Assert.Equal(testEmail, result[0].ConversionsSummary?.AssignedUserEmailAddress);
 		}
 
 
@@ -93,7 +95,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 
 			Assert.Single(result);
 			Assert.Equal(newProject.Id, result[0].Id);
-			Assert.Equal(testEmail, result[0].TransfersSummary.AssignedUserEmailAddress);
+			Assert.Equal(testEmail, result[0].TransfersSummary?.AssignedUserEmailAddress);
 		}
 
 		[Fact]
@@ -126,10 +128,10 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 
 			Assert.Equal(2, result.Length);
 			Assert.Equal(newProject.Id, result[0].Id);
-			Assert.Equal(testEmail, result[0].ConversionsSummary.AssignedUserEmailAddress);
+			Assert.Equal(testEmail, result[0].ConversionsSummary?.AssignedUserEmailAddress);
 
 			Assert.Equal(newTransferProject.Id, result[1].Id);
-			Assert.Equal(testEmail, result[1].TransfersSummary.AssignedUserEmailAddress);
+			Assert.Equal(testEmail, result[1].TransfersSummary?.AssignedUserEmailAddress);
 		}
 	}
 }

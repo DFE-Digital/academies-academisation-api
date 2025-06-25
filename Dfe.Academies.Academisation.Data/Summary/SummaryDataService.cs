@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Data.Summary
 	{
 		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        public async Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat)
+        public Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat)
         {
             IEnumerable<ProjectSummaryIntermediate> conversionQuery = [];
             IEnumerable<ProjectSummaryIntermediate> transferQuery = [];
@@ -15,7 +15,7 @@ namespace Dfe.Academies.Academisation.Data.Summary
             {
 				conversionQuery = _context.Projects
 	                .Where(x => x.Details.ProjectStatus == "Converter Pre-AO (C)" || x.Details.ProjectStatus == "Deferred")
-                    .Where(x => x.Details.AssignedUser.EmailAddress == email)
+                    .Where(x => (x.Details.AssignedUser != null ? x.Details.AssignedUser.EmailAddress : null) == email)
 					.Select(x => new ProjectSummaryIntermediate
                     {
                         Id = x.Id,
@@ -83,19 +83,18 @@ namespace Dfe.Academies.Academisation.Data.Summary
             }
 
             var projectSummaries = conversionQuery
-                .Concat(transferQuery)
-                .Select(x => new ProjectSummary
-                {
-                    Id = x.Id,
-                    Urn = x.Urn,
-                    CreatedOn = x.CreatedOn,
-                    LastModifiedOn = x.LastModifiedOn,
-                    ConversionsSummary = x.ConversionsSummary,
-                    TransfersSummary = x.TransfersSummary
-                })
-                .ToList();
+	            .Concat(transferQuery)
+	            .Select(x => new ProjectSummary
+	            {
+		            Id = x.Id,
+		            Urn = x.Urn,
+		            CreatedOn = x.CreatedOn,
+		            LastModifiedOn = x.LastModifiedOn,
+		            ConversionsSummary = x.ConversionsSummary,
+		            TransfersSummary = x.TransfersSummary
+	            });
 
-            return projectSummaries;
+            return Task.FromResult(projectSummaries);
         }
    	}
 	public class ProjectSummaryIntermediate
