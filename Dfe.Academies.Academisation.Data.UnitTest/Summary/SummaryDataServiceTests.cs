@@ -37,6 +37,10 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 		{
 			_context = new TestProjectContext(_mediator).CreateContext();
 			_subject = new SummaryDataService(_context);
+
+			_fixture.Customize<ProjectDetails>(
+				composer => composer.With(x => x.ProjectStatus, "Converter Pre-AO (C)")
+			);
 		}
 
 
@@ -44,7 +48,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 		public async Task ProjectConversionExists___GetProjectSummary()
 		{
 			const string testEmail = "a@b.com";
-
+			
 			// arrange
 			var projectDetails = _fixture.Create<ProjectDetails>();
 
@@ -56,7 +60,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 			await _context.SaveChangesAsync();
 
 			// act
-			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail)).ToArray();
+			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true)).ToArray();
 
 			// assert
 			Assert.NotNull(result);
@@ -82,7 +86,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 			await _context.SaveChangesAsync();
 
 			// act
-			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail)).ToArray();
+			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true)).ToArray();
 
 			// assert
 			Assert.NotNull(result);
@@ -115,7 +119,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 			await _context.SaveChangesAsync();
 
 			// act
-			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail)).ToArray();
+			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true)).ToArray();
 
 			// assert
 			Assert.NotNull(result);

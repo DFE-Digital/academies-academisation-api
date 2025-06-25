@@ -28,8 +28,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			var summaries = await _summaryRepository.GetProjectSummariesByAssignedEmail(request.EmailAddress,
 																												request.IncludeConversions,
 																												request.IncludeTransfers,
-																												request.IncludeFormAMat,
-																												request.SearchTerm);
+																												request.IncludeFormAMat);
 			return summaries;
 		}
 	}

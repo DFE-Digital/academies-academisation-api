@@ -31,6 +31,10 @@ namespace Dfe.Academies.Academisation.IntegrationTest.Summary
 
 			const int conversionProjectId = 1000;
 			var client = _factory.CreateClient();
+			
+			_fixture.Customize<ProjectDetails>(
+				composer => composer.With(x => x.ProjectStatus, "Converter Pre-AO (C)")
+			);
 
 			var conversionProjectDetails = _fixture.Create<ProjectDetails>();
 

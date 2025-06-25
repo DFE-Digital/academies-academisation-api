@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Data.Summary
 	{
 		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        public async Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat, string? searchTerm)
+        public async Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat)
         {
             IEnumerable<ProjectSummaryIntermediate> conversionQuery = [];
             IEnumerable<ProjectSummaryIntermediate> transferQuery = [];
@@ -16,7 +16,6 @@ namespace Dfe.Academies.Academisation.Data.Summary
 				conversionQuery = _context.Projects
 	                .Where(x => x.Details.ProjectStatus == "Converter Pre-AO (C)" || x.Details.ProjectStatus == "Deferred")
                     .Where(x => x.Details.AssignedUser.EmailAddress == email)
-                    .Where(x => searchTerm == null || x.Details.Urn.ToString().Contains(searchTerm) || x.Details.SchoolName.ToString().Contains(searchTerm))
 					.Select(x => new ProjectSummaryIntermediate
                     {
                         Id = x.Id,
@@ -80,8 +79,7 @@ namespace Dfe.Academies.Academisation.Data.Summary
                             IncomingTrustUkprn = x.FirstAcademy != null ? x.FirstAcademy.IncomingTrustUkprn : null,
                             IncomingTrustName = x.FirstAcademy != null ? x.FirstAcademy.IncomingTrustName : null
                         }
-                    })
-                    .Where(x => searchTerm == null || x.Urn.ToString().Contains(searchTerm) || x.TransfersSummary.IncomingTrustName.Contains(searchTerm)) ;
+                    });
             }
 
             var projectSummaries = conversionQuery
