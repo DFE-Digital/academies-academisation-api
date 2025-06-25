@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.Summary;
+﻿using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Summary;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
@@ -8,12 +9,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
     public class SummaryController : ControllerBase
     {
 	    private readonly ILogger<SummaryController> _logger;
-	    private readonly ISummaryDataService _summaryDataService;
+	    private readonly ISummaryQueryService _summaryQueryService;
 
-	    public SummaryController(ILogger<SummaryController> logger, ISummaryDataService summaryDataService)
+	    public SummaryController(ILogger<SummaryController> logger, ISummaryQueryService summaryQueryService)
 	    {
 		    _logger = logger;
-		    _summaryDataService = summaryDataService;
+		    _summaryQueryService = summaryQueryService;
 	    }
 
         [HttpGet("projects")]
@@ -23,7 +24,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 	        bool noFilters = includeConversions == null && includeTransfers == null && includeFormAMat == null;
 
-			var result = await _summaryDataService.GetProjectSummariesByAssignedEmail(email,
+			var result = await _summaryQueryService.GetProjectSummariesByAssignedEmail(email,
 		        includeConversions ?? noFilters,
 		        includeTransfers ?? noFilters,
 		        includeFormAMat ?? noFilters);

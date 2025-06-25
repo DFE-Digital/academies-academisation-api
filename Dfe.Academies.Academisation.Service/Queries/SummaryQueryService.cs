@@ -1,9 +1,10 @@
-﻿using Dfe.Academies.Academisation.Data.Migrations;
-using Dfe.Academies.Academisation.Domain.Summary;
+﻿using Dfe.Academies.Academisation.Data;
+using Dfe.Academies.Academisation.IService.Query;
+using Dfe.Academies.Academisation.IService.ServiceModels.Summary;
 
-namespace Dfe.Academies.Academisation.Data.Summary
+namespace Dfe.Academies.Academisation.Service.Queries
 {
-	public class SummaryDataService(AcademisationContext context) : ISummaryDataService
+	public class SummaryQueryService(AcademisationContext context) : ISummaryQueryService
 	{
 		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
 		

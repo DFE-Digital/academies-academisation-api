@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoFixture;
-using Dfe.Academies.Academisation.Data.Summary;
+﻿using AutoFixture;
+using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Service.Queries;
 using MediatR;
 using Moq;
-using Xunit;
 
-namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
+namespace Dfe.Academies.Academisation.SubcutaneousTest.Summary
 {
-	public class SummaryDataServiceTests
+	public class SummaryQueryServiceTests
 	{
 		private readonly Fixture _fixture = new();
 
-		private readonly SummaryDataService _subject;
+		private readonly SummaryQueryService _subject;
 		private readonly AcademisationContext _context;
 		private readonly IMediator _mediator;
 
@@ -34,11 +30,11 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Summary
 		];
 
 
-		public SummaryDataServiceTests()
+		public SummaryQueryServiceTests()
 		{
 			_mediator = new Mock<IMediator>().Object;
 			_context = new TestProjectContext(_mediator).CreateContext();
-			_subject = new SummaryDataService(_context);
+			_subject = new SummaryQueryService(_context);
 
 			_fixture.Customize<ProjectDetails>(
 				composer => composer.With(x => x.ProjectStatus, "Converter Pre-AO (C)")

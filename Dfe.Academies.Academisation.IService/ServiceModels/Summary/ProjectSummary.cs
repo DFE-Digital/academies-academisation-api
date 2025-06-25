@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dfe.Academies.Academisation.Domain.Summary
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.Summary
 {
 	public class ProjectSummary
 	{

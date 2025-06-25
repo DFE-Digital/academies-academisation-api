@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
-using Dfe.Academies.Academisation.Domain.Summary;
 using Dfe.Academies.Academisation.IntegrationTest.Extensions;
+using Dfe.Academies.Academisation.IService.ServiceModels.Summary;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.IntegrationTest.Summary
