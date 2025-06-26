@@ -43,7 +43,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				.With(p => p.Urn, updatedProject.Details.Urn)
 				.With(x => x.ExternalApplicationFormSaved, true)
 				.With(x => x.ExternalApplicationFormUrl, "test//url")
-				.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 18, 0, 0, DateTimeKind.Utc)) // before support grant deadline
+				.With(x => x.AcademyTypeAndRoute, "Sponsored")
 				.Create();
 
 
@@ -60,7 +60,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 		}
 
 		[Fact]
-		public async Task UpdateCommand_When_Application_Received_After_SupportGrant_Deadline_Should_Have_No_SuportGrant_Data_Recorded()
+		public async Task Voluntary_Conversion_UpdateCommand_When_Application_Received_After_SupportGrant_Deadline_Should_Have_No_SuportGrant_Data_Recorded()
 		{
 			// arrange
 			_context.ChangeTracker.AutoDetectChangesEnabled = false;
@@ -78,6 +78,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				.With(p => p.Urn, updatedProject.Details.Urn)
 				.With(x => x.ExternalApplicationFormSaved, true)
 				.With(x => x.ExternalApplicationFormUrl, "test//url")
+				.With(x => x.AcademyTypeAndRoute, "Converter")
 				.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 21, 0, 0, 0, DateTimeKind.Utc)) // after support grant deadline
 				.Create();
 
@@ -91,10 +92,6 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 			// assert
 			Assert.Equal(0, updatedProject.Details.ConversionSupportGrantAmount);
 			Assert.Null(updatedProject.Details.ConversionSupportGrantChangeReason);
-			Assert.Null(updatedProject.Details.ConversionSupportGrantType);
-			Assert.Null(updatedProject.Details.ConversionSupportGrantEnvironmentalImprovementGrant);
-			Assert.Null(updatedProject.Details.ConversionSupportGrantAmountChanged);
-			Assert.Null(updatedProject.Details.ConversionSupportGrantNumberOfSites);
 		}
 	}
 }

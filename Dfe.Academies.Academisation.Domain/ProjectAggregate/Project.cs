@@ -15,7 +15,6 @@ public class Project : Entity, IProject, IAggregateRoot
 	private Project(ProjectDetails projectDetails)
 	{
 		Details = projectDetails;
-
 	}
 
 	public Guid? SchoolSharePointId { get; private set; }
@@ -52,6 +51,14 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public bool ProjectSentToComplete { get; set; } = false;
 
+	static readonly string voluntaryConversionAcademyTypeAndRoute = "Converter";
+
+	private static bool IsVoluntaryConversionPostDeadline(string? academyTypeAndRoute, DateTime? applicationReceivedDate)
+	{
+		bool isPostDeadline = applicationReceivedDate.HasValue && DateTime.Compare(applicationReceivedDate.Value, new DateTime(2024, 12, 20, 23, 59, 59, DateTimeKind.Utc)) > 0;
+		return isPostDeadline && academyTypeAndRoute == voluntaryConversionAcademyTypeAndRoute;
+	}
+
 	// Create from A2b 
 	public static CreateResult Create(IApplication application)
 	{
@@ -66,20 +73,22 @@ public class Project : Entity, IProject, IAggregateRoot
 		var school = application.Schools.Single();
 		var schoolDetails = school.Details;
 
+		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(voluntaryConversionAcademyTypeAndRoute, application.ApplicationSubmittedDate);
+
 		var projectDetails = new ProjectDetails
 		{
 			Urn = schoolDetails.Urn,
 			SchoolName = schoolDetails.SchoolName,
 			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
-			ProjectStatus = "Converter Pre-AO (C)",
+			ProjectStatus = $"{voluntaryConversionAcademyTypeAndRoute} Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			TrustReferenceNumber = application.JoinTrust?.TrustReference,
 			NameOfTrust = application.JoinTrust?.TrustName,
-			AcademyTypeAndRoute = "Converter",
+			AcademyTypeAndRoute = voluntaryConversionAcademyTypeAndRoute,
 			IsFormAMat = false,
 			// Temp hotfix
 			ProposedConversionDate = null,
-			ConversionSupportGrantAmount = 0,
+			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000, 
 			PublishedAdmissionNumber = schoolDetails.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(schoolDetails.LandAndBuildings?.PartOfPfiScheme),
 			FinancialDeficit = ToYesNoString(IsDeficit(schoolDetails.CurrentFinancialYear?.CapitalCarryForwardStatus)),
@@ -109,19 +118,21 @@ public class Project : Entity, IProject, IAggregateRoot
 				});
 		}
 
+		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(voluntaryConversionAcademyTypeAndRoute, application.ApplicationSubmittedDate);
+
 		var projectDetailsList = application.Schools.Select(school => new ProjectDetails
 		{
 			Urn = school.Details.Urn,
 			SchoolName = school.Details.SchoolName,
 			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
-			ProjectStatus = "Converter Pre-AO (C)",
+			ProjectStatus = $"{voluntaryConversionAcademyTypeAndRoute} Pre-AO (C)",
 			ApplicationReceivedDate = application.ApplicationSubmittedDate,
 			NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
-			AcademyTypeAndRoute = "Converter",
+			AcademyTypeAndRoute = voluntaryConversionAcademyTypeAndRoute,
 			IsFormAMat = true,
 			// Temp hotfix
 			ProposedConversionDate = null,
-			ConversionSupportGrantAmount = 0,
+			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000,
 			PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
 			FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
@@ -194,20 +205,6 @@ public class Project : Entity, IProject, IAggregateRoot
 		Details.SetPerformanceData(keyStage2PerformanceAdditionalInformation, keyStage4PerformanceAdditionalInformation, keyStage5PerformanceAdditionalInformation, educationalAttendanceAdditionalInformation);
 	}
 
-	private static bool IsBeforeSupportGrantDeadline(DateTime? applicationReceivedDate)
-	{
-		bool isBefore = false;
-
-		var deadline = new DateTime(2024, 12, 20, 23, 59, 59, DateTimeKind.Utc);
-
-		if (applicationReceivedDate != null && applicationReceivedDate <= deadline)
-		{
-			isBefore = true;
-		}
-
-		return isBefore;
-	}
-
 	public CommandResult Update(ProjectDetails detailsToUpdate)
 	{
 		if (Details.Urn != detailsToUpdate.Urn)
@@ -218,7 +215,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			});
 		}
 
-		var isBeforeSupportGrantDeadline = IsBeforeSupportGrantDeadline(detailsToUpdate.ApplicationReceivedDate);
+		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(detailsToUpdate.AcademyTypeAndRoute, detailsToUpdate.ApplicationReceivedDate);
 
 		Details = new ProjectDetails
 		{
@@ -259,12 +256,14 @@ public class Project : Entity, IProject, IAggregateRoot
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedConversionDate = detailsToUpdate.ProposedConversionDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
-			ConversionSupportGrantAmount = isBeforeSupportGrantDeadline ? CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase) : 0,
-			ConversionSupportGrantChangeReason = isBeforeSupportGrantDeadline ? NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute) : null,
-			ConversionSupportGrantType = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantType : null,
-			ConversionSupportGrantEnvironmentalImprovementGrant = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant : null,
-			ConversionSupportGrantAmountChanged = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantAmountChanged : null,
-			ConversionSupportGrantNumberOfSites = isBeforeSupportGrantDeadline ? detailsToUpdate.ConversionSupportGrantNumberOfSites : null,
+
+			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase),
+			ConversionSupportGrantChangeReason = isVoluntaryConverionPostDeadline ? null : NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute),
+			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
+			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
+			ConversionSupportGrantAmountChanged = detailsToUpdate.ConversionSupportGrantAmountChanged,
+			ConversionSupportGrantNumberOfSites = detailsToUpdate.ConversionSupportGrantNumberOfSites,
+
 			Region = detailsToUpdate.Region,
 
 			// Annex B
@@ -666,5 +665,4 @@ public class Project : Entity, IProject, IAggregateRoot
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
-	
 }
