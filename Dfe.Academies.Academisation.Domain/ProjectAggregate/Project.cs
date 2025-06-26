@@ -216,6 +216,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(detailsToUpdate.AcademyTypeAndRoute, detailsToUpdate.ApplicationReceivedDate);
+		decimal? defaultSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase);
 
 		Details = new ProjectDetails
 		{
@@ -256,8 +257,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			Form7ReceivedDate = detailsToUpdate.Form7ReceivedDate,
 			ProposedConversionDate = detailsToUpdate.ProposedConversionDate,
 			SchoolAndTrustInformationSectionComplete = detailsToUpdate.SchoolAndTrustInformationSectionComplete,
-
-			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase),
+			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : defaultSupportGrantAmount,
 			ConversionSupportGrantChangeReason = isVoluntaryConverionPostDeadline ? null : NullifyGrantChangeReasonIfNeeded(detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.ConversionSupportGrantChangeReason, detailsToUpdate.AcademyTypeAndRoute),
 			ConversionSupportGrantType = detailsToUpdate.ConversionSupportGrantType,
 			ConversionSupportGrantEnvironmentalImprovementGrant = detailsToUpdate.ConversionSupportGrantEnvironmentalImprovementGrant,
