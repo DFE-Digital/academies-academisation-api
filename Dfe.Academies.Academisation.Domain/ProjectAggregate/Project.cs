@@ -52,6 +52,8 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public bool ProjectSentToComplete { get; set; } = false;
 
+	public DateTime LockedUntil { get; private set; }
+
 	// Create from A2b 
 	public static CreateResult Create(IApplication application)
 	{
@@ -666,5 +668,9 @@ public class Project : Entity, IProject, IAggregateRoot
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		this.LastModifiedOn = DateTime.UtcNow;
 	}
-	
+
+	public void SetLockedUntil(DateTime dateTime)
+	{
+		this.LockedUntil = dateTime;
+	}
 }
