@@ -120,6 +120,7 @@ builder.Services.AddScoped<ITransferProjectQueryService, TransferProjectQuerySer
 builder.Services.AddScoped<ITransferProjectExportService, TransferProjectExportService>();
 builder.Services.AddScoped<IProjectGroupQueryService, ProjectGroupQueryService>();
 builder.Services.AddScoped<IRoleCapabilitiesQueryService, RoleCapabilitiesQueryService>();
+builder.Services.AddScoped<ISummaryQueryService, SummaryQueryService>();
 
 // utils
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

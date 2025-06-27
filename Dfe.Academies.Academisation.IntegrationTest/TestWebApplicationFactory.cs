@@ -21,6 +21,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 	private AcademisationContext _dbContext = null!;
 	private readonly SqliteConnection _connection;
 
+	public AcademisationContext Context
+	{
+		get
+		{
+			return _dbContext ?? throw new InvalidOperationException("Database context is not initialized. Ensure the factory is properly configured before use.");
+		}
+	}
+
 	public TestWebApplicationFactory()
 	{
 		_authKey = Guid.NewGuid().ToString();
