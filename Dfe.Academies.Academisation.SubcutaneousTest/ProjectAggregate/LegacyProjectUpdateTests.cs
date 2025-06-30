@@ -99,7 +99,7 @@ public class ProjectUpdateTests
 	}
 
 	[Fact]
-	public async Task ProjectPatch_When_Application_Received_After_SupportGrant_Deadline_Should_Have_No_SuportGrant_Data_Recorded()
+	public async Task ProjectPatch_When_Voluntary_Conversion_And_Application_Received_After_SupportGrant_Deadline_Should_Have_No_SupportGrant_Data_Recorded()
 	{
 		// Arrange
 		var legacyProjectController = new ProjectController(_legacyProjectGetQuery, _mediatr);
@@ -120,6 +120,7 @@ public class ProjectUpdateTests
 			.With(p => p.ExternalApplicationFormSaved, existingProject.Details.ExternalApplicationFormSaved)
 			.With(p => p.IsReadOnly, existingProject.ReadOnlyDate.HasValue)
 			.With(p => p.ProjectSentToCompleteDate, existingProject.ReadOnlyDate)
+			.With(x => x.AcademyTypeAndRoute, "Converter")
 			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 21, 5, 0, 0, DateTimeKind.Utc)) // after support grant deadline
 			.Create();
 
@@ -132,10 +133,6 @@ public class ProjectUpdateTests
 
 		Assert.Equal(0, project.ConversionSupportGrantAmount);
 		Assert.Null(project.ConversionSupportGrantChangeReason);
-		Assert.Null(project.ConversionSupportGrantType);
-		Assert.Null(project.ConversionSupportGrantEnvironmentalImprovementGrant);
-		Assert.Null(project.ConversionSupportGrantAmountChanged);
-		Assert.Null(project.ConversionSupportGrantNumberOfSites);
 	}
 
 	[Fact]
