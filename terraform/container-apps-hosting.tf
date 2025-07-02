@@ -32,6 +32,7 @@ module "azure_container_apps_hosting" {
   mssql_firewall_ipv4_allow_list     = local.mssql_firewall_ipv4_allow_list
   mssql_server_public_access_enabled = local.mssql_server_public_access_enabled
   mssql_managed_identity_assign_role = local.mssql_managed_identity_assign_role
+  mssql_sku_name                     = local.mssql_sku_name
 
   enable_event_hub                          = local.enable_event_hub
   enable_logstash_consumer                  = local.enable_logstash_consumer
