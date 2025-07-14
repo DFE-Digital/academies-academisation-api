@@ -4,6 +4,6 @@ namespace Dfe.Academies.Academisation.IService.Query
 {
 	public interface ISummaryQueryService
 	{
-		Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat);
+		Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat, CancellationToken cancellationToken);
 	}
 }
