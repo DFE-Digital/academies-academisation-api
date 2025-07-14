@@ -48,7 +48,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				formAMats.Select(x => x.Id as int?),
 				cancellationToken)).ToList();
 
-			return formAMats.ToList().Select(formAMat => new ProjectSummary()
+			return formAMats.Select(formAMat => new ProjectSummary()
 			{
 				Id = formAMat.Id,
 				CreatedOn = formAMat.CreatedOn,
@@ -89,7 +89,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					AssignedUserEmailAddress = x.AssignedUserEmailAddress,
 					AssignedUserFullName = x.AssignedUserFullName,
 					Status = x.Status,
-					IncomingTrustName = x.TransferringAcademies.Select(x => x.IncomingTrustName).First()
+					IncomingTrustName = x.TransferringAcademies.Select(t => t.IncomingTrustName).FirstOrDefault() ?? ""
 				}
 			}).ToList();
 		}
@@ -122,34 +122,6 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				}).ToList();
 
 
-
-			//return _context.Projects
-			//	.Where(x =>
-			//		(x.Details.ProjectStatus == "Converter Pre-AO (C)" || x.Details.ProjectStatus == "Deferred") &&
-			//		x.Details.AssignedUser != null &&
-			//		x.Details.AssignedUser.EmailAddress == email
-			//	)
-			//	.Select(x => new ProjectSummaryIntermediate
-			//	{
-			//		Id = x.Id,
-			//		Urn = x.Details.Urn,
-			//		CreatedOn = x.CreatedOn,
-			//		LastModifiedOn = x.LastModifiedOn,
-			//		ConversionsSummary = new ConversionsSummary
-			//		{
-			//			ApplicationReferenceNumber = x.Details.ApplicationReferenceNumber,
-			//			SchoolName = x.Details.SchoolName,
-			//			LocalAuthority = x.Details.LocalAuthority,
-			//			Region = x.Details.Region,
-			//			AcademyTypeAndRoute = x.Details.AcademyTypeAndRoute,
-			//			NameOfTrust = x.Details.NameOfTrust,
-			//			AssignedUserEmailAddress = x.Details.AssignedUser != null ? x.Details.AssignedUser.EmailAddress : null,
-			//			AssignedUserFullName = x.Details.AssignedUser != null ? x.Details.AssignedUser.FullName : null,
-			//			ProjectStatus = x.Details.ProjectStatus,
-			//			TrustReferenceNumber = x.Details.TrustReferenceNumber,
-			//		},
-			//		TransfersSummary = null
-			//	});
 		}
 	}
 }
