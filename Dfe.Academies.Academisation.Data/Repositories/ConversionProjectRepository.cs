@@ -351,5 +351,17 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			proj.FormAMatProjectId.HasValue &&
 			proj.ReadOnlyDate.HasValue).ToListAsync(cancellationToken);
 		}
+
+		public async Task<IEnumerable<IProject>> GetConversionProjectsByEmail(string deliveryOfficersEmail, CancellationToken cancellationToken)
+		{
+			IQueryable<Project> queryable = dbSet;
+			
+			queryable = queryable.Where(p => p.Details.AssignedUser != null && p.Details.AssignedUser.EmailAddress == deliveryOfficersEmail);
+
+			var projects = await queryable
+				.OrderByDescending(acp => acp.CreatedOn).ToListAsync(cancellationToken);
+
+			return projects;
+		}
 	}
 }

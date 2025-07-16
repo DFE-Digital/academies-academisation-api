@@ -69,6 +69,11 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			Insert(formAMatProject as FormAMatProject);
 		}
+
+		public async Task<IEnumerable<FormAMatProject>> GetByEmail(string? deliveryOfficerEmail, CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(x => x.AssignedUser != null && x.AssignedUser.EmailAddress == deliveryOfficerEmail).ToListAsync(cancellationToken);
+		}
 	}
 }
 

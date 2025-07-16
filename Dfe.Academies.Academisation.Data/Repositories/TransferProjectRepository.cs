@@ -145,5 +145,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return await projects.Where(y => y.IsFormAMat == true && y.IncomingTrustReferenceNumber != null).ToListAsync(cancellationToken);
 		}
+
+		public async Task<IEnumerable<ITransferProject>> GetByDeliveryOfficerEmail(string email, CancellationToken cancellationToken)
+		{
+			return await DefaultIncludes().Where(x => x.AssignedUserEmailAddress == email).ToListAsync(cancellationToken);
+		}
 	}
 }
