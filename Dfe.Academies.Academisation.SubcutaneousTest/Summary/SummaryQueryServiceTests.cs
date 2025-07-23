@@ -1,7 +1,9 @@
 ﻿using AutoFixture;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
+using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.Service.Queries;
@@ -15,7 +17,9 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Summary
 		private readonly Fixture _fixture = new();
 
 		private readonly SummaryQueryService _subject;
-		private readonly AcademisationContext _context;
+		private readonly Mock<IConversionProjectRepository> _conversionProjectRepositoryMock;
+		private readonly Mock<ITransferProjectRepository> _transferProjectRepositoryMock;
+		private readonly Mock<IFormAMatProjectRepository> _formAMatProjectRepositoryMock;
 		private readonly IMediator _mediator;
 
 		private readonly string _outgoingTrustUkprn = "12345678";
@@ -32,9 +36,14 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Summary
 
 		public SummaryQueryServiceTests()
 		{
+			_transferProjectRepositoryMock = new Mock<ITransferProjectRepository>();
+			_conversionProjectRepositoryMock = new Mock<IConversionProjectRepository>();
+			_formAMatProjectRepositoryMock = new Mock<IFormAMatProjectRepository>();
+
 			_mediator = new Mock<IMediator>().Object;
-			_context = new TestProjectContext(_mediator).CreateContext();
-			_subject = new SummaryQueryService(_context);
+			_subject = new SummaryQueryService(_conversionProjectRepositoryMock.Object,
+				_transferProjectRepositoryMock.Object,
+				_formAMatProjectRepositoryMock.Object);
 
 			_fixture.Customize<ProjectDetails>(
 				composer => composer.With(x => x.ProjectStatus, "Converter Pre-AO (C)")
@@ -54,11 +63,12 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Summary
 
 			var newProject = new Project(0, projectDetails);
 
-			_context.Projects.Add(newProject);
-			await _context.SaveChangesAsync();
+			_conversionProjectRepositoryMock
+				.Setup(x => x.GetConversionProjectsByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync([newProject]);
 
 			// act
-			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true)).ToArray();
+			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true, CancellationToken.None)).ToArray();
 
 			// assert
 			Assert.NotNull(result);
@@ -79,12 +89,10 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Summary
 				TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, false, DateTime.Now);
 			newProject.AssignUser(Guid.NewGuid(), testEmail, "Test User");
 
-			_context.TransferProjects.Add(newProject);
-
-			await _context.SaveChangesAsync();
+			_transferProjectRepositoryMock.Setup(x => x.GetByDeliveryOfficerEmail(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync([newProject]);
 
 			// act
-			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true)).ToArray();
+			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true, CancellationToken.None)).ToArray();
 
 			// assert
 			Assert.NotNull(result);
@@ -107,17 +115,18 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Summary
 
 			var newProject = new Project(0, conversionProjectDetails);
 
-			_context.Projects.Add(newProject);
-
+			_conversionProjectRepositoryMock
+				.Setup(x => x.GetConversionProjectsByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync([newProject]);
+			
 			var newTransferProject =
 				TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, false, DateTime.Now);
 			newTransferProject.AssignUser(Guid.NewGuid(), testEmail, "Test User");
-
-			_context.TransferProjects.Add(newTransferProject);
-			await _context.SaveChangesAsync();
+			
+			_transferProjectRepositoryMock.Setup(x => x.GetByDeliveryOfficerEmail(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync([newTransferProject]);
 
 			// act
-			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true)).ToArray();
+			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true, CancellationToken.None)).ToArray();
 
 			// assert
 			Assert.NotNull(result);
@@ -128,6 +137,44 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Summary
 
 			Assert.Equal(newTransferProject.Id, result[1].Id);
 			Assert.Equal(testEmail, result[1].TransfersSummary?.AssignedUserEmailAddress);
+		}
+
+
+		[Fact]
+		public async Task ProjectFormAMatExists___GetProjectSummary()
+		{
+			const string testEmail = "a@b.com";
+			const string proposedTrustName = "Form A Mat";
+
+			// arrange
+
+			var conversionProjectDetails = _fixture.Create<ProjectDetails>();
+
+			conversionProjectDetails.AssignedUser = new User(Guid.NewGuid(), "Test User", testEmail);
+
+			var newProject = new Project(0, conversionProjectDetails);
+
+			_conversionProjectRepositoryMock
+				.Setup(x => x.GetConversionProjectsByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync([newProject]);
+			
+			var newFormAMatProject =
+				FormAMatProject.Create(proposedTrustName, "MAT123", DateTime.Now);
+			newFormAMatProject.Id = 123;
+			_formAMatProjectRepositoryMock.Setup(x => x.GetByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync([newFormAMatProject]);
+
+			// act
+			var result = (await _subject.GetProjectSummariesByAssignedEmail(testEmail, true, true, true, CancellationToken.None)).ToArray();
+
+			// assert
+			Assert.NotNull(result);
+
+			Assert.Equal(2, result.Length);
+			Assert.Equal(newProject.Id, result[0].Id);
+			Assert.Equal(testEmail, result[0].ConversionsSummary?.AssignedUserEmailAddress);
+
+			Assert.Equal(newFormAMatProject.Id, result[1].Id);
+			Assert.Equal(proposedTrustName, result[1].FormAMatSummary?.ProposedTrustName);
 		}
 	}
 }

@@ -11,5 +11,8 @@ namespace Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate
 		Task<IEnumerable<FormAMatProject>> SearchProjectsByTermAsync(string searchTerm, CancellationToken cancellationToken);
 
 		Task CreateFormAMatProjectWithTrustReferenceNumber(IFormAMatProject formAMatProject);
+
+		Task<IEnumerable<FormAMatProject>>
+			GetByEmail(string deliveryOfficerEmail, CancellationToken cancellationToken);
 	}
 }

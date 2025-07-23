@@ -1,125 +1,127 @@
-﻿using Dfe.Academies.Academisation.Data;
+﻿using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
+using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Summary;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
-	public class SummaryQueryService(AcademisationContext context) : ISummaryQueryService
+	public class SummaryQueryService(
+		IConversionProjectRepository conversionProjectRepository,
+		ITransferProjectRepository transferProjectRepository,
+		IFormAMatProjectRepository formAMatProjectRepository) : ISummaryQueryService
 	{
-		private readonly AcademisationContext _context = context ?? throw new ArgumentNullException(nameof(context));
-		
-        public Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email, bool includeConversions, bool includeTransfers, bool includeFormAMat)
-        {
-            IEnumerable<ProjectSummaryIntermediate> conversionQuery = [];
-            IEnumerable<ProjectSummaryIntermediate> transferQuery = [];
+		public async Task<IEnumerable<ProjectSummary>> GetProjectSummariesByAssignedEmail(string email,
+			bool includeConversions, bool includeTransfers, bool includeFormAMat, CancellationToken cancellationToken)
+		{
+			List<ProjectSummary> conversionQuery = [];
+			List<ProjectSummary> transferQuery = [];
+			List<ProjectSummary> formAMatQuery = [];
 
-            if (includeConversions)
-            {
-                conversionQuery = GetConversionQuery(email);
-            }
+			if (includeConversions)
+			{
+				conversionQuery = await GetConversionQuery(email, cancellationToken);
+			}
 
-            if (includeTransfers)
-            {
-                transferQuery = GetTransferQuery(email);
-            }
+			if (includeTransfers)
+			{
+				transferQuery = await GetTransferQuery(email, cancellationToken);
+			}
 
-            var projectSummaries = conversionQuery
-                .Concat(transferQuery)
-                .Select(x => new ProjectSummary
-                {
-                    Id = x.Id,
-                    Urn = x.Urn,
-                    CreatedOn = x.CreatedOn,
-                    LastModifiedOn = x.LastModifiedOn,
-                    ConversionsSummary = x.ConversionsSummary,
-                    TransfersSummary = x.TransfersSummary
-                });
+			if (includeFormAMat)
+			{
+				formAMatQuery = await GetFormAMatQuery(email, cancellationToken);
+			}
 
-            return Task.FromResult(projectSummaries);
-        }
+			var projectSummaries = conversionQuery
+				.Concat(transferQuery)
+				.Concat(formAMatQuery);
 
-        private IQueryable<ProjectSummaryIntermediate> GetTransferQuery(string email)
-        {
-	        return _context.TransferProjects
-		        .Where(x => x.AssignedUserEmailAddress == email)
-		        .Select(x => new
-		        {
-			        x.Id,
-			        x.Urn,
-			        x.CreatedOn,
-			        x.LastModifiedOn,
-			        x.ProjectReference,
-			        x.OutgoingTrustUkprn,
-			        x.OutgoingTrustName,
-			        x.TypeOfTransfer,
-			        x.TargetDateForTransfer,
-			        x.AssignedUserEmailAddress,
-			        x.AssignedUserFullName,
-			        x.Status,
-			        FirstAcademy = x.TransferringAcademies.FirstOrDefault()
-		        })
-		        .Select(x => new ProjectSummaryIntermediate
-		        {
-			        Id = x.Id,
-			        Urn = x.Urn,
-			        CreatedOn = x.CreatedOn,
-			        LastModifiedOn = x.LastModifiedOn,
-			        ConversionsSummary = null,
-			        TransfersSummary = new TransfersSummary
-			        {
-				        ProjectReference = x.ProjectReference,
-				        OutgoingTrustUkprn = x.OutgoingTrustUkprn,
-				        OutgoingTrustName = x.OutgoingTrustName,
-				        TypeOfTransfer = x.TypeOfTransfer,
-				        TargetDateForTransfer = x.TargetDateForTransfer,
-				        AssignedUserEmailAddress = x.AssignedUserEmailAddress,
-				        AssignedUserFullName = x.AssignedUserFullName,
-				        Status = x.Status,
-				        IncomingTrustUkprn = x.FirstAcademy != null ? x.FirstAcademy.IncomingTrustUkprn : null,
-				        IncomingTrustName = x.FirstAcademy != null ? x.FirstAcademy.IncomingTrustName : null
-			        }
-		        });
-        }
+			return projectSummaries;
+		}
 
-        private IQueryable<ProjectSummaryIntermediate> GetConversionQuery(string email)
-        {
-	        return _context.Projects
-		        .Where(x =>
-			        (x.Details.ProjectStatus == "Converter Pre-AO (C)" || x.Details.ProjectStatus == "Deferred") &&
-			        x.Details.AssignedUser != null &&
-			        x.Details.AssignedUser.EmailAddress == email
-		        )
-		        .Select(x => new ProjectSummaryIntermediate
-		        {
-			        Id = x.Id,
-			        Urn = x.Details.Urn,
-			        CreatedOn = x.CreatedOn,
-			        LastModifiedOn = x.LastModifiedOn,
-			        ConversionsSummary = new ConversionsSummary
-			        {
-				        ApplicationReferenceNumber = x.Details.ApplicationReferenceNumber,
-				        SchoolName = x.Details.SchoolName,
-				        LocalAuthority = x.Details.LocalAuthority,
-				        Region = x.Details.Region,
-				        AcademyTypeAndRoute = x.Details.AcademyTypeAndRoute,
-				        NameOfTrust = x.Details.NameOfTrust,
-				        AssignedUserEmailAddress = x.Details.AssignedUser != null ? x.Details.AssignedUser.EmailAddress : null,
-				        AssignedUserFullName = x.Details.AssignedUser != null ? x.Details.AssignedUser.FullName : null,
-				        ProjectStatus = x.Details.ProjectStatus,
-				        TrustReferenceNumber = x.Details.TrustReferenceNumber,
-			        },
-			        TransfersSummary = null
-		        });
-        }
-	}
-	
-	public class ProjectSummaryIntermediate
-	{
-		public int Id { get; set; }
-		public int Urn { get; set; }
-		public DateTime? CreatedOn { get; set; }
-		public DateTime? LastModifiedOn { get; set; }
-		public ConversionsSummary? ConversionsSummary { get; set; }
-		public TransfersSummary? TransfersSummary { get; set; }
+		private async Task<List<ProjectSummary>> GetFormAMatQuery(string email, CancellationToken cancellationToken)
+		{
+			var formAMats = (await formAMatProjectRepository.GetByEmail(email, cancellationToken)).ToList();
+
+			var projects = (await conversionProjectRepository.GetConversionProjectsByFormAMatIds(
+				formAMats.Select(x => x.Id as int?),
+				cancellationToken)).ToList();
+
+			return formAMats.Select(formAMat => new ProjectSummary()
+			{
+				Id = formAMat.Id,
+				CreatedOn = formAMat.CreatedOn,
+				LastModifiedOn = formAMat.LastModifiedOn,
+				ConversionsSummary = null,
+				FormAMatSummary = new FormAMatSummary()
+				{
+					ProposedTrustName = formAMat.ProposedTrustName,
+					SchoolNames =
+						projects.Where(x => x.FormAMatProjectId == formAMat.Id && x.Details.SchoolName != null)
+							.Select(x => x.Details.SchoolName!).ToArray(),
+					LocalAuthority =
+						projects.Where(x => x.FormAMatProjectId == formAMat.Id && x.Details.SchoolName != null)
+							.Select(x => x.Details.LocalAuthority!).ToArray(),
+					AdvisoryBoardDate = projects.Where(x => x.FormAMatProjectId == formAMat.Id)
+						.Select(x => x.Details.HeadTeacherBoardDate).OrderDescending().FirstOrDefault(),
+				}
+			}).ToList();
+		}
+
+		private async Task<List<ProjectSummary>> GetTransferQuery(string email, CancellationToken cancellationToken)
+		{
+			var projects = await transferProjectRepository.GetByDeliveryOfficerEmail(email, cancellationToken);
+
+			return projects.Select(x => new ProjectSummary
+			{
+				Id = x.Id,
+				CreatedOn = x.CreatedOn,
+				LastModifiedOn = x.LastModifiedOn,
+				TransfersSummary = new TransfersSummary
+				{
+					Urn = x.Urn,
+					ProjectReference = x.ProjectReference,
+					OutgoingTrustUkprn = x.OutgoingTrustUkprn,
+					OutgoingTrustName = x.OutgoingTrustName,
+					TypeOfTransfer = x.TypeOfTransfer,
+					TargetDateForTransfer = x.TargetDateForTransfer,
+					AssignedUserEmailAddress = x.AssignedUserEmailAddress,
+					AssignedUserFullName = x.AssignedUserFullName,
+					Status = x.Status,
+					IncomingTrustName = x.TransferringAcademies.Select(t => t.IncomingTrustName).FirstOrDefault() ?? ""
+				}
+			}).ToList();
+		}
+
+		private async Task<List<ProjectSummary>> GetConversionQuery(string email, CancellationToken cancellationToken)
+		{
+			var projects = await conversionProjectRepository.GetConversionProjectsByEmail(email, cancellationToken);
+			return projects.Select(x =>
+				new ProjectSummary
+				{
+					Id = x.Id,
+					CreatedOn = x.CreatedOn,
+					LastModifiedOn = x.LastModifiedOn,
+					ConversionsSummary = new ConversionsSummary
+					{
+						Urn = x.Details.Urn,
+						ApplicationReferenceNumber = x.Details.ApplicationReferenceNumber,
+						SchoolName = x.Details.SchoolName,
+						LocalAuthority = x.Details.LocalAuthority,
+						Region = x.Details.Region,
+						AcademyTypeAndRoute = x.Details.AcademyTypeAndRoute,
+						NameOfTrust = x.Details.NameOfTrust,
+						AssignedUserEmailAddress =
+							x.Details.AssignedUser?.EmailAddress,
+						AssignedUserFullName =
+							x.Details.AssignedUser?.FullName,
+						ProjectStatus = x.Details.ProjectStatus,
+						TrustReferenceNumber = x.Details.TrustReferenceNumber,
+					}
+				}).ToList();
+
+
+		}
 	}
 }

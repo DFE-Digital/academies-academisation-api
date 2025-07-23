@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	    }
 
         [HttpGet("projects")]
-        public async Task<ActionResult<IEnumerable<ProjectSummary>>> GetProjects(string email, bool? includeConversions, bool? includeTransfers, bool? includeFormAMat)
+        public async Task<ActionResult<IEnumerable<ProjectSummary>>> GetProjects(string email, bool? includeConversions, bool? includeTransfers, bool? includeFormAMat, CancellationToken cancellationToken)
         {
 	        _logger.LogInformation($"Attempting to retrieve summary projects");
 
@@ -27,7 +27,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var result = await _summaryQueryService.GetProjectSummariesByAssignedEmail(email,
 		        includeConversions ?? noFilters,
 		        includeTransfers ?? noFilters,
-		        includeFormAMat ?? noFilters);
+		        includeFormAMat ?? noFilters,
+		        cancellationToken);
 
 	        return Ok(result);
         }

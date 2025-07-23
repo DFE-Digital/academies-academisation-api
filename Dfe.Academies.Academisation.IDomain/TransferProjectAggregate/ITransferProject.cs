@@ -14,6 +14,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		string? ComplexLandAndBuildingFurtherSpecification { get; }
 		bool? ComplexLandAndBuildingShouldBeConsidered { get; }
 		DateTime? CreatedOn { get; }
+		DateTime LastModifiedOn { get; }
 		string? DiocesanConsent { get; }
 		bool? EqualitiesImpactAssessmentConsidered { get; }
 		bool? FeatureSectionIsCompleted { get; }
