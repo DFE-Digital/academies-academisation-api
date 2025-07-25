@@ -45,7 +45,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 			var headers = new List<string>
 			{
 				"School", "URN","School Type", "School Phase", "Incoming Trust", "Incoming Trust Reference Number", "Local Authority",
-				"Region", "Proposed Decision Date", "Decision Date", "Status", "Decision maker's name", "Decision maker's role", "Assigned To",
+				"Region", "Advisory Board Date", "Decision Date", "Status", "Decision maker's name", "Decision maker's role", "Assigned To",
 				"Academy Type and Route", "Part of PFI scheme", "Date AO issued", "Date dAO issued", "DAO Revoked Reasons"
 			};
 
@@ -112,7 +112,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 			var headers = new List<string>
 			{
 				"Academy", "URN", "Academy Type", "Incoming Trust", "Incoming Trust UKPRN","Outgoing Trust", "Outgoing Trust UKPRN", "Local Authority", "Region",
-				"Proposed Decision Date", "Decision Date", "Status", "Decision maker's name", "Decision maker's role", "Assigned To", "Reason for transfer", "Type of transfer",
+				"Advisory Board Date", "Decision Date", "Status", "Decision maker's name", "Decision maker's role", "Assigned To", "Reason for transfer", "Type of transfer",
 				"Proposed academy transfer date", "PFI (Private Finance Initiative)"
 			};
 
