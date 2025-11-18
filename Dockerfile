@@ -53,7 +53,7 @@ ENV PATH=$PATH:/root/.dotnet/tools
 
 # Install dotnet-ef and create migration bundle
 RUN mkdir /sql && \
-    dotnet tool install --global dotnet-ef && \
+    dotnet tool install --global dotnet-ef --version 8.* && \
     dotnet ef migrations bundle \
       -r linux-x64 \
       -p Dfe.Academies.Academisation.Data \

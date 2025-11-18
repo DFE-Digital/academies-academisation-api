@@ -88,6 +88,34 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			}).Should().BeTrue();
 		}
 
+		[Fact]
+		public async Task Handle_ValidCommandCustomRef_ReturnsCreateCommandSuccessResponse()
+		{
+			var now = DateTime.Now;
+			mockDateTimeProvider.Setup(x => x.Now).Returns(now);
+			mockTransferProjectRepository.Setup(x => x.Insert(It.IsAny<Domain.TransferProjectAggregate.TransferProject>()));
+
+			// Arrange
+			var createTransferProjectCommandHandler = CreateCreateTransferProjectCommandHandler();
+			CreateTransferProjectCommand request = CreateValidTransferProjectCommand();
+			request.Reference = "CustomRef123";
+			CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
+
+			// Act
+			var result = await createTransferProjectCommandHandler.Handle(
+				request,
+				cancellationToken);
+
+			// Assert
+			result.GetType().Should().Be(typeof(CreateSuccessResult<AcademyTransferProjectResponse>));
+			((CreateSuccessResult<AcademyTransferProjectResponse>)result).Payload.OutgoingTrustUkprn.Should().Be(request.OutgoingTrustUkprn);
+			((CreateSuccessResult<AcademyTransferProjectResponse>)result).Payload.TransferringAcademies.All(x => {
+				var transferringAcademy = request.TransferringAcademies.Single(ta => ta.OutgoingAcademyUkprn == x.OutgoingAcademyUkprn);
+				return transferringAcademy.IncomingTrustUkprn!.Equals(x.IncomingTrustUkprn) && transferringAcademy.IncomingTrustName!.Equals(x.IncomingTrustName);
+			}).Should().BeTrue();
+			((CreateSuccessResult<AcademyTransferProjectResponse>)result).Payload.ProjectReference.Should().Be(request.Reference);
+		}
+
 		private static CreateTransferProjectCommand CreateValidTransferProjectCommand()
 		{
 			string outgoingTrustUkprn = "11112222";
