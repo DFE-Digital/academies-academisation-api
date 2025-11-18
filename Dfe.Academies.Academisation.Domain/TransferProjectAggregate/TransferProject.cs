@@ -82,7 +82,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public Guid? AssignedUserId { get; private set; }
 		public bool? IsFormAMat { get; set; }
 		public int? ProjectGroupId { get; private set; }
-		
+
 		public string? IncomingTrustReferenceNumber { get; private set; }
 
 		// Public sector equality duty
@@ -112,14 +112,24 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			{
 				Urn = Id;
 			}
+		}
 
-			string referenceNumber = "SAT";
-			if (TransferringAcademies.Count > 1)
+		public void GenerateReference(string? reference = null)
+		{
+			if (!string.IsNullOrEmpty(reference))
 			{
-				referenceNumber = "MAT";
+				ProjectReference = reference;
 			}
+			else
+			{
+				string referenceNumber = "SAT";
+				if (TransferringAcademies.Count > 1)
+				{
+					referenceNumber = "MAT";
+				}
 
-			ProjectReference = $"{referenceNumber}-{Urn}";
+				ProjectReference = $"{referenceNumber}-{Urn}";
+			}
 		}
 
 		public void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted)
@@ -246,17 +256,17 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			OutgoingTrustName = outgoingTrustName;
 		}
 
-		public void SetAcademyIncomingTrust(int academyId, string incomingTrustName,string? incomingTrustReferenceNumber, string? incomingTrustUKPRN)
+		public void SetAcademyIncomingTrust(int academyId, string incomingTrustName, string? incomingTrustReferenceNumber, string? incomingTrustUKPRN)
 		{
 
 			IncomingTrustReferenceNumber = incomingTrustReferenceNumber;
-			
+
 			var transferringAcademy = TransferringAcademies.SingleOrDefault(x => x.Id == academyId);
 
 			if (transferringAcademy != null)
 			{
 
-				transferringAcademy.SetIncomingTrust(incomingTrustName,incomingTrustUKPRN);
+				transferringAcademy.SetIncomingTrust(incomingTrustName, incomingTrustUKPRN);
 
 			}
 		}
@@ -301,6 +311,6 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			ReadOnlyDate = date;
 
 		}
-		
+
 	}
 }

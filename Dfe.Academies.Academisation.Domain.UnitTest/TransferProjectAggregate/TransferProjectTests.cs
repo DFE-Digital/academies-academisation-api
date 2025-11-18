@@ -50,6 +50,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Act
 			result.GenerateUrn(10101020);
 
+			result.GenerateReference();
+
 			// Assert
 			result.ProjectReference.Should().Be("MAT-10101020");
 		}
@@ -78,8 +80,40 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Act
 			result.GenerateUrn(10101020);
 
+			result.GenerateReference();
+
 			// Assert
 			result.ProjectReference.Should().Be("SAT-10101020");
+		}
+
+		[Fact]
+		public void GenerateReference_WithOneAcademy_GivesCustomReference()
+		{
+			// Arrange      
+			string outgoingTrustUkprn = "11112222";
+			string outgoingTrustName = "outgoingTrustName";
+			string incomingTrustUkprn = "11110000";
+			string incomingTrustName = "incomingTrustName";
+			var academies = new List<TransferringAcademy>() { new(incomingTrustUkprn, incomingTrustName, "22221111", "region", "local authority") };
+
+			bool isFormAMat = true;
+			DateTime createdOn = DateTime.Now;
+
+			// Act
+			var result = TransferProject.Create(
+				outgoingTrustUkprn,
+				outgoingTrustName,
+				academies,
+				isFormAMat,
+				createdOn);
+
+			// Act
+			result.GenerateUrn(10101020);
+
+			result.GenerateReference("Test-Reference");
+
+			// Assert
+			result.ProjectReference.Should().Be("Test-Reference");
 		}
 
 		[Fact]

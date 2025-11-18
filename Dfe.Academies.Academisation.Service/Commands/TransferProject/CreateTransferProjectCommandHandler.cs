@@ -41,6 +41,11 @@ public class CreateTransferProjectCommandHandler : IRequestHandler<CreateTransfe
 
 		transferProject.GenerateUrn();
 
+		if (!string.IsNullOrEmpty(message.Reference))
+		{
+			transferProject.GenerateReference(message.Reference);
+		}
+
 		await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 		return new CreateSuccessResult<AcademyTransferProjectResponse>(AcademyTransferProjectResponseFactory.Create(transferProject));

@@ -64,6 +64,7 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		public bool? PublicEqualityDutySectionComplete { get; }
 
 		void GenerateUrn(int? urnOverride = null);
+		void GenerateReference(string? reference = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
 		void AssignUser(Guid userId, string userEmail, string userFullName);
 		void SetFeatures(string whoInitiatedTheTransfer, List<string> specificReasonsForTransfer, string transferType, bool? isCompleted);
