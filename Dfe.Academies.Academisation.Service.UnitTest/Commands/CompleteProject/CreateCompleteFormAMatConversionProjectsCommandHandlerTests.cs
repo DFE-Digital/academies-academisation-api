@@ -62,9 +62,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 				_mockProjectGroupRepository.Object,
 				_mockCompleteTransmissionLogRepository.Object,
 				_mockDateTimeProvider.Object,
-				_mockPollyPolicyFactory.Object,
-				_mockLogger.Object,
-				_mockProjectsClient.Object);
+				new CompleteApiClientRetryFactory(_mockPollyPolicyFactory.Object, _mockProjectsClient.Object),
+				_mockLogger.Object);
 		}
 
 		public static Mock<HttpMessageHandler> CreateHttpMessageHandlerMock(HttpStatusCode code, object content)

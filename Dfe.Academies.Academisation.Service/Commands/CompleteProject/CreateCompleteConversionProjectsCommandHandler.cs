@@ -8,10 +8,8 @@ using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
-using Dfe.Complete.Client.Contracts;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Dfe.Academies.Academisation.Service.Commands.CompleteProject.Helpers;
 
 namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 {
@@ -21,15 +19,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		IProjectGroupRepository projectGroupRepository,
 		ICompleteTransmissionLogRepository completeTransmissionLogRepository,
 		IDateTimeProvider dateTimeProvider,
-		IPollyPolicyFactory pollyPolicyFactory,
-		IProjectsClient projectsClient,
+		ICompleteApiClientRetryFactory completeApiClientRetryFactory, 
 		ILogger<CreateCompleteConversionProjectsCommandHandler> logger) : IRequestHandler<CreateCompleteConversionProjectsCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(CreateCompleteConversionProjectsCommand request,
 			CancellationToken cancellationToken)
-		{ 
-			var retryPolicy = pollyPolicyFactory.GetCompleteHttpClientRetryPolicy(logger);
-
+		{
 			var conversionProjects = await conversionProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
 			if (conversionProjects == null || !conversionProjects.Any())
@@ -38,6 +33,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				return new NotFoundCommandResult();
 			}
 
+			var retryPolicy = completeApiClientRetryFactory.GetCompleteHttpClientRetryPolicy(logger);
 			foreach (var conversionProject in conversionProjects)
 			{
 				var decision = await advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
@@ -47,17 +43,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				if (conversionProject.ProjectGroupId != null)
 				{
 					var group = await projectGroupRepository.GetById((int)conversionProject.ProjectGroupId);
-					groupReferenceNumber = group.ReferenceNumber;
+					groupReferenceNumber = group?.ReferenceNumber;
 				}
 
 				var completeObject = CompleteConversionProjectServiceModelMapper.FromDomain(conversionProject, decision?.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails!, groupReferenceNumber!);
 				 
-				var response = await CompleteApiHelper.ExecuteCompleteClientCallAsync(
-					completeObject,
-					async (req, ct) => await projectsClient.CreateConversionProjectAsync(req, ct).ConfigureAwait(false),
-					id => new CreateCompleteConversionProjectSuccessResponse(id!.Value.GetValueOrDefault()),
-					retryPolicy,
-					cancellationToken);
+				var response = await completeApiClientRetryFactory.CreateConversionProjectAsync(completeObject, retryPolicy, cancellationToken);
 
 				Guid? completeProjectId = null;
 				string responseMessage = string.Empty;

@@ -6,10 +6,8 @@ using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
-using Dfe.Academies.Academisation.Service.Commands.CompleteProject.Helpers;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
-using Dfe.Complete.Client.Contracts;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -20,15 +18,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 		IProjectGroupRepository projectGroupRepository,
 		ICompleteTransmissionLogRepository completeTransmissionLogRepository, 
-		IDateTimeProvider dateTimeProvider, 
-		IPollyPolicyFactory pollyPolicyFactory,
-		ILogger<CreateCompleteFormAMatConversionProjectsCommandHandler> logger,
-		IProjectsClient projectsClient) : IRequestHandler<CreateCompleteFormAMatConversionProjectsCommand, CommandResult>
+		IDateTimeProvider dateTimeProvider,
+		ICompleteApiClientRetryFactory completeApiClientRetryFactory,
+		ILogger<CreateCompleteFormAMatConversionProjectsCommandHandler> logger) : IRequestHandler<CreateCompleteFormAMatConversionProjectsCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(CreateCompleteFormAMatConversionProjectsCommand request,
 			CancellationToken cancellationToken)
-		{ 
-			var retryPolicy = pollyPolicyFactory.GetCompleteHttpClientRetryPolicy(logger);
+		{
 
 			var conversionProjects = await conversionProjectRepository.GetFormAMatProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
@@ -37,10 +33,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				logger.LogInformation($"No conversion projects found.");
 				return new NotFoundCommandResult();
 			}
-
+			var retryPolicy = completeApiClientRetryFactory.GetCompleteHttpClientRetryPolicy(logger);
 			foreach (var conversionProject in conversionProjects)
-			{
-
+			{ 
 				var decision = await advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
 
 				string? groupReferenceNumber = null;
@@ -53,12 +48,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 				var completeObject = CompleteConversionProjectServiceModelMapper.FormAMatFromDomain(conversionProject, decision?.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails!, groupReferenceNumber!);
  
-				var response = await CompleteApiHelper.ExecuteCompleteClientCallAsync(
-					completeObject,
-					async (req, ct) => await projectsClient.CreateConversionMatProjectAsync(req, ct).ConfigureAwait(false),
-					id => new CreateCompleteConversionProjectSuccessResponse(id!.Value.GetValueOrDefault()),
-					retryPolicy,
-					cancellationToken);
+				var response = await completeApiClientRetryFactory.CreateConversionMatProjectAsync(
+						completeObject, retryPolicy, cancellationToken);
+
 				Guid? completeProjectId = null;
 				string? responseMessage = string.Empty;
 
@@ -77,9 +69,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				}
 
 				conversionProject.SetProjectSentToComplete(); 
-				if (conversionProject is Domain.ProjectAggregate.Project domainProject)
+				if (conversionProject is Domain.ProjectAggregate.Project conversionMatProject)
 				{
-					conversionProjectRepository.Update(domainProject);
+					conversionProjectRepository.Update(conversionMatProject);
 				}
 				await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

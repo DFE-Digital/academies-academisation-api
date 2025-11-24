@@ -5,7 +5,6 @@ using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
-using Dfe.Academies.Academisation.Service.Commands.CompleteProject.Helpers;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 using Dfe.Complete.Client.Contracts;
@@ -19,15 +18,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 		IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 		IAcademiesQueryService academiesQueryService, 
 		ICompleteTransmissionLogRepository completeTransmissionLogRepository, 
-		IDateTimeProvider dateTimeProvider, 
-		IPollyPolicyFactory pollyPolicyFactory,
-		ILogger<CreateCompleteTransferProjectsCommandHandler> logger,
-		IProjectsClient projectsClient) : IRequestHandler<CreateCompleteTransferProjectsCommand, CommandResult>
+		IDateTimeProvider dateTimeProvider,
+		ICompleteApiClientRetryFactory completeApiClientRetryFactory,
+		ILogger<CreateCompleteTransferProjectsCommandHandler> logger) : IRequestHandler<CreateCompleteTransferProjectsCommand, CommandResult>
 	{
 		public async Task<CommandResult> Handle(CreateCompleteTransferProjectsCommand request,
 			CancellationToken cancellationToken)
 		{ 
-			var retryPolicy = pollyPolicyFactory.GetCompleteHttpClientRetryPolicy(logger);
+			var retryPolicy = completeApiClientRetryFactory.GetCompleteHttpClientRetryPolicy(logger);
 
 			var transferProjects = await transferProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
@@ -57,10 +55,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				var transferObject = CompleteTransferProjectServiceModelMapper.FromDomain(transferProject,
 					decision?.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails!, establishment.Urn);
 
-				var response = await CompleteApiHelper.ExecuteCompleteClientCallAsync(
-					transferObject,
-					async (req, ct) => await projectsClient.CreateTransferProjectAsync(req, ct).ConfigureAwait(false),
-					id => new CreateCompleteConversionProjectSuccessResponse(id!.Value.GetValueOrDefault()),
+				var response = await completeApiClientRetryFactory.CreateTransferProjectAsync(
+					transferObject, 
 					retryPolicy,
 					cancellationToken);
 
@@ -87,9 +83,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
 				transferProject.SetProjectSentToComplete(transferringAcademy.Ukprn);
 				 
-				if (transferProject is Domain.TransferProjectAggregate.TransferProject domainProject)
+				if (transferProject is Domain.TransferProjectAggregate.TransferProject transferMatProject)
 				{
-					transferProjectRepository.Update(domainProject);
+					transferProjectRepository.Update(transferMatProject);
 				}
 				await transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

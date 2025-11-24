@@ -36,7 +36,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 		private readonly Mock<IPollyPolicyFactory> _mockPollyPolicyFactory; 
 		private readonly Mock<ILogger<CreateCompleteConversionProjectsCommandHandler>> _mockLogger;
 		private CreateCompleteConversionProjectsCommandHandler? _handler;
-		private readonly Mock<IProjectsClient> _mockProjectsClient;
+		private readonly Mock<IProjectsClient> _mockProjectsClient; 
 
 		public CreateCompleteConversionProjectsCommandHandlerTests()
 		{
@@ -50,7 +50,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			_mockDateTimeProvider = mockRepository.Create<IDateTimeProvider>();
 			_mockPollyPolicyFactory = mockRepository.Create<IPollyPolicyFactory>(); 
 			_mockLogger = mockRepository.Create<ILogger<CreateCompleteConversionProjectsCommandHandler>>();
-			_mockProjectsClient = mockRepository.Create<IProjectsClient>();
+			_mockProjectsClient = mockRepository.Create<IProjectsClient>(); 
 		}
 
 		private CreateCompleteConversionProjectsCommandHandler CreateCreateCompleteConversionProjectsCommandHandler()
@@ -60,9 +60,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 				_mockAdvisoryBoardDecisionRepository.Object,
 				_mockProjectGroupRepository.Object,
 				_mockCompleteTransmissionLogRepository.Object,
-				_mockDateTimeProvider.Object, 
-				_mockPollyPolicyFactory.Object,
-				_mockProjectsClient.Object,
+				_mockDateTimeProvider.Object,
+				new CompleteApiClientRetryFactory(_mockPollyPolicyFactory.Object, _mockProjectsClient.Object),
 				_mockLogger.Object);
 		}
 
