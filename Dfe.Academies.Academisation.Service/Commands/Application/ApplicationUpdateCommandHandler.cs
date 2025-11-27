@@ -58,7 +58,7 @@ public class ApplicationUpdateCommandHandler : IRequestHandler<ApplicationUpdate
 		{
 			throw new NotImplementedException();
 		}
-		//ShakirTodo
+
 		_applicationRepository.Update(existingApplication);
 		await _applicationRepository.UnitOfWork.SaveChangesAsync();
 		return result;
