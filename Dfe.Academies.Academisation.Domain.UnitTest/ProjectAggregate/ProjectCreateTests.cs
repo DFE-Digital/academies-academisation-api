@@ -141,7 +141,7 @@ public class ProjectCreateTests
 			() => Assert.Equal(application.JoinTrust?.TrustReference, project.Details.TrustReferenceNumber),
 			() => Assert.Equal(application.JoinTrust?.TrustName, project.Details.NameOfTrust),
 			() => Assert.Equal("Converter", project.Details.AcademyTypeAndRoute),
-			() => Assert.Null(project.Details.ProposedConversionDate),
+			() => Assert.Equal(school.Details.ConversionTargetDate,project.Details.ProposedConversionDate),
 			() => Assert.Equal(25000, project.Details.ConversionSupportGrantAmount),
 			() => Assert.Equal(school.Details.CapacityPublishedAdmissionsNumber.ToString(), project.Details.PublishedAdmissionNumber),
 			() => Assert.Equal(ToYesNoString(school.Details.LandAndBuildings!.PartOfPfiScheme), project.Details.PartOfPfiScheme),

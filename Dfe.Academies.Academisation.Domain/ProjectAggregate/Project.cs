@@ -87,7 +87,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			AcademyTypeAndRoute = voluntaryConversionAcademyTypeAndRoute,
 			IsFormAMat = false,
 			// Temp hotfix
-			ProposedConversionDate = null,
+			ProposedConversionDate = schoolDetails.ConversionTargetDate,
 			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000, 
 			PublishedAdmissionNumber = schoolDetails.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(schoolDetails.LandAndBuildings?.PartOfPfiScheme),
@@ -131,7 +131,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			AcademyTypeAndRoute = voluntaryConversionAcademyTypeAndRoute,
 			IsFormAMat = true,
 			// Temp hotfix
-			ProposedConversionDate = null,
+			ProposedConversionDate = school.Details.ConversionTargetDate,
 			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000,
 			PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
 			PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
@@ -145,7 +145,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.CapitalCarryForward, school.Details.NextFinancialYear?.CapitalCarryForwardStatus),
 			YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
-			YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3
+			YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3, 
 		}).ToList();
 
 		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails) { ApplicationSharePointId = application.EntityId, SchoolSharePointId = application.Schools.Single(x => x.Details.Urn == projectDetails.Urn).EntityId }).ToList();
