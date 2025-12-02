@@ -34,8 +34,10 @@ internal static class CompleteConversionProjectServiceModelMapper
 	{
 		var assignedUser = project.Details.AssignedUser;
 		 
-		string? fullName = assignedUser?.FullName; 
-
+		string? fullName = assignedUser?.FullName;
+		string[] nameParts = fullName?
+			.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+			?? [];
 		return new CreateConversionMatProjectCommand
 		{
 			Urn = project.Details.Urn,
@@ -44,8 +46,8 @@ internal static class CompleteConversionProjectServiceModelMapper
 			ProvisionalConversionDate = project.Details.ProposedConversionDate,
 			DirectiveAcademyOrder = project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
 			CreatedByEmail = assignedUser?.EmailAddress,
-			CreatedByFirstName = fullName?.Split(' ')[0],
-			CreatedByLastName = fullName?.Split(' ')[1],
+			CreatedByFirstName = nameParts.Length > 0 ? nameParts[0] : null,
+			CreatedByLastName = nameParts.Length > 1 ? nameParts[1] : null,
 			PrepareId = project.Id,
 			NewTrustName = project.Details.NameOfTrust,
 			NewTrustReferenceNumber = project.Details.TrustReferenceNumber,
