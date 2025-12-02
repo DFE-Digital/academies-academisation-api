@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Complete.Client.Contracts;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
@@ -10,9 +11,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 		var assignedUser = project.Details.AssignedUser;
 		 
 		string? fullName = assignedUser?.FullName;
-		string[] nameParts = fullName?
-			.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-			?? [];
+		var (firstName, lastName) = fullName.GetFirstAndLastName();
 
 		return new CreateConversionProjectCommand
 		{
@@ -22,8 +21,8 @@ internal static class CompleteConversionProjectServiceModelMapper
 			ProvisionalConversionDate = project.Details.ProposedConversionDate,
 			DirectiveAcademyOrder = project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
 			CreatedByEmail = assignedUser?.EmailAddress,
-			CreatedByFirstName = nameParts.Length > 0 ? nameParts[0] : null,
-			CreatedByLastName = nameParts.Length > 1 ? nameParts[1] : null,
+			CreatedByFirstName = firstName,
+			CreatedByLastName = lastName,
 			PrepareId = project.Id,
 			GroupId = groupReferenceNumber,
 			IncomingTrustUkprn = project.Details.TrustUkprn
@@ -35,9 +34,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 		var assignedUser = project.Details.AssignedUser;
 		 
 		string? fullName = assignedUser?.FullName;
-		string[] nameParts = fullName?
-			.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-			?? [];
+		var (firstName, lastName) = fullName.GetFirstAndLastName();
 		return new CreateConversionMatProjectCommand
 		{
 			Urn = project.Details.Urn,
@@ -46,8 +43,8 @@ internal static class CompleteConversionProjectServiceModelMapper
 			ProvisionalConversionDate = project.Details.ProposedConversionDate,
 			DirectiveAcademyOrder = project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
 			CreatedByEmail = assignedUser?.EmailAddress,
-			CreatedByFirstName = nameParts.Length > 0 ? nameParts[0] : null,
-			CreatedByLastName = nameParts.Length > 1 ? nameParts[1] : null,
+			CreatedByFirstName = firstName,
+			CreatedByLastName = lastName,
 			PrepareId = project.Id,
 			NewTrustName = project.Details.NameOfTrust,
 			NewTrustReferenceNumber = project.Details.TrustReferenceNumber,

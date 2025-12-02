@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Complete.Client.Contracts;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
@@ -22,9 +23,7 @@ internal static class CompleteTransferProjectServiceModelMapper
 		                                               project.SpecificReasonsForTransfer.Contains("TrustClosed");
 		
 		string? fullName = project.AssignedUserFullName ?? null;
-		string[] nameParts = fullName?
-			.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-			?? [];
+		var (firstName, lastName) = fullName.GetFirstAndLastName();
 
 		return new CreateTransferProjectCommand
 		{
@@ -36,8 +35,8 @@ internal static class CompleteTransferProjectServiceModelMapper
 			FinancialSafeguardingGovernanceIssues = financialSafeGuardingOrGovernanceIssues,
 			OutgoingTrustToClose = outGoingTrustToClose,
 			CreatedByEmail = project.AssignedUserEmailAddress,
-			CreatedByFirstName = nameParts.Length > 0 ? nameParts[0] : null,
-			CreatedByLastName = nameParts.Length > 1 ? nameParts[1] : null,
+			CreatedByFirstName = firstName,
+			CreatedByLastName = lastName,
 			IncomingTrustUkprn = int.Parse(incomingTrustUkprn),
 			OutgoingTrustUkprn = int.Parse(project.OutgoingTrustUkprn),
 			PrepareId = project.Id
@@ -59,10 +58,7 @@ internal static class CompleteTransferProjectServiceModelMapper
 													   project.SpecificReasonsForTransfer.Contains("Safeguarding") ||
 													   project.SpecificReasonsForTransfer.Contains("TrustClosed");
 
-		string? fullName = project.AssignedUserFullName ?? null;
-		string[] nameParts = fullName?
-			.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-			?? []; 
+		var (firstName, lastName) = project.AssignedUserFullName.GetFirstAndLastName(); 
 
 		return new CreateTransferMatProjectCommand
 		{
@@ -74,8 +70,8 @@ internal static class CompleteTransferProjectServiceModelMapper
 			  FinancialSafeguardingGovernanceIssues = financialSafeGuardingOrGovernanceIssues,
 			  OutgoingTrustToClose = outGoingTrustToClose,
 			  CreatedByEmail = project.AssignedUserEmailAddress,
-			  CreatedByFirstName = nameParts.Length > 0 ? nameParts[0] : null,
-			  CreatedByLastName = nameParts.Length > 1 ? nameParts[1] : null,
+			  CreatedByFirstName = firstName,
+			  CreatedByLastName = lastName,
 			  OutgoingTrustUkprn = int.Parse(project.OutgoingTrustUkprn),
 			  PrepareId = project.Id,
 			  NewTrustReferenceNumber = project.IncomingTrustReferenceNumber,
