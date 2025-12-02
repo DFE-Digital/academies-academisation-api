@@ -3,7 +3,6 @@ using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using System.Net;
 using Dfe.Academies.Academisation.Core.Utils;
-using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Domain.CompleteTransmissionLog;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
@@ -15,66 +14,57 @@ using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
 using Dfe.Academies.Academisation.Service.Commands.CompleteProject;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Contracts.V4.Establishments;
-using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
 using Polly;
 using Xunit;
+using Dfe.Complete.Client.Contracts;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 {
     public class CreateCompleteTransferProjectsCommandHandlerTests
-    {
-		private MockRepository mockRepository;
-		private Fixture _fixture = new Fixture();
+    { 
+		private readonly Fixture _fixture = new();
 
-		private Mock<ITransferProjectRepository> _mockTransferProjectRepository;
-		private Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository;
-		private Mock<IAcademiesQueryService> _mockAcademiesQueryService;
-		private Mock<IProjectGroupRepository> _mockProjectGroupRepository;
-		private Mock<ICompleteTransmissionLogRepository> _mockCompleteTransmissionLogRepository;
-		private Mock<ICompleteApiClientFactory> _mockCompleteApiClientFactory;
-		private Mock<IDateTimeProvider> _mockDateTimeProvider;
-		private ICorrelationContext _correlationContext;
-		private Mock<IPollyPolicyFactory> _mockPollyPolicyFactory;
-		private Mock<ILogger<CreateCompleteTransferProjectsCommandHandler>> _mockLogger;
-		private CreateCompleteTransferProjectsCommandHandler _handler;
+		private readonly Mock<ITransferProjectRepository> _mockTransferProjectRepository;
+		private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository;
+		private readonly Mock<IAcademiesQueryService> _mockAcademiesQueryService;
+		private readonly Mock<IProjectGroupRepository> _mockProjectGroupRepository;
+		private readonly Mock<ICompleteTransmissionLogRepository> _mockCompleteTransmissionLogRepository; 
+		private readonly Mock<IDateTimeProvider> _mockDateTimeProvider; 
+		private readonly Mock<IPollyPolicyFactory> _mockPollyPolicyFactory;
+		private readonly Mock<ILogger<CreateCompleteTransferProjectsCommandHandler>> _mockLogger;
+		private CreateCompleteTransferProjectsCommandHandler? _handler;
+		private readonly Mock<IProjectsClient> _mockProjectsClient;
 
 		public CreateCompleteTransferProjectsCommandHandlerTests()
 		{
-			this.mockRepository = new MockRepository(MockBehavior.Default);
+			var mockRepository = new MockRepository(MockBehavior.Default);
 
-			this._mockTransferProjectRepository = this.mockRepository.Create<ITransferProjectRepository>();
-			this._mockAdvisoryBoardDecisionRepository = this.mockRepository.Create<IAdvisoryBoardDecisionRepository>();
-			this._mockAcademiesQueryService = this.mockRepository.Create<IAcademiesQueryService>();
-			this._mockProjectGroupRepository = this.mockRepository.Create<IProjectGroupRepository>();
-			this._mockCompleteTransmissionLogRepository = this.mockRepository.Create<ICompleteTransmissionLogRepository>();
-			this._mockCompleteApiClientFactory = this.mockRepository.Create<ICompleteApiClientFactory>();
-			this._mockDateTimeProvider = this.mockRepository.Create<IDateTimeProvider>();
-			this._mockPollyPolicyFactory = this.mockRepository.Create<IPollyPolicyFactory>();
-			this._mockLogger = this.mockRepository.Create<ILogger<CreateCompleteTransferProjectsCommandHandler>>();
-
-			this._correlationContext = new CorrelationContext();
-			_correlationContext.SetContext(Guid.NewGuid());
-
+			_mockTransferProjectRepository = mockRepository.Create<ITransferProjectRepository>();
+			_mockAdvisoryBoardDecisionRepository = mockRepository.Create<IAdvisoryBoardDecisionRepository>();
+			_mockAcademiesQueryService = mockRepository.Create<IAcademiesQueryService>();
+			_mockProjectGroupRepository = mockRepository.Create<IProjectGroupRepository>();
+			_mockCompleteTransmissionLogRepository = mockRepository.Create<ICompleteTransmissionLogRepository>(); 
+			_mockDateTimeProvider = mockRepository.Create<IDateTimeProvider>();
+			_mockPollyPolicyFactory = mockRepository.Create<IPollyPolicyFactory>();
+			_mockLogger = mockRepository.Create<ILogger<CreateCompleteTransferProjectsCommandHandler>>();
+			_mockProjectsClient = mockRepository.Create<IProjectsClient>();
 			_fixture.Customize(new AutoMoqCustomization());
 		}
 
 		private CreateCompleteTransferProjectsCommandHandler CreateCreateCompleteTransferProjectsCommandHandler()
 		{
 			return new CreateCompleteTransferProjectsCommandHandler(
-				this._mockTransferProjectRepository.Object,
-				this._mockAdvisoryBoardDecisionRepository.Object,
-				this._mockAcademiesQueryService.Object,
-				this._mockProjectGroupRepository.Object,
-				this._mockCompleteTransmissionLogRepository.Object,
-				this._mockCompleteApiClientFactory.Object,
-				this._mockDateTimeProvider.Object,
-				this._correlationContext,
-				this._mockPollyPolicyFactory.Object,
-				this._mockLogger.Object);
+				_mockTransferProjectRepository.Object,
+				_mockAdvisoryBoardDecisionRepository.Object,
+				_mockAcademiesQueryService.Object,
+				_mockCompleteTransmissionLogRepository.Object, 
+				_mockDateTimeProvider.Object,
+				new CompleteApiClientRetryFactory(_mockPollyPolicyFactory.Object, _mockProjectsClient.Object),
+				_mockLogger.Object);
 		}
 
 		public static Mock<HttpMessageHandler> CreateHttpMessageHandlerMock(HttpStatusCode code, object content)
@@ -93,16 +83,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 		}
 
 		[Fact]
-		public async Task Handle_NoConversionProjectsFound_ReturnsNotFoundCommandResult()
+		public async Task Handle_NoTransferProjectsFound_ReturnsNotFoundCommandResult()
 		{
 			// Arrange
 			var command = _fixture.Create<CreateCompleteTransferProjectsCommand>();
 			_mockTransferProjectRepository.Setup(repo => repo.GetProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()))
-				.ReturnsAsync((IEnumerable<ITransferProject>)null);
-
-			var mockClient = new Mock<HttpClient>();
-			_mockCompleteApiClientFactory.Setup(factory => factory.Create(It.Is<CorrelationContext>(x => x == _correlationContext)))
-				.Returns(mockClient.Object);
+				.ReturnsAsync((IEnumerable<ITransferProject>)null!);
+			 
+			_mockProjectsClient.Setup(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(_fixture.Create<ProjectId>());
 
 			_handler = CreateCreateCompleteTransferProjectsCommandHandler();
 
@@ -114,14 +103,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Verifying that the logger was called for the "No transfer projects found" case
 			_mockLogger.Verify(x => x.Log(LogLevel.Information,
 				// We're checking for an Information log
-				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("No transfer projects found.")),
+				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("No transfer projects found.")),
 				// Check if the message contains the expected string
 				null,
 				// No exception is expected here
-				It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once);
+				It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
 
 			// Verifying that the GetFormAMatProjectsToSendToCompleteAsync was called once
 			_mockTransferProjectRepository.Verify(repo => repo.GetProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()), Times.Once);
+			_mockProjectsClient.Verify(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()), Times.Never());
 		}
 		[Fact]
 		public async Task Handle_ConversionProjectsExist_SuccessfulResponse_ReturnsCommandSuccessResult()
@@ -130,7 +120,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			var command = _fixture.Create<CreateCompleteTransferProjectsCommand>();
 			var transferProjects = _fixture.CreateMany<ITransferProject>().ToList();
 			var establishments = new List<EstablishmentDto>();
-
+			int transferringAcademiesCount = 0;
 			foreach (var transferProject in transferProjects)
 			{
 				Mock.Get(transferProject).Setup(x => x.Id).Returns(_fixture.Create<int>());
@@ -143,7 +133,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 				Mock.Get(transferProject).Setup(x => x.TargetDateForTransfer).Returns(DateTime.Now);
 
 				var transferringAcademies = _fixture.CreateMany<ITransferringAcademy>().ToList();
-
+				transferringAcademiesCount = transferringAcademiesCount + transferringAcademies.Count;
 				foreach (var academy in transferringAcademies)
 				{
 					Mock.Get(academy).Setup(x => x.TransferProjectId).Returns(transferProject.Id);
@@ -155,8 +145,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 				Mock.Get(transferProject).Setup(x => x.TransferringAcademies).Returns(transferringAcademies);
 			}
 
-			var advisoryDecision = _fixture.Create<ConversionAdvisoryBoardDecision>();
-			var successResponse = _fixture.Create<CreateCompleteConversionProjectSuccessResponse>();
+			var advisoryDecision = _fixture.Create<ConversionAdvisoryBoardDecision>(); 
 			var projectGroup = _fixture.Create<Domain.ProjectGroupsAggregate.ProjectGroup>();
 			var mockContext = new Mock<IUnitOfWork>();
 
@@ -172,12 +161,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			_mockAcademiesQueryService.Setup(x => x.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>())).ReturnsAsync(establishments);
 			_mockPollyPolicyFactory.Setup(pol => pol.GetCompleteHttpClientRetryPolicy(It.IsAny<ILogger>()))
 			.Returns(Policy.NoOpAsync<HttpResponseMessage>());
-
-			var handlerMock = CreateHttpMessageHandlerMock(HttpStatusCode.Created, successResponse);
-			var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("http://localhost") };
-
-			_mockCompleteApiClientFactory.Setup(factory => factory.Create(It.IsAny<CorrelationContext>()))
-				.Returns(httpClient);
+			 
+			_mockProjectsClient.Setup(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(_fixture.Create<ProjectId>());
 
 			_handler = CreateCreateCompleteTransferProjectsCommandHandler();
 
@@ -189,13 +175,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Verifying that the logger was called for the "Success sending conversion" case
 			_mockLogger.Verify(x => x.Log(LogLevel.Information,
 				// We're checking for an Information log
-				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Success sending transfer project to complete with project urn")),
+				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Success sending transfer project to complete with project urn")),
 				// Check if the message contains the expected string
 				null,
 				// No exception is expected here
-				It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Exactly(transferProjects.SelectMany(x => x.TransferringAcademies).Count()));
+				It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Exactly(transferProjects.SelectMany(x => x.TransferringAcademies).Count()));
 
 			_mockTransferProjectRepository.Verify(repo => repo.GetProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()), Times.Once);
+			_mockProjectsClient.Verify(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(transferringAcademiesCount));
 		}
 		[Fact]
 		public async Task Handle_ConversionProjectsExist_ErrorResponse_ReturnsCommandSuccessResult()
@@ -203,7 +190,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Arrange
 			var transferProjects = _fixture.CreateMany<ITransferProject>().ToList();
 			var establishments = new List<EstablishmentDto>();
-
+			int transferringAcademiesCount = 0;
 			foreach (var transferProject in transferProjects)
 			{
 				Mock.Get(transferProject).Setup(x => x.Id).Returns(_fixture.Create<int>());
@@ -216,7 +203,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 				Mock.Get(transferProject).Setup(x => x.TargetDateForTransfer).Returns(DateTime.Now);
 
 				var transferringAcademies = _fixture.CreateMany<ITransferringAcademy>().ToList();
-
+				transferringAcademiesCount = transferringAcademiesCount + transferringAcademies.Count;
 				foreach (var academy in transferringAcademies)
 				{
 					Mock.Get(academy).Setup(x => x.TransferProjectId).Returns(transferProject.Id);
@@ -247,11 +234,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			_mockPollyPolicyFactory.Setup(pol => pol.GetCompleteHttpClientRetryPolicy(It.IsAny<ILogger>()))
 			.Returns(Policy.NoOpAsync<HttpResponseMessage>());
 
-			var handlerMock = CreateHttpMessageHandlerMock(HttpStatusCode.BadRequest, errorResponse);
-			var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("http://localhost") };
-
-			_mockCompleteApiClientFactory.Setup(factory => factory.Create(It.IsAny<CorrelationContext>()))
-				.Returns(httpClient);
+			_mockProjectsClient.Setup(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()))
+				.Throws(new CompleteApiException(errorResponse.Response!, 400, errorResponse.Response, new Dictionary<string, IEnumerable<string>>(), null));
 
 			_handler = CreateCreateCompleteTransferProjectsCommandHandler();
 
@@ -263,14 +247,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Verifying that the logger was called for the "Success sending conversion" case
 			_mockLogger.Verify(x => x.Log(LogLevel.Error,
 				// We're checking for an Information log
-				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Error sending transfer project to complete with project urn")),
+				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Error sending transfer project to complete with project urn")),
 				// Check if the message contains the expected string
 				null,
 				// No exception is expected here
-				It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Exactly(transferProjects.SelectMany(x => x.TransferringAcademies).Count()));
+				It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Exactly(transferProjects.SelectMany(x => x.TransferringAcademies).Count()));
 
 			// Verifying that the GetFormAMatProjectsToSendToCompleteAsync was called once
 			_mockTransferProjectRepository.Verify(repo => repo.GetProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()), Times.Once);
+			_mockProjectsClient.Verify(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(transferringAcademiesCount));
 		}
 	}
 }

@@ -24,6 +24,7 @@
     <PackageReference Include="ClosedXML" Version="0.104.2" />
     <PackageReference Include="Dfe.Academies.Contracts" Version="1.0.10" />
     <PackageReference Include="Dfe.Academisation.ExtensionMethods" Version="2.0.0" />
+    <PackageReference Include="Dfe.Complete.Api.Client" Version="1.0.11" />
     <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
