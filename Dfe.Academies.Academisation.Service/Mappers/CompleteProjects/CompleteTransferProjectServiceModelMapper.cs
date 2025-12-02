@@ -22,8 +22,9 @@ internal static class CompleteTransferProjectServiceModelMapper
 		                                               project.SpecificReasonsForTransfer.Contains("TrustClosed");
 		
 		string? fullName = project.AssignedUserFullName ?? null;
-		string? firstName = fullName?.Split(' ')[0];
-		string? lastName = fullName?.Split(' ')[1];
+		string[] nameParts = fullName?
+			.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+			?? [];
 
 		return new CreateTransferProjectCommand
 		{
@@ -35,8 +36,8 @@ internal static class CompleteTransferProjectServiceModelMapper
 			FinancialSafeguardingGovernanceIssues = financialSafeGuardingOrGovernanceIssues,
 			OutgoingTrustToClose = outGoingTrustToClose,
 			CreatedByEmail = project.AssignedUserEmailAddress,
-			CreatedByFirstName = firstName,
-			CreatedByLastName = lastName,
+			CreatedByFirstName = nameParts.Length > 0 ? nameParts[0] : null,
+			CreatedByLastName = nameParts.Length > 1 ? nameParts[1] : null,
 			IncomingTrustUkprn = int.Parse(incomingTrustUkprn),
 			OutgoingTrustUkprn = int.Parse(project.OutgoingTrustUkprn),
 			PrepareId = project.Id
@@ -59,8 +60,9 @@ internal static class CompleteTransferProjectServiceModelMapper
 													   project.SpecificReasonsForTransfer.Contains("TrustClosed");
 
 		string? fullName = project.AssignedUserFullName ?? null;
-		string? firstName = fullName?.Split(' ')[0];
-		string? lastName = fullName?.Split(' ')[1];
+		string[] nameParts = fullName?
+			.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+			?? []; 
 
 		return new CreateTransferMatProjectCommand
 		{
@@ -72,8 +74,8 @@ internal static class CompleteTransferProjectServiceModelMapper
 			  FinancialSafeguardingGovernanceIssues = financialSafeGuardingOrGovernanceIssues,
 			  OutgoingTrustToClose = outGoingTrustToClose,
 			  CreatedByEmail = project.AssignedUserEmailAddress,
-			  CreatedByFirstName = firstName,
-			  CreatedByLastName = lastName,
+			  CreatedByFirstName = nameParts.Length > 0 ? nameParts[0] : null,
+			  CreatedByLastName = nameParts.Length > 1 ? nameParts[1] : null,
 			  OutgoingTrustUkprn = int.Parse(project.OutgoingTrustUkprn),
 			  PrepareId = project.Id,
 			  NewTrustReferenceNumber = project.IncomingTrustReferenceNumber,
