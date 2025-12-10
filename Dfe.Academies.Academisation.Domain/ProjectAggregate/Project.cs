@@ -241,6 +241,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 			// school/trust info
 			RecommendationForProject = detailsToUpdate.RecommendationForProject,
+			RecommendationNotesForProject = detailsToUpdate.RecommendationNotesForProject,
 			Author = detailsToUpdate.Author,
 			Version = detailsToUpdate.Version,
 			ClearedBy = detailsToUpdate.ClearedBy,
