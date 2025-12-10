@@ -37,6 +37,7 @@ internal static class LegacyProjectDetailsMapper
 
 			// school/trust info
 			RecommendationForProject = detailsToUpdate.RecommendationForProject ?? existingProject.Details.RecommendationForProject,
+			RecommendationNotesForProject = detailsToUpdate.RecommendationNotesForProject ?? existingProject.Details.RecommendationNotesForProject,
 			Author = detailsToUpdate.Author ?? existingProject.Details.Author,
 			Version = detailsToUpdate.Version ?? existingProject.Details.Version,
 			ClearedBy = detailsToUpdate.ClearedBy ?? existingProject.Details.ClearedBy,

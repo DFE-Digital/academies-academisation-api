@@ -211,6 +211,7 @@ public class ProjectUpdateTests
 					() => Assert.Equal(existingProject.Details.LocalAuthorityInformationTemplateLink, getProject.LocalAuthorityInformationTemplateLink),
 					() => Assert.Equal(existingProject.Details.LocalAuthorityInformationTemplateSectionComplete, getProject.LocalAuthorityInformationTemplateSectionComplete),
 					() => Assert.Equal(existingProject.Details.RecommendationForProject, getProject.RecommendationForProject),
+					() => Assert.Equal(existingProject.Details.RecommendationNotesForProject, getProject.RecommendationNotesForProject),
 					() => Assert.Equal(existingProject.Details.SchoolAndTrustInformationSectionComplete, getProject.SchoolAndTrustInformationSectionComplete),
 					() => Assert.Equal(existingProject.Details.DistanceFromSchoolToTrustHeadquarters, getProject.DistanceFromSchoolToTrustHeadquarters),
 					() => Assert.Equal(existingProject.Details.DistanceFromSchoolToTrustHeadquarters, getProject.DistanceFromSchoolToTrustHeadquarters),
