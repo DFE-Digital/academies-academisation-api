@@ -37,8 +37,8 @@ internal static class CompleteTransferProjectServiceModelMapper
 			CreatedByEmail = project.AssignedUserEmailAddress,
 			CreatedByFirstName = firstName,
 			CreatedByLastName = lastName,
-			IncomingTrustUkprn = int.Parse(incomingTrustUkprn),
-			OutgoingTrustUkprn = int.Parse(project.OutgoingTrustUkprn),
+			IncomingTrustUkprn = string.IsNullOrWhiteSpace(incomingTrustUkprn)?null: int.Parse(incomingTrustUkprn),
+			OutgoingTrustUkprn = string.IsNullOrWhiteSpace(project.OutgoingTrustUkprn) ? null : int.Parse(project.OutgoingTrustUkprn),
 			PrepareId = project.Id
 		};
 	}
@@ -72,7 +72,7 @@ internal static class CompleteTransferProjectServiceModelMapper
 			  CreatedByEmail = project.AssignedUserEmailAddress,
 			  CreatedByFirstName = firstName,
 			  CreatedByLastName = lastName,
-			  OutgoingTrustUkprn = int.Parse(project.OutgoingTrustUkprn),
+			  OutgoingTrustUkprn = string.IsNullOrWhiteSpace(project.OutgoingTrustUkprn) ? null : int.Parse(project.OutgoingTrustUkprn),
 			  PrepareId = project.Id,
 			  NewTrustReferenceNumber = project.IncomingTrustReferenceNumber,
 			  NewTrustName = incomingName
