@@ -40,6 +40,9 @@ using Dfe.Academies.Academisation.WebApi.Options;
 using Dfe.Academies.Academisation.WebApi.Services;
 using Dfe.Academies.Academisation.WebApi.Swagger;
 using Dfe.Academisation.CorrelationIdMiddleware;
+using Dfe.Complete.Api.Client.Extensions;
+using Dfe.Complete.Client;
+using Dfe.Complete.Client.Contracts;
 using FluentValidation;
 using MediatR;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -48,8 +51,9 @@ using NetEscapades.AspNetCore.SecurityHeaders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Swashbuckle.AspNetCore.SwaggerUI;
 using Serilog;
+using Swashbuckle.AspNetCore.SwaggerUI;
+using CreateTransferProjectCommand = Dfe.Academies.Academisation.Service.Commands.TransferProject.CreateTransferProjectCommand;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -134,7 +138,9 @@ builder.Services.AddScoped<IAcademiesApiClientFactory, AcademiesApiClientFactory
 builder.Services.AddScoped<ICompleteApiClientFactory, CompleteApiClientFactory>();
 builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IPollyPolicyFactory, PollyPolicyFactory>();
+builder.Services.AddScoped<ICompleteApiClientRetryFactory, CompleteApiClientRetryFactory>(); 
 
+builder.Services.AddCompleteApiClient<IProjectsClient, ProjectsClient>(builder.Configuration); 
 //Validators
 builder.Services.AddSingleton<ICypressKeyValidator, CypressKeyValidator>();
 
@@ -197,7 +203,7 @@ builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateL
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typeof(CreateTransferProjectCommandValidator));
-builder.Services.AddScoped(typeof(IValidator<CreateProjectGroupCommand>), typeof(CreateProjectGroupCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<Dfe.Academies.Academisation.Service.Commands.ProjectGroup.CreateProjectGroupCommand>), typeof(CreateProjectGroupCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<SetProjectGroupCommand>), typeof(SetProjectGroupCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<SetProjectGroupAssignUserCommand>), typeof(SetProjectGroupAssignUserCommandValidator));
 
@@ -224,23 +230,7 @@ builder.Services.AddHttpClient("AcademiesApi", (sp, client) =>
 	{
 		sp.GetRequiredService<ILogger<Program>>().LogError("Academies API http client not configured.");
 	}
-});
-
-builder.Services.AddHttpClient("CompleteApi", (sp, client) =>
-{
-	var configuration = sp.GetRequiredService<IConfiguration>();
-	var url = configuration.GetValue<string?>("CompleteUrl");
-	if (!string.IsNullOrEmpty(url))
-	{
-		client.BaseAddress = new Uri(url);
-		client.DefaultRequestHeaders.Add("ApiKey", configuration.GetValue<string>("CompleteApiKey"));
-		client.DefaultRequestHeaders.Add("User-Agent", "AcademisationApi/1.0");
-	}
-	else
-	{
-		sp.GetRequiredService<ILogger<Program>>().LogError("Complete API http client not configured.");
-	}
-});
+}); 
 
 builder.Services.AddSingleton<IRoleInfo>(provider =>
 {

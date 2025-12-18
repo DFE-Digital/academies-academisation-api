@@ -1,63 +1,54 @@
-﻿using System;
-using System.Globalization;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
+﻿using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Extensions;
+using Dfe.Complete.Client.Contracts;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 
 internal static class CompleteConversionProjectServiceModelMapper
 {
-	internal static CompleteConversionProjectServiceModel FromDomain(IProject project, string conditions, string groupReferenceNumber)
+	internal static CreateConversionProjectCommand FromDomain(IProject project, string conditions, string groupReferenceNumber)
 	{
-		
 		var assignedUser = project.Details.AssignedUser;
+		 
+		string? fullName = assignedUser?.FullName;
+		var (firstName, lastName) = fullName.GetFirstAndLastName();
 
-		string? email = assignedUser != null ? assignedUser.EmailAddress : null;
-		string? fullName = assignedUser != null ? assignedUser.FullName : null;
-		string? firstName = fullName != null ? fullName.Split(' ')[0] : null;
-		string? lastName = fullName != null ? fullName.Split(' ')[1] : null;
-		
-		return new CompleteConversionProjectServiceModel(
-			project.Details.Urn,
-			project.Details.HeadTeacherBoardDate?.ToString(new CultureInfo("en-GB")),
-			conditions,
-			project.Details.ProposedConversionDate?.ToString(new CultureInfo("en-GB")),
-			project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
-			email,
-			firstName,
-			lastName,
-			project.Id,
-			groupReferenceNumber,
-			project.Details.TrustUkprn
-		);
+		return new CreateConversionProjectCommand
+		{
+			Urn = project.Details.Urn,
+			AdvisoryBoardDate = project.Details.HeadTeacherBoardDate,
+			AdvisoryBoardConditions = conditions,
+			ProvisionalConversionDate = project.Details.ProposedConversionDate,
+			DirectiveAcademyOrder = project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
+			CreatedByEmail = assignedUser?.EmailAddress,
+			CreatedByFirstName = firstName,
+			CreatedByLastName = lastName,
+			PrepareId = project.Id,
+			GroupId = groupReferenceNumber,
+			IncomingTrustUkprn = project.Details.TrustUkprn
+		}; 
 	}
 
-	internal static CompleteFormAMatConversionProjectServiceModel FormAMatFromDomain(IProject project, string conditions, string groupReferenceNumber)
+	internal static CreateConversionMatProjectCommand FormAMatFromDomain(IProject project, string conditions, string groupReferenceNumber)
 	{
-
 		var assignedUser = project.Details.AssignedUser;
-
-		string? email = assignedUser != null ? assignedUser.EmailAddress : null;
-		string? fullName = assignedUser != null ? assignedUser.FullName : null;
-		string? firstName = fullName != null ? fullName.Split(' ')[0] : null;
-		string? lastName = fullName != null ? fullName.Split(' ')[1] : null;
-
-		return new CompleteFormAMatConversionProjectServiceModel(
-			project.Details.Urn,
-			project.Details.HeadTeacherBoardDate?.ToString(new CultureInfo("en-GB")),
-			conditions,
-			project.Details.ProposedConversionDate?.ToString(new CultureInfo("en-GB")),
-			project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
-			email,
-			firstName,
-			lastName,
-			project.Id,
-			groupReferenceNumber,
-			// proposed trust name is held in the name of trust field
-			project.Details.TrustReferenceNumber,
-			project.Details.NameOfTrust
-		);
+		 
+		string? fullName = assignedUser?.FullName;
+		var (firstName, lastName) = fullName.GetFirstAndLastName();
+		return new CreateConversionMatProjectCommand
+		{
+			Urn = project.Details.Urn,
+			AdvisoryBoardDate = project.Details.HeadTeacherBoardDate,
+			AdvisoryBoardConditions = conditions,
+			ProvisionalConversionDate = project.Details.ProposedConversionDate,
+			DirectiveAcademyOrder = project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
+			CreatedByEmail = assignedUser?.EmailAddress,
+			CreatedByFirstName = firstName,
+			CreatedByLastName = lastName,
+			PrepareId = project.Id,
+			NewTrustName = project.Details.NameOfTrust,
+			NewTrustReferenceNumber = project.Details.TrustReferenceNumber,
+			GroupId = groupReferenceNumber
+		}; 
 	}
 }
