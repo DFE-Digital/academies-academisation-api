@@ -1,17 +1,15 @@
-﻿using System.Globalization;
-using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
-using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
-using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
+﻿using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Service.Extensions;
+using Dfe.Complete.Client.Contracts;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 
 internal static class CompleteTransferProjectServiceModelMapper
 {	
-	internal static CompleteTransferProjectServiceModel FromDomain(ITransferProject project, string conditions, string urn)
+	internal static CreateTransferProjectCommand FromDomain(ITransferProject project, string conditions, string urn)
 	{
 
-		string incomingTrustUkprn = project.TransferringAcademies.First().IncomingTrustUkprn;
+		string incomingTrustUkprn = project.TransferringAcademies.First().IncomingTrustUkprn!;
 		
 		
 		bool outGoingTrustToClose = project.SpecificReasonsForTransfer.Contains("VoluntaryClosure") ||
@@ -24,32 +22,30 @@ internal static class CompleteTransferProjectServiceModelMapper
 		                                               project.SpecificReasonsForTransfer.Contains("Safeguarding") ||
 		                                               project.SpecificReasonsForTransfer.Contains("TrustClosed");
 		
-		string? fullName = project.AssignedUserFullName != null ? project.AssignedUserFullName : null;
-		string? firstName = fullName != null ? fullName.Split(' ')[0] : null;
-		string? lastName = fullName != null ? fullName.Split(' ')[1] : null;
-		
-		return new CompleteTransferProjectServiceModel(
-			int.Parse(urn),
-			project.HtbDate?.ToString(new CultureInfo("en-GB")),
-			conditions,
-			project.TargetDateForTransfer?.ToString(new CultureInfo("en-GB")),
-			inadequeteOfsted,
-			financialSafeGuardingOrGovernanceIssues,
-			outGoingTrustToClose,
-			project.AssignedUserEmailAddress,
-			firstName,
-			lastName,
-			project.Id,
-			null,
-			int.Parse(incomingTrustUkprn),
-			int.Parse(project.OutgoingTrustUkprn)
-			
-		);
+		string? fullName = project.AssignedUserFullName ?? null;
+		var (firstName, lastName) = fullName.GetFirstAndLastName();
+
+		return new CreateTransferProjectCommand
+		{
+			Urn = int.Parse(urn),
+			AdvisoryBoardDate = project.HtbDate,
+			AdvisoryBoardConditions = conditions,
+			ProvisionalTransferDate = project.TargetDateForTransfer,
+			InadequateOfsted = inadequeteOfsted,
+			FinancialSafeguardingGovernanceIssues = financialSafeGuardingOrGovernanceIssues,
+			OutgoingTrustToClose = outGoingTrustToClose,
+			CreatedByEmail = project.AssignedUserEmailAddress,
+			CreatedByFirstName = firstName,
+			CreatedByLastName = lastName,
+			IncomingTrustUkprn = string.IsNullOrWhiteSpace(incomingTrustUkprn)?null: int.Parse(incomingTrustUkprn),
+			OutgoingTrustUkprn = string.IsNullOrWhiteSpace(project.OutgoingTrustUkprn) ? null : int.Parse(project.OutgoingTrustUkprn),
+			PrepareId = project.Id
+		};
 	}
 
-	internal static CompleteFormAMatTransferProjectServiceModel FormAMatFromDomain(ITransferProject project, string conditions, string urn)
+	internal static CreateTransferMatProjectCommand FormAMatFromDomain(ITransferProject project, string conditions, string urn)
 	{
-		string incomingName = project.TransferringAcademies.First().IncomingTrustName;
+		string incomingName = project.TransferringAcademies.First().IncomingTrustName!;
 
 
 		bool outGoingTrustToClose = project.SpecificReasonsForTransfer.Contains("VoluntaryClosure") ||
@@ -62,28 +58,24 @@ internal static class CompleteTransferProjectServiceModelMapper
 													   project.SpecificReasonsForTransfer.Contains("Safeguarding") ||
 													   project.SpecificReasonsForTransfer.Contains("TrustClosed");
 
-		string? fullName = project.AssignedUserFullName != null ? project.AssignedUserFullName : null;
-		string? firstName = fullName != null ? fullName.Split(' ')[0] : null;
-		string? lastName = fullName != null ? fullName.Split(' ')[1] : null;
+		var (firstName, lastName) = project.AssignedUserFullName.GetFirstAndLastName(); 
 
-		return new CompleteFormAMatTransferProjectServiceModel(
-			int.Parse(urn),
-			project.HtbDate?.ToString(new CultureInfo("en-GB")),
-			conditions,
-			project.TargetDateForTransfer?.ToString(new CultureInfo("en-GB")),
-			inadequeteOfsted,
-			financialSafeGuardingOrGovernanceIssues,
-			int.Parse(project.OutgoingTrustUkprn),
-			outGoingTrustToClose,
-			project.AssignedUserEmailAddress,
-			firstName,
-			lastName,
-			project.Id,
-			// Transfer projects aren't currently added to groups
-			null,
-			// Need the trust reference number, proposed trust name is held in the incoming trust name field
-			project.IncomingTrustReferenceNumber,
-			incomingName			
-		);
+		return new CreateTransferMatProjectCommand
+		{
+			 Urn = int.Parse(urn),
+			 AdvisoryBoardDate = project.HtbDate,
+			  AdvisoryBoardConditions = conditions,
+			  ProvisionalTransferDate = project.TargetDateForTransfer,
+			  InadequateOfsted = inadequeteOfsted,
+			  FinancialSafeguardingGovernanceIssues = financialSafeGuardingOrGovernanceIssues,
+			  OutgoingTrustToClose = outGoingTrustToClose,
+			  CreatedByEmail = project.AssignedUserEmailAddress,
+			  CreatedByFirstName = firstName,
+			  CreatedByLastName = lastName,
+			  OutgoingTrustUkprn = string.IsNullOrWhiteSpace(project.OutgoingTrustUkprn) ? null : int.Parse(project.OutgoingTrustUkprn),
+			  PrepareId = project.Id,
+			  NewTrustReferenceNumber = project.IncomingTrustReferenceNumber,
+			  NewTrustName = incomingName
+		};
 	}
 }
