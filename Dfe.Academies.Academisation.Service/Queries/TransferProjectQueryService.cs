@@ -94,7 +94,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			{
 				queryable = [.. queryable
 					.Where(p => p.TransferringAcademies != null && p.TransferringAcademies
-						.Exists(r => r != null && r.IncomingTrustName != null && r.IncomingTrustName.ToLower().Contains(title.ToLower())))];
+						.Exists(r => r != null && r.IncomingTrustName != null && r.IncomingTrustName.Contains(title, StringComparison.CurrentCultureIgnoreCase)))];
 			}
 			return queryable;
 		}
