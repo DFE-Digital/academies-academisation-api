@@ -7,36 +7,25 @@ using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.Service.Factories;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
-using Dfe.Academies.Contracts.V4.Establishments;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
-	public class TransferProjectQueryService : ITransferProjectQueryService
+	public class TransferProjectQueryService(
+		ITransferProjectRepository transferProjectRepository,
+		IAcademiesQueryService establishmentRepository,
+		IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository) : ITransferProjectQueryService
 	{
-		private readonly ITransferProjectRepository _transferProjectRepository;
-		private readonly IAcademiesQueryService _establishmentRepository;
-		private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
-
-		public TransferProjectQueryService(
-			ITransferProjectRepository transferProjectRepository,
-			IAcademiesQueryService establishmentRepository,
-			IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
+		public async Task<AcademyTransferProjectResponse?> GetByUrn(int Urn)
 		{
-			_transferProjectRepository = transferProjectRepository;
-			_establishmentRepository = establishmentRepository;
-			_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
-		}
+			var transferProject = await transferProjectRepository.GetByUrn(Urn);
 
-		public async Task<AcademyTransferProjectResponse?> GetByUrn(int id)
-		{
-			var transferProject = await _transferProjectRepository.GetByUrn(id);
-
-			return AcademyTransferProjectResponseFactory.Create(transferProject);
+			return AcademyTransferProjectResponseFactory.Create(transferProject!);
 		}
 
 		public async Task<AcademyTransferProjectResponse?> GetById(int id)
 		{
-			var transferProject = await _transferProjectRepository.GetById(id);
+			var transferProject = await transferProjectRepository.GetById(id);
 
 			return AcademyTransferProjectResponseFactory.Create(transferProject);
 		}
@@ -44,18 +33,18 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		public async Task<PagedResultResponse<AcademyTransferProjectSummaryResponse>> GetTransferProjects(int page, int count, int? urn,
 		string title)
 		{
-			var transferProjects = FilterByUrn(await _transferProjectRepository.GetAllTransferProjects(), urn).ToList();
+			var transferProjects = FilterByUrn((await transferProjectRepository.GetAllTransferProjects())!, urn).ToList();
 
 			//the logic retrieving the trust data goes here
 			var projects = FilterByIncomingTrust(title, AcademyTransferProjectSummaryResponse(transferProjects));
 
 			// remove any projects without an outgoing trust.
-			projects = projects
+			projects = [.. projects
 			.Where(p =>
 				!string.IsNullOrEmpty(p.OutgoingTrustUkprn) && !string.IsNullOrEmpty(p.OutgoingTrustName)
-				).ToList();
+				)];
 
-			var recordTotal = projects.Count();
+			int recordTotal = projects.Count();
 
 			projects = projects.OrderByDescending(atp => atp.ProjectUrn)
 			.Skip((page - 1) * count).Take(count).ToList();
@@ -64,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		}
 		public async Task<PagedDataResponse<AcademyTransferProjectSummaryResponse>?> GetProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
 		{
-			var (projects, totalCount) = await _transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
+			var (projects, totalCount) = await transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
 			IEnumerable<AcademyTransferProjectSummaryResponse> data = AcademyTransferProjectSummaryResponse(projects);
 			var pageResponse = PagingResponseFactory.Create("transfer-projects/projects", page, count, totalCount,
 				new Dictionary<string, object?> {
@@ -76,16 +65,16 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		}
 		public async Task<PagedResultResponse<ExportedTransferProjectModel>> GetExportedTransferProjects(IEnumerable<string>? states, string? title, IEnumerable<string>? deliveryOfficers, int page, int count)
 		{
-			var (projects, totalCount) = await _transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
+			var (projects, _) = await transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
 			IEnumerable<IConversionAdvisoryBoardDecision> advisoryBoardDecisions;
 			try
 			{
-				advisoryBoardDecisions = await _advisoryBoardDecisionRepository.GetAllAdvisoryBoardDecisionsForTransfers();
+				advisoryBoardDecisions = (await advisoryBoardDecisionRepository.GetAllAdvisoryBoardDecisionsForTransfers())!;
 			}
 			catch (Exception ex)
 			{
 				var e = ex;
-				throw;
+				throw ex;
 			}
 
 			var mappedProjects = await MapExportedTransferProjectModel(projects, advisoryBoardDecisions);
@@ -111,10 +100,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			if (!string.IsNullOrWhiteSpace(title))
 			{
-				queryable = queryable
+				queryable = [.. queryable
 					.Where(p => p.TransferringAcademies != null && p.TransferringAcademies
-						.Exists(r => r != null && r.IncomingTrustName != null && r.IncomingTrustName.ToLower().Contains(title.ToLower())))
-					.ToList();
+						.Exists(r => r != null && r.IncomingTrustName != null && r.IncomingTrustName.ToLower().Contains(title.ToLower())))];
 			}
 			return queryable;
 		}
@@ -131,7 +119,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 							.ToList();
 			if (ukprns.Count != 0)
 			{
-				var establishments = await _establishmentRepository.PostBulkEstablishmentsByUkprns(ukprns);
+				var establishments = await establishmentRepository.PostBulkEstablishmentsByUkprns(ukprns);
 
 				foreach (var transferProject in atp)
 				{
@@ -248,7 +236,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<IEnumerable<AcademyTransferProjectSummaryResponse>?> GetTransfersProjectsForGroup(string ukprn, CancellationToken cancellationToken)
 		{
-			var transferProjects = await _transferProjectRepository.GetTransfersProjectsForGroup(ukprn, cancellationToken);
+			var transferProjects = await transferProjectRepository.GetTransfersProjectsForGroup(ukprn, cancellationToken);
 
 			return AcademyTransferProjectSummaryResponse(transferProjects);
 		}

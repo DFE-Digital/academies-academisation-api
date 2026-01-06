@@ -1,12 +1,12 @@
 ﻿using System.Net.Http.Json;
-using Dfe.Academies.Academisation.IService.Query;
-using Dfe.Academies.Contracts.V4.Trusts;
-using Dfe.Academies.Contracts.V4.Establishments;
+using Dfe.Academies.Academisation.IService.Query; 
 using Dfe.Academisation.CorrelationIdMiddleware;
 using Microsoft.Extensions.Logging;
 using Dfe.Academies.Academisation.Service.Extensions;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Service.Queries.Models;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Trusts;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
@@ -115,6 +115,29 @@ namespace Dfe.Academies.Academisation.Service.Queries
 			};
 
 			var response = await client.PostAsJsonAsync("v4/establishments/bulk/ukprns", request);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.LogError("Request for establishments failed , statuscode - {StatusCode}", response!.StatusCode);
+				return null!;
+			}
+
+			var establishments = await response.Content.ReadFromJsonAsync<IEnumerable<EstablishmentDto>>();
+
+			return establishments!;
+		}
+
+		public async Task<IEnumerable<EstablishmentDto>> PostBulkEstablishmentsByUrns(IEnumerable<int> urns)
+		{
+			var client = _academiesApiClientFactory.Create(_correlationContext);
+
+			// the model here
+			var request = new UrnRequestModel
+			{
+				Urns = urns
+			};
+
+			var response = await client.PostAsJsonAsync("v4/establishments/bulk/urns", request);
 
 			if (!response.IsSuccessStatusCode)
 			{

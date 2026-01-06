@@ -6,7 +6,7 @@ using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.WebApi;
 using Dfe.Academies.Academisation.WebApi.Options;
-using Dfe.Academies.Contracts.V4.Establishments;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;

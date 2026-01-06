@@ -2,8 +2,8 @@
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.Http;
 using Dfe.Academies.Academisation.Service.Queries;
-using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academisation.CorrelationIdMiddleware;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;

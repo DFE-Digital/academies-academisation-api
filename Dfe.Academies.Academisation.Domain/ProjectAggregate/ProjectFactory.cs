@@ -1,18 +1,18 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
 public class ProjectFactory : IProjectFactory
 {
-	public CreateResult Create(IApplication application)
+	public CreateResult Create(IApplication application, IEnumerable<EstablishmentDto> establishmentDtos)
 	{
-		return Project.Create(application);
+		return Project.Create(application, establishmentDtos);
 	}
-	public CreateResult CreateFormAMat(IApplication application)
+	public CreateResult CreateFormAMat(IApplication application, IEnumerable<EstablishmentDto> establishmentDtos)
 	{
-		return Project.CreateFormAMat(application);
+		return Project.CreateFormAMat(application, establishmentDtos);
 	}
 }

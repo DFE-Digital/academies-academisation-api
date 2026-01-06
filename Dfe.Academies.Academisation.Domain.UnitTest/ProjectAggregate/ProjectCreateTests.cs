@@ -10,13 +10,16 @@ using Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Domain.UnitTest.ProjectAggregate;
 
 public class ProjectCreateTests
 {
-	private readonly Fixture _fixture = new Fixture();
+	private readonly Fixture _fixture = new();
+	private readonly Mock<IEnumerable<EstablishmentDto>> _mockEstablishmentDtos = new();
 	public ProjectCreateTests()
 	{
 		_fixture.Customize(new AutoMoqCustomization());
@@ -38,7 +41,7 @@ public class ProjectCreateTests
 			null);
 
 		// Act
-		var project = new ProjectFactory().Create(application);
+		var project = new ProjectFactory().Create(application, _mockEstablishmentDtos.Object);
 
 		CreateValidationErrorResult? result = null;
 
@@ -50,8 +53,11 @@ public class ProjectCreateTests
 		);
 	}
 
-	[Fact]
-	public void Create_JoinAMatApplicationType_WithNulls___ReturnsCreateSuccessResult()
+	[Theory]
+	[InlineData("100", "80", "Yes")]
+	[InlineData("480", "402", "Yes")]
+	[InlineData("480", "472", "No")]
+	public void Create_JoinAMatApplicationType_WithNulls___ReturnsCreateSuccessResult(string schoolCapacity, string NumberOfPupils, string viabilityIssues)
 	{
 		// Arrange
 		var now = DateTime.Now;
@@ -75,15 +81,21 @@ public class ProjectCreateTests
 		var school = _fixture.Build<School>()
 						.With(s => s.Details, schoolDetails)
 						.Create();
+		var censusDto = new CensusDto { NumberOfPupils = NumberOfPupils };
+		var establishmentDto = _fixture.Build<EstablishmentDto>()
+								.With(ed => ed.Urn, schoolDetails.Urn.ToString())
+								.With(ed => ed.SchoolCapacity, schoolCapacity)
+								.With(ed => ed.Census, censusDto)
+								.Create();
 
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new List<School> { school }, _fixture.Create<JoinTrust>(),
+			[school], _fixture.Create<JoinTrust>(),
 			null);
 
 		// Act
-		var createResult = new ProjectFactory().Create(application);
+		var createResult = new ProjectFactory().Create(application, [establishmentDto]);
 
 		// Assert
 		IProject project = Assert.IsType<CreateSuccessResult<IProject>>(createResult).Payload;
@@ -92,12 +104,16 @@ public class ProjectCreateTests
 			() => Assert.Null(project.Details.RevenueCarryForwardAtEndMarchCurrentYear),
 			() => Assert.Null(project.Details.ProjectedRevenueBalanceAtEndMarchNextYear),
 			() => Assert.Null(project.Details.CapitalCarryForwardAtEndMarchCurrentYear),
-			() => Assert.Null(project.Details.CapitalCarryForwardAtEndMarchNextYear)
+			() => Assert.Null(project.Details.CapitalCarryForwardAtEndMarchNextYear),
+			() => Assert.Equal(viabilityIssues, project.Details.ViabilityIssues)
 		);
 	}
 
-	[Fact]
-	public void Create_JoinAMatApplicationType___ReturnsCreateSuccessResult()
+	[Theory]
+	[InlineData("100", "80", "Yes")]
+	[InlineData("480", "402", "Yes")]
+	[InlineData("480", "472", "No")]
+	public void Create_JoinAMatApplicationType___ReturnsCreateSuccessResult(string schoolCapacity, string NumberOfPupils, string viabilityIssues)
 	{
 		// Arrange
 		var now = DateTime.Now;
@@ -119,15 +135,21 @@ public class ProjectCreateTests
 		var school = _fixture.Build<School>()
 						.With(s => s.Details, schoolDetails)
 						.Create();
+		var censusDto = new CensusDto {  NumberOfPupils = NumberOfPupils };
+		var establishmentDto = _fixture.Build<EstablishmentDto>()
+								.With(ed => ed.Urn, schoolDetails.Urn.ToString())
+								.With(ed => ed.SchoolCapacity, schoolCapacity)
+								.With(ed => ed.Census, censusDto)
+								.Create();
 
 		var application = new Application(1, now, now, ApplicationType.JoinAMat,
 			_fixture.Create<ApplicationStatus>(),
 			new Dictionary<int, ContributorDetails> { { 1, _fixture.Create<ContributorDetails>() } },
-			new List<School> { school }, _fixture.Create<JoinTrust>(),
+			[school], _fixture.Create<JoinTrust>(),
 			null);
 
 		// Act
-		var createResult = new ProjectFactory().Create(application);
+		var createResult = new ProjectFactory().Create(application, [establishmentDto]);
 
 		// Assert
 		IProject project = Assert.IsType<CreateSuccessResult<IProject>>(createResult).Payload;
@@ -155,7 +177,10 @@ public class ProjectCreateTests
 			() => Assert.Equal(school.Details.NextFinancialYear!.CapitalCarryForward, project.Details.CapitalCarryForwardAtEndMarchNextYear),
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear1, project.Details.YearOneProjectedPupilNumbers),
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear2, project.Details.YearTwoProjectedPupilNumbers),
-			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear3, project.Details.YearThreeProjectedPupilNumbers)
+			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear3, project.Details.YearThreeProjectedPupilNumbers),
+			() => Assert.Equal(establishmentDto.Census.NumberOfPupils, project.Details.ActualPupilNumbers.ToString()),
+			() => Assert.Equal(establishmentDto.SchoolCapacity, project.Details.Capacity.ToString()),
+			() => Assert.Equal(viabilityIssues, project.Details.ViabilityIssues)
 		);
 	}
 

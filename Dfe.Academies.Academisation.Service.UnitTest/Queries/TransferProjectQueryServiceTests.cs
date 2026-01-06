@@ -6,8 +6,8 @@ using Dfe.Academies.Academisation.IService.ServiceModels.TransferProject;
 using Dfe.Academies.Academisation.Service.Mappers.TransferProject;
 using Dfe.Academies.Academisation.Service.Queries;
 using Dfe.Academies.Academisation.Service.UnitTest.Mocks;
-using Dfe.Academies.Contracts.V4.Establishments;
 using FluentAssertions;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 using Moq;
 using Xunit;
 

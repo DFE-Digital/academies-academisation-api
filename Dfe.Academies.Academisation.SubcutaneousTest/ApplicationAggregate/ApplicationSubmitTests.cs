@@ -51,6 +51,7 @@ public class ApplicationSubmitTests
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
 	private readonly Mock<IMediator> _mediator = new();
 	private readonly Mock<IAdvisoryBoardDecisionRepository> _mockAdvisoryBoardDecisionRepository = new();
+	private readonly Mock<IAcademiesQueryService> _academiesQueryServiceMock = new();
 	public ApplicationSubmitTests()
 	{
 		_context = new TestApplicationContext(_mediator.Object).CreateContext();
@@ -63,7 +64,7 @@ public class ApplicationSubmitTests
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>();
 
-		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationRepo, _conversionRepo, _applicationSubmissionService);
+		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationRepo, _conversionRepo, _applicationSubmissionService, _academiesQueryServiceMock.Object);
 
 		_mediator.Setup(x => x.Send(It.IsAny<ApplicationSubmitCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) =>

@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.SchoolImprovemenP
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ProjectAggregate;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments; 
 
 namespace Dfe.Academies.Academisation.Domain.ProjectAggregate;
 
@@ -23,7 +24,7 @@ public class Project : Entity, IProject, IAggregateRoot
 	public IEnumerable<ProjectNote> Notes => _notes.AsReadOnly();
 	IReadOnlyCollection<IProjectNote> IProject.Notes => _notes.AsReadOnly();
 
-	private readonly List<ProjectNote> _notes = new();
+	private readonly List<ProjectNote> _notes = [];
 
 	public IEnumerable<SchoolImprovementPlan> SchoolImprovementPlans => _schoolImprovementPlans.AsReadOnly();
 	IReadOnlyCollection<ISchoolImprovementPlan> IProject.SchoolImprovementPlans => _schoolImprovementPlans.AsReadOnly();
@@ -60,21 +61,21 @@ public class Project : Entity, IProject, IAggregateRoot
 	}
 
 	// Create from A2b 
-	public static CreateResult Create(IApplication application)
+	public static CreateResult Create(IApplication application, IEnumerable<EstablishmentDto> establishmentDtos)
 	{
 		if (application.ApplicationType != ApplicationType.JoinAMat)
 		{
 			return new CreateValidationErrorResult(
-				new List<ValidationError>
-				{
+				[
 					new("ApplicationStatus", "Only projects of type JoinAMat are supported")
-				});
+				]);
 		}
 		var school = application.Schools.Single();
 		var schoolDetails = school.Details;
 
 		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(voluntaryConversionAcademyTypeAndRoute, application.ApplicationSubmittedDate);
-
+		
+		var (actualPupilNumbers, capacity, viabilityIssues) = GetViabilityIssuesData(establishmentDtos, school.Details.Urn.ToString());
 		var projectDetails = new ProjectDetails
 		{
 			Urn = schoolDetails.Urn,
@@ -86,6 +87,9 @@ public class Project : Entity, IProject, IAggregateRoot
 			NameOfTrust = application.JoinTrust?.TrustName,
 			AcademyTypeAndRoute = voluntaryConversionAcademyTypeAndRoute,
 			IsFormAMat = false,
+			Capacity = capacity,
+			ActualPupilNumbers = actualPupilNumbers,
+			ViabilityIssues = viabilityIssues,
 			// Temp hotfix
 			ProposedConversionDate = schoolDetails.ConversionTargetDate,
 			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000, 
@@ -107,49 +111,85 @@ public class Project : Entity, IProject, IAggregateRoot
 		return new CreateSuccessResult<IProject>(new Project(projectDetails) { ApplicationSharePointId = application.EntityId, SchoolSharePointId = school.EntityId});
 	}
 
-	public static CreateResult CreateFormAMat(IApplication application)
+	public static CreateResult CreateFormAMat(IApplication application, IEnumerable<EstablishmentDto> establishmentDtos)
 	{
 		if (application.ApplicationType != ApplicationType.FormAMat)
 		{
 			return new CreateValidationErrorResult(
-				new List<ValidationError>
-				{
+				[
 					new("ApplicationStatus", "Only projects of type FormAMat are supported")
-				});
+				]);
 		}
 
 		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(voluntaryConversionAcademyTypeAndRoute, application.ApplicationSubmittedDate);
 
-		var projectDetailsList = application.Schools.Select(school => new ProjectDetails
-		{
-			Urn = school.Details.Urn,
-			SchoolName = school.Details.SchoolName,
-			ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
-			ProjectStatus = $"{voluntaryConversionAcademyTypeAndRoute} Pre-AO (C)",
-			ApplicationReceivedDate = application.ApplicationSubmittedDate,
-			NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
-			AcademyTypeAndRoute = voluntaryConversionAcademyTypeAndRoute,
-			IsFormAMat = true,
-			// Temp hotfix
-			ProposedConversionDate = school.Details.ConversionTargetDate,
-			ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000,
-			PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
-			PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
-			FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
-			RationaleForTrust = school.Details.SchoolConversionReasonsForJoining,
-			EndOfCurrentFinancialYear = school.Details.CurrentFinancialYear?.FinancialYearEndDate,
-			EndOfNextFinancialYear = school.Details.NextFinancialYear?.FinancialYearEndDate,
-			RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.Revenue, school.Details.CurrentFinancialYear?.RevenueStatus),
-			ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.Revenue, school.Details.NextFinancialYear?.RevenueStatus),
-			CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.CapitalCarryForward, school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus),
-			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.CapitalCarryForward, school.Details.NextFinancialYear?.CapitalCarryForwardStatus),
-			YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
-			YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
-			YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3, 
+		var projectDetailsList = application.Schools.Select(school => {
+			var (actualPupilNumbers, capacity, viabilityIssues) = GetViabilityIssuesData(establishmentDtos, school.Details.Urn.ToString());
+			return new ProjectDetails
+			{
+				Urn = school.Details.Urn,
+				SchoolName = school.Details.SchoolName,
+				ApplicationReferenceNumber = $"A2B_{application.ApplicationId}",
+				ProjectStatus = $"{voluntaryConversionAcademyTypeAndRoute} Pre-AO (C)",
+				ApplicationReceivedDate = application.ApplicationSubmittedDate,
+				NameOfTrust = application.FormTrust?.TrustDetails.FormTrustProposedNameOfTrust,
+				AcademyTypeAndRoute = voluntaryConversionAcademyTypeAndRoute,
+				IsFormAMat = true,
+				Capacity = capacity,
+				ActualPupilNumbers = actualPupilNumbers,
+				ViabilityIssues = viabilityIssues,
+				// Temp hotfix
+				ProposedConversionDate = school.Details.ConversionTargetDate,
+				ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000,
+				PublishedAdmissionNumber = school.Details.CapacityPublishedAdmissionsNumber.ToString(),
+				PartOfPfiScheme = ToYesNoString(school.Details.LandAndBuildings?.PartOfPfiScheme),
+				FinancialDeficit = ToYesNoString(IsDeficit(school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus)),
+				RationaleForTrust = school.Details.SchoolConversionReasonsForJoining,
+				EndOfCurrentFinancialYear = school.Details.CurrentFinancialYear?.FinancialYearEndDate,
+				EndOfNextFinancialYear = school.Details.NextFinancialYear?.FinancialYearEndDate,
+				RevenueCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.Revenue, school.Details.CurrentFinancialYear?.RevenueStatus),
+				ProjectedRevenueBalanceAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.Revenue, school.Details.NextFinancialYear?.RevenueStatus),
+				CapitalCarryForwardAtEndMarchCurrentYear = ConvertDeficitAmountToNegative(school.Details.CurrentFinancialYear?.CapitalCarryForward, school.Details.CurrentFinancialYear?.CapitalCarryForwardStatus),
+				CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(school.Details.NextFinancialYear?.CapitalCarryForward, school.Details.NextFinancialYear?.CapitalCarryForwardStatus),
+				YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
+				YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
+				YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3,
+			};
 		}).ToList();
 
-		var projectList = projectDetailsList.Select(projectDetails => new Project(projectDetails) { ApplicationSharePointId = application.EntityId, SchoolSharePointId = application.Schools.Single(x => x.Details.Urn == projectDetails.Urn).EntityId }).ToList();
+		var projectList = projectDetailsList
+			.Select(projectDetails => new Project(projectDetails)
+			{
+				ApplicationSharePointId = application.EntityId,
+				SchoolSharePointId = application.Schools.Single(x => x.Details.Urn == projectDetails.Urn).EntityId
+			})
+			.ToList();
+
 		return new CreateSuccessResult<IEnumerable<IProject>>(projectList);
+	}
+	private static (int? actualPupilNumbers, int? capacity, string viabilityIssues) GetViabilityIssuesData(IEnumerable<EstablishmentDto> establishmentDtos, string urn)
+	{
+		var establishmentDto = establishmentDtos.FirstOrDefault(x => x.Urn == urn);
+		if (establishmentDto == null)
+			return (null, null, "No");
+
+		if (!int.TryParse(establishmentDto?.Census?.NumberOfPupils, out int actualPupilNumbers))
+			return (null, null, "No");
+
+		if (!int.TryParse(establishmentDto?.SchoolCapacity, out int capacity))
+			return (null, null, "No");
+
+		string viabilityIssues = CalculateViabilityIssues(actualPupilNumbers, capacity);
+
+		return (actualPupilNumbers, capacity, viabilityIssues);
+	}
+	private static string CalculateViabilityIssues(int actualPupilNumbers, int capacity)
+	{
+		if (capacity <= 0)
+			return "No";
+
+		double percentage = Math.Floor((double)actualPupilNumbers / capacity * 100);
+		return percentage >= 85 ? "No" : "Yes";
 	}
 	// Create from Conversions
 	public static CreateResult CreateNewProject(NewProject project)
@@ -375,7 +415,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	private static string? ToYesNoString(bool? value)
 	{
-		if (value.HasValue is false) return null;
+		if (!value.HasValue) return null;
 		return value == true ? "Yes" : "No";
 	}
 
@@ -492,7 +532,7 @@ public class Project : Entity, IProject, IAggregateRoot
 			_ => currentAmount
 		};
 	}
-	protected string? NullifyGrantChangeReasonIfNeeded(bool? grantAmountChanged, string? reason, string? route)
+	protected static string? NullifyGrantChangeReasonIfNeeded(bool? grantAmountChanged, string? reason, string? route)
 	{
 		if (route == "Sponsored")
 		{
@@ -509,12 +549,12 @@ public class Project : Entity, IProject, IAggregateRoot
 
 	public void SetExternalApplicationForm(bool ExternalApplicationFormSaved, string ExternalApplicationFormUrl)
 	{
-		this.Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
-		this.Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
+		Details.ExternalApplicationFormSaved = ExternalApplicationFormSaved;
+		Details.ExternalApplicationFormUrl = ExternalApplicationFormUrl;
 	}
-	public void SetFormAMatProjectReference(int formAMatProjectId)
+	public void SetFormAMatProjectReference(int FormAMAtProjectId)
 	{
-		this.FormAMatProjectId = formAMatProjectId;
+		FormAMatProjectId = FormAMAtProjectId;
 	}
 	public void SetSchoolOverview(
 							  string publishedAdmissionNumber,
@@ -534,23 +574,23 @@ public class Project : Entity, IProject, IAggregateRoot
 		)
 	{
 		// Update the respective properties in the Details object
-		this.Details.PublishedAdmissionNumber = publishedAdmissionNumber;
-		this.Details.ViabilityIssues = viabilityIssues;
-		this.Details.PartOfPfiScheme = partOfPfiScheme;
-		this.Details.FinancialDeficit = financialDeficit;
-		this.Details.NumberOfPlacesFundedFor = numberOfPlacesFundedFor;
-		this.Details.NumberOfResidentialPlaces = numberOfResidentialPlaces;
-		this.Details.NumberOfFundedResidentialPlaces = numberOfFundedResidentialPlaces;
-		this.Details.PfiSchemeDetails = pfiSchemeDetails;
-		this.Details.DistanceFromSchoolToTrustHeadquarters = distanceFromSchoolToTrustHeadquarters;
-		this.Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation = distanceFromSchoolToTrustHeadquartersAdditionalInformation;
-		this.Details.MemberOfParliamentNameAndParty = memberOfParliamentNameAndParty;
-		this.Details.PupilsAttendingGroupPermanentlyExcluded = pupilsAttendingGroupPermanentlyExcluded;
-		this.Details.PupilsAttendingGroupMedicalAndHealthNeeds = pupilsAttendingGroupMedicalAndHealthNeeds;
-		this.Details.PupilsAttendingGroupTeenageMums = pupilsAttendingGroupTeenageMums;
+		Details.PublishedAdmissionNumber = publishedAdmissionNumber;
+		Details.ViabilityIssues = viabilityIssues;
+		Details.PartOfPfiScheme = partOfPfiScheme;
+		Details.FinancialDeficit = financialDeficit;
+		Details.NumberOfPlacesFundedFor = numberOfPlacesFundedFor;
+		Details.NumberOfResidentialPlaces = numberOfResidentialPlaces;
+		Details.NumberOfFundedResidentialPlaces = numberOfFundedResidentialPlaces;
+		Details.PfiSchemeDetails = pfiSchemeDetails;
+		Details.DistanceFromSchoolToTrustHeadquarters = distanceFromSchoolToTrustHeadquarters;
+		Details.DistanceFromSchoolToTrustHeadquartersAdditionalInformation = distanceFromSchoolToTrustHeadquartersAdditionalInformation;
+		Details.MemberOfParliamentNameAndParty = memberOfParliamentNameAndParty;
+		Details.PupilsAttendingGroupPermanentlyExcluded = pupilsAttendingGroupPermanentlyExcluded;
+		Details.PupilsAttendingGroupMedicalAndHealthNeeds = pupilsAttendingGroupMedicalAndHealthNeeds;
+		Details.PupilsAttendingGroupTeenageMums = pupilsAttendingGroupTeenageMums;
 
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
-		this.LastModifiedOn = DateTime.UtcNow;
+		LastModifiedOn = DateTime.UtcNow;
 	}
 
 	public void SetPublicEqualityDuty(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete)
@@ -563,16 +603,16 @@ public class Project : Entity, IProject, IAggregateRoot
 	public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
 	{
 		// Update the respective properties in the Details object
-		this.Details.AssignedUser = new User(userId, fullName, emailAddress);
+		Details.AssignedUser = new User(userId, fullName, emailAddress);
 
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
-		this.LastModifiedOn = DateTime.UtcNow;
+		LastModifiedOn = DateTime.UtcNow;
 	}
 
 	public void SetFormAMatProjectId(int id)
 	{
 		// Protect normal conversions from having this value set
-		if ((this.Details.IsFormAMat.HasValue && this.Details.IsFormAMat.Value))
+		if ((Details.IsFormAMat.HasValue && Details.IsFormAMat.Value))
 		{
 			FormAMatProjectId = id;
 		}
@@ -602,9 +642,9 @@ public class Project : Entity, IProject, IAggregateRoot
 		ReadOnlyDate = date;
 	}
 
-	public void SetProjectGroupId(int? projectGroupId)
+	public void SetProjectGroupId(int? id)
 	{
-		ProjectGroupId = projectGroupId;
+		ProjectGroupId = id;
 	}
 
 	public void AddNote(string subject, string note, string author, DateTime date)
@@ -637,32 +677,28 @@ public class Project : Entity, IProject, IAggregateRoot
 	{
 		var schoolImprovementPlan = _schoolImprovementPlans.SingleOrDefault(x => x.Id == id);
 
-		if (schoolImprovementPlan != null)
-		{
-			schoolImprovementPlan.Update(arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
-			
-		}
+		schoolImprovementPlan?.Update(arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
 	}
 
 	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete, List<ReasonChange>? reasonsChanged, string? changedBy = default)
 	{
 		// Update the respective properties in the Details object
-		this.Details.HeadTeacherBoardDate = advisoryBoardDate;
-		this.Details.PreviousHeadTeacherBoardDate = previousAdvisoryBoard;
+		Details.HeadTeacherBoardDate = advisoryBoardDate;
+		Details.PreviousHeadTeacherBoardDate = previousAdvisoryBoard;
 
-		if (this.Details.ProposedConversionDate != proposedConversionDate)
+		if (Details.ProposedConversionDate != proposedConversionDate)
 		{
-			var oldDate = this.Details.ProposedConversionDate;
-			this.Details.ProposedConversionDate = proposedConversionDate;
+			var oldDate = Details.ProposedConversionDate;
+			Details.ProposedConversionDate = proposedConversionDate;
 			if (oldDate != null)
 			{
 				AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(Project), oldDate, proposedConversionDate, DateTime.UtcNow, changedBy, reasonsChanged));
 			}
 		}
 
-		this.Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
+		Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
 
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
-		this.LastModifiedOn = DateTime.UtcNow;
+		LastModifiedOn = DateTime.UtcNow;
 	}
 }

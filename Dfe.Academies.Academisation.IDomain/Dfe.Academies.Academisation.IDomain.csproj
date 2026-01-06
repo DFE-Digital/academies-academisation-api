@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GovUK.Dfe.CoreLibs.Contracts" Version="1.0.53" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 

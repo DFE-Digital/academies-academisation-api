@@ -1,5 +1,5 @@
-﻿using Dfe.Academies.Contracts.V4.Establishments;
-using Dfe.Academies.Contracts.V4.Trusts;
+﻿using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Trusts;
 
 namespace Dfe.Academies.Academisation.IService.Query
 {
@@ -11,5 +11,6 @@ namespace Dfe.Academies.Academisation.IService.Query
 		Task<TrustDto?> GetTrustByReferenceNumber(string trustReferenceNumber);
 		Task<IEnumerable<EstablishmentDto>> GetBulkEstablishmentsByUkprn(IEnumerable<string> ukprns);
 		Task<IEnumerable<EstablishmentDto>> PostBulkEstablishmentsByUkprns(IEnumerable<string> ukprns);
+		Task<IEnumerable<EstablishmentDto>> PostBulkEstablishmentsByUrns(IEnumerable<int> urns);
 	}
 }
