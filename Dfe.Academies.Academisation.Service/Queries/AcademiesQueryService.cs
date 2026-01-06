@@ -10,27 +10,16 @@ using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Trusts;
 
 namespace Dfe.Academies.Academisation.Service.Queries
 {
-	public class AcademiesQueryService : IAcademiesQueryService
+	public class AcademiesQueryService(ILogger<AcademiesQueryService> logger, IAcademiesApiClientFactory academiesApiClientFactory, ICorrelationContext correlationContext) : IAcademiesQueryService
 	{
-		private readonly ILogger<AcademiesQueryService> _logger;
-		private readonly IAcademiesApiClientFactory _academiesApiClientFactory;
-		private readonly ICorrelationContext _correlationContext;
-
-		public AcademiesQueryService(ILogger<AcademiesQueryService> logger, IAcademiesApiClientFactory academiesApiClientFactory, ICorrelationContext correlationContext)
-		{
-			_logger = logger;
-			_academiesApiClientFactory = academiesApiClientFactory;
-			_correlationContext = correlationContext;
-		}
-
 		public async Task<EstablishmentDto?> GetEstablishmentByUkprn(string ukprn)
 		{
-			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var client = academiesApiClientFactory.Create(correlationContext);
 			var response = await client.GetAsync($"/v4/establishment/{ukprn}");
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.LogError("Request for establishment failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
+				logger.LogError("Request for establishment failed for ukprn - {Ukprn}, statuscode - {StatusCode}", ukprn, response!.StatusCode);
 				return null;
 			}
 
@@ -39,12 +28,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<EstablishmentDto?> GetEstablishment(int urn)
 		{
-			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var client = academiesApiClientFactory.Create(correlationContext);
 			var response = await client.GetAsync($"/v4/establishment/urn/{urn}");
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.LogError("Request for establishment failed for urn - {urn}, statuscode - {statusCode}", urn, response!.StatusCode);
+				logger.LogError("Request for establishment failed for urn - {Urn}, statuscode - {StatusCode}", urn, response!.StatusCode);
 				return null;
 			}
 
@@ -53,12 +42,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<TrustDto?> GetTrust(string ukprn)
 		{
-			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var client = academiesApiClientFactory.Create(correlationContext);
 			var response = await client.GetAsync($"/v4/trust/{ukprn}");
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.LogError("Request for trust failed for ukprn - {ukprn}, statuscode - {statusCode}", ukprn, response!.StatusCode);
+				logger.LogError("Request for trust failed for ukprn - {Ukprn}, statuscode - {StatusCode}", ukprn, response!.StatusCode);
 				return null;
 			}
 			var trust = await response.Content.ReadFromJsonAsync<TrustDto>();
@@ -68,12 +57,12 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<TrustDto?> GetTrustByReferenceNumber(string trustReferenceNumber)
 		{
-			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var client = academiesApiClientFactory.Create(correlationContext);
 			var response = await client.GetAsync($"/v4/trust/trustReferenceNumber/{trustReferenceNumber}");
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.LogError("Request for trust failed for trustReferenceNumber - {trustReferenceNumber}, statuscode - {statusCode}", trustReferenceNumber, response!.StatusCode);
+				logger.LogError("Request for trust failed for trustReferenceNumber - {TrustReferenceNumber}, statuscode - {StatusCode}", trustReferenceNumber, response!.StatusCode);
 				return null;
 			}
 			var trust = await response.Content.ReadFromJsonAsync<TrustDto>();
@@ -83,9 +72,9 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<IEnumerable<EstablishmentDto>> GetBulkEstablishmentsByUkprn(IEnumerable<string> ukprns)
 		{
-			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var client = academiesApiClientFactory.Create(correlationContext);
 
-			var queryParameters = ukprns.Select(ukprn =>
+			string queryParameters = ukprns.Select(ukprn =>
 			{
 				return new KeyValuePair<string, string>("Ukprn", ukprn);
 			})
@@ -96,7 +85,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.LogError("Request for establishments failed , statuscode - {statusCode}", response!.StatusCode);
+				logger.LogError("Request for establishments failed , statuscode - {StatusCode}", response!.StatusCode);
 				return null!;
 			}
 			var establishments = await response.Content.ReadFromJsonAsync<IEnumerable<EstablishmentDto>>();
@@ -106,7 +95,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<IEnumerable<EstablishmentDto>> PostBulkEstablishmentsByUkprns(IEnumerable<string> ukprns)
 		{
-			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var client = academiesApiClientFactory.Create(correlationContext);
 
 			// the model here
 			var request = new UkprnRequestModel
@@ -118,7 +107,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.LogError("Request for establishments failed , statuscode - {StatusCode}", response!.StatusCode);
+				logger.LogError("Request for establishments failed , statuscode - {StatusCode}", response!.StatusCode);
 				return null!;
 			}
 
@@ -129,7 +118,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 		public async Task<IEnumerable<EstablishmentDto>> PostBulkEstablishmentsByUrns(IEnumerable<int> urns)
 		{
-			var client = _academiesApiClientFactory.Create(_correlationContext);
+			var client = academiesApiClientFactory.Create(correlationContext);
 
 			// the model here
 			var request = new UrnRequestModel
@@ -141,7 +130,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.LogError("Request for establishments failed , statuscode - {StatusCode}", response!.StatusCode);
+				logger.LogError("Request for establishments failed , statuscode - {StatusCode}", response!.StatusCode);
 				return null!;
 			}
 

@@ -40,13 +40,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.Application
 				case CommandSuccessResult:
 					break;
 				case CreateSuccessResult<IProject> createSuccessResult:
-					conversionProjectRepository.Insert(createSuccessResult.Payload as Project);
+					conversionProjectRepository.Insert((createSuccessResult.Payload as Project)!);
 					await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 					break;
 				case CreateSuccessResult<IEnumerable<IProject>> createSuccessResult:
 					foreach (var project in createSuccessResult.Payload)
 					{
-						conversionProjectRepository.Insert(project as Project);
+						conversionProjectRepository.Insert((project as Project)!);
 					}
 					await conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 					break;

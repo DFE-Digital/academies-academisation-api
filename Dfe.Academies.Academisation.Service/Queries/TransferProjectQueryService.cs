@@ -67,15 +67,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 		{
 			var (projects, _) = await transferProjectRepository.SearchProjects(states, title, deliveryOfficers, page, count);
 			IEnumerable<IConversionAdvisoryBoardDecision> advisoryBoardDecisions;
-			try
-			{
-				advisoryBoardDecisions = (await advisoryBoardDecisionRepository.GetAllAdvisoryBoardDecisionsForTransfers())!;
-			}
-			catch (Exception ex)
-			{
-				var e = ex;
-				throw ex;
-			}
+			advisoryBoardDecisions = (await advisoryBoardDecisionRepository.GetAllAdvisoryBoardDecisionsForTransfers())!;
 
 			var mappedProjects = await MapExportedTransferProjectModel(projects, advisoryBoardDecisions);
 
@@ -182,6 +174,17 @@ namespace Dfe.Academies.Academisation.Service.Queries
 				PFI = transferringAcademyPfi
 			};
 		}
+		private static AssignedUserResponse? SetAssignedUserResponse(ITransferProject transferProject)
+		{
+			return string.IsNullOrWhiteSpace(transferProject.AssignedUserEmailAddress)
+				? null
+				: new AssignedUserResponse
+				{
+					EmailAddress = transferProject.AssignedUserEmailAddress!,
+					FullName = transferProject.AssignedUserFullName!,
+					Id = transferProject.AssignedUserId
+				};
+		}
 
 		public IEnumerable<AcademyTransferProjectSummaryResponse> AcademyTransferProjectSummaryResponse(
  IEnumerable<ITransferProject> atp)
@@ -195,14 +198,7 @@ namespace Dfe.Academies.Academisation.Service.Queries
 					OutgoingTrustUkprn = x.OutgoingTrustUkprn,
 					OutgoingTrustName = x.OutgoingTrustName!,
 					Status = x.Status!,
-					AssignedUser = string.IsNullOrWhiteSpace(x.AssignedUserEmailAddress)
-				   ? null
-				   : new AssignedUserResponse
-				   {
-					   EmailAddress = x.AssignedUserEmailAddress!,
-					   FullName = x.AssignedUserFullName,
-					   Id = x.AssignedUserId
-				   },
+					AssignedUser = SetAssignedUserResponse(x)!,
 					TransferringAcademies = x.TransferringAcademies.Select(ta =>
 					{
 						return new TransferringAcademyDto

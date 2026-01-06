@@ -173,10 +173,10 @@ public class Project : Entity, IProject, IAggregateRoot
 		if (establishmentDto == null)
 			return (null, null, "No");
 
-		if (!int.TryParse(establishmentDto?.Census?.NumberOfPupils, out int actualPupilNumbers))
+		if (!int.TryParse(establishmentDto.Census?.NumberOfPupils, out int actualPupilNumbers))
 			return (null, null, "No");
 
-		if (!int.TryParse(establishmentDto?.SchoolCapacity, out int capacity))
+		if (!int.TryParse(establishmentDto.SchoolCapacity, out int capacity))
 			return (null, null, "No");
 
 		string viabilityIssues = CalculateViabilityIssues(actualPupilNumbers, capacity);
@@ -198,10 +198,10 @@ public class Project : Entity, IProject, IAggregateRoot
 
 		if (project.Trust == null && project.HasPreferredTrust.ToLower().Equals("yes"))
 		{
-			return new CreateValidationErrorResult(new List<ValidationError>
-			{
+			return new CreateValidationErrorResult(
+			[
 				new("Trust", "Trust in the model must not be null")
-			});
+			]);
 		}
 
 		if (project.School == null)
