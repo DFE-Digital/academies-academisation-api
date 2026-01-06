@@ -37,6 +37,7 @@ internal static class LegacyProjectServiceModelMapper
 
 			// school/trust info
 			RecommendationForProject = project.Details.RecommendationForProject,
+			RecommendationNotesForProject = project.Details.RecommendationNotesForProject,
 			Author = project.Details.Author,
 			Version = project.Details.Version,
 			ClearedBy = project.Details.ClearedBy,

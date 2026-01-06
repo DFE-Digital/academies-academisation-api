@@ -34,6 +34,7 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public string? LocalAuthorityInformationTemplateLink { get; init; }
 		public bool? LocalAuthorityInformationTemplateSectionComplete { get; init; }
 		public string? RecommendationForProject { get; init; }
+		public string? RecommendationNotesForProject { get; init; }
 		public string? Author { get; init; }
 		public string? Version { get; init; }
 		public string? ClearedBy { get; init; }
