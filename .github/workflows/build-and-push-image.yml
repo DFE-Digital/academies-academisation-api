@@ -71,7 +71,7 @@ jobs:
       attestations: write
       id-token: write
     steps:
-      - uses: DFE-Digital/deploy-azure-container-apps-action/.github/actions/build@v5.2.1
+      - uses: DFE-Digital/deploy-azure-container-apps-action/.github/actions/build@8e72e403f05ff9da09668207eef1d79e1ce9d1a7 # v5.2.1
         with:
           image-name: ${{ needs.set-env.outputs.image-name }}
           build-args: CI=true
@@ -79,7 +79,7 @@ jobs:
           tag-prefix: ${{ matrix.tag-prefix }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: DFE-Digital/deploy-azure-container-apps-action/.github/actions/import@v5.2.1
+      - uses: DFE-Digital/deploy-azure-container-apps-action/.github/actions/import@8e72e403f05ff9da09668207eef1d79e1ce9d1a7 # v5.2.1
         with:
           image-name: ${{ needs.set-env.outputs.image-name }}
           tag-prefix: ${{ matrix.tag-prefix }}
@@ -101,7 +101,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: DFE-Digital/deploy-azure-container-apps-action/.github/actions/deploy@v5.2.1
+      - uses: DFE-Digital/deploy-azure-container-apps-action/.github/actions/deploy@8e72e403f05ff9da09668207eef1d79e1ce9d1a7 # v5.2.1
         with:
           image-name: ${{ needs.set-env.outputs.image-name }}
           annotate-release: 'yes'
@@ -110,6 +110,29 @@ jobs:
           azure-acr-name: ${{ secrets.ACR_NAME }}
           azure-aca-client-id: ${{ secrets.ACA_CLIENT_ID }}
           azure-aca-name: ${{ secrets.ACA_CONTAINERAPP_NAME }}
+          azure-aca-resource-group: ${{ secrets.ACA_RESOURCE_GROUP }}
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || '' }}
+          AZURE_SUBSCRIPTION: ${{ secrets.AZURE_SUBSCRIPTION_ID || '' }}
+          AZURE_ACA_CLIENT_ID: ${{ secrets.ACA_CLIENT_ID || '' }}
+
+  deploy-worker:
+    name: Deploy to ${{ needs.set-env.outputs.environment }}
+    needs: [ set-env, build-import ]
+    runs-on: ubuntu-24.04
+    environment: ${{ needs.set-env.outputs.environment }}
+    permissions:
+      id-token: write
+    steps:
+      - uses: DFE-Digital/deploy-azure-container-apps-action/.github/actions/deploy@8e72e403f05ff9da09668207eef1d79e1ce9d1a7 # v5.2.1
+        with:
+          image-name: ${{ needs.set-env.outputs.image-name }}
+          annotate-release: 'yes'
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-acr-name: ${{ secrets.ACR_NAME }}
+          azure-aca-client-id: ${{ secrets.ACA_CLIENT_ID }}
+          azure-aca-name: ${{ secrets.ACA_CONTAINERAPP_NAME }}-worker
           azure-aca-resource-group: ${{ secrets.ACA_RESOURCE_GROUP }}
         env:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || '' }}
