@@ -12,8 +12,7 @@ using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Complete;
 using Dfe.Academies.Academisation.Service.Commands.CompleteProject;
-using Dfe.Academies.Academisation.Service.Factories;
-using Dfe.Academies.Contracts.V4.Establishments;
+using Dfe.Academies.Academisation.Service.Factories; 
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
@@ -21,6 +20,7 @@ using Newtonsoft.Json;
 using Polly;
 using Xunit;
 using Dfe.Complete.Client.Contracts;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 {

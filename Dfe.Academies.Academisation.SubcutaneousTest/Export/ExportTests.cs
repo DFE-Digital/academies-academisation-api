@@ -7,8 +7,8 @@ using ClosedXML.Excel;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate; 
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
-using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academies.Academisation.Service.Queries.Models;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 {

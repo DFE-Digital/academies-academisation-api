@@ -46,6 +46,7 @@ public class ApplicationDeleteTests
 	private readonly Mock<IMapper> _mapper = new();
 	private readonly Mock<IDateTimeProvider> _DateTimeProvider = new();
 	private readonly Mock<IMediator> _mediator = new();
+	private readonly Mock<IAcademiesQueryService> _academiesQueryServiceMock = new();
 	public ApplicationDeleteTests()
 	{
 		_context = new TestApplicationContext(_mediator.Object).CreateContext();
@@ -58,7 +59,7 @@ public class ApplicationDeleteTests
 		_applicationLogger = new Mock<ILogger<ApplicationController>>().Object;
 		_mediator = new Mock<IMediator>();
 
-		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationRepo, _conversionRepo, _applicationSubmissionService);
+		var submitApplicationHandler = new ApplicationSubmitCommandHandler(_applicationRepo, _conversionRepo, _applicationSubmissionService, _academiesQueryServiceMock.Object);
 
 		_mediator.Setup(x => x.Send(It.IsAny<ApplicationSubmitCommand>(), It.IsAny<CancellationToken>()))
 			.Returns<IRequest<CommandOrCreateResult>, CancellationToken>(async (cmd, ct) =>

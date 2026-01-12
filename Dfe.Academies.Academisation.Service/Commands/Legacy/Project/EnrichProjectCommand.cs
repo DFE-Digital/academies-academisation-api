@@ -4,8 +4,8 @@ using Dfe.Academies.Academisation.IService.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.Legacy.ProjectAggregate;
-using Dfe.Academies.Contracts.V4.Establishments;
-using Dfe.Academies.Contracts.V4.Trusts;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Trusts;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
@@ -34,14 +34,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 								
 				if (school == null)
 				{
-					logger.LogWarning("No schools found for project - {project}, urn - {urn}", project.Id, project.Details.Urn);
+					logger.LogWarning("No schools found for project - {Project}, urn - {Urn}", project.Id, project.Details.Urn);
 					continue;
 				}
 
 				var projectChanges = new ConversionProjectServiceModel(project.Id, project.Details.Urn)
 				{
 				
-					TrustUkprn = int.TryParse(trust?.Ukprn, out var ukprn) ? ukprn : null,
+					TrustUkprn = int.TryParse(trust?.Ukprn, out int ukprn) ? ukprn : null,
 					LocalAuthority = school.LocalAuthorityName,
 					Region = school.Gor.Name,
 					SchoolPhase = school.PhaseOfEducation.Name,
@@ -52,7 +52,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.Legacy.Project
 
 				await projectUpdateDataCommand.Execute(project);
 
-				logger.LogInformation("Project {project} updated", project.Id);
+				logger.LogInformation("Project {Project} updated", project.Id);
 			}
 		}
 	}
