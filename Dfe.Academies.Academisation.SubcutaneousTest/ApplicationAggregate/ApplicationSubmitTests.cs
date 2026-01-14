@@ -10,6 +10,7 @@ using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
@@ -127,7 +128,7 @@ public class ApplicationSubmitTests
 
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
-		var school = _fixture.Create<ApplicationSchoolServiceModel>();
+		var school = _fixture.Create<ApplicationSchoolServiceModel>() with { SchoolHasConsultedStakeholders = true };
 
 		var updateRequest = new ApplicationUpdateCommand(createdPayload.ApplicationId, createdPayload.ApplicationType, createdPayload.ApplicationStatus, createdPayload.Contributors,
 			new List<ApplicationSchoolServiceModel> { school });
@@ -152,6 +153,7 @@ public class ApplicationSubmitTests
 		(_, ConversionProjectServiceModel project) = DfeAssert.OkObjectResult(projectResult);
 
 		AssertProject(school, project, Converter);
+		Assert.Equal(YesNoNotApplicable.Yes, project.Consultation);
 	}
 
 	[Fact]
@@ -172,8 +174,8 @@ public class ApplicationSubmitTests
 		(_, var createdPayload) = DfeAssert.CreatedAtRoute(createResult, "GetApplication");
 
 		var firstSchool = _fixture.Create<ApplicationSchoolServiceModel>();
-		var secondSchool = _fixture.Create<ApplicationSchoolServiceModel>();
-		var thirdSchool = _fixture.Create<ApplicationSchoolServiceModel>();
+		var secondSchool = _fixture.Create<ApplicationSchoolServiceModel>() with { SchoolHasConsultedStakeholders = false };
+		var thirdSchool = _fixture.Create<ApplicationSchoolServiceModel>() with { SchoolHasConsultedStakeholders = true };
 
 		var updateRequest = new ApplicationUpdateCommand(
 			createdPayload.ApplicationId,
@@ -203,23 +205,31 @@ public class ApplicationSubmitTests
 		(_, PagedDataResponse<ConversionProjectServiceModel> projects) = DfeAssert.OkObjectResult(projectResults);
 
 		AssertProject(firstSchool, projects.Data.FirstOrDefault(x => x.SchoolName == firstSchool.SchoolName)!, Converter, true);
-		AssertProject(secondSchool, projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!, Converter, true);
-		AssertProject(thirdSchool, projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!, Converter, true);
+
+		var project = projects.Data.FirstOrDefault(x => x.SchoolName == secondSchool.SchoolName)!;
+		AssertProject(secondSchool, project, Converter, true);
+		Assert.Equal(YesNoNotApplicable.No, project.Consultation);
+
+		project = projects.Data.FirstOrDefault(x => x.SchoolName == thirdSchool.SchoolName)!;
+		AssertProject(thirdSchool, project, Converter, true);
+		Assert.Equal(YesNoNotApplicable.Yes, project.Consultation);
 	}
 
 	private static void AssertProject(ApplicationSchoolServiceModel school, ConversionProjectServiceModel project, string type, bool isFormAMat = false)
 	{
 		Assert.Multiple(
-		() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
-		() => Assert.Equal(type, project.AcademyTypeAndRoute),
-		() => Assert.Equal(isFormAMat, project.IsFormAMat),
-		() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedConversionDate),
-		() => Assert.Equal(25000, project.ConversionSupportGrantAmount),
-		() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
-		() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
-		() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),
-		() => Assert.Equal(school.ProjectedPupilNumbersYear2, project.YearTwoProjectedPupilNumbers),
-		() => Assert.Equal(school.ProjectedPupilNumbersYear3, project.YearThreeProjectedPupilNumbers));
+			() => Assert.Equal("Converter Pre-AO (C)", project.ProjectStatus),
+			() => Assert.Equal(type, project.AcademyTypeAndRoute),
+			() => Assert.Equal(isFormAMat, project.IsFormAMat),
+			() => Assert.Equal(school.SchoolConversionTargetDate, project.ProposedConversionDate),
+			() => Assert.Equal(25000, project.ConversionSupportGrantAmount),
+			() => Assert.Equal(school.SchoolCapacityPublishedAdmissionsNumber.ToString(), project.PublishedAdmissionNumber),
+			() => Assert.Equal(ToYesNoString(school.LandAndBuildings!.PartOfPfiScheme), project.PartOfPfiScheme),
+			() => Assert.Equal(school.ProjectedPupilNumbersYear1, project.YearOneProjectedPupilNumbers),
+			() => Assert.Equal(school.ProjectedPupilNumbersYear2, project.YearTwoProjectedPupilNumbers),
+			() => Assert.Equal(school.ProjectedPupilNumbersYear3, project.YearThreeProjectedPupilNumbers),
+			() => Assert.Equal(YesNoNotApplicable.Yes, project.GoverningBodyResolution)
+		);
 	}
 
 	private static string ToYesNoString(bool? value)
