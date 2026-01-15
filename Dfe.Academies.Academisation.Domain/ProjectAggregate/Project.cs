@@ -106,7 +106,9 @@ public class Project : Entity, IProject, IAggregateRoot
 			CapitalCarryForwardAtEndMarchNextYear = ConvertDeficitAmountToNegative(schoolDetails.NextFinancialYear?.CapitalCarryForward, schoolDetails.NextFinancialYear?.CapitalCarryForwardStatus),
 			YearOneProjectedPupilNumbers = schoolDetails.ProjectedPupilNumbersYear1,
 			YearTwoProjectedPupilNumbers = schoolDetails.ProjectedPupilNumbersYear2,
-			YearThreeProjectedPupilNumbers = schoolDetails.ProjectedPupilNumbersYear3
+			YearThreeProjectedPupilNumbers = schoolDetails.ProjectedPupilNumbersYear3,
+			GoverningBodyResolution = YesNoNotApplicable.Yes,
+			Consultation = schoolDetails.SchoolHasConsultedStakeholders == true ? YesNoNotApplicable.Yes : YesNoNotApplicable.No
 		};
 
 		return new CreateSuccessResult<IProject>(new Project(projectDetails) { ApplicationSharePointId = application.EntityId, SchoolSharePointId = school.EntityId});
@@ -156,6 +158,8 @@ public class Project : Entity, IProject, IAggregateRoot
 				YearOneProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear1,
 				YearTwoProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear2,
 				YearThreeProjectedPupilNumbers = school.Details.ProjectedPupilNumbersYear3,
+				GoverningBodyResolution = YesNoNotApplicable.Yes,
+				Consultation = school.Details.SchoolHasConsultedStakeholders == true ? YesNoNotApplicable.Yes : YesNoNotApplicable.No
 			};
 		}).ToList();
 
