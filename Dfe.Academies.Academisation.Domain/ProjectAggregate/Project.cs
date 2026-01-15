@@ -140,7 +140,7 @@ public class Project : Entity, IProject, IAggregateRoot
 				IsFormAMat = true,
 				Capacity = capacity,
 				ActualPupilNumbers = actualPupilNumbers,
-				ViabilityIssues = viabilityIssues, 
+				ViabilityIssues = viabilityIssues,
 				// Temp hotfix
 				ProposedConversionDate = school.Details.ConversionTargetDate,
 				ConversionSupportGrantAmount = isVoluntaryConverionPostDeadline ? 0 : 25000,
