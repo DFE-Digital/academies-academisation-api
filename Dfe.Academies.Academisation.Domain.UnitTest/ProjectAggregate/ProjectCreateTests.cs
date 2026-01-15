@@ -110,10 +110,11 @@ public class ProjectCreateTests
 	}
 
 	[Theory]
-	[InlineData("100", "80", "Yes")]
-	[InlineData("480", "402", "Yes")]
-	[InlineData("480", "472", "No")]
-	public void Create_JoinAMatApplicationType___ReturnsCreateSuccessResult(string schoolCapacity, string NumberOfPupils, string viabilityIssues)
+	[InlineData("100", "80", "Yes", null, null, null, null)]
+	[InlineData("480", "402", "Yes", true, "Public sector", "Yes", "Public sector")]
+	[InlineData("480", "472", "No", false, null, "No", null)]
+	public void Create_JoinAMatApplicationType___ReturnsCreateSuccessResult(string schoolCapacity, string NumberOfPupils, string viabilityIssues,
+		bool? partOfPfiScheme, string? pfiSchemeDetails, string? expectedPartOfPfiScheme,string? expectedPfiSchemeDetails)
 	{
 		// Arrange
 		var now = DateTime.Now;
@@ -127,9 +128,14 @@ public class ProjectCreateTests
 							.With(fy => fy.RevenueStatus, RevenueType.Surplus)
 							.Create();
 
+		var landAndBuildings = _fixture.Build<LandAndBuildings>()
+										.With(lb => lb.PartOfPfiScheme, partOfPfiScheme)
+										.With(lb => lb.PartOfPfiSchemeType, pfiSchemeDetails)
+										.Create();
 		var schoolDetails = _fixture.Build<SchoolDetails>()
 								.With(sd => sd.CurrentFinancialYear, currentYear)
 								.With(sd => sd.NextFinancialYear, nextYear)
+								.With(sd => sd.LandAndBuildings, landAndBuildings)
 								.Create();
 
 		var school = _fixture.Build<School>()
@@ -138,7 +144,7 @@ public class ProjectCreateTests
 		var censusDto = new CensusDto {  NumberOfPupils = NumberOfPupils };
 		var establishmentDto = _fixture.Build<EstablishmentDto>()
 								.With(ed => ed.Urn, schoolDetails.Urn.ToString())
-								.With(ed => ed.SchoolCapacity, schoolCapacity)
+								.With(ed => ed.SchoolCapacity, schoolCapacity) 
 								.With(ed => ed.Census, censusDto)
 								.Create();
 
@@ -180,7 +186,10 @@ public class ProjectCreateTests
 			() => Assert.Equal(school.Details.ProjectedPupilNumbersYear3, project.Details.YearThreeProjectedPupilNumbers),
 			() => Assert.Equal(establishmentDto.Census.NumberOfPupils, project.Details.ActualPupilNumbers.ToString()),
 			() => Assert.Equal(establishmentDto.SchoolCapacity, project.Details.Capacity.ToString()),
-			() => Assert.Equal(viabilityIssues, project.Details.ViabilityIssues)
+			() => Assert.Equal(viabilityIssues, project.Details.ViabilityIssues),
+			() => Assert.NotNull(school.Details.LandAndBuildings),
+			() => Assert.Equal(expectedPfiSchemeDetails, project.Details.PfiSchemeDetails),
+			() => Assert.Equal(expectedPartOfPfiScheme, project.Details.PartOfPfiScheme)
 		);
 	}
 
