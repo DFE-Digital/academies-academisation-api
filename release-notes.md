@@ -1,8 +1,15 @@
 ## NEXT
+
+## 9.4.0 
 * Added ability to edit PFI schemes within a Transfer project for their requisite Transferring Academies
+* OKR 1- Consultation response pre-populated
+* OKR 1 - Pre-populate 'Viability issues' under 'School Overview'
+ 
+## 9.3.0
 * Added Region and Local authority to the transfering academy record for filtering purposes
 * Added ability to have 'DAO Revoked' decision recorded against a Sponsored conversion project
 * Auto-Populate the `Proposed conversion date` when `Preferred conversion date` is set during conversion project creation for the school.
+  
 ## 9.2.0
 * Added transfer projects
 * Added fields required to a Conversion Project to allow for sponsored grants
