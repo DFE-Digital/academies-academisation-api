@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-01-19.560...HEAD)
 Note: remember to update unrelease section when creating a new release.
 
+### Fixed
+- [273331](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/CI%20Team/Stories?workitem=273331) pre-decision transfer projects were not being included in prepare when filtering
 --- 
 
 ## [9.46.0][9.46.0] - 2026-01-19
