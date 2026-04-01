@@ -6,10 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
  
-## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-01-19.560...HEAD)
+## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-04-01.570..HEAD)
 Note: remember to update unrelease section when creating a new release.
 
 --- 
+
+## [9.47.0][9.47.0] - 2026-04-01
+
+### Changed
+- 221675 - Project list download, update 'advisory board' references
 
 ## [9.46.0][9.46.0] - 2026-01-19
 
@@ -456,7 +461,7 @@ Note: remember to update unrelease section when creating a new release.
 * LA Dates can be set back to null
 ---
 
-
+[9.47.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-04-01.570
 [9.46.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-01-19.560
 [9.45.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-01-07.551
 [9.44.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-01-06.548
