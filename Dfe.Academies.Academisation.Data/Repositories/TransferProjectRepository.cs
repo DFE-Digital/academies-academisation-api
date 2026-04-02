@@ -101,7 +101,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			if (states != null && states!.Any())
 			{
-				queryable = queryable.Where(p => states.Contains(p.Status!.ToLower()));
+				queryable = queryable.Where(p => 
+					states.Contains(p.Status!.ToLower())
+					|| (states.Contains("Pre decision") && p.Status! == null)
+				);
 			}
 
 			return queryable;
