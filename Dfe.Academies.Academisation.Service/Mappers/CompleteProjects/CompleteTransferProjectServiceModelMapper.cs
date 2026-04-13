@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 
 internal static class CompleteTransferProjectServiceModelMapper
 {	
-	internal static CreateTransferProjectCommand FromDomain(ITransferProject project, string conditions, string urn)
+	internal static CreateTransferProjectCommand FromDomain(ITransferProject project, string conditions, string urn, DateTime? advisoryBoardDecisionDate)
 	{
 
 		string incomingTrustUkprn = project.TransferringAcademies.First().IncomingTrustUkprn!;
@@ -28,7 +28,7 @@ internal static class CompleteTransferProjectServiceModelMapper
 		return new CreateTransferProjectCommand
 		{
 			Urn = int.Parse(urn),
-			AdvisoryBoardDate = project.HtbDate,
+			AdvisoryBoardDate = advisoryBoardDecisionDate,
 			AdvisoryBoardConditions = conditions,
 			ProvisionalTransferDate = project.TargetDateForTransfer,
 			InadequateOfsted = inadequeteOfsted,
