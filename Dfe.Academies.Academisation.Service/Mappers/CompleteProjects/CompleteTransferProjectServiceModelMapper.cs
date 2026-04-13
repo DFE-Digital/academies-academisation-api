@@ -43,7 +43,7 @@ internal static class CompleteTransferProjectServiceModelMapper
 		};
 	}
 
-	internal static CreateTransferMatProjectCommand FormAMatFromDomain(ITransferProject project, string conditions, string urn)
+	internal static CreateTransferMatProjectCommand FormAMatFromDomain(ITransferProject project, string conditions, string urn, DateTime? advisoryBoardDecisionDate)
 	{
 		string incomingName = project.TransferringAcademies.First().IncomingTrustName!;
 
@@ -63,7 +63,7 @@ internal static class CompleteTransferProjectServiceModelMapper
 		return new CreateTransferMatProjectCommand
 		{
 			 Urn = int.Parse(urn),
-			 AdvisoryBoardDate = project.HtbDate,
+			  AdvisoryBoardDate = advisoryBoardDecisionDate,
 			  AdvisoryBoardConditions = conditions,
 			  ProvisionalTransferDate = project.TargetDateForTransfer,
 			  InadequateOfsted = inadequeteOfsted,

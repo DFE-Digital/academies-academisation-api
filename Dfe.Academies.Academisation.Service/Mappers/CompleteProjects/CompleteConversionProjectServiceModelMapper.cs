@@ -6,7 +6,7 @@ namespace Dfe.Academies.Academisation.Service.Mappers.CompleteProjects;
 
 internal static class CompleteConversionProjectServiceModelMapper
 {
-	internal static CreateConversionProjectCommand FromDomain(IProject project, string conditions, string groupReferenceNumber)
+	internal static CreateConversionProjectCommand FromDomain(IProject project, string conditions, string groupReferenceNumber, DateTime? advisoryBoardDecisionDate)
 	{
 		var assignedUser = project.Details.AssignedUser;
 		 
@@ -16,7 +16,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 		return new CreateConversionProjectCommand
 		{
 			Urn = project.Details.Urn,
-			AdvisoryBoardDate = project.Details.HeadTeacherBoardDate,
+			AdvisoryBoardDate = advisoryBoardDecisionDate,
 			AdvisoryBoardConditions = conditions,
 			ProvisionalConversionDate = project.Details.ProposedConversionDate,
 			DirectiveAcademyOrder = project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
@@ -29,7 +29,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 		}; 
 	}
 
-	internal static CreateConversionMatProjectCommand FormAMatFromDomain(IProject project, string conditions, string groupReferenceNumber)
+	internal static CreateConversionMatProjectCommand FormAMatFromDomain(IProject project, string conditions, string groupReferenceNumber, DateTime? advisoryBoardDecisionDate)
 	{
 		var assignedUser = project.Details.AssignedUser;
 		 
@@ -38,7 +38,7 @@ internal static class CompleteConversionProjectServiceModelMapper
 		return new CreateConversionMatProjectCommand
 		{
 			Urn = project.Details.Urn,
-			AdvisoryBoardDate = project.Details.HeadTeacherBoardDate,
+			AdvisoryBoardDate = advisoryBoardDecisionDate,
 			AdvisoryBoardConditions = conditions,
 			ProvisionalConversionDate = project.Details.ProposedConversionDate,
 			DirectiveAcademyOrder = project.Details.AcademyTypeAndRoute?.Equals("Sponsored") ?? false,
