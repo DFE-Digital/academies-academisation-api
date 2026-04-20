@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-04-02.577...HEAD)
 Note: remember to update unrelease section when creating a new release.
 
+### Fixed
+- [275553](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/275553) - projects not sending to complete, use the decision date instead of proposed decision date
 ---
 
 ## [9.47.1][9.47.1] - 2026-04-02

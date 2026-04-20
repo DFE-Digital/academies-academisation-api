@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 				var establishment = establishments.Single(x => x.Ukprn == transferringAcademy.Ukprn);
 
 				var transferObject = CompleteTransferProjectServiceModelMapper.FromDomain(transferProject,
-					decision?.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails!, establishment.Urn);
+					decision?.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails!, establishment.Urn, decision?.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate);
 
 				var response = await completeApiClientRetryFactory.CreateTransferProjectAsync(
 					transferObject, 

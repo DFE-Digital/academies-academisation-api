@@ -114,7 +114,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			_mockProjectsClient.Verify(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()), Times.Never());
 		}
 		[Fact]
-		public async Task Handle_ConversionProjectsExist_SuccessfulResponse_ReturnsCommandSuccessResult()
+		public async Task Handle_TransferProjectsExist_SuccessfulResponse_ReturnsCommandSuccessResult()
 		{
 			// Arrange
 			var command = _fixture.Create<CreateCompleteTransferProjectsCommand>();
@@ -172,7 +172,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Assert
 			Assert.IsType<CommandSuccessResult>(result);
 
-			// Verifying that the logger was called for the "Success sending conversion" case
+			// Verifying that the logger was called for the "Success sending transfer" case
 			_mockLogger.Verify(x => x.Log(LogLevel.Information,
 				// We're checking for an Information log
 				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Success sending transfer project to complete with project urn")),
@@ -185,7 +185,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			_mockProjectsClient.Verify(client => client.CreateTransferProjectAsync(It.IsAny<CreateTransferProjectCommand>(), It.IsAny<CancellationToken>()), Times.Exactly(transferringAcademiesCount));
 		}
 		[Fact]
-		public async Task Handle_ConversionProjectsExist_ErrorResponse_ReturnsCommandSuccessResult()
+		public async Task Handle_TransferProjectsExist_ErrorResponse_ReturnsCommandSuccessResult()
 		{
 			// Arrange
 			var transferProjects = _fixture.CreateMany<ITransferProject>().ToList();
@@ -244,7 +244,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			// Assert
 			Assert.IsType<CommandSuccessResult>(result);
 
-			// Verifying that the logger was called for the "Success sending conversion" case
+			// Verifying that the logger was called for the "Error sending transfer" case
 			_mockLogger.Verify(x => x.Log(LogLevel.Error,
 				// We're checking for an Information log
 				It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Error sending transfer project to complete with project urn")),

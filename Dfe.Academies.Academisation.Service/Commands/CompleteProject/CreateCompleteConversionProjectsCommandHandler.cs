@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					groupReferenceNumber = group?.ReferenceNumber;
 				}
 
-				var completeObject = CompleteConversionProjectServiceModelMapper.FromDomain(conversionProject, decision?.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails!, groupReferenceNumber!);
+				var completeObject = CompleteConversionProjectServiceModelMapper.FromDomain(conversionProject, decision?.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails!, groupReferenceNumber!, decision?.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate);
 				 
 				var response = await completeApiClientRetryFactory.CreateConversionProjectAsync(completeObject, retryPolicy, cancellationToken);
 
