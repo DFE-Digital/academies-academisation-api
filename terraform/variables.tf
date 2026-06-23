@@ -158,6 +158,18 @@ variable "mssql_managed_identity_assign_role" {
   default     = false
 }
 
+variable "mssql_sku_name" {
+  description = "Specifies the name of the SKU used by the database"
+  type        = string
+  default     = "S0"
+}
+
+variable "mssql_max_gb" {
+  description = "The max size of the database in gigabyte"
+  type        = number
+  default     = 10
+}
+
 variable "enable_cdn_frontdoor" {
   description = "Enable Azure CDN FrontDoor. This will use the Container Apps endpoint as the origin."
   type        = bool
