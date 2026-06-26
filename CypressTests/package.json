@@ -12,6 +12,7 @@
     "combine:reports": "mochawesome-merge cypress/reports/mocha/*.json> mochareports/report.json",
     "create:html:report": "marge mochareports/report.json -f report -o mochareports",
     "generate:html:report": "npm run combine:reports && npm run create:html:report",
+    "zap:report:teams": "node scripts/send-zap-teams-notification.js",
     "lint": "eslint ."
   },
   "repository": {
@@ -34,6 +35,7 @@
   "homepage": "https://github.com/DFE-Digital/academies-academisation-api/CypressTests#readme",
   "devDependencies": {
     "@stylistic/eslint-plugin": "2.3.0",
+    "axios": "^1.18.1",
     "cypress": "13.16.1",
     "cypress-multi-reporters": "2.0.5",
     "cypress-plugin-api": "2.11.2",
