@@ -182,7 +182,7 @@ jobs:
     secrets:
       API_KEY: ${{ secrets.API_KEY }}
       URL: ${{ secrets.URL }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
 
   security-tests:
     name: Run Security Scanner Tests
