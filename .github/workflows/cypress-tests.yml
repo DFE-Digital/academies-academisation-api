@@ -11,7 +11,7 @@ on:
         required: true
       URL:
         required: true
-      SLACK_WEBHOOK_URL:
+      TEAMS_WEBHOOK_URL:
         required: true
   workflow_dispatch:
     inputs:
