@@ -174,7 +174,7 @@ jobs:
 
   cypress-tests:
     name: Run Cypress tests
-    if: needs.set-env.outputs.environment == 'test' || needs.set-env.outputs.environment == 'development'
+    if: needs.set-env.outputs.environment == 'test'
     needs: [ deploy, set-env ]
     uses: ./.github/workflows/cypress-tests.yml
     with:
@@ -185,7 +185,7 @@ jobs:
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
 
   security-tests:
-    name: Run Security Scanner Tests
+    name: Run Cypress tests with OWASP ZAP
     needs: [ set-env, deploy ]
     if: needs.set-env.outputs.environment == 'development'
     uses: ./.github/workflows/security-tests.yml
@@ -201,3 +201,4 @@ jobs:
       OWASP_STORAGE_CONTAINER_NAME: ${{ secrets.OWASP_STORAGE_CONTAINER_NAME }}
       OWASP_STORAGE_ACCOUNT_NAME: ${{ secrets.OWASP_STORAGE_ACCOUNT_NAME }}
       TEAMS_OWASP_SCAN_WEBHOOK_URL: ${{ secrets.TEAMS_OWASP_SCAN_WEBHOOK_URL }}
+      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
