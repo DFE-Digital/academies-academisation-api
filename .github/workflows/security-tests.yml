@@ -25,6 +25,8 @@ on:
         required: true
       TEAMS_OWASP_SCAN_WEBHOOK_URL:
         required: true
+      TEAMS_WEBHOOK_URL:
+        required: true
   workflow_dispatch:
 
 env:
@@ -126,6 +128,35 @@ jobs:
           ZAP_PORT: ${{ env.ZAP_PORT }}
         run: npm run cy:run -- --env url=$URL,apiKey=$API_KEY
 
+      - name: Upload artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: screenshots-${{ inputs.environment }}-${{ matrix.browser }}
+          path: CypressTests/cypress/screenshots
+
+      - name: Generate report
+        if: always()
+        run: |
+          mkdir mochareports
+          npm run generate:html:report
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: reports-${{ inputs.environment }}-${{ matrix.browser }}
+          path: CypressTests/cypress/reports/mocha
+
+      - name: Report Cypress results to Teams
+        if: always()
+        run: |
+            npm run cypress:report:teams
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          INFORMATION_LINK: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
       - name: Azure login with OIDC
         if: ${{ !cancelled() }}
         uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3
@@ -148,7 +179,7 @@ jobs:
               --auth-mode login \
               --overwrite
 
-      - name: Report results to Teams
+      - name: Report ZAP results to Teams
         if: ${{ !cancelled() }}
         run: npm run zap:report:teams
         env:
