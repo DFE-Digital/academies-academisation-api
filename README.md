@@ -87,36 +87,68 @@ dotnet ef database update --project Dfe.Academies.Academisation.Data --startup-p
 
 ## Getting Started
 ### Prerequisites
-You must have the trams API docker container downloaded and running as this API uses the same database. Instructions to do this are here:-
-https://github.com/DFE-Digital/trams-data-api/
+This API uses the TRAMS development SQL Server image.
 
-which has 2 main steps:-
-1) Creating a PAT token within GitHub as below:-
+1) Create a GitHub PAT:
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-2) put that PAT token into an environment variable (windows)
-3) login to ghcr.io using command line:-
-docker login https://ghcr.io --username 'github username'
 
-Above will prompt for password, this is the PAT token
+Recommended PAT access:
+- `read:packages` (required to pull images from GHCR)
+- `repo` (only if your org/repo policy requires it)
 
-4) download & run docker image like so:-
-docker run -d -p 1433:1433 ghcr.io/dfe-digital/trams-development-database:latest
+2) Set the PAT as an environment variable named `GITHUB_TOKEN`.
 
-You may run into port issues if you have something else running on port 1433 i.e. a local install of SQL server. 
-If this is the case, try the following command instead:-
+PowerShell:
+```powershell
+$env:GITHUB_TOKEN = "<your-pat>"
+```
+
+3) Log in to GHCR:
+```bash
+docker login https://ghcr.io --username <your-github-username>
+```
+
+Use the PAT value as the password when prompted.
+
+4) Start the local stack from the repository root:
+```bash
+docker compose up --build -d
+```
+
+This starts the API and local SQL Server services configured for this repo.
+
+Alternative (database container only):
+```bash
 docker run -d -p 2401:1433 ghcr.io/dfe-digital/trams-development-database:latest
+```
 
-If you do this, remember to amend the DefaultConnection within the trams API codebase within BOTH appsettings.json files !!!
+To find the SQL `sa` password configured in the image, inspect the image environment values:
+```bash
+docker image inspect ghcr.io/dfe-digital/trams-development-database:latest --format "{{json .Config.Env}}"
+```
 
-5) run trams API EF migrations first to create default database:-
-trams API has 2 DB contexts (why?)
-So, firstly, you need to run the following migration:-
-dotnet ef database update --connection DefaultConnection --project TramsDataApi --context TramsDataApi.DatabaseModels.LegacyTramsDbContext
+Look for `MSSQL_SA_PASSWORD=...` and use that value in your connection string.
 
-then:-
-dotnet ef database update --connection "Server=localhost,1433;Database=sip;User=sa;Password=StrongPassword905" --project TramsDataApi --context TramsDataApi.DatabaseModels.TramsDbContext
+When using the DB-only container on port 2401, the connection string format is:
+`Server=localhost,2401;Database=sip;User Id=sa;Password=<MSSQL_SA_PASSWORD>;TrustServerCertificate=True;`
 
-6) run academisation EF migration to apply database changes specific to this API onto docker image database:-
+5) Run EF Core migrations
+
+Use the WebApi project as the startup project when running EF commands, otherwise the DbContext cannot be created.
+
+If using the DB-only container on port 2401:
+```powershell
+$env:AcademiesDatabaseConnectionString="Server=localhost,2401;Database=sip;User Id=sa;Password=<MSSQL_SA_PASSWORD>;TrustServerCertificate=True;"
+dotnet ef database update --project Dfe.Academies.Academisation.Data --startup-project Dfe.Academies.Academisation.WebApi --context Dfe.Academies.Academisation.Data.AcademisationContext
+```
+
+If using docker compose DB on port 1433:
+```powershell
+$env:AcademiesDatabaseConnectionString="Server=localhost,1433;Database=sip;User Id=sa;Password=Your_password123;TrustServerCertificate=True;"
+dotnet ef database update --project Dfe.Academies.Academisation.Data --startup-project Dfe.Academies.Academisation.WebApi --context Dfe.Academies.Academisation.Data.AcademisationContext
+```
+
+No `TramsDataApi` migration commands are required for this repository setup.
 
 ## Cypress testing
 
