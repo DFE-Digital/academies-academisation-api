@@ -39,9 +39,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 				date.Value.AddDays(-3),
 				null,
 				null,
-				true,
-				sfsoOverride
-			);
+				true
+			)
+			{
+				SfsoCommissioningRequestedDate = sfsoOverride
+			};
 		}
 
 		private Project CreateMockProject()

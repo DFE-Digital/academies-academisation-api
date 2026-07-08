@@ -706,7 +706,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		bool? projectDatesSectionComplete, 
 		List<ReasonChange>? reasonsChanged, 
 		DateTime? sfsoCommissioningRequestedDate, 
-		string? changedBy = default)
+		string? changedBy)
 	{
 		// Update the respective properties in the Details object
 		Details.HeadTeacherBoardDate = advisoryBoardDate;

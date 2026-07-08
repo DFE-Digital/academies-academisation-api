@@ -7,7 +7,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 	{
 		public SetProjectDatesCommand(int id, DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard,
 			DateTime? proposedConversionDate, List<ReasonChange>? reasonsChanged, string? changedBy,
-			bool? projectDatesSectionComplete, DateTime? sfsoCommissioningRequestedDate)
+			bool? projectDatesSectionComplete)
 		{
 			Id = id;
 			AdvisoryBoardDate = advisoryBoardDate;
@@ -16,7 +16,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 			ReasonsChanged = reasonsChanged;
 			ChangedBy = changedBy;
 			ProjectDatesSectionComplete = projectDatesSectionComplete;
-			SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate;
 		}
 
 		public int Id { get; set; }

@@ -16,12 +16,10 @@ public static class SeedProject
 		var projectNotes = new List<ProjectNote>();
 		for (int i = 1; i <= numberOfProjects; i++)
 		{
-			// var newAcademyConversionProject = NewAcademyConversionProject();
 			using var dbContextTransaction = await academisationContext.Database.BeginTransactionAsync();
 			try
 			{
 				// Create and add project
-				// var newProject = new Project(default, new ProjectDetails());
 				var newProject = new Project(default, NewProjectDetails());
 				newProjects.Add(newProject);
 
@@ -55,31 +53,6 @@ public static class SeedProject
 			}
 		}
 	}
-
-	static Project NewAcademyConversionProject()
-	{
-		// Initialing details, would use AutoFixture but these details are init only
-		// So we could do it on init but the School name for example would be unintelligible 
-		var projectDetails = new ProjectDetails()
-		{
-			Urn = (int)Faker.Number.Between(1, 100000),
-			SchoolName = Faker.Ancient.God() + " " + Faker.Company.Profession(),
-			ApplicationReferenceNumber = $"A2B_{Faker.Number.Between(1, 100000)}",
-			ProjectStatus = ProjectConsts.Statuses[(int)Faker.Number.Between(0, 7)],
-			ApplicationReceivedDate = DateTime.Now.AddMonths(-2),
-			HeadTeacherBoardDate = DateTime.Now.AddMonths(-2),
-			LocalAuthorityInformationTemplateSentDate = DateTime.Now.AddYears(-2),
-			LocalAuthorityInformationTemplateReturnedDate = DateTime.Now.AddYears(-1),
-			ProposedConversionDate = DateTime.Now.AddMonths(3),
-			Region = ProjectConsts.Regions[(int)Faker.Number.Between(0, 9)],
-			LocalAuthority = Faker.Address.State(),
-			NameOfTrust = Faker.Company.Name()
-		};
-
-		var newProject = new Project(Convert.ToInt32(Faker.Number.Number(7)), projectDetails);
-		return newProject;
-	}
-
 	
 	static ProjectDetails NewProjectDetails()
 	{
