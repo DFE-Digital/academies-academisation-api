@@ -44,6 +44,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				.With(x => x.ExternalApplicationFormSaved, true)
 				.With(x => x.ExternalApplicationFormUrl, "test//url")
 				.With(x => x.AcademyTypeAndRoute, "Sponsored")
+				.With(x => x.ConversionSupportGrantAmountChanged, false)
 				.Create();
 
 
