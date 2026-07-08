@@ -5,7 +5,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 {
 	public class SetProjectDatesCommand : IRequest<CommandResult>
 	{
-		public SetProjectDatesCommand(int id, DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, List<ReasonChange>? reasonsChanged, string? changedBy, bool? projectDatesSectionComplete)
+		public SetProjectDatesCommand(int id, DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard,
+			DateTime? proposedConversionDate, List<ReasonChange>? reasonsChanged, string? changedBy,
+			bool? projectDatesSectionComplete, DateTime? sfsoCommissioningRequestedDate)
 		{
 			Id = id;
 			AdvisoryBoardDate = advisoryBoardDate;
@@ -14,6 +16,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 			ReasonsChanged = reasonsChanged;
 			ChangedBy = changedBy;
 			ProjectDatesSectionComplete = projectDatesSectionComplete;
+			SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate;
 		}
 
 		public int Id { get; set; }
@@ -23,6 +26,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 		public List<ReasonChange>? ReasonsChanged { get; set; }
 		public string? ChangedBy { get; set; }
 		public bool? ProjectDatesSectionComplete { get; set; }
+		public DateTime? SfsoCommissioningRequestedDate { get; set; }
 	}
 }
 

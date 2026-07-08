@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			_handler = new SetProjectDatesCommandHandler(_mockConversionProjectRepository.Object, _mockLogger.Object);
 		}
 
-		private SetProjectDatesCommand CreateValidSetProjectDatesCommand()
+		private SetProjectDatesCommand CreateValidSetProjectDatesCommand(DateTime? sfsoOverride = null)
 		{
 			DateTime? date = DateTime.Now;
 			return new SetProjectDatesCommand(
@@ -39,7 +39,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 				date.Value.AddDays(-3),
 				null,
 				null,
-				true
+				true,
+				sfsoOverride
 			);
 		}
 
@@ -73,6 +74,34 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 
 			_mockConversionProjectRepository.Verify(repo => repo.Update(It.IsAny<Project>()), Times.Once);
 			Assert.IsType<CommandSuccessResult>(result);
+		}
+
+		[Fact]
+		public async Task Handle_StoresSfsoCommissioningRequestedDate_WhenProvided()
+		{
+			var overrideDate = DateTime.Today.AddDays(10);
+			var command = CreateValidSetProjectDatesCommand(overrideDate);
+			var existingProject = CreateMockProject();
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Equal(overrideDate, existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_ClearsSfsoCommissioningRequestedDate_WhenNull()
+		{
+			var command = CreateValidSetProjectDatesCommand(null);
+			var projectDetails = new ProjectDetails { SfsoCommissioningRequestedDate = DateTime.Today };
+			var existingProject = new Project(1, projectDetails);
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Null(existingProject.Details.SfsoCommissioningRequestedDate);
 		}
 	}
 }

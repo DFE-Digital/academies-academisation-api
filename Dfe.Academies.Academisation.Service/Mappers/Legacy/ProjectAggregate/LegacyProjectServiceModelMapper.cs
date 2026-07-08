@@ -148,6 +148,11 @@ internal static class LegacyProjectServiceModelMapper
 			PublicEqualityDutyReduceImpactReason = project.Details.PublicEqualityDutyReduceImpactReason,
 			PublicEqualityDutySectionComplete = project.Details.PublicEqualityDutySectionComplete,
 
+			// SFSO commissioning
+			SfsoCommissioningRequestedDate = project.Details.SfsoCommissioningRequestedDate,
+			SfsoCommissioningOverview = project.Details.SfsoCommissioningOverview,
+			SfsoCommissioningSectionComplete = project.Details.SfsoCommissioningSectionComplete,
+
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null
 				: new User(project.Details.AssignedUser!.Id, project.Details.AssignedUser.FullName, project.Details.AssignedUser.EmailAddress),

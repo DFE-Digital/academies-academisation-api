@@ -118,7 +118,11 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	public string? PublicEqualityDutyImpact { get; set; }
 	public string? PublicEqualityDutyReduceImpactReason { get; set; }
 	public bool? PublicEqualityDutySectionComplete { get; set; }
-
+	
+	// SFSO commissioning
+	public DateTime? SfsoCommissioningRequestedDate { get; set; }
+	public string? SfsoCommissioningOverview { get; set; }
+	public bool? SfsoCommissioningSectionComplete { get; set; }
 
 	public User? AssignedUser { get; set; }
 
@@ -248,11 +252,14 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 				   StringComparison.InvariantCultureIgnoreCase) &&
 			   string.Equals(KeyStage5PerformanceAdditionalInformation, other.KeyStage5PerformanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-			  string.Equals(EducationalAttendanceAdditionalInformation, other.EducationalAttendanceAdditionalInformation,
+			   string.Equals(EducationalAttendanceAdditionalInformation, other.EducationalAttendanceAdditionalInformation,
 				   StringComparison.InvariantCultureIgnoreCase) && Equals(AssignedUser, other.AssignedUser) &&
 				string.Equals(ExternalApplicationFormUrl, other.ExternalApplicationFormUrl,
 				   StringComparison.InvariantCultureIgnoreCase) &&
-				   ExternalApplicationFormSaved == other.ExternalApplicationFormSaved;
+				ExternalApplicationFormSaved == other.ExternalApplicationFormSaved && 
+				Nullable.Equals(SfsoCommissioningRequestedDate, other.SfsoCommissioningRequestedDate) && 
+				string.Equals(SfsoCommissioningOverview, other.SfsoCommissioningOverview, StringComparison.InvariantCultureIgnoreCase) && 
+				SfsoCommissioningSectionComplete == other.SfsoCommissioningSectionComplete;
 	}
 
 	public override bool Equals(object? obj)
@@ -367,6 +374,9 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(AssignedUser);
 		hashCode.Add(ExternalApplicationFormUrl, StringComparer.InvariantCultureIgnoreCase);
 		hashCode.Add(ExternalApplicationFormSaved);
+		hashCode.Add(SfsoCommissioningRequestedDate);
+		hashCode.Add(SfsoCommissioningOverview, StringComparer.InvariantCultureIgnoreCase);
+		hashCode.Add(SfsoCommissioningSectionComplete);
 
 		return hashCode.ToHashCode();
 	}

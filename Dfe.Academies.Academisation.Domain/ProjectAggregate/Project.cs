@@ -394,6 +394,11 @@ public class Project : Entity, IProject, IAggregateRoot
 			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers,
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
 
+			// SFSO commissioning
+			SfsoCommissioningRequestedDate = detailsToUpdate.SfsoCommissioningRequestedDate,
+			SfsoCommissioningOverview = detailsToUpdate.SfsoCommissioningOverview,
+			SfsoCommissioningSectionComplete = detailsToUpdate.SfsoCommissioningSectionComplete,
+
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
 		};
@@ -606,6 +611,13 @@ public class Project : Entity, IProject, IAggregateRoot
 		Details.PublicEqualityDutyReduceImpactReason = publicEqualityDutyReduceImpactReason;
 		Details.PublicEqualityDutySectionComplete = publicEqualityDutySectionComplete;
 	}
+	
+	public void SetSfsoCommissioning(string? sfsoCommissioningOverview, bool? sfsoCommissioningSectionComplete)
+	{
+		Details.SfsoCommissioningOverview = sfsoCommissioningOverview;
+		Details.SfsoCommissioningSectionComplete = sfsoCommissioningSectionComplete;
+		LastModifiedOn = DateTime.UtcNow;
+	}
 
 	public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
 	{
@@ -687,7 +699,14 @@ public class Project : Entity, IProject, IAggregateRoot
 		schoolImprovementPlan?.Update(arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
 	}
 
-	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete, List<ReasonChange>? reasonsChanged, string? changedBy = default)
+	public void SetProjectDates(
+		DateTime? advisoryBoardDate, 
+		DateTime? previousAdvisoryBoard, 
+		DateTime? proposedConversionDate, 
+		bool? projectDatesSectionComplete, 
+		List<ReasonChange>? reasonsChanged, 
+		DateTime? sfsoCommissioningRequestedDate, 
+		string? changedBy = default)
 	{
 		// Update the respective properties in the Details object
 		Details.HeadTeacherBoardDate = advisoryBoardDate;
@@ -704,7 +723,8 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
-
+		Details.SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate; // set or null-to-clear
+    	LastModifiedOn = DateTime.UtcNow;
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		LastModifiedOn = DateTime.UtcNow;
 	}

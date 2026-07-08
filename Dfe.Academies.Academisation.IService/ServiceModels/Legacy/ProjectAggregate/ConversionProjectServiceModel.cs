@@ -133,6 +133,10 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public bool IsReadOnly { get; set; }
 		
 		public DateTime? ProjectSentToCompleteDate { get; set; }
+
+		public DateTime? SfsoCommissioningRequestedDate { get; init; }
+		public string? SfsoCommissioningOverview { get; init; }
+		public bool? SfsoCommissioningSectionComplete { get; init; }
 		
 		
 

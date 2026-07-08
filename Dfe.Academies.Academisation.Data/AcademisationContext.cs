@@ -410,6 +410,11 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			pd.Property(d => d.PublicEqualityDutyReduceImpactReason).HasColumnName("PublicEqualityDutyReduceImpactReason");
 			pd.Property(d => d.PublicEqualityDutySectionComplete).HasColumnName("PublicEqualityDutySectionComplete");
 
+			// SFSO commissioning
+			pd.Property(d => d.SfsoCommissioningRequestedDate).HasColumnName("SfsoCommissioningRequestedDate");
+			pd.Property(d => d.SfsoCommissioningOverview).HasColumnName("SfsoCommissioningOverview").HasMaxLength(250);
+			pd.Property(d => d.SfsoCommissioningSectionComplete).HasColumnName("SfsoCommissioningSectionComplete");
+
 			pd.Property(d => d.MemberOfParliamentNameAndParty).HasColumnName("MemberOfParliamentNameAndParty");
 			pd.Property(d => d.DistanceFromSchoolToTrustHeadquartersAdditionalInformation).HasColumnName("DistanceFromSchoolToTrustHeadquartersAdditionalInformation");
 			pd.Property(d => d.DistanceFromSchoolToTrustHeadquarters).HasColumnName("DistanceFromSchoolToTrustHeadquarters");
