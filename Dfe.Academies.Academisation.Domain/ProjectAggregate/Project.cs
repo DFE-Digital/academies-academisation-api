@@ -724,7 +724,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 		Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
 		Details.SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate; // set or null-to-clear
-    	LastModifiedOn = DateTime.UtcNow;
+		
 		// Update the LastModifiedOn property to the current time to indicate the object has been modified
 		LastModifiedOn = DateTime.UtcNow;
 	}
