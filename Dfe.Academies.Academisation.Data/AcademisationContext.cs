@@ -13,6 +13,7 @@ using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
 using Dfe.Academies.Academisation.Domain.SeedWork;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -256,8 +257,11 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 				.IncrementsBy(1);
 		}
 
+		modelBuilder.Entity<SignificantChangeProject>(ConfigureSignificantChangeProject);
+
 		base.OnModelCreating(modelBuilder);
 	}
+
 
 	private static void ConfigureCompleteTransmissionLog(EntityTypeBuilder<CompleteTransmissionLog> completeTransmissionLogConfiguration)
 	{
@@ -936,6 +940,24 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		trustKeyPersonRoleConfiguration.ToTable("ApplicationFormTrustKeyPersonRole", DEFAULT_SCHEMA);
 		trustKeyPersonRoleConfiguration.HasKey(a => a.Id);
 		trustKeyPersonRoleConfiguration.Property<int?>("ApplicationFormTrustKeyPersonRoleId").IsRequired(false);
+	}
+
+	private void ConfigureSignificantChangeProject(
+		EntityTypeBuilder<SignificantChangeProject> significantChangeConfiguration)
+	{
+		significantChangeConfiguration.ToTable("SignificantChangeProject", DEFAULT_SCHEMA);
+		significantChangeConfiguration.HasKey(a => a.Id);
+
+		significantChangeConfiguration.Property(e => e.Status).HasConversion<string>().HasColumnName("Status").IsRequired();
+		significantChangeConfiguration.Property(e => e.Urn).HasColumnName("Urn").IsRequired();
+		significantChangeConfiguration.Property(p => p.AssignedUserId).HasColumnName("AssignedUserId");
+		significantChangeConfiguration.Property(p => p.AssignedUserEmailAddress).HasColumnName("AssignedUserEmailAddress");
+		significantChangeConfiguration.Property(p => p.AssignedUserFullName).HasColumnName("AssignedUserFullName");
+		significantChangeConfiguration.Property(p => p.Tier).HasColumnName("Tier").IsRequired();
+		significantChangeConfiguration.Property(p => p.TypeOfSignificantChange).HasColumnName("TypeOfSignificantChange").IsRequired();
+		significantChangeConfiguration.Property(p => p.TrustUkprn).HasColumnName("TrustUkprn").IsRequired();
+		significantChangeConfiguration.Property(p => p.TrustName).HasColumnName("TrustName").IsRequired();
+
 	}
 }
 
