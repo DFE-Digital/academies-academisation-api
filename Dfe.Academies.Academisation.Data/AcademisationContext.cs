@@ -942,7 +942,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		trustKeyPersonRoleConfiguration.Property<int?>("ApplicationFormTrustKeyPersonRoleId").IsRequired(false);
 	}
 
-	private void ConfigureSignificantChangeProject(
+	private static void ConfigureSignificantChangeProject(
 		EntityTypeBuilder<SignificantChangeProject> significantChangeConfiguration)
 	{
 		significantChangeConfiguration.ToTable("SignificantChangeProject", DEFAULT_SCHEMA);
