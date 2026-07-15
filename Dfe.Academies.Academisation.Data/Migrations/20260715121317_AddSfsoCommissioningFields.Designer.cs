@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20260707104406_AddSfsoCommissioningFields")]
+    [Migration("20260715121317_AddSfsoCommissioningFields")]
     partial class AddSfsoCommissioningFields
     {
         /// <inheritdoc />
@@ -2195,10 +2195,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<DateTime?>("SfsoCommissioningRequestedDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("SfsoCommissioningRequestedDate");
-
-                            b1.Property<bool?>("SfsoCommissioningSectionComplete")
-                                .HasColumnType("bit")
-                                .HasColumnName("SfsoCommissioningSectionComplete");
 
                             b1.Property<string>("SponsorName")
                                 .HasColumnType("nvarchar(max)")

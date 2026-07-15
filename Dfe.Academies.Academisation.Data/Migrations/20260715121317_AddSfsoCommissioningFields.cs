@@ -25,13 +25,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 table: "Project",
                 type: "datetime2",
                 nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "SfsoCommissioningSectionComplete",
-                schema: "academisation",
-                table: "Project",
-                type: "bit",
-                nullable: true);
         }
 
         /// <inheritdoc />
@@ -44,11 +37,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "SfsoCommissioningRequestedDate",
-                schema: "academisation",
-                table: "Project");
-
-            migrationBuilder.DropColumn(
-                name: "SfsoCommissioningSectionComplete",
                 schema: "academisation",
                 table: "Project");
         }

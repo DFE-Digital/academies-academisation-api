@@ -2193,10 +2193,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("datetime2")
                                 .HasColumnName("SfsoCommissioningRequestedDate");
 
-                            b1.Property<bool?>("SfsoCommissioningSectionComplete")
-                                .HasColumnType("bit")
-                                .HasColumnName("SfsoCommissioningSectionComplete");
-
                             b1.Property<string>("SponsorName")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("SponsorName");

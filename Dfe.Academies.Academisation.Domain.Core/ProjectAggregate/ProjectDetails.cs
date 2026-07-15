@@ -122,7 +122,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	// SFSO commissioning
 	public DateTime? SfsoCommissioningRequestedDate { get; set; }
 	public string? SfsoCommissioningOverview { get; set; }
-	// public bool? SfsoCommissioningSectionComplete { get; set; }
 
 	public User? AssignedUser { get; set; }
 
