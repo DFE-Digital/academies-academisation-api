@@ -117,10 +117,9 @@ internal static class LegacyProjectDetailsMapper
 			PublicEqualityDutyReduceImpactReason = existingProject.Details.PublicEqualityDutyReduceImpactReason,
 			PublicEqualityDutySectionComplete = existingProject.Details.PublicEqualityDutySectionComplete,
 
-			// SFSO commissioning (set via set-project-dates / dedicated endpoint — preserve existing)
+			// SFSO commissioning
 			SfsoCommissioningRequestedDate = existingProject.Details.SfsoCommissioningRequestedDate,
 			SfsoCommissioningOverview = existingProject.Details.SfsoCommissioningOverview,
-			SfsoCommissioningSectionComplete = existingProject.Details.SfsoCommissioningSectionComplete,
 
 			// legal requirements
 			Consultation = detailsToUpdate.Consultation ?? existingProject.Details.Consultation,

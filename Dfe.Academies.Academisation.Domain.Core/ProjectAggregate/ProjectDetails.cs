@@ -122,7 +122,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 	// SFSO commissioning
 	public DateTime? SfsoCommissioningRequestedDate { get; set; }
 	public string? SfsoCommissioningOverview { get; set; }
-	public bool? SfsoCommissioningSectionComplete { get; set; }
+	// public bool? SfsoCommissioningSectionComplete { get; set; }
 
 	public User? AssignedUser { get; set; }
 
@@ -258,8 +258,7 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 				   StringComparison.InvariantCultureIgnoreCase) &&
 				ExternalApplicationFormSaved == other.ExternalApplicationFormSaved && 
 				Nullable.Equals(SfsoCommissioningRequestedDate, other.SfsoCommissioningRequestedDate) && 
-				string.Equals(SfsoCommissioningOverview, other.SfsoCommissioningOverview, StringComparison.InvariantCultureIgnoreCase) && 
-				SfsoCommissioningSectionComplete == other.SfsoCommissioningSectionComplete;
+				string.Equals(SfsoCommissioningOverview, other.SfsoCommissioningOverview, StringComparison.InvariantCultureIgnoreCase);
 	}
 
 	public override bool Equals(object? obj)
@@ -376,7 +375,6 @@ public class ProjectDetails : IEquatable<ProjectDetails>
 		hashCode.Add(ExternalApplicationFormSaved);
 		hashCode.Add(SfsoCommissioningRequestedDate);
 		hashCode.Add(SfsoCommissioningOverview, StringComparer.InvariantCultureIgnoreCase);
-		hashCode.Add(SfsoCommissioningSectionComplete);
 
 		return hashCode.ToHashCode();
 	}

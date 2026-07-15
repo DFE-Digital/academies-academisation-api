@@ -151,7 +151,6 @@ internal static class LegacyProjectServiceModelMapper
 			// SFSO commissioning
 			SfsoCommissioningRequestedDate = project.Details.SfsoCommissioningRequestedDate,
 			SfsoCommissioningOverview = project.Details.SfsoCommissioningOverview,
-			SfsoCommissioningSectionComplete = project.Details.SfsoCommissioningSectionComplete,
 
 			AssignedUser = project.Details.AssignedUser?.Id == null
 				? null

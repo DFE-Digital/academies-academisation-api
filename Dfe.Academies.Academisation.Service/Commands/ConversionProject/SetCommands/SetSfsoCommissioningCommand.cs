@@ -5,15 +5,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 {
     public class SetSfsoCommissioningCommand : IRequest<CommandResult>
     {
-        public SetSfsoCommissioningCommand(int id, string? sfsoCommissioningOverview, bool? sfsoCommissioningSectionComplete)
+        public SetSfsoCommissioningCommand(int id, string? sfsoCommissioningOverview)
         {
             Id = id;
             SfsoCommissioningOverview = sfsoCommissioningOverview;
-            SfsoCommissioningSectionComplete = sfsoCommissioningSectionComplete;
         }
 
         public int Id { get; set; }
         public string? SfsoCommissioningOverview { get; set; }
-        public bool? SfsoCommissioningSectionComplete { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
             {
                 return new CommandValidationErrorResult(new List<ValidationError>
                 {
-                    new("SfsoCommissioningOverview", $"Overview must be {MaxOverviewLength} characters or less")
+                    new("SfsoCommissioningOverview", $"The overview must be {MaxOverviewLength} characters or less")
                 });
             }
 
@@ -35,7 +35,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
                 return new NotFoundCommandResult();
             }
 
-            existingProject.SetSfsoCommissioning(request.SfsoCommissioningOverview, request.SfsoCommissioningSectionComplete);
+            existingProject.SetSfsoCommissioning(request.SfsoCommissioningOverview);
             _conversionProjectRepository.Update((Project)existingProject);
             await _conversionProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 

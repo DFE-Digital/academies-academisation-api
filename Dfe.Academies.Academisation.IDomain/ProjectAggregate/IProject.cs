@@ -65,10 +65,9 @@ public interface IProject
 			SchoolImprovementPlanConfidenceLevel confidenceLevel,
 			string? planComments);
 	void UpdateSchoolImprovementPlan(int id, List<SchoolImprovementPlanArranger> arrangedBy, string? arrangedByOther, string providedBy, DateTime startDate, SchoolImprovementPlanExpectedEndDate expectedEndDate, DateTime? expectedEndDateOther, SchoolImprovementPlanConfidenceLevel confidenceLevel, string? planComments);
-
 	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete, List<ReasonChange>? reasonsChanged, DateTime? sfsoCommissioningRequestedDate, string? changedBy);
 	void SetProjectSentToComplete();
-	public void SetSfsoCommissioning(string? sfsoCommissioningOverview, bool? sfsoCommissioningSectionComplete);
+	public void SetSfsoCommissioning(string? sfsoCommissioningOverview);
 	
 	
 }

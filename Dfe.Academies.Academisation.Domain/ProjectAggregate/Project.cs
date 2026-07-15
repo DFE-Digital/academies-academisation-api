@@ -397,7 +397,6 @@ public class Project : Entity, IProject, IAggregateRoot
 			// SFSO commissioning
 			SfsoCommissioningRequestedDate = detailsToUpdate.SfsoCommissioningRequestedDate,
 			SfsoCommissioningOverview = detailsToUpdate.SfsoCommissioningOverview,
-			SfsoCommissioningSectionComplete = detailsToUpdate.SfsoCommissioningSectionComplete,
 
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
@@ -612,10 +611,9 @@ public class Project : Entity, IProject, IAggregateRoot
 		Details.PublicEqualityDutySectionComplete = publicEqualityDutySectionComplete;
 	}
 	
-	public void SetSfsoCommissioning(string? sfsoCommissioningOverview, bool? sfsoCommissioningSectionComplete)
+	public void SetSfsoCommissioning(string? sfsoCommissioningOverview)
 	{
 		Details.SfsoCommissioningOverview = sfsoCommissioningOverview;
-		Details.SfsoCommissioningSectionComplete = sfsoCommissioningSectionComplete;
 		LastModifiedOn = DateTime.UtcNow;
 	}
 
@@ -723,9 +721,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
-		Details.SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate; // set or null-to-clear
-    	LastModifiedOn = DateTime.UtcNow;
-		// Update the LastModifiedOn property to the current time to indicate the object has been modified
+		Details.SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate;
 		LastModifiedOn = DateTime.UtcNow;
 	}
 }
