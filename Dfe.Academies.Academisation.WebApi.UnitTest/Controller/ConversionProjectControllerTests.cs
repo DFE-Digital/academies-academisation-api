@@ -55,8 +55,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			);
 		}
 
-		private static SetSfsoCommissioningCommand CreateValidSetSfsoCommissioningCommand() =>
-    		new(id: 1, sfsoCommissioningOverview: "Commissioning overview text", sfsoCommissioningSectionComplete: true);
+		private static SetSfsoCommissioningCommand CreateValidSetSfsoCommissioningCommand() => 
+			new(id: 1, sfsoCommissioningOverview: "Commissioning overview text");
 
 		[Fact]
 		public async Task SetSchoolOverview_ReturnsOk_WhenUpdateIsSuccessful()

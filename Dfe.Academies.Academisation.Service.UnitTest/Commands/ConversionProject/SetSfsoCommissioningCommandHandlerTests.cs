@@ -32,7 +32,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
         [Fact]
         public async Task Handle_ReturnsNotFound_WhenProjectDoesNotExist()
         {
-            var command = new SetSfsoCommissioningCommand(1, "overview", true);
+            var command = new SetSfsoCommissioningCommand(1, "overview");
             _mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, default))
                                             .ReturnsAsync(null as Project);
 
@@ -44,7 +44,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
         [Fact]
         public async Task Handle_ReturnsSuccessAndStores_WhenProjectExists()
         {
-            var command = new SetSfsoCommissioningCommand(1, "overview text", true);
+            var command = new SetSfsoCommissioningCommand(1, "overview text");
             var existingProject = CreateMockProject();
             _mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, default))
                                             .ReturnsAsync(existingProject);
@@ -54,13 +54,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
             Assert.IsType<CommandSuccessResult>(result);
             _mockConversionProjectRepository.Verify(repo => repo.Update(It.IsAny<Project>()), Times.Once);
             Assert.Equal("overview text", existingProject.Details.SfsoCommissioningOverview);
-            Assert.True(existingProject.Details.SfsoCommissioningSectionComplete);
         }
 
         [Fact]
         public async Task Handle_ReturnsValidationError_WhenOverviewExceeds250Characters()
         {
-            var command = new SetSfsoCommissioningCommand(1, new string('x', 251), false);
+            var command = new SetSfsoCommissioningCommand(1, new string('x', 251));
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -73,7 +72,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenOverviewIsExactly250Characters()
         {
-            var command = new SetSfsoCommissioningCommand(1, new string('x', 250), true);
+            var command = new SetSfsoCommissioningCommand(1, new string('x', 250));
             var existingProject = CreateMockProject();
             _mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, default))
                                             .ReturnsAsync(existingProject);
