@@ -105,7 +105,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 		public async Task Handle_TrustNotFound_LogsWarning()
 		{
 			_mockAcademiesQueryService.Setup(x => x.GetTrust(trustUkprn))
-				.ReturnsAsync((TrustDto)null);
+				.ReturnsAsync((TrustDto?)null);
 
 			var handler = CreateHandler();
 			var request = CreateValidCommand();
