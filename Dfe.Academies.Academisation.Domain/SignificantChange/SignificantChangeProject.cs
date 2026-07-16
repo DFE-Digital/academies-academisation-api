@@ -32,5 +32,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserEmailAddress = userEmail;
 			AssignedUserFullName = userFullName;
 		}
+
+		public static SignificantChangeProject Create(int urn, byte tier, string trustName, string trustUkprn,
+			string route, DateTime createdOn)
+		{
+			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn,
+				route) { CreatedOn = createdOn };
+		}
 	}
 }
