@@ -12,9 +12,10 @@ namespace Dfe.Academies.Academisation.Service.CommandValidations
 				.NotEmpty()
 				.WithMessage("Route must not be empty");
 
-			RuleFor(x => x.TrustUkprn)
-				.NotNull().WithMessage("TrustUkprn must not be null")
-				.Length(8).WithMessage("TrustUkprn must be length 8");
+				RuleFor(x => x.TrustUkprn)
+					.NotNull().WithMessage("TrustUkprn must not be null")
+					.Length(8).WithMessage("TrustUkprn must be length 8")
+					.Must(m => m != null && m.StartsWith("1")).WithMessage("TrustUkprn must start with a 1");
 		}
 	}
 }
