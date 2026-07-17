@@ -15,7 +15,7 @@ namespace Dfe.Academies.Academisation.Service.CommandValidations
 				RuleFor(x => x.TrustUkprn)
 					.NotNull().WithMessage("TrustUkprn must not be null")
 					.Length(8).WithMessage("TrustUkprn must be length 8")
-					.Must(m => m != null && m.StartsWith("1")).WithMessage("TrustUkprn must start with a 1");
+					.Must(m => m != null && m.StartsWith('1')).WithMessage("TrustUkprn must start with a 1");
 		}
 	}
 }
