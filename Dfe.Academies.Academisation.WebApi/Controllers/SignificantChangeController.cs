@@ -51,8 +51,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result switch
 			{
-				PagedDataResponse<SignificantChangeProjectResponse> pagedResult => Ok(pagedResult),
-				null => BadRequest()
+				PagedDataResponse<SignificantChangeProjectResponse> pagedResult => Ok(pagedResult)
 			};
 		}
 	}

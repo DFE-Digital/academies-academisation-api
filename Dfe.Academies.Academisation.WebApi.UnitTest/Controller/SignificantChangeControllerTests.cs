@@ -1,8 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
+using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using Dfe.Academies.Academisation.WebApi.Controllers;
 using FluentAssertions;
 using MediatR;
@@ -64,6 +67,55 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             result.Result.Should().BeOfType<BadRequestResult>();
         }
 
+        [Fact]
+        public async Task GetSignificantProjects_ReturnsResults_WhenFound()
+        {
+            var query = CreateValidQuery();
+            var results = new List<SignificantChangeProjectResponse>
+            {
+                new SignificantChangeProjectResponse
+                {
+                    Urn = 123456,
+                    Tier = 2,
+                    TrustName = "Test Trust",
+                    TrustUkprn = "12345678",
+                    TypeOfSignificantChange = "Change of age range",
+                    Status = "InProgress"
+                }
+            };
+
+            var expectedResponse = new PagedDataResponse<SignificantChangeProjectResponse>(
+                results,
+                new PagingResponse { Page = query.Page, RecordCount = 1, NextPageUrl = null });
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<GetSignificantProjectsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            var result = await _controller.GetSignificantChangeProjects(query, CancellationToken.None);
+
+            result.Result.Should().BeOfType<OkObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
+        public async Task GetSignificantProjects_ReturnsEmptyArray_WhenNoResultsFound()
+        {
+            var query = CreateValidQuery();
+            var expectedResponse = new PagedDataResponse<SignificantChangeProjectResponse>(
+                [],
+                new PagingResponse { Page = query.Page, RecordCount = 0, NextPageUrl = null });
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<GetSignificantProjectsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            var result = await _controller.GetSignificantChangeProjects(query, CancellationToken.None);
+
+            result.Result.Should().BeOfType<OkObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(
@@ -71,6 +123,13 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 Tier: 2,
                 Route: "Change of age range",
                 TrustUkprn: "12345678");
+        }
+
+        private static GetSignificantProjectsQuery CreateValidQuery()
+        {
+            return new GetSignificantProjectsQuery(
+                Page: 1,
+                Count: 10);
         }
     }
 }

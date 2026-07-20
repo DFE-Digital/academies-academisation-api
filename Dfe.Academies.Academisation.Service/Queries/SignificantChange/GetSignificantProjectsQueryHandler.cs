@@ -1,14 +1,12 @@
-﻿using Dfe.Academies.Academisation.Core.Utils;
-using Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Factories;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 {
-	public class GetSignificantProjectsQueryHandler(ISignificantChangeProjectRepository significantChangeProjectRepository, IDateTimeProvider dateTimeProvider, ILogger<GetSignificantProjectsQueryHandler> logger) : IRequestHandler<GetSignificantProjectsQuery, PagedDataResponse<SignificantChangeProjectResponse>>
+	public class GetSignificantProjectsQueryHandler(ISignificantChangeProjectRepository significantChangeProjectRepository) : IRequestHandler<GetSignificantProjectsQuery, PagedDataResponse<SignificantChangeProjectResponse>>
 	{
 		private readonly ISignificantChangeProjectRepository _significantChangeProjectRepository = significantChangeProjectRepository;
 
