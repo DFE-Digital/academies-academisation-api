@@ -1,8 +1,10 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
+using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -35,6 +37,22 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				CreateSuccessResult<SignificantChangeProjectResponse> successResult => Created($"/significant-change/{successResult.Payload.Urn}", successResult.Payload),
 				null => BadRequest(),
 				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPost("search", Name = "GetSignificantChangeProjects")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<ActionResult<PagedDataResponse<SignificantChangeProjectResponse>>> GetSignificantChangeProjects(
+			[FromBody] GetSignificantProjectsQuery query,
+			CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Getting significant change projects");
+			var result = await _mediator.Send(query, cancellationToken);
+
+			return result switch
+			{
+				PagedDataResponse<SignificantChangeProjectResponse> pagedResult => Ok(pagedResult),
+				null => BadRequest()
 			};
 		}
 	}
