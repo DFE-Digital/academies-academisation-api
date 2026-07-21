@@ -347,6 +347,10 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		transferProject.Property(d => d.PublicEqualityDutyReduceImpactReason).HasColumnName("PublicEqualityDutyReduceImpactReason");
 		transferProject.Property(d => d.PublicEqualityDutySectionComplete).HasColumnName("PublicEqualityDutySectionComplete");
 
+		// SFSO commissioning
+		transferProject.Property(d => d.SfsoCommissioningRequestedDate).HasColumnName("SfsoCommissioningRequestedDate");
+		transferProject.Property(d => d.SfsoCommissioningOverview).HasColumnName("SfsoCommissioningOverview").HasMaxLength(250);
+		
 		transferProject.HasQueryFilter(d => !d.DeletedAt.HasValue);
 
 		transferProject

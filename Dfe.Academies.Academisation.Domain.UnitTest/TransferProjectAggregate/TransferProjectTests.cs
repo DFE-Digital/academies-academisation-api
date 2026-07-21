@@ -500,6 +500,27 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Act & Assert
 			Assert.Throws<InvalidOperationException>(() => transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details", "12", "Details", "20.5", "Distance details", "Yes", "10"));
 		}
+
+		[Fact]
+		public void SetSfsoCommissioning_StoresOverview()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+
+			transferProject.SetSfsoCommissioning("some overview");
+
+			transferProject.SfsoCommissioningOverview.Should().Be("some overview");
+		}
+
+		[Fact]
+		public void SetSfsoCommissioningRequestedDate_StoresDate()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+			var requested = new DateTime(2026, 07, 17, 0, 0, 0, DateTimeKind.Utc);
+
+			transferProject.SetSfsoCommissioningRequestedDate(requested);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(requested);
+		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
 			private List<TransferringAcademy> _transferringAcademies = new List<TransferringAcademy>() {
@@ -522,5 +543,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 		}
+		
 	}
 }

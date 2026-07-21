@@ -63,6 +63,10 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		public string? PublicEqualityDutyReduceImpactReason { get; }
 		public bool? PublicEqualityDutySectionComplete { get; }
 
+		// SFSO commissioning
+		public DateTime? SfsoCommissioningRequestedDate { get; }
+		public string? SfsoCommissioningOverview { get; }
+
 		void GenerateUrn(int? urnOverride = null);
 		void GenerateReference(string? reference = null);
 		void SetRationale(string projectRationale, string trustSponsorRationale, bool? isCompleted);
@@ -78,12 +82,12 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetAcademyIncomingTrust(int academyId, string incomingTrustName,string incomingTrustReferenceNumber, string? incomingTrustUKPRN);
 		void SetTransferringAcademyGeneralInformation(string transferringAcademyUkprn, string pfiScheme, string pfiSchemeDetails, string distanceFromAcademyToTrustHq, string distanceFromAcademyToTrustHqDetails, string viabilityIssues, string financialDeficit, string mpNameAndParty, string publishedAdmissionNumber);
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
-
 		void SetPublicEqualityDuty(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete);
+		void SetSfsoCommissioning(string? sfsoCommissioningOverview);
+		void SetSfsoCommissioningRequestedDate(DateTime? sfsoCommissioningRequestedDate);
 		void SetDeletedAt();
 		void SetProjectGroupId(int? projectGroupId);
 		void SetId(int id);
-		
 		void SetProjectSentToComplete(string transferingAcademyUkprn);
 		void SetIsReadOnly(DateTime date);
 	}

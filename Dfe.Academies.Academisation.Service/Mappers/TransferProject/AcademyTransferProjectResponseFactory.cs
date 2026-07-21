@@ -145,7 +145,9 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				IncomingTrustReferenceNumber = model.IncomingTrustReferenceNumber,
 				PublicEqualityDutyImpact = model.PublicEqualityDutyImpact,
 				PublicEqualityDutyReduceImpactReason = model.PublicEqualityDutyReduceImpactReason,
-				PublicEqualityDutySectionComplete = model.PublicEqualityDutySectionComplete
+				PublicEqualityDutySectionComplete = model.PublicEqualityDutySectionComplete,
+				SfsoCommissioningRequestedDate = model.SfsoCommissioningRequestedDate,
+				SfsoCommissioningOverview = model.SfsoCommissioningOverview
 			};
 		}
 	}

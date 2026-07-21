@@ -90,6 +90,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? PublicEqualityDutyReduceImpactReason { get; set; }
 		public bool? PublicEqualityDutySectionComplete { get; set; }
 
+		// SFSO commissioning
+		public DateTime? SfsoCommissioningRequestedDate { get; set; }
+		public string? SfsoCommissioningOverview { get; set; }
+		
 		public DateTime? DeletedAt { get; set; }
 
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
@@ -292,6 +296,16 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			PublicEqualityDutyImpact = publicEqualityDutyImpact;
 			PublicEqualityDutyReduceImpactReason = publicEqualityDutyReduceImpactReason;
 			PublicEqualityDutySectionComplete = publicEqualityDutySectionComplete;
+		}
+
+		public void SetSfsoCommissioning(string? sfsoCommissioningOverview)
+		{
+			SfsoCommissioningOverview = sfsoCommissioningOverview;
+		}
+
+		public void SetSfsoCommissioningRequestedDate(DateTime? sfsoCommissioningRequestedDate)
+		{
+			SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate;
 		}
 
 		public void SetDeletedAt()

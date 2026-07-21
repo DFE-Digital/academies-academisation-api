@@ -10,5 +10,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 		public bool? IsCompleted { get; set; }
 		public string? ChangedBy { get; set; }
 		public List<ReasonChange>? ReasonsChanged { get; set; }
+		public DateTime? SfsoCommissioningRequestedDate { get; set; }
 	}
 }

@@ -27,6 +27,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.TransferProject
 			}
 
 			transferProject.SetTransferDates(request.HtbDate, request.PreviousAdvisoryBoardDate, request.TargetDateForTransfer, request.IsCompleted, request.ChangedBy, request.ReasonsChanged);
+			transferProject.SetSfsoCommissioningRequestedDate(request.SfsoCommissioningRequestedDate);
 
 			_transferProjectRepository.Update(transferProject as Domain.TransferProjectAggregate.TransferProject);
 			await _transferProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
