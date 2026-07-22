@@ -30,7 +30,6 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 		public bool? PublicEqualityDutySectionComplete { get; set; }
 
         // SFSO commissioning
-		public DateTime? SfsoCommissioningRequestedDate { get; set; }
 		public string? SfsoCommissioningOverview { get; set; }
 	}
 }

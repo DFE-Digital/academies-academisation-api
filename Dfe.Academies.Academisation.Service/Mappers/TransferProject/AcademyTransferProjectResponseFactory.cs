@@ -59,7 +59,8 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				HasHtbDate = model.HasHtbDate,
 				IsCompleted = model.TransferDatesSectionIsCompleted,
 				HasTargetDateForTransfer = model.HasTargetDateForTransfer,
-				HasTransferFirstDiscussedDate = model.HasTransferFirstDiscussedDate
+				HasTransferFirstDiscussedDate = model.HasTransferFirstDiscussedDate,
+				SfsoCommissioningRequestedDate = model.SfsoCommissioningRequestedDate
 			};
 
 			var intendedTransferBenefits = new IntendedTransferBenefitResponse
@@ -146,7 +147,6 @@ namespace Dfe.Academies.Academisation.Service.Mappers.TransferProject
 				PublicEqualityDutyImpact = model.PublicEqualityDutyImpact,
 				PublicEqualityDutyReduceImpactReason = model.PublicEqualityDutyReduceImpactReason,
 				PublicEqualityDutySectionComplete = model.PublicEqualityDutySectionComplete,
-				SfsoCommissioningRequestedDate = model.SfsoCommissioningRequestedDate,
 				SfsoCommissioningOverview = model.SfsoCommissioningOverview
 			};
 		}
