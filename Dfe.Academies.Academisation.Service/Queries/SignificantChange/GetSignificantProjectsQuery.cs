@@ -7,5 +7,5 @@ namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 	public record GetSignificantProjectsQuery(
 		int Page,
 		int Count)
-		: IRequest<PagedDataResponse<SignificantChangeProjectResponse>>;
+		: IRequest<PagedDataResponse<SignificantChangeProjectSearchResponse>>;
 }

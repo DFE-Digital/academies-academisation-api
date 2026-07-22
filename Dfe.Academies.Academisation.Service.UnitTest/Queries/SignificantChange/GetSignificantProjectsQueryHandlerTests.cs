@@ -1,5 +1,6 @@
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
+using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using FluentAssertions;
@@ -30,11 +31,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			// Arrange
 			var query = new GetSignificantProjectsQuery(Page: 1, Count: 2);
 			var cancellationToken = CancellationToken.None;
+			var assignedUserId = Guid.NewGuid();
 			var projects = new List<SignificantChangeProject>
 			{
 				CreateProject(id: 10, urn: 123456, tier: 2, trustName: "Trust A", trustUkprn: "10000001", route: "Change of age range"),
 				CreateProject(id: 11, urn: 654321, tier: 3, trustName: "Trust B", trustUkprn: "10000002", route: "Change of gender composition")
 			};
+
+			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 
 			_repositoryMock
 				.Setup(x => x.SearchSignificantProjects(query.Page, query.Count, cancellationToken))
@@ -50,23 +54,29 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.Paging.NextPageUrl.Should().Be("significant-change/significant-change-projects?page=2&count=2");
 
 			data.Should().HaveCount(2);
-			data[0].Should().BeEquivalentTo(new SignificantChangeProjectResponse
+			data[0].Should().BeEquivalentTo(new SignificantChangeProjectSearchResponse
 			{
 				Id = 10,
 				Urn = 123456,
+				ProjectReference = string.Empty,
+				SchoolName = string.Empty,
 				Tier = 2,
 				TrustName = "Trust A",
 				TrustUkprn = "10000001",
+				AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
 				TypeOfSignificantChange = "Change of age range",
 				Status = nameof(SignificantChangeStatus.InProgress)
 			});
-			data[1].Should().BeEquivalentTo(new SignificantChangeProjectResponse
+			data[1].Should().BeEquivalentTo(new SignificantChangeProjectSearchResponse
 			{
 				Id = 11,
 				Urn = 654321,
+				ProjectReference = string.Empty,
+				SchoolName = string.Empty,
 				Tier = 3,
 				TrustName = "Trust B",
 				TrustUkprn = "10000002",
+				AssignedUser = null,
 				TypeOfSignificantChange = "Change of gender composition",
 				Status = nameof(SignificantChangeStatus.InProgress)
 			});

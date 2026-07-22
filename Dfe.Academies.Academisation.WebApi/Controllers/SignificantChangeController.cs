@@ -42,7 +42,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 		[HttpPost("search", Name = "GetSignificantChangeProjects")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public async Task<ActionResult<PagedDataResponse<SignificantChangeProjectResponse>>> GetSignificantChangeProjects(
+		public async Task<ActionResult<PagedDataResponse<SignificantChangeProjectSearchResponse>>> GetSignificantChangeProjects(
 			[FromBody] GetSignificantProjectsQuery query,
 			CancellationToken cancellationToken)
 		{
@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 
 			return result switch
 			{
-				PagedDataResponse<SignificantChangeProjectResponse> pagedResult => Ok(pagedResult)
+				PagedDataResponse<SignificantChangeProjectSearchResponse> pagedResult => Ok(pagedResult)
 			};
 		}
 	}

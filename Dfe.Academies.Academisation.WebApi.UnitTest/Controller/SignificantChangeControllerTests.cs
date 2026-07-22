@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using System;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -71,20 +72,24 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task GetSignificantProjects_ReturnsResults_WhenFound()
         {
             var query = CreateValidQuery();
-            var results = new List<SignificantChangeProjectResponse>
+            var assignedUserId = Guid.NewGuid();
+            var results = new List<SignificantChangeProjectSearchResponse>
             {
-                new SignificantChangeProjectResponse
+                new SignificantChangeProjectSearchResponse
                 {
                     Urn = 123456,
+                    ProjectReference = "SC0001",
+                    SchoolName = "Test School",
                     Tier = 2,
                     TrustName = "Test Trust",
                     TrustUkprn = "12345678",
+                    AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
                     TypeOfSignificantChange = "Change of age range",
                     Status = "InProgress"
                 }
             };
 
-            var expectedResponse = new PagedDataResponse<SignificantChangeProjectResponse>(
+            var expectedResponse = new PagedDataResponse<SignificantChangeProjectSearchResponse>(
                 results,
                 new PagingResponse { Page = query.Page, RecordCount = 1, NextPageUrl = null });
 
@@ -102,7 +107,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task GetSignificantProjects_ReturnsEmptyArray_WhenNoResultsFound()
         {
             var query = CreateValidQuery();
-            var expectedResponse = new PagedDataResponse<SignificantChangeProjectResponse>(
+            var expectedResponse = new PagedDataResponse<SignificantChangeProjectSearchResponse>(
                 [],
                 new PagingResponse { Page = query.Page, RecordCount = 0, NextPageUrl = null });
 
