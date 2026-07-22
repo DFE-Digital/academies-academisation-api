@@ -21,8 +21,7 @@ namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 		{
 			Id = p.Id,
 			Urn = p.Urn,
-			ProjectReference = "",
-			SchoolName = "",
+			SchoolName = p.SchoolName,
 			Tier = p.Tier,
 			TrustName = p.TrustName,
 			TrustUkprn = p.TrustUkprn,

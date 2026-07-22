@@ -29,6 +29,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				trustName,
 				command.TrustUkprn,
 				command.Route,
+				string.Empty,
 				dateTimeProvider.Now);
 
 			significantChangeProjectRepository.Insert(significantChangeProject);

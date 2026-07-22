@@ -34,8 +34,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var assignedUserId = Guid.NewGuid();
 			var projects = new List<SignificantChangeProject>
 			{
-				CreateProject(id: 10, urn: 123456, tier: 2, trustName: "Trust A", trustUkprn: "10000001", route: "Change of age range"),
-				CreateProject(id: 11, urn: 654321, tier: 3, trustName: "Trust B", trustUkprn: "10000002", route: "Change of gender composition")
+				CreateProject(id: 10, urn: 123456, tier: 2, trustName: "Trust A", trustUkprn: "10000001", route: "Change of age range", schoolName: "School A"),
+				CreateProject(id: 11, urn: 654321, tier: 3, trustName: "Trust B", trustUkprn: "10000002", route: "Change of gender composition", schoolName: "School B")
 			};
 
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
@@ -56,7 +56,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data.Should().HaveCount(2);
 			data[0].Id.Should().Be(10);
 			data[0].Urn.Should().Be(123456);
-			data[0].SchoolName.Should().BeEmpty();
+			data[0].SchoolName.Should().Be("School A");
 			data[0].Tier.Should().Be(2);
 			data[0].TrustName.Should().Be("Trust A");
 			data[0].TrustUkprn.Should().Be("10000001");
@@ -66,7 +66,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			data[1].Id.Should().Be(11);
 			data[1].Urn.Should().Be(654321);
-			data[1].SchoolName.Should().BeEmpty();
+			data[1].SchoolName.Should().Be("School B");
 			data[1].Tier.Should().Be(3);
 			data[1].TrustName.Should().Be("Trust B");
 			data[1].TrustUkprn.Should().Be("10000002");
@@ -83,7 +83,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var cancellationToken = CancellationToken.None;
 			var projects = new List<SignificantChangeProject>
 			{
-				CreateProject(id: 22, urn: 222222, tier: 2, trustName: "Trust C", trustUkprn: "10000003", route: "Other")
+				CreateProject(id: 22, urn: 222222, tier: 2, trustName: "Trust C", trustUkprn: "10000003", route: "Other", schoolName: "School C")
 			};
 
 			_repositoryMock
@@ -123,9 +123,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 				Times.Once);
 		}
 
-		private static SignificantChangeProject CreateProject(int id, int urn, byte tier, string trustName, string trustUkprn, string route)
+		private static SignificantChangeProject CreateProject(int id, int urn, byte tier, string trustName, string trustUkprn, string route, string schoolName)
 		{
-			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn, route)
+			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn, route, schoolName)
 			{
 				Id = id,
 				CreatedOn = DateTime.UtcNow
