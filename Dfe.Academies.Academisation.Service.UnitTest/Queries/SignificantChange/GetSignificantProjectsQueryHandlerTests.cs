@@ -54,32 +54,25 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.Paging.NextPageUrl.Should().Be("significant-change/significant-change-projects?page=2&count=2");
 
 			data.Should().HaveCount(2);
-			data[0].Should().BeEquivalentTo(new SignificantChangeProjectSearchResponse
-			{
-				Id = 10,
-				Urn = 123456,
-				ProjectReference = string.Empty,
-				SchoolName = string.Empty,
-				Tier = 2,
-				TrustName = "Trust A",
-				TrustUkprn = "10000001",
-				AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
-				TypeOfSignificantChange = "Change of age range",
-				Status = nameof(SignificantChangeStatus.InProgress)
-			});
-			data[1].Should().BeEquivalentTo(new SignificantChangeProjectSearchResponse
-			{
-				Id = 11,
-				Urn = 654321,
-				ProjectReference = string.Empty,
-				SchoolName = string.Empty,
-				Tier = 3,
-				TrustName = "Trust B",
-				TrustUkprn = "10000002",
-				AssignedUser = null,
-				TypeOfSignificantChange = "Change of gender composition",
-				Status = nameof(SignificantChangeStatus.InProgress)
-			});
+			data[0].Id.Should().Be(10);
+			data[0].Urn.Should().Be(123456);
+			data[0].SchoolName.Should().BeEmpty();
+			data[0].Tier.Should().Be(2);
+			data[0].TrustName.Should().Be("Trust A");
+			data[0].TrustUkprn.Should().Be("10000001");
+			data[0].AssignedUser.Should().BeEquivalentTo(new User(assignedUserId, "Assigned User", "assigned.user@test.local"));
+			data[0].TypeOfSignificantChange.Should().Be("Change of age range");
+			data[0].Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
+
+			data[1].Id.Should().Be(11);
+			data[1].Urn.Should().Be(654321);
+			data[1].SchoolName.Should().BeEmpty();
+			data[1].Tier.Should().Be(3);
+			data[1].TrustName.Should().Be("Trust B");
+			data[1].TrustUkprn.Should().Be("10000002");
+			data[1].AssignedUser.Should().BeNull();
+			data[1].TypeOfSignificantChange.Should().Be("Change of gender composition");
+			data[1].Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
 		}
 
 		[Fact]

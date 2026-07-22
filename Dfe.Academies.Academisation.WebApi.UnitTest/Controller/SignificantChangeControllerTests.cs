@@ -78,7 +78,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 new SignificantChangeProjectSearchResponse
                 {
                     Urn = 123456,
-                    ProjectReference = "SC0001",
                     SchoolName = "Test School",
                     Tier = 2,
                     TrustName = "Test Trust",
