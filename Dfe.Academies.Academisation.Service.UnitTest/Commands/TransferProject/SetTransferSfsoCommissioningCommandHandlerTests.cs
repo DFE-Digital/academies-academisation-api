@@ -38,9 +38,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 		[Fact]
 		public async Task Handle_ReturnsNotFound_WhenProjectDoesNotExist()
 		{
-			var command = new SetTransferSfsoCommissioningCommand(1, "overview");
+			var command = new SetTransferSfsoCommissioningCommand(1, "overview");			
 			_transferProjectRepositoryMock.Setup(r => r.GetByUrn(It.IsAny<int>()))
-				.ReturnsAsync((Domain.TransferProjectAggregate.TransferProject)null);
+				.ReturnsAsync((Domain.TransferProjectAggregate.TransferProject?)null);
 
 			var result = await _handler.Handle(command, default);
 
