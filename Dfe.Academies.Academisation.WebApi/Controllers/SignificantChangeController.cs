@@ -55,7 +55,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpGet("project/{id:int}", Name = "GetSignificantChangeProjectById")]
+		[HttpGet("{id:int}", Name = "GetSignificantChangeProjectById")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<SignificantChangeProjectSearchResponse>> GetSignificantChangeProject(int id,
