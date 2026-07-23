@@ -84,7 +84,6 @@ namespace Dfe.Academies.Academisation.IDomain.TransferProjectAggregate
 		void SetAcademyReferenceData(string outgoingAcademyUkprn, string name, string localAuthorityName);
 		void SetPublicEqualityDuty(string publicEqualityDutyImpact, string publicEqualityDutyReduceImpactReason, bool publicEqualityDutySectionComplete);
 		void SetSfsoCommissioning(string? sfsoCommissioningOverview);
-		void SetSfsoCommissioningRequestedDate(DateTime? sfsoCommissioningRequestedDate);
 		void SetDeletedAt();
 		void SetProjectGroupId(int? projectGroupId);
 		void SetId(int id);

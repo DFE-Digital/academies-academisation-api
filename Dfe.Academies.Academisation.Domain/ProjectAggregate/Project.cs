@@ -263,6 +263,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(detailsToUpdate.AcademyTypeAndRoute, detailsToUpdate.ApplicationReceivedDate);
 		decimal? defaultSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase);
+		bool headTeacherBoardDateChanged = Details.HeadTeacherBoardDate != detailsToUpdate.HeadTeacherBoardDate;
 
 		Details = new ProjectDetails
 		{
@@ -395,7 +396,9 @@ public class Project : Entity, IProject, IAggregateRoot
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
 
 			// SFSO commissioning
-			SfsoCommissioningRequestedDate = detailsToUpdate.SfsoCommissioningRequestedDate,
+			SfsoCommissioningRequestedDate = headTeacherBoardDateChanged
+				? SfsoCommissioningCalculator.CalculateRequestedDate(detailsToUpdate.HeadTeacherBoardDate)
+				: detailsToUpdate.SfsoCommissioningRequestedDate,
 			SfsoCommissioningOverview = detailsToUpdate.SfsoCommissioningOverview,
 
 			// assigned users
@@ -703,7 +706,6 @@ public class Project : Entity, IProject, IAggregateRoot
 		DateTime? proposedConversionDate, 
 		bool? projectDatesSectionComplete, 
 		List<ReasonChange>? reasonsChanged, 
-		DateTime? sfsoCommissioningRequestedDate, 
 		string? changedBy)
 	{
 		// Update the respective properties in the Details object
@@ -721,9 +723,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
-		Details.SfsoCommissioningRequestedDate = sfsoCommissioningRequestedDate; // set or null-to-clear
-		
-		// Update the LastModifiedOn property to the current time to indicate the object has been modified
+		Details.SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(advisoryBoardDate);
 		LastModifiedOn = DateTime.UtcNow;
 	}
 }

@@ -200,8 +200,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			Assert.Null(project.DomainEvents);
 		}
 
-				[Fact]
-		public async Task Handle_StoresSfsoCommissioningRequestedDate()
+		[Fact]
+		public async Task Handle_DerivesSfsoCommissioningRequestedDate_FromHtbDate()
 		{
 			// Arrange
 			var transferringAcademies = new List<TransferringAcademy>
@@ -215,13 +215,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			_transferProjectRepositoryMock.Setup(repo => repo.UnitOfWork).Returns(unitOfWorkMock.Object);
 			_transferProjectRepositoryMock.Setup(r => r.GetByUrn(It.IsAny<int>())).ReturnsAsync(project);
 
-			var requested = DateTime.Parse("2026-07-17");
+			var htbDate = DateTime.Today.AddDays(40);
 			var command = new SetTransferProjectTransferDatesCommand
 			{
 				Urn = 1,
-				HtbDate = requested,
-				IsCompleted = true,
-				SfsoCommissioningRequestedDate = requested
+				HtbDate = htbDate,
+				IsCompleted = true
 			};
 
 			// Act
@@ -229,7 +228,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 
 			// Assert
 			result.Should().BeOfType<CommandSuccessResult>();
-			project.SfsoCommissioningRequestedDate.Should().Be(requested);
-		}
+			project.SfsoCommissioningRequestedDate.Should().Be(htbDate.AddDays(-15));
+		}	
 	}
 }

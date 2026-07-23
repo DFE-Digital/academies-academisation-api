@@ -29,7 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			_handler = new SetProjectDatesCommandHandler(_mockConversionProjectRepository.Object, _mockLogger.Object);
 		}
 
-		private SetProjectDatesCommand CreateValidSetProjectDatesCommand(DateTime? sfsoOverride = null)
+		private SetProjectDatesCommand CreateValidSetProjectDatesCommand()
 		{
 			DateTime? date = DateTime.Now;
 			return new SetProjectDatesCommand(
@@ -40,10 +40,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 				null,
 				null,
 				true
-			)
-			{
-				SfsoCommissioningRequestedDate = sfsoOverride
-			};
+			);
 		}
 
 		private Project CreateMockProject()
@@ -79,25 +76,38 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		}
 
 		[Fact]
-		public async Task Handle_StoresSfsoCommissioningRequestedDate_WhenProvided()
+		public async Task Handle_DerivesSfsoCommissioningRequestedDate_FromAdvisoryBoardDate()
 		{
-			var overrideDate = DateTime.Today.AddDays(10);
-			var command = CreateValidSetProjectDatesCommand(overrideDate);
+			var htb = DateTime.Today.AddDays(40);
+			var command = new SetProjectDatesCommand(1, htb, null, null, null, null, true);
 			var existingProject = CreateMockProject();
 			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
 											.ReturnsAsync(existingProject);
 
 			await _handler.Handle(command, CancellationToken.None);
 
-			Assert.Equal(overrideDate, existingProject.Details.SfsoCommissioningRequestedDate);
+			Assert.Equal(htb.AddDays(-15), existingProject.Details.SfsoCommissioningRequestedDate);
 		}
 
 		[Fact]
-		public async Task Handle_ClearsSfsoCommissioningRequestedDate_WhenNull()
+		public async Task Handle_SetsToday_WhenAdvisoryBoardDateWithin15Days()
 		{
-			var command = CreateValidSetProjectDatesCommand(null);
-			var projectDetails = new ProjectDetails { SfsoCommissioningRequestedDate = DateTime.Today };
-			var existingProject = new Project(1, projectDetails);
+			var htb = DateTime.Today.AddDays(10);
+			var command = new SetProjectDatesCommand(1, htb, null, null, null, null, true);
+			var existingProject = CreateMockProject();
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Equal(DateTime.Today, existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_SetsNull_WhenNoAdvisoryBoardDate()
+		{
+			var command = new SetProjectDatesCommand(1, null, null, null, null, null, true);
+			var existingProject = new Project(1, new ProjectDetails { SfsoCommissioningRequestedDate = DateTime.Today });
 			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
 											.ReturnsAsync(existingProject);
 

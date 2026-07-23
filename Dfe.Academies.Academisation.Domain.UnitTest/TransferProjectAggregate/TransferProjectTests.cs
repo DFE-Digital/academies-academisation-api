@@ -512,14 +512,24 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		}
 
 		[Fact]
-		public void SetSfsoCommissioningRequestedDate_StoresDate()
+		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenMoreThan15DaysAway()
 		{
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
-			var requested = new DateTime(2026, 07, 17, 0, 0, 0, DateTimeKind.Utc);
+			var proposed = DateTime.Today.AddDays(40);
 
-			transferProject.SetSfsoCommissioningRequestedDate(requested);
+			transferProject.SetTransferDates(proposed, null, null, true);
 
-			transferProject.SfsoCommissioningRequestedDate.Should().Be(requested);
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(proposed.AddDays(-15));
+		}
+
+		[Fact]
+		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenWithin15Days()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+
+			transferProject.SetTransferDates(DateTime.Today.AddDays(10), null, null, true);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(DateTime.Today);
 		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
