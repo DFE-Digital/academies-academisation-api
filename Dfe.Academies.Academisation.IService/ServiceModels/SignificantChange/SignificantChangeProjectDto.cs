@@ -1,4 +1,4 @@
-namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange;
+namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
 public class SignificantChangeProjectDto
 {
