@@ -61,7 +61,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult<SignificantChangeProjectSearchResponse>> GetSignificantChangeProject(int id,
 			CancellationToken cancellationToken)
 		{
-			_logger.LogInformation("Getting significant change project with id {id}", id);
+			_logger.LogInformation("Getting significant change project with id {Id}", id);
 			var result = await _mediator.Send(new GetSignificantChangeProjectByIdQuery(id), cancellationToken);
 
 			return result is null ? NotFound() : Ok(result);
