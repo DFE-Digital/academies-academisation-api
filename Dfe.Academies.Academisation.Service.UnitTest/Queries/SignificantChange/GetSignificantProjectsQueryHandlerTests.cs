@@ -1,9 +1,9 @@
-using Dfe.Academies.Academisation.Core.Utils;
+using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -17,11 +17,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		public GetSignificantProjectsQueryHandlerTests()
 		{
 			_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-			var dateTimeProviderMock = new Mock<IDateTimeProvider>();
-			var loggerMock = new Mock<ILogger<GetSignificantProjectsQueryHandler>>();
+			var mapperConfiguration = new MapperConfiguration(configuration =>
+				configuration.AddProfile<SignificantChangeProjectMappingProfile>());
+			mapperConfiguration.AssertConfigurationIsValid();
+			var mapper = mapperConfiguration.CreateMapper();
 
 			_handler = new GetSignificantProjectsQueryHandler(
-				_repositoryMock.Object);
+				_repositoryMock.Object,
+				mapper);
 		}
 
 		[Fact]

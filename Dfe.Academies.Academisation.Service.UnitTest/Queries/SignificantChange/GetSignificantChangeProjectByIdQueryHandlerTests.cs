@@ -1,5 +1,7 @@
+using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using FluentAssertions;
 using Moq;
@@ -15,7 +17,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		public GetSignificantChangeProjectByIdQueryHandlerTests()
 		{
 			_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-			_handler = new GetSignificantChangeProjectByIdQueryHandler(_repositoryMock.Object);
+			var mapperConfiguration = new MapperConfiguration(configuration =>
+				configuration.AddProfile<SignificantChangeProjectMappingProfile>());
+			mapperConfiguration.AssertConfigurationIsValid();
+			var mapper = mapperConfiguration.CreateMapper();
+
+			_handler = new GetSignificantChangeProjectByIdQueryHandler(_repositoryMock.Object, mapper);
 		}
 
 		[Fact]
