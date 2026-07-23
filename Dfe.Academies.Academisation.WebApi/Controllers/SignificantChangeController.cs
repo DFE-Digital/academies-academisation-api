@@ -54,5 +54,17 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				PagedDataResponse<SignificantChangeProjectSearchResponse> pagedResult => Ok(pagedResult)
 			};
 		}
+
+		[HttpGet("project/{id:int}", Name = "GetSignificantProjectById")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<SignificantChangeProjectSearchResponse>> GetSignificantChangeProject(int id,
+			CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Getting significant change project with id {id}", id);
+			var result = await _mediator.Send(new GetSignificantProjectByIdQuery(id), cancellationToken);
+
+			return result is null ? NotFound() : Ok(result);
+		}
 	}
 }

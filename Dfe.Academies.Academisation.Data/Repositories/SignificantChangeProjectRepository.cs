@@ -23,5 +23,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return (projects, totalProjects);
 		}
+
+		public async Task<SignificantChangeProject?> GetSignificantProjectById(int id, CancellationToken cancellationToken)
+		{
+			return await dbSet.SingleOrDefaultAsync(project => project.Id == id, cancellationToken);
+		}
 	}
 }

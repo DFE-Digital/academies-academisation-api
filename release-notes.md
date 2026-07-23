@@ -11,6 +11,7 @@ Note: remember to update unrelease section when creating a new release.
 
 ### Added
 - [290392](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add paginated post request for significant change project
+- [290394](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add get by id request for significant change project
 
 ---
 
