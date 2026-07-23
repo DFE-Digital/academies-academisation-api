@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantProjects(query.Page, query.Count, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, cancellationToken))
 				.ReturnsAsync((projects, totalCount: 3));
 
 			// Act
@@ -86,7 +86,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			};
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantProjects(query.Page, query.Count, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, cancellationToken))
 				.ReturnsAsync((projects, totalCount: 4));
 
 			// Act
@@ -107,7 +107,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var cancellationToken = cts.Token;
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((Enumerable.Empty<SignificantChangeProject>(), 0));
 
 			// Act
@@ -115,7 +115,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			// Assert
 			_repositoryMock.Verify(
-				x => x.SearchSignificantProjects(
+				x => x.SearchSignificantChangeProjects(
 					It.Is<int>(page => page == 3),
 					It.Is<int>(count => count == 25),
 					It.Is<CancellationToken>(token => token == cancellationToken)),

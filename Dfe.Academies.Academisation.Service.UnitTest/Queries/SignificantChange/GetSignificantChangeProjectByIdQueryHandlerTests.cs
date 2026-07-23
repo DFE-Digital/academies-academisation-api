@@ -7,21 +7,21 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 {
-	public class GetSignificantProjectByIdQueryHandlerTests
+	public class GetSignificantChangeProjectByIdQueryHandlerTests
 	{
 		private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
-		private readonly GetSignificantProjectByIdQueryHandler _handler;
+		private readonly GetSignificantChangeProjectByIdQueryHandler _handler;
 
-		public GetSignificantProjectByIdQueryHandlerTests()
+		public GetSignificantChangeProjectByIdQueryHandlerTests()
 		{
 			_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-			_handler = new GetSignificantProjectByIdQueryHandler(_repositoryMock.Object);
+			_handler = new GetSignificantChangeProjectByIdQueryHandler(_repositoryMock.Object);
 		}
 
 		[Fact]
 		public async Task Handle_ProjectExists_ReturnsMappedResponse()
 		{
-			var query = new GetSignificantProjectByIdQuery(10);
+			var query = new GetSignificantChangeProjectByIdQuery(10);
 			var cancellationToken = CancellationToken.None;
 			var assignedUserId = Guid.NewGuid();
 
@@ -40,7 +40,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 
 			_repositoryMock
-				.Setup(x => x.GetSignificantProjectById(query.Id, cancellationToken))
+				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
 				.ReturnsAsync(project);
 
 			var result = await _handler.Handle(query, cancellationToken);
@@ -60,12 +60,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		[Fact]
 		public async Task Handle_ProjectDoesNotExist_ReturnsNull()
 		{
-			var query = new GetSignificantProjectByIdQuery(999);
+			var query = new GetSignificantChangeProjectByIdQuery(999);
 			using var cts = new CancellationTokenSource();
 			var cancellationToken = cts.Token;
 
 			_repositoryMock
-				.Setup(x => x.GetSignificantProjectById(query.Id, cancellationToken))
+				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
 				.ReturnsAsync((SignificantChangeProject?)null);
 
 			var result = await _handler.Handle(query, cancellationToken);

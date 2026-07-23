@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public IUnitOfWork UnitOfWork => _context;
 
-		public async Task<(IEnumerable<SignificantChangeProject> projects, int totalCount)> SearchSignificantProjects(int page, int count, CancellationToken cancellationToken)
+		public async Task<(IEnumerable<SignificantChangeProject> projects, int totalCount)> SearchSignificantChangeProjects(int page, int count, CancellationToken cancellationToken)
 		{
 			IQueryable<SignificantChangeProject> queryable = dbSet;
 
@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return (projects, totalProjects);
 		}
 
-		public async Task<SignificantChangeProject?> GetSignificantProjectById(int id, CancellationToken cancellationToken)
+		public async Task<SignificantChangeProject?> GetSignificantChangeProjectById(int id, CancellationToken cancellationToken)
 		{
 			return await dbSet.SingleOrDefaultAsync(project => project.Id == id, cancellationToken);
 		}

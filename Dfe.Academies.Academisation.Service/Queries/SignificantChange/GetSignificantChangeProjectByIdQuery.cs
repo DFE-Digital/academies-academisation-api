@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 
-public record GetSignificantProjectByIdQuery(int Id) : IRequest<SignificantChangeProjectSearchResponse?>;
+public record GetSignificantChangeProjectByIdQuery(int Id) : IRequest<SignificantChangeProjectSearchResponse?>;

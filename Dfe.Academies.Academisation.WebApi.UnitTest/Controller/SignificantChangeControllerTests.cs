@@ -138,7 +138,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             };
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<GetSignificantProjectByIdQuery>(), It.IsAny<CancellationToken>()))
+				.Setup(m => m.Send(It.IsAny<GetSignificantChangeProjectByIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(expectedResponse);
 
             var result = await _controller.GetSignificantChangeProject(100, CancellationToken.None);
@@ -151,7 +151,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task GetSignificantChangeProject_ReturnsNotFound_WhenProjectDoesNotExist()
         {
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<GetSignificantProjectByIdQuery>(), It.IsAny<CancellationToken>()))
+				.Setup(m => m.Send(It.IsAny<GetSignificantChangeProjectByIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((SignificantChangeProjectSearchResponse?)null);
 
             var result = await _controller.GetSignificantChangeProject(999, CancellationToken.None);
