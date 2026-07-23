@@ -14,6 +14,7 @@ using Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate;
 using Dfe.Academies.Academisation.Domain.OpeningDateHistoryAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ApplicationAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
@@ -27,6 +28,7 @@ using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService;
+using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
@@ -54,6 +56,7 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using CreateTransferProjectCommand = Dfe.Academies.Academisation.Service.Commands.TransferProject.CreateTransferProjectCommand;
+using CreateSignificantProjectCommand = Dfe.Academies.Academisation.Service.Commands.SignificantChange.CreateSignificantProjectCommand;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +108,7 @@ builder.Services.AddScoped<IProjectUpdateDataCommand, ProjectUpdateDataCommand>(
 // Repositories
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<ITransferProjectRepository, TransferProjectRepository>();
+builder.Services.AddScoped<ISignificantChangeProjectRepository, SignificantChangeProjectRepository>();
 builder.Services.AddScoped<IProjectGroupRepository, ProjectGroupRepository>();
 builder.Services.AddScoped<IConversionProjectRepository, ConversionProjectRepository>();
 builder.Services.AddScoped<IFormAMatProjectRepository, FormAMatProjectRepository>();
@@ -203,6 +207,7 @@ builder.Services.AddScoped(typeof(IValidator<CreateLoanCommand>), typeof(CreateL
 builder.Services.AddScoped(typeof(IValidator<UpdateLeaseCommand>), typeof(UpdateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateLeaseCommand>), typeof(CreateLeaseCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<CreateTransferProjectCommand>), typeof(CreateTransferProjectCommandValidator));
+builder.Services.AddScoped(typeof(IValidator<CreateSignificantProjectCommand>), typeof(CreateSignificantProjectCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<Dfe.Academies.Academisation.Service.Commands.ProjectGroup.CreateProjectGroupCommand>), typeof(CreateProjectGroupCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<SetProjectGroupCommand>), typeof(SetProjectGroupCommandValidator));
 builder.Services.AddScoped(typeof(IValidator<SetProjectGroupAssignUserCommand>), typeof(SetProjectGroupAssignUserCommandValidator));
