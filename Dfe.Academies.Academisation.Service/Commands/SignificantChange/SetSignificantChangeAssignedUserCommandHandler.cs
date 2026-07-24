@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.Domain.ProjectAggregate;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,7 @@ public class SetSignificantChangeAssignedUserCommandHandler(ISignificantChangePr
 
 		if (existingProject is null)
 		{
-			_logger.LogError($"Significant change project not found with id: {request.Id}");
+			_logger.LogError("Significant change project not found with id: {ProjectId}", request.Id);
 			return new NotFoundCommandResult();
 		}
 
