@@ -22,11 +22,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_logger = logger;
 		}
 
-		[HttpPut("{id:int}/SetAssignedUser", Name = "SetAssignedUser")]
+		[HttpPut("{id:int}/SetAssignedUser", Name = "SetSignificantChangeAssignedUser")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> SetAssignedUser(
+		public async Task<ActionResult> SetSignificantChangeAssignedUser(
 			int id,
 			[FromBody] SetAssignedUserCommand request)
 		{

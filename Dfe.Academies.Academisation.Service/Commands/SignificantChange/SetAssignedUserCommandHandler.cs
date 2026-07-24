@@ -13,7 +13,7 @@ public class SetAssignedUserCommandHandler(ISignificantChangeProjectRepository r
 
 	public async Task<CommandResult> Handle(SetAssignedUserCommand request, CancellationToken cancellationToken)
 	{
-		var existingProject = await _repository.GetSignificantChangeProject(request.Id, cancellationToken);
+		var existingProject = await _repository.GetSignificantChangeProjectById(request.Id, cancellationToken);
 
 		if (existingProject is null)
 		{
@@ -21,10 +21,9 @@ public class SetAssignedUserCommandHandler(ISignificantChangeProjectRepository r
 			return new NotFoundCommandResult();
 		}
 
-		// Update the school overview information in the existing project
-		existingProject.SetAssignedUser(request.UserId, request.FullName, request.EmailAddress);
+		existingProject.AssignUser(request.UserId, request.EmailAddress, request.FullName);
 
-		_repository.Update(existingProject as Project);
+		_repository.Update(existingProject);
 		await _repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
 		return new CommandSuccessResult();
