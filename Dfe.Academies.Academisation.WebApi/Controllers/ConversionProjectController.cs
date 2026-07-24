@@ -428,7 +428,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			SetDeletedAtCommand request = new SetDeletedAtCommand(id);
 
-			CommandResult result = await _mediator.Send(request);
+			CommandResult result = await _mediator.Send(request, cancellationToken);
 
 			return result switch
 			{

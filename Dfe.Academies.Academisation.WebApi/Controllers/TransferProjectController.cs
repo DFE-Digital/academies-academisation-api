@@ -374,7 +374,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			SetTransferProjectDeletedAtCommand request = new SetTransferProjectDeletedAtCommand(urn);
 
-			CommandResult result = await _mediator.Send(request);
+			CommandResult result = await _mediator.Send(request, cancellationToken);
 
 			return result switch
 			{
