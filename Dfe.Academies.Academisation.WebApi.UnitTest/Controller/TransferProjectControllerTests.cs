@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
+using System.Collections.Generic;
+using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -36,6 +38,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			);
 		}
 
+		private static SetTransferSfsoCommissioningCommand CreateValidSetTransferSfsoCommissioningCommand() =>
+			new(urn: 1001, sfsoCommissioningOverview: "Commissioning overview text");
+
 		[Fact]
 		public async Task SetPublicEqualityDuty_ReturnsOk_WhenUpdateIsSuccessful()
 		{
@@ -59,6 +64,43 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _controller.SetTransferPublicEqualityDuty(request.Urn, request);
 
 			Assert.IsType<NotFoundResult>(result);
+		}		
+
+		[Fact]
+		public async Task SetTransferSfsoCommissioning_ReturnsOk_WhenSuccessful()
+		{
+			var request = CreateValidSetTransferSfsoCommissioningCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetTransferSfsoCommissioningCommand>(), default))
+						 .ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetTransferSfsoCommissioning(request.Urn, request);
+
+			Assert.IsType<OkResult>(result);
+		}
+
+		[Fact]
+		public async Task SetTransferSfsoCommissioning_ReturnsNotFound_WhenProjectNotFound()
+		{
+			var request = CreateValidSetTransferSfsoCommissioningCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetTransferSfsoCommissioningCommand>(), default))
+						 .ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetTransferSfsoCommissioning(request.Urn, request);
+
+			Assert.IsType<NotFoundResult>(result);
+		}
+
+		[Fact]
+		public async Task SetTransferSfsoCommissioning_ReturnsBadRequest_WhenValidationFails()
+		{
+			var request = CreateValidSetTransferSfsoCommissioningCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetTransferSfsoCommissioningCommand>(), default))
+						 .ReturnsAsync(new CommandValidationErrorResult(
+							 new List<ValidationError> { new("SfsoCommissioningOverview", "Overview must be 250 characters or less") }));
+
+			var result = await _controller.SetTransferSfsoCommissioning(request.Urn, request);
+
+			Assert.IsType<BadRequestObjectResult>(result);
 		}
 	}
 }

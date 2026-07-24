@@ -25,7 +25,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 		public List<ReasonChange>? ReasonsChanged { get; set; }
 		public string? ChangedBy { get; set; }
 		public bool? ProjectDatesSectionComplete { get; set; }
-		public DateTime? SfsoCommissioningRequestedDate { get; set; }
 	}
 }
 

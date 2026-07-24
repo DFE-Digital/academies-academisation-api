@@ -500,6 +500,37 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			// Act & Assert
 			Assert.Throws<InvalidOperationException>(() => transferProject.SetTransferringAcademyGeneralInformation("12345678", "No", "Details", "12", "Details", "20.5", "Distance details", "Yes", "10"));
 		}
+
+		[Fact]
+		public void SetSfsoCommissioning_StoresOverview()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+
+			transferProject.SetSfsoCommissioning("some overview");
+
+			transferProject.SfsoCommissioningOverview.Should().Be("some overview");
+		}
+
+		[Fact]
+		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenMoreThan15DaysAway()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+			var proposed = DateTime.Today.AddDays(40);
+
+			transferProject.SetTransferDates(proposed, null, null, true);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(proposed.AddDays(-15));
+		}
+
+		[Fact]
+		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenWithin15Days()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+
+			transferProject.SetTransferDates(DateTime.Today.AddDays(10), null, null, true);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(DateTime.Today);
+		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
 			private List<TransferringAcademy> _transferringAcademies = new List<TransferringAcademy>() {
@@ -522,5 +553,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 		}
+		
 	}
 }

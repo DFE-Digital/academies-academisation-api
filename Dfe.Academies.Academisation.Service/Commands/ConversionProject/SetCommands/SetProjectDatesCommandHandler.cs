@@ -34,7 +34,6 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 				request.ProposedConversionDate,
 				request.ProjectDatesSectionComplete,
 				request.ReasonsChanged,
-				request.SfsoCommissioningRequestedDate,
 				request.ChangedBy);
 
 			_conversionProjectRepository.Update(existingProject as Project);
