@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using Microsoft.EntityFrameworkCore;
@@ -37,8 +38,7 @@ public class SetAssignedUserTests : IClassFixture<TestWebApplicationFactory>
 		var expectedUserId = Guid.NewGuid();
 		var expectedName = "Assigned User";
 		var expectedEmail = "assigned.user@test.local";
-		var request = new SetSignificantChangeAssignedUserCommand(
-			id: 999,
+		var request = new SetSignificantChangeAssignedUserPublicCommand(
 			userId: expectedUserId,
 			fullName: expectedName,
 			emailAddress: expectedEmail);
@@ -62,8 +62,7 @@ public class SetAssignedUserTests : IClassFixture<TestWebApplicationFactory>
 	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
 		var client = _factory.CreateClient();
-		var request = new SetSignificantChangeAssignedUserCommand(
-			id: 1,
+		var request = new SetSignificantChangeAssignedUserPublicCommand(
 			userId: Guid.NewGuid(),
 			fullName: "Assigned User",
 			emailAddress: "assigned.user@test.local");

@@ -28,12 +28,15 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> SetSignificantChangeAssignedUser(
 			int id,
-			[FromBody] SetSignificantChangeAssignedUserCommand request)
+			[FromBody] SetSignificantChangeAssignedUserPublicCommand request)
 		{
-			// Ensure the command's ID matches the route parameter
-			request.Id = id;
+			var command = new SetSignificantChangeAssignedUserCommand(
+				id: id,
+				userId: request.UserId,
+				fullName: request.FullName,
+				emailAddress: request.EmailAddress);
 
-			CommandResult result = await _mediator.Send(request);
+			CommandResult result = await _mediator.Send(command);
 
 			return result switch
 			{

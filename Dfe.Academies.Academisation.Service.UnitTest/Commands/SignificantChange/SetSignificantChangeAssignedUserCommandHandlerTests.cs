@@ -9,17 +9,17 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChange;
 
-public class SetAssignedUserCommandHandlerTests
+public class SetSignificantChangeAssignedUserCommandHandlerTests
 {
 	private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
-	private readonly Mock<ILogger<SetAssignedUserCommandHandler>> _loggerMock;
-	private readonly SetAssignedUserCommandHandler _handler;
+	private readonly Mock<ILogger<SetSignificantChangeAssignedUserCommandHandler>> _loggerMock;
+	private readonly SetSignificantChangeAssignedUserCommandHandler _handler;
 
-	public SetAssignedUserCommandHandlerTests()
+	public SetSignificantChangeAssignedUserCommandHandlerTests()
 	{
 		_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-		_loggerMock = new Mock<ILogger<SetAssignedUserCommandHandler>>();
-		_handler = new SetAssignedUserCommandHandler(_repositoryMock.Object, _loggerMock.Object);
+		_loggerMock = new Mock<ILogger<SetSignificantChangeAssignedUserCommandHandler>>();
+		_handler = new SetSignificantChangeAssignedUserCommandHandler(_repositoryMock.Object, _loggerMock.Object);
 	}
 
 	[Fact]

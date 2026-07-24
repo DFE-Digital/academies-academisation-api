@@ -163,8 +163,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task SetAssignedUser_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;
-            var request = new SetSignificantChangeAssignedUserCommand(
-                id: 999,
+            var request = new SetSignificantChangeAssignedUserPublicCommand(
                 userId: Guid.NewGuid(),
                 fullName: "Assigned User",
                 emailAddress: "assigned.user@test.local");
@@ -188,8 +187,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         [Fact]
         public async Task SetAssignedUser_ReturnsNotFound_WhenProjectDoesNotExist()
         {
-            var request = new SetSignificantChangeAssignedUserCommand(
-                id: 100,
+            var request = new SetSignificantChangeAssignedUserPublicCommand(
                 userId: Guid.NewGuid(),
                 fullName: "Assigned User",
                 emailAddress: "assigned.user@test.local");
@@ -206,8 +204,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         [Fact]
         public async Task SetAssignedUser_ReturnsBadRequest_WhenValidationFails()
         {
-            var request = new SetSignificantChangeAssignedUserCommand(
-                id: 100,
+            var request = new SetSignificantChangeAssignedUserPublicCommand(
                 userId: Guid.NewGuid(),
                 fullName: string.Empty,
                 emailAddress: "not-an-email");
