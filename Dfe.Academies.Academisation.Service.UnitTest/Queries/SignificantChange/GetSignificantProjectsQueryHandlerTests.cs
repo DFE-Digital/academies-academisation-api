@@ -1,10 +1,9 @@
-using Dfe.Academies.Academisation.Core.Utils;
+using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
-using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
+using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -18,11 +17,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		public GetSignificantProjectsQueryHandlerTests()
 		{
 			_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-			var dateTimeProviderMock = new Mock<IDateTimeProvider>();
-			var loggerMock = new Mock<ILogger<GetSignificantProjectsQueryHandler>>();
+			var mapperConfiguration = new MapperConfiguration(configuration =>
+				configuration.AddProfile<SignificantChangeProjectMappingProfile>());
+			mapperConfiguration.AssertConfigurationIsValid();
+			var mapper = mapperConfiguration.CreateMapper();
 
 			_handler = new GetSignificantProjectsQueryHandler(
-				_repositoryMock.Object);
+				_repositoryMock.Object,
+				mapper);
 		}
 
 		[Fact]
@@ -41,7 +43,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantProjects(query.Page, query.Count, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, cancellationToken))
 				.ReturnsAsync((projects, totalCount: 3));
 
 			// Act
@@ -87,7 +89,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			};
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantProjects(query.Page, query.Count, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, cancellationToken))
 				.ReturnsAsync((projects, totalCount: 4));
 
 			// Act
@@ -108,7 +110,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var cancellationToken = cts.Token;
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((Enumerable.Empty<SignificantChangeProject>(), 0));
 
 			// Act
@@ -116,7 +118,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			// Assert
 			_repositoryMock.Verify(
-				x => x.SearchSignificantProjects(
+				x => x.SearchSignificantChangeProjects(
 					It.Is<int>(page => page == 3),
 					It.Is<int>(count => count == 25),
 					It.Is<CancellationToken>(token => token == cancellationToken)),

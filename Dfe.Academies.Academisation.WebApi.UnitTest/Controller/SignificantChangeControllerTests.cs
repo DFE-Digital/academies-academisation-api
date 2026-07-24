@@ -120,6 +120,45 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .Which.Value.Should().BeEquivalentTo(expectedResponse);
         }
 
+        [Fact]
+        public async Task GetSignificantChangeProject_ReturnsProject_WhenFound()
+        {
+            var assignedUserId = Guid.NewGuid();
+            var expectedResponse = new SignificantChangeProjectSearchResponse
+            {
+                Id = 100,
+                Urn = 123456,
+                SchoolName = "Test School",
+                Tier = 2,
+                TrustName = "Test Trust",
+                TrustUkprn = "12345678",
+                AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
+                TypeOfSignificantChange = "Change of age range",
+                Status = "InProgress"
+            };
+
+            _mockMediator
+				.Setup(m => m.Send(It.IsAny<GetSignificantChangeProjectByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            var result = await _controller.GetSignificantChangeProject(100, CancellationToken.None);
+
+            result.Result.Should().BeOfType<OkObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
+        public async Task GetSignificantChangeProject_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            _mockMediator
+				.Setup(m => m.Send(It.IsAny<GetSignificantChangeProjectByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((SignificantChangeProjectSearchResponse?)null);
+
+            var result = await _controller.GetSignificantChangeProject(999, CancellationToken.None);
+
+            result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(
