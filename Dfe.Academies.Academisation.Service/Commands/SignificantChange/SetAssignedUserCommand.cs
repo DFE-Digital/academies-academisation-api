@@ -1,7 +1,7 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using MediatR;
 
-namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
+namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
 public class SetAssignedUserCommand(
 	int id,
@@ -12,6 +12,5 @@ public class SetAssignedUserCommand(
 	public int Id { get; set; } = id;
 	public Guid UserId { get; set; } = userId;
 	public string FullName { get; set; } = fullName;
-
 	public string EmailAddress { get; set; } = emailAddress;
 }

@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using MediatR;
@@ -18,6 +18,29 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			_mediator = mediator;
 			_logger = logger;
+		}
+
+		[HttpPut("{id:int}/SetAssignedUser", Name = "SetAssignedUser")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetAssignedUser(
+			int id,
+			[FromBody] SetAssignedUserCommand request)
+		{
+			// Ensure the command's ID matches the route parameter
+			request.Id = id;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
 		}
 
 		[HttpPost(Name = "CreateSignificantProject")]
