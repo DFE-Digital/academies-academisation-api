@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> SetSignificantChangeAssignedUser(
 			int id,
-			[FromBody] SetAssignedUserCommand request)
+			[FromBody] SetSignificantChangeAssignedUserCommand request)
 		{
 			// Ensure the command's ID matches the route parameter
 			request.Id = id;

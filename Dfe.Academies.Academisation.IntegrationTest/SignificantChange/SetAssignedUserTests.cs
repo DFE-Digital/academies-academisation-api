@@ -37,7 +37,7 @@ public class SetAssignedUserTests : IClassFixture<TestWebApplicationFactory>
 		var expectedUserId = Guid.NewGuid();
 		var expectedName = "Assigned User";
 		var expectedEmail = "assigned.user@test.local";
-		var request = new SetAssignedUserCommand(
+		var request = new SetSignificantChangeAssignedUserCommand(
 			id: 999,
 			userId: expectedUserId,
 			fullName: expectedName,
@@ -62,7 +62,7 @@ public class SetAssignedUserTests : IClassFixture<TestWebApplicationFactory>
 	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
 		var client = _factory.CreateClient();
-		var request = new SetAssignedUserCommand(
+		var request = new SetSignificantChangeAssignedUserCommand(
 			id: 1,
 			userId: Guid.NewGuid(),
 			fullName: "Assigned User",

@@ -1,9 +1,9 @@
-﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Core;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
-public class SetAssignedUserCommand(
+public class SetSignificantChangeAssignedUserCommand(
 	int id,
 	Guid userId,
 	string fullName,

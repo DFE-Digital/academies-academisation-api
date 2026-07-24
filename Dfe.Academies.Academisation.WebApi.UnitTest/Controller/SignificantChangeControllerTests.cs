@@ -163,21 +163,21 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task SetAssignedUser_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;
-            var request = new SetAssignedUserCommand(
+            var request = new SetSignificantChangeAssignedUserCommand(
                 id: 999,
                 userId: Guid.NewGuid(),
                 fullName: "Assigned User",
                 emailAddress: "assigned.user@test.local");
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetAssignedUserCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAssignedUserCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CommandSuccessResult());
 
             var result = await _controller.SetSignificantChangeAssignedUser(routeId, request);
 
             result.Should().BeOfType<OkResult>();
             _mockMediator.Verify(m => m.Send(
-                It.Is<SetAssignedUserCommand>(c =>
+                It.Is<SetSignificantChangeAssignedUserCommand>(c =>
                     c.Id == routeId
                     && c.UserId == request.UserId
                     && c.FullName == request.FullName
@@ -188,14 +188,14 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         [Fact]
         public async Task SetAssignedUser_ReturnsNotFound_WhenProjectDoesNotExist()
         {
-            var request = new SetAssignedUserCommand(
+            var request = new SetSignificantChangeAssignedUserCommand(
                 id: 100,
                 userId: Guid.NewGuid(),
                 fullName: "Assigned User",
                 emailAddress: "assigned.user@test.local");
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetAssignedUserCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAssignedUserCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new NotFoundCommandResult());
 
             var result = await _controller.SetSignificantChangeAssignedUser(100, request);
@@ -206,7 +206,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         [Fact]
         public async Task SetAssignedUser_ReturnsBadRequest_WhenValidationFails()
         {
-            var request = new SetAssignedUserCommand(
+            var request = new SetSignificantChangeAssignedUserCommand(
                 id: 100,
                 userId: Guid.NewGuid(),
                 fullName: string.Empty,
@@ -218,7 +218,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             };
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetAssignedUserCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAssignedUserCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
 
             var result = await _controller.SetSignificantChangeAssignedUser(100, request);

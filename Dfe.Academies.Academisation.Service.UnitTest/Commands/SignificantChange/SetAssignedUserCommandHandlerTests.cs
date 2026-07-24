@@ -25,7 +25,7 @@ public class SetAssignedUserCommandHandlerTests
 	[Fact]
 	public async Task Handle_ProjectNotFound_ReturnsNotFoundCommandResult()
 	{
-		var command = new SetAssignedUserCommand(
+		var command = new SetSignificantChangeAssignedUserCommand(
 			id: 100,
 			userId: Guid.NewGuid(),
 			fullName: "Assigned User",
@@ -45,7 +45,7 @@ public class SetAssignedUserCommandHandlerTests
 	[Fact]
 	public async Task Handle_ProjectFound_AssignsUserAndPersistsChanges()
 	{
-		var command = new SetAssignedUserCommand(
+		var command = new SetSignificantChangeAssignedUserCommand(
 			id: 200,
 			userId: Guid.NewGuid(),
 			fullName: "Assigned User",

@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
-public class SetAssignedUserCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetAssignedUserCommandHandler> logger) : IRequestHandler<SetAssignedUserCommand, CommandResult>
+public class SetAssignedUserCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetAssignedUserCommandHandler> logger) : IRequestHandler<SetSignificantChangeAssignedUserCommand, CommandResult>
 {
 	private readonly ISignificantChangeProjectRepository _repository = repository;
 	private readonly ILogger<SetAssignedUserCommandHandler> _logger = logger;
 
-	public async Task<CommandResult> Handle(SetAssignedUserCommand request, CancellationToken cancellationToken)
+	public async Task<CommandResult> Handle(SetSignificantChangeAssignedUserCommand request, CancellationToken cancellationToken)
 	{
 		var existingProject = await _repository.GetSignificantChangeProjectById(request.Id, cancellationToken);
 
