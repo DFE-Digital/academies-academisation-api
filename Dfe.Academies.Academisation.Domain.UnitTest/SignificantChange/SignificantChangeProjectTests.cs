@@ -19,8 +19,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			var trustName = _fixture.Create<string>();
 			var trustUkprn = _fixture.Create<string>();
 			var typeOfSignificantChange = _fixture.Create<string>();
+			var schoolName= _fixture.Create<string>();
 
-			var project = new SignificantChangeProject(status, urn, tier, trustName, trustUkprn, typeOfSignificantChange);
+			var project = new SignificantChangeProject(status, urn, tier, trustName, trustUkprn, typeOfSignificantChange, schoolName);
 
 			project.Status.Should().Be(status);
 			project.Urn.Should().Be(urn);
@@ -40,6 +41,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<SignificantChangeStatus>(),
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
