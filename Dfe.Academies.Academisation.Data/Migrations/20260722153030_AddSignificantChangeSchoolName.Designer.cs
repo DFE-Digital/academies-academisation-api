@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260722153030_AddSignificantChangeSchoolName")]
+    partial class AddSignificantChangeSchoolName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1066,15 +1069,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("Recommendation")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SfsoCommissioningOverview")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("SfsoCommissioningOverview");
-
-                    b.Property<DateTime?>("SfsoCommissioningRequestedDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("SfsoCommissioningRequestedDate");
 
                     b.Property<string>("SpecificReasonsForTransfer")
                         .IsRequired()
@@ -2255,15 +2249,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("SchoolType")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("SchoolType");
-
-                            b1.Property<string>("SfsoCommissioningOverview")
-                                .HasMaxLength(250)
-                                .HasColumnType("nvarchar(250)")
-                                .HasColumnName("SfsoCommissioningOverview");
-
-                            b1.Property<DateTime?>("SfsoCommissioningRequestedDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("SfsoCommissioningRequestedDate");
 
                             b1.Property<string>("SponsorName")
                                 .HasColumnType("nvarchar(max)")
