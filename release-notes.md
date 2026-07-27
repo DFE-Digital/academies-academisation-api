@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-04-20.581...HEAD)
 Note: remember to update unrelease section when creating a new release.
 
+### Added
+- [290392](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add paginated post request for significant change project
+- [290394](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add get by id request for significant change project
+
 ---
 
 ## [9.48.0][9.48.0] - 2026-04-20
