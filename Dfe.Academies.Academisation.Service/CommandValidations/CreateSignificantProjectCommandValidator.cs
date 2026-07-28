@@ -18,10 +18,9 @@ namespace Dfe.Academies.Academisation.Service.CommandValidations
 				.WithMessage("Tier must be 1, 2 or 3");
 
 			// Urn: 6 digits starting with 1
-			RuleFor(x => x.Urn.ToString())
-				.NotNull().WithMessage("Urn must not be null")
-				.Length(6).WithMessage("Urn must be length 6")
-				.Must(m => m.ToString().StartsWith('1')).WithMessage("Urn must start with a 1");
+			RuleFor(x => x.Urn)
+				.InclusiveBetween(100000, 199999)
+				.WithMessage("Urn must be 6 digits and start with a 1");
 
 			// TrustUkprn: 8 digits starting with 1
 			RuleFor(x => x.TrustUkprn)
