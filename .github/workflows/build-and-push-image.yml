@@ -43,6 +43,7 @@ jobs:
     name: Package Validation
     permissions:
       contents: read
+      packages: read
     needs: [ set-env ]
     steps:
       - name: Validate Packages
