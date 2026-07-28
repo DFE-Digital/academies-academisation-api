@@ -37,6 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var payload = new SignificantChangeProjectResponse
             {
                 Urn = command.Urn,
+                SchoolName = "Test School",
                 Tier = command.Tier,
                 TrustName = "Test Trust",
                 TrustUkprn = command.TrustUkprn,
@@ -66,6 +67,21 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var result = await _controller.CreateSignificantProject(command, CancellationToken.None);
 
             result.Result.Should().BeOfType<BadRequestResult>();
+        }
+
+        [Fact]
+        public async Task CreateSignificantProject_ReturnsNotFound_WhenValidationErrorReturned()
+        {
+            var command = CreateValidCommand();
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<CreateSignificantProjectCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CreateValidationErrorResult(
+                    [new ValidationError("TrustUkprn", $"Trust with UKPRN {command.TrustUkprn} not found")]));
+
+            var result = await _controller.CreateSignificantProject(command, CancellationToken.None);
+
+            result.Result.Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
