@@ -9,6 +9,7 @@ using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using FluentAssertions;
 using MediatR;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
@@ -18,7 +19,7 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 		private readonly Fixture _fixture = new();
 		private readonly AcademisationContext _context;
 		private readonly SignificantChangeProjectRepository _repository;
-		private readonly IMediator _mediator;
+		private readonly IMediator _mediator = new Mock<IMediator>().Object;
 
 		public SignificantChangeProjectRepositoryTests()
 		{
