@@ -10,9 +10,17 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 		public IUnitOfWork UnitOfWork => _context;
 
-		public async Task<(IEnumerable<SignificantChangeProject> projects, int totalCount)> SearchSignificantChangeProjects(int page, int count, CancellationToken cancellationToken)
+		public async Task<(IEnumerable<SignificantChangeProject> projects, int totalCount)>
+			SearchSignificantChangeProjects(int page, int count, string? keyword, List<string>? status,
+				List<string>? assignee, List<byte>? tier, List<string>? route, CancellationToken cancellationToken)
 		{
 			IQueryable<SignificantChangeProject> queryable = dbSet;
+
+			queryable = FilterByStatus(status, queryable);
+			queryable = FilterByKeyword(keyword, queryable);
+			queryable = FilterByAssignee(assignee, queryable);
+			queryable = FilterByTier(tier, queryable);
+			queryable = FilterByRoute(route, queryable);
 
 			int totalProjects = await queryable.CountAsync(cancellationToken);
 			var projects = await queryable
@@ -22,6 +30,80 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.ToListAsync(cancellationToken);
 
 			return (projects, totalProjects);
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByRoute(List<string>? route, IQueryable<SignificantChangeProject> queryable)
+		{
+			if (route is null || route.Count == 0)
+			{
+				return queryable;
+			}
+
+			return queryable.Where(x => route.Contains(x.TypeOfSignificantChange));
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByTier(List<byte>? tier, IQueryable<SignificantChangeProject> queryable)
+		{
+			if (tier is null || tier.Count == 0)
+			{
+				return queryable;
+			}
+
+			return queryable.Where(x => tier.Contains(x.Tier));
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByAssignee(List<string>? assignee,
+			IQueryable<SignificantChangeProject> queryable)
+		{
+			if (assignee is null || assignee.Count == 0)
+			{
+				return queryable;
+			}
+
+			var lowerCaseAssignees = assignee.Select(x => x.ToLower()).ToArray();
+
+			if (lowerCaseAssignees.Contains("not assigned"))
+			{
+				// Query by unassigned or assigned
+				return queryable.Where(p =>
+					(!string.IsNullOrEmpty(p.AssignedUserFullName) &&
+					 lowerCaseAssignees.Contains(p.AssignedUserFullName.ToLower()))
+					|| string.IsNullOrEmpty(p.AssignedUserFullName));
+			}
+
+			// Query by assigned only
+			return queryable.Where(p =>
+				!string.IsNullOrEmpty(p.AssignedUserFullName) &&
+				lowerCaseAssignees.Contains(p.AssignedUserFullName.ToLower()));
+
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByKeyword(string? keyword, IQueryable<SignificantChangeProject> queryable)
+		{
+			if (string.IsNullOrWhiteSpace(keyword))
+			{
+				return queryable;
+			}
+			
+			return queryable.Where(p =>
+				p.SchoolName.Contains(keyword) ||
+				p.TrustName.Contains(keyword) ||
+				p.Urn.ToString().Contains(keyword) ||
+				p.TrustUkprn.Contains(keyword));
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByStatus(List<string>? status, IQueryable<SignificantChangeProject> queryable)
+		{
+			if (status is null || status.Count == 0)
+			{
+				return queryable;
+			}
+
+			//convert List<string> to List<SignificantChangeStatus> and filter by status
+			var significantChangeStatuses = status.Select(s => Enum.Parse<SignificantChangeStatus>(s, true)).ToList();
+
+
+			return queryable.Where(p => significantChangeStatuses.Contains(p.Status));
 		}
 
 		public async Task<SignificantChangeProject?> GetSignificantChangeProjectById(int id, CancellationToken cancellationToken)
