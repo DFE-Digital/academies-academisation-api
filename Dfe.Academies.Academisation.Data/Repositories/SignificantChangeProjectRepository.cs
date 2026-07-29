@@ -39,7 +39,9 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				return queryable;
 			}
 
-			return queryable.Where(x => route.Contains(x.TypeOfSignificantChange));
+			var lowerCaseRoutes = route.Select(x => x.ToLower()).ToArray();
+
+			return queryable.Where(x => lowerCaseRoutes.Contains(x.TypeOfSignificantChange.ToLower()));
 		}
 
 		private static IQueryable<SignificantChangeProject> FilterByTier(List<byte>? tier, IQueryable<SignificantChangeProject> queryable)
@@ -84,12 +86,12 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			{
 				return queryable;
 			}
-			
+
 			return queryable.Where(p =>
-				p.SchoolName.Contains(keyword) ||
-				p.TrustName.Contains(keyword) ||
-				p.Urn.ToString().Contains(keyword) ||
-				p.TrustUkprn.Contains(keyword));
+				EF.Functions.Like(p.SchoolName, $"%{keyword}%") ||
+				EF.Functions.Like(p.TrustName, $"%{keyword}%") ||
+				EF.Functions.Like(p.Urn.ToString(), $"%{keyword}%") ||
+				EF.Functions.Like(p.TrustUkprn, $"%{keyword}%"));
 		}
 
 		private static IQueryable<SignificantChangeProject> FilterByStatus(List<string>? status, IQueryable<SignificantChangeProject> queryable)
@@ -103,7 +105,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			var significantChangeStatuses = status.Select(s => Enum.Parse<SignificantChangeStatus>(s, true)).ToList();
 
 
-			return queryable.Where(p => significantChangeStatuses.Contains(p.Status));
+			return queryable.Where(p =>  significantChangeStatuses.Contains(p.Status));
 		}
 
 		public async Task<SignificantChangeProject?> GetSignificantChangeProjectById(int id, CancellationToken cancellationToken)

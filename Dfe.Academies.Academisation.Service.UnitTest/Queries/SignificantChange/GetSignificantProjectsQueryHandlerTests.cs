@@ -130,6 +130,38 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 				Times.Once);
 		}
 
+		[Fact]
+		public async Task Handle_PassesQueryItems_ToRepository()
+		{
+			// Arrange
+			var query = new GetSignificantProjectsQuery(Page: 3, Count: 25, "school", ["InProgress"], ["Ste"], [1], ["a change"]);
+
+			using var cts = new CancellationTokenSource();
+			var cancellationToken = cts.Token;
+
+			_repositoryMock
+				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(),
+					It.IsAny<List<string>>(), It.IsAny<List<string>>(), It.IsAny<List<byte>>(),
+					It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync((Enumerable.Empty<SignificantChangeProject>(), 0));
+
+			// Act
+			await _handler.Handle(query, cancellationToken);
+
+			// Assert
+			_repositoryMock.Verify(
+				x => x.SearchSignificantChangeProjects(
+					It.Is<int>(page => page == 3),
+					It.Is<int>(count => count == 25),
+					It.Is<string>(keyword => keyword == "school"),
+					It.Is<List<string>>(status => status.SequenceEqual(new List<string> { "InProgress" })),
+					It.Is<List<string>>(assignee => assignee.SequenceEqual(new List<string> { "Ste" })),
+					It.Is<List<byte>>(tier => tier.SequenceEqual(new List<byte> { 1 })),
+					It.Is<List<string>>(route => route.SequenceEqual(new List<string> { "a change" })),
+					It.Is<CancellationToken>(token => token == cancellationToken)),
+				Times.Once);
+		}
+
 		private static SignificantChangeProject CreateProject(int id, int urn, byte tier, string trustName, string trustUkprn, string route, string schoolName)
 		{
 			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn, route, schoolName)
