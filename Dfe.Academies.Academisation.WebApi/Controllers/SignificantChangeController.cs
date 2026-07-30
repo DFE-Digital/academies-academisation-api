@@ -22,6 +22,32 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			_logger = logger;
 		}
 
+		[HttpPut("{id:int}/SetAssignedUser", Name = "SetSignificantChangeAssignedUser")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeAssignedUser(
+			int id,
+			[FromBody] SetSignificantChangeAssignedUserPublicCommand request)
+		{
+			var command = new SetSignificantChangeAssignedUserCommand(
+				id: id,
+				userId: request.UserId,
+				fullName: request.FullName,
+				emailAddress: request.EmailAddress);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPost(Name = "CreateSignificantProject")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
