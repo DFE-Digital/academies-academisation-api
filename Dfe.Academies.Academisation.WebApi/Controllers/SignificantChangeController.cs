@@ -51,6 +51,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost(Name = "CreateSignificantProject")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<SignificantChangeProjectResponse>> CreateSignificantProject(
 			[FromBody] CreateSignificantProjectCommand command,
 			CancellationToken cancellationToken)
@@ -61,6 +62,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			return result switch
 			{
 				CreateSuccessResult<SignificantChangeProjectResponse> successResult => Created($"/significant-change/{successResult.Payload.Urn}", successResult.Payload),
+				CreateValidationErrorResult => NotFound(),
 				null => BadRequest(),
 				_ => throw new NotImplementedException()
 			};
