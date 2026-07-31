@@ -37,6 +37,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var payload = new SignificantChangeProjectResponse
             {
                 Urn = command.Urn,
+                SchoolName = "Test School",
                 Tier = command.Tier,
                 TrustName = "Test Trust",
                 TrustUkprn = command.TrustUkprn,
@@ -66,6 +67,21 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var result = await _controller.CreateSignificantProject(command, CancellationToken.None);
 
             result.Result.Should().BeOfType<BadRequestResult>();
+        }
+
+        [Fact]
+        public async Task CreateSignificantProject_ReturnsNotFound_WhenValidationErrorReturned()
+        {
+            var command = CreateValidCommand();
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<CreateSignificantProjectCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CreateValidationErrorResult(
+                    [new ValidationError("TrustUkprn", $"Trust with UKPRN {command.TrustUkprn} not found")]));
+
+            var result = await _controller.CreateSignificantProject(command, CancellationToken.None);
+
+            result.Result.Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
@@ -157,6 +173,71 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var result = await _controller.GetSignificantChangeProject(999, CancellationToken.None);
 
             result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetAssignedUser_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeAssignedUserPublicCommand(
+                userId: Guid.NewGuid(),
+                fullName: "Assigned User",
+                emailAddress: "assigned.user@test.local");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAssignedUserCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeAssignedUser(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeAssignedUserCommand>(c =>
+                    c.Id == routeId
+                    && c.UserId == request.UserId
+                    && c.FullName == request.FullName
+                    && c.EmailAddress == request.EmailAddress),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetAssignedUser_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeAssignedUserPublicCommand(
+                userId: Guid.NewGuid(),
+                fullName: "Assigned User",
+                emailAddress: "assigned.user@test.local");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAssignedUserCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeAssignedUser(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetAssignedUser_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeAssignedUserPublicCommand(
+                userId: Guid.NewGuid(),
+                fullName: string.Empty,
+                emailAddress: "not-an-email");
+
+            var validationErrors = new[]
+            {
+                new ValidationError("FullName", "Full name is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAssignedUserCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeAssignedUser(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
 
         private static CreateSignificantProjectCommand CreateValidCommand()

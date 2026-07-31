@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Core;
+﻿
+using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
@@ -6,6 +7,7 @@ using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using FluentAssertions;
+using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Trusts;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -23,6 +25,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 
 		private static readonly string trustUkprn = "12345678";
 		private static readonly string trustName = "a trust name";
+		private static readonly int urn = 123456;
+		private static readonly string schoolName = "a school name";
 
 		public CreateSignificantProjectCommandHandlerTests()
 		{
@@ -35,6 +39,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 
 			_mockAcademiesQueryService.Setup(x => x.GetTrust(trustUkprn))
 				.ReturnsAsync(new TrustDto() { Name = trustName });
+
+			_mockAcademiesQueryService.Setup(x => x.GetEstablishment(urn))
+				.ReturnsAsync(new EstablishmentDto() { Name = schoolName });
 
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockSignificantChangeProjectRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
@@ -68,11 +75,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				p.Tier == request.Tier &&
 				p.TrustName == trustName &&
 				p.TrustUkprn == request.TrustUkprn &&
+				p.SchoolName == schoolName &&
 				p.TypeOfSignificantChange == request.Route &&
 				p.Status == SignificantChangeStatus.InProgress
 			)), Times.Once);
 
 			_mockAcademiesQueryService.Verify(x => x.GetTrust(request.TrustUkprn), Times.Once);
+			_mockAcademiesQueryService.Verify(x => x.GetEstablishment(request.Urn), Times.Once);
 
 			_mockSignificantChangeProjectRepository.Verify(x =>
 				x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(c => c == cancellationToken)), Times.Once);
@@ -97,12 +106,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 			payload.Tier.Should().Be(request.Tier);
 			payload.TrustName.Should().Be(trustName);
 			payload.TrustUkprn.Should().Be(request.TrustUkprn);
+			payload.SchoolName.Should().Be(schoolName);
 			payload.TypeOfSignificantChange.Should().Be(request.Route);
 			payload.Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
 		}
 
 		[Fact]
-		public async Task Handle_TrustNotFound_LogsWarning()
+		public async Task Handle_TrustNotFound_ReturnsValidationErrorAndDoesNotPersist()
 		{
 			_mockAcademiesQueryService.Setup(x => x.GetTrust(trustUkprn))
 				.ReturnsAsync((TrustDto?)null);
@@ -121,26 +131,48 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 					It.IsAny<Func<It.IsAnyType, Exception, string>>()!),
 				Times.Once);
 
-			result.Should().BeOfType<CreateSuccessResult<SignificantChangeProjectResponse>>();
+			result.Should().BeOfType<CreateValidationErrorResult>();
+			((CreateValidationErrorResult)result).ValidationErrors
+				.Should().ContainSingle(e => e.PropertyName == "TrustUkprn");
 
-			_mockSignificantChangeProjectRepository.Verify(x => x.Insert(It.Is<SignificantChangeProject>(p =>
-				p.Urn == request.Urn &&
-				p.Tier == request.Tier &&
-				p.TrustName == string.Empty &&
-				p.TrustUkprn == request.TrustUkprn &&
-				p.TypeOfSignificantChange == request.Route &&
-				p.Status == SignificantChangeStatus.InProgress
-			)), Times.Once);
-
-
+			_mockSignificantChangeProjectRepository.Verify(x => x.Insert(It.IsAny<SignificantChangeProject>()), Times.Never);
 			_mockSignificantChangeProjectRepository.Verify(x =>
-				x.UnitOfWork.SaveChangesAsync(It.Is<CancellationToken>(c => c == cancellationToken)), Times.Once);
+				x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+		}
+
+		[Fact]
+		public async Task Handle_SchoolNotFound_ReturnsValidationErrorAndDoesNotPersist()
+		{
+			_mockAcademiesQueryService.Setup(x => x.GetEstablishment(urn))
+				.ReturnsAsync((EstablishmentDto?)null);
+
+			var handler = CreateHandler();
+			var request = CreateValidCommand();
+			CancellationToken cancellationToken = default;
+			var result = await handler.Handle(request, cancellationToken);
+
+			_mockLogger.Verify(
+				x => x.Log(
+					LogLevel.Warning,
+					It.IsAny<EventId>(),
+					It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains($"School with URN {urn} not found")),
+					null,
+					It.IsAny<Func<It.IsAnyType, Exception, string>>()!),
+				Times.Once);
+
+			result.Should().BeOfType<CreateValidationErrorResult>();
+			((CreateValidationErrorResult)result).ValidationErrors
+				.Should().ContainSingle(e => e.PropertyName == "Urn");
+
+			_mockSignificantChangeProjectRepository.Verify(x => x.Insert(It.IsAny<SignificantChangeProject>()), Times.Never);
+			_mockSignificantChangeProjectRepository.Verify(x =>
+				x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		private static CreateSignificantProjectCommand CreateValidCommand()
 		{
 			return new CreateSignificantProjectCommand(
-				Urn: 123456,
+				Urn: urn,
 				Tier: 2,
 				Route: "Change of age range",
 				TrustUkprn: trustUkprn);
