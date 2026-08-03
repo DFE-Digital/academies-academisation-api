@@ -200,6 +200,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
             result.Result.Should().BeOfType<OkObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
         public async Task SetAssignedUser_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;

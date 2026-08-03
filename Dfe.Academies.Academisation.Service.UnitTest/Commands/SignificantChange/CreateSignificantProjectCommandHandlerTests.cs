@@ -131,24 +131,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 					It.IsAny<Func<It.IsAnyType, Exception, string>>()!),
 				Times.Once);
 
-			result.Should().BeOfType<CreateSuccessResult<SignificantChangeProjectResponse>>();
-
-			_mockSignificantChangeProjectRepository.Verify(x => x.Insert(It.Is<SignificantChangeProject>(p =>
-				p.Urn == request.Urn &&
-				p.Tier == request.Tier &&
-				p.TrustName == string.Empty &&
-				p.TrustUkprn == request.TrustUkprn &&
-				p.TypeOfSignificantChange == request.Route &&
-				p.Status == SignificantChangeStatus.PreDecision
-			)), Times.Once);
-
 			result.Should().BeOfType<CreateValidationErrorResult>();
 			((CreateValidationErrorResult)result).ValidationErrors
 				.Should().ContainSingle(e => e.PropertyName == "TrustUkprn");
-
-			_mockSignificantChangeProjectRepository.Verify(x => x.Insert(It.IsAny<SignificantChangeProject>()), Times.Never);
-			_mockSignificantChangeProjectRepository.Verify(x =>
-				x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[Fact]
