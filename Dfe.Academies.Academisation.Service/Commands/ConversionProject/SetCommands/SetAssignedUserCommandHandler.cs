@@ -27,7 +27,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 				return new NotFoundCommandResult();
 			}
 
-			// Update the school overview information in the existing project
+			// Update the assigned user in the existing project
 			existingProject.SetAssignedUser(request.UserId, request.FullName, request.EmailAddress);
 
 			_conversionProjectRepository.Update(existingProject as Project);

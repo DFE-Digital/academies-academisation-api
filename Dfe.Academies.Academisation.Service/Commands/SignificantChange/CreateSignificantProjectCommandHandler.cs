@@ -15,21 +15,26 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 		{
 
 			var trust = await academiesQueryService.GetTrust(command.TrustUkprn);
-
 			if (trust is null)
 			{
 				logger.LogWarning("Trust with UKPRN {Ukprn} not found", command.TrustUkprn);
+				return new CreateValidationErrorResult([new ValidationError("TrustUkprn", "Trust with UKPRN {Ukprn} not found")]);
 			}
 
-			string trustName = trust?.Name ?? string.Empty;
+			var establishment = await academiesQueryService.GetEstablishment(command.Urn);
+			if (establishment is null)
+			{
+				logger.LogWarning("School with URN {Urn} not found", command.Urn);
+				return new CreateValidationErrorResult([new ValidationError("Urn", $"School with URN {command.Urn} not found")]);
+			}
 			
 			var significantChangeProject = SignificantChangeProject.Create(
 				command.Urn,
 				command.Tier,
-				trustName,
+				trust.Name,
 				command.TrustUkprn,
 				command.Route,
-				string.Empty,
+				establishment.Name,
 				dateTimeProvider.Now);
 
 			significantChangeProjectRepository.Insert(significantChangeProject);
@@ -39,6 +44,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 			{
 				Id = significantChangeProject.Id,
 				Urn = significantChangeProject.Urn,
+				SchoolName = significantChangeProject.SchoolName,
 				Tier = significantChangeProject.Tier,
 				TrustName = significantChangeProject.TrustName,
 				TrustUkprn = significantChangeProject.TrustUkprn,
