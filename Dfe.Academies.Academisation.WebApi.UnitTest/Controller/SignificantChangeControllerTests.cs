@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using System;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -157,6 +158,32 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var result = await _controller.GetSignificantChangeProject(999, CancellationToken.None);
 
             result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task GetFilterParameters_ReturnsOk_WithFilterParameters()
+        {
+            var expectedResponse = new SignificantChangeFilterParameters
+            {
+                Statuses = [new FilterValueDisplay("PreDecision", "Pre decision")],
+                Tiers =
+                [
+                    new FilterValueDisplay("1", "Tier 1"),
+                    new FilterValueDisplay("2", "Tier 2"),
+                    new FilterValueDisplay("3", "Tier 3")
+                ],
+                AssignedUsers = [new FilterValueDisplay("Assigned User", "Assigned User")],
+                Routes = [new FilterValueDisplay("Change of age range", "Change of age range")]
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<GetSignificantChangeFilterParametersQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            var result = await _controller.GetFilterParameters(CancellationToken.None);
+
+            result.Result.Should().BeOfType<OkObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(expectedResponse);
         }
 
         private static CreateSignificantProjectCommand CreateValidCommand()

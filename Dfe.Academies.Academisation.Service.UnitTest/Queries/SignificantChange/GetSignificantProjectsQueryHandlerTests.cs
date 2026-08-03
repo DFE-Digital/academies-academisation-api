@@ -64,7 +64,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].TrustUkprn.Should().Be("10000001");
 			data[0].AssignedUser.Should().BeEquivalentTo(new User(assignedUserId, "Assigned User", "assigned.user@test.local"));
 			data[0].TypeOfSignificantChange.Should().Be("Change of age range");
-			data[0].Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
+			data[0].Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 
 			data[1].Id.Should().Be(11);
 			data[1].Urn.Should().Be(654321);
@@ -74,7 +74,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[1].TrustUkprn.Should().Be("10000002");
 			data[1].AssignedUser.Should().BeNull();
 			data[1].TypeOfSignificantChange.Should().Be("Change of gender composition");
-			data[1].Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
+			data[1].Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 		}
 
 		[Fact]
@@ -127,7 +127,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 		private static SignificantChangeProject CreateProject(int id, int urn, byte tier, string trustName, string trustUkprn, string route, string schoolName)
 		{
-			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn, route, schoolName)
+			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, urn, tier, trustName, trustUkprn, route, schoolName)
 			{
 				Id = id,
 				CreatedOn = DateTime.UtcNow

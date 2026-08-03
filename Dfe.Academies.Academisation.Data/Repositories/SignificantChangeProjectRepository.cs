@@ -28,5 +28,43 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		{
 			return await dbSet.SingleOrDefaultAsync(project => project.Id == id, cancellationToken);
 		}
+
+		public async Task<SignificantChangeFilterParameters> GetFilterParameters(CancellationToken cancellationToken)
+		{
+			List<string> assignedUsers = (await dbSet
+				.AsNoTracking()
+				.Select(project => project.AssignedUserFullName)
+				.Where(fullName => !string.IsNullOrEmpty(fullName))
+				.Distinct()
+				.OrderBy(fullName => fullName)
+				.ToListAsync(cancellationToken))!;
+
+			List<string> routes = await dbSet
+				.AsNoTracking()
+				.Select(project => project.TypeOfSignificantChange)
+				.Where(route => !string.IsNullOrEmpty(route))
+				.Distinct()
+				.OrderBy(route => route)
+				.ToListAsync(cancellationToken);
+
+			return new SignificantChangeFilterParameters
+			{
+				Statuses = Enum.GetValues<SignificantChangeStatus>()
+					.Select(status => new FilterValueDisplay(status.ToString(), status.ToDisplayName()))
+					.ToList(),
+
+				Tiers = SignificantChangeTiers.All
+					.Select(tier => new FilterValueDisplay(tier.ToString(), $"Tier {tier}"))
+					.ToList(),
+
+				AssignedUsers = assignedUsers
+					.Select(fullName => new FilterValueDisplay(fullName, fullName))
+					.ToList(),
+
+				Routes = routes
+					.Select(route => new FilterValueDisplay(route, route))
+					.ToList()
+			};
+		}
 	}
 }

@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				p.TrustName == trustName &&
 				p.TrustUkprn == request.TrustUkprn &&
 				p.TypeOfSignificantChange == request.Route &&
-				p.Status == SignificantChangeStatus.InProgress
+				p.Status == SignificantChangeStatus.PreDecision
 			)), Times.Once);
 
 			_mockAcademiesQueryService.Verify(x => x.GetTrust(request.TrustUkprn), Times.Once);
@@ -98,7 +98,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 			payload.TrustName.Should().Be(trustName);
 			payload.TrustUkprn.Should().Be(request.TrustUkprn);
 			payload.TypeOfSignificantChange.Should().Be(request.Route);
-			payload.Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
+			payload.Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 		}
 
 		[Fact]
@@ -129,7 +129,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				p.TrustName == string.Empty &&
 				p.TrustUkprn == request.TrustUkprn &&
 				p.TypeOfSignificantChange == request.Route &&
-				p.Status == SignificantChangeStatus.InProgress
+				p.Status == SignificantChangeStatus.PreDecision
 			)), Times.Once);
 
 
