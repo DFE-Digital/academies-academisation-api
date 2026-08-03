@@ -58,6 +58,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
 
+	public DbSet<SignificantChangeProject> SignificantChangeProjects { get; set; } = null!;
+
 	public override int SaveChanges()
 	{
 		SetModifiedAndCreatedDates();
