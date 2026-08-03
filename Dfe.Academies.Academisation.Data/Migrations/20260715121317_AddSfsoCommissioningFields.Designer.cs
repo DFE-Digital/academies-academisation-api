@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260715121317_AddSfsoCommissioningFields")]
+    partial class AddSfsoCommissioningFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -834,69 +837,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ProjectGroups", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AssignedUserEmailAddress")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("AssignedUserEmailAddress");
-
-                    b.Property<string>("AssignedUserFullName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("AssignedUserFullName");
-
-                    b.Property<Guid?>("AssignedUserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("AssignedUserId");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SchoolName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Status");
-
-                    b.Property<byte>("Tier")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("Tier");
-
-                    b.Property<string>("TrustName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("TrustName");
-
-                    b.Property<string>("TrustUkprn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("TrustUkprn");
-
-                    b.Property<string>("TypeOfSignificantChange")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("TypeOfSignificantChange");
-
-                    b.Property<int>("Urn")
-                        .HasColumnType("int")
-                        .HasColumnName("Urn");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SignificantChangeProject", "academisation");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
                 {
                     b.Property<int>("Id")
@@ -1066,15 +1006,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("Recommendation")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SfsoCommissioningOverview")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("SfsoCommissioningOverview");
-
-                    b.Property<DateTime?>("SfsoCommissioningRequestedDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("SfsoCommissioningRequestedDate");
 
                     b.Property<string>("SpecificReasonsForTransfer")
                         .IsRequired()

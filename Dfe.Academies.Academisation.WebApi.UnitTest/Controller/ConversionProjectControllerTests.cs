@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.Query;
 using Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands;
@@ -54,6 +55,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			);
 		}
 
+		private static SetSfsoCommissioningCommand CreateValidSetSfsoCommissioningCommand() => 
+			new(id: 1, sfsoCommissioningOverview: "Commissioning overview text");
+
 		[Fact]
 		public async Task SetSchoolOverview_ReturnsOk_WhenUpdateIsSuccessful()
 		{
@@ -101,6 +105,43 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var result = await _controller.SetPublicEqualityDuty(request.Id, request);
 
 			Assert.IsType<NotFoundResult>(result);
+		}
+
+		[Fact]
+		public async Task SetSfsoCommissioning_ReturnsOk_WhenUpdateIsSuccessful()
+		{
+			var request = CreateValidSetSfsoCommissioningCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetSfsoCommissioningCommand>(), default))
+						.ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetSfsoCommissioning(request.Id, request);
+
+			Assert.IsType<OkResult>(result);
+		}
+
+		[Fact]
+		public async Task SetSfsoCommissioning_ReturnsNotFound_WhenProjectNotFound()
+		{
+			var request = CreateValidSetSfsoCommissioningCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetSfsoCommissioningCommand>(), default))
+						.ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetSfsoCommissioning(request.Id, request);
+
+			Assert.IsType<NotFoundResult>(result);
+		}
+
+		[Fact]
+		public async Task SetSfsoCommissioning_ReturnsBadRequest_WhenValidationFails()
+		{
+			var request = CreateValidSetSfsoCommissioningCommand();
+			_mockMediator.Setup(m => m.Send(It.IsAny<SetSfsoCommissioningCommand>(), default))
+						.ReturnsAsync(new CommandValidationErrorResult(
+							new List<ValidationError> { new("SfsoCommissioningOverview", "Overview must be 250 characters or less") }));
+
+			var result = await _controller.SetSfsoCommissioning(request.Id, request);
+
+			Assert.IsType<BadRequestObjectResult>(result);
 		}
 	}
 }

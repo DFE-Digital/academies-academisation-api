@@ -74,5 +74,46 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			_mockConversionProjectRepository.Verify(repo => repo.Update(It.IsAny<Project>()), Times.Once);
 			Assert.IsType<CommandSuccessResult>(result);
 		}
+
+		[Fact]
+		public async Task Handle_DerivesSfsoCommissioningRequestedDate_FromAdvisoryBoardDate()
+		{
+			var htb = DateTime.Today.AddDays(40);
+			var command = new SetProjectDatesCommand(1, htb, null, null, null, null, true);
+			var existingProject = CreateMockProject();
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Equal(htb.AddDays(-15), existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_SetsToday_WhenAdvisoryBoardDateWithin15Days()
+		{
+			var htb = DateTime.Today.AddDays(10);
+			var command = new SetProjectDatesCommand(1, htb, null, null, null, null, true);
+			var existingProject = CreateMockProject();
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Equal(DateTime.Today, existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_SetsNull_WhenNoAdvisoryBoardDate()
+		{
+			var command = new SetProjectDatesCommand(1, null, null, null, null, null, true);
+			var existingProject = new Project(1, new ProjectDetails { SfsoCommissioningRequestedDate = DateTime.Today });
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Null(existingProject.Details.SfsoCommissioningRequestedDate);
+		}
 	}
 }

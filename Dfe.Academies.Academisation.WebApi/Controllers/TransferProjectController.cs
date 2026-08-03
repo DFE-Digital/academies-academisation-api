@@ -91,6 +91,27 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{urn:int}/sfso-commissioning", Name = "SetTransferSfsoCommissioning")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetTransferSfsoCommissioning(int urn, SetTransferSfsoCommissioningCommand request)
+		{
+			request.Urn = urn;
+
+			CommandResult result = await _mediator.Send(request);
+
+			return ToActionResult(result);
+		}
+
+		private ActionResult ToActionResult(CommandResult result) => result switch
+		{
+			CommandSuccessResult => Ok(),
+			NotFoundCommandResult => NotFound(),
+			CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+			_ => throw new NotImplementedException()
+		};
+
 		[HttpPut("{urn}/set-transfer-dates", Name = "SetTransferProjectTransferDates")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -353,7 +374,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			SetTransferProjectDeletedAtCommand request = new SetTransferProjectDeletedAtCommand(urn);
 
-			CommandResult result = await _mediator.Send(request);
+			CommandResult result = await _mediator.Send(request, cancellationToken);
 
 			return result switch
 			{

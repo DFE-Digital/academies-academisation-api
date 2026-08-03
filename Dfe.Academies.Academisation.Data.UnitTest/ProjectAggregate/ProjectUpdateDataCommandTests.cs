@@ -44,6 +44,9 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.ProjectAggregate
 				.With(x => x.ExternalApplicationFormSaved, true)
 				.With(x => x.ExternalApplicationFormUrl, "test//url")
 				.With(x => x.AcademyTypeAndRoute, "Sponsored")
+				.With(x => x.ConversionSupportGrantAmountChanged, false)
+				.With(x => x.HeadTeacherBoardDate, (DateTime?)DateTime.Today.AddDays(40))
+				.With(x => x.SfsoCommissioningRequestedDate, (DateTime?)DateTime.Today.AddDays(25)) // = HTB − 15, matches Update's derivation
 				.Create();
 
 
