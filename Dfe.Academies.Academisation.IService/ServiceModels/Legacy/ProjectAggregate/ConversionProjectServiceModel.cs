@@ -131,10 +131,9 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggre
 		public DateTime? ProposedConversionDate { get; set; }
 		public bool? ProjectDatesSectionComplete { get; set; }
 		public bool IsReadOnly { get; set; }
-		
 		public DateTime? ProjectSentToCompleteDate { get; set; }
-		
-		
+		public DateTime? SfsoCommissioningRequestedDate { get; init; }
+		public string? SfsoCommissioningOverview { get; init; }
 
 		public bool Equals(ConversionProjectServiceModel? other)
 		{

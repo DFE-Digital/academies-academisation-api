@@ -12,5 +12,6 @@
 		public bool? HasHtbDate { get; set; }
 		public bool? HasHtbDateInserted { get; set; }
 		public bool? IsCompleted { get; set; }
+		public DateTime? SfsoCommissioningRequestedDate { get; set; }
 	}
 }

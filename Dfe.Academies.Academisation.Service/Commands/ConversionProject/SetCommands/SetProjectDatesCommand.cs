@@ -5,7 +5,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 {
 	public class SetProjectDatesCommand : IRequest<CommandResult>
 	{
-		public SetProjectDatesCommand(int id, DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, List<ReasonChange>? reasonsChanged, string? changedBy, bool? projectDatesSectionComplete)
+		public SetProjectDatesCommand(int id, DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard,
+			DateTime? proposedConversionDate, List<ReasonChange>? reasonsChanged, string? changedBy,
+			bool? projectDatesSectionComplete)
 		{
 			Id = id;
 			AdvisoryBoardDate = advisoryBoardDate;

@@ -263,6 +263,7 @@ public class Project : Entity, IProject, IAggregateRoot
 
 		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(detailsToUpdate.AcademyTypeAndRoute, detailsToUpdate.ApplicationReceivedDate);
 		decimal? defaultSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase);
+		bool headTeacherBoardDateChanged = Details.HeadTeacherBoardDate != detailsToUpdate.HeadTeacherBoardDate;
 
 		Details = new ProjectDetails
 		{
@@ -393,6 +394,12 @@ public class Project : Entity, IProject, IAggregateRoot
 			YearThreeProjectedCapacity = detailsToUpdate.YearThreeProjectedCapacity,
 			YearThreeProjectedPupilNumbers = detailsToUpdate.YearThreeProjectedPupilNumbers,
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
+
+			// SFSO commissioning
+			SfsoCommissioningRequestedDate = headTeacherBoardDateChanged
+				? SfsoCommissioningCalculator.CalculateRequestedDate(detailsToUpdate.HeadTeacherBoardDate)
+				: detailsToUpdate.SfsoCommissioningRequestedDate,
+			SfsoCommissioningOverview = detailsToUpdate.SfsoCommissioningOverview,
 
 			// assigned users
 			AssignedUser = MapUser(detailsToUpdate.AssignedUser)
@@ -606,6 +613,12 @@ public class Project : Entity, IProject, IAggregateRoot
 		Details.PublicEqualityDutyReduceImpactReason = publicEqualityDutyReduceImpactReason;
 		Details.PublicEqualityDutySectionComplete = publicEqualityDutySectionComplete;
 	}
+	
+	public void SetSfsoCommissioning(string? sfsoCommissioningOverview)
+	{
+		Details.SfsoCommissioningOverview = sfsoCommissioningOverview;
+		LastModifiedOn = DateTime.UtcNow;
+	}
 
 	public void SetAssignedUser(Guid userId, string fullName, string emailAddress)
 	{
@@ -687,7 +700,13 @@ public class Project : Entity, IProject, IAggregateRoot
 		schoolImprovementPlan?.Update(arrangedBy, arrangedByOther, providedBy, startDate, expectedEndDate, expectedEndDateOther, confidenceLevel, planComments);
 	}
 
-	public void SetProjectDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoard, DateTime? proposedConversionDate, bool? projectDatesSectionComplete, List<ReasonChange>? reasonsChanged, string? changedBy = default)
+	public void SetProjectDates(
+		DateTime? advisoryBoardDate, 
+		DateTime? previousAdvisoryBoard, 
+		DateTime? proposedConversionDate, 
+		bool? projectDatesSectionComplete, 
+		List<ReasonChange>? reasonsChanged, 
+		string? changedBy)
 	{
 		// Update the respective properties in the Details object
 		Details.HeadTeacherBoardDate = advisoryBoardDate;
@@ -704,8 +723,7 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
-
-		// Update the LastModifiedOn property to the current time to indicate the object has been modified
+		Details.SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(advisoryBoardDate);
 		LastModifiedOn = DateTime.UtcNow;
 	}
 }

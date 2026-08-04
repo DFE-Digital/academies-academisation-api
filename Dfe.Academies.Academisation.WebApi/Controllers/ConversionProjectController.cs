@@ -256,6 +256,23 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{id:int}/sfso-commissioning", Name = "SetSfsoCommissioning")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSfsoCommissioning(int id, SetSfsoCommissioningCommand request)
+		{
+			request.Id = id;
+			CommandResult result = await _mediator.Send(request);
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult => BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpGet("formamatproject/{id:int}", Name = "GetFormAMatProjectById")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -411,7 +428,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			SetDeletedAtCommand request = new SetDeletedAtCommand(id);
 
-			CommandResult result = await _mediator.Send(request);
+			CommandResult result = await _mediator.Send(request, cancellationToken);
 
 			return result switch
 			{

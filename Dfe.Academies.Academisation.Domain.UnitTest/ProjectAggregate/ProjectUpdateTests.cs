@@ -25,6 +25,8 @@ public class ProjectUpdateTests
 			.With(x => x.ExternalApplicationFormUrl, "test//url")
 			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 23, 59, 58, DateTimeKind.Utc)) // before support grant deadline
 			.With(p => p.Urn, initialProject.Urn).Without(x => x.ConversionSupportGrantChangeReason)
+			.With(x => x.HeadTeacherBoardDate, (DateTime?)DateTime.Today.AddDays(40))
+			.With(x => x.SfsoCommissioningRequestedDate, (DateTime?)DateTime.Today.AddDays(25)) // = HTB − 15, matches Update's derivation
 			.Create();
 
 		// Act
