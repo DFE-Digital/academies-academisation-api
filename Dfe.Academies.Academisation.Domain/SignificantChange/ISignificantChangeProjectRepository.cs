@@ -6,5 +6,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 	{
 		Task<(IEnumerable<SignificantChangeProject> projects, int totalCount)> SearchSignificantChangeProjects(int page, int count, CancellationToken cancellationToken);
 		Task<SignificantChangeProject?> GetSignificantChangeProjectById(int id, CancellationToken cancellationToken);
+		Task<SignificantChangeFilterParameters> GetFilterParameters(CancellationToken cancellationToken);
 	}
 }

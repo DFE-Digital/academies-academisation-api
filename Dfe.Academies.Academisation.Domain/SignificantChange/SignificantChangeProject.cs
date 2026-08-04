@@ -26,7 +26,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public static SignificantChangeProject Create(int urn, byte tier, string trustName, string trustUkprn,
 			string route, string schoolName, DateTime createdOn)
 		{
-			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn,
+			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, urn, tier, trustName, trustUkprn,
 				route, schoolName) { CreatedOn = createdOn };
 		}
 	}

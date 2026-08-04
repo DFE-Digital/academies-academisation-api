@@ -33,7 +33,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var assignedUserId = Guid.NewGuid();
 
 			var project = new SignificantChangeProject(
-				SignificantChangeStatus.InProgress,
+				SignificantChangeStatus.PreDecision,
 				urn: 123456,
 				tier: 2,
 				trustName: "Trust A",
@@ -61,7 +61,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.TrustUkprn.Should().Be("10000001");
 			result.AssignedUser.Should().BeEquivalentTo(new User(assignedUserId, "Assigned User", "assigned.user@test.local"));
 			result.TypeOfSignificantChange.Should().Be("Change of age range");
-			result.Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
+			result.Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 		}
 
 		[Fact]
