@@ -3,8 +3,10 @@ using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
 using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 using MediatR;
 
@@ -15,28 +17,27 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 	IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository,
 	IConversionProjectRepository conversionProjectRepository,
 	ITransferProjectRepository transferProjectRepository,
-	IDateTimeProvider dateTimeProvider) : IRequestHandler<AdvisoryBoardDecisionCreateCommand, CreateResult>
+	ISignificantChangeProjectRepository significantChangeProjectRepository,
+	IDateTimeProvider dateTimeProvider) : IRequestHandler<AdvisoryBoardDecisionCreateCommand, CreateResult>, IRequestHandler<SignificantChangeDecisionCommand, CreateResult>
 {
-	public async Task<CreateResult> Handle(AdvisoryBoardDecisionCreateCommand request, CancellationToken cancellationToken)
+	public async Task<CreateResult> Handle(AdvisoryBoardDecisionCreateCommand request,
+		CancellationToken cancellationToken)
 	{
-		var deferredReasons = request.DeferredReasons ?? [];
-		var declinedReasons = request.DeclinedReasons ?? [];
-		var withdrawnReasons = request.WithdrawnReasons ?? [];
-		var daoRevokedReasons = request.DAORevokedReasons ?? [];
+		var result = CreateAdvisoryBoardDecisionDetails(request);
 
-		var details = new AdvisoryBoardDecisionDetails(
-			request.ConversionProjectId,
-			request.TransferProjectId,
-			request.Decision,
-			request.ApprovedConditionsSet,
-			request.ApprovedConditionsDetails,
-			request.AdvisoryBoardDecisionDate,
-			request.AcademyOrderDate,
-			request.DecisionMadeBy,
-			request.DecisionMakerName
-		);
+		return result switch
+		{
+			CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
+				await ExecuteDataCommand(successResult, cancellationToken),
+			CreateValidationErrorResult errorResult =>
+				errorResult.MapToPayloadType(),
+			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
+		};
+	}
 
-		var result = factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
+	public async Task<CreateResult> Handle(SignificantChangeDecisionCommand request, CancellationToken cancellationToken)
+	{
+		var result = CreateSignificantChangeDecisionDetails(request);
 
 		return result switch
 		{
@@ -54,41 +55,124 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 		advisoryBoardDecisionRepository.Insert(successResult.Payload as ConversionAdvisoryBoardDecision);
 
 		await advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-		await SetProjectReadOnlyAsync(successResult.Payload.AdvisoryBoardDecisionDetails);
+
+		if (successResult.Payload.AdvisoryBoardDecisionDetails.Decision == Domain.Core
+			    .ConversionAdvisoryBoardDecisionAggregate
+			    .AdvisoryBoardDecision.Approved)
+		{
+			await SetProjectReadOnlyAsync(successResult.Payload.AdvisoryBoardDecisionDetails);
+		}
+
 		return successResult.MapToPayloadType(ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain);
 	}
 
+	private CreateResult CreateAdvisoryBoardDecisionDetails(AdvisoryBoardDecisionCreateCommand request)
+	{
+		var details = new AdvisoryBoardDecisionDetails(
+			request.ConversionProjectId,
+			request.TransferProjectId,
+			null,
+			request.Decision,
+			request.ApprovedConditionsSet,
+			request.ApprovedConditionsDetails,
+			request.AdvisoryBoardDecisionDate,
+			request.AcademyOrderDate,
+			request.DecisionMadeBy,
+			request.DecisionMakerName
+		);
+		
+		var deferredReasons = request.DeferredReasons ?? [];
+		var declinedReasons = request.DeclinedReasons ?? [];
+		var withdrawnReasons = request.WithdrawnReasons ?? [];
+		var daoRevokedReasons = request.DAORevokedReasons ?? [];
+
+		return factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
+	}
+
+	private CreateResult CreateSignificantChangeDecisionDetails(SignificantChangeDecisionCommand request)
+	{
+		var significantChangeDetails = new AdvisoryBoardDecisionDetails(
+			null,
+			null,
+			request.SignificantChangeProjectId,
+			MapToAdvisoryBoardDecision(request.Decision),
+			request.ApprovedConditionsSet,
+			request.ApprovedConditionsDetails,
+			request.AdvisoryBoardDecisionDate,
+			null,
+			request.DecisionMadeBy,
+			request.DecisionMakerName
+		);
+		var sigChangeDeferredReasons = request.DeferredReasons ?? [];
+		var sigChangeDeclinedReasons = request.DeclinedReasons ?? [];
+		var sigChangeWithdrawnReasons = request.WithdrawnReasons ?? [];
+
+		return factory.Create(significantChangeDetails, sigChangeDeferredReasons, sigChangeDeclinedReasons, sigChangeWithdrawnReasons, []);
+	}
+
+	private static Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision MapToAdvisoryBoardDecision(
+		Decision decision) =>
+		decision switch
+		{
+			Decision.Approved => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved,
+			Decision.Declined => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Declined,
+			Decision.Deferred => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Deferred,
+			Decision.Withdrawn => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Withdrawn,
+			_ => throw new ArgumentOutOfRangeException(nameof(decision), decision, null)
+		};
+
 	private async Task SetProjectReadOnlyAsync(AdvisoryBoardDecisionDetails advisoryBoardDecisionDetails)
 	{
-		if (advisoryBoardDecisionDetails != null)
+		if (advisoryBoardDecisionDetails.TransferProjectId != null)
+		{ 
+			await UpdateTransferProjectAsync(advisoryBoardDecisionDetails.TransferProjectId);
+		}
+		else if (advisoryBoardDecisionDetails.ConversionProjectId != null)
 		{
-			if (advisoryBoardDecisionDetails.TransferProjectId != null)
-			{
-				var project = await transferProjectRepository.GetById(advisoryBoardDecisionDetails.TransferProjectId.GetValueOrDefault());
-				if (project != null)
-				{
-					if (advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved)
-					{ 
-						project.SetIsReadOnly(dateTimeProvider.Now); 
-					}
-					transferProjectRepository.Update(project);
-					await transferProjectRepository.UnitOfWork.SaveChangesAsync();
-				}
-			}
-			else
-			{
-				var project = await conversionProjectRepository.GetById(advisoryBoardDecisionDetails.ConversionProjectId.GetValueOrDefault());
-				if (project != null)
-				{
-					if (advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved)
-					{
-						project.SetIsReadOnly(dateTimeProvider.Now);
-					}
-					conversionProjectRepository.Update(project);
-					await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
-				}
-			}
-
+			await UpdateConversionProjectAsync(advisoryBoardDecisionDetails.ConversionProjectId);
+		}
+		else if (advisoryBoardDecisionDetails.SignificantChangeProjectId != null)
+		{
+			await UpdateSignificantChangeProjectAsync(advisoryBoardDecisionDetails.SignificantChangeProjectId);
 		}
 	}
+
+	private async Task UpdateSignificantChangeProjectAsync(int? significantChangeProjectId)
+	{
+		var project = await significantChangeProjectRepository.GetById(significantChangeProjectId.GetValueOrDefault());
+
+		if (project != null)
+		{
+			project.SetReadOnlyDate(dateTimeProvider.Now);
+
+			significantChangeProjectRepository.Update(project);
+			await significantChangeProjectRepository.UnitOfWork.SaveChangesAsync();
+		}
+	}
+
+	private async Task UpdateConversionProjectAsync(int? conversionProjectId)
+	{
+		var project = await conversionProjectRepository.GetById(conversionProjectId.GetValueOrDefault());
+		if (project != null)
+		{
+			project.SetIsReadOnly(dateTimeProvider.Now);
+
+			conversionProjectRepository.Update(project);
+			await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
+		}
+	}
+
+	private async Task UpdateTransferProjectAsync(int? transferProjectId)
+	{
+		var project = await transferProjectRepository.GetById(transferProjectId.GetValueOrDefault());
+
+		if (project != null)
+		{
+			project.SetIsReadOnly(dateTimeProvider.Now);
+
+			transferProjectRepository.Update(project);
+			await transferProjectRepository.UnitOfWork.SaveChangesAsync();
+		}
+	}
+
 }

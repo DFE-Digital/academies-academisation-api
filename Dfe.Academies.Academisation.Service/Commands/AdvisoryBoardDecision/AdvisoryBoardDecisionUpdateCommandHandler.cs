@@ -32,6 +32,7 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(
 		var details = new AdvisoryBoardDecisionDetails(
 			command.ConversionProjectId,
 			command.TransferProjectId,
+			command.SignificantChangeProjectId,
 			command.Decision,
 			command.ApprovedConditionsSet,
 			command.ApprovedConditionsDetails,
