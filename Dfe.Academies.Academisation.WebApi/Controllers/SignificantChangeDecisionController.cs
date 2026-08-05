@@ -1,5 +1,6 @@
 ﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
+using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
 using MediatR;
@@ -14,13 +15,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[HttpPost]
-		public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> Post([FromBody] SignificantChangeDecisionCommand request, CancellationToken cancellationToken)
+		public async Task<ActionResult<SignificantChangeDecisionServiceModel>> Post([FromBody] SignificantChangeDecisionCommand request, CancellationToken cancellationToken)
 		{
 			var result = await mediator.Send(request, cancellationToken).ConfigureAwait(false);
 
 			return result switch
 			{
-				CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel> successResult => CreatedAtRoute(
+				CreateSuccessResult<SignificantChangeDecisionServiceModel> successResult => CreatedAtRoute(
 					"GetProject",
 					new { projectId = successResult.Payload.AdvisoryBoardDecisionId },
 					successResult.Payload),

@@ -70,78 +70,78 @@ public class AdvisoryBoardDecisionCreateCommandExecuteTests
 		_mockRepo.Verify(c => c.Insert(It.IsAny<ConversionAdvisoryBoardDecision>()), Times.Once);
 	}
 
-	//[Fact]
-	//public async Task RequestModelIsValid___ReturnsExpectedConversionAdvisoryBoardDecisionServiceModel()
-	//{
-	//	//Arrange
-	//	var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-	//	var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
-	//	var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
-	//	var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
-	//	var daoRevoked = _fixture.CreateMany<AdvisoryBoardDAORevokedReasonDetails>();
+	[Fact]
+	public async Task RequestModelIsValid___ReturnsExpectedConversionAdvisoryBoardDecisionServiceModel()
+	{
+		//Arrange
+		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
+		var deferred = _fixture.CreateMany<AdvisoryBoardDeferredReasonDetails>();
+		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
+		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
+		var daoRevoked = _fixture.CreateMany<AdvisoryBoardDAORevokedReasonDetails>();
 
-	//	var expected = new ConversionAdvisoryBoardDecisionServiceModel
-	//	{
-	//		ConversionProjectId = details.ConversionProjectId,
-	//		Decision = details.Decision,
-	//		ApprovedConditionsSet = details.ApprovedConditionsSet,
-	//		ApprovedConditionsDetails = details.ApprovedConditionsDetails,
-	//		DeclinedReasons = declined.ToList(),
-	//		DeferredReasons = deferred.ToList(),
-	//		WithdrawnReasons = withdrawn.ToList(),
-	//		DAORevokedReasons = daoRevoked.ToList(),
-	//		AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
-	//		AcademyOrderDate = details.AcademyOrderDate,
-	//		DecisionMadeBy = details.DecisionMadeBy,
-	//		DecisionMakerName = details.DecisionMakerName
-	//	};
+		var expected = new ConversionAdvisoryBoardDecisionServiceModel
+		{
+			ConversionProjectId = details.ConversionProjectId,
+			Decision = details.Decision,
+			ApprovedConditionsSet = details.ApprovedConditionsSet,
+			ApprovedConditionsDetails = details.ApprovedConditionsDetails,
+			DeclinedReasons = declined.ToList(),
+			DeferredReasons = deferred.ToList(),
+			WithdrawnReasons = withdrawn.ToList(),
+			DAORevokedReasons = daoRevoked.ToList(),
+			AdvisoryBoardDecisionDate = details.AdvisoryBoardDecisionDate,
+			AcademyOrderDate = details.AcademyOrderDate,
+			DecisionMadeBy = details.DecisionMadeBy,
+			DecisionMakerName = details.DecisionMakerName
+		};
 
-	//	//Arrange
-	//	_mockDecisionFactory
-	//		.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
-	//		.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
+		//Arrange
+		_mockDecisionFactory
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+			.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
 
-	//	_mockDecision
-	//		.SetupGet(d => d.AdvisoryBoardDecisionDetails)
-	//		.Returns(details);
-	//	_mockDecision
-	//		.SetupGet(d => d.DeferredReasons)
-	//		.Returns(deferred.ToList().AsReadOnly());
-	//	_mockDecision
-	//		.SetupGet(d => d.DeclinedReasons)
-	//		.Returns(declined.ToList().AsReadOnly());
-	//	_mockDecision
-	//		.SetupGet(d => d.WithdrawnReasons)
-	//		.Returns(withdrawn.ToList().AsReadOnly());
-	//	_mockDecision
-	//		.SetupGet(d => d.DAORevokedReasons)
-	//		.Returns(daoRevoked.ToList().AsReadOnly());
+		_mockDecision
+			.SetupGet(d => d.AdvisoryBoardDecisionDetails)
+			.Returns(details);
+		_mockDecision
+			.SetupGet(d => d.DeferredReasons)
+			.Returns(deferred.ToList().AsReadOnly());
+		_mockDecision
+			.SetupGet(d => d.DeclinedReasons)
+			.Returns(declined.ToList().AsReadOnly());
+		_mockDecision
+			.SetupGet(d => d.WithdrawnReasons)
+			.Returns(withdrawn.ToList().AsReadOnly());
+		_mockDecision
+			.SetupGet(d => d.DAORevokedReasons)
+			.Returns(daoRevoked.ToList().AsReadOnly());
 
-	//	var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object, _mockSignificantChangeProjectRepository.Object, _mockDateTimeProvider.Object);
+		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object, _mockSignificantChangeProjectRepository.Object, _mockDateTimeProvider.Object);
 
-	//	//Act
-	//	var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>)await target.Handle(new(), default);
+		//Act
+		var result = (CreateSuccessResult<ConversionAdvisoryBoardDecisionServiceModel>)await target.Handle(new AdvisoryBoardDecisionCreateCommand(), default);
 
-	//	//Assert
-	//	Assert.Equivalent(expected, result.Payload);
-	//}
+		//Assert
+		Assert.Equivalent(expected, result.Payload);
+	}
 
-	//[Fact]
-	//public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
-	//{
-	//	//Arrange
-	//	_mockDecisionFactory
-	//		.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
-	//		.Returns(new CreateValidationErrorResult(Enumerable.Empty<ValidationError>()));
+	[Fact]
+	public async Task RequestModelIsInvalid_DoesNotCallExecuteOnDataCommand()
+	{
+		//Arrange
+		_mockDecisionFactory
+			.Setup(f => f.Create(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+			.Returns(new CreateValidationErrorResult(Enumerable.Empty<ValidationError>()));
 
-	//	var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object, _mockSignificantChangeProjectRepository.Object, _mockDateTimeProvider.Object);
+		var target = new AdvisoryBoardDecisionCreateCommandHandler(_mockDecisionFactory.Object, _mockRepo.Object, _mockConversionProjectRepository.Object, _mockTransferProjectRepository.Object, _mockSignificantChangeProjectRepository.Object, _mockDateTimeProvider.Object);
 
-	//	//Act
-	//	_ = await target.Handle(new(), default);
+		//Act
+		_ = await target.Handle(new AdvisoryBoardDecisionCreateCommand(), default);
 
-	//	//Assert
-	//	_mockRepo.Verify(c => c.Insert(It.IsAny<ConversionAdvisoryBoardDecision>()), Times.Never);
-	//}
+		//Assert
+		_mockRepo.Verify(c => c.Insert(It.IsAny<ConversionAdvisoryBoardDecision>()), Times.Never);
+	}
 
 	[Fact]
 	public async Task FactoryReturnsUnhandledCreateResult___ThrowsException()

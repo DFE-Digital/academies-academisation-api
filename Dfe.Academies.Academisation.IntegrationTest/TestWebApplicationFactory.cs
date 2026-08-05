@@ -59,21 +59,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 			_dbContext = serviceProvider.GetRequiredService<AcademisationContext>();
 
 			_dbContext.Database.EnsureCreated();
-
-			SeedDecisionData();
 		});
-	}
-
-	private void SeedDecisionData()
-	{
-		_dbContext.AddRange(new Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision(
-			1,
-			new AdvisoryBoardDecisionDetails(1000, null, null, AdvisoryBoardDecision.Approved, true, "TestData", System.DateTime.UtcNow.AddMonths(-1), System.DateTime.UtcNow.AddMonths(-1), DecisionMadeBy.DirectorGeneral, "John Smith"),
-			null!, null!, null!, null, new(2022, 02, 02),
-			new(2022, 02, 02)
-			));
-
-		_dbContext.SaveChanges();
 	}
 
 	protected override void Dispose(bool disposing)

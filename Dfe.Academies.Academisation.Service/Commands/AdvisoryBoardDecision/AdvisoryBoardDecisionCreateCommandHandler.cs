@@ -6,6 +6,8 @@ using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAgg
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
+using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
 using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 using MediatR;
@@ -28,7 +30,7 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 		return result switch
 		{
 			CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
-				await ExecuteDataCommand(successResult, cancellationToken),
+				await ExecuteDataCommand<ConversionAdvisoryBoardDecisionServiceModel>(successResult, cancellationToken),
 			CreateValidationErrorResult errorResult =>
 				errorResult.MapToPayloadType(),
 			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
@@ -42,14 +44,14 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 		return result switch
 		{
 			CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult =>
-				await ExecuteDataCommand(successResult, cancellationToken),
+				await ExecuteDataCommand<SignificantChangeDecisionServiceModel>(successResult, cancellationToken),
 			CreateValidationErrorResult errorResult =>
 				errorResult.MapToPayloadType(),
 			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
 		};
 	}
 
-	private async Task<CreateResult> ExecuteDataCommand(
+	private async Task<CreateResult> ExecuteDataCommand<TServiceModel>(
 		CreateSuccessResult<IConversionAdvisoryBoardDecision> successResult, CancellationToken cancellationToken)
 	{
 		advisoryBoardDecisionRepository.Insert(successResult.Payload as ConversionAdvisoryBoardDecision);
@@ -63,7 +65,22 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 			await SetProjectReadOnlyAsync(successResult.Payload.AdvisoryBoardDecisionDetails);
 		}
 
-		return successResult.MapToPayloadType(ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain);
+		return successResult.MapToPayloadType(GetMapFromDomain<TServiceModel>());
+	}
+
+	private static Func<IConversionAdvisoryBoardDecision, TServiceModel> GetMapFromDomain<TServiceModel>()
+	{
+		if (typeof(TServiceModel) == typeof(ConversionAdvisoryBoardDecisionServiceModel))
+		{
+			return decision => (TServiceModel)(object)ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain(decision);
+		}
+
+		if (typeof(TServiceModel) == typeof(SignificantChangeDecisionServiceModel))
+		{
+			return decision => (TServiceModel)(object)SignificantChangeDecisionServiceModelMapper.MapFromDomain(decision);
+		}
+
+		throw new NotSupportedException($"No MapFromDomain mapper configured for service model type '{typeof(TServiceModel).Name}'.");
 	}
 
 	private CreateResult CreateAdvisoryBoardDecisionDetails(AdvisoryBoardDecisionCreateCommand request)
@@ -95,7 +112,7 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 			null,
 			null,
 			request.SignificantChangeProjectId,
-			MapToAdvisoryBoardDecision(request.Decision),
+			request.Decision.MapToAdvisoryBoardDecision(),
 			request.ApprovedConditionsSet,
 			request.ApprovedConditionsDetails,
 			request.AdvisoryBoardDecisionDate,
@@ -109,18 +126,7 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 
 		return factory.Create(significantChangeDetails, sigChangeDeferredReasons, sigChangeDeclinedReasons, sigChangeWithdrawnReasons, []);
 	}
-
-	private static Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision MapToAdvisoryBoardDecision(
-		Decision decision) =>
-		decision switch
-		{
-			Decision.Approved => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved,
-			Decision.Declined => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Declined,
-			Decision.Deferred => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Deferred,
-			Decision.Withdrawn => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Withdrawn,
-			_ => throw new ArgumentOutOfRangeException(nameof(decision), decision, null)
-		};
-
+	
 	private async Task SetProjectReadOnlyAsync(AdvisoryBoardDecisionDetails advisoryBoardDecisionDetails)
 	{
 		if (advisoryBoardDecisionDetails.TransferProjectId != null)
