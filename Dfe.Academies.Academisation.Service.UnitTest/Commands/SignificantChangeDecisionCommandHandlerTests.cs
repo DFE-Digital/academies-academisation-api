@@ -66,7 +66,7 @@ public class SignificantChangeDecisionCommandHandlerTests
 				d.Decision == expectedDecision &&
 				d.ApprovedConditionsSet == command.ApprovedConditionsSet &&
 				d.ApprovedConditionsDetails == command.ApprovedConditionsDetails &&
-				d.AdvisoryBoardDecisionDate == command.AdvisoryBoardDecisionDate &&
+				d.AdvisoryBoardDecisionDate == command.DecisionDate &&
 				d.AcademyOrderDate == null &&
 				d.DecisionMadeBy == command.DecisionMadeBy &&
 				d.DecisionMakerName == command.DecisionMakerName),
@@ -211,7 +211,7 @@ public class SignificantChangeDecisionCommandHandlerTests
 		Decision = decision,
 		ApprovedConditionsSet = decision == Decision.Approved ? true : null,
 		ApprovedConditionsDetails = decision == Decision.Approved ? _fixture.Create<string>() : null,
-		AdvisoryBoardDecisionDate = DateTime.UtcNow.AddDays(-1),
+		DecisionDate = DateTime.UtcNow.AddDays(-1),
 		DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
 		DecisionMakerName = _fixture.Create<string>(),
 		DeclinedReasons = [],

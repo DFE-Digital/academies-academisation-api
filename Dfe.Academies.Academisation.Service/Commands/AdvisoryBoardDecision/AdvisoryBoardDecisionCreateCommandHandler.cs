@@ -115,7 +115,7 @@ public class AdvisoryBoardDecisionCreateCommandHandler(
 			request.Decision.MapToAdvisoryBoardDecision(),
 			request.ApprovedConditionsSet,
 			request.ApprovedConditionsDetails,
-			request.AdvisoryBoardDecisionDate,
+			request.DecisionDate,
 			null,
 			request.DecisionMadeBy,
 			request.DecisionMakerName

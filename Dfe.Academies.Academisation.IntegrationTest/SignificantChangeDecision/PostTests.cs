@@ -54,7 +54,7 @@ public class PostTests(TestWebApplicationFactory factory)
 			DeclinedReasons = [new(significantChangeProjectId, AdvisoryBoardDeclinedReason.Finance, "reason")],
 			DeferredReasons = [],
 			WithdrawnReasons = [],
-			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddMonths(-1),
+			DecisionDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion,
 			DecisionMakerName = "John Smith"
 		};

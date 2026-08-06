@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision
 		public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; }
 		public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
 		public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
-		public DateTime AdvisoryBoardDecisionDate { get; set; }
+		public DateTime DecisionDate { get; set; }
 		public DecisionMadeBy DecisionMadeBy { get; set; }
 		public string? DecisionMakerName { get; set; }
 	}

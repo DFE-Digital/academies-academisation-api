@@ -19,7 +19,7 @@ internal static class SignificantChangeDecisionServiceModelMapper
 			DeclinedReasons = decision.DeclinedReasons.ToList(),
 			DeferredReasons = decision.DeferredReasons.ToList(),
 			WithdrawnReasons = decision.WithdrawnReasons.ToList(),
-			AdvisoryBoardDecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
+			DecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,
 			DecisionMakerName = decision.AdvisoryBoardDecisionDetails.DecisionMakerName
 		};
