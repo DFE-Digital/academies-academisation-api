@@ -26,6 +26,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			approvedConditionsSet,
 			approvedConditionsSet ? _faker.Lorem.Sentence() : null,
@@ -56,6 +57,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
@@ -83,6 +85,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -112,6 +115,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Withdrawn,
 			null,
 			null,
@@ -133,6 +137,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		// Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -162,6 +167,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
@@ -189,6 +195,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		// Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Approved,
 			null,
@@ -222,6 +229,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			true,
 			value,
@@ -249,6 +257,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		//Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -278,6 +287,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
@@ -305,6 +315,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		//Arrange	
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Approved,
 			false,
@@ -334,6 +345,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
@@ -362,6 +374,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
@@ -389,6 +402,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		// Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -421,6 +435,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		// Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -455,6 +470,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Withdrawn,
 			null,
 			null,
@@ -485,6 +501,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Declined,
 			false,
 			null,
@@ -512,6 +529,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		//Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Declined,
 			null,
@@ -541,6 +559,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Deferred,
 			null,
 			null,
@@ -568,6 +587,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		// Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -601,6 +621,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Declined,
 			null,
 			null,
@@ -630,6 +651,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Declined,
 			false,
 			null,
@@ -657,6 +679,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		//Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Deferred,
 			null,
@@ -689,6 +712,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
@@ -720,6 +744,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			false,
 			null,
@@ -745,6 +770,7 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 		//Arrange
 		ConversionAdvisoryBoardDecision decision = new(1, new AdvisoryBoardDecisionDetails(
 			ConversionProjectId,
+			null,
 			null,
 			AdvisoryBoardDecision.Approved,
 			false,

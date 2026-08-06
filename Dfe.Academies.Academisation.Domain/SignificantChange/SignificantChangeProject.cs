@@ -15,6 +15,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public string TrustName { get; private set; } = trustName;
 		public string TrustUkprn { get; private set; } = trustUkprn;
 		public string TypeOfSignificantChange { get; private set; } = typeOfSignificantChange;
+		public DateTime? ReadOnlyDate { get; private set; }
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
@@ -28,6 +29,11 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		{
 			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn,
 				route, schoolName) { CreatedOn = createdOn };
+		}
+
+		public void SetReadOnlyDate(DateTime readOnlyDate)
+		{
+			this.ReadOnlyDate = readOnlyDate;
 		}
 	}
 }

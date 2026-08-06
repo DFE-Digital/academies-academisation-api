@@ -57,5 +57,24 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.AssignedUserEmailAddress.Should().Be(userEmail);
 			project.AssignedUserFullName.Should().Be(userFullName);
 		}
+
+		[Fact]
+		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
+		{
+			var project = SignificantChangeProject.Create(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				DateTime.UtcNow);
+
+			var readOnlyDate = DateTime.UtcNow.AddDays(-1);
+
+			project.SetReadOnlyDate(readOnlyDate);
+
+			project.ReadOnlyDate.Should().Be(readOnlyDate);
+		}
 	}
 }

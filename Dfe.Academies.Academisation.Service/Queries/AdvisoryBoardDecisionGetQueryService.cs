@@ -28,6 +28,11 @@ public class AdvisoryBoardDecisionGetQueryService : IAdvisoryBoardDecisionQueryS
 			decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(projectId);
 		}
 
-		return decision?.MapFromDomain();
+		if (decision != null)
+		{
+			return ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain(decision);
+		}
+
+		return null;
 	}
 }
