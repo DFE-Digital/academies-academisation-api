@@ -12,12 +12,15 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 
-public class AdvisoryBoardDecisionUpdateCommandHandler(
+internal class AdvisoryBoardDecisionUpdateCommandHandler(
 	IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, 
 	IConversionProjectRepository conversionProjectRepository,
 	ITransferProjectRepository transferProjectRepository,
 	ISignificantChangeProjectRepository significantChangeProjectRepository,
-	IDateTimeProvider dateTimeProvider) : IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>, IRequestHandler<SignificantChangeUpdateDecisionCommand, CommandResult>
+	IDateTimeProvider dateTimeProvider)
+	: AdvisoryBoardDecisionProjectReadOnlyUpdater(transferProjectRepository, conversionProjectRepository, significantChangeProjectRepository, dateTimeProvider),
+	  IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>,
+	  IRequestHandler<SignificantChangeUpdateDecisionCommand, CommandResult>
 {
 	public async Task<CommandResult> Handle(AdvisoryBoardDecisionUpdateCommand command, CancellationToken cancellationToken)
 	{
@@ -102,58 +105,4 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(
 		return new CommandSuccessResult();
 	}
 
-	private async Task SetProjectReadOnlyAsync(AdvisoryBoardDecisionDetails advisoryBoardDecisionDetails)
-	{
-		if (advisoryBoardDecisionDetails.TransferProjectId != null)
-		{
-			await UpdateTransferProjectAsync(advisoryBoardDecisionDetails.TransferProjectId);
-		}
-		else if (advisoryBoardDecisionDetails.ConversionProjectId != null)
-		{
-			await UpdateConversionProjectAsync(advisoryBoardDecisionDetails.ConversionProjectId);
-		}
-		else if (advisoryBoardDecisionDetails.SignificantChangeProjectId != null)
-		{
-			await UpdateSignificantChangeProjectAsync(advisoryBoardDecisionDetails.SignificantChangeProjectId);
-		}
-	}
-
-	private async Task UpdateSignificantChangeProjectAsync(int? significantChangeProjectId)
-	{
-		var project = await significantChangeProjectRepository.GetById(significantChangeProjectId.GetValueOrDefault());
-
-		if (project != null)
-		{
-			project.SetReadOnlyDate(dateTimeProvider.Now);
-
-			significantChangeProjectRepository.Update(project);
-			await significantChangeProjectRepository.UnitOfWork.SaveChangesAsync();
-		}
-	}
-
-	private async Task UpdateConversionProjectAsync(int? conversionProjectId)
-	{
-		var project = await conversionProjectRepository.GetById(conversionProjectId.GetValueOrDefault());
-
-		if (project != null)
-		{
-			project.SetIsReadOnly(dateTimeProvider.Now);
-
-			conversionProjectRepository.Update(project);
-			await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
-		}
-	}
-
-	private async Task UpdateTransferProjectAsync(int? transferProjectId)
-	{
-		var project = await transferProjectRepository.GetById(transferProjectId.GetValueOrDefault());
-
-		if (project != null)
-		{
-			project.SetIsReadOnly(dateTimeProvider.Now);
-
-			transferProjectRepository.Update(project);
-			await transferProjectRepository.UnitOfWork.SaveChangesAsync();
-		}
-	}
 }
