@@ -21,18 +21,6 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(
 {
 	public async Task<CommandResult> Handle(AdvisoryBoardDecisionUpdateCommand command, CancellationToken cancellationToken)
 	{
-		if (command.AdvisoryBoardDecisionId == default)
-		{
-			return new BadRequestCommandResult();
-		}
-
-		var existingDecision = await advisoryBoardDecisionRepository.GetAdvisoryBoardDecisionById(command.AdvisoryBoardDecisionId);
-
-		if (existingDecision is null)
-		{
-			return new NotFoundCommandResult();
-		}
-
 		var details = new AdvisoryBoardDecisionDetails(
 			command.ConversionProjectId,
 			command.TransferProjectId,
@@ -46,30 +34,14 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(
 			command.DecisionMakerName
 		);
 
-		var result = existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, command.DAORevokedReasons!);
-
-		return result switch
-		{
-			CommandSuccessResult => await ExecuteDataCommand(existingDecision, cancellationToken),
-			CommandValidationErrorResult errorResult => errorResult,
-			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
-		};
+		return await UpdateDecisionAsync(
+			command.AdvisoryBoardDecisionId,
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, command.DAORevokedReasons!),
+			cancellationToken);
 	}
 
 	public async Task<CommandResult> Handle(SignificantChangeUpdateDecisionCommand command, CancellationToken cancellationToken)
 	{
-		if (command.AdvisoryBoardDecisionId == default)
-		{
-			return new BadRequestCommandResult();
-		}
-
-		var existingDecision = await advisoryBoardDecisionRepository.GetAdvisoryBoardDecisionById(command.AdvisoryBoardDecisionId);
-
-		if (existingDecision is null)
-		{
-			return new NotFoundCommandResult();
-		}
-
 		var details = new AdvisoryBoardDecisionDetails(
 			null,
 			null,
@@ -83,7 +55,30 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(
 			command.DecisionMakerName
 		);
 
-		var result = existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>());
+		return await UpdateDecisionAsync(
+			command.AdvisoryBoardDecisionId,
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>()),
+			cancellationToken);
+	}
+
+	private async Task<CommandResult> UpdateDecisionAsync(
+		int advisoryBoardDecisionId,
+		Func<IConversionAdvisoryBoardDecision, CommandResult> updateDecision,
+		CancellationToken cancellationToken)
+	{
+		if (advisoryBoardDecisionId == default)
+		{
+			return new BadRequestCommandResult();
+		}
+
+		var existingDecision = await advisoryBoardDecisionRepository.GetAdvisoryBoardDecisionById(advisoryBoardDecisionId);
+
+		if (existingDecision is null)
+		{
+			return new NotFoundCommandResult();
+		}
+
+		var result = updateDecision(existingDecision);
 
 		return result switch
 		{
