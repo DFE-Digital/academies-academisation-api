@@ -30,5 +30,23 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
 			};
 		}
+
+		[HttpPut]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> Put([FromBody] SignificantChangeUpdateDecisionCommand request, CancellationToken cancellationToken)
+		{
+			var result = await mediator.Send(request, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => new OkResult(),
+				NotFoundCommandResult => new NotFoundResult(),
+				BadRequestCommandResult => new BadRequestResult(),
+				CommandValidationErrorResult validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
+			};
+		}
 	}
 }

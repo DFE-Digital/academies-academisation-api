@@ -3,32 +3,27 @@ using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
+using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 
-public class AdvisoryBoardDecisionUpdateCommandHandler(
+internal class AdvisoryBoardDecisionUpdateCommandHandler(
 	IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, 
 	IConversionProjectRepository conversionProjectRepository,
 	ITransferProjectRepository transferProjectRepository,
-	IDateTimeProvider dateTimeProvider) : IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>
+	ISignificantChangeProjectRepository significantChangeProjectRepository,
+	IDateTimeProvider dateTimeProvider)
+	: AdvisoryBoardDecisionProjectReadOnlyUpdater(transferProjectRepository, conversionProjectRepository, significantChangeProjectRepository, dateTimeProvider),
+	  IRequestHandler<AdvisoryBoardDecisionUpdateCommand, CommandResult>,
+	  IRequestHandler<SignificantChangeUpdateDecisionCommand, CommandResult>
 {
 	public async Task<CommandResult> Handle(AdvisoryBoardDecisionUpdateCommand command, CancellationToken cancellationToken)
 	{
-		if (command.AdvisoryBoardDecisionId == default)
-		{
-			return new BadRequestCommandResult();
-		}
-
-		var existingDecision = await advisoryBoardDecisionRepository.GetAdvisoryBoardDecisionById(command.AdvisoryBoardDecisionId);
-
-		if (existingDecision is null)
-		{
-			return new NotFoundCommandResult();
-		}
-
 		var details = new AdvisoryBoardDecisionDetails(
 			command.ConversionProjectId,
 			command.TransferProjectId,
@@ -42,7 +37,51 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(
 			command.DecisionMakerName
 		);
 
-		var result = existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, command.DAORevokedReasons!);
+		return await UpdateDecisionAsync(
+			command.AdvisoryBoardDecisionId,
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, command.DAORevokedReasons!),
+			cancellationToken);
+	}
+
+	public async Task<CommandResult> Handle(SignificantChangeUpdateDecisionCommand command, CancellationToken cancellationToken)
+	{
+		var details = new AdvisoryBoardDecisionDetails(
+			null,
+			null,
+			command.SignificantChangeProjectId,
+			command.Decision.MapToAdvisoryBoardDecision(),
+			command.ApprovedConditionsSet,
+			command.ApprovedConditionsDetails,
+			command.DecisionDate,
+			null,
+			command.DecisionMadeBy,
+			command.DecisionMakerName
+		);
+
+		return await UpdateDecisionAsync(
+			command.AdvisoryBoardDecisionId,
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>()),
+			cancellationToken);
+	}
+
+	private async Task<CommandResult> UpdateDecisionAsync(
+		int advisoryBoardDecisionId,
+		Func<IConversionAdvisoryBoardDecision, CommandResult> updateDecision,
+		CancellationToken cancellationToken)
+	{
+		if (advisoryBoardDecisionId == default)
+		{
+			return new BadRequestCommandResult();
+		}
+
+		var existingDecision = await advisoryBoardDecisionRepository.GetAdvisoryBoardDecisionById(advisoryBoardDecisionId);
+
+		if (existingDecision is null)
+		{
+			return new NotFoundCommandResult();
+		}
+
+		var result = updateDecision(existingDecision);
 
 		return result switch
 		{
@@ -58,37 +97,12 @@ public class AdvisoryBoardDecisionUpdateCommandHandler(
 
 		await advisoryBoardDecisionRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-		await SetProjectReadOnlyAsync(decision.AdvisoryBoardDecisionDetails);
+		if (decision.AdvisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved)
+		{
+			await SetProjectReadOnlyAsync(decision.AdvisoryBoardDecisionDetails);
+		}
 
 		return new CommandSuccessResult();
 	}
-	private async Task SetProjectReadOnlyAsync(AdvisoryBoardDecisionDetails advisoryBoardDecisionDetails)
-	{
-		if (advisoryBoardDecisionDetails.TransferProjectId != null)
-		{
-			var project = await transferProjectRepository.GetById(advisoryBoardDecisionDetails.TransferProjectId.GetValueOrDefault());
-			if (project != null)
-			{
-				if (advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved)
-				{
-					project.SetIsReadOnly(dateTimeProvider.Now);
-				}
-				transferProjectRepository.Update(project);
-				await transferProjectRepository.UnitOfWork.SaveChangesAsync();
-			}
-		}
-		else
-		{
-			var project = await conversionProjectRepository.GetById(advisoryBoardDecisionDetails.ConversionProjectId.GetValueOrDefault());
-			if (project != null)
-			{
-				if (advisoryBoardDecisionDetails.Decision == Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved)
-				{
-					project.SetIsReadOnly(dateTimeProvider.Now);
-				}
-				conversionProjectRepository.Update(project);
-				await conversionProjectRepository.UnitOfWork.SaveChangesAsync();
-			}
-		}
-	}
+
 }
