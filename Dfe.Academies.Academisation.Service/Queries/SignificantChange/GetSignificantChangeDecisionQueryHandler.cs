@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 {
-	public class GetSignificantChangeDecisionQueryHandler(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository, IMapper mapper) : IRequestHandler<GetSignificantChangeDecisionQuery, SignificantChangeDecisionServiceModel?>
+	public class GetSignificantChangeDecisionQueryHandler(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository) : IRequestHandler<GetSignificantChangeDecisionQuery, SignificantChangeDecisionServiceModel?>
 	{
 		public async Task<SignificantChangeDecisionServiceModel?> Handle(GetSignificantChangeDecisionQuery query, CancellationToken cancellationToken)
 		{

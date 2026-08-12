@@ -1,12 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data.Repositories;
 using Dfe.Academies.Academisation.Data.UnitTest.Contexts;
 using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Moq;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.Data.UnitTest.ConversionAdvisoryBoardDecisionAggregate;
@@ -15,12 +16,11 @@ public class ConversionAdvisoryBoardDecisionStateGetBySignificantChangeProjectId
 {
 	private readonly AdvisoryBoardDecisionRepository _target;
 	private readonly AcademisationContext _context;
-	private readonly IMediator _mediator;
 	private readonly Fixture _fixture = new();
 
 	public ConversionAdvisoryBoardDecisionStateGetBySignificantChangeProjectIdTests()
 	{
-		_context = new TestAdvisoryBoardDecisionContext(_mediator).CreateContext();
+		_context = new TestAdvisoryBoardDecisionContext(new Mock<IMediator>().Object).CreateContext();
 		_target = new AdvisoryBoardDecisionRepository(_context);
 	}
 

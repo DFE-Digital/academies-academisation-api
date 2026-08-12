@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
+﻿using Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
@@ -13,7 +13,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 public class GetSignificantChangeDecisionQueryHandlerTests
 {
 	private readonly Mock<IAdvisoryBoardDecisionRepository> _repositoryMock = new();
-	private readonly Mock<IMapper> _mapperMock = new();
 
 	[Fact]
 	public async Task Handle_WhenDecisionExists_ReturnsMappedServiceModel()
@@ -46,7 +45,7 @@ public class GetSignificantChangeDecisionQueryHandlerTests
 			.Setup(r => r.GetSignificantChangeDecision(projectId))
 			.ReturnsAsync(decision);
 
-		var target = new GetSignificantChangeDecisionQueryHandler(_repositoryMock.Object, _mapperMock.Object);
+		var target = new GetSignificantChangeDecisionQueryHandler(_repositoryMock.Object);
 
 		var result = await target.Handle(new GetSignificantChangeDecisionQuery(projectId), default);
 
@@ -66,7 +65,7 @@ public class GetSignificantChangeDecisionQueryHandlerTests
 			.Setup(r => r.GetSignificantChangeDecision(projectId))
 			.ReturnsAsync((ConversionAdvisoryBoardDecision?)null);
 
-		var target = new GetSignificantChangeDecisionQueryHandler(_repositoryMock.Object, _mapperMock.Object);
+		var target = new GetSignificantChangeDecisionQueryHandler(_repositoryMock.Object);
 
 		var result = await target.Handle(new GetSignificantChangeDecisionQuery(projectId), default);
 
