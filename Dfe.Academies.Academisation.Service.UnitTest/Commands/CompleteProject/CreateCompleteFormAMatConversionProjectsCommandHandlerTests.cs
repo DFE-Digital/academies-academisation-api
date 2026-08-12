@@ -126,7 +126,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 
 			_mockConversionProjectRepository.Setup(repo => repo.GetFormAMatProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()))
 				.ReturnsAsync(conversionProjects);
-			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetConversionProjectDecsion(It.IsAny<int>()))
+			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetConversionProjectDecision(It.IsAny<int>()))
 				.ReturnsAsync(advisoryDecision);
 			_mockProjectGroupRepository.Setup(repo => repo.GetById(It.IsAny<int>()))
 				.ReturnsAsync(projectGroup);
@@ -172,7 +172,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 
 			_mockConversionProjectRepository.Setup(repo => repo.GetFormAMatProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()))
 				.ReturnsAsync(conversionProjects);
-			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetConversionProjectDecsion(It.IsAny<int>()))
+			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetConversionProjectDecision(It.IsAny<int>()))
 				.ReturnsAsync(advisoryDecision);
 			_mockProjectGroupRepository.Setup(repo => repo.GetById(It.IsAny<int>()))
 				.ReturnsAsync(projectGroup);

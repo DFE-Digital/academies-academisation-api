@@ -36,7 +36,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			var retryPolicy = completeApiClientRetryFactory.GetCompleteHttpClientRetryPolicy(logger);
 			foreach (var conversionProject in conversionProjects)
 			{
-				var decision = await advisoryBoardDecisionRepository.GetConversionProjectDecsion(conversionProject.Id);
+				var decision = await advisoryBoardDecisionRepository.GetConversionProjectDecision(conversionProject.Id);
 
 				string? groupReferenceNumber = null;
 
