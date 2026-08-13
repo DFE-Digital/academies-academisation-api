@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,9 @@ namespace Dfe.Academies.Academisation.Seed
 			services.AddDbContext<AcademisationContext>(options =>
 				options.UseSqlServer(
 					connectionString: configurationRoot.GetSection("DatabaseConfig").Get<DatabaseConfig>()!.ConnectionString!));
+			
+			services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DatabaseConfig).Assembly));
+			
 			var serviceProvider = services.BuildServiceProvider();
 			var academisationContext = serviceProvider.GetService<AcademisationContext>();
 			return academisationContext;

@@ -28,5 +28,8 @@ namespace Dfe.Academies.Academisation.IService.ServiceModels.TransferProject
 		public string? PublicEqualityDutyImpact { get; set; }
 		public string? PublicEqualityDutyReduceImpactReason { get; set; }
 		public bool? PublicEqualityDutySectionComplete { get; set; }
+
+        // SFSO commissioning
+		public string? SfsoCommissioningOverview { get; set; }
 	}
 }

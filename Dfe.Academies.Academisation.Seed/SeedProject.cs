@@ -16,12 +16,11 @@ public static class SeedProject
 		var projectNotes = new List<ProjectNote>();
 		for (int i = 1; i <= numberOfProjects; i++)
 		{
-			var newAcademyConversionProject = NewAcademyConversionProject();
 			using var dbContextTransaction = await academisationContext.Database.BeginTransactionAsync();
 			try
 			{
 				// Create and add project
-				var newProject = new Project(default, new ProjectDetails());
+				var newProject = new Project(default, NewProjectDetails());
 				newProjects.Add(newProject);
 
 				// Batch save for every 80 project (If over 80)
@@ -54,12 +53,10 @@ public static class SeedProject
 			}
 		}
 	}
-
-	static Project NewAcademyConversionProject()
+	
+	static ProjectDetails NewProjectDetails()
 	{
-		// Initialing details, would use AutoFixture but these details are init only
-		// So we could do it on init but the School name for example would be unintelligible 
-		var projectDetails = new ProjectDetails()
+		return new ProjectDetails
 		{
 			Urn = (int)Faker.Number.Between(1, 100000),
 			SchoolName = Faker.Ancient.God() + " " + Faker.Company.Profession(),
@@ -74,9 +71,6 @@ public static class SeedProject
 			LocalAuthority = Faker.Address.State(),
 			NameOfTrust = Faker.Company.Name()
 		};
-
-		var newProject = new Project(Convert.ToInt32(Faker.Number.Number(7)), projectDetails);
-		return newProject;
 	}
 }
 

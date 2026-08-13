@@ -2,6 +2,7 @@
 using Ardalis.GuardClauses;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.IDomain.TransferProjectAggregate;
+using Dfe.Academies.Academisation.Core;
 
 namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 {
@@ -90,6 +91,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public string? PublicEqualityDutyReduceImpactReason { get; set; }
 		public bool? PublicEqualityDutySectionComplete { get; set; }
 
+		// SFSO commissioning
+		public DateTime? SfsoCommissioningRequestedDate { get; set; }
+		public string? SfsoCommissioningOverview { get; set; }
+		
 		public DateTime? DeletedAt { get; set; }
 
 		private List<IntendedTransferBenefit> _intendedTransferBenefits;
@@ -181,6 +186,7 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy = default, List<ReasonChange> reasonsChanged = default)
 		{
 			HtbDate = advisoryBoardDate;
+			SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(advisoryBoardDate);
 			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;
 			if (TargetDateForTransfer != expectedDateForTransfer)
 			{
@@ -293,6 +299,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			PublicEqualityDutyReduceImpactReason = publicEqualityDutyReduceImpactReason;
 			PublicEqualityDutySectionComplete = publicEqualityDutySectionComplete;
 		}
+
+		public void SetSfsoCommissioning(string? sfsoCommissioningOverview)
+		{
+			SfsoCommissioningOverview = sfsoCommissioningOverview;
+		}		
 
 		public void SetDeletedAt()
 		{
