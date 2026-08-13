@@ -11,7 +11,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[Route("significant-change")]
 	[ApiController]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-	public class SignificantChangeController : ControllerBase
+	public partial class SignificantChangeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
 		private readonly ILogger<SignificantChangeController> _logger;

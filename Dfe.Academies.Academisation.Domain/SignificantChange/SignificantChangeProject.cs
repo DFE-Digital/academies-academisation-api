@@ -16,12 +16,29 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public string TrustUkprn { get; private set; } = trustUkprn;
 		public string TypeOfSignificantChange { get; private set; } = typeOfSignificantChange;
 		public DateTime? ReadOnlyDate { get; private set; }
+		public SignificantChangeProjectDetails Details { get; private set; } = new();
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
 			AssignedUserId = userId;
 			AssignedUserEmailAddress = userEmail;
 			AssignedUserFullName = userFullName;
+		}
+
+		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
+		{
+			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
+			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
+				? trustConsultedStakeholdersNotConsultedReason
+				: null;
+
+			if (trustConsultedStakeholders is false)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void MoveToTierTwoIfApplicable()
+		{
+			if (Tier == 1) Tier = 2;
 		}
 
 		public static SignificantChangeProject Create(int urn, byte tier, string trustName, string trustUkprn,
