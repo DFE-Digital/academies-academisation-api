@@ -189,6 +189,8 @@ jobs:
   security-tests:
     permissions:
       id-token: write
+      contents: read
+      packages: read
     name: Run Cypress tests with OWASP ZAP
     needs: [ set-env, deploy ]
     if: needs.set-env.outputs.environment == 'development'
