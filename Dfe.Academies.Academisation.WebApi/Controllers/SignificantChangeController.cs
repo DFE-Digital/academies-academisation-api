@@ -48,6 +48,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{id:int}/SetConsultStakeholders", Name = "SetSignificantChangeConsultStakeholders")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeConsultStakeholders(
+			int id,
+			[FromBody] SetSignificantChangeConsultStakeholdersPublicCommand request)
+		{
+			var command = new SetSignificantChangeConsultStakeholdersCommand(
+				id: id,
+				trustConsultedStakeholders: request.TrustConsultedStakeholders,
+				trustConsultedStakeholdersNotConsultedReason: request.TrustConsultedStakeholdersNotConsultedReason);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPost(Name = "CreateSignificantProject")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]

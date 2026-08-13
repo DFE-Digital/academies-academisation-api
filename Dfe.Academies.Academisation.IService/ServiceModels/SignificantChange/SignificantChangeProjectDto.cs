@@ -13,4 +13,7 @@ public class SignificantChangeProjectDto
 	public string? AssignedUserEmailAddress { get; set; }
 	public string TypeOfSignificantChange { get; set; } = string.Empty;
 	public string Status { get; set; } = string.Empty;
+	public bool? TrustConsultedStakeholders { get; set; }
+	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
+	public string ConsultStakeholdersTaskStatus { get; set; } = string.Empty;
 }
