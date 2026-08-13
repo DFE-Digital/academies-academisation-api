@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
-public class SetSignificantChangeConsultStakeholdersCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetSignificantChangeConsultStakeholdersCommandHandler> logger) : IRequestHandler<SetSignificantChangeConsultStakeholdersCommand, CommandResult>
+public class SetSignificantChangeStakeholderConsultationCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetSignificantChangeStakeholderConsultationCommandHandler> logger) : IRequestHandler<SetSignificantChangeStakeholderConsultationCommand, CommandResult>
 {
 	private readonly ISignificantChangeProjectRepository _repository = repository;
-	private readonly ILogger<SetSignificantChangeConsultStakeholdersCommandHandler> _logger = logger;
+	private readonly ILogger<SetSignificantChangeStakeholderConsultationCommandHandler> _logger = logger;
 
-	public async Task<CommandResult> Handle(SetSignificantChangeConsultStakeholdersCommand request, CancellationToken cancellationToken)
+	public async Task<CommandResult> Handle(SetSignificantChangeStakeholderConsultationCommand request, CancellationToken cancellationToken)
 	{
 		var existingProject = await _repository.GetSignificantChangeProjectById(request.Id, cancellationToken);
 
@@ -20,7 +20,7 @@ public class SetSignificantChangeConsultStakeholdersCommandHandler(ISignificantC
 			return new NotFoundCommandResult();
 		}
 
-		existingProject.SetConsultStakeholders(
+		existingProject.SetStakeholderConsultation(
 			request.TrustConsultedStakeholders,
 			request.TrustConsultedStakeholdersNotConsultedReason);
 

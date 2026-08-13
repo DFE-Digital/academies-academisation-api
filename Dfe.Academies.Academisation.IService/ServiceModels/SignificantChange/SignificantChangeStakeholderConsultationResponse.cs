@@ -1,6 +1,6 @@
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
-public class SignificantChangeConsultStakeholdersResponse
+public class SignificantChangeStakeholderConsultationResponse
 {
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }

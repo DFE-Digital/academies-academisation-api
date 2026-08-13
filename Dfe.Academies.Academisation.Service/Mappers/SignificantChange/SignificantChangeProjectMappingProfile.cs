@@ -16,12 +16,12 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.TrustConsultedStakeholders))
 			.ForMember(destination => destination.TrustConsultedStakeholdersNotConsultedReason,
 				options => options.MapFrom(source => source.Details.TrustConsultedStakeholdersNotConsultedReason))
-			.ForMember(destination => destination.ConsultStakeholdersTaskStatus,
-				options => options.MapFrom(source => source.Details.GetConsultStakeholdersTaskStatus().ToString()));
+			.ForMember(destination => destination.StakeholderConsultationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetStakeholderConsultationTaskStatus().ToString()));
 
-		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultStakeholdersResponse>()
+		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
 			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => source.ConsultStakeholdersTaskStatus));
+				options => options.MapFrom(source => source.StakeholderConsultationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
 			.ForMember(destination => destination.AssignedUser,
@@ -31,7 +31,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 						source.AssignedUserId.Value,
 						source.AssignedUserFullName ?? string.Empty,
 						source.AssignedUserEmailAddress ?? string.Empty)))
-			.ForMember(destination => destination.ConsultStakeholders,
+			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source));
 	}
 }

@@ -9,11 +9,11 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.IntegrationTest.SignificantChange;
 
-public class SetConsultStakeholdersTests : IClassFixture<TestWebApplicationFactory>
+public class SetStakeholderConsultationTests : IClassFixture<TestWebApplicationFactory>
 {
 	private readonly TestWebApplicationFactory _factory;
 
-	public SetConsultStakeholdersTests(TestWebApplicationFactory factory)
+	public SetStakeholderConsultationTests(TestWebApplicationFactory factory)
 	{
 		_factory = factory;
 	}
@@ -35,11 +35,11 @@ public class SetConsultStakeholdersTests : IClassFixture<TestWebApplicationFacto
 		_factory.Context.Add(project);
 		await _factory.Context.SaveChangesAsync();
 
-		var request = new SetSignificantChangeConsultStakeholdersPublicCommand(
+		var request = new SetSignificantChangeStakeholderConsultationPublicCommand(
 			trustConsultedStakeholders: false,
 			trustConsultedStakeholdersNotConsultedReason: "Trust has not consulted stakeholders yet");
 
-		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetConsultStakeholders", request);
+		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetStakeholderConsultation", request);
 
 		_factory.Context.ChangeTracker.Clear();
 		var updated = await _factory.Context.Set<SignificantChangeProject>()
@@ -58,11 +58,11 @@ public class SetConsultStakeholdersTests : IClassFixture<TestWebApplicationFacto
 	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
 		var client = _factory.CreateClient();
-		var request = new SetSignificantChangeConsultStakeholdersPublicCommand(
+		var request = new SetSignificantChangeStakeholderConsultationPublicCommand(
 			trustConsultedStakeholders: true,
 			trustConsultedStakeholdersNotConsultedReason: null);
 
-		var response = await client.PutAsJsonAsync("/significant-change/99999/SetConsultStakeholders", request);
+		var response = await client.PutAsJsonAsync("/significant-change/99999/SetStakeholderConsultation", request);
 
 		Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 	}

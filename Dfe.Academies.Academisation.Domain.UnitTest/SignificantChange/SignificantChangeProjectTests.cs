@@ -59,7 +59,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
-		public void SetConsultStakeholders_ShouldSetDetailsProperties()
+		public void SetStakeholderConsultation_ShouldSetDetailsProperties()
 		{
 			var project = new SignificantChangeProject(
 				_fixture.Create<SignificantChangeStatus>(),
@@ -71,14 +71,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>()
 			);
 
-			project.SetConsultStakeholders(false, "Trust has not consulted stakeholders yet");
+			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 
 			project.Details.TrustConsultedStakeholders.Should().BeFalse();
 			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 		}
 
 		[Fact]
-		public void GetConsultStakeholdersTaskStatus_WhenNoValues_ReturnsNotStarted()
+		public void GetStakeholderConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
 			var project = new SignificantChangeProject(
 				_fixture.Create<SignificantChangeStatus>(),
@@ -90,11 +90,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>()
 			);
 
-			project.Details.GetConsultStakeholdersTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
 
 		[Fact]
-		public void GetConsultStakeholdersTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
+		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
 		{
 			var project = new SignificantChangeProject(
 				_fixture.Create<SignificantChangeStatus>(),
@@ -106,13 +106,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>()
 			);
 
-			project.SetConsultStakeholders(false, null);
+			project.SetStakeholderConsultation(false, null);
 
-			project.Details.GetConsultStakeholdersTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
 
 		[Fact]
-		public void GetConsultStakeholdersTaskStatus_WhenConsulted_ReturnsCompleted()
+		public void GetStakeholderConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
 		{
 			var project = new SignificantChangeProject(
 				_fixture.Create<SignificantChangeStatus>(),
@@ -124,13 +124,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>()
 			);
 
-			project.SetConsultStakeholders(true, null);
+			project.SetStakeholderConsultation(true, null);
 
-			project.Details.GetConsultStakeholdersTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 
 		[Fact]
-		public void GetConsultStakeholdersTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
+		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
 		{
 			var project = new SignificantChangeProject(
 				_fixture.Create<SignificantChangeStatus>(),
@@ -142,13 +142,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>()
 			);
 
-			project.SetConsultStakeholders(false, "Consultation timeline does not allow this yet");
+			project.SetStakeholderConsultation(false, "Consultation timeline does not allow this yet");
 
-			project.Details.GetConsultStakeholdersTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 
 		[Fact]
-		public void SetConsultStakeholders_WhenNotConsulted_AndTierOne_MovesToTierTwo()
+		public void SetStakeholderConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
 		{
 			var project = new SignificantChangeProject(
 				SignificantChangeStatus.InProgress,
@@ -159,13 +159,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
 
-			project.SetConsultStakeholders(false, "No consultation carried out");
+			project.SetStakeholderConsultation(false, "No consultation carried out");
 
 			project.Tier.Should().Be(2);
 		}
 
 		[Fact]
-		public void SetConsultStakeholders_WhenTierMovedToTwo_DoesNotRevertToTierOne()
+		public void SetStakeholderConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
 			var project = new SignificantChangeProject(
 				SignificantChangeStatus.InProgress,
@@ -176,8 +176,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
 
-			project.SetConsultStakeholders(false, "No consultation carried out");
-			project.SetConsultStakeholders(true, null);
+			project.SetStakeholderConsultation(false, "No consultation carried out");
+			project.SetStakeholderConsultation(true, null);
 
 			project.Tier.Should().Be(2);
 		}

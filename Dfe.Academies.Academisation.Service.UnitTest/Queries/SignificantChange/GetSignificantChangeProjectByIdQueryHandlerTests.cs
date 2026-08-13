@@ -45,7 +45,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			};
 
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
-			project.SetConsultStakeholders(false, "Trust has not consulted stakeholders yet");
+			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -63,9 +63,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.AssignedUser.Should().BeEquivalentTo(new User(assignedUserId, "Assigned User", "assigned.user@test.local"));
 			result.TypeOfSignificantChange.Should().Be("Change of age range");
 			result.Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
-			result.ConsultStakeholders.TrustConsultedStakeholders.Should().BeFalse();
-			result.ConsultStakeholders.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
-			result.ConsultStakeholders.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.StakeholderConsultation.TrustConsultedStakeholders.Should().BeFalse();
+			result.StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
+			result.StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]

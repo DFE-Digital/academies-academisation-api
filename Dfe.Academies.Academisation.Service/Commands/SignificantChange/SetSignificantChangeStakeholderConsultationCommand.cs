@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
-public class SetSignificantChangeConsultStakeholdersPublicCommand(
+public class SetSignificantChangeStakeholderConsultationPublicCommand(
 	bool? trustConsultedStakeholders,
 	string? trustConsultedStakeholdersNotConsultedReason) : IRequest<CommandResult>
 {
@@ -11,11 +11,11 @@ public class SetSignificantChangeConsultStakeholdersPublicCommand(
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; } = trustConsultedStakeholdersNotConsultedReason;
 }
 
-public class SetSignificantChangeConsultStakeholdersCommand(
+public class SetSignificantChangeStakeholderConsultationCommand(
 	int id,
 	bool? trustConsultedStakeholders,
 	string? trustConsultedStakeholdersNotConsultedReason)
-	: SetSignificantChangeConsultStakeholdersPublicCommand(trustConsultedStakeholders, trustConsultedStakeholdersNotConsultedReason)
+	: SetSignificantChangeStakeholderConsultationPublicCommand(trustConsultedStakeholders, trustConsultedStakeholdersNotConsultedReason)
 {
 	public int Id { get; set; } = id;
 }

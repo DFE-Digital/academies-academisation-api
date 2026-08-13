@@ -5,7 +5,7 @@ public class SignificantChangeProjectDetails
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
 
-	public SignificantChangeTaskStatus GetConsultStakeholdersTaskStatus()
+	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
 			&& string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))

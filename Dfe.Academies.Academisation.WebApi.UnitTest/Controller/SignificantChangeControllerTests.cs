@@ -241,22 +241,22 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
-        public async Task SetConsultStakeholders_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        public async Task SetStakeholderConsultation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;
-            var request = new SetSignificantChangeConsultStakeholdersPublicCommand(
+            var request = new SetSignificantChangeStakeholderConsultationPublicCommand(
                 trustConsultedStakeholders: false,
                 trustConsultedStakeholdersNotConsultedReason: "Trust has not consulted stakeholders yet");
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetSignificantChangeConsultStakeholdersCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderConsultationCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CommandSuccessResult());
 
-            var result = await _controller.SetSignificantChangeConsultStakeholders(routeId, request);
+            var result = await _controller.SetSignificantChangeStakeholderConsultation(routeId, request);
 
             result.Should().BeOfType<OkResult>();
             _mockMediator.Verify(m => m.Send(
-                It.Is<SetSignificantChangeConsultStakeholdersCommand>(c =>
+                It.Is<SetSignificantChangeStakeholderConsultationCommand>(c =>
                     c.Id == routeId
                     && c.TrustConsultedStakeholders == request.TrustConsultedStakeholders
                     && c.TrustConsultedStakeholdersNotConsultedReason == request.TrustConsultedStakeholdersNotConsultedReason),
@@ -264,25 +264,25 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
-        public async Task SetConsultStakeholders_ReturnsNotFound_WhenProjectDoesNotExist()
+        public async Task SetStakeholderConsultation_ReturnsNotFound_WhenProjectDoesNotExist()
         {
-            var request = new SetSignificantChangeConsultStakeholdersPublicCommand(
+            var request = new SetSignificantChangeStakeholderConsultationPublicCommand(
                 trustConsultedStakeholders: true,
                 trustConsultedStakeholdersNotConsultedReason: null);
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetSignificantChangeConsultStakeholdersCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderConsultationCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new NotFoundCommandResult());
 
-            var result = await _controller.SetSignificantChangeConsultStakeholders(100, request);
+            var result = await _controller.SetSignificantChangeStakeholderConsultation(100, request);
 
             result.Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
-        public async Task SetConsultStakeholders_ReturnsBadRequest_WhenValidationFails()
+        public async Task SetStakeholderConsultation_ReturnsBadRequest_WhenValidationFails()
         {
-            var request = new SetSignificantChangeConsultStakeholdersPublicCommand(
+            var request = new SetSignificantChangeStakeholderConsultationPublicCommand(
                 trustConsultedStakeholders: null,
                 trustConsultedStakeholdersNotConsultedReason: null);
 
@@ -292,10 +292,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             };
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetSignificantChangeConsultStakeholdersCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderConsultationCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
 
-            var result = await _controller.SetSignificantChangeConsultStakeholders(100, request);
+            var result = await _controller.SetSignificantChangeStakeholderConsultation(100, request);
 
             result.Should().BeOfType<BadRequestObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(validationErrors);

@@ -11,7 +11,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 	[Route("significant-change")]
 	[ApiController]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-	public class SignificantChangeController : ControllerBase
+	public partial class SignificantChangeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
 		private readonly ILogger<SignificantChangeController> _logger;
@@ -35,31 +35,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				userId: request.UserId,
 				fullName: request.FullName,
 				emailAddress: request.EmailAddress);
-
-			CommandResult result = await _mediator.Send(command);
-
-			return result switch
-			{
-				CommandSuccessResult => Ok(),
-				NotFoundCommandResult => NotFound(),
-				CommandValidationErrorResult validationErrorResult =>
-					BadRequest(validationErrorResult.ValidationErrors),
-				_ => throw new NotImplementedException()
-			};
-		}
-
-		[HttpPut("{id:int}/SetConsultStakeholders", Name = "SetSignificantChangeConsultStakeholders")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> SetSignificantChangeConsultStakeholders(
-			int id,
-			[FromBody] SetSignificantChangeConsultStakeholdersPublicCommand request)
-		{
-			var command = new SetSignificantChangeConsultStakeholdersCommand(
-				id: id,
-				trustConsultedStakeholders: request.TrustConsultedStakeholders,
-				trustConsultedStakeholdersNotConsultedReason: request.TrustConsultedStakeholdersNotConsultedReason);
 
 			CommandResult result = await _mediator.Send(command);
 

@@ -9,23 +9,23 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChange;
 
-public class SetSignificantChangeConsultStakeholdersCommandHandlerTests
+public class SetSignificantChangeStakeholderConsultationCommandHandlerTests
 {
 	private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
-	private readonly Mock<ILogger<SetSignificantChangeConsultStakeholdersCommandHandler>> _loggerMock;
-	private readonly SetSignificantChangeConsultStakeholdersCommandHandler _handler;
+	private readonly Mock<ILogger<SetSignificantChangeStakeholderConsultationCommandHandler>> _loggerMock;
+	private readonly SetSignificantChangeStakeholderConsultationCommandHandler _handler;
 
-	public SetSignificantChangeConsultStakeholdersCommandHandlerTests()
+	public SetSignificantChangeStakeholderConsultationCommandHandlerTests()
 	{
 		_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-		_loggerMock = new Mock<ILogger<SetSignificantChangeConsultStakeholdersCommandHandler>>();
-		_handler = new SetSignificantChangeConsultStakeholdersCommandHandler(_repositoryMock.Object, _loggerMock.Object);
+		_loggerMock = new Mock<ILogger<SetSignificantChangeStakeholderConsultationCommandHandler>>();
+		_handler = new SetSignificantChangeStakeholderConsultationCommandHandler(_repositoryMock.Object, _loggerMock.Object);
 	}
 
 	[Fact]
 	public async Task Handle_ProjectNotFound_ReturnsNotFoundCommandResult()
 	{
-		var command = new SetSignificantChangeConsultStakeholdersCommand(
+		var command = new SetSignificantChangeStakeholderConsultationCommand(
 			id: 100,
 			trustConsultedStakeholders: true,
 			trustConsultedStakeholdersNotConsultedReason: null);
@@ -44,7 +44,7 @@ public class SetSignificantChangeConsultStakeholdersCommandHandlerTests
 	[Fact]
 	public async Task Handle_ProjectFound_UpdatesSectionAndPersistsChanges()
 	{
-		var command = new SetSignificantChangeConsultStakeholdersCommand(
+		var command = new SetSignificantChangeStakeholderConsultationCommand(
 			id: 200,
 			trustConsultedStakeholders: false,
 			trustConsultedStakeholdersNotConsultedReason: "Trust did not consult stakeholders");
@@ -74,7 +74,7 @@ public class SetSignificantChangeConsultStakeholdersCommandHandlerTests
 		project.Details.TrustConsultedStakeholders.Should().BeFalse();
 		project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust did not consult stakeholders");
 		project.Tier.Should().Be(2);
-		project.Details.GetConsultStakeholdersTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);
 		_repositoryMock.Verify(x => x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetConsultStakeholders(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
+		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
 		{
 			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
 			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
