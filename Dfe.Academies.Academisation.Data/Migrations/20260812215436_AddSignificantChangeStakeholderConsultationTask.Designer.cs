@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20260812215436_AddSignificantChangeTrustConsultStakeholdersTask")]
-    partial class AddSignificantChangeTrustConsultStakeholdersTask
+    [Migration("20260812215436_AddSignificantChangeStakeholderConsultationTask")]
+    partial class AddSignificantChangeStakeholderConsultationTask
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -5,7 +5,7 @@
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddSignificantChangeTrustConsultStakeholdersTask : Migration
+    public partial class AddSignificantChangeStakeholderConsultationTask : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
