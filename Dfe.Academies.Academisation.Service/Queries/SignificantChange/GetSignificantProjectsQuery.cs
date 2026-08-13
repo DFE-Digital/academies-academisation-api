@@ -6,6 +6,11 @@ namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 {
 	public record GetSignificantProjectsQuery(
 		int Page,
-		int Count)
+		int Count,
+		string? Keyword = null,
+		List<string>? Status = null,
+		List<string>? Assignee = null,
+		List<byte>? Tier = null,
+		List<string>? Route = null) 
 		: IRequest<PagedDataResponse<SignificantChangeProjectSearchResponse>>;
 }
