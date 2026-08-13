@@ -187,6 +187,8 @@ jobs:
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
 
   security-tests:
+    permissions:
+      id-token: write
     name: Run Cypress tests with OWASP ZAP
     needs: [ set-env, deploy ]
     if: needs.set-env.outputs.environment == 'development'
