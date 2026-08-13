@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260812215436_AddSignificantChangeStakeholderConsultationTask")]
+    partial class AddSignificantChangeStakeholderConsultationTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1211,7 +1214,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Contributor.Details#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.ContributorDetails", "Details", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.ContributorDetails", "Details", b1 =>
                         {
                             b1.Property<int>("ContributorId")
                                 .HasColumnType("int");
@@ -1277,7 +1280,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School.Details#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.SchoolDetails", "Details", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.SchoolDetails", "Details", b1 =>
                         {
                             b1.Property<int>("SchoolId")
                                 .HasColumnType("int");
@@ -1426,56 +1429,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("SchoolId");
 
-                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School.Details#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.SchoolDetails.CurrentFinancialYear#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "CurrentFinancialYear", b2 =>
-                                {
-                                    b2.Property<int>("SchoolDetailsSchoolId")
-                                        .HasColumnType("int");
-
-                                    b2.Property<decimal?>("CapitalCarryForward")
-                                        .HasColumnType("decimal(18,2)")
-                                        .HasColumnName("CurrentFinancialYearCapitalCarryForward");
-
-                                    b2.Property<string>("CapitalCarryForwardExplained")
-                                        .HasColumnType("nvarchar(max)")
-                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardExplained");
-
-                                    b2.Property<string>("CapitalCarryForwardFileLink")
-                                        .HasColumnType("nvarchar(max)")
-                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardFileLink");
-
-                                    b2.Property<int?>("CapitalCarryForwardStatus")
-                                        .HasColumnType("int")
-                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardStatus");
-
-                                    b2.Property<DateTime?>("FinancialYearEndDate")
-                                        .HasColumnType("datetime2")
-                                        .HasColumnName("CurrentFinancialYearEndDate");
-
-                                    b2.Property<decimal?>("Revenue")
-                                        .HasColumnType("decimal(18,2)")
-                                        .HasColumnName("CurrentFinancialYearRevenue");
-
-                                    b2.Property<int?>("RevenueStatus")
-                                        .HasColumnType("int")
-                                        .HasColumnName("CurrentFinancialYearRevenueStatus");
-
-                                    b2.Property<string>("RevenueStatusExplained")
-                                        .HasColumnType("nvarchar(max)")
-                                        .HasColumnName("CurrentFinancialYearRevenueStatusExplained");
-
-                                    b2.Property<string>("RevenueStatusFileLink")
-                                        .HasColumnType("nvarchar(max)")
-                                        .HasColumnName("CurrentFinancialYearRevenueStatusFileLink");
-
-                                    b2.HasKey("SchoolDetailsSchoolId");
-
-                                    b2.ToTable("ApplicationSchool", "academisation");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("SchoolDetailsSchoolId");
-                                });
-
-                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School.Details#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.SchoolDetails.LandAndBuildings#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.LandAndBuildings", "LandAndBuildings", b2 =>
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.LandAndBuildings", "LandAndBuildings", b2 =>
                                 {
                                     b2.Property<int>("SchoolDetailsSchoolId")
                                         .HasColumnType("int");
@@ -1536,7 +1490,56 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                         .HasForeignKey("SchoolDetailsSchoolId");
                                 });
 
-                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School.Details#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.SchoolDetails.NextFinancialYear#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "NextFinancialYear", b2 =>
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "CurrentFinancialYear", b2 =>
+                                {
+                                    b2.Property<int>("SchoolDetailsSchoolId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<decimal?>("CapitalCarryForward")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForward");
+
+                                    b2.Property<string>("CapitalCarryForwardExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardExplained");
+
+                                    b2.Property<string>("CapitalCarryForwardFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardFileLink");
+
+                                    b2.Property<int?>("CapitalCarryForwardStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("CurrentFinancialYearCapitalCarryForwardStatus");
+
+                                    b2.Property<DateTime?>("FinancialYearEndDate")
+                                        .HasColumnType("datetime2")
+                                        .HasColumnName("CurrentFinancialYearEndDate");
+
+                                    b2.Property<decimal?>("Revenue")
+                                        .HasColumnType("decimal(18,2)")
+                                        .HasColumnName("CurrentFinancialYearRevenue");
+
+                                    b2.Property<int?>("RevenueStatus")
+                                        .HasColumnType("int")
+                                        .HasColumnName("CurrentFinancialYearRevenueStatus");
+
+                                    b2.Property<string>("RevenueStatusExplained")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearRevenueStatusExplained");
+
+                                    b2.Property<string>("RevenueStatusFileLink")
+                                        .HasColumnType("nvarchar(max)")
+                                        .HasColumnName("CurrentFinancialYearRevenueStatusFileLink");
+
+                                    b2.HasKey("SchoolDetailsSchoolId");
+
+                                    b2.ToTable("ApplicationSchool", "academisation");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SchoolDetailsSchoolId");
+                                });
+
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "NextFinancialYear", b2 =>
                                 {
                                     b2.Property<int>("SchoolDetailsSchoolId")
                                         .HasColumnType("int");
@@ -1585,7 +1588,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                         .HasForeignKey("SchoolDetailsSchoolId");
                                 });
 
-                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Schools.School.Details#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.SchoolDetails.PreviousFinancialYear#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "PreviousFinancialYear", b2 =>
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FinancialYear", "PreviousFinancialYear", b2 =>
                                 {
                                     b2.Property<int>("SchoolDetailsSchoolId")
                                         .HasColumnType("int");
@@ -1649,7 +1652,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.FormTrust", b =>
                 {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.ApplicationAggregate.Trusts.FormTrust.TrustDetails#Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FormTrustDetails", "TrustDetails", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ApplicationAggregate.FormTrustDetails", "TrustDetails", b1 =>
                         {
                             b1.Property<int>("FormTrustId")
                                 .HasColumnType("int");
@@ -1754,7 +1757,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", b =>
                 {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision.AdvisoryBoardDecisionDetails#Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDetails", "AdvisoryBoardDecisionDetails", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecisionDetails", "AdvisoryBoardDecisionDetails", b1 =>
                         {
                             b1.Property<int>("ConversionAdvisoryBoardDecisionId")
                                 .HasColumnType("int");
@@ -1856,7 +1859,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate.FormAMatProject", b =>
                 {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.FormAMatProjectAggregate.FormAMatProject.AssignedUser#Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b1 =>
                         {
                             b1.Property<int>("FormAMatProjectId")
                                 .HasColumnType("int");
@@ -1888,7 +1891,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project", b =>
                 {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project.Details#Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.ProjectDetails", "Details", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.ProjectDetails", "Details", b1 =>
                         {
                             b1.Property<int>("ProjectId")
                                 .HasColumnType("int");
@@ -2323,7 +2326,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ProjectId");
 
-                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.ProjectAggregate.Project.Details#Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.ProjectDetails.AssignedUser#Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b2 =>
+                            b1.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b2 =>
                                 {
                                     b2.Property<int>("ProjectDetailsProjectId")
                                         .HasColumnType("int");
@@ -2368,7 +2371,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate.ProjectGroup", b =>
                 {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.ProjectGroupsAggregate.ProjectGroup.AssignedUser#Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.Core.ProjectAggregate.User", "AssignedUser", b1 =>
                         {
                             b1.Property<int>("ProjectGroupId")
                                 .HasColumnType("int");
@@ -2400,7 +2403,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProject", b =>
                 {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProject.Details#Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProjectDetails", "Details", b1 =>
+                    b.OwnsOne("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProjectDetails", "Details", b1 =>
                         {
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");

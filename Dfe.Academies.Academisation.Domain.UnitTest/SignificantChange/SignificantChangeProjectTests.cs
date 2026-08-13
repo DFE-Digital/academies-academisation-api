@@ -57,5 +57,129 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.AssignedUserEmailAddress.Should().Be(userEmail);
 			project.AssignedUserFullName.Should().Be(userFullName);
 		}
+
+		[Fact]
+		public void SetStakeholderConsultation_ShouldSetDetailsProperties()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
+
+			project.Details.TrustConsultedStakeholders.Should().BeFalse();
+			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
+		}
+
+		[Fact]
+		public void GetStakeholderConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			project.SetStakeholderConsultation(false, null);
+
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetStakeholderConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			project.SetStakeholderConsultation(true, null);
+
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			project.SetStakeholderConsultation(false, "Consultation timeline does not allow this yet");
+
+			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetStakeholderConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
+		{
+			var project = new SignificantChangeProject(
+				SignificantChangeStatus.InProgress,
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.SetStakeholderConsultation(false, "No consultation carried out");
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void SetStakeholderConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
+		{
+			var project = new SignificantChangeProject(
+				SignificantChangeStatus.InProgress,
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.SetStakeholderConsultation(false, "No consultation carried out");
+			project.SetStakeholderConsultation(true, null);
+
+			project.Tier.Should().Be(2);
+		}
 	}
 }

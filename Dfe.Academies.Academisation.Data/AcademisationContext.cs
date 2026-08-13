@@ -968,6 +968,12 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		significantChangeConfiguration.Property(p => p.TrustUkprn).HasColumnName("TrustUkprn").IsRequired();
 		significantChangeConfiguration.Property(p => p.TrustName).HasColumnName("TrustName").IsRequired();
 
+		significantChangeConfiguration.OwnsOne(p => p.Details, details =>
+		{
+			details.Property(d => d.TrustConsultedStakeholders).HasColumnName("TrustConsultedStakeholders");
+			details.Property(d => d.TrustConsultedStakeholdersNotConsultedReason).HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+		});
+
 	}
 }
 
