@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
@@ -44,7 +44,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, null, null, null, null, null, cancellationToken))
 				.ReturnsAsync((projects, totalCount: 3));
 
 			// Act
@@ -94,7 +94,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			};
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, null, null, null, null, null, cancellationToken))
 				.ReturnsAsync((projects, totalCount: 4));
 
 			// Act
@@ -115,7 +115,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var cancellationToken = cts.Token;
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), null, null, null, null, null, It.IsAny<CancellationToken>()))
 				.ReturnsAsync((Enumerable.Empty<SignificantChangeProject>(), 0));
 
 			// Act
@@ -126,6 +126,43 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 				x => x.SearchSignificantChangeProjects(
 					It.Is<int>(page => page == 3),
 					It.Is<int>(count => count == 25),
+					null,
+					null,
+					null,
+					null,
+					null,
+					It.Is<CancellationToken>(token => token == cancellationToken)),
+				Times.Once);
+		}
+
+		[Fact]
+		public async Task Handle_PassesQueryItems_ToRepository()
+		{
+			// Arrange
+			var query = new GetSignificantProjectsQuery(Page: 3, Count: 25, "school", ["InProgress"], ["Ste"], [1], ["a change"]);
+
+			using var cts = new CancellationTokenSource();
+			var cancellationToken = cts.Token;
+
+			_repositoryMock
+				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(),
+					It.IsAny<List<string>>(), It.IsAny<List<string>>(), It.IsAny<List<byte>>(),
+					It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync((Enumerable.Empty<SignificantChangeProject>(), 0));
+
+			// Act
+			await _handler.Handle(query, cancellationToken);
+
+			// Assert
+			_repositoryMock.Verify(
+				x => x.SearchSignificantChangeProjects(
+					It.Is<int>(page => page == 3),
+					It.Is<int>(count => count == 25),
+					It.Is<string>(keyword => keyword == "school"),
+					It.Is<List<string>>(status => status.SequenceEqual(new List<string> { "InProgress" })),
+					It.Is<List<string>>(assignee => assignee.SequenceEqual(new List<string> { "Ste" })),
+					It.Is<List<byte>>(tier => tier.SequenceEqual(new List<byte> { 1 })),
+					It.Is<List<string>>(route => route.SequenceEqual(new List<string> { "a change" })),
 					It.Is<CancellationToken>(token => token == cancellationToken)),
 				Times.Once);
 		}
