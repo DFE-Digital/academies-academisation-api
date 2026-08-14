@@ -43,6 +43,7 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 		AdvisoryBoardDecisionDetails details = new(
 			ConversionProjectId,
 			null,
+			null,
 			AdvisoryBoardDecision.Approved,
 			true,
 			_faker.Lorem.Sentence(),
