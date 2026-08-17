@@ -200,5 +200,111 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Tier.Should().Be(2);
 		}
+
+		[Fact]
+		public void SetAdmissionVariationConsultation_ShouldSetDetailsProperties()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.SetAdmissionVariationConsultation(false, false, "No admission variation required");
+
+			project.Details.ConsultationIncludeAdmissionVariation.Should().BeFalse();
+			project.Details.ConsultationIncludeAdmissionVariationNotApplicable.Should().BeNull();
+			project.Details.ConsultationNoAdmissionVariationReason.Should().Be("No admission variation required");
+		}
+
+		[Fact]
+		public void SetAdmissionVariationConsultation_WhenNotApplicable_ClearsOtherValues()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.SetAdmissionVariationConsultation(false, false, "Some reason");
+			project.SetAdmissionVariationConsultation(true, true, "Should be ignored");
+
+			project.Details.ConsultationIncludeAdmissionVariationNotApplicable.Should().BeTrue();
+			project.Details.ConsultationIncludeAdmissionVariation.Should().BeNull();
+			project.Details.ConsultationNoAdmissionVariationReason.Should().BeNull();
+			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NoApplicable);
+		}
+
+		[Fact]
+		public void GetAdmissionVariationConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetAdmissionVariationConsultationTaskStatus_WhenNoVariationWithoutReason_ReturnsInProgress()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.SetAdmissionVariationConsultation(false, false, null);
+
+			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetAdmissionVariationConsultationTaskStatus_WhenVariationIncluded_ReturnsCompleted()
+		{
+			var project = new SignificantChangeProject(
+				_fixture.Create<SignificantChangeStatus>(),
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.SetAdmissionVariationConsultation(true, false, null);
+
+			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetAdmissionVariationConsultation_WhenNoVariationAndTierOne_MovesToTierTwo()
+		{
+			var project = new SignificantChangeProject(
+				SignificantChangeStatus.InProgress,
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			project.SetAdmissionVariationConsultation(false, false, "No admission variation required");
+
+			project.Tier.Should().Be(2);
+		}
 	}
 }
