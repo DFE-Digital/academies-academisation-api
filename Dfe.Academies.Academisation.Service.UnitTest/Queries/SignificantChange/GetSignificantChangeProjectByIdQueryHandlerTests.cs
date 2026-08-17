@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
-			project.SetAdmissionVariationConsultation(false, false, "no information provided");
+			project.SetAdmissionVariationConsultation(false, "no information provided");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))

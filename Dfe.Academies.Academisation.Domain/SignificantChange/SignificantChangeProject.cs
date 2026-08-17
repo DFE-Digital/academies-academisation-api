@@ -25,25 +25,16 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation, bool? consultationIncludeAdmissionVariationNotApplicable, string? noAdmissionVariationReason)
+		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation, string? noAdmissionVariationReason)
 		{
-			if (consultationIncludeAdmissionVariationNotApplicable is true)
-			{
-				Details.ConsultationIncludeAdmissionVariationNotApplicable = true;
-				Details.ConsultationIncludeAdmissionVariation = null;
-				Details.ConsultationNoAdmissionVariationReason = null;
-			}
-			else
-			{
-				Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
-				Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
-					? noAdmissionVariationReason
-					: null;
+			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
+			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
+				? noAdmissionVariationReason
+				: null;
 
-				if (consultationIncludeAdmissionVariation is false)
-				{
-					MoveToTierTwoIfApplicable();
-				}
+			if (consultationIncludeAdmissionVariation is false)
+			{
+				MoveToTierTwoIfApplicable();
 			}
 		}
 

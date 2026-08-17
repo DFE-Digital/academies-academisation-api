@@ -2415,10 +2415,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("bit")
                                 .HasColumnName("ConsultationIncludeAdmissionVariation");
 
-                            b1.Property<bool?>("ConsultationIncludeAdmissionVariationNotApplicable")
-                                .HasColumnType("bit")
-                                .HasColumnName("ConsultationIncludeAdmissionVariationNotApplicable");
-
                             b1.Property<string>("ConsultationNoAdmissionVariationReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationNoAdmissionVariationReason");

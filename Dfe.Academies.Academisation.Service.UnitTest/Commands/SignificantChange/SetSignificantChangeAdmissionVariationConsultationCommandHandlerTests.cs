@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
@@ -28,7 +28,6 @@ public class SetSignificantChangeAdmissionVariationConsultationCommandHandlerTes
 		var command = new SetSignificantChangeAdmissionVariationConsultationCommand(
 			id: 100,
 			consultationIncludeAdmissionVariation: true,
-			consultationIncludeAdmissionVariationNotApplicable: false,
 			noAdmissionVariationReason: null);
 
 		_repositoryMock
@@ -48,7 +47,6 @@ public class SetSignificantChangeAdmissionVariationConsultationCommandHandlerTes
 		var command = new SetSignificantChangeAdmissionVariationConsultationCommand(
 			id: 200,
 			consultationIncludeAdmissionVariation: false,
-			consultationIncludeAdmissionVariationNotApplicable: false,
 			noAdmissionVariationReason: "No admission variation required");
 
 		var project = SignificantChangeProject.Create(
@@ -74,7 +72,6 @@ public class SetSignificantChangeAdmissionVariationConsultationCommandHandlerTes
 
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.ConsultationIncludeAdmissionVariation.Should().BeFalse();
-		project.Details.ConsultationIncludeAdmissionVariationNotApplicable.Should().BeNull();
 		project.Details.ConsultationNoAdmissionVariationReason.Should().Be("No admission variation required");
 		project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		project.Tier.Should().Be(2);

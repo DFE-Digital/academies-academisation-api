@@ -42,7 +42,6 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var command = new SetSignificantChangeAdmissionVariationConsultationCommand(
 				id: id,
 				consultationIncludeAdmissionVariation: request.ConsultationIncludeAdmissionVariation,
-				consultationIncludeAdmissionVariationNotApplicable: request.ConsultationIncludeAdmissionVariationNotApplicable,
 				noAdmissionVariationReason: request.NoAdmissionVariationReason);
 
 			CommandResult result = await _mediator.Send(command);

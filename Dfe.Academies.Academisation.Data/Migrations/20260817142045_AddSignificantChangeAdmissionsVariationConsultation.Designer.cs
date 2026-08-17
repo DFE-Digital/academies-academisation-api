@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20260817130706_AddSignificantChangeAdmissionsVariationConsultation")]
+    [Migration("20260817142045_AddSignificantChangeAdmissionsVariationConsultation")]
     partial class AddSignificantChangeAdmissionsVariationConsultation
     {
         /// <inheritdoc />
@@ -2417,10 +2417,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<bool?>("ConsultationIncludeAdmissionVariation")
                                 .HasColumnType("bit")
                                 .HasColumnName("ConsultationIncludeAdmissionVariation");
-
-                            b1.Property<bool?>("ConsultationIncludeAdmissionVariationNotApplicable")
-                                .HasColumnType("bit")
-                                .HasColumnName("ConsultationIncludeAdmissionVariationNotApplicable");
 
                             b1.Property<string>("ConsultationNoAdmissionVariationReason")
                                 .HasColumnType("nvarchar(max)")

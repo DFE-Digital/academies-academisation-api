@@ -4,6 +4,5 @@ public enum SignificantChangeTaskStatus
 {
 	NotStarted,
 	InProgress,
-	Completed,
-	NoApplicable
+	Completed
 }

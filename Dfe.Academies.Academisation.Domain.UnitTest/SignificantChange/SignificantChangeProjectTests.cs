@@ -213,33 +213,12 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
 
-			project.SetAdmissionVariationConsultation(false, false, "No admission variation required");
+			project.SetAdmissionVariationConsultation(false, "No admission variation required");
 
 			project.Details.ConsultationIncludeAdmissionVariation.Should().BeFalse();
-			project.Details.ConsultationIncludeAdmissionVariationNotApplicable.Should().BeNull();
 			project.Details.ConsultationNoAdmissionVariationReason.Should().Be("No admission variation required");
 		}
 
-		[Fact]
-		public void SetAdmissionVariationConsultation_WhenNotApplicable_ClearsOtherValues()
-		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
-
-			project.SetAdmissionVariationConsultation(false, false, "Some reason");
-			project.SetAdmissionVariationConsultation(true, true, "Should be ignored");
-
-			project.Details.ConsultationIncludeAdmissionVariationNotApplicable.Should().BeTrue();
-			project.Details.ConsultationIncludeAdmissionVariation.Should().BeNull();
-			project.Details.ConsultationNoAdmissionVariationReason.Should().BeNull();
-			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NoApplicable);
-		}
 
 		[Fact]
 		public void GetAdmissionVariationConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
@@ -268,7 +247,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
 
-			project.SetAdmissionVariationConsultation(false, false, null);
+			project.SetAdmissionVariationConsultation(false, null);
 
 			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
@@ -285,7 +264,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
 
-			project.SetAdmissionVariationConsultation(true, false, null);
+			project.SetAdmissionVariationConsultation(true, null);
 
 			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -302,7 +281,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
 
-			project.SetAdmissionVariationConsultation(false, false, "No admission variation required");
+			project.SetAdmissionVariationConsultation(false, "No admission variation required");
 
 			project.Tier.Should().Be(2);
 		}

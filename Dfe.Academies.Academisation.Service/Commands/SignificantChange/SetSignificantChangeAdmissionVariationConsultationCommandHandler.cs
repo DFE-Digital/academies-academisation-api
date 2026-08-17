@@ -19,7 +19,6 @@ public class SetSignificantChangeAdmissionVariationConsultationCommandHandler(IS
 
 		existingProject.SetAdmissionVariationConsultation(
 			request.ConsultationIncludeAdmissionVariation,
-			request.ConsultationIncludeAdmissionVariationNotApplicable,
 			request.NoAdmissionVariationReason);
 
 		repository.Update(existingProject);

@@ -23,8 +23,6 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.ConsultationIncludeAdmissionVariation))
 			.ForMember(destination => destination.ConsultationNoAdmissionVariationReason,
 				options => options.MapFrom(source => source.Details.ConsultationNoAdmissionVariationReason))
-			.ForMember(destination => destination.ConsultationIncludeAdmissionVariationNotApplicable,
-				options => options.MapFrom(source => source.Details.ConsultationIncludeAdmissionVariationNotApplicable))
 			.ForMember(destination => destination.AdmissionVariationConsultationTaskStatus,
 				options => options.MapFrom(source => source.Details.GetAdmissionVariationConsultationTaskStatus().ToString()));
 

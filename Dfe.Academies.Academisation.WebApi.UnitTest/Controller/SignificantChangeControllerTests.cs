@@ -307,7 +307,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var routeId = 100;
             var request = new SetSignificantChangeAdmissionVariationConsultationPublicCommand(
                 consultationIncludeAdmissionVariation: false,
-                consultationIncludeAdmissionVariationNotApplicable: false,
                 noAdmissionVariationReason: "No admission variation required");
 
             _mockMediator
@@ -321,7 +320,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 It.Is<SetSignificantChangeAdmissionVariationConsultationCommand>(c =>
                     c.Id == routeId
                     && c.ConsultationIncludeAdmissionVariation == request.ConsultationIncludeAdmissionVariation
-                    && c.ConsultationIncludeAdmissionVariationNotApplicable == request.ConsultationIncludeAdmissionVariationNotApplicable
                     && c.NoAdmissionVariationReason == request.NoAdmissionVariationReason),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -331,7 +329,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeAdmissionVariationConsultationPublicCommand(
                 consultationIncludeAdmissionVariation: true,
-                consultationIncludeAdmissionVariationNotApplicable: false,
                 noAdmissionVariationReason: null);
 
             _mockMediator
@@ -348,7 +345,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeAdmissionVariationConsultationPublicCommand(
                 consultationIncludeAdmissionVariation: null,
-                consultationIncludeAdmissionVariationNotApplicable: null,
                 noAdmissionVariationReason: null);
 
             var validationErrors = new[]

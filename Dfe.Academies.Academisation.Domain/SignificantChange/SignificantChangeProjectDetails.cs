@@ -22,21 +22,14 @@ public class SignificantChangeProjectDetails
 	}
 
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
-	public bool? ConsultationIncludeAdmissionVariationNotApplicable { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 
 	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
 	{
 		if (!ConsultationIncludeAdmissionVariation.HasValue
-		    && !ConsultationIncludeAdmissionVariationNotApplicable.HasValue
 		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
 		{
 			return SignificantChangeTaskStatus.NotStarted;
-		}
-
-		if (ConsultationIncludeAdmissionVariationNotApplicable is true)
-		{
-			return SignificantChangeTaskStatus.NoApplicable;
 		}
 
 		if (ConsultationIncludeAdmissionVariation is true)

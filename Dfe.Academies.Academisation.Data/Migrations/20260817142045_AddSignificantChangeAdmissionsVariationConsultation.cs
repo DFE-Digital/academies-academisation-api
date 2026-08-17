@@ -17,13 +17,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                 type: "bit",
                 nullable: true);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "ConsultationIncludeAdmissionVariationNotApplicable",
-                schema: "academisation",
-                table: "SignificantChangeProject",
-                type: "bit",
-                nullable: true);
-
             migrationBuilder.AddColumn<string>(
                 name: "ConsultationNoAdmissionVariationReason",
                 schema: "academisation",
@@ -37,11 +30,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ConsultationIncludeAdmissionVariation",
-                schema: "academisation",
-                table: "SignificantChangeProject");
-
-            migrationBuilder.DropColumn(
-                name: "ConsultationIncludeAdmissionVariationNotApplicable",
                 schema: "academisation",
                 table: "SignificantChangeProject");
 
