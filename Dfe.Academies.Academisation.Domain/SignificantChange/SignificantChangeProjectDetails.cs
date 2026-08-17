@@ -1,4 +1,4 @@
-namespace Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public class SignificantChangeProjectDetails
 {
@@ -20,4 +20,37 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+
+	public bool? ConsultationIncludeAdmissionVariation { get; set; }
+	public bool? ConsultationIncludeAdmissionVariationNotApplicable { get; set; }
+	public string? ConsultationNoAdmissionVariationReason { get; set; }
+
+	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
+	{
+		if (!ConsultationIncludeAdmissionVariation.HasValue
+		    && !ConsultationIncludeAdmissionVariationNotApplicable.HasValue
+		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (ConsultationIncludeAdmissionVariationNotApplicable is true)
+		{
+			return SignificantChangeTaskStatus.NoApplicable;
+		}
+
+		if (ConsultationIncludeAdmissionVariation is true)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (ConsultationIncludeAdmissionVariation is false
+		    && !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
 }
