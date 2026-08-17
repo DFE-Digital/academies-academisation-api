@@ -71,7 +71,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 			data[0].StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			data[0].AdmissionVariationConsultation.ConsultationIncludeAdmissionVariation.Should().BeFalse();
-			data[0].AdmissionVariationConsultation.ConsultationIncludeAdmissionVariationNotApplicable.Should().BeNull();
 			data[0].AdmissionVariationConsultation.ConsultationNoAdmissionVariationReason.Should().Be("no information provided");
 
 			data[1].Id.Should().Be(11);

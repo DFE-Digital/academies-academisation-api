@@ -18,7 +18,6 @@ public class SignificantChangeProjectDto
 	public string StakeholderConsultationTaskStatus { get; set; } = string.Empty;
 
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
-	public bool? ConsultationIncludeAdmissionVariationNotApplicable { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;
 }
