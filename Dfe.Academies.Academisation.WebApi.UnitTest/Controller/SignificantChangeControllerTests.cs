@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using System;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -300,6 +301,67 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             result.Should().BeOfType<BadRequestObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
+
+        		[Fact]
+		public async Task SetConsultationDuration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+		{
+			var routeId = 100;
+			var request = new SetSignificantChangeConsultationDurationPublicCommand(
+				consultationLastedMinimumThreeWeeks: ConsultationDurationAnswer.No,
+				consultationDurationNotMetReason: "Consultation ran for two weeks only");
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeConsultationDurationCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetSignificantChangeConsultationDuration(routeId, request);
+
+			result.Should().BeOfType<OkResult>();
+			_mockMediator.Verify(m => m.Send(
+				It.Is<SetSignificantChangeConsultationDurationCommand>(c =>
+					c.Id == routeId
+					&& c.ConsultationLastedMinimumThreeWeeks == request.ConsultationLastedMinimumThreeWeeks
+					&& c.ConsultationDurationNotMetReason == request.ConsultationDurationNotMetReason),
+				It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[Fact]
+		public async Task SetConsultationDuration_ReturnsNotFound_WhenProjectDoesNotExist()
+		{
+			var request = new SetSignificantChangeConsultationDurationPublicCommand(
+				consultationLastedMinimumThreeWeeks: ConsultationDurationAnswer.Yes,
+				consultationDurationNotMetReason: null);
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeConsultationDurationCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetSignificantChangeConsultationDuration(100, request);
+
+			result.Should().BeOfType<NotFoundResult>();
+		}
+
+		[Fact]
+		public async Task SetConsultationDuration_ReturnsBadRequest_WhenValidationFails()
+		{
+			var request = new SetSignificantChangeConsultationDurationPublicCommand(
+				consultationLastedMinimumThreeWeeks: null,
+				consultationDurationNotMetReason: null);
+
+			var validationErrors = new[]
+			{
+				new ValidationError("ConsultationLastedMinimumThreeWeeks", "Consultation duration is required")
+			};
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeConsultationDurationCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+			var result = await _controller.SetSignificantChangeConsultationDuration(100, request);
+
+			result.Should().BeOfType<BadRequestObjectResult>()
+				.Which.Value.Should().BeEquivalentTo(validationErrors);
+		}
 
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
