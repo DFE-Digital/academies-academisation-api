@@ -3,6 +3,7 @@
 public record AdvisoryBoardDecisionDetails(
 	int? ConversionProjectId,
 	int? TransferProjectId,
+	int? SignificantChangeProjectId,
 	AdvisoryBoardDecision Decision,
 	bool? ApprovedConditionsSet,
 	string? ApprovedConditionsDetails,

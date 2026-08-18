@@ -9,6 +9,7 @@ public class AdvisoryBoardDecisionUpdateCommand : IRequest<CommandResult>
 	public int AdvisoryBoardDecisionId { get; init; }
 	public int? ConversionProjectId { get; init; }
 	public int? TransferProjectId { get; init; }
+	public int? SignificantChangeProjectId { get; init; }
 	public Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision Decision { get; init; }
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }

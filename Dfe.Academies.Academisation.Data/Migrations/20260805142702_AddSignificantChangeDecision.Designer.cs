@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260805142702_AddSignificantChangeDecision")]
+    partial class AddSignificantChangeDecision
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2402,41 +2405,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         });
 
                     b.Navigation("AssignedUser");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProject", b =>
-                {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProjectDetails", "Details", b1 =>
-                        {
-                            b1.Property<int>("SignificantChangeProjectId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("ConsultationDurationNotMetReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ConsultationDurationNotMetReason");
-
-                            b1.Property<string>("ConsultationLastedMinimumThreeWeeks")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ConsultationLastedMinimumThreeWeeks");
-
-                            b1.Property<bool?>("TrustConsultedStakeholders")
-                                .HasColumnType("bit")
-                                .HasColumnName("TrustConsultedStakeholders");
-
-                            b1.Property<string>("TrustConsultedStakeholdersNotConsultedReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
-
-                            b1.HasKey("SignificantChangeProjectId");
-
-                            b1.ToTable("SignificantChangeProject", "academisation");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SignificantChangeProjectId");
-                        });
-
-                    b.Navigation("Details")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>
