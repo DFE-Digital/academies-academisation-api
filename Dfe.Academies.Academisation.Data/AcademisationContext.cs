@@ -555,6 +555,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			{
 				abd.Property(d => d.ConversionProjectId).HasColumnName("ConversionProjectId");
 				abd.Property(d => d.TransferProjectId).HasColumnName("TransferProjectId");
+				abd.Property(d => d.SignificantChangeProjectId).HasColumnName("SignificantChangeProjectId");
 				abd.Property(d => d.Decision).HasColumnName("Decision").HasConversion<string>();
 				abd.Property(d => d.ApprovedConditionsSet).HasColumnName("ApprovedConditionsSet");
 				abd.Property(d => d.ApprovedConditionsDetails).HasColumnName("ApprovedConditionsDetails");
