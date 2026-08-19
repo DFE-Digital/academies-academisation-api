@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await dbSet.ToListAsync().ConfigureAwait(false);
 		}
 
-		public async Task<TEntity> GetById(int id)
+		public async Task<TEntity?> GetById(int id)
 		{
 			return await dbSet.FindAsync(id).ConfigureAwait(false);
 		}
