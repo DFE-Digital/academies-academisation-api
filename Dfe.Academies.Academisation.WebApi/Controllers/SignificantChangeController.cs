@@ -5,6 +5,7 @@ using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.WebApi.Controllers
 {
@@ -93,6 +94,17 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var result = await _mediator.Send(new GetSignificantChangeProjectByIdQuery(id), cancellationToken);
 
 			return result is null ? NotFound() : Ok(result);
+		}
+
+		[HttpGet("filter-parameters", Name = "GetSignificantChangeFilterParameters")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<ActionResult<SignificantChangeFilterParameters>> GetFilterParameters(
+			CancellationToken cancellationToken)
+		{
+			_logger.LogInformation("Getting significant change filter parameters");
+			var result = await _mediator.Send(new GetSignificantChangeFilterParametersQuery(), cancellationToken);
+
+			return Ok(result);
 		}
 	}
 }

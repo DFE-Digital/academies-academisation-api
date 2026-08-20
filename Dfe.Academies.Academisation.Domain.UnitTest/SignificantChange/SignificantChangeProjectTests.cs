@@ -170,7 +170,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void SetStakeholderConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
 		{
 			var project = new SignificantChangeProject(
-				SignificantChangeStatus.InProgress,
+				SignificantChangeStatus.PreDecision,
 				_fixture.Create<int>(),
 				(byte)1,
 				_fixture.Create<string>(),
@@ -187,7 +187,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void SetStakeholderConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
 			var project = new SignificantChangeProject(
-				SignificantChangeStatus.InProgress,
+				SignificantChangeStatus.PreDecision,
 				_fixture.Create<int>(),
 				(byte)1,
 				_fixture.Create<string>(),
