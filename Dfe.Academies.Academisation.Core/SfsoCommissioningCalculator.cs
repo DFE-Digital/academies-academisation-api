@@ -4,10 +4,10 @@ namespace Dfe.Academies.Academisation.Core
 	public static class SfsoCommissioningCalculator
 	{
 		private const int LeadTimeInDays = 15;
-
-		public static DateTime? CalculateRequestedDate(DateTime? proposedDecisionDate)
+		
+		public static DateTime? CalculateRequestedDate(DateTime? proposedDecisionDate, bool mandatoryInformationComplete)
 		{
-			if (proposedDecisionDate is null)
+			if (proposedDecisionDate is null || !mandatoryInformationComplete)
 			{
 				return null;
 			}
