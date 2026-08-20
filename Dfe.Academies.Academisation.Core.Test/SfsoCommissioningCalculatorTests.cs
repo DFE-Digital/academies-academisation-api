@@ -5,7 +5,7 @@ public class SfsoCommissioningCalculatorTests
 	[Fact]
 	public void CalculateRequestedDate_ReturnsNull_WhenProposedDateIsNull()
 	{
-		Assert.Null(SfsoCommissioningCalculator.CalculateRequestedDate(null));
+		Assert.Null(SfsoCommissioningCalculator.CalculateRequestedDate(null, true));
 	}
 
 	[Fact]
@@ -13,7 +13,7 @@ public class SfsoCommissioningCalculatorTests
 	{
 		var proposed = DateTime.Today.AddDays(40);
 
-		var result = SfsoCommissioningCalculator.CalculateRequestedDate(proposed);
+		var result = SfsoCommissioningCalculator.CalculateRequestedDate(proposed, true);
 
 		Assert.Equal(proposed.AddDays(-15), result);
 	}
@@ -23,7 +23,7 @@ public class SfsoCommissioningCalculatorTests
 	{
 		var proposed = DateTime.Today.AddDays(10);
 
-		var result = SfsoCommissioningCalculator.CalculateRequestedDate(proposed);
+		var result = SfsoCommissioningCalculator.CalculateRequestedDate(proposed, true);
 
 		Assert.Equal(DateTime.Today, result);
 	}
@@ -31,12 +31,12 @@ public class SfsoCommissioningCalculatorTests
 	[Fact]
 	public void CalculateRequestedDate_ReturnsToday_WhenProposedIsToday()
 	{
-		Assert.Equal(DateTime.Today, SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today));
+		Assert.Equal(DateTime.Today, SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today, true));
 	}
 
 	[Fact]
 	public void CalculateRequestedDate_ReturnsToday_WhenProposedIsInThePast()
 	{
-		Assert.Equal(DateTime.Today, SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today.AddDays(-5)));
+		Assert.Equal(DateTime.Today, SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today.AddDays(-5), true));
 	}
 }
