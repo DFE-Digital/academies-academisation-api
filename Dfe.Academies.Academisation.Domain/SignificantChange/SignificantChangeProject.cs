@@ -25,6 +25,19 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
+		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation, string? noAdmissionVariationReason)
+		{
+			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
+			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
+				? noAdmissionVariationReason
+				: null;
+
+			if (consultationIncludeAdmissionVariation is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
+		}
+
 		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
 		{
 			Details.TrustConsultedStakeholders = trustConsultedStakeholders;

@@ -1,4 +1,4 @@
-namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
+﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
 public class SignificantChangeProjectDto
 {
@@ -16,4 +16,8 @@ public class SignificantChangeProjectDto
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
 	public string StakeholderConsultationTaskStatus { get; set; } = string.Empty;
+
+	public bool? ConsultationIncludeAdmissionVariation { get; set; }
+	public string? ConsultationNoAdmissionVariationReason { get; set; }
+	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;
 }
