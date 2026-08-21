@@ -24,7 +24,7 @@ public class ConversionAdvisoryBoardDecisionStateGetByProjectIdTests
 		const int expectedProjectId = 2;
 
 		//Act
-		var result = await _target.GetConversionProjectDecsion(expectedProjectId);
+		var result = await _target.GetConversionProjectDecision(expectedProjectId);
 
 		//Assert
 		Assert.Multiple(
@@ -44,7 +44,7 @@ public class ConversionAdvisoryBoardDecisionStateGetByProjectIdTests
 		const int id = 4;
 
 		//Act
-		var result = await _target.GetConversionProjectDecsion(id);
+		var result = await _target.GetConversionProjectDecision(id);
 
 		//Assert
 		Assert.Null(result);

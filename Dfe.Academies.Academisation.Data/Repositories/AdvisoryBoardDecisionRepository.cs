@@ -27,14 +27,19 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			return await DefaultIncludes().Where(x => x.AdvisoryBoardDecisionDetails.TransferProjectId != null).ToListAsync();
 		}
 
-		public async Task<ConversionAdvisoryBoardDecision?> GetConversionProjectDecsion(int projectId)
+		public async Task<ConversionAdvisoryBoardDecision?> GetConversionProjectDecision(int projectId)
 		{
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.AdvisoryBoardDecisionDetails.ConversionProjectId == projectId);
 		}
 
-		public async Task<ConversionAdvisoryBoardDecision?> GetTransferProjectDecsion(int projectId)
+		public async Task<ConversionAdvisoryBoardDecision?> GetTransferProjectDecision(int projectId)
 		{
 			return await DefaultIncludes().SingleOrDefaultAsync(x => x.AdvisoryBoardDecisionDetails.TransferProjectId == projectId);
+		}
+
+		public async Task<ConversionAdvisoryBoardDecision?> GetSignificantChangeDecision(int projectId)
+		{
+			return await DefaultIncludes().SingleOrDefaultAsync(x => x.AdvisoryBoardDecisionDetails.SignificantChangeProjectId == projectId);
 		}
 
 		private IQueryable<ConversionAdvisoryBoardDecision> DefaultIncludes()

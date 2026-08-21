@@ -28,7 +28,7 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 
 		ConversionAdvisoryBoardDecision data = new(expectedId, details, deferred, declined, withdrawn, daoRevoked, default, default);
 
-		_mockDataQuery.Setup(q => q.GetConversionProjectDecsion(expectedId))
+		_mockDataQuery.Setup(q => q.GetConversionProjectDecision(expectedId))
 			.ReturnsAsync(data);
 
 		AdvisoryBoardDecisionGetQueryService query = new(_mockDataQuery.Object);
