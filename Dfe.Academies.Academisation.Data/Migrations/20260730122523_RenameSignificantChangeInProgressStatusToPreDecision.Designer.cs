@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260730122523_RenameSignificantChangeInProgressStatusToPreDecision")]
+    partial class RenameSignificantChangeInProgressStatusToPreDecision
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -860,9 +863,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ReadOnlyDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("SchoolName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1069,15 +1069,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<string>("Recommendation")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SfsoCommissioningOverview")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("SfsoCommissioningOverview");
-
-                    b.Property<DateTime?>("SfsoCommissioningRequestedDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("SfsoCommissioningRequestedDate");
 
                     b.Property<string>("SpecificReasonsForTransfer")
                         .IsRequired()
@@ -1796,10 +1787,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("DecisionMakerName");
 
-                            b1.Property<int?>("SignificantChangeProjectId")
-                                .HasColumnType("int")
-                                .HasColumnName("SignificantChangeProjectId");
-
                             b1.Property<int?>("TransferProjectId")
                                 .HasColumnType("int")
                                 .HasColumnName("TransferProjectId");
@@ -2263,15 +2250,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("SchoolType");
 
-                            b1.Property<string>("SfsoCommissioningOverview")
-                                .HasMaxLength(250)
-                                .HasColumnType("nvarchar(250)")
-                                .HasColumnName("SfsoCommissioningOverview");
-
-                            b1.Property<DateTime?>("SfsoCommissioningRequestedDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("SfsoCommissioningRequestedDate");
-
                             b1.Property<string>("SponsorName")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("SponsorName");
@@ -2403,33 +2381,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         });
 
                     b.Navigation("AssignedUser");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProject", b =>
-                {
-                    b.OwnsOne("Dfe.Academies.Academisation.Domain.SignificantChange.SignificantChangeProjectDetails", "Details", b1 =>
-                        {
-                            b1.Property<int>("SignificantChangeProjectId")
-                                .HasColumnType("int");
-
-                            b1.Property<bool?>("TrustConsultedStakeholders")
-                                .HasColumnType("bit")
-                                .HasColumnName("TrustConsultedStakeholders");
-
-                            b1.Property<string>("TrustConsultedStakeholdersNotConsultedReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
-
-                            b1.HasKey("SignificantChangeProjectId");
-
-                            b1.ToTable("SignificantChangeProject", "academisation");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SignificantChangeProjectId");
-                        });
-
-                    b.Navigation("Details")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.TransferProjectAggregate.IntendedTransferBenefit", b =>

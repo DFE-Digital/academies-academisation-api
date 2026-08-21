@@ -16,6 +16,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public string TrustUkprn { get; private set; } = trustUkprn;
 		public string TypeOfSignificantChange { get; private set; } = typeOfSignificantChange;
 		public DateTime? ReadOnlyDate { get; private set; }
+		public SignificantChangeProjectDetails Details { get; private set; } = new();
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
@@ -24,10 +25,26 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
+		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
+		{
+			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
+			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
+				? trustConsultedStakeholdersNotConsultedReason
+				: null;
+
+			if (trustConsultedStakeholders is false)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void MoveToTierTwoIfApplicable()
+		{
+			if (Tier == 1) Tier = 2;
+		}
+
 		public static SignificantChangeProject Create(int urn, byte tier, string trustName, string trustUkprn,
 			string route, string schoolName, DateTime createdOn)
 		{
-			return new SignificantChangeProject(SignificantChangeStatus.InProgress, urn, tier, trustName, trustUkprn,
+			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, urn, tier, trustName, trustUkprn,
 				route, schoolName) { CreatedOn = createdOn };
 		}
 

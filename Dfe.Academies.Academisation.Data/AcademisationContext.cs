@@ -58,6 +58,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 	public DbSet<TransferProject> TransferProjects { get; set; } = null!;
 	public DbSet<ProjectGroup> ProjectGroups { get; set; } = null!;
 
+	public DbSet<SignificantChangeProject> SignificantChangeProjects { get; set; } = null!;
+
 	public override int SaveChanges()
 	{
 		SetModifiedAndCreatedDates();
@@ -553,6 +555,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			{
 				abd.Property(d => d.ConversionProjectId).HasColumnName("ConversionProjectId");
 				abd.Property(d => d.TransferProjectId).HasColumnName("TransferProjectId");
+				abd.Property(d => d.SignificantChangeProjectId).HasColumnName("SignificantChangeProjectId");
 				abd.Property(d => d.Decision).HasColumnName("Decision").HasConversion<string>();
 				abd.Property(d => d.ApprovedConditionsSet).HasColumnName("ApprovedConditionsSet");
 				abd.Property(d => d.ApprovedConditionsDetails).HasColumnName("ApprovedConditionsDetails");
@@ -965,6 +968,12 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		significantChangeConfiguration.Property(p => p.TypeOfSignificantChange).HasColumnName("TypeOfSignificantChange").IsRequired();
 		significantChangeConfiguration.Property(p => p.TrustUkprn).HasColumnName("TrustUkprn").IsRequired();
 		significantChangeConfiguration.Property(p => p.TrustName).HasColumnName("TrustName").IsRequired();
+
+		significantChangeConfiguration.OwnsOne(p => p.Details, details =>
+		{
+			details.Property(d => d.TrustConsultedStakeholders).HasColumnName("TrustConsultedStakeholders");
+			details.Property(d => d.TrustConsultedStakeholdersNotConsultedReason).HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+		});
 
 	}
 }
