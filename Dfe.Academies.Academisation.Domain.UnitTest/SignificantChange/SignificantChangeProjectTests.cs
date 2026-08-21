@@ -58,7 +58,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.AssignedUserFullName.Should().Be(userFullName);
 		}
     
-    [Fact]
+		[Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
 			var project = SignificantChangeProject.Create(
@@ -200,5 +200,51 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Tier.Should().Be(2);
 		}
+
+		[Fact]
+		public void SetProjectDates_ShouldSetDates()
+		{
+			var project = SignificantChangeProject.Create(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				DateTime.UtcNow);
+
+			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
+			var proposedChangeDate = DateTime.UtcNow.AddDays(11);
+
+			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
+
+			project.Details.ProposedDecisionDate.Should().Be(proposedDecisionDate);
+			project.Details.ProposedChangeDate.Should().Be(proposedChangeDate);
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData("2024-07-01", null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(null, "2024-07-01", SignificantChangeTaskStatus.InProgress)]
+		[InlineData("2024-07-01", "2024-07-02", SignificantChangeTaskStatus.Completed)]
+        public void GetProjectDates_ShouldHaveCorrectStatus(string? proposedDecisionDateString, string? proposedChangeDateString, SignificantChangeTaskStatus expectedTaskStatus)
+        {
+            var project = SignificantChangeProject.Create(
+            _fixture.Create<int>(),
+            _fixture.Create<byte>(),
+            _fixture.Create<string>(),
+            _fixture.Create<string>(),
+            _fixture.Create<string>(),
+            _fixture.Create<string>(),
+            DateTime.UtcNow);
+
+            DateTime? proposedDecisionDate = string.IsNullOrEmpty(proposedDecisionDateString) ? null : DateTime.Parse(proposedDecisionDateString);
+            DateTime? proposedChangeDate = string.IsNullOrEmpty(proposedChangeDateString) ? null : DateTime.Parse(proposedChangeDateString);
+
+            project.Details.ProposedDecisionDate = proposedDecisionDate;
+            project.Details.ProposedChangeDate = proposedChangeDate;
+
+            project.Details.GetConfirmProjectDatesTaskStatus().Should().Be(expectedTaskStatus);
+        }
 	}
 }

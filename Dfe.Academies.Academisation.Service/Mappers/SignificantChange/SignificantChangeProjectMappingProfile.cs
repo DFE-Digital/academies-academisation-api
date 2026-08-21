@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
@@ -17,7 +17,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.TrustConsultedStakeholdersNotConsultedReason,
 				options => options.MapFrom(source => source.Details.TrustConsultedStakeholdersNotConsultedReason))
 			.ForMember(destination => destination.StakeholderConsultationTaskStatus,
-				options => options.MapFrom(source => source.Details.GetStakeholderConsultationTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetStakeholderConsultationTaskStatus().ToString()))
+			.ForMember(destination => destination.ProposedChangeDate,
+				options => options.MapFrom(source => source.Details.ProposedChangeDate))
+			.ForMember(destination => destination.ProposedDecisionDate,
+				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
+			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
+				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()));
+
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
 			.ForMember(destination => destination.Status,
@@ -32,6 +39,13 @@ public class SignificantChangeProjectMappingProfile : Profile
 						source.AssignedUserFullName ?? string.Empty,
 						source.AssignedUserEmailAddress ?? string.Empty)))
 			.ForMember(destination => destination.StakeholderConsultation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
+
 	}
 }

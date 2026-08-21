@@ -328,6 +328,45 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
 
+	    [Fact]
+		public async Task SetProjectDates_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+		{
+			var routeId = 100;
+			var request = new SetSignificantChangeProjectDatesPublicCommand(
+				ProposedDecisionDate: new DateTime(2026, 9, 1),
+				ProposedChangeDate: new DateTime(2027, 1, 1));
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeProjectDatesCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetSignificantChangeProjectDates(routeId, request);
+
+			result.Should().BeOfType<OkResult>();
+			_mockMediator.Verify(m => m.Send(
+				It.Is<SetSignificantChangeProjectDatesCommand>(c =>
+					c.Id == routeId
+					&& c.ProposedDecisionDate == request.ProposedDecisionDate
+					&& c.ProposedChangeDate == request.ProposedChangeDate),
+				It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[Fact]
+		public async Task SetProjectDates_ReturnsNotFound_WhenProjectDoesNotExist()
+		{
+			var request = new SetSignificantChangeProjectDatesPublicCommand(
+				ProposedDecisionDate: new DateTime(2026, 9, 1),
+				ProposedChangeDate: new DateTime(2027, 1, 1));
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeProjectDatesCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetSignificantChangeProjectDates(100, request);
+
+			result.Should().BeOfType<NotFoundResult>();
+		}
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(

@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +18,29 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				id: id,
 				trustConsultedStakeholders: request.TrustConsultedStakeholders,
 				trustConsultedStakeholdersNotConsultedReason: request.TrustConsultedStakeholdersNotConsultedReason);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/SetSignificantChangeProjectDates", Name = "SetSignificantChangeProjectDates")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeProjectDates(int id, [FromBody] SetSignificantChangeProjectDatesPublicCommand request)
+		{
+			var command = new SetSignificantChangeProjectDatesCommand(
+				id,
+				request.ProposedDecisionDate,
+				request.ProposedChangeDate);
 
 			CommandResult result = await _mediator.Send(command);
 
