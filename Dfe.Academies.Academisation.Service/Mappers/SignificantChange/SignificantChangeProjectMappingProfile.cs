@@ -17,7 +17,17 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.TrustConsultedStakeholdersNotConsultedReason,
 				options => options.MapFrom(source => source.Details.TrustConsultedStakeholdersNotConsultedReason))
 			.ForMember(destination => destination.StakeholderConsultationTaskStatus,
-				options => options.MapFrom(source => source.Details.GetStakeholderConsultationTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetStakeholderConsultationTaskStatus().ToString()))
+			.ForMember(destination => destination.ConsultationLastedMinimumThreeWeeks,
+				options => options.MapFrom(source => source.Details.ConsultationLastedMinimumThreeWeeks))
+			.ForMember(destination => destination.ConsultationDurationNotMetReason,
+				options => options.MapFrom(source => source.Details.ConsultationDurationNotMetReason))
+			.ForMember(destination => destination.ConsultationDurationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetConsultationDurationTaskStatus().ToString()));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ConsultationDurationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
 			.ForMember(destination => destination.Status,
@@ -32,6 +42,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 						source.AssignedUserFullName ?? string.Empty,
 						source.AssignedUserEmailAddress ?? string.Empty)))
 			.ForMember(destination => destination.StakeholderConsultation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.ConsultationDuration,
 				options => options.MapFrom(source => source));
 	}
 }
