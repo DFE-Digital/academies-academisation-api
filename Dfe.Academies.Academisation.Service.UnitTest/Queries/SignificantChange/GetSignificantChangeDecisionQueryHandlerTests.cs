@@ -38,6 +38,7 @@ public class GetSignificantChangeDecisionQueryHandlerTests
 			new List<AdvisoryBoardDeclinedReasonDetails>(),
 			new List<AdvisoryBoardWithdrawnReasonDetails>(),
 			new List<AdvisoryBoardDAORevokedReasonDetails>(),
+			new List<AdvisoryBoardDAONotIssuedReasonDetails>(),
 			now,
 			now);
 
