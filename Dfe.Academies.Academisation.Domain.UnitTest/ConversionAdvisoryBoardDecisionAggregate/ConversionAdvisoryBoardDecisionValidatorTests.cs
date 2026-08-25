@@ -719,9 +719,9 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>(),
 			_faker.Name.ToString()),
-			null,
-			null,
-			null,
+			[],
+			[],
+			[],
 			null,
 			new List<AdvisoryBoardDAONotIssuedReasonDetails>() { new(1, AdvisoryBoardDAONotIssuedReason.ThereAreNoSuitableTrustOptions, _faker.Lorem.Sentence()) },
 			DateTime.UtcNow,
@@ -746,9 +746,9 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			DateTime.UtcNow.AddDays(-1),
 			_faker.PickRandom<DecisionMadeBy>(),
 			_faker.Name.ToString()),
-			null,
-			null,
-			null,
+			[],
+			[],
+			[],
 			null,
 			new List<AdvisoryBoardDAONotIssuedReasonDetails>() { new(1, AdvisoryBoardDAONotIssuedReason.Other, _faker.Lorem.Sentence()) },
 			DateTime.UtcNow,
@@ -777,9 +777,9 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 				DateTime.UtcNow.AddDays(-1),
 				DecisionMadeBy.DeputyDirector,
 				string.Empty),
-			null,
-			null,
-			null, null, null, DateTime.UtcNow, DateTime.UtcNow);
+			[],
+			[],
+			[], null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
 		var result = _validator.Validate(decision);
@@ -810,9 +810,9 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			DateTime.UtcNow.AddDays(-1),
 			DecisionMadeBy.DeputyDirector,
 			"John Smith"),
-			null,
-			null,
-			null,
+			[],
+			[],
+			[],
 			null,
 			null, DateTime.UtcNow, DateTime.UtcNow);
 
@@ -838,9 +838,9 @@ public class ConversionAdvisoryBoardDecisionValidatorTests
 			DateTime.UtcNow.AddDays(-1),
 			DecisionMadeBy.None,
 			string.Empty),
-			null,
-			null,
-			null,
+			[],
+			[],
+			[],
 			null, null, DateTime.UtcNow, DateTime.UtcNow);
 
 		// Act
