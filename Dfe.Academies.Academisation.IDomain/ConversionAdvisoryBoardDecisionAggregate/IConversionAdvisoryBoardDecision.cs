@@ -14,12 +14,14 @@ public interface IConversionAdvisoryBoardDecision
 		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
-		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons);
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons,
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails> daoNotIssuedReason);
 
 	public IReadOnlyCollection<AdvisoryBoardDeclinedReasonDetails> DeclinedReasons { get; }
 	public IReadOnlyCollection<AdvisoryBoardDeferredReasonDetails> DeferredReasons { get; }
 	public IReadOnlyCollection<AdvisoryBoardWithdrawnReasonDetails> WithdrawnReasons { get; }
 	public IReadOnlyCollection<AdvisoryBoardDAORevokedReasonDetails> DAORevokedReasons { get; }
+	public IReadOnlyCollection<AdvisoryBoardDAONotIssuedReasonDetails> DAONotIssuedReasons { get; }
 
 
 }

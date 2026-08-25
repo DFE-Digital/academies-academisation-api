@@ -25,8 +25,9 @@ public class ConversionAdvisoryBoardDecisionGetQueryTests
 		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
 		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
 		var daoRevoked = _fixture.CreateMany<AdvisoryBoardDAORevokedReasonDetails>();
+		var daoNotIssuedReasons = _fixture.CreateMany<AdvisoryBoardDAONotIssuedReasonDetails>();
 
-		ConversionAdvisoryBoardDecision data = new(expectedId, details, deferred, declined, withdrawn, daoRevoked, default, default);
+		ConversionAdvisoryBoardDecision data = new(expectedId, details, deferred, declined, withdrawn, daoRevoked, daoNotIssuedReasons, default, default);
 
 		_mockDataQuery.Setup(q => q.GetConversionProjectDecision(expectedId))
 			.ReturnsAsync(data);

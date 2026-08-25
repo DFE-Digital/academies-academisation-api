@@ -50,6 +50,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.Include(x => x.DeferredReasons)
 				.Include(x => x.DeclinedReasons)
 				.Include(x => x.DaoRevokedReasons)
+				.Include(x => x.DaoNotIssuedReasons)
 				.AsQueryable();
 
 			return x;

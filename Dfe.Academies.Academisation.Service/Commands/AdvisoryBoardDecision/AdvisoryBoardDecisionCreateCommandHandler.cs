@@ -106,8 +106,9 @@ internal class AdvisoryBoardDecisionCreateCommandHandler(
 		var declinedReasons = request.DeclinedReasons ?? [];
 		var withdrawnReasons = request.WithdrawnReasons ?? [];
 		var daoRevokedReasons = request.DAORevokedReasons ?? [];
+		var daoNotIssueReasons = request.DAONotIssuedReasons ?? [];
 
-		return factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
+		return factory.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons, daoNotIssueReasons);
 	}
 
 	private CreateResult CreateSignificantChangeDecisionDetails(SignificantChangeDecisionCommand request)
@@ -128,7 +129,7 @@ internal class AdvisoryBoardDecisionCreateCommandHandler(
 		var sigChangeDeclinedReasons = request.DeclinedReasons ?? [];
 		var sigChangeWithdrawnReasons = request.WithdrawnReasons ?? [];
 
-		return factory.Create(significantChangeDetails, sigChangeDeferredReasons, sigChangeDeclinedReasons, sigChangeWithdrawnReasons, []);
+		return factory.Create(significantChangeDetails, sigChangeDeferredReasons, sigChangeDeclinedReasons, sigChangeWithdrawnReasons, [], []);
 	}
 	
 }
