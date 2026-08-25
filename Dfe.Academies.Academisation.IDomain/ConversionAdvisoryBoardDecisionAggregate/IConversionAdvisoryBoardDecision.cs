@@ -15,7 +15,7 @@ public interface IConversionAdvisoryBoardDecision
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
 		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons,
-		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails> daoNotIssuedReason);
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails> daoNotIssuedReasons);
 
 	public IReadOnlyCollection<AdvisoryBoardDeclinedReasonDetails> DeclinedReasons { get; }
 	public IReadOnlyCollection<AdvisoryBoardDeferredReasonDetails> DeferredReasons { get; }
