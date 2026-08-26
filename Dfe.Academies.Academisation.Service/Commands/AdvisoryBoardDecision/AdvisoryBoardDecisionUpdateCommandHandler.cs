@@ -40,7 +40,7 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 
 		return await UpdateDecisionAsync(
 			command.AdvisoryBoardDecisionId,
-			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, command.DAORevokedReasons!),
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, command.DAORevokedReasons!, command.DAONotIssuedReasons!),
 			cancellationToken);
 	}
 
@@ -61,7 +61,7 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 
 		return await UpdateDecisionAsync(
 			command.AdvisoryBoardDecisionId,
-			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>()),
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>(), new List<AdvisoryBoardDAONotIssuedReasonDetails>()),
 			cancellationToken);
 	}
 

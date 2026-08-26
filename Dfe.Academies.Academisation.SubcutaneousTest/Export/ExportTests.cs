@@ -163,7 +163,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest.Export
 
 			var conversionAdvisoryBoardDecision = new ConversionAdvisoryBoardDecision(1,
 				new AdvisoryBoardDecisionDetails(conversionProjectId, transferProjectId, null, AdvisoryBoardDecision.Withdrawn, false, "Approved", now, now,
-				DecisionMadeBy.DeputyDirector, "Paull Smith"), null!, null!, advisoryBoardDeclinedReasonDetails, null, now, now);
+				DecisionMadeBy.DeputyDirector, "Paull Smith"), null!, null!, advisoryBoardDeclinedReasonDetails, null, null, now, now);
 
 			_dbContext.ConversionAdvisoryBoardDecisions.Add(conversionAdvisoryBoardDecision);
 			await _dbContext.SaveChangesAsync();

@@ -9,6 +9,7 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 	{
 		ValidateApprovedDecision();
 		ValidateDeclinedDecision();
+		ValidateDaoNotIssuedReasons();
 		ValidateDeferredDecision();
 		ValidateWithdrawnDecision();
 		ValidateDecisionDate();
@@ -155,6 +156,41 @@ public class ConversionAdvisoryBoardDecisionValidator : AbstractValidator<Conver
 						nameof(r.Details)) +
 					InNestedPropertySuffix(
 						nameof(ConversionAdvisoryBoardDecision.DeclinedReasons),
+						"{CollectionIndex}")));
+	}
+
+	private void ValidateDaoNotIssuedReasons()
+	{
+		RuleFor(details => details.DaoNotIssuedReasons)
+			.NotNull()
+			.NotEmpty()
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is AdvisoryBoardDecision.DAONotIssued)
+			.WithMessage(details =>
+				NotEmptyMessage(
+					nameof(details.DaoNotIssuedReasons)) +
+				WhenIsSuffix(
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
+					nameof(AdvisoryBoardDecision.DAONotIssued)));
+
+		RuleFor(details => details.DaoNotIssuedReasons)
+			.Empty()
+			.When(details => details.AdvisoryBoardDecisionDetails.Decision is not AdvisoryBoardDecision.DAONotIssued)
+			.WithMessage(details =>
+				NullMessage(
+					nameof(details.DaoNotIssuedReasons)) +
+				WhenIsNotSuffix(
+					nameof(details.AdvisoryBoardDecisionDetails.Decision),
+					nameof(AdvisoryBoardDecision.Declined)));
+
+		RuleForEach(details => details.DaoNotIssuedReasons)
+			.ChildRules(reason => reason
+				.RuleFor(r => r.Details)
+				.NotEmpty()
+				.WithMessage(r =>
+					NotEmptyMessage(
+						nameof(r.Details)) +
+					InNestedPropertySuffix(
+						nameof(ConversionAdvisoryBoardDecision.DaoNotIssuedReasons),
 						"{CollectionIndex}")));
 	}
 

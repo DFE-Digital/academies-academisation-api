@@ -160,6 +160,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		var advisoryBoardDeclinedReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardDeclinedReasonDetails>().ToList();
 		var AdvisoryBoardWithdrawnReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardWithdrawnReasonDetails>().ToList();
 		var AdvisoryBoardDAORevokedDetailsEntities = ChangeTracker.Entries<AdvisoryBoardDAORevokedReasonDetails>().ToList();
+		var advisoryBoardDAONotIssuedReasonDetailsEntities = ChangeTracker.Entries<AdvisoryBoardDAONotIssuedReasonDetails>().ToList();
 
 		foreach (var entity in advisoryBoardDeferredReasonDetailsEntities.Where(e => e.State == EntityState.Added))
 		{
@@ -203,6 +204,17 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		{
 			entity.Entity.LastModifiedOn = timestamp;
 		}
+
+		foreach (var entity in advisoryBoardDAONotIssuedReasonDetailsEntities.Where(e => e.State == EntityState.Added))
+		{
+			entity.Entity.CreatedOn = timestamp;
+			entity.Entity.LastModifiedOn = timestamp;
+		}
+
+		foreach (var entity in advisoryBoardDAONotIssuedReasonDetailsEntities.Where(e => e.State == EntityState.Modified))
+		{
+			entity.Entity.LastModifiedOn = timestamp;
+		}
 		// for new domain object mapped directly to the database
 		var domainEntities = ChangeTracker.Entries<Entity>().ToList();
 
@@ -239,6 +251,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		modelBuilder.Entity<AdvisoryBoardDeclinedReasonDetails>(ConfigureConversionAdvisoryBoardDecisionDeclinedReason);
 		modelBuilder.Entity<AdvisoryBoardWithdrawnReasonDetails>(ConfigureAdvisoryBoardDecisionWithdrawnReason);
 		modelBuilder.Entity<AdvisoryBoardDAORevokedReasonDetails>(ConfigureAdvisoryBoardDecisionDAORevokedReason);
+		modelBuilder.Entity<AdvisoryBoardDAONotIssuedReasonDetails>(ConfigureAdvisoryBoardDecisionDAONotIssuedReason);
 
 		modelBuilder.Entity<FormAMatProject>(ConfigureFormAMatProject);
 		modelBuilder.Entity<ProjectGroup>(ConfigureProjectGroup);
@@ -600,6 +613,15 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 
 		var daoRevokedNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.DaoRevokedReasons));
 		daoRevokedNav!.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+		ConversionAdvisoryBoardDecisionConfiguration
+			.HasMany(a => a.DaoNotIssuedReasons)
+			.WithOne()
+			.HasForeignKey(x => x.AdvisoryBoardDecisionId)
+			.IsRequired();
+
+		var daoNotIssueNav = ConversionAdvisoryBoardDecisionConfiguration.Metadata.FindNavigation(nameof(ConversionAdvisoryBoardDecision.DaoNotIssuedReasons));
+		daoNotIssueNav!.SetPropertyAccessMode(PropertyAccessMode.Field);
 	}
 
 	private static void ConfigureConversionAdvisoryBoardDecisionDeferredReason(EntityTypeBuilder<AdvisoryBoardDeferredReasonDetails> ConversionAdvisoryBoardDecisionDeferredReasonConfiguration)
@@ -630,6 +652,14 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 	{
 		AdvisoryBoardDecisionDAORevokedReasonConfiguration.ToTable("AdvisoryBoardDecisionDAORevokedReason", DEFAULT_SCHEMA);
 		AdvisoryBoardDecisionDAORevokedReasonConfiguration
+			.Property(e => e.Reason)
+			.HasConversion<string>();
+	}
+
+	private static void ConfigureAdvisoryBoardDecisionDAONotIssuedReason(EntityTypeBuilder<AdvisoryBoardDAONotIssuedReasonDetails> advisoryBoardDecisionDAONotIssuedReasonConfiguration)
+	{
+		advisoryBoardDecisionDAONotIssuedReasonConfiguration.ToTable("AdvisoryBoardDecisionDaoNotIssuedReason", DEFAULT_SCHEMA);
+		advisoryBoardDecisionDAONotIssuedReasonConfiguration
 			.Property(e => e.Reason)
 			.HasConversion<string>();
 	}

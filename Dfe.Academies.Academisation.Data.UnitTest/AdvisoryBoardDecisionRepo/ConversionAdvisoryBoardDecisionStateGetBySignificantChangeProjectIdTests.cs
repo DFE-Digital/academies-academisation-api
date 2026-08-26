@@ -43,6 +43,7 @@ public class ConversionAdvisoryBoardDecisionStateGetBySignificantChangeProjectId
 			new List<AdvisoryBoardDeclinedReasonDetails>(),
 			new List<AdvisoryBoardWithdrawnReasonDetails>(),
 			new List<AdvisoryBoardDAORevokedReasonDetails>(),
+			new List<AdvisoryBoardDAONotIssuedReasonDetails>(),
 			timestamp,
 			timestamp);
 

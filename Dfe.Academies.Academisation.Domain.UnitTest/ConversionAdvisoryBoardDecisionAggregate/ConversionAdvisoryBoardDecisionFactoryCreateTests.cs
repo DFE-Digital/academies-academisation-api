@@ -28,9 +28,10 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
 		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
 		var daoRevoked = _fixture.CreateMany<AdvisoryBoardDAORevokedReasonDetails>();
+		var daoNotIssuedReasons = _fixture.CreateMany<AdvisoryBoardDAONotIssuedReasonDetails>();
 
 		//Act
-		var result = _target.Create(details, deferred, declined, withdrawn, daoRevoked);
+		var result = _target.Create(details, deferred, declined, withdrawn, daoRevoked, daoNotIssuedReasons);
 
 		//Assert
 		Assert.IsType<CreateValidationErrorResult>(result);
@@ -56,9 +57,10 @@ public class ConversionAdvisoryBoardDecisionFactoryTests
 		var declined = new List<AdvisoryBoardDeclinedReasonDetails>();
 		var withdrawn = new List<AdvisoryBoardWithdrawnReasonDetails>();
 		var daoRevoked = new List<AdvisoryBoardDAORevokedReasonDetails>();
+		var daoNotIssuedReasons = new List<AdvisoryBoardDAONotIssuedReasonDetails>();
 
 		//Act
-		var result = _target.Create(details, deferred, declined, withdrawn, daoRevoked);
+		var result = _target.Create(details, deferred, declined, withdrawn, daoRevoked, daoNotIssuedReasons);
 
 		//Assert
 		var decision = Assert.IsType<CreateSuccessResult<IConversionAdvisoryBoardDecision>>(result);
