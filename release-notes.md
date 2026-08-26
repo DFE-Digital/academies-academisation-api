@@ -9,12 +9,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-04-20.581...HEAD)
 Note: remember to update unrelease section when creating a new release.
 
-### Added
-- [290392](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add paginated post request for significant change project
-- [290394](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add get by id request for significant change project
 
 ---
+## [10.0.0][10.0.0] - 2026-08-26
 
+## Added
+- [290392](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add paginated post request for significant change project
+- [290394](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290392) - add get by id request for significant change project
+- [290387](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290387) -  Add POST endpoint to create Significant Change project
+- [295040](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/295040) -  Add POST endpoint to Record a decision end point
+- [295117](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/295117) -  Add GET endpoint to  Filter values
+- [296230](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296230) -  Add endpoint to   change a decision end point
+- [290395](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290395) -  Expand paginated request to include filters
+- [294532](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/294532) -  sig change post request tidy up
+- [290426](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290426) - Add a Put endpoint to have the ability to assign a user
+- [290377](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290377) - Create table for SIG 
+- [298211](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/298211) - Add DAO not issued decision to record decision flow
+
+  
+---
 ## [9.48.0][9.48.0] - 2026-04-20
 
 ### Fixed
@@ -481,6 +494,7 @@ Note: remember to update unrelease section when creating a new release.
 * LA Dates can be set back to null
 ---
 
+[10.0.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-08-26.647
 [9.48.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-04-20.581
 [9.47.1]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-04-02.577
 [9.47.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-04-01.570
