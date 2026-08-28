@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260824123609_AddAdvisoryBoardDecisionDaoNotIssuedReason")]
+    partial class AddAdvisoryBoardDecisionDaoNotIssuedReason
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -886,19 +889,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("AssignedUserId");
 
-                    b.Property<string>("CompaniesHouseNumber")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CompaniesHouseNumber");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("LocalAuthorityName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("LocalAuthorityName");
 
                     b.Property<DateTime?>("ReadOnlyDate")
                         .HasColumnType("datetime2");
@@ -1837,8 +1832,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("DecisionMakerName");
 
                             b1.Property<int?>("SignificantChangeProjectId")
-                                .HasColumnType("int")
-                                .HasColumnName("SignificantChangeProjectId");
+                                .HasColumnType("int");
 
                             b1.Property<int?>("TransferProjectId")
                                 .HasColumnType("int")

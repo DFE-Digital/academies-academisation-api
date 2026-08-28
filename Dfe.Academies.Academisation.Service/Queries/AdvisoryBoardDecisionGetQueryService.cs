@@ -6,33 +6,22 @@ using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 
 namespace Dfe.Academies.Academisation.Service.Queries;
 
-public class AdvisoryBoardDecisionGetQueryService : IAdvisoryBoardDecisionQueryService
+public class AdvisoryBoardDecisionGetQueryService(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
+	: IAdvisoryBoardDecisionQueryService
 {
-	private readonly IAdvisoryBoardDecisionRepository _advisoryBoardDecisionRepository;
-
-	public AdvisoryBoardDecisionGetQueryService(IAdvisoryBoardDecisionRepository advisoryBoardDecisionRepository)
-	{
-		_advisoryBoardDecisionRepository = advisoryBoardDecisionRepository;
-	}
-
 	public async Task<ConversionAdvisoryBoardDecisionServiceModel?> GetByProjectId(int projectId, bool isTransfer = false)
 	{
-		ConversionAdvisoryBoardDecision? decision = null;
+		ConversionAdvisoryBoardDecision? decision;
 
 		if (isTransfer)
 		{
-			decision = await _advisoryBoardDecisionRepository.GetTransferProjectDecsion(projectId);
+			decision = await advisoryBoardDecisionRepository.GetTransferProjectDecision(projectId);
 		}
 		else
 		{
-			decision = await _advisoryBoardDecisionRepository.GetConversionProjectDecsion(projectId);
+			decision = await advisoryBoardDecisionRepository.GetConversionProjectDecision(projectId);
 		}
 
-		if (decision != null)
-		{
-			return ConversionAdvisoryBoardDecisionServiceModelMapper.MapFromDomain(decision);
-		}
-
-		return null;
+		return decision?.MapFromDomain();
 	}
 }

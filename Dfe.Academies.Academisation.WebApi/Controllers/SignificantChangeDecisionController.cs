@@ -3,6 +3,7 @@ using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoard
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
+using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +48,16 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				CommandValidationErrorResult validationErrorResult => new BadRequestObjectResult(validationErrorResult.ValidationErrors),
 				_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
 			};
+		}
+
+		[HttpGet("{projectId:int}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByProjectId(int projectId, CancellationToken cancellationToken)
+		{
+			var result = await mediator.Send(new GetSignificantChangeDecisionQuery(projectId), cancellationToken);
+
+			return result is null ? NotFound() : Ok(result);
 		}
 	}
 }

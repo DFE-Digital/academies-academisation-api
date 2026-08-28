@@ -10,9 +10,10 @@ public class ConversionAdvisoryBoardDecisionFactory : IConversionAdvisoryBoardDe
 		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
-		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons)
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons,
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails> daoNotIssuedReasons)
 	{
-		return ConversionAdvisoryBoardDecision.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
+		return ConversionAdvisoryBoardDecision.Create(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons, daoNotIssuedReasons);
 	}
 
 }

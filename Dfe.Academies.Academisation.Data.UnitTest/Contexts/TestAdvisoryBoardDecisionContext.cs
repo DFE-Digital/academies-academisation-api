@@ -32,6 +32,7 @@ public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 				Enumerable.Empty<AdvisoryBoardDeclinedReasonDetails>(),
 				Enumerable.Empty<AdvisoryBoardWithdrawnReasonDetails>(),
 				Enumerable.Empty<AdvisoryBoardDAORevokedReasonDetails>(),
+				[],
 				timestamp,timestamp),
 			new ConversionAdvisoryBoardDecision(2,_fixture.Build<AdvisoryBoardDecisionDetails>()
 				.With(d => d.ConversionProjectId, 2).Create(),
@@ -39,6 +40,7 @@ public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 				Enumerable.Empty<AdvisoryBoardDeclinedReasonDetails>(),
 				Enumerable.Empty<AdvisoryBoardWithdrawnReasonDetails>(),
 				Enumerable.Empty<AdvisoryBoardDAORevokedReasonDetails>(),
+				[],
 				timestamp, timestamp),
 			new ConversionAdvisoryBoardDecision(3,_fixture.Build<AdvisoryBoardDecisionDetails>()
 				.With(d => d.ConversionProjectId, 3).Create(),
@@ -46,6 +48,7 @@ public class TestAdvisoryBoardDecisionContext : TestAcademisationContext
 				Enumerable.Empty<AdvisoryBoardDeclinedReasonDetails>(),
 				Enumerable.Empty<AdvisoryBoardWithdrawnReasonDetails>(),
 				Enumerable.Empty<AdvisoryBoardDAORevokedReasonDetails>(),
+				[],
 				timestamp, timestamp)
 		};
 
