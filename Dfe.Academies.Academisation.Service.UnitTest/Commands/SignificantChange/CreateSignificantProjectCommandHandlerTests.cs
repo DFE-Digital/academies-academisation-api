@@ -27,6 +27,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 		private static readonly string trustName = "a trust name";
 		private static readonly int urn = 123456;
 		private static readonly string schoolName = "a school name";
+		private static readonly string companiesHouseNumber = "12345678";
+		private static readonly string localAuthorityName = "a local authority";
+
 
 		public CreateSignificantProjectCommandHandlerTests()
 		{
@@ -38,10 +41,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 			_mockLogger = _mockRepository.Create<ILogger<CreateSignificantProjectCommandHandler>>();
 
 			_mockAcademiesQueryService.Setup(x => x.GetTrust(trustUkprn))
-				.ReturnsAsync(new TrustDto() { Name = trustName });
+				.ReturnsAsync(new TrustDto() { Name = trustName, CompaniesHouseNumber = companiesHouseNumber });
 
 			_mockAcademiesQueryService.Setup(x => x.GetEstablishment(urn))
-				.ReturnsAsync(new EstablishmentDto() { Name = schoolName });
+				.ReturnsAsync(new EstablishmentDto() { Name = schoolName, LocalAuthorityName = localAuthorityName });
 
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockSignificantChangeProjectRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
@@ -77,7 +80,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				p.TrustUkprn == request.TrustUkprn &&
 				p.SchoolName == schoolName &&
 				p.TypeOfSignificantChange == request.Route &&
-				p.Status == SignificantChangeStatus.PreDecision
+				p.Status == SignificantChangeStatus.PreDecision &&
+				p.LocalAuthorityName == localAuthorityName &&
+				p.CompaniesHouseNumber == companiesHouseNumber
 			)), Times.Once);
 
 			_mockAcademiesQueryService.Verify(x => x.GetTrust(request.TrustUkprn), Times.Once);
@@ -106,7 +111,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 			payload.Tier.Should().Be(request.Tier);
 			payload.TrustName.Should().Be(trustName);
 			payload.TrustUkprn.Should().Be(request.TrustUkprn);
+			payload.CompaniesHouseNumber.Should().Be(companiesHouseNumber);
 			payload.SchoolName.Should().Be(schoolName);
+			payload.LocalAuthorityName.Should().Be(localAuthorityName);
 			payload.TypeOfSignificantChange.Should().Be(request.Route);
 			payload.Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 		}

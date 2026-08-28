@@ -68,9 +68,9 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 		{
 			var projects = new List<SignificantChangeProject>
 			{
-				new SignificantChangeProject(SignificantChangeStatus.PreDecision, 2222, 1, "trust", "66666", "route", "Test School"),
-				new SignificantChangeProject(SignificantChangeStatus.PreDecision, 3333, 1, "Test Trust", "77777", "route", "school"),
-				new SignificantChangeProject(SignificantChangeStatus.Approved, 4444, 1, "trust", "99999", "route", "school")
+				new(SignificantChangeStatus.PreDecision, 2222, 1, "trust", "66666", "route", "Test School"),
+				new(SignificantChangeStatus.PreDecision, 3333, 1, "Test Trust", "77777", "route", "school"),
+				new(SignificantChangeStatus.Approved, 4444, 1, "trust", "99999", "route", "school"),
 			};
 
 			_context.SignificantChangeProjects.AddRange(projects);

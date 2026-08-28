@@ -2,7 +2,7 @@
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
-	public class SignificantChangeProject(SignificantChangeStatus status, int urn, byte tier, string trustName, string trustUkprn, string typeOfSignificantChange, string schoolName) : Entity, IAggregateRoot
+	public class SignificantChangeProject(SignificantChangeStatus status, int urn, byte tier, string trustName, string trustUkprn, string typeOfSignificantChange, string schoolName, string? localAuthorityName = null, string? companiesHouseNumber = null) : Entity, IAggregateRoot
 	{
 
 		public SignificantChangeStatus Status { get; private set; } = status;
@@ -17,6 +17,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public string TypeOfSignificantChange { get; private set; } = typeOfSignificantChange;
 		public DateTime? ReadOnlyDate { get; private set; }
 		public SignificantChangeProjectDetails Details { get; private set; } = new();
+		public string? LocalAuthorityName { get; private set; } = localAuthorityName;
+		public string? CompaniesHouseNumber { get; private set; } = companiesHouseNumber;
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
@@ -42,10 +44,10 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		}
 
 		public static SignificantChangeProject Create(int urn, byte tier, string trustName, string trustUkprn,
-			string route, string schoolName, DateTime createdOn)
+			string route, string schoolName, DateTime createdOn, string? localAuthorityName = null, string? companiesHouseNumber = null)
 		{
 			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, urn, tier, trustName, trustUkprn,
-				route, schoolName) { CreatedOn = createdOn };
+				route, schoolName, localAuthorityName, companiesHouseNumber) { CreatedOn = createdOn };
 		}
 
 		public void SetReadOnlyDate(DateTime readOnlyDate)

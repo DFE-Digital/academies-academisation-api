@@ -35,7 +35,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				command.TrustUkprn,
 				command.Route,
 				establishment.Name,
-				dateTimeProvider.Now);
+				dateTimeProvider.Now,
+				establishment.LocalAuthorityName,
+				trust.CompaniesHouseNumber);
 
 			significantChangeProjectRepository.Insert(significantChangeProject);
 			await significantChangeProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
@@ -49,7 +51,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				TrustName = significantChangeProject.TrustName,
 				TrustUkprn = significantChangeProject.TrustUkprn,
 				TypeOfSignificantChange = significantChangeProject.TypeOfSignificantChange,
-				Status = significantChangeProject.Status.ToString()
+				Status = significantChangeProject.Status.ToString(),
+				LocalAuthorityName = significantChangeProject.LocalAuthorityName,
+				CompaniesHouseNumber = significantChangeProject.CompaniesHouseNumber
 			});
 		}
 

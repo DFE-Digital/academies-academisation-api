@@ -19,9 +19,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			var trustName = _fixture.Create<string>();
 			var trustUkprn = _fixture.Create<string>();
 			var typeOfSignificantChange = _fixture.Create<string>();
-			var schoolName= _fixture.Create<string>();
+			var schoolName = _fixture.Create<string>();
+			var localAuthorityName = _fixture.Create<string>();
+			var companiesHouseNumber = _fixture.Create<string>();
 
-			var project = new SignificantChangeProject(status, urn, tier, trustName, trustUkprn, typeOfSignificantChange, schoolName);
+			var project = new SignificantChangeProject(status, urn, tier, trustName, trustUkprn, typeOfSignificantChange, schoolName, localAuthorityName, companiesHouseNumber);
 
 			project.Status.Should().Be(status);
 			project.Urn.Should().Be(urn);
@@ -29,6 +31,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.TrustName.Should().Be(trustName);
 			project.TrustUkprn.Should().Be(trustUkprn);
 			project.TypeOfSignificantChange.Should().Be(typeOfSignificantChange);
+			project.SchoolName.Should().Be(schoolName);
+			project.LocalAuthorityName.Should().Be(localAuthorityName);
+			project.CompaniesHouseNumber.Should().Be(companiesHouseNumber);
 			project.AssignedUserId.Should().BeNull();
 			project.AssignedUserFullName.Should().BeNull();
 			project.AssignedUserEmailAddress.Should().BeNull();
@@ -45,7 +50,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
-			);
+			);	
 
 			var userId = _fixture.Create<Guid>();
 			var userEmail = _fixture.Create<string>();
@@ -87,7 +92,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
-				_fixture.Create<string>()
+				_fixture.Create<string>(),
+				null,
+				null
 			);
 
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
