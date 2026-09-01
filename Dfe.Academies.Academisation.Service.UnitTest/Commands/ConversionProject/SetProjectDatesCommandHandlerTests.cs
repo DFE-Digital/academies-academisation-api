@@ -49,6 +49,20 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			return new Project(1, projectDetails);
 		}
 
+		private static Project CreateMockProjectWithMandatoryFhaInformation(DateTime proposedConversionDate)
+		{
+			var projectDetails = new ProjectDetails
+			{
+				ProposedConversionDate = proposedConversionDate,
+				RevenueCarryForwardAtEndMarchCurrentYear = 1,
+				CapitalCarryForwardAtEndMarchCurrentYear = 1,
+				ProjectedRevenueBalanceAtEndMarchNextYear = 1,
+				CapitalCarryForwardAtEndMarchNextYear = 1
+			};
+
+			return new Project(1, projectDetails);
+		}
+
 		[Fact]
 		public async Task Handle_ReturnsNotFound_WhenProjectDoesNotExist()
 		{
@@ -79,8 +93,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		public async Task Handle_DerivesSfsoCommissioningRequestedDate_FromAdvisoryBoardDate()
 		{
 			var htb = DateTime.Today.AddDays(40);
-			var command = new SetProjectDatesCommand(1, htb, null, null, null, null, true);
-			var existingProject = CreateMockProject();
+			var proposedConversionDate = DateTime.Today.AddDays(60);
+			var command = new SetProjectDatesCommand(1, htb, null, proposedConversionDate, null, null, true);
+			var existingProject = CreateMockProjectWithMandatoryFhaInformation(proposedConversionDate);
 			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
 											.ReturnsAsync(existingProject);
 
@@ -93,8 +108,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		public async Task Handle_SetsToday_WhenAdvisoryBoardDateWithin15Days()
 		{
 			var htb = DateTime.Today.AddDays(10);
-			var command = new SetProjectDatesCommand(1, htb, null, null, null, null, true);
-			var existingProject = CreateMockProject();
+			var proposedConversionDate = DateTime.Today.AddDays(60);
+			var command = new SetProjectDatesCommand(1, htb, null, proposedConversionDate, null, null, true);
+			var existingProject = CreateMockProjectWithMandatoryFhaInformation(proposedConversionDate);
 			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
 											.ReturnsAsync(existingProject);
 
