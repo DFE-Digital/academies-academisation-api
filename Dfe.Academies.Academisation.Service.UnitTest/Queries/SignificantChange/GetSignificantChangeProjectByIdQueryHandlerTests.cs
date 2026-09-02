@@ -34,12 +34,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			var project = new SignificantChangeProject(
 				SignificantChangeStatus.PreDecision,
-				urn: 123456,
-				tier: 2,
-				trustName: "Trust A",
-				trustUkprn: "10000001",
-				typeOfSignificantChange: "Change of age range",
-				schoolName: "School A")
+				new SignificantChangeProjectOptions(
+					urn: 123456,
+					tier: 2,
+					trustName: "Trust A",
+					trustUkprn: "10000001",
+					typeOfSignificantChange: "Change of age range",
+					schoolName: "School A"
+				)
+			)
 			{
 				Id = query.Id
 			};
