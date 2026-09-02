@@ -67,6 +67,16 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
+			var userId = _fixture.Create<Guid>();
+			var userEmail = _fixture.Create<string>();
+			var userFullName = _fixture.Create<string>();
+
+			project.AssignUser(userId, userEmail, userFullName);
+
+			project.AssignedUserId.Should().Be(userId);
+			project.AssignedUserEmailAddress.Should().Be(userEmail);
+			project.AssignedUserFullName.Should().Be(userFullName);
+
 			
 		}
     
@@ -79,9 +89,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				null,
-				null
+				_fixture.Create<string>()
 			);
 			var project = SignificantChangeProject.Create(significantChangeProjectOptions, DateTime.UtcNow);
 
@@ -103,23 +111,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				null,
-				null
+				_fixture.Create<string>()
 			);
 
 			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
+			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 
-			var userId = _fixture.Create<Guid>();
-			var userEmail = _fixture.Create<string>();
-			var userFullName = _fixture.Create<string>();
-
-			project.AssignUser(userId, userEmail, userFullName);
-
-			project.AssignedUserId.Should().Be(userId);
-			project.AssignedUserEmailAddress.Should().Be(userEmail);
-			project.AssignedUserFullName.Should().Be(userFullName);
+			project.Details.TrustConsultedStakeholders.Should().BeFalse();
+			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 		}
     
 		[Fact]
