@@ -68,9 +68,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 		{
 			var projects = new List<SignificantChangeProject>
 			{
-				new(SignificantChangeStatus.PreDecision, 2222, 1, "trust", "66666", "route", "Test School"),
-				new(SignificantChangeStatus.PreDecision, 3333, 1, "Test Trust", "77777", "route", "school"),
-				new(SignificantChangeStatus.Approved, 4444, 1, "trust", "99999", "route", "school"),
+				new SignificantChangeProject( SignificantChangeStatus.PreDecision, new SignificantChangeProjectOptions(
+					2222, 1, "trust", "66666", "route", "Test School", null, null)),
+				new SignificantChangeProject( SignificantChangeStatus.PreDecision, new SignificantChangeProjectOptions(
+					3333, 1, "Test Trust", "77777", "route", "school", null, null)),
+				new SignificantChangeProject( SignificantChangeStatus.Approved, new SignificantChangeProjectOptions(
+					4444, 1, "trust", "99999", "route", "school", null, null)),
 			};
 
 			_context.SignificantChangeProjects.AddRange(projects);
@@ -97,9 +100,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 		{
 			var projects = new List<SignificantChangeProject>
 			{
-				SignificantChangeProject.Create(2222, 1, "trust", "66666", "route", "Test School", DateTime.UtcNow),
-				SignificantChangeProject.Create(3333, 1, "Test Trust", "77777", "route", "school", DateTime.UtcNow),
-				SignificantChangeProject.Create(4444, 1, "trust", "99999", "route", "school", DateTime.UtcNow)
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					2222, 1, "trust", "66666", "route", "Test School", null, null), DateTime.UtcNow),
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					3333, 1, "Test Trust", "77777", "route", "school", null, null), DateTime.UtcNow),
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					4444, 1, "trust", "99999", "route", "school", null, null), DateTime.UtcNow)
 			};
 			_context.SignificantChangeProjects.AddRange(projects);
 			await _context.SaveChangesAsync();
@@ -193,11 +199,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 		{
 			var projects = new List<SignificantChangeProject>
 			{
-				SignificantChangeProject.Create(2222, 1, "trust", "66666", "Sponsored", "Test School",
-					DateTime.UtcNow),
-				SignificantChangeProject.Create(3333, 1, "Test Trust", "77777", "Converter", "school",
-					DateTime.UtcNow),
-				SignificantChangeProject.Create(4444, 1, "trust", "99999", "Form a MAT", "school", DateTime.UtcNow)
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					 2222, 1, "trust", "66666", "Sponsored", "Test School", null, null), DateTime.UtcNow),
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					3333, 1, "Test Trust", "77777", "Converter", "school", null, null), DateTime.UtcNow),
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					4444, 1, "trust", "99999", "Form a MAT", "school", null, null), DateTime.UtcNow)
 			};
 
 			_context.SignificantChangeProjects.AddRange(projects);

@@ -169,7 +169,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 		private static SignificantChangeProject CreateProject(int id, int urn, byte tier, string trustName, string trustUkprn, string route, string schoolName)
 		{
-			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, urn, tier, trustName, trustUkprn, route, schoolName)
+			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, new SignificantChangeProjectOptions(
+				 urn, tier, trustName, trustUkprn, route, schoolName))
 			{
 				Id = id,
 				CreatedOn = DateTime.UtcNow

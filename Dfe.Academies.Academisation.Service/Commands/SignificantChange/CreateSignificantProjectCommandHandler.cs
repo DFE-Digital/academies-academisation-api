@@ -29,15 +29,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 			}
 			
 			var significantChangeProject = SignificantChangeProject.Create(
-				command.Urn,
-				command.Tier,
-				trust.Name,
-				command.TrustUkprn,
-				command.Route,
-				establishment.Name,
-				dateTimeProvider.Now,
-				establishment.LocalAuthorityName,
-				trust.CompaniesHouseNumber);
+				new SignificantChangeProjectOptions(
+					command.Urn,
+					command.Tier,
+					trust.Name,
+					command.TrustUkprn,
+					command.Route,
+					establishment.Name,
+					establishment.LocalAuthorityName,
+					trust.CompaniesHouseNumber),
+				dateTimeProvider.Now);
 
 			significantChangeProjectRepository.Insert(significantChangeProject);
 			await significantChangeProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
