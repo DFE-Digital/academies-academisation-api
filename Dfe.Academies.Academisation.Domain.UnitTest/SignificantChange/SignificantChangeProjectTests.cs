@@ -295,7 +295,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		private SignificantChangeProject CreateProject(byte tier = 1)
 		{
 			return new SignificantChangeProject(
-				SignificantChangeStatus.InProgress,
+				SignificantChangeStatus.PreDecision,
 				_fixture.Create<int>(),
 				tier,
 				_fixture.Create<string>(),
