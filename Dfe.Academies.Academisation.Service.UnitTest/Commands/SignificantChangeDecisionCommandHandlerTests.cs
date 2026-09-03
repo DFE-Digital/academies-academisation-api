@@ -73,7 +73,8 @@ public class SignificantChangeDecisionCommandHandlerTests
 			It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
 			It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
 			It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
-			It.Is<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(r => !r.Any())), Times.Once);
+			It.Is<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(r => !r.Any()),
+			It.Is<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>(r=> !r.Any())), Times.Once);
 	}
 
 	[Fact]
@@ -164,7 +165,8 @@ public class SignificantChangeDecisionCommandHandlerTests
 				It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
 				It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
 				It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>()))
+				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CreateValidationErrorResult([]));
 
 		var target = CreateHandler();
@@ -184,7 +186,8 @@ public class SignificantChangeDecisionCommandHandlerTests
 				It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
 				It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
 				It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>()))
+				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new UnhandledCreateResult());
 
 		var target = CreateHandler();
@@ -229,7 +232,8 @@ public class SignificantChangeDecisionCommandHandlerTests
 				It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
 				It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
 				It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>()))
+				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CreateSuccessResult<IConversionAdvisoryBoardDecision>(_mockDecision.Object));
 
 		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails).Returns(details);
@@ -237,6 +241,7 @@ public class SignificantChangeDecisionCommandHandlerTests
 		_mockDecision.SetupGet(d => d.DeclinedReasons).Returns(new List<AdvisoryBoardDeclinedReasonDetails>());
 		_mockDecision.SetupGet(d => d.WithdrawnReasons).Returns(new List<AdvisoryBoardWithdrawnReasonDetails>());
 		_mockDecision.SetupGet(d => d.DAORevokedReasons).Returns(new List<AdvisoryBoardDAORevokedReasonDetails>());
+		_mockDecision.SetupGet(d => d.DAONotIssuedReasons).Returns(new List<AdvisoryBoardDAONotIssuedReasonDetails>());
 	}
 
 	private AdvisoryBoardDecisionCreateCommandHandler CreateHandler() =>

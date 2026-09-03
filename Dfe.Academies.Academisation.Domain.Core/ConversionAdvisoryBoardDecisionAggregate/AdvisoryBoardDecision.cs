@@ -6,5 +6,6 @@ public enum AdvisoryBoardDecision
 	Declined = 1,
 	Deferred = 2,
 	Withdrawn = 3,
-	DAORevoked = 4
+	DAORevoked = 4,
+	DAONotIssued = 5
 }

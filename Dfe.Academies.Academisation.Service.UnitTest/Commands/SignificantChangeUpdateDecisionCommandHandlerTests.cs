@@ -1,4 +1,4 @@
-using AutoFixture;
+﻿using AutoFixture;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Core.Utils;
 using Dfe.Academies.Academisation.Domain.ApplicationAggregate;
@@ -51,7 +51,8 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 				It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
 				It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
 				It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+				It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 
 		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails).Returns(_fixture.Build<AdvisoryBoardDecisionDetails>()
@@ -84,7 +85,8 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 			It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
 			It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
 			It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-			It.Is<List<AdvisoryBoardDAORevokedReasonDetails>>(r => r.Count == 0)), Times.Once);
+			It.Is<List<AdvisoryBoardDAORevokedReasonDetails>>(r => r.Count == 0),
+			It.Is<List<AdvisoryBoardDAONotIssuedReasonDetails>>(r=> r.Count == 0)), Times.Once);
 	}
 
 	[Fact]
@@ -112,7 +114,8 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 				It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
 				It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
 				It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+				It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 
 		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails).Returns(new AdvisoryBoardDecisionDetails(

@@ -474,6 +474,38 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
                 });
 
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAONotIssuedReasonDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdvisoryBoardDecisionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvisoryBoardDecisionId");
+
+                    b.ToTable("AdvisoryBoardDecisionDaoNotIssuedReason", "academisation");
+                });
+
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAORevokedReasonDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -1797,7 +1829,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("DecisionMakerName");
 
                             b1.Property<int?>("SignificantChangeProjectId")
-                                .HasColumnType("int");
+                                .HasColumnType("int")
+                                .HasColumnName("SignificantChangeProjectId");
 
                             b1.Property<int?>("TransferProjectId")
                                 .HasColumnType("int")
@@ -1812,6 +1845,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         });
 
                     b.Navigation("AdvisoryBoardDecisionDetails")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAONotIssuedReasonDetails", b =>
+                {
+                    b.HasOne("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", null)
+                        .WithMany("DaoNotIssuedReasons")
+                        .HasForeignKey("AdvisoryBoardDecisionId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2483,6 +2525,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", b =>
                 {
+                    b.Navigation("DaoNotIssuedReasons");
+
                     b.Navigation("DaoRevokedReasons");
 
                     b.Navigation("DeclinedReasons");

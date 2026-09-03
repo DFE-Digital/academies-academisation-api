@@ -10,5 +10,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			List<string>? route, CancellationToken cancellationToken);
 
 		Task<SignificantChangeProject?> GetSignificantChangeProjectById(int id, CancellationToken cancellationToken);
+		Task<SignificantChangeFilterParameters> GetFilterParameters(CancellationToken cancellationToken);
 	}
 }

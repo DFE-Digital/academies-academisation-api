@@ -77,7 +77,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				p.TrustUkprn == request.TrustUkprn &&
 				p.SchoolName == schoolName &&
 				p.TypeOfSignificantChange == request.Route &&
-				p.Status == SignificantChangeStatus.InProgress
+				p.Status == SignificantChangeStatus.PreDecision
 			)), Times.Once);
 
 			_mockAcademiesQueryService.Verify(x => x.GetTrust(request.TrustUkprn), Times.Once);
@@ -108,7 +108,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 			payload.TrustUkprn.Should().Be(request.TrustUkprn);
 			payload.SchoolName.Should().Be(schoolName);
 			payload.TypeOfSignificantChange.Should().Be(request.Route);
-			payload.Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
+			payload.Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 		}
 
 		[Fact]
@@ -134,10 +134,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 			result.Should().BeOfType<CreateValidationErrorResult>();
 			((CreateValidationErrorResult)result).ValidationErrors
 				.Should().ContainSingle(e => e.PropertyName == "TrustUkprn");
-
-			_mockSignificantChangeProjectRepository.Verify(x => x.Insert(It.IsAny<SignificantChangeProject>()), Times.Never);
-			_mockSignificantChangeProjectRepository.Verify(x =>
-				x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[Fact]

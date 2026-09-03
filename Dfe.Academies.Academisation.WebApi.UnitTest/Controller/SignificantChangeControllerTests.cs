@@ -177,6 +177,32 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task GetFilterParameters_ReturnsOk_WithFilterParameters()
+        {
+            var expectedResponse = new SignificantChangeFilterParameters
+            {
+                Statuses = [new FilterValueDisplay("PreDecision", "Pre decision")],
+                Tiers =
+                [
+                    new FilterValueDisplay("1", "Tier 1"),
+                    new FilterValueDisplay("2", "Tier 2"),
+                    new FilterValueDisplay("3", "Tier 3")
+                ],
+                AssignedUsers = [new FilterValueDisplay("Assigned User", "Assigned User")],
+                Routes = [new FilterValueDisplay("Change of age range", "Change of age range")]
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<GetSignificantChangeFilterParametersQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            var result = await _controller.GetFilterParameters(CancellationToken.None);
+
+            result.Result.Should().BeOfType<OkObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
         public async Task SetAssignedUser_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;
