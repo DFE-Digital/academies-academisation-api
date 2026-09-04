@@ -42,6 +42,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			projects[0].SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
+			projects[0].SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Needs mitigating actions");
 
 			_repositoryMock
 				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, null, null, null, null, null, cancellationToken))
@@ -70,6 +71,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 			data[0].StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
+			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
+			data[0].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.ImpactsIdentified));
+			data[0].EqualitiesImpactAssessment.EqualitiesImpactIdentifiedMitigation.Should().Be("Needs mitigating actions");
+			data[0].EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+
 			data[1].Id.Should().Be(11);
 			data[1].Urn.Should().Be(654321);
 			data[1].SchoolName.Should().Be("School B");
@@ -80,6 +86,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[1].TypeOfSignificantChange.Should().Be("Change of gender composition");
 			data[1].Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 			data[1].StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
+
+			data[1].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeNull();
+			data[1].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().BeNull();
+			data[1].EqualitiesImpactAssessment.EqualitiesImpactIdentifiedMitigation.Should().BeNull();
+			data[1].EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 		}
 
 		[Fact]

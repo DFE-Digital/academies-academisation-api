@@ -328,6 +328,95 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
 
+        [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: true,
+                EqualitiesImpactIdentified: EqualitiesImpact.ImpactsIdentified,
+                EqualitiesImpactIdentifiedMitigation: "Mitigation plan in place");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeEqualitiesImpactAssessmentCommand>(c =>
+                    c.Id == routeId
+                    && c.EqualitiesImpactAssessmentCompleted == request.EqualitiesImpactAssessmentCompleted
+                    && c.EqualitiesImpactIdentified == request.EqualitiesImpactIdentified
+                    && c.EqualitiesImpactIdentifiedMitigation == request.EqualitiesImpactIdentifiedMitigation),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsOk_WhenRequestValuesAreNull()
+        {
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: null,
+                EqualitiesImpactIdentified: null,
+                EqualitiesImpactIdentifiedMitigation: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeEqualitiesImpactAssessmentCommand>(c =>
+                    c.Id == 100
+                    && c.EqualitiesImpactAssessmentCompleted == null
+                    && c.EqualitiesImpactIdentified == null
+                    && c.EqualitiesImpactIdentifiedMitigation == null),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: true,
+                EqualitiesImpactIdentified: EqualitiesImpact.None,
+                EqualitiesImpactIdentifiedMitigation: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: null,
+                EqualitiesImpactIdentified: null,
+                EqualitiesImpactIdentifiedMitigation: null);
+
+            var validationErrors = new[]
+            {
+                new ValidationError("EqualitiesImpactAssessmentCompleted", "Equalities impact assessment completed is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(

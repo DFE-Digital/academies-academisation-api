@@ -1,9 +1,13 @@
-namespace Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public class SignificantChangeProjectDetails
 {
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
+
+	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
+	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -20,4 +24,20 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+
+    public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
+    {
+        if (EqualitiesImpactAssessmentCompleted is null && EqualitiesImpactIdentified is null)
+        {
+            return SignificantChangeTaskStatus.NotStarted;
+        }
+
+        if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
+        {
+
+            return SignificantChangeTaskStatus.Completed;
+        }
+
+        return SignificantChangeTaskStatus.InProgress;
+    }
 }
