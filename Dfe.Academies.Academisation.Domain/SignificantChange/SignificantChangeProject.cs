@@ -35,6 +35,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			if (trustConsultedStakeholders is false)
 				MoveToTierTwoIfApplicable();
 		}
+		public void SetConsultationDuration(
+			ConsultationDurationAnswer? consultationLastedMinimumThreeWeeks,
+			string? consultationDurationNotMetReason)
+		{
+			Details.ConsultationLastedMinimumThreeWeeks = consultationLastedMinimumThreeWeeks;
+			Details.ConsultationDurationNotMetReason = consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
+				? consultationDurationNotMetReason
+				: null;
+
+			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
+				MoveToTierTwoIfApplicable();
+		}
 
 		public void MoveToTierTwoIfApplicable()
 		{

@@ -1003,6 +1003,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		{
 			details.Property(d => d.TrustConsultedStakeholders).HasColumnName("TrustConsultedStakeholders");
 			details.Property(d => d.TrustConsultedStakeholdersNotConsultedReason).HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+			details.Property(d => d.ConsultationLastedMinimumThreeWeeks).HasConversion<string>().HasColumnName("ConsultationLastedMinimumThreeWeeks");
+			details.Property(d => d.ConsultationDurationNotMetReason).HasColumnName("ConsultationDurationNotMetReason");
 		});
 
 	}

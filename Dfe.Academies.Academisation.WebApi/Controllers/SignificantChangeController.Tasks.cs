@@ -30,5 +30,30 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpPut("{id:int}/SetConsultationDuration", Name = "SetSignificantChangeConsultationDuration")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeConsultationDuration(
+			int id,
+			[FromBody] SetSignificantChangeConsultationDurationPublicCommand request)
+		{
+			var command = new SetSignificantChangeConsultationDurationCommand(
+				id: id,
+				consultationLastedMinimumThreeWeeks: request.ConsultationLastedMinimumThreeWeeks,
+				consultationDurationNotMetReason: request.ConsultationDurationNotMetReason);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }
