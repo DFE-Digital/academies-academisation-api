@@ -2,21 +2,53 @@
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
-	public class SignificantChangeProject(SignificantChangeStatus status, int urn, byte tier, string trustName, string trustUkprn, string typeOfSignificantChange, string schoolName) : Entity, IAggregateRoot
-	{
 
-		public SignificantChangeStatus Status { get; private set; } = status;
-		public int Urn { get; private set; } = urn;
-		public string SchoolName { get; private set; } = schoolName;
-		public byte Tier { get; private set; } = tier;
+	public record SignificantChangeProjectOptions(
+		int urn, 
+		byte tier, 
+		string trustName, 
+		string trustUkprn, 
+		string typeOfSignificantChange, 
+		string schoolName, 
+		string? localAuthorityName = null, 
+		string? companiesHouseNumber = null
+	);
+
+	
+	public class SignificantChangeProject : Entity, IAggregateRoot
+	{
+		// Private constructor for EF Core
+		private SignificantChangeProject()
+		{
+		}
+
+		public SignificantChangeProject(SignificantChangeStatus status, SignificantChangeProjectOptions options)
+		{
+			Status = status;
+			Urn = options.urn;
+			SchoolName = options.schoolName;
+			Tier = options.tier;
+			TrustName = options.trustName;
+			TrustUkprn = options.trustUkprn;
+			TypeOfSignificantChange = options.typeOfSignificantChange;
+			LocalAuthorityName = options.localAuthorityName;
+			CompaniesHouseNumber = options.companiesHouseNumber;
+		}
+
+		public SignificantChangeStatus Status { get; private set; }
+		public int Urn { get; private set; }
+		public string SchoolName { get; private set; } = string.Empty;
+		public byte Tier { get; private set; }
 		public Guid? AssignedUserId { get; private set; }
 		public string? AssignedUserFullName { get; private set; }
 		public string? AssignedUserEmailAddress { get; private set; }
-		public string TrustName { get; private set; } = trustName;
-		public string TrustUkprn { get; private set; } = trustUkprn;
-		public string TypeOfSignificantChange { get; private set; } = typeOfSignificantChange;
+		public string TrustName { get; private set; } = string.Empty;
+		public string TrustUkprn { get; private set; } = string.Empty;
+		public string TypeOfSignificantChange { get; private set; } = string.Empty;
 		public DateTime? ReadOnlyDate { get; private set; }
 		public SignificantChangeProjectDetails Details { get; private set; } = new();
+		public string? LocalAuthorityName { get; private set; }
+		public string? CompaniesHouseNumber { get; private set; }
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
@@ -41,11 +73,9 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			if (Tier == 1) Tier = 2;
 		}
 
-		public static SignificantChangeProject Create(int urn, byte tier, string trustName, string trustUkprn,
-			string route, string schoolName, DateTime createdOn)
+		public static SignificantChangeProject Create(SignificantChangeProjectOptions options, DateTime createdOn)
 		{
-			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, urn, tier, trustName, trustUkprn,
-				route, schoolName) { CreatedOn = createdOn };
+			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, options) { CreatedOn = createdOn };
 		}
 
 		public void SetReadOnlyDate(DateTime readOnlyDate)

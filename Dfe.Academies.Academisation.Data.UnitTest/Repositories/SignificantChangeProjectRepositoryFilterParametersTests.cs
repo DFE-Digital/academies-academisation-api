@@ -26,14 +26,14 @@ public class SignificantChangeProjectRepositoryFilterParametersTests : TestAcade
 		using AcademisationContext context = CreateContext();
 		context.Database.EnsureCreated();
 
-		SignificantChangeProject assigned = SignificantChangeProject.Create(
+		SignificantChangeProject assigned = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
 			urn: 123456, tier: 2, trustName: "Trust A", trustUkprn: "10000001",
-			route: "Change of age range", schoolName: "School A", createdOn: new DateTime(2026, 1, 1));
+			typeOfSignificantChange: "Change of age range", schoolName: "School A"), createdOn: new DateTime(2026, 1, 1));
 		assigned.AssignUser(Guid.NewGuid(), "assigned.user@test.local", "Assigned User");
 
-		SignificantChangeProject unassigned = SignificantChangeProject.Create(
+		SignificantChangeProject unassigned = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
 			urn: 654321, tier: 2, trustName: "Trust B", trustUkprn: "10000002",
-			route: "Change of age range", schoolName: "School B", createdOn: new DateTime(2026, 1, 2));
+			typeOfSignificantChange: "Change of age range", schoolName: "School B"), createdOn: new DateTime(2026, 1, 2));
 
 		context.AddRange(assigned, unassigned);
 		context.SaveChanges();

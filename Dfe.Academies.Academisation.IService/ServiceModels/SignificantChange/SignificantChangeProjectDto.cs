@@ -16,4 +16,6 @@ public class SignificantChangeProjectDto
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
 	public string StakeholderConsultationTaskStatus { get; set; } = string.Empty;
+	public string? LocalAuthorityName { get; set; }
+	public string? CompaniesHouseNumber { get; set; }
 }

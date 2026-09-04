@@ -14,14 +14,28 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void Constructor_ShouldSetPropertiesCorrectly()
 		{
 			var status = _fixture.Create<SignificantChangeStatus>();
+
 			var urn = _fixture.Create<int>();
 			var tier = _fixture.Create<byte>();
 			var trustName = _fixture.Create<string>();
 			var trustUkprn = _fixture.Create<string>();
 			var typeOfSignificantChange = _fixture.Create<string>();
-			var schoolName= _fixture.Create<string>();
+			var schoolName = _fixture.Create<string>();
+			var localAuthorityName = _fixture.Create<string>();
+			var companiesHouseNumber = _fixture.Create<string>();
 
-			var project = new SignificantChangeProject(status, urn, tier, trustName, trustUkprn, typeOfSignificantChange, schoolName);
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				urn,
+				tier,
+				trustName,
+				trustUkprn,
+				typeOfSignificantChange,
+				schoolName,
+				localAuthorityName,
+				companiesHouseNumber
+			);
+
+			var project = new SignificantChangeProject(status,significantChangeProjectOptions);
 
 			project.Status.Should().Be(status);
 			project.Urn.Should().Be(urn);
@@ -29,6 +43,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.TrustName.Should().Be(trustName);
 			project.TrustUkprn.Should().Be(trustUkprn);
 			project.TypeOfSignificantChange.Should().Be(typeOfSignificantChange);
+			project.SchoolName.Should().Be(schoolName);
+			project.LocalAuthorityName.Should().Be(localAuthorityName);
+			project.CompaniesHouseNumber.Should().Be(companiesHouseNumber);
 			project.AssignedUserId.Should().BeNull();
 			project.AssignedUserFullName.Should().BeNull();
 			project.AssignedUserEmailAddress.Should().BeNull();
@@ -37,8 +54,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void AssignUser_ShouldSetUserProperties()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -46,6 +64,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			var userId = _fixture.Create<Guid>();
 			var userEmail = _fixture.Create<string>();
@@ -56,19 +76,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.AssignedUserId.Should().Be(userId);
 			project.AssignedUserEmailAddress.Should().Be(userEmail);
 			project.AssignedUserFullName.Should().Be(userFullName);
+
+			
 		}
     
     [Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
-			var project = SignificantChangeProject.Create(
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				DateTime.UtcNow);
+				_fixture.Create<string>()
+			);
+			var project = SignificantChangeProject.Create(significantChangeProjectOptions, DateTime.UtcNow);
 
 			var readOnlyDate = DateTime.UtcNow.AddDays(-1);
 
@@ -80,8 +103,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetStakeholderConsultation_ShouldSetDetailsProperties()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -89,18 +113,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 
 			project.Details.TrustConsultedStakeholders.Should().BeFalse();
 			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 		}
-
+    
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -108,6 +136,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
@@ -115,8 +145,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -124,6 +155,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			project.SetStakeholderConsultation(false, null);
 
@@ -133,8 +166,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var status = _fixture.Create<SignificantChangeStatus>();
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -142,6 +175,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			project.SetStakeholderConsultation(true, null);
 
@@ -151,8 +186,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -160,6 +196,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			project.SetStakeholderConsultation(false, "Consultation timeline does not allow this yet");
 
@@ -169,14 +207,16 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetStakeholderConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
 		{
-			var project = new SignificantChangeProject(
-				SignificantChangeStatus.PreDecision,
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				(byte)1,
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
-				_fixture.Create<string>());
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
 			project.SetStakeholderConsultation(false, "No consultation carried out");
 
@@ -186,14 +226,18 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetStakeholderConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
-			var project = new SignificantChangeProject(
-				SignificantChangeStatus.PreDecision,
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				(byte)1,
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
-				_fixture.Create<string>());
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			project.SetStakeholderConsultation(false, "No consultation carried out");
 			project.SetStakeholderConsultation(true, null);
