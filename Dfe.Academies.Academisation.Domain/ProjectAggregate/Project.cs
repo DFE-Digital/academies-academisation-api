@@ -263,7 +263,13 @@ public class Project : Entity, IProject, IAggregateRoot
 
 		bool isVoluntaryConverionPostDeadline = IsVoluntaryConversionPostDeadline(detailsToUpdate.AcademyTypeAndRoute, detailsToUpdate.ApplicationReceivedDate);
 		decimal? defaultSupportGrantAmount = CalculateDefaultSponsoredGrant(Details.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantType, detailsToUpdate.ConversionSupportGrantAmount, detailsToUpdate.ConversionSupportGrantAmountChanged, detailsToUpdate.SchoolPhase ?? Details.SchoolPhase);
-		bool headTeacherBoardDateChanged = Details.HeadTeacherBoardDate != detailsToUpdate.HeadTeacherBoardDate;
+		bool sfsoPrerequisiteChanged =
+			Details.HeadTeacherBoardDate != detailsToUpdate.HeadTeacherBoardDate
+			|| Details.ProposedConversionDate != detailsToUpdate.ProposedConversionDate
+			|| Details.RevenueCarryForwardAtEndMarchCurrentYear != detailsToUpdate.RevenueCarryForwardAtEndMarchCurrentYear
+			|| Details.CapitalCarryForwardAtEndMarchCurrentYear != detailsToUpdate.CapitalCarryForwardAtEndMarchCurrentYear
+			|| Details.ProjectedRevenueBalanceAtEndMarchNextYear != detailsToUpdate.ProjectedRevenueBalanceAtEndMarchNextYear
+			|| Details.CapitalCarryForwardAtEndMarchNextYear != detailsToUpdate.CapitalCarryForwardAtEndMarchNextYear;
 
 		Details = new ProjectDetails
 		{
@@ -396,8 +402,10 @@ public class Project : Entity, IProject, IAggregateRoot
 			SchoolPupilForecastsAdditionalInformation = detailsToUpdate.SchoolPupilForecastsAdditionalInformation,
 
 			// SFSO commissioning
-			SfsoCommissioningRequestedDate = headTeacherBoardDateChanged
-				? SfsoCommissioningCalculator.CalculateRequestedDate(detailsToUpdate.HeadTeacherBoardDate)
+			SfsoCommissioningRequestedDate = sfsoPrerequisiteChanged
+				? SfsoCommissioningCalculator.CalculateRequestedDate(
+					detailsToUpdate.HeadTeacherBoardDate,
+					HasMandatoryFhaInformation(detailsToUpdate))
 				: detailsToUpdate.SfsoCommissioningRequestedDate,
 			SfsoCommissioningOverview = detailsToUpdate.SfsoCommissioningOverview,
 
@@ -416,6 +424,16 @@ public class Project : Entity, IProject, IAggregateRoot
 		return revenueType.HasValue
 			? revenueType == RevenueType.Deficit
 			: null;
+	}
+
+	private static bool HasMandatoryFhaInformation(ProjectDetails details)
+	{
+		return details.HeadTeacherBoardDate.HasValue
+			&& details.ProposedConversionDate.HasValue
+			&& details.RevenueCarryForwardAtEndMarchCurrentYear.HasValue
+			&& details.CapitalCarryForwardAtEndMarchCurrentYear.HasValue
+			&& details.ProjectedRevenueBalanceAtEndMarchNextYear.HasValue
+			&& details.CapitalCarryForwardAtEndMarchNextYear.HasValue;
 	}
 
 	private static decimal? ConvertDeficitAmountToNegative(decimal? amount, RevenueType? revenueType)
@@ -723,7 +741,8 @@ public class Project : Entity, IProject, IAggregateRoot
 		}
 
 		Details.ProjectDatesSectionComplete = projectDatesSectionComplete;
-		Details.SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(advisoryBoardDate);
+		Details.SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(
+			advisoryBoardDate, HasMandatoryFhaInformation(Details));
 		LastModifiedOn = DateTime.UtcNow;
 	}
 }
