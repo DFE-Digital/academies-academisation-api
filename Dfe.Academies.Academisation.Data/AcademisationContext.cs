@@ -1003,6 +1003,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		{
 			details.Property(d => d.TrustConsultedStakeholders).HasColumnName("TrustConsultedStakeholders");
 			details.Property(d => d.TrustConsultedStakeholdersNotConsultedReason).HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+			details.Property(d => d.ConsultationIncludeAdmissionVariation).HasColumnName("ConsultationIncludeAdmissionVariation");
+			details.Property(d => d.ConsultationNoAdmissionVariationReason).HasColumnName("ConsultationNoAdmissionVariationReason");
 		});
 
 	}

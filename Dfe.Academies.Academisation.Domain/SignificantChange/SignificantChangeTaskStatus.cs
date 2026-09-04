@@ -1,4 +1,4 @@
-namespace Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public enum SignificantChangeTaskStatus
 {
