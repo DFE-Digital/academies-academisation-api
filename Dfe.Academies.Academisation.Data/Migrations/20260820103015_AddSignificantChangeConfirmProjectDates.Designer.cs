@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260820103015_AddSignificantChangeConfirmProjectDates")]
+    partial class AddSignificantChangeConfirmProjectDates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -474,38 +477,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
                 });
 
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAONotIssuedReasonDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdvisoryBoardDecisionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdvisoryBoardDecisionId");
-
-                    b.ToTable("AdvisoryBoardDecisionDaoNotIssuedReason", "academisation");
-                });
-
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAORevokedReasonDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -886,19 +857,11 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("AssignedUserId");
 
-                    b.Property<string>("CompaniesHouseNumber")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CompaniesHouseNumber");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("LocalAuthorityName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("LocalAuthorityName");
 
                     b.Property<DateTime?>("ReadOnlyDate")
                         .HasColumnType("datetime2");
@@ -1837,8 +1800,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("DecisionMakerName");
 
                             b1.Property<int?>("SignificantChangeProjectId")
-                                .HasColumnType("int")
-                                .HasColumnName("SignificantChangeProjectId");
+                                .HasColumnType("int");
 
                             b1.Property<int?>("TransferProjectId")
                                 .HasColumnType("int")
@@ -1853,15 +1815,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         });
 
                     b.Navigation("AdvisoryBoardDecisionDetails")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAONotIssuedReasonDetails", b =>
-                {
-                    b.HasOne("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", null)
-                        .WithMany("DaoNotIssuedReasons")
-                        .HasForeignKey("AdvisoryBoardDecisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2533,8 +2486,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", b =>
                 {
-                    b.Navigation("DaoNotIssuedReasons");
-
                     b.Navigation("DaoRevokedReasons");
 
                     b.Navigation("DeclinedReasons");
