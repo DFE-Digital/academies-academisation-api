@@ -52,5 +52,11 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		{
 			this.ReadOnlyDate = readOnlyDate;
 		}
+
+		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
+		{
+			Details.ProposedDecisionDate = proposedDecisionDate;
+			Details.ProposedChangeDate = proposedChangeDate;
+		}
 	}
 }

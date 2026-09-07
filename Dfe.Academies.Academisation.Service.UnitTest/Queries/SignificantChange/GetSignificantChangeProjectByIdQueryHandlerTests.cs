@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
@@ -28,6 +28,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		[Fact]
 		public async Task Handle_ProjectExists_ReturnsMappedResponse()
 		{
+			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
+			var proposedChangeDate = DateTime.UtcNow.AddDays(20);
+
 			var query = new GetSignificantChangeProjectByIdQuery(10);
 			var cancellationToken = CancellationToken.None;
 			var assignedUserId = Guid.NewGuid();
@@ -46,6 +49,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
+			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -66,6 +70,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.StakeholderConsultation.TrustConsultedStakeholders.Should().BeFalse();
 			result.StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 			result.StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
+			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
+			result.ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]
