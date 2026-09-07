@@ -249,12 +249,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void SetProjectDates_ShouldSetDates()
 		{
 			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
-				_fixture.Create<string>(),
+				_fixture.Create<string>()),
 				DateTime.UtcNow);
 
 			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
@@ -274,12 +275,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
         public void GetProjectDates_ShouldHaveCorrectStatus(string? proposedDecisionDateString, string? proposedChangeDateString, SignificantChangeTaskStatus expectedTaskStatus)
         {
             var project = SignificantChangeProject.Create(
-            _fixture.Create<int>(),
-            _fixture.Create<byte>(),
-            _fixture.Create<string>(),
-            _fixture.Create<string>(),
-            _fixture.Create<string>(),
-            _fixture.Create<string>(),
+            new SignificantChangeProjectOptions(
+                _fixture.Create<int>(),
+                _fixture.Create<byte>(),
+                _fixture.Create<string>(),
+                _fixture.Create<string>(),
+                _fixture.Create<string>(),
+                _fixture.Create<string>()),
             DateTime.UtcNow);
 
             DateTime? proposedDecisionDate = string.IsNullOrEmpty(proposedDecisionDateString) ? null : DateTime.Parse(proposedDecisionDateString);
