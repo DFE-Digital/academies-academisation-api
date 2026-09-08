@@ -68,6 +68,17 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
+		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody, string? trustConsultedReligiousBodyNotConsultedReason)
+		{
+			Details.TrustConsultedReligiousBody = trustConsultedReligiousBody;
+			Details.TrustConsultedReligiousBodyNotConsultedReason = trustConsultedReligiousBody is false
+				? trustConsultedReligiousBodyNotConsultedReason
+				: null;
+
+			if (trustConsultedReligiousBody is false)
+				MoveToTierTwoIfApplicable();
+		}
+
 		public void MoveToTierTwoIfApplicable()
 		{
 			if (Tier == 1) Tier = 2;

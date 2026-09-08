@@ -4,6 +4,8 @@ public class SignificantChangeProjectDetails
 {
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
+	public bool? TrustConsultedReligiousBody { get; set; }
+	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
 
@@ -36,13 +38,28 @@ public class SignificantChangeProjectDetails
 
         if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
         {
-
             return SignificantChangeTaskStatus.Completed;
         }
 
         return SignificantChangeTaskStatus.InProgress;
     }
   
+	public SignificantChangeTaskStatus GetReligiousBodyConsultationTaskStatus()
+	{
+		if (!TrustConsultedReligiousBody.HasValue
+			&& string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (TrustConsultedReligiousBody is true)
+			return SignificantChangeTaskStatus.Completed;
+
+		if (TrustConsultedReligiousBody is false
+			&& !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
 	public SignificantChangeTaskStatus GetConfirmProjectDatesTaskStatus()
 	{
 		if (!ProposedDecisionDate.HasValue && !ProposedChangeDate.HasValue)

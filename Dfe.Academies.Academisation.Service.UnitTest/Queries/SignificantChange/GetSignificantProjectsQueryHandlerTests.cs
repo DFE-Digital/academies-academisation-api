@@ -46,6 +46,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			projects[0].SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 			projects[0].SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Needs mitigating actions");
+			projects[0].SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			projects[0].SetProjectDates(proposedDecisionDate, proposedChangeDate);
 
 			_repositoryMock
@@ -74,6 +75,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].StakeholderConsultation.TrustConsultedStakeholders.Should().BeFalse();
 			data[0].StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 			data[0].StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			data[0].ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().BeFalse();
+			data[0].ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
+			data[0].ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			data[0].ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			data[0].ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			data[0].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
@@ -98,6 +102,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[1].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().BeNull();
 			data[1].EqualitiesImpactAssessment.EqualitiesImpactIdentifiedMitigation.Should().BeNull();
 			data[1].EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
+			data[1].ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 			data[1].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 		}
 

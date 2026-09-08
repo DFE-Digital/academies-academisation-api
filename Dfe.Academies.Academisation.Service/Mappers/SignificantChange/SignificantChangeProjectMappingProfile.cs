@@ -27,6 +27,12 @@ public class SignificantChangeProjectMappingProfile : Profile
                 options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
             .ForMember(destination => destination.EqualitiesTaskStatus,
                 options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
+			.ForMember(destination => destination.TrustConsultedReligiousBody,
+				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBody))
+			.ForMember(destination => destination.TrustConsultedReligiousBodyNotConsultedReason,
+				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBodyNotConsultedReason))
+			.ForMember(destination => destination.ReligiousBodyConsultationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetReligiousBodyConsultationTaskStatus().ToString()))
 			.ForMember(destination => destination.ProposedChangeDate,
 				options => options.MapFrom(source => source.Details.ProposedChangeDate))
 			.ForMember(destination => destination.ProposedDecisionDate,
@@ -43,6 +49,9 @@ public class SignificantChangeProjectMappingProfile : Profile
             .ForMember(destination => destination.Status,
                 options => options.MapFrom(source => source.EqualitiesTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeReligiousBodyConsultationResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ReligiousBodyConsultationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
             .ForMember(destination => destination.AssignedUser,
@@ -64,6 +73,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 						source.AssignedUserFullName ?? string.Empty,
 						source.AssignedUserEmailAddress ?? string.Empty)))
 			.ForMember(destination => destination.StakeholderConsultation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source));
