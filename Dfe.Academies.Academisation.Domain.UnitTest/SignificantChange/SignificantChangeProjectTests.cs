@@ -250,8 +250,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetReligiousBodyConsultation_ShouldSetDetailsProperties()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -259,6 +258,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 
@@ -269,8 +270,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -278,6 +278,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
@@ -285,8 +287,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -294,6 +295,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
 			project.SetReligiousBodyConsultation(false, null);
 
@@ -303,8 +306,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -312,6 +314,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
 			project.SetReligiousBodyConsultation(true, null);
 
@@ -321,8 +325,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				_fixture.Create<byte>(),
 				_fixture.Create<string>(),
@@ -330,6 +333,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>(),
 				_fixture.Create<string>()
 			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
 			project.SetReligiousBodyConsultation(false, "Consultation timeline does not allow this yet");
 
@@ -339,14 +344,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetReligiousBodyConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
 		{
-			var project = new SignificantChangeProject(
-				SignificantChangeStatus.PreDecision,
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				(byte)1,
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
+
+			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
 			project.SetReligiousBodyConsultation(false, "No consultation carried out");
 
@@ -356,14 +362,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetReligiousBodyConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
-			var project = new SignificantChangeProject(
-				SignificantChangeStatus.PreDecision,
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				(byte)1,
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>(),
 				_fixture.Create<string>());
+
+			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
 			project.SetReligiousBodyConsultation(false, "No consultation carried out");
 			project.SetReligiousBodyConsultation(true, null);

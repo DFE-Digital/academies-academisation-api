@@ -50,13 +50,14 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 			trustConsultedReligiousBodyNotConsultedReason: "Trust did not consult religious body");
 
 		var project = SignificantChangeProject.Create(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			route: "Change of age range",
-			schoolName: "Test School",
-			createdOn: DateTime.UtcNow);
+			new SignificantChangeProjectOptions(
+				123456,
+				1,
+				"Test Trust",
+				"12345678",
+				"Change of age range",
+				"Test School"),
+			DateTime.UtcNow);
 
 		var unitOfWorkMock = new Mock<IUnitOfWork>();
 		unitOfWorkMock
