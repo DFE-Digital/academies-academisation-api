@@ -83,6 +83,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			this.ReadOnlyDate = readOnlyDate;
 		}
 
+		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted, EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
+		{
+			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
+			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
+			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
+      
+    }
+    
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
 		{
 			Details.ProposedDecisionDate = proposedDecisionDate;

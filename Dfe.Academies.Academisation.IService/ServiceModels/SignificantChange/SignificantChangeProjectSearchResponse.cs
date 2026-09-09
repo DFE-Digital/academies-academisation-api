@@ -5,5 +5,6 @@ public class SignificantChangeProjectSearchResponse : SignificantChangeProjectRe
 {
     public User? AssignedUser { get; set; }
 	public SignificantChangeStakeholderConsultationResponse StakeholderConsultation { get; set; } = new();
+	public EqualitiesImpactAssessmentResponse EqualitiesImpactAssessment { get; init; } = new();
 	public SignificantChangeProjectDatesResponse ProjectDates { get; set; } = new();
 }
