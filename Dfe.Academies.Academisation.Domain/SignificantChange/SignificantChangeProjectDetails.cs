@@ -7,6 +7,10 @@ public class SignificantChangeProjectDetails
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
 
+	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
+	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
@@ -23,6 +27,22 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
+    public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
+    {
+        if (EqualitiesImpactAssessmentCompleted is null && EqualitiesImpactIdentified is null)
+        {
+            return SignificantChangeTaskStatus.NotStarted;
+        }
+
+        if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
+        {
+
+            return SignificantChangeTaskStatus.Completed;
+        }
+
+        return SignificantChangeTaskStatus.InProgress;
+    }
+  
 	public SignificantChangeTaskStatus GetConfirmProjectDatesTaskStatus()
 	{
 		if (!ProposedDecisionDate.HasValue && !ProposedChangeDate.HasValue)
