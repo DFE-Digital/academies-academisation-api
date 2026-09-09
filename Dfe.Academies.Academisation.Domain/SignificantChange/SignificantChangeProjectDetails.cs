@@ -4,6 +4,8 @@ public class SignificantChangeProjectDetails
 {
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
+	public DateTime? ProposedDecisionDate { get; set; }
+	public DateTime? ProposedChangeDate { get; set; }
 
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
@@ -40,4 +42,19 @@ public class SignificantChangeProjectDetails
 
         return SignificantChangeTaskStatus.InProgress;
     }
+  
+	public SignificantChangeTaskStatus GetConfirmProjectDatesTaskStatus()
+	{
+		if (!ProposedDecisionDate.HasValue && !ProposedChangeDate.HasValue)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (ProposedDecisionDate.HasValue && ProposedChangeDate.HasValue)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
 }

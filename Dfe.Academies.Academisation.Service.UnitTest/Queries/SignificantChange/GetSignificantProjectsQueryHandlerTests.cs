@@ -30,6 +30,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		[Fact]
 		public async Task Handle_ValidQuery_ReturnsMappedPagedResponse()
 		{
+			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
+			var proposedChangeDate = DateTime.UtcNow.AddDays(20);
+
 			// Arrange
 			var query = new GetSignificantProjectsQuery(Page: 1, Count: 2);
 			var cancellationToken = CancellationToken.None;
@@ -43,6 +46,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			projects[0].SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 			projects[0].SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Needs mitigating actions");
+			projects[0].SetProjectDates(proposedDecisionDate, proposedChangeDate);
 
 			_repositoryMock
 				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, null, null, null, null, null, cancellationToken))
@@ -70,6 +74,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].StakeholderConsultation.TrustConsultedStakeholders.Should().BeFalse();
 			data[0].StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 			data[0].StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			data[0].ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
+			data[0].ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
+			data[0].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.ImpactsIdentified));
@@ -91,6 +98,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[1].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().BeNull();
 			data[1].EqualitiesImpactAssessment.EqualitiesImpactIdentifiedMitigation.Should().BeNull();
 			data[1].EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
+			data[1].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 		}
 
 		[Fact]
@@ -180,7 +188,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 		private static SignificantChangeProject CreateProject(int id, int urn, byte tier, string trustName, string trustUkprn, string route, string schoolName)
 		{
-			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, urn, tier, trustName, trustUkprn, route, schoolName)
+			return new SignificantChangeProject(SignificantChangeStatus.PreDecision, new SignificantChangeProjectOptions(
+				 urn, tier, trustName, trustUkprn, route, schoolName))
 			{
 				Id = id,
 				CreatedOn = DateTime.UtcNow

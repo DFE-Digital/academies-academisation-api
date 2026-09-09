@@ -27,6 +27,12 @@ public class SignificantChangeProjectMappingProfile : Profile
                 options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
             .ForMember(destination => destination.EqualitiesTaskStatus,
                 options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()));
+			.ForMember(destination => destination.ProposedChangeDate,
+				options => options.MapFrom(source => source.Details.ProposedChangeDate))
+			.ForMember(destination => destination.ProposedDecisionDate,
+				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
+			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
+				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()));
 
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
@@ -51,4 +57,21 @@ public class SignificantChangeProjectMappingProfile : Profile
             .ForMember(destination => destination.EqualitiesImpactAssessment,
                 options => options.MapFrom(source => source));
     }
+			.ForMember(destination => destination.AssignedUser,
+				options => options.MapFrom(source => source.AssignedUserId == null
+					? null
+					: new User(
+						source.AssignedUserId.Value,
+						source.AssignedUserFullName ?? string.Empty,
+						source.AssignedUserEmailAddress ?? string.Empty)))
+			.ForMember(destination => destination.StakeholderConsultation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.ProjectDates,
+				options => options.MapFrom(source => source));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
+
+	}
 }

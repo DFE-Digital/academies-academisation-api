@@ -516,8 +516,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		{
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var proposed = DateTime.Today.AddDays(40);
+			var targetDateForTransfer = DateTime.Today.AddDays(60);
 
-			transferProject.SetTransferDates(proposed, null, null, true);
+			transferProject.SetTransferDates(proposed, null, targetDateForTransfer, true);
 
 			transferProject.SfsoCommissioningRequestedDate.Should().Be(proposed.AddDays(-15));
 		}
@@ -526,8 +527,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenWithin15Days()
 		{
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+			var targetDateForTransfer = DateTime.Today.AddDays(60);
 
-			transferProject.SetTransferDates(DateTime.Today.AddDays(10), null, null, true);
+			transferProject.SetTransferDates(DateTime.Today.AddDays(10), null, targetDateForTransfer, true);
 
 			transferProject.SfsoCommissioningRequestedDate.Should().Be(DateTime.Today);
 		}

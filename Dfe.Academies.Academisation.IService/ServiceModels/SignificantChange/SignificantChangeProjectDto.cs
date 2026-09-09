@@ -20,4 +20,9 @@ public class SignificantChangeProjectDto
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+	public string? LocalAuthorityName { get; set; }
+	public string? CompaniesHouseNumber { get; set; }
+	public DateTime? ProposedDecisionDate { get; set; }
+	public DateTime? ProposedChangeDate { get; set; }
+	public string ConfirmProjectDatesTaskStatus { get; set; } = string.Empty;
 }
