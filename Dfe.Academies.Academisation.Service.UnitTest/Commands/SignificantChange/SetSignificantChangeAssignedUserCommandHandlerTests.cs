@@ -51,13 +51,13 @@ public class SetSignificantChangeAssignedUserCommandHandlerTests
 			fullName: "Assigned User",
 			emailAddress: "assigned.user@test.local");
 
-		var project = SignificantChangeProject.Create(
+		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
 			urn: 123456,
 			tier: 2,
 			trustName: "Test Trust",
 			trustUkprn: "12345678",
-			route: "Change of age range",
-			schoolName: "Test School",
+			typeOfSignificantChange: "Change of age range",
+			schoolName: "Test School"),
 			createdOn: DateTime.UtcNow);
 
 		var unitOfWorkMock = new Mock<IUnitOfWork>();
