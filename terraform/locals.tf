@@ -26,6 +26,7 @@ locals {
   mssql_firewall_ipv4_allow_list                  = var.mssql_firewall_ipv4_allow_list
   mssql_server_public_access_enabled              = var.mssql_server_public_access_enabled
   mssql_managed_identity_assign_role              = var.mssql_managed_identity_assign_role
+  mssql_private_endpoint_subnet_cidr              = var.mssql_private_endpoint_subnet_cidr
   enable_dns_zone                                 = var.enable_dns_zone
   dns_zone_domain_name                            = var.dns_zone_domain_name
   dns_ns_records                                  = var.dns_ns_records
