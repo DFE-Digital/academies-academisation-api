@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -90,13 +90,13 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 	private async Task<SignificantChangeProject> CreateProjectAsync()
 	{
 		var project = SignificantChangeProject.Create(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			route: "Change of age range",
-			schoolName: "Test School",
-			createdOn: DateTime.UtcNow);
+			new SignificantChangeProjectOptions(
+				123456,
+				1,
+				"Test Trust",
+				"12345678",
+				"Change of age range",
+				"Test School"), DateTime.UtcNow);
 
 		_factory.Context.Add(project);
 		await _factory.Context.SaveChangesAsync();

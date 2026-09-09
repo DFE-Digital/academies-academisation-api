@@ -35,7 +35,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				companiesHouseNumber
 			);
 
-			var project = new SignificantChangeProject(status,significantChangeProjectOptions);
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
 			project.Status.Should().Be(status);
 			project.Urn.Should().Be(urn);
@@ -77,9 +77,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.AssignedUserEmailAddress.Should().Be(userEmail);
 			project.AssignedUserFullName.Should().Be(userFullName);
 
-			
+
 		}
-    
+
 		[Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
@@ -119,9 +119,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 
 			project.Details.TrustConsultedStakeholders.Should().BeFalse();
-			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
+			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should()
+				.Be("Trust has not consulted stakeholders yet");
 		}
-    
+
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
@@ -216,7 +217,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				_fixture.Create<string>()
 			);
 
-			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+			var project =
+				new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
 			project.SetStakeholderConsultation(false, "No consultation carried out");
 
@@ -250,12 +252,12 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		{
 			var project = SignificantChangeProject.Create(
 				new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()),
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
 				DateTime.UtcNow);
 
 			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
@@ -272,103 +274,115 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[InlineData("2024-07-01", null, SignificantChangeTaskStatus.InProgress)]
 		[InlineData(null, "2024-07-01", SignificantChangeTaskStatus.InProgress)]
 		[InlineData("2024-07-01", "2024-07-02", SignificantChangeTaskStatus.Completed)]
-        public void GetProjectDates_ShouldHaveCorrectStatus(string? proposedDecisionDateString, string? proposedChangeDateString, SignificantChangeTaskStatus expectedTaskStatus)
-        {
-            var project = SignificantChangeProject.Create(
-            new SignificantChangeProjectOptions(
-                _fixture.Create<int>(),
-                _fixture.Create<byte>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>()),
-            DateTime.UtcNow);
+		public void GetProjectDates_ShouldHaveCorrectStatus(string? proposedDecisionDateString,
+			string? proposedChangeDateString, SignificantChangeTaskStatus expectedTaskStatus)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
-            DateTime? proposedDecisionDate = string.IsNullOrEmpty(proposedDecisionDateString) ? null : DateTime.Parse(proposedDecisionDateString);
-            DateTime? proposedChangeDate = string.IsNullOrEmpty(proposedChangeDateString) ? null : DateTime.Parse(proposedChangeDateString);
+			DateTime? proposedDecisionDate = string.IsNullOrEmpty(proposedDecisionDateString)
+				? null
+				: DateTime.Parse(proposedDecisionDateString);
+			DateTime? proposedChangeDate = string.IsNullOrEmpty(proposedChangeDateString)
+				? null
+				: DateTime.Parse(proposedChangeDateString);
 
-            project.Details.ProposedDecisionDate = proposedDecisionDate;
-            project.Details.ProposedChangeDate = proposedChangeDate;
+			project.Details.ProposedDecisionDate = proposedDecisionDate;
+			project.Details.ProposedChangeDate = proposedChangeDate;
 
-            project.Details.GetConfirmProjectDatesTaskStatus().Should().Be(expectedTaskStatus);
-        }
-    
-            [Fact]
-        public void GetEqualitiesTaskStatus_WhenNoValues_ReturnNotStarted()
-        {
-            var project = new SignificantChangeProject(
-                _fixture.Create<SignificantChangeStatus>(),
-                _fixture.Create<int>(),
-                _fixture.Create<byte>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>()
-            );
+			project.Details.GetConfirmProjectDatesTaskStatus().Should().Be(expectedTaskStatus);
+		}
 
-            project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
-        }
+		[Fact]
+		public void GetEqualitiesTaskStatus_WhenNoValues_ReturnNotStarted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
-        [Theory]
+
+			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Theory]
 		[InlineData(true)]
 		[InlineData(false)]
-		public void GetEqualitiesTaskStatus_WhenSetAssessmentHasBeenCompleted_ReturnInprogress(bool equalitiesImpactAssessmentCompleted)
-        {
-            var project = new SignificantChangeProject(
-                _fixture.Create<SignificantChangeStatus>(),
-                _fixture.Create<int>(),
-                _fixture.Create<byte>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>()
-            );
+		public void GetEqualitiesTaskStatus_WhenSetAssessmentHasBeenCompleted_ReturnInprogress(
+			bool equalitiesImpactAssessmentCompleted)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
 
 			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null);
 
-            project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
-        }
+			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
 
-        [Theory]
-        [InlineData( EqualitiesImpact.None)]
-        [InlineData( EqualitiesImpact.PotentialImpacts)]
-        public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenSet_ReturnCompleted(EqualitiesImpact equalitiesImpact)
-        {
-            var project = new SignificantChangeProject(
-                _fixture.Create<SignificantChangeStatus>(),
-                _fixture.Create<int>(),
-                _fixture.Create<byte>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>()
-            );
+		[Theory]
+		[InlineData(EqualitiesImpact.None)]
+		[InlineData(EqualitiesImpact.PotentialImpacts)]
+		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenSet_ReturnCompleted(EqualitiesImpact equalitiesImpact)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
-            project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null);
 
-            project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-        }
+			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null);
 
-        [Theory]
-        [InlineData(EqualitiesImpact.ImpactsIdentified, "", SignificantChangeTaskStatus.Completed)]
+			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Theory]
+		[InlineData(EqualitiesImpact.ImpactsIdentified, "", SignificantChangeTaskStatus.Completed)]
 		[InlineData(EqualitiesImpact.ImpactsIdentified, null, SignificantChangeTaskStatus.Completed)]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, "Mitigation plan in place", SignificantChangeTaskStatus.Completed)]
-		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenIdentified_ShouldReturnCorrectStatus(EqualitiesImpact impact, string? mitigation, SignificantChangeTaskStatus expectedStatus)
-        {
-            var project = new SignificantChangeProject(
-                _fixture.Create<SignificantChangeStatus>(),
-                _fixture.Create<int>(),
-                _fixture.Create<byte>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>()
-            );
+		[InlineData(EqualitiesImpact.ImpactsIdentified, "Mitigation plan in place",
+			SignificantChangeTaskStatus.Completed)]
+		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenIdentified_ShouldReturnCorrectStatus(
+			EqualitiesImpact impact, string? mitigation, SignificantChangeTaskStatus expectedStatus)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
-            project.SetEqualitiesImpactAssessment(true, impact, mitigation);
 
-            project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
-        }
-    }
+			project.SetEqualitiesImpactAssessment(true, impact, mitigation);
+
+			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
+		}
 	}
 }
+
