@@ -95,12 +95,14 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		var projectId = _fixture.Create<int>();
 		var now = DateTime.UtcNow;
 		var project = SignificantChangeProject.Create(
-			_fixture.Create<int>(),
-			_fixture.Create<byte>(),
-			_fixture.Create<string>(),
-			_fixture.Create<string>(),
-			_fixture.Create<string>(),
-			_fixture.Create<string>(),
+			new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			),
 			now);
 
 		_mockDateTimeProvider.Setup(d => d.Now).Returns(now);
