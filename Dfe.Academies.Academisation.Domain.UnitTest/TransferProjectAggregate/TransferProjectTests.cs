@@ -524,14 +524,36 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		}
 
 		[Fact]
-		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenWithin15Days()
+		public void SetTransferDates_SetsSfsoCommissioningRequestedDateToNull_WhenWithin15Days()
 		{
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var targetDateForTransfer = DateTime.Today.AddDays(60);
 
 			transferProject.SetTransferDates(DateTime.Today.AddDays(10), null, targetDateForTransfer, true);
 
-			transferProject.SfsoCommissioningRequestedDate.Should().Be(DateTime.Today);
+			transferProject.SfsoCommissioningRequestedDate.Should().BeNull();
+		}
+
+		[Fact]
+		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenTargetDateIsLessThan15DaysInFuture()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+			var htbDate = DateTime.Today.AddDays(40);
+
+			transferProject.SetTransferDates(htbDate, null, DateTime.Today.AddDays(14), true);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(htbDate.AddDays(-15));
+		}
+
+		[Fact]
+		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenTargetDateIsInThePast()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+			var htbDate = DateTime.Today.AddDays(40);
+
+			transferProject.SetTransferDates(htbDate, null, DateTime.Today.AddDays(-1), true);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(htbDate.AddDays(-15));
 		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
