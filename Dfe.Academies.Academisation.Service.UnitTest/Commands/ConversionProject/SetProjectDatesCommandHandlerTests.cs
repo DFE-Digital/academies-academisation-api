@@ -120,6 +120,36 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		}
 
 		[Fact]
+		public async Task Handle_SetsNull_WhenProposedConversionDateIsLessThan15DaysInFuture()
+		{
+			var htb = DateTime.Today.AddDays(40);
+			var proposedConversionDate = DateTime.Today.AddDays(14);
+			var command = new SetProjectDatesCommand(1, htb, null, proposedConversionDate, null, null, true);
+			var existingProject = CreateMockProjectWithMandatoryFhaInformation(proposedConversionDate);
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Null(existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_SetsNull_WhenProposedConversionDateIsInThePast()
+		{
+			var htb = DateTime.Today.AddDays(40);
+			var proposedConversionDate = DateTime.Today.AddDays(-1);
+			var command = new SetProjectDatesCommand(1, htb, null, proposedConversionDate, null, null, true);
+			var existingProject = CreateMockProjectWithMandatoryFhaInformation(proposedConversionDate);
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Null(existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
 		public async Task Handle_SetsNull_WhenNoAdvisoryBoardDate()
 		{
 			var command = new SetProjectDatesCommand(1, null, null, null, null, null, true);

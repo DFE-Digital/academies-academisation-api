@@ -429,11 +429,19 @@ public class Project : Entity, IProject, IAggregateRoot
 	private static bool HasMandatoryFhaInformation(ProjectDetails details)
 	{
 		return details.HeadTeacherBoardDate.HasValue
-			&& details.ProposedConversionDate.HasValue
+			&& HasProposedDecisionDateAtLeast15DaysInFuture(details.HeadTeacherBoardDate)
 			&& details.RevenueCarryForwardAtEndMarchCurrentYear.HasValue
 			&& details.CapitalCarryForwardAtEndMarchCurrentYear.HasValue
 			&& details.ProjectedRevenueBalanceAtEndMarchNextYear.HasValue
 			&& details.CapitalCarryForwardAtEndMarchNextYear.HasValue;
+	}
+
+	private static bool HasProposedDecisionDateAtLeast15DaysInFuture(DateTime? proposedDecisionDate)
+	{
+		if (!proposedDecisionDate.HasValue) return false;
+
+		DateTime minimumAllowedDate = DateTime.Today.AddDays(15);
+		return proposedDecisionDate.Value.Date >= minimumAllowedDate;
 	}
 
 	private static decimal? ConvertDeficitAmountToNegative(decimal? amount, RevenueType? revenueType)
