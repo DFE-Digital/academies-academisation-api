@@ -6,7 +6,7 @@ services:
         - github_token
     command: /bin/bash -c "./docker-entrypoint.sh dotnet Dfe.Academies.Academisation.WebApi.dll"
     ports:
-      - 80:80/tcp
+      - 7099:8080
     depends_on:
       - db
       - sqlcmd
