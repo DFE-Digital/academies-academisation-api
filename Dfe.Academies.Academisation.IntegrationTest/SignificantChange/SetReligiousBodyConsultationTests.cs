@@ -9,11 +9,11 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.IntegrationTest.SignificantChange;
 
-public class SetStakeholderConsultationTests : IClassFixture<TestWebApplicationFactory>
+public class SetReligiousBodyConsultationTests : IClassFixture<TestWebApplicationFactory>
 {
 	private readonly TestWebApplicationFactory _factory;
 
-	public SetStakeholderConsultationTests(TestWebApplicationFactory factory)
+	public SetReligiousBodyConsultationTests(TestWebApplicationFactory factory)
 	{
 		_factory = factory;
 	}
@@ -25,22 +25,22 @@ public class SetStakeholderConsultationTests : IClassFixture<TestWebApplicationF
 
 		var project = SignificantChangeProject.Create(
 			new SignificantChangeProjectOptions(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			typeOfSignificantChange: "Change of age range",
-			schoolName: "Test School"),
-			createdOn: DateTime.UtcNow);
+				123456,
+				1,
+				"Test Trust",
+				"12345678",
+				"Change of age range",
+				"Test School"),
+			DateTime.UtcNow);
 
 		_factory.Context.Add(project);
 		await _factory.Context.SaveChangesAsync();
 
-		var request = new SetSignificantChangeStakeholderConsultationPublicCommand(
-			trustConsultedStakeholders: false,
-			trustConsultedStakeholdersNotConsultedReason: "Trust has not consulted stakeholders yet");
+		var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
+			trustConsultedReligiousBody: false,
+			trustConsultedReligiousBodyNotConsultedReason: "Trust has not consulted religious body yet");
 
-		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetStakeholderConsultation", request);
+		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetReligiousBodyConsultation", request);
 
 		_factory.Context.ChangeTracker.Clear();
 		var updated = await _factory.Context.Set<SignificantChangeProject>()
@@ -50,8 +50,8 @@ public class SetStakeholderConsultationTests : IClassFixture<TestWebApplicationF
 		{
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 			Assert.Equal((byte)2, updated.Tier);
-			Assert.False(updated.Details.TrustConsultedStakeholders);
-			Assert.Equal("Trust has not consulted stakeholders yet", updated.Details.TrustConsultedStakeholdersNotConsultedReason);
+			Assert.False(updated.Details.TrustConsultedReligiousBody);
+			Assert.Equal("Trust has not consulted religious body yet", updated.Details.TrustConsultedReligiousBodyNotConsultedReason);
 		});
 	}
 
@@ -59,11 +59,11 @@ public class SetStakeholderConsultationTests : IClassFixture<TestWebApplicationF
 	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
 		var client = _factory.CreateClient();
-		var request = new SetSignificantChangeStakeholderConsultationPublicCommand(
-			trustConsultedStakeholders: true,
-			trustConsultedStakeholdersNotConsultedReason: null);
+		var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
+			trustConsultedReligiousBody: true,
+			trustConsultedReligiousBodyNotConsultedReason: null);
 
-		var response = await client.PutAsJsonAsync("/significant-change/99999/SetStakeholderConsultation", request);
+		var response = await client.PutAsJsonAsync("/significant-change/99999/SetReligiousBodyConsultation", request);
 
 		Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 	}

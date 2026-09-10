@@ -9,27 +9,26 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChange;
 
-public class SetSignificantChangeAssignedUserCommandHandlerTests
+public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 {
 	private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
-	private readonly Mock<ILogger<SetSignificantChangeAssignedUserCommandHandler>> _loggerMock;
-	private readonly SetSignificantChangeAssignedUserCommandHandler _handler;
+	private readonly Mock<ILogger<SetSignificantChangeReligiousBodyConsultationCommandHandler>> _loggerMock;
+	private readonly SetSignificantChangeReligiousBodyConsultationCommandHandler _handler;
 
-	public SetSignificantChangeAssignedUserCommandHandlerTests()
+	public SetSignificantChangeReligiousBodyConsultationCommandHandlerTests()
 	{
 		_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-		_loggerMock = new Mock<ILogger<SetSignificantChangeAssignedUserCommandHandler>>();
-		_handler = new SetSignificantChangeAssignedUserCommandHandler(_repositoryMock.Object, _loggerMock.Object);
+		_loggerMock = new Mock<ILogger<SetSignificantChangeReligiousBodyConsultationCommandHandler>>();
+		_handler = new SetSignificantChangeReligiousBodyConsultationCommandHandler(_repositoryMock.Object, _loggerMock.Object);
 	}
 
 	[Fact]
 	public async Task Handle_ProjectNotFound_ReturnsNotFoundCommandResult()
 	{
-		var command = new SetSignificantChangeAssignedUserCommand(
+		var command = new SetSignificantChangeReligiousBodyConsultationCommand(
 			id: 100,
-			userId: Guid.NewGuid(),
-			fullName: "Assigned User",
-			emailAddress: "assigned.user@test.local");
+			trustConsultedReligiousBody: true,
+			trustConsultedReligiousBodyNotConsultedReason: null);
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -43,22 +42,22 @@ public class SetSignificantChangeAssignedUserCommandHandlerTests
 	}
 
 	[Fact]
-	public async Task Handle_ProjectFound_AssignsUserAndPersistsChanges()
+	public async Task Handle_ProjectFound_UpdatesSectionAndPersistsChanges()
 	{
-		var command = new SetSignificantChangeAssignedUserCommand(
+		var command = new SetSignificantChangeReligiousBodyConsultationCommand(
 			id: 200,
-			userId: Guid.NewGuid(),
-			fullName: "Assigned User",
-			emailAddress: "assigned.user@test.local");
+			trustConsultedReligiousBody: false,
+			trustConsultedReligiousBodyNotConsultedReason: "Trust did not consult religious body");
 
-		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
-			urn: 123456,
-			tier: 2,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			typeOfSignificantChange: "Change of age range",
-			schoolName: "Test School"),
-			createdOn: DateTime.UtcNow);
+		var project = SignificantChangeProject.Create(
+			new SignificantChangeProjectOptions(
+				123456,
+				1,
+				"Test Trust",
+				"12345678",
+				"Change of age range",
+				"Test School"),
+			DateTime.UtcNow);
 
 		var unitOfWorkMock = new Mock<IUnitOfWork>();
 		unitOfWorkMock
@@ -73,9 +72,10 @@ public class SetSignificantChangeAssignedUserCommandHandlerTests
 		var result = await _handler.Handle(command, CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.AssignedUserId.Should().Be(command.UserId);
-		project.AssignedUserFullName.Should().Be(command.FullName);
-		project.AssignedUserEmailAddress.Should().Be(command.EmailAddress);
+		project.Details.TrustConsultedReligiousBody.Should().BeFalse();
+		project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust did not consult religious body");
+		project.Tier.Should().Be(2);
+		project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);
 		_repositoryMock.Verify(x => x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

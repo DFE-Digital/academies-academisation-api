@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-04-20.581...HEAD)
 Note: remember to update unrelease section when creating a new release.
 
+### Added
+- [296559](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=296559) - Add religious body consultation task controller and handler
 
 ---
 ## [10.0.0][10.0.0] - 2026-08-26

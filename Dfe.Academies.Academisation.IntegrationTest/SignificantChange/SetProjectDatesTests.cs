@@ -17,12 +17,14 @@ public class SetProjectDatesTests(TestWebApplicationFactory factory) : IClassFix
 		var client = factory.CreateClient();
 
 		var project = SignificantChangeProject.Create(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			route: "Change of age range",
-			schoolName: "Test School",
+			new SignificantChangeProjectOptions(
+				urn: 123456,
+				tier: 1,
+				trustName: "Test Trust",
+				trustUkprn: "12345678",
+				typeOfSignificantChange: "Change of age range",
+				schoolName: "Test School"
+			),
 			createdOn: DateTime.UtcNow);
 
 		factory.Context.Add(project);
