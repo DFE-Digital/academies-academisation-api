@@ -483,8 +483,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		{
 			var routeId = 100;
 			var request = new SetSignificantChangeProjectDatesPublicCommand(
-				ProposedDecisionDate: new DateTime(2026, 9, 1),
-				ProposedChangeDate: new DateTime(2027, 1, 1));
+                ProposedDecisionDate: new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc),
+                ProposedChangeDate: new DateTime(2027, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
 			_mockMediator
 				.Setup(m => m.Send(It.IsAny<SetSignificantChangeProjectDatesCommand>(), It.IsAny<CancellationToken>()))
@@ -505,8 +505,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 		public async Task SetProjectDates_ReturnsNotFound_WhenProjectDoesNotExist()
 		{
 			var request = new SetSignificantChangeProjectDatesPublicCommand(
-				ProposedDecisionDate: new DateTime(2026, 9, 1),
-				ProposedChangeDate: new DateTime(2027, 1, 1));
+                ProposedDecisionDate: new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc),
+                ProposedChangeDate: new DateTime(2027, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
 			_mockMediator
 				.Setup(m => m.Send(It.IsAny<SetSignificantChangeProjectDatesCommand>(), It.IsAny<CancellationToken>()))
