@@ -53,6 +53,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 			project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Mitigation");
+			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 
 			_repositoryMock
@@ -79,6 +80,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.ImpactsIdentified));
 			result.EqualitiesImpactAssessment.EqualitiesImpactIdentifiedMitigation.Should().Be("Mitigation");
 			result.EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().BeFalse();
+			result.ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
+			result.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			result.ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));

@@ -248,6 +248,137 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
+		public void SetReligiousBodyConsultation_ShouldSetDetailsProperties()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
+
+			project.Details.TrustConsultedReligiousBody.Should().BeFalse();
+			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
+		}
+
+		[Fact]
+		public void GetReligiousBodyConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.SetReligiousBodyConsultation(false, null);
+
+			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetReligiousBodyConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.SetReligiousBodyConsultation(true, null);
+
+			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.SetReligiousBodyConsultation(false, "Consultation timeline does not allow this yet");
+
+			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetReligiousBodyConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+
+			project.SetReligiousBodyConsultation(false, "No consultation carried out");
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void SetReligiousBodyConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+
+			project.SetReligiousBodyConsultation(false, "No consultation carried out");
+			project.SetReligiousBodyConsultation(true, null);
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
 		public void SetProjectDates_ShouldSetDates()
 		{
 			var project = SignificantChangeProject.Create(
