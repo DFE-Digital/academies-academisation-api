@@ -67,6 +67,47 @@ public class ProjectUpdateTests
 			() => Assert.Equivalent(existingProject, sut.Details)
 		);
 	}
+
+	[Fact]
+	public void Update_WhenProposedDecisionDateUnchanged_DoesNotRecalculateSfsoCommissioningRequestedDate()
+	{
+		// Arrange
+		var existingSfsoRequestedDate = DateTime.Today.AddDays(3);
+		var existingProjectDetails = new ProjectDetails
+		{
+			Urn = 1234,
+			HeadTeacherBoardDate = DateTime.Today.AddDays(10),
+			ProposedConversionDate = DateTime.Today.AddDays(60),
+			RevenueCarryForwardAtEndMarchCurrentYear = 1,
+			CapitalCarryForwardAtEndMarchCurrentYear = 1,
+			ProjectedRevenueBalanceAtEndMarchNextYear = 1,
+			CapitalCarryForwardAtEndMarchNextYear = 1,
+			SfsoCommissioningRequestedDate = existingSfsoRequestedDate
+		};
+
+		var sut = new Project(1, existingProjectDetails);
+
+		var updatedProjectDetails = new ProjectDetails
+		{
+			Urn = 1234,
+			HeadTeacherBoardDate = existingProjectDetails.HeadTeacherBoardDate,
+			ProposedConversionDate = DateTime.Today.AddDays(61),
+			RevenueCarryForwardAtEndMarchCurrentYear = 1,
+			CapitalCarryForwardAtEndMarchCurrentYear = 1,
+			ProjectedRevenueBalanceAtEndMarchNextYear = 1,
+			CapitalCarryForwardAtEndMarchNextYear = 1,
+			SfsoCommissioningRequestedDate = null
+		};
+
+		// Act
+		var result = sut.Update(updatedProjectDetails);
+
+		// Assert
+		Assert.Multiple(
+			() => Assert.IsType<CommandSuccessResult>(result),
+			() => Assert.Equal(existingSfsoRequestedDate, sut.Details.SfsoCommissioningRequestedDate)
+		);
+	}
 	public static IEnumerable<object[]> TypeChangedData => new List<object[]>
 		{
 			new object[] { "fast track", "intermediate", 70000m, 90000m, false, "primary" },

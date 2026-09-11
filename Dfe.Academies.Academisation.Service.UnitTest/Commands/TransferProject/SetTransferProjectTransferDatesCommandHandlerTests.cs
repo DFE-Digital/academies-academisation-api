@@ -261,6 +261,43 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			// Assert
 			result.Should().BeOfType<CommandSuccessResult>();
 			project.SfsoCommissioningRequestedDate.Should().Be(command.HtbDate!.Value.AddDays(-15));
+		}
+
+		[Fact]
+		public async Task Handle_DoesNotRecalculateSfsoCommissioningRequestedDate_WhenAdvisoryBoardDateIsUnchanged()
+		{
+			// Arrange
+			var transferringAcademies = new List<TransferringAcademy>
+			{
+				new TransferringAcademy("23456789", "in trust", "34567890", "", "")
+			};
+			var project = Domain.TransferProjectAggregate.TransferProject.Create("12345678", "out trust", transferringAcademies, false, DateTime.Now);
+			var advisoryBoardDate = DateTime.Today.AddDays(10);
+			var existingRequestedDate = DateTime.Today.AddDays(3);
+
+			project.SetTransferDates(advisoryBoardDate, null, DateTime.Today.AddDays(60), true);
+			project.SfsoCommissioningRequestedDate = existingRequestedDate;
+
+			var unitOfWorkMock = new Mock<IUnitOfWork>();
+			unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(1));
+			_transferProjectRepositoryMock.Setup(repo => repo.UnitOfWork).Returns(unitOfWorkMock.Object);
+			_transferProjectRepositoryMock.Setup(r => r.GetByUrn(It.IsAny<int>())).ReturnsAsync(project);
+
+			var command = new SetTransferProjectTransferDatesCommand
+			{
+				Urn = 1,
+				HtbDate = advisoryBoardDate,
+				PreviousAdvisoryBoardDate = DateTime.Today,
+				TargetDateForTransfer = DateTime.Today.AddDays(61),
+				IsCompleted = true
+			};
+
+			// Act
+			var result = await _handler.Handle(command, CancellationToken.None);
+
+			// Assert
+			result.Should().BeOfType<CommandSuccessResult>();
+			project.SfsoCommissioningRequestedDate.Should().Be(existingRequestedDate);
 		}	
 	}
 }

@@ -185,6 +185,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy = default, List<ReasonChange> reasonsChanged = default)
 		{
+			bool proposedDecisionDateChanged = HtbDate != advisoryBoardDate;
+
 			HtbDate = advisoryBoardDate;
 			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;
 			if (TargetDateForTransfer != expectedDateForTransfer)
@@ -197,8 +199,11 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 				}
 			}
 
-			SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(
-				advisoryBoardDate, HasMandatoryFhaInformation(advisoryBoardDate, TargetDateForTransfer));
+			if (proposedDecisionDateChanged)
+			{
+				SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(
+					advisoryBoardDate, HasMandatoryFhaInformation(advisoryBoardDate, TargetDateForTransfer));
+			}
 
 			TransferDatesSectionIsCompleted = isCompleted;
 		}

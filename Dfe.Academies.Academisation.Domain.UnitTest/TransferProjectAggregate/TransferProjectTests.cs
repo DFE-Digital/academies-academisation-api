@@ -555,6 +555,20 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 
 			transferProject.SfsoCommissioningRequestedDate.Should().Be(htbDate.AddDays(-15));
 		}
+
+		[Fact]
+		public void SetTransferDates_DoesNotRecalculateSfsoCommissioningRequestedDate_WhenAdvisoryBoardDateIsUnchanged()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+			var advisoryBoardDate = DateTime.Today.AddDays(10);
+			var existingRequestedDate = DateTime.Today.AddDays(3);
+
+			transferProject.SetTransferDates(advisoryBoardDate, null, DateTime.Today.AddDays(60), true);
+			transferProject.SfsoCommissioningRequestedDate = existingRequestedDate;
+			transferProject.SetTransferDates(advisoryBoardDate, DateTime.Today, DateTime.Today.AddDays(61), true);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().Be(existingRequestedDate);
+		}
 		public class CreationArgumentExceptionTestData : IEnumerable<object[]>
 		{
 			private List<TransferringAcademy> _transferringAcademies = new List<TransferringAcademy>() {
