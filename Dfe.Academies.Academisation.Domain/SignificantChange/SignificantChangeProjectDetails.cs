@@ -12,6 +12,9 @@ public class SignificantChangeProjectDetails
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+  
+  public bool? ConsultationIncludeAdmissionVariation { get; set; }
+	public string? ConsultationNoAdmissionVariationReason { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -74,4 +77,28 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+  
+  public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
+	{
+		if (!ConsultationIncludeAdmissionVariation.HasValue
+		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (ConsultationIncludeAdmissionVariation is true)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (ConsultationIncludeAdmissionVariation is false
+		    && !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+  
+  
 }
