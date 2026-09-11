@@ -63,6 +63,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 			return new Project(1, projectDetails);
 		}
 
+		private static Project CreateMockProjectWithMandatoryFhaInformationAndAdvisoryDate(DateTime advisoryBoardDate, DateTime proposedConversionDate)
+		{
+			var project = CreateMockProjectWithMandatoryFhaInformation(proposedConversionDate);
+			project.Details.HeadTeacherBoardDate = advisoryBoardDate;
+			return project;
+		}
+
 		[Fact]
 		public async Task Handle_ReturnsNotFound_WhenProjectDoesNotExist()
 		{
@@ -105,7 +112,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 		}
 
 		[Fact]
-		public async Task Handle_SetsToday_WhenAdvisoryBoardDateWithin15Days()
+		public async Task Handle_SetsNull_WhenAdvisoryBoardDateWithin15Days()
 		{
 			var htb = DateTime.Today.AddDays(10);
 			var proposedConversionDate = DateTime.Today.AddDays(60);
@@ -116,20 +123,71 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.ConversionProjec
 
 			await _handler.Handle(command, CancellationToken.None);
 
-			Assert.Equal(DateTime.Today, existingProject.Details.SfsoCommissioningRequestedDate);
+			Assert.Null(existingProject.Details.SfsoCommissioningRequestedDate);
 		}
 
 		[Fact]
-		public async Task Handle_SetsNull_WhenNoAdvisoryBoardDate()
+		public async Task Handle_DerivesSfsoCommissioningRequestedDate_WhenProposedConversionDateIsLessThan15DaysInFuture()
 		{
-			var command = new SetProjectDatesCommand(1, null, null, null, null, null, true);
-			var existingProject = new Project(1, new ProjectDetails { SfsoCommissioningRequestedDate = DateTime.Today });
+			var htb = DateTime.Today.AddDays(40);
+			var proposedConversionDate = DateTime.Today.AddDays(14);
+			var command = new SetProjectDatesCommand(1, htb, null, proposedConversionDate, null, null, true);
+			var existingProject = CreateMockProjectWithMandatoryFhaInformation(proposedConversionDate);
 			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
 											.ReturnsAsync(existingProject);
 
 			await _handler.Handle(command, CancellationToken.None);
 
-			Assert.Null(existingProject.Details.SfsoCommissioningRequestedDate);
+			Assert.Equal(htb.AddDays(-15), existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_DerivesSfsoCommissioningRequestedDate_WhenProposedConversionDateIsInThePast()
+		{
+			var htb = DateTime.Today.AddDays(40);
+			var proposedConversionDate = DateTime.Today.AddDays(-1);
+			var command = new SetProjectDatesCommand(1, htb, null, proposedConversionDate, null, null, true);
+			var existingProject = CreateMockProjectWithMandatoryFhaInformation(proposedConversionDate);
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Equal(htb.AddDays(-15), existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_DoesNotRecalculateSfsoCommissioningRequestedDate_WhenAdvisoryBoardDateIsUnchanged()
+		{
+			var advisoryBoardDate = DateTime.Today.AddDays(10);
+			var existingRequestedDate = DateTime.Today.AddDays(3);
+			var initialProposedConversionDate = DateTime.Today.AddDays(60);
+			var updatedProposedConversionDate = DateTime.Today.AddDays(61);
+
+			var command = new SetProjectDatesCommand(1, advisoryBoardDate, DateTime.Today, updatedProposedConversionDate, null, null, true);
+			var existingProject = CreateMockProjectWithMandatoryFhaInformationAndAdvisoryDate(advisoryBoardDate, initialProposedConversionDate);
+			existingProject.Details.SfsoCommissioningRequestedDate = existingRequestedDate;
+
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Equal(existingRequestedDate, existingProject.Details.SfsoCommissioningRequestedDate);
+		}
+
+		[Fact]
+		public async Task Handle_DoesNotRecalculateSfsoCommissioningRequestedDate_WhenNoAdvisoryBoardDateAndValueIsUnchanged()
+		{
+			var command = new SetProjectDatesCommand(1, null, null, null, null, null, true);
+			var existingRequestedDate = DateTime.Today;
+			var existingProject = new Project(1, new ProjectDetails { SfsoCommissioningRequestedDate = existingRequestedDate });
+			_mockConversionProjectRepository.Setup(repo => repo.GetConversionProject(command.Id, CancellationToken.None))
+											.ReturnsAsync(existingProject);
+
+			await _handler.Handle(command, CancellationToken.None);
+
+			Assert.Equal(existingRequestedDate, existingProject.Details.SfsoCommissioningRequestedDate);
 		}
 	}
 }

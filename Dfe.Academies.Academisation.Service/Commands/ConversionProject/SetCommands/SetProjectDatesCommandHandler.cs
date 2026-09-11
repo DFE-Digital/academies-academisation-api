@@ -6,16 +6,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetCommands
 {
-	public class SetProjectDatesCommandHandler : IRequestHandler<SetProjectDatesCommand, CommandResult>
+	public class SetProjectDatesCommandHandler(IConversionProjectRepository conversionProjectRepository, ILogger<SetProjectDatesCommandHandler> logger) : IRequestHandler<SetProjectDatesCommand, CommandResult>
 	{
-		private readonly IConversionProjectRepository _conversionProjectRepository;
-		private readonly ILogger<SetProjectDatesCommandHandler> _logger;
-
-		public SetProjectDatesCommandHandler(IConversionProjectRepository conversionProjectRepository, ILogger<SetProjectDatesCommandHandler> logger)
-		{
-			_conversionProjectRepository = conversionProjectRepository;
-			_logger = logger;
-		}
+		private readonly IConversionProjectRepository _conversionProjectRepository = conversionProjectRepository;
+		private readonly ILogger<SetProjectDatesCommandHandler> _logger = logger;
 
 		public async Task<CommandResult> Handle(SetProjectDatesCommand request, CancellationToken cancellationToken)
 		{
@@ -23,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.ConversionProject.SetComm
 
 			if (existingProject is null)
 			{
-				_logger.LogError($"Conversion project not found with id: {request.Id}");
+				_logger.LogError("Conversion project not found with id: {ProjectId}", request.Id);
 				return new NotFoundCommandResult();
 			}
 

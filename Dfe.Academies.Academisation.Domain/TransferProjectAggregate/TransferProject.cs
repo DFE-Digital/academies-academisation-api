@@ -185,6 +185,8 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 
 		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy = default, List<ReasonChange> reasonsChanged = default)
 		{
+			bool proposedDecisionDateChanged = HtbDate != advisoryBoardDate;
+
 			HtbDate = advisoryBoardDate;
 			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;
 			if (TargetDateForTransfer != expectedDateForTransfer)
@@ -197,10 +199,22 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 				}
 			}
 
-			SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(
-				advisoryBoardDate, HtbDate.HasValue && TargetDateForTransfer.HasValue);
+			if (proposedDecisionDateChanged)
+			{
+				SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(
+					advisoryBoardDate, HasMandatoryFhaInformation(advisoryBoardDate, TargetDateForTransfer));
+			}
 
 			TransferDatesSectionIsCompleted = isCompleted;
+		}
+
+		private static bool HasMandatoryFhaInformation(DateTime? advisoryBoardDate, DateTime? proposedTransferDate)
+		{
+			if (!advisoryBoardDate.HasValue || !proposedTransferDate.HasValue)
+				return false;
+
+			DateTime minimumAllowedDate = DateTime.Today.AddDays(15);
+			return advisoryBoardDate.Value.Date >= minimumAllowedDate;
 		}
 
 
