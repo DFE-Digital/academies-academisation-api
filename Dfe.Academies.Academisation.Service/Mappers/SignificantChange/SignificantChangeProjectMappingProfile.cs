@@ -25,7 +25,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ConsultationNoAdmissionVariationReason,
 				options => options.MapFrom(source => source.Details.ConsultationNoAdmissionVariationReason))
 			.ForMember(destination => destination.AdmissionVariationConsultationTaskStatus,
-				options => options.MapFrom(source => source.Details.GetAdmissionVariationConsultationTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetAdmissionVariationConsultationTaskStatus().ToString()))
             .ForMember(destination=> destination.EqualitiesImpactAssessmentCompleted,
                 options=>options.MapFrom(source=> source.Details.EqualitiesImpactAssessmentCompleted))
             .ForMember(destination => destination.EqualitiesImpactIdentified,
@@ -86,7 +86,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.AdmissionVariationConsultation,
-				options => options.MapFrom(source => source));
+				options => options.MapFrom(source => source))
 		
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))

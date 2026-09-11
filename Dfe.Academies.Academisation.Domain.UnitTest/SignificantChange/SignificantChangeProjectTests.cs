@@ -515,17 +515,18 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
     
-    		[Fact]
+		[Fact]
 		public void SetAdmissionVariationConsultation_ShouldSetDetailsProperties()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetAdmissionVariationConsultation(false, "No admission variation required");
 
@@ -537,14 +538,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetAdmissionVariationConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
@@ -552,14 +554,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetAdmissionVariationConsultationTaskStatus_WhenNoVariationWithoutReason_ReturnsInProgress()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetAdmissionVariationConsultation(false, null);
 
@@ -569,14 +572,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetAdmissionVariationConsultationTaskStatus_WhenVariationIncluded_ReturnsCompleted()
 		{
-			var project = new SignificantChangeProject(
-				_fixture.Create<SignificantChangeStatus>(),
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetAdmissionVariationConsultation(true, null);
 
@@ -586,14 +590,16 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetAdmissionVariationConsultation_WhenNoVariationAndTierOne_MovesToTierTwo()
 		{
-			var project = new SignificantChangeProject(
-				SignificantChangeStatus.InProgress,
-				_fixture.Create<int>(),
-				(byte)1,
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
 
 			project.SetAdmissionVariationConsultation(false, "No admission variation required");
 

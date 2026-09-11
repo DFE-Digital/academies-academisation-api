@@ -49,14 +49,14 @@ public class SetSignificantChangeAdmissionVariationConsultationCommandHandlerTes
 			consultationIncludeAdmissionVariation: false,
 			noAdmissionVariationReason: "No admission variation required");
 
-		var project = SignificantChangeProject.Create(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			route: "Change of age range",
-			schoolName: "Test School",
-			createdOn: DateTime.UtcNow);
+		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+				123456,
+				1,
+				"Test Trust",
+				"12345678",
+				"Change of age range",
+				"Test School"), DateTime.UtcNow
+		);
 
 		var unitOfWorkMock = new Mock<IUnitOfWork>();
 		unitOfWorkMock
