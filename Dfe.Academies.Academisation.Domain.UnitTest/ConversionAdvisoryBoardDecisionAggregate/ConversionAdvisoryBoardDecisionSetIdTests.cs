@@ -15,7 +15,7 @@ public class ConversionAdvisoryBoardDecisionSetIdTests
 	{
 		//Arrange
 		var details = _fixture.Create<AdvisoryBoardDecisionDetails>();
-		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, null, default, default);
+		ConversionAdvisoryBoardDecision target = new(1, details, null, null, null, null, null, default, default);
 
 		//Act & Assert
 		Assert.Throws<InvalidOperationException>(() => target.SetId(1));
@@ -32,8 +32,9 @@ public class ConversionAdvisoryBoardDecisionSetIdTests
 		var declined = _fixture.CreateMany<AdvisoryBoardDeclinedReasonDetails>();
 		var withdrawn = _fixture.CreateMany<AdvisoryBoardWithdrawnReasonDetails>();
 		var daoRevokedReasons = _fixture.CreateMany<AdvisoryBoardDAORevokedReasonDetails>();
-		ConversionAdvisoryBoardDecision expected = new(expectedId, details, deferred, declined, withdrawn, daoRevokedReasons, default, default);
-		ConversionAdvisoryBoardDecision target = new(default, details, deferred, declined, withdrawn, daoRevokedReasons, default, default);
+		var daoNotIssuedReasons = _fixture.CreateMany<AdvisoryBoardDAONotIssuedReasonDetails>();
+		ConversionAdvisoryBoardDecision expected = new(expectedId, details, deferred, declined, withdrawn, daoRevokedReasons, daoNotIssuedReasons, default, default);
+		ConversionAdvisoryBoardDecision target = new(default, details, deferred, declined, withdrawn, daoRevokedReasons, daoNotIssuedReasons, default, default);
 
 		//Act
 		target.SetId(expectedId);

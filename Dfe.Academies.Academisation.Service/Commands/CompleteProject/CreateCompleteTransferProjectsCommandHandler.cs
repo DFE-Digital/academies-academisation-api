@@ -49,7 +49,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 			foreach (var transferringAcademy in transferingAcademies)
 			{
 				var transferProject = transferProjects.Single(x => x.Id == transferringAcademy.TransferProjectId);
-				var decision = await advisoryBoardDecisionRepository.GetTransferProjectDecsion(transferringAcademy.TransferProjectId);
+				var decision = await advisoryBoardDecisionRepository.GetTransferProjectDecision(transferringAcademy.TransferProjectId);
 				var establishment = establishments.Single(x => x.Ukprn == transferringAcademy.Ukprn);
 
 				var transferObject = CompleteTransferProjectServiceModelMapper.FromDomain(transferProject,

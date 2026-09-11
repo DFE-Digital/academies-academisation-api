@@ -4,6 +4,17 @@ public class SignificantChangeProjectDetails
 {
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
+	public bool? TrustConsultedReligiousBody { get; set; }
+	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
+	public DateTime? ProposedDecisionDate { get; set; }
+	public DateTime? ProposedChangeDate { get; set; }
+
+	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
+	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+  
+  public bool? ConsultationIncludeAdmissionVariation { get; set; }
+	public string? ConsultationNoAdmissionVariationReason { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -21,10 +32,53 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-	public bool? ConsultationIncludeAdmissionVariation { get; set; }
-	public string? ConsultationNoAdmissionVariationReason { get; set; }
+    public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
+    {
+        if (EqualitiesImpactAssessmentCompleted is null && EqualitiesImpactIdentified is null)
+        {
+            return SignificantChangeTaskStatus.NotStarted;
+        }
 
-	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
+        if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
+        {
+            return SignificantChangeTaskStatus.Completed;
+        }
+
+        return SignificantChangeTaskStatus.InProgress;
+    }
+  
+	public SignificantChangeTaskStatus GetReligiousBodyConsultationTaskStatus()
+	{
+		if (!TrustConsultedReligiousBody.HasValue
+			&& string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (TrustConsultedReligiousBody is true)
+			return SignificantChangeTaskStatus.Completed;
+
+		if (TrustConsultedReligiousBody is false
+			&& !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetConfirmProjectDatesTaskStatus()
+	{
+		if (!ProposedDecisionDate.HasValue && !ProposedChangeDate.HasValue)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (ProposedDecisionDate.HasValue && ProposedChangeDate.HasValue)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+  
+  public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
 	{
 		if (!ConsultationIncludeAdmissionVariation.HasValue
 		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
@@ -45,5 +99,6 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-
+  
+  
 }

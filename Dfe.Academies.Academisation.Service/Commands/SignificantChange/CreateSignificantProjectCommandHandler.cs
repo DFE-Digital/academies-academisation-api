@@ -29,12 +29,15 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 			}
 			
 			var significantChangeProject = SignificantChangeProject.Create(
-				command.Urn,
-				command.Tier,
-				trust.Name,
-				command.TrustUkprn,
-				command.Route,
-				establishment.Name,
+				new SignificantChangeProjectOptions(
+					command.Urn,
+					command.Tier,
+					trust.Name,
+					command.TrustUkprn,
+					command.Route,
+					establishment.Name,
+					establishment.LocalAuthorityName,
+					trust.CompaniesHouseNumber),
 				dateTimeProvider.Now);
 
 			significantChangeProjectRepository.Insert(significantChangeProject);
@@ -49,7 +52,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				TrustName = significantChangeProject.TrustName,
 				TrustUkprn = significantChangeProject.TrustUkprn,
 				TypeOfSignificantChange = significantChangeProject.TypeOfSignificantChange,
-				Status = significantChangeProject.Status.ToString()
+				Status = significantChangeProject.Status.ToString(),
+				LocalAuthorityName = significantChangeProject.LocalAuthorityName,
+				CompaniesHouseNumber = significantChangeProject.CompaniesHouseNumber
 			});
 		}
 

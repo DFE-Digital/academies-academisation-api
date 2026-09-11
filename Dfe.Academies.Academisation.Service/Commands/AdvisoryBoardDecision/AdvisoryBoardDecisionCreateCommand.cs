@@ -15,6 +15,7 @@ public class AdvisoryBoardDecisionCreateCommand : IRequest<CreateResult>
 	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
 	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
 	public List<AdvisoryBoardDAORevokedReasonDetails>? DAORevokedReasons { get; init; }
+	public List<AdvisoryBoardDAONotIssuedReasonDetails>? DAONotIssuedReasons { get; init; }
 	public DateTime AdvisoryBoardDecisionDate { get; set; }
 	public DateTime? AcademyOrderDate { get; set; }
 	public DecisionMadeBy DecisionMadeBy { get; set; }

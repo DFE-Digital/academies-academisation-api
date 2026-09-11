@@ -44,7 +44,7 @@ public class ConversionAdvisoryBoardDecisionUpdateTests
 
 		await _context.ConversionAdvisoryBoardDecisions.LoadAsync();
 
-		existingDecision.Update(details, existingDecision.DeferredReasons, existingDecision.DeclinedReasons, existingDecision.WithdrawnReasons, existingDecision.DaoRevokedReasons);
+		existingDecision.Update(details, existingDecision.DeferredReasons, existingDecision.DeclinedReasons, existingDecision.WithdrawnReasons, existingDecision.DaoRevokedReasons, existingDecision.DaoNotIssuedReasons);
 
 		//Act
 		_repo.Update(existingDecision);

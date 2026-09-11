@@ -147,7 +147,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 
 			_mockTransferProjectRepository.Setup(repo => repo.GetFormAMatProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()))
 				.ReturnsAsync(transferProjects);
-			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetTransferProjectDecsion(It.IsAny<int>()))
+			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetTransferProjectDecision(It.IsAny<int>()))
 				.ReturnsAsync(advisoryDecision); 
 			_mockAcademiesQueryService.Setup(x => x.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>())).ReturnsAsync(establishments);
 			_mockPollyPolicyFactory.Setup(pol => pol.GetCompleteHttpClientRetryPolicy(It.IsAny<ILogger>()))
@@ -216,7 +216,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 
 			_mockTransferProjectRepository.Setup(repo => repo.GetFormAMatProjectsToSendToCompleteAsync(It.IsAny<CancellationToken>()))
 				.ReturnsAsync(transferProjects);
-			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetTransferProjectDecsion(It.IsAny<int>()))
+			_mockAdvisoryBoardDecisionRepository.Setup(repo => repo.GetTransferProjectDecision(It.IsAny<int>()))
 				.ReturnsAsync(advisoryDecision); 
 			_mockAcademiesQueryService.Setup(x => x.GetBulkEstablishmentsByUkprn(It.IsAny<IEnumerable<string>>())).ReturnsAsync(establishments);
 			_mockPollyPolicyFactory.Setup(pol => pol.GetCompleteHttpClientRetryPolicy(It.IsAny<ILogger>()))

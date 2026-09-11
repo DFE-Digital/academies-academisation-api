@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using System;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -176,6 +177,32 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task GetFilterParameters_ReturnsOk_WithFilterParameters()
+        {
+            var expectedResponse = new SignificantChangeFilterParameters
+            {
+                Statuses = [new FilterValueDisplay("PreDecision", "Pre decision")],
+                Tiers =
+                [
+                    new FilterValueDisplay("1", "Tier 1"),
+                    new FilterValueDisplay("2", "Tier 2"),
+                    new FilterValueDisplay("3", "Tier 3")
+                ],
+                AssignedUsers = [new FilterValueDisplay("Assigned User", "Assigned User")],
+                Routes = [new FilterValueDisplay("Change of age range", "Change of age range")]
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<GetSignificantChangeFilterParametersQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            var result = await _controller.GetFilterParameters(CancellationToken.None);
+
+            result.Result.Should().BeOfType<OkObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
         public async Task SetAssignedUser_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;
@@ -302,6 +329,195 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: true,
+                EqualitiesImpactIdentified: EqualitiesImpact.ImpactsIdentified,
+                EqualitiesImpactIdentifiedMitigation: "Mitigation plan in place");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeEqualitiesImpactAssessmentCommand>(c =>
+                    c.Id == routeId
+                    && c.EqualitiesImpactAssessmentCompleted == request.EqualitiesImpactAssessmentCompleted
+                    && c.EqualitiesImpactIdentified == request.EqualitiesImpactIdentified
+                    && c.EqualitiesImpactIdentifiedMitigation == request.EqualitiesImpactIdentifiedMitigation),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsOk_WhenRequestValuesAreNull()
+        {
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: null,
+                EqualitiesImpactIdentified: null,
+                EqualitiesImpactIdentifiedMitigation: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeEqualitiesImpactAssessmentCommand>(c =>
+                    c.Id == 100
+                    && c.EqualitiesImpactAssessmentCompleted == null
+                    && c.EqualitiesImpactIdentified == null
+                    && c.EqualitiesImpactIdentifiedMitigation == null),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: true,
+                EqualitiesImpactIdentified: EqualitiesImpact.None,
+                EqualitiesImpactIdentifiedMitigation: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetEqualitiesImpactAssessment_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
+                EqualitiesImpactAssessmentCompleted: null,
+                EqualitiesImpactIdentified: null,
+                EqualitiesImpactIdentifiedMitigation: null);
+
+            var validationErrors = new[]
+            {
+                new ValidationError("EqualitiesImpactAssessmentCompleted", "Equalities impact assessment completed is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeEqualitiesImpactAssessment(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
+        [Fact]
+        public async Task SetReligiousBodyConsultation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
+                trustConsultedReligiousBody: false,
+                trustConsultedReligiousBodyNotConsultedReason: "Trust has not consulted religious body yet");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeReligiousBodyConsultation(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeReligiousBodyConsultationCommand>(c =>
+                    c.Id == routeId
+                    && c.TrustConsultedReligiousBody == request.TrustConsultedReligiousBody
+                    && c.TrustConsultedReligiousBodyNotConsultedReason == request.TrustConsultedReligiousBodyNotConsultedReason),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetReligiousBodyConsultation_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
+                trustConsultedReligiousBody: true,
+                trustConsultedReligiousBodyNotConsultedReason: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeReligiousBodyConsultation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetReligiousBodyConsultation_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
+                trustConsultedReligiousBody: null,
+                trustConsultedReligiousBodyNotConsultedReason: null);
+
+            var validationErrors = new[]
+            {
+                new ValidationError("TrustConsultedReligiousBody", "Trust consulted religious body is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeReligiousBodyConsultation(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
+	    [Fact]
+		public async Task SetProjectDates_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+		{
+			var routeId = 100;
+			var request = new SetSignificantChangeProjectDatesPublicCommand(
+                ProposedDecisionDate: new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc),
+                ProposedChangeDate: new DateTime(2027, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeProjectDatesCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetSignificantChangeProjectDates(routeId, request);
+
+			result.Should().BeOfType<OkResult>();
+			_mockMediator.Verify(m => m.Send(
+				It.Is<SetSignificantChangeProjectDatesCommand>(c =>
+					c.Id == routeId
+					&& c.ProposedDecisionDate == request.ProposedDecisionDate
+					&& c.ProposedChangeDate == request.ProposedChangeDate),
+				It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[Fact]
+		public async Task SetProjectDates_ReturnsNotFound_WhenProjectDoesNotExist()
+		{
+			var request = new SetSignificantChangeProjectDatesPublicCommand(
+                ProposedDecisionDate: new DateTime(2026, 9, 1, 0, 0, 0, DateTimeKind.Utc),
+                ProposedChangeDate: new DateTime(2027, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeProjectDatesCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetSignificantChangeProjectDates(100, request);
+
+			result.Should().BeOfType<NotFoundResult>();
+		}
+      
+           [Fact]
         public async Task SetAdmissionVariationConsultation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;

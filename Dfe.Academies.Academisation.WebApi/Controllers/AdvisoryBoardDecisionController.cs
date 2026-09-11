@@ -10,24 +10,19 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers;
 [Route("/conversion-project/advisory-board-decision")]
 [ApiController]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-public class AdvisoryBoardDecisionController : ControllerBase
+public class AdvisoryBoardDecisionController(
+	IMediator mediator,
+	IAdvisoryBoardDecisionQueryService advisoryBoardDecisionQueryService)
+	: ControllerBase
 {
 	private const string GetRouteName = "GetProject";
-	private readonly IMediator _mediator;
-	private readonly IAdvisoryBoardDecisionQueryService _advisoryBoardDecisionQueryService;
-
-	public AdvisoryBoardDecisionController(IMediator mediator, IAdvisoryBoardDecisionQueryService advisoryBoardDecisionQueryService)
-	{
-		_mediator = mediator;
-		_advisoryBoardDecisionQueryService = advisoryBoardDecisionQueryService;
-	}
 
 	[ProducesResponseType(StatusCodes.Status201Created)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[HttpPost]
 	public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> Post([FromBody] AdvisoryBoardDecisionCreateCommand request, CancellationToken cancellationToken)
 	{
-		var result = await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
+		var result = await mediator.Send(request, cancellationToken).ConfigureAwait(false);
 
 		return result switch
 		{
@@ -46,7 +41,7 @@ public class AdvisoryBoardDecisionController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByProjectId(int projectId)
 	{
-		var result = await _advisoryBoardDecisionQueryService.GetByProjectId(projectId);
+		var result = await advisoryBoardDecisionQueryService.GetByProjectId(projectId);
 
 		return result is null
 			? NotFound()
@@ -58,7 +53,7 @@ public class AdvisoryBoardDecisionController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByTransferProjectId(int projectId)
 	{
-		var result = await _advisoryBoardDecisionQueryService.GetByProjectId(projectId, true);
+		var result = await advisoryBoardDecisionQueryService.GetByProjectId(projectId, true);
 
 		return result is null
 			? NotFound()
@@ -70,7 +65,7 @@ public class AdvisoryBoardDecisionController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public async Task<ActionResult> Put([FromBody] AdvisoryBoardDecisionUpdateCommand request, CancellationToken cancellationToken)
 	{
-		var result = await _mediator.Send(request, cancellationToken);
+		var result = await mediator.Send(request, cancellationToken);
 
 		return result switch
 		{

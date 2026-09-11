@@ -9,7 +9,9 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		Task<IConversionAdvisoryBoardDecision?> GetAdvisoryBoardDecisionById(int decisionId);
 		public Task<IEnumerable<IConversionAdvisoryBoardDecision?>> GetAllAdvisoryBoardDecisions();
 		public Task<IEnumerable<IConversionAdvisoryBoardDecision?>> GetAllAdvisoryBoardDecisionsForTransfers();
-		Task<ConversionAdvisoryBoardDecision?> GetConversionProjectDecsion(int projectId);
-		Task<ConversionAdvisoryBoardDecision?> GetTransferProjectDecsion(int projectId);
+		Task<ConversionAdvisoryBoardDecision?> GetConversionProjectDecision(int projectId);
+		Task<ConversionAdvisoryBoardDecision?> GetTransferProjectDecision(int projectId);
+
+		Task<ConversionAdvisoryBoardDecision?> GetSignificantChangeDecision(int projectId);
 	}
 }

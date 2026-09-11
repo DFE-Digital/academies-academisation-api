@@ -63,7 +63,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	{
 		//Arrange
 		_mockDecision
-			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new UnhandledCommandResult());
 
 		_mockRepo
@@ -80,7 +80,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	public async Task DomainReturnsValidatorError_DoesNotCallExecuteOnDataCommand()
 	{
 		_mockDecision
-			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CommandValidationErrorResult(new List<ValidationError>()));
 
 		_mockRepo
@@ -100,7 +100,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	public async Task DomainReturnsSuccess___CallsExecuteOnDataCommand()
 	{
 		_mockDecision
-			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+			.Setup(c => c.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 
 		_mockDecision.Setup(d => d.AdvisoryBoardDecisionDetails).Returns(_fixture.Build<AdvisoryBoardDecisionDetails>().With(x => x.TransferProjectId, 1).Create());
@@ -123,7 +123,7 @@ public class AdvisoryBoardDecisionUpdateCommandExecuteTests
 	{
 		//Arrange
 		_mockDecision
-			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>()))
+			.Setup(d => d.Update(It.IsAny<AdvisoryBoardDecisionDetails>(), It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(), It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(), It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(), It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 		_mockDecision.Setup(d => d.AdvisoryBoardDecisionDetails).Returns(_fixture.Build<AdvisoryBoardDecisionDetails>().With(x => x.TransferProjectId, 1).Create());
 		_mockRepo

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
@@ -10,7 +9,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Dfe.Academies.Academisation.IntegrationTest;
@@ -47,8 +48,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		builder.UseEnvironment("production");
 		builder.ConfigureTestServices(services =>
 		{
-			var context = services.Single(d => d.ServiceType == typeof(DbContextOptions<AcademisationContext>));
-			services.Remove(context);
+			// Remove the options AND the underlying configure-action descriptor, otherwise the
+			// original UseSqlServer configuration still gets applied alongside UseSqlite below.
+			services.RemoveAll<DbContextOptions<AcademisationContext>>();
+			services.RemoveAll<IDbContextOptionsConfiguration<AcademisationContext>>();
 			services.AddDbContext<AcademisationContext>(options => options.UseSqlite(_connection));
 
 			var optionsConfig = Options.Create<AuthenticationConfig>(new() { ApiKeys = new List<string> { _authKey } });
@@ -68,7 +71,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		_dbContext.AddRange(new Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision(
 			1,
 			new AdvisoryBoardDecisionDetails(1000, null, null, AdvisoryBoardDecision.Approved, true, "TestData", System.DateTime.UtcNow.AddMonths(-1), System.DateTime.UtcNow.AddMonths(-1), DecisionMadeBy.DirectorGeneral, "John Smith"),
-			null!, null!, null!, null, new(2022, 02, 02),
+			null!, null!, null!, null, null, new(2022, 02, 02),
 			new(2022, 02, 02)
 		));
 

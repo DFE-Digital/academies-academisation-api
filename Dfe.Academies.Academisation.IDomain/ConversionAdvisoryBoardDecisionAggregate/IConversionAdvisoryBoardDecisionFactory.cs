@@ -9,6 +9,7 @@ public interface IConversionAdvisoryBoardDecisionFactory
 		IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
-		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons,
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails> daoNotIssuedReasons
 		);
 }

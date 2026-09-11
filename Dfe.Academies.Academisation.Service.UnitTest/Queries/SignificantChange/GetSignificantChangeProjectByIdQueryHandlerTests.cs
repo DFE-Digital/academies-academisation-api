@@ -28,18 +28,24 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		[Fact]
 		public async Task Handle_ProjectExists_ReturnsMappedResponse()
 		{
+			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
+			var proposedChangeDate = DateTime.UtcNow.AddDays(20);
+
 			var query = new GetSignificantChangeProjectByIdQuery(10);
 			var cancellationToken = CancellationToken.None;
 			var assignedUserId = Guid.NewGuid();
 
 			var project = new SignificantChangeProject(
-				SignificantChangeStatus.InProgress,
-				urn: 123456,
-				tier: 2,
-				trustName: "Trust A",
-				trustUkprn: "10000001",
-				typeOfSignificantChange: "Change of age range",
-				schoolName: "School A")
+				SignificantChangeStatus.PreDecision,
+				new SignificantChangeProjectOptions(
+					urn: 123456,
+					tier: 2,
+					trustName: "Trust A",
+					trustUkprn: "10000001",
+					typeOfSignificantChange: "Change of age range",
+					schoolName: "School A"
+				)
+			)
 			{
 				Id = query.Id
 			};
@@ -47,6 +53,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 			project.SetAdmissionVariationConsultation(false, "no information provided");
+			project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Mitigation");
+			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
+			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -63,12 +72,23 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.TrustUkprn.Should().Be("10000001");
 			result.AssignedUser.Should().BeEquivalentTo(new User(assignedUserId, "Assigned User", "assigned.user@test.local"));
 			result.TypeOfSignificantChange.Should().Be("Change of age range");
-			result.Status.Should().Be(nameof(SignificantChangeStatus.InProgress));
+			result.Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
 			result.StakeholderConsultation.TrustConsultedStakeholders.Should().BeFalse();
 			result.StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 			result.StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.AdmissionVariationConsultation.ConsultationIncludeAdmissionVariation.Should().BeFalse();
 			result.AdmissionVariationConsultation.ConsultationNoAdmissionVariationReason.Should().Be("no information provided");
+
+			result.EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
+			result.EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.ImpactsIdentified));
+			result.EqualitiesImpactAssessment.EqualitiesImpactIdentifiedMitigation.Should().Be("Mitigation");
+			result.EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().BeFalse();
+			result.ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
+			result.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
+			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
+			result.ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]

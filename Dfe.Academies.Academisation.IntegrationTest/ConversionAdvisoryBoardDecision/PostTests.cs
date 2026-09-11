@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Linq;
+using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IntegrationTest.Extensions;
 using Dfe.Academies.Academisation.IService.RequestModels;
@@ -91,5 +93,48 @@ public class PostTests
 		var result = await client.PostAsync("/conversion-project/advisory-board-decision/1000", null);
 
 		Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
+	}
+
+	[Fact]
+	public async Task Post_WithValidDaoNotIssueReason___ReturnsCreatedAndPersistsReason()
+	{
+		const int conversionProjectId = 9002;
+		var client = _factory.CreateClient();
+		var request = new AdvisoryBoardDecisionCreateCommand
+		{
+			ConversionProjectId = conversionProjectId,
+			Decision = AdvisoryBoardDecision.DAONotIssued,
+			DeclinedReasons = null,
+			DAONotIssuedReasons =
+			[
+				new(0, AdvisoryBoardDAONotIssuedReason.SchoolWouldNotBeViableAsAnAcademy,
+					"Projected outcomes show sustained unviability"),
+				new(0, AdvisoryBoardDAONotIssuedReason.Other,
+					"Some other reason")
+			],
+			DeferredReasons = null,
+			WithdrawnReasons = null,
+			AdvisoryBoardDecisionDate = DateTime.UtcNow.AddDays(-7),
+			DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
+			DecisionMakerName = "Jane Doe"
+		};
+
+		var result = await client.PostAsJsonDeserialized<ConversionAdvisoryBoardDecisionServiceModel>(
+			"/conversion-project/advisory-board-decision", request);
+
+		Assert.Multiple(() =>
+		{
+			Assert.Equal(HttpStatusCode.Created, result.StatusCode);
+			Assert.NotNull(result.Result);
+			Assert.Equal(AdvisoryBoardDecision.DAONotIssued, result.Result.Decision);
+			Assert.NotNull(result.Result!.DAONotIssuedReasons);
+			Assert.Equal(2, result.Result.DAONotIssuedReasons!.Count);
+
+			Assert.Equal(AdvisoryBoardDAONotIssuedReason.SchoolWouldNotBeViableAsAnAcademy, result.Result.DAONotIssuedReasons[0].Reason);
+			Assert.Equal("Projected outcomes show sustained unviability", result.Result.DAONotIssuedReasons[0].Details);
+
+			Assert.Equal(AdvisoryBoardDAONotIssuedReason.Other, result.Result.DAONotIssuedReasons[1].Reason);
+			Assert.Equal("Some other reason", result.Result.DAONotIssuedReasons[1].Details);
+		});
 	}
 }

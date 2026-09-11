@@ -12,7 +12,8 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 		IEnumerable<AdvisoryBoardDeferredReasonDetails>? deferredReasons,
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails>? declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails>? withdrawnReasons,
-		IEnumerable<AdvisoryBoardDAORevokedReasonDetails>? daoRevokedReasons
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails>? daoRevokedReasons,
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>? daoNotIssuedReasons
 		)
 	{
 		AdvisoryBoardDecisionDetails = details;
@@ -20,6 +21,7 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 		_declinedReasons = declinedReasons?.Any() ?? false ? declinedReasons.ToList() : _declinedReasons;
 		_withdrawnReasons = withdrawnReasons?.Any() ?? false ? withdrawnReasons.ToList() : _withdrawnReasons;
 		_daoRevokedReasons = daoRevokedReasons?.Any() ?? false ? daoRevokedReasons.ToList() : _daoRevokedReasons;
+		_daoNotIssuedReasons = daoNotIssuedReasons?.Any() ?? false ? daoNotIssuedReasons.ToList() : _daoNotIssuedReasons;
 	}
 
 	public ConversionAdvisoryBoardDecision(
@@ -29,8 +31,9 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
 		IEnumerable<AdvisoryBoardDAORevokedReasonDetails>? daoRevokedReasons,
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>? daoNotIssuedReasons,
 		DateTime createdOn,
-		DateTime lastModifiedOn) : this(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons)
+		DateTime lastModifiedOn) : this(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons, daoNotIssuedReasons)
 	{
 		Id = id;
 		CreatedOn = createdOn;
@@ -55,16 +58,20 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 	public IEnumerable<AdvisoryBoardDAORevokedReasonDetails> DaoRevokedReasons => _daoRevokedReasons.AsReadOnly();
 	IReadOnlyCollection<AdvisoryBoardDAORevokedReasonDetails> IConversionAdvisoryBoardDecision.DAORevokedReasons => _daoRevokedReasons.AsReadOnly();
 	private readonly List<AdvisoryBoardDAORevokedReasonDetails> _daoRevokedReasons = new();
+	public IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails> DaoNotIssuedReasons => _daoNotIssuedReasons.AsReadOnly();
+	IReadOnlyCollection<AdvisoryBoardDAONotIssuedReasonDetails> IConversionAdvisoryBoardDecision.DAONotIssuedReasons => _daoNotIssuedReasons.AsReadOnly();
+	private readonly List<AdvisoryBoardDAONotIssuedReasonDetails> _daoNotIssuedReasons = new();
 
 
 	internal static CreateResult Create(AdvisoryBoardDecisionDetails details,
 				IEnumerable<AdvisoryBoardDeferredReasonDetails> deferredReasons,
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails> declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails> withdrawnReasons,
-		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails> daoRevokedReasons,
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails> daoNotIssuedReasons
 		)
 	{
-		var decision = new ConversionAdvisoryBoardDecision(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
+		var decision = new ConversionAdvisoryBoardDecision(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons, daoNotIssuedReasons);
 
 		var validationResult = Validator.Validate(decision);
 
@@ -79,12 +86,13 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 		IEnumerable<AdvisoryBoardDeferredReasonDetails>? deferredReasons,
 		IEnumerable<AdvisoryBoardDeclinedReasonDetails>? declinedReasons,
 		IEnumerable<AdvisoryBoardWithdrawnReasonDetails>? withdrawnReasons,
-		IEnumerable<AdvisoryBoardDAORevokedReasonDetails>? daoRevokedReasons
+		IEnumerable<AdvisoryBoardDAORevokedReasonDetails>? daoRevokedReasons,
+		IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>? daoNotIssuedReasons
 		)
 	{
 		// create a new decision to validate intended state
 		// if validation fails do not change internal state and raise validation error result
-		var decision = new ConversionAdvisoryBoardDecision(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons);
+		var decision = new ConversionAdvisoryBoardDecision(details, deferredReasons, declinedReasons, withdrawnReasons, daoRevokedReasons, daoNotIssuedReasons);
 
 		var validationResult = Validator.Validate(decision);
 
@@ -105,10 +113,12 @@ public class ConversionAdvisoryBoardDecision : Entity, IConversionAdvisoryBoardD
 		_withdrawnReasons.AddRange(withdrawnReasons?.Any() ?? false ? withdrawnReasons.ToList() : _withdrawnReasons);
 		_daoRevokedReasons.Clear();
 		_daoRevokedReasons.AddRange(daoRevokedReasons?.Any() ?? false ? daoRevokedReasons.ToList() : _daoRevokedReasons);
+		_daoNotIssuedReasons.Clear();
+		_daoNotIssuedReasons.AddRange(daoNotIssuedReasons?.Any() ?? false ? daoNotIssuedReasons.ToList() : _daoNotIssuedReasons);
 
 		return new CommandSuccessResult();
 	}
-
+	
 	public void SetId(int id)
 	{
 		Id = Id == default

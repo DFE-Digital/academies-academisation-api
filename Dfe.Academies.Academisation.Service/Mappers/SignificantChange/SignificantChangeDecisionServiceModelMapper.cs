@@ -2,7 +2,7 @@
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
-namespace Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
+namespace Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 
 internal static class SignificantChangeDecisionServiceModelMapper
 {
