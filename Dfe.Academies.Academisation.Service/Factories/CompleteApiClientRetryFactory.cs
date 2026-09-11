@@ -7,7 +7,7 @@ using Polly;
 
 namespace Dfe.Academies.Academisation.Service.Factories;
 
-public class CompleteApiClientRetryFactory(IPollyPolicyFactory pollyPolicyFactory, IProjectsClient projectsClient): ICompleteApiClientRetryFactory
+public class CompleteApiClientRetryFactory(IPollyPolicyFactory pollyPolicyFactory, IProjectsClient projectsClient, ISignificantChangeProjectsClient significantChangeProjectsClient): ICompleteApiClientRetryFactory
 {
 	public IAsyncPolicy<HttpResponseMessage> GetCompleteHttpClientRetryPolicy(ILogger logger) 
 		=> pollyPolicyFactory.GetCompleteHttpClientRetryPolicy(logger);
@@ -47,6 +47,17 @@ public class CompleteApiClientRetryFactory(IPollyPolicyFactory pollyPolicyFactor
 					id => new CreateCompleteTransferProjectSuccessResponse(id!.Value.GetValueOrDefault()),
 					retryPolicy,
 					cancellationToken);
+	}
+
+	public async Task<HttpResponseMessage> CreateSignificantChangeProjectAsync(CreateSignificantChangeProjectCommand command, IAsyncPolicy<HttpResponseMessage> retryPolicy,
+		CancellationToken cancellationToken)
+	{
+		return await ExecuteCompleteClientCallAsync(
+			command,
+			significantChangeProjectsClient.CreateSignificantChangeProjectAsync!,
+			id => new CreateCompleteSignificantChangeSuccessResponse(id!.Value.GetValueOrDefault()),
+			retryPolicy,
+			cancellationToken);
 	}
 
 	private static async Task<HttpResponseMessage> ExecuteCompleteClientCallAsync<TRequest>(
