@@ -28,7 +28,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 
             var significantChangeProjects = await significantChangeProjectRepository.GetProjectsToSendToCompleteAsync(cancellationToken).ConfigureAwait(false);
 
-            if (!significantChangeProjects.Any())
+            if (significantChangeProjects.Count == 0)
             {
                 logger.LogInformation("No significant change projects found.");
                 return new NotFoundCommandResult();
@@ -50,13 +50,13 @@ namespace Dfe.Academies.Academisation.Service.Commands.CompleteProject
 					var successResponse = await response.Content.ReadFromJsonAsync<CreateCompleteSignificantChangeSuccessResponse>(cancellationToken);
 					completeProjectId = successResponse?.significantchange_project_id;
 
-					logger.LogInformation("Success sending conversion project to complete with project urn: {Project} with Status code 201 ", completeObject.AcademyUrn);
+					logger.LogInformation("Success sending significant change project to complete with project urn: {AcademyUrn} with Status code 201 ", completeObject.AcademyUrn);
 				}
 				else
 				{
 					var errorResponse = await response.Content.ReadFromJsonAsync<CreateCompleteProjectErrorResponse>(cancellationToken);
 					responseMessage = errorResponse?.Response ?? "No error message returned";
-					logger.LogError("Error sending conversion project to complete with project urn: {Project} due to Status code {Code} and Complete Validation Errors: {ResponseMessage}", completeObject.AcademyUrn, response.StatusCode, responseMessage);
+					logger.LogError("Error sending significant change project to complete with project urn: {AcademyUrn} due to Status code {StatusCode} and Complete Validation Errors: {ResponseMessage}", completeObject.AcademyUrn, response.StatusCode, responseMessage);
 				}
 
 				significantChangeProject.SetProjectSentToComplete(completeProjectId);
