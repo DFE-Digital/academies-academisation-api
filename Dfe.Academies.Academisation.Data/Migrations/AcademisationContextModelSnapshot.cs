@@ -886,11 +886,19 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("AssignedUserId");
 
+                    b.Property<string>("CompaniesHouseNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CompaniesHouseNumber");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LocalAuthorityName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LocalAuthorityName");
 
                     b.Property<DateTime?>("ReadOnlyDate")
                         .HasColumnType("datetime2");
@@ -2460,6 +2468,32 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("ConsultationLastedMinimumThreeWeeks")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationLastedMinimumThreeWeeks");
+                            b1.Property<bool?>("EqualitiesImpactAssessmentCompleted")
+                                .HasColumnType("bit")
+                                .HasColumnName("EqualitiesImpactAssessmentCompleted");
+
+                            b1.Property<string>("EqualitiesImpactIdentified")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactIdentified");
+
+                            b1.Property<string>("EqualitiesImpactIdentifiedMitigation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactIdentifiedMitigation");
+                            b1.Property<DateTime?>("ProposedChangeDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("ProposedChangeDate");
+
+                            b1.Property<DateTime?>("ProposedDecisionDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("ProposedDecisionDate");
+
+                            b1.Property<bool?>("TrustConsultedReligiousBody")
+                                .HasColumnType("bit")
+                                .HasColumnName("TrustConsultedReligiousBody");
+
+                            b1.Property<string>("TrustConsultedReligiousBodyNotConsultedReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
 
                             b1.Property<bool?>("TrustConsultedStakeholders")
                                 .HasColumnType("bit")

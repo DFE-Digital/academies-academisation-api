@@ -1,5 +1,3 @@
-using Dfe.Academies.Academisation.Domain.SignificantChange;
-
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
 public class SignificantChangeProjectDto
@@ -14,6 +12,8 @@ public class SignificantChangeProjectDto
 	public string? AssignedUserFullName { get; set; }
 	public string? AssignedUserEmailAddress { get; set; }
 	public string TypeOfSignificantChange { get; set; } = string.Empty;
+	public string? LocalAuthorityName { get; set; }
+	public string? CompaniesHouseNumber { get; set; }
 	public string Status { get; set; } = string.Empty;
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
@@ -21,4 +21,15 @@ public class SignificantChangeProjectDto
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public string ConsultationDurationTaskStatus { get; set; } = string.Empty;
+}
+	public string EqualitiesTaskStatus { get; set; } = string.Empty;
+	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public string? EqualitiesImpactIdentified { get; set; }
+	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+	public bool? TrustConsultedReligiousBody { get; set; }
+	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
+	public string ReligiousBodyConsultationTaskStatus { get; set; } = string.Empty;
+	public DateTime? ProposedDecisionDate { get; set; }
+	public DateTime? ProposedChangeDate { get; set; }
+	public string ConfirmProjectDatesTaskStatus { get; set; } = string.Empty;
 }

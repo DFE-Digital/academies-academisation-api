@@ -1,7 +1,8 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 
@@ -28,12 +29,52 @@ public class SignificantChangeProjectMappingProfile : Profile
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.ConsultationDurationTaskStatus));
+            .ForMember(destination=> destination.EqualitiesImpactAssessmentCompleted,
+                options=>options.MapFrom(source=> source.Details.EqualitiesImpactAssessmentCompleted))
+            .ForMember(destination => destination.EqualitiesImpactIdentified,
+                options => options.MapFrom(source => source.Details.EqualitiesImpactIdentified.ToString()))
+            .ForMember(destination => destination.EqualitiesImpactIdentifiedMitigation,
+                options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
+            .ForMember(destination => destination.EqualitiesTaskStatus,
+                options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
+			.ForMember(destination => destination.TrustConsultedReligiousBody,
+				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBody))
+			.ForMember(destination => destination.TrustConsultedReligiousBodyNotConsultedReason,
+				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBodyNotConsultedReason))
+			.ForMember(destination => destination.ReligiousBodyConsultationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetReligiousBodyConsultationTaskStatus().ToString()))
+			.ForMember(destination => destination.ProposedChangeDate,
+				options => options.MapFrom(source => source.Details.ProposedChangeDate))
+			.ForMember(destination => destination.ProposedDecisionDate,
+				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
+			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
+				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()));
+
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.StakeholderConsultationTaskStatus));
 
+        CreateMap<SignificantChangeProjectDto, EqualitiesImpactAssessmentResponse>()
+            .ForMember(destination => destination.Status,
+                options => options.MapFrom(source => source.EqualitiesTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeReligiousBodyConsultationResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ReligiousBodyConsultationTaskStatus));
+
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
+            .ForMember(destination => destination.AssignedUser,
+                options => options.MapFrom(source => source.AssignedUserId == null
+                    ? null
+                    : new User(
+                        source.AssignedUserId.Value,
+                        source.AssignedUserFullName ?? string.Empty,
+                        source.AssignedUserEmailAddress ?? string.Empty)))
+            .ForMember(destination => destination.StakeholderConsultation,
+                options => options.MapFrom(source => source))
+            .ForMember(destination => destination.EqualitiesImpactAssessment,
+                options => options.MapFrom(source => source))
 			.ForMember(destination => destination.AssignedUser,
 				options => options.MapFrom(source => source.AssignedUserId == null
 					? null
@@ -44,6 +85,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ConsultationDuration,
+			.ForMember(destination => destination.ReligiousBodyConsultation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
+
 	}
 }

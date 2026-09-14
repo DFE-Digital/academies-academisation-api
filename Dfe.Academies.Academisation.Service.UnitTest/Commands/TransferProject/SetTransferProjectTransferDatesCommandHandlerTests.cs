@@ -220,6 +220,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			{
 				Urn = 1,
 				HtbDate = htbDate,
+				TargetDateForTransfer = DateTime.Today.AddDays(60),
 				IsCompleted = true
 			};
 

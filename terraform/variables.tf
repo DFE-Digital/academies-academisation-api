@@ -158,6 +158,12 @@ variable "mssql_managed_identity_assign_role" {
   default     = false
 }
 
+variable "mssql_private_endpoint_subnet_cidr" {
+  description = "Specify a subnet prefix to use for the mssql_private_endpoint subnet"
+  type        = string
+  default     = ""
+}
+
 variable "enable_cdn_frontdoor" {
   description = "Enable Azure CDN FrontDoor. This will use the Container Apps endpoint as the origin."
   type        = bool

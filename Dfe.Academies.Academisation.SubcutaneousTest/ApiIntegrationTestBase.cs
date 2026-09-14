@@ -1,19 +1,17 @@
 ﻿using System.Net.Http.Headers;
 using System.Reflection;
-using System.Text.Encodings.Web;
 using AutoFixture;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
-using Dfe.Academies.Academisation.WebApi;
-using Dfe.Academies.Academisation.WebApi.Options;
-using GovUK.Dfe.CoreLibs.Contracts.Academies.V4.Establishments;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WireMock.Matchers;
@@ -26,53 +24,53 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 {
 	public abstract class ApiIntegrationTestBase : IDisposable
 	{
-		private static int _currentPort = 5080;
-		private static readonly object Sync = new();
 		private readonly Fixture _fixture;
+		private readonly SqliteConnection _sqliteConnection;
+		private readonly string _sqliteConnectionString;
+		private readonly WebApplicationFactory<Program> _webApplicationFactory;
 		protected readonly string _apiKey;
-		protected HttpClient _httpClient;
+		protected readonly HttpClient _httpClient;
 		protected AcademisationContext _dbContext;
 		protected readonly WireMockServer _mockApiServer;
+
 		public ApiIntegrationTestBase()
 		{
-			int port = AllocateNext();
 			_fixture = new();
 			_apiKey = Guid.NewGuid().ToString();
-			_mockApiServer = WireMockServer.Start(port);
-			_httpClient =Build();
-			_dbContext = GetDbContext();
-		}
+			_mockApiServer = WireMockServer.Start();
+			_sqliteConnectionString = $"Data Source={Guid.NewGuid()};Mode=Memory;Cache=Shared";
+			_sqliteConnection = new SqliteConnection(_sqliteConnectionString);
+			_sqliteConnection.Open();
 
-		private WebApplicationFactory<Program> WebAppFactory { get; set; } = new();
+			_webApplicationFactory = Build();
+
+			var dbScope = _webApplicationFactory.Services.CreateScope();
+			_dbContext = dbScope.ServiceProvider.GetRequiredService<AcademisationContext>();
+			_httpClient = BuildHttpClient();
+		}
 
 		protected Fixture Fixture => _fixture;
-
-		protected AcademisationContext GetDbContext()
-		{
-			var dbContext = ServiceProvider.GetRequiredService<AcademisationContext>();
-			dbContext.Database.EnsureDeleted();
-			dbContext.Database.EnsureCreated();
-			return dbContext;
-		}
 		protected static CancellationToken CancellationToken => CancellationToken.None;
 
 		protected IServiceProvider ServiceProvider
 		{
-			get
-			{
-				return WebAppFactory.Services;
-			}
+			get => _webApplicationFactory.Services;
 		}
-		void IDisposable.Dispose() 
-		{
-			_httpClient?.Dispose();
-			_mockApiServer?.Stop();
-			_mockApiServer?.Dispose();
-		} 
 
-		private HttpClient Build()
+		public void Dispose()
 		{
-			WebAppFactory = new WebApplicationFactory<Program>()
+			_httpClient.Dispose();
+			_dbContext.Dispose();
+			_webApplicationFactory.Dispose();
+			_mockApiServer.Stop();
+			_mockApiServer.Dispose();
+			_sqliteConnection.Dispose();
+			GC.SuppressFinalize(this);
+		}
+
+		private WebApplicationFactory<Program> Build()
+		{
+			return new WebApplicationFactory<Program>()
 		   .WithWebHostBuilder(builder =>
 		   {
 			   builder.UseEnvironment("local");
@@ -87,21 +85,16 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 
 			   builder.ConfigureTestServices(services =>
 			   {
-				   ConfigureInMemoryDatabase(services);
-				   ConfigureServices(builder);
+				   ConfigureInMemoryDatabase(services, _sqliteConnectionString);
 
 				   services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetAssembly(typeof(CreateProjectGroupCommandHandler))!));
 			   });
 		   });
-
-			WebAppFactory.Server.PreserveExecutionContext = true;
-
-			return BuildHttpClient();
 		}
 
 		private HttpClient BuildHttpClient() 
 		{
-			var httpClient = WebAppFactory.CreateClient(new WebApplicationFactoryClientOptions
+			var httpClient = _webApplicationFactory.CreateClient(new WebApplicationFactoryClientOptions
 			{
 				AllowAutoRedirect = false
 			});
@@ -111,70 +104,26 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			return httpClient;
 		}
 
-		private static void ConfigureServices(IWebHostBuilder builder)
+		private void ConfigureInMemoryDatabase(IServiceCollection services, string connectionString)
 		{
-			var establishmentDto = new EstablishmentDto
-			{
-				Ukprn = "OutgoingAcademyUkprn",
-				Name = "School Name",
-				EstablishmentType = new NameAndCodeDto { Name = "EstablishmentType" },
-				LocalAuthorityName = "Manchester",
-				Gor = new NameAndCodeDto { Name = "Gor" }
-			};
-
-			var query = ToQueryString((new List<string> { establishmentDto.Ukprn }).Select(ukprn =>
-			{
-				return new KeyValuePair<string, string>("Ukprn", ukprn);
-			})
-			.ToList());
-
-			builder.ConfigureServices((context, services) =>
-			{
-				// Bind the configuration section to the AuthenticationConfig class
-				var configuration = context.Configuration;
-				services.Configure<AuthenticationConfig>(configuration.GetSection("AuthenticationConfig"));
-
-			});
-		}
-
-		private static string ToQueryString(IList<KeyValuePair<string, string>> parameters, bool prefix = true,
-		   bool keepEmpty = true)
-		{
-			IList<string> parameterPairs = parameters
-			   .Where(x => keepEmpty || string.IsNullOrWhiteSpace(x.Value) is false)
-			   .Select(x => $"{Encode(x.Key)}={Encode(x.Value)}")
-			   .ToList();
-
-			var prefixContent = prefix ? "?" : string.Empty;
-
-			return parameterPairs.Count > 0
-			   ? $"{prefixContent}{string.Join("&", parameterPairs)}"
-			   : string.Empty;
-
-			string Encode(string x)
-			{
-				return string.IsNullOrWhiteSpace(x) ? string.Empty : UrlEncoder.Default.Encode(x);
-			}
-		}
-
-		private static void ConfigureInMemoryDatabase(IServiceCollection services)
-		{
-			// Replace database context with our own Integration database
-			var descriptor = services.SingleOrDefault(d =>
-				d.ServiceType == typeof(DbContextOptions<AcademisationContext>));
-			if (descriptor != null)
-			{
-				services.Remove(descriptor);
-			}
-
-			var connection = new SqliteConnection("DataSource=:memory:");
-			connection.Open();
+			services.RemoveAll<AcademisationContext>();
+			services.RemoveAll<DbContextOptions<AcademisationContext>>();
+			services.RemoveAll<DbContextOptions>();
+			services.RemoveAll<IDbContextOptionsConfiguration<AcademisationContext>>();
 
 			services.AddDbContext<AcademisationContext>(options =>
 			{
-				options.UseSqlite(connection);
+				options.UseSqlite(connectionString);
 			});
+
+			using var serviceProvider = services.BuildServiceProvider();
+			using var scope = serviceProvider.CreateScope();
+
+			_dbContext = scope.ServiceProvider.GetRequiredService<AcademisationContext>();
+			_dbContext.Database.EnsureCreated();
 		}
+
+
 		private void ConfigureAppConfiguration(IWebHostBuilder builder, string apiKey)
 		{
 			builder.ConfigureAppConfiguration((context, configBuilder) =>
@@ -283,16 +232,6 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		protected void Reset()
 		{
 			_mockApiServer.Reset();
-		}
-
-		private static int AllocateNext()
-		{
-			lock (Sync)
-			{
-				int next = _currentPort;
-				_currentPort++;
-				return next;
-			}
 		}
 	}
 }

@@ -186,7 +186,6 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 		public void SetTransferDates(DateTime? advisoryBoardDate, DateTime? previousAdvisoryBoardDate, DateTime? expectedDateForTransfer, bool? isCompleted, string changedBy = default, List<ReasonChange> reasonsChanged = default)
 		{
 			HtbDate = advisoryBoardDate;
-			SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(advisoryBoardDate);
 			PreviousAdvisoryBoardDate = previousAdvisoryBoardDate;
 			if (TargetDateForTransfer != expectedDateForTransfer)
 			{
@@ -197,6 +196,10 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 					AddDomainEvent(new OpeningDateChangedDomainEvent(Id, nameof(TransferProject), oldDate, TargetDateForTransfer, TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.Now, "GMT Standard Time"), changedBy, reasonsChanged));
 				}
 			}
+
+			SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(
+				advisoryBoardDate, HtbDate.HasValue && TargetDateForTransfer.HasValue);
+
 			TransferDatesSectionIsCompleted = isCompleted;
 		}
 

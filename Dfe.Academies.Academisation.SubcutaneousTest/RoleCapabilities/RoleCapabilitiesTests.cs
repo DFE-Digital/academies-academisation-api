@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
 using Dfe.Academies.Academisation.Domain.Core.RoleCapabilitiesAggregate;
 using Dfe.Academies.Academisation.SubcutaneousTest.Utils;
 using Dfe.Academies.Academisation.IService.ServiceModels.RoleCapabilities;
