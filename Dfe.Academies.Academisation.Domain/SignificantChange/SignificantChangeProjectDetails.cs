@@ -8,6 +8,8 @@ public class SignificantChangeProjectDetails
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
+	public StakeholderObjections? StakeholderObjections { get; set; }
+	public string? StakeholderObjectionsComment { get; set; }
 
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
