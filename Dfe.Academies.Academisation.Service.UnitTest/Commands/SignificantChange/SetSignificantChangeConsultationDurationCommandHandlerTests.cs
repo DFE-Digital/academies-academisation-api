@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
@@ -101,12 +101,13 @@ public class SetSignificantChangeConsultationDurationCommandHandlerTests
 	private static SignificantChangeProject BuildProject()
 	{
 		return SignificantChangeProject.Create(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			route: "Change of age range",
-			schoolName: "Test School",
+			new SignificantChangeProjectOptions(
+				urn: 123456,
+				tier: 1,
+				trustName: "Test Trust",
+				trustUkprn: "12345678",
+				typeOfSignificantChange: "Change of age range",
+				schoolName: "Test School"),
 			createdOn: DateTime.UtcNow);
 	}
 }

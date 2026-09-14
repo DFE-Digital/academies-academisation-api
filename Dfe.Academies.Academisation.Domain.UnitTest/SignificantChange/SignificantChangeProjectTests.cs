@@ -515,10 +515,18 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
     
-    		[Fact]
+		[Fact]
 		public void SetConsultationDuration_ShouldSetDetailsProperties()
 		{
-			var project = CreateProject();
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation ran for two weeks only");
 
@@ -531,7 +539,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)]
 		public void SetConsultationDuration_WhenAnswerIsNotNo_ClearsReason(ConsultationDurationAnswer answer)
 		{
-			var project = CreateProject();
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetConsultationDuration(answer, "This should be cleared");
 
@@ -542,7 +558,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetConsultationDuration_WhenNo_AndTierOne_MovesToTierTwo()
 		{
-			var project = CreateProject(tier: 1);
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
 
@@ -554,7 +578,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)]
 		public void SetConsultationDuration_WhenAnswerIsNotNo_DoesNotChangeTier(ConsultationDurationAnswer answer)
 		{
-			var project = CreateProject(tier: 1);
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetConsultationDuration(answer, null);
 
@@ -564,7 +596,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetConsultationDuration_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
-			var project = CreateProject(tier: 1);
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
 			project.SetConsultationDuration(ConsultationDurationAnswer.Yes, null);
@@ -575,7 +615,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetConsultationDurationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
-			var project = CreateProject();
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
@@ -583,7 +631,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetConsultationDurationTaskStatus_WhenNoWithoutReason_ReturnsInProgress()
 		{
-			var project = CreateProject();
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetConsultationDuration(ConsultationDurationAnswer.No, null);
 
@@ -598,7 +654,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			ConsultationDurationAnswer answer,
 			string? reason)
 		{
-			var project = CreateProject();
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
 
 			project.SetConsultationDuration(answer, reason);
 

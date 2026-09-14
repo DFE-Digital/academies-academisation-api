@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -90,12 +90,13 @@ public class SetConsultationDurationTests : IClassFixture<TestWebApplicationFact
 	private static SignificantChangeProject CreateProject()
 	{
 		return SignificantChangeProject.Create(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			route: "Change of age range",
-			schoolName: "Test School",
+			new SignificantChangeProjectOptions(
+				urn: 123456,
+				tier: 1,
+				trustName: "Test Trust",
+				trustUkprn: "12345678",
+				typeOfSignificantChange: "Change of age range",
+				schoolName: "Test School"),
 			createdOn: DateTime.UtcNow);
 	}
 }

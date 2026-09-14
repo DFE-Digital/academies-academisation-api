@@ -1,3 +1,5 @@
+﻿using Dfe.Academies.Academisation.Domain.SignificantChange;
+
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
 public class SignificantChangeProjectDto
@@ -21,7 +23,7 @@ public class SignificantChangeProjectDto
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public string ConsultationDurationTaskStatus { get; set; } = string.Empty;
-}
+
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
