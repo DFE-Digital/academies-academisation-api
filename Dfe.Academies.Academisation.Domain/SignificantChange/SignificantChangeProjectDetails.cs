@@ -8,9 +8,8 @@ public class SignificantChangeProjectDetails
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
-	public StakeholderObjections? StakeholderObjections { get; set; }
+	public SignificantChangeStakeholderObjections? StakeholderObjections { get; set; }
 	public string? StakeholderObjectionsComment { get; set; }
-
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
@@ -73,6 +72,22 @@ public class SignificantChangeProjectDetails
 		{
 			return SignificantChangeTaskStatus.Completed;
 		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetStakeholderObjectionsTaskStatus()
+	{
+		if (!StakeholderObjections.HasValue
+			&& string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesAllObjectionsAddressed)
+			return SignificantChangeTaskStatus.Completed;
+
+		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
+			&& !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
 	}

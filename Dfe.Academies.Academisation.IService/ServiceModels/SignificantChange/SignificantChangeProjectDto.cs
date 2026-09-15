@@ -28,4 +28,7 @@ public class SignificantChangeProjectDto
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
 	public string ConfirmProjectDatesTaskStatus { get; set; } = string.Empty;
+	public string? StakeholderObjections { get; set; }
+	public string? StakeholderObjectionsComment { get; set; }
+	public string StakeholderObjectionsTaskStatus { get; set; } = string.Empty;
 }
