@@ -84,6 +84,9 @@ public class SignificantChangeProjectDetails
 
 		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesAllObjectionsAddressed)
 			return SignificantChangeTaskStatus.Completed;
+		
+		if(StakeholderObjections == SignificantChangeStakeholderObjections.No)
+			return SignificantChangeTaskStatus.Completed;
 
 		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
 			&& !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
