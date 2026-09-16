@@ -19,24 +19,24 @@ public class SfsoCommissioningCalculatorTests
 	}
 
 	[Fact]
-	public void CalculateRequestedDate_ReturnsToday_WhenWithin15Days()
+	public void CalculateRequestedDate_ReturnsNull_WhenWithin15Days()
 	{
 		var proposed = DateTime.Today.AddDays(10);
 
 		var result = SfsoCommissioningCalculator.CalculateRequestedDate(proposed, true);
 
-		Assert.Equal(DateTime.Today, result);
+		Assert.Null(result);
 	}
 
 	[Fact]
-	public void CalculateRequestedDate_ReturnsToday_WhenProposedIsToday()
+	public void CalculateRequestedDate_ReturnsNull_WhenProposedIsToday()
 	{
-		Assert.Equal(DateTime.Today, SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today, true));
+		Assert.Null(SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today, true));
 	}
 
 	[Fact]
-	public void CalculateRequestedDate_ReturnsToday_WhenProposedIsInThePast()
+	public void CalculateRequestedDate_ReturnsNull_WhenProposedIsInThePast()
 	{
-		Assert.Equal(DateTime.Today, SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today.AddDays(-5), true));
+		Assert.Null(SfsoCommissioningCalculator.CalculateRequestedDate(DateTime.Today.AddDays(-5), true));
 	}
 }

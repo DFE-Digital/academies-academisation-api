@@ -18,6 +18,10 @@ public class SignificantChangeProjectDto
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
 	public string StakeholderConsultationTaskStatus { get; set; } = string.Empty;
+
+	public bool? ConsultationIncludeAdmissionVariation { get; set; }
+	public string? ConsultationNoAdmissionVariationReason { get; set; }
+	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
