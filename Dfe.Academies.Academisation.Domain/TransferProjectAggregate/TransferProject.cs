@@ -202,15 +202,15 @@ namespace Dfe.Academies.Academisation.Domain.TransferProjectAggregate
 			if (proposedDecisionDateChanged)
 			{
 				SfsoCommissioningRequestedDate = SfsoCommissioningCalculator.CalculateRequestedDate(
-					advisoryBoardDate, HasMandatoryFhaInformation(advisoryBoardDate, TargetDateForTransfer));
+					advisoryBoardDate, HasMandatoryFhaInformation(advisoryBoardDate, TargetDateForTransfer, TypeOfTransfer));
 			}
 
 			TransferDatesSectionIsCompleted = isCompleted;
 		}
 
-		private static bool HasMandatoryFhaInformation(DateTime? advisoryBoardDate, DateTime? proposedTransferDate)
+		private static bool HasMandatoryFhaInformation(DateTime? advisoryBoardDate, DateTime? proposedTransferDate, string? transferType)
 		{
-			if (!advisoryBoardDate.HasValue || !proposedTransferDate.HasValue)
+			if (!advisoryBoardDate.HasValue || !proposedTransferDate.HasValue || string.IsNullOrWhiteSpace(transferType))
 				return false;
 
 			DateTime minimumAllowedDate = DateTime.Today.AddDays(15);
