@@ -517,6 +517,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var proposed = DateTime.Today.AddDays(40);
 			var targetDateForTransfer = DateTime.Today.AddDays(60);
+			transferProject.SetFeatures("Test Initiation", new List<string> { "Test specific reason" }, "Test Type", true);
 
 			transferProject.SetTransferDates(proposed, null, targetDateForTransfer, true);
 
@@ -528,6 +529,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		{
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var targetDateForTransfer = DateTime.Today.AddDays(60);
+			transferProject.SetFeatures("Test Initiation", new List<string> { "Test specific reason" }, "Test Type", true);
 
 			transferProject.SetTransferDates(DateTime.Today.AddDays(10), null, targetDateForTransfer, true);
 
@@ -539,6 +541,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		{
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var htbDate = DateTime.Today.AddDays(40);
+			transferProject.SetFeatures("Test Initiation", new List<string> { "Test specific reason" }, "Test Type", true);
 
 			transferProject.SetTransferDates(htbDate, null, DateTime.Today.AddDays(14), true);
 
@@ -546,10 +549,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.TransferProjectAggregate
 		}
 
 		[Fact]
+		public void SetTransferDates_SetsSfsoCommissioningRequestedDateToNull_WhenTypeOfTransferIsMissing()
+		{
+			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
+			var htbDate = DateTime.Today.AddDays(40);
+
+			transferProject.SetTransferDates(htbDate, null, DateTime.Today.AddDays(14), true);
+
+			transferProject.SfsoCommissioningRequestedDate.Should().BeNull();
+		}
+
+		[Fact]
 		public void SetTransferDates_DerivesSfsoCommissioningRequestedDate_WhenTargetDateIsInThePast()
 		{
 			var transferProject = TransferProject.Create(_outgoingTrustUkprn, _outgoingTrusName, _academies, _isFormAMat, _createdOn);
 			var htbDate = DateTime.Today.AddDays(40);
+			transferProject.SetFeatures("Test Initiation", new List<string> { "Test specific reason" }, "Test Type", true);
 
 			transferProject.SetTransferDates(htbDate, null, DateTime.Today.AddDays(-1), true);
 
