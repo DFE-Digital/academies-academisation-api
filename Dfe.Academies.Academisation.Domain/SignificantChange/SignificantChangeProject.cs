@@ -112,6 +112,10 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		{
 			Details.StakeholderObjections = stakeholderObjections;
 			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
+
+			
+			if (stakeholderObjections is SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided)
+				MoveToTierTwoIfApplicable();
 		}
 	}
 }

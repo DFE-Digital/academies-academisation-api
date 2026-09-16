@@ -54,6 +54,7 @@ public class SetStakeholderObjectionsTests : IClassFixture<TestWebApplicationFac
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 			Assert.Equal(objection, updated.Details.StakeholderObjections);
 			Assert.Equal(comment, updated.Details.StakeholderObjectionsComment);
+            Assert.Equal((byte)2, updated.Tier);
 		});
 	}
 

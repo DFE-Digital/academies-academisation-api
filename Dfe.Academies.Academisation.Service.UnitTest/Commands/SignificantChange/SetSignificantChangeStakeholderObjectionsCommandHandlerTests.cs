@@ -73,6 +73,7 @@ public class SetSignificantChangeStakeholderObjectionsCommandHandlerTests
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.StakeholderObjections.Should().Be(command.StakeholderObjections);
 		project.Details.StakeholderObjectionsComment.Should().Be(command.StakeholderObjectionsComment);
+		project.Tier.Should().Be(2);
 		project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);

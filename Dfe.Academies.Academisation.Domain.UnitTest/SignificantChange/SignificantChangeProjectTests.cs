@@ -638,5 +638,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 
+		[Fact]
+		public void SetStakeholderObjections_WhenYesNoFurtherInformationProvidedd_AndTierOne_MovesToTierTwo()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project =
+				new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further info");
+
+			project.Tier.Should().Be(2);
+		}
+
 	}
 }
