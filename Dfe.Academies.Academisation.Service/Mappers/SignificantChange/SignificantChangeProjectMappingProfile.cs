@@ -18,6 +18,13 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.TrustConsultedStakeholdersNotConsultedReason))
 			.ForMember(destination => destination.StakeholderConsultationTaskStatus,
 				options => options.MapFrom(source => source.Details.GetStakeholderConsultationTaskStatus().ToString()))
+
+			.ForMember(destination => destination.ConsultationIncludeAdmissionVariation,
+				options => options.MapFrom(source => source.Details.ConsultationIncludeAdmissionVariation))
+			.ForMember(destination => destination.ConsultationNoAdmissionVariationReason,
+				options => options.MapFrom(source => source.Details.ConsultationNoAdmissionVariationReason))
+			.ForMember(destination => destination.AdmissionVariationConsultationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetAdmissionVariationConsultationTaskStatus().ToString()))
             .ForMember(destination=> destination.EqualitiesImpactAssessmentCompleted,
                 options=>options.MapFrom(source=> source.Details.EqualitiesImpactAssessmentCompleted))
             .ForMember(destination => destination.EqualitiesImpactIdentified,
@@ -49,6 +56,10 @@ public class SignificantChangeProjectMappingProfile : Profile
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.StakeholderConsultationTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionVariationConsultationResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.AdmissionVariationConsultationTaskStatus));
 
         CreateMap<SignificantChangeProjectDto, EqualitiesImpactAssessmentResponse>()
             .ForMember(destination => destination.Status,
@@ -87,6 +98,9 @@ public class SignificantChangeProjectMappingProfile : Profile
 						source.AssignedUserEmailAddress ?? string.Empty)))
 			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.AdmissionVariationConsultation,
+				options => options.MapFrom(source => source))
+		
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ProjectDates,
