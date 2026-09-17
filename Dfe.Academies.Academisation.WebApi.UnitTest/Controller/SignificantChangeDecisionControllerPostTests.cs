@@ -67,35 +67,38 @@ public class SignificantChangeDecisionControllerPostTests
 	}
 
 	[Fact]
-	public async Task CommandReturnsCreateValidationErrorResult_ReturnsBadRequestResult()
-	{
-		var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
+    public async Task CommandReturnsCreateValidationErrorResult_ReturnsBadRequestResult()
+    {
+        var request = _fixture.Create<SignificantChangeDecisionCommand>();
+        var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
 
-		_mockMediator
-			.Setup(c => c.Send(It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new CreateValidationErrorResult(expectedValidationErrors));
+        _mockMediator
+        .Setup(c => c.Send(It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()))
+        .ReturnsAsync(new CreateValidationErrorResult(expectedValidationErrors));
 
-		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
 
-		var result = await subject.Post(It.IsAny<SignificantChangeDecisionCommand>(), default);
+        var result = await subject.Post(request, default);
 
-		result.Result.Should().BeOfType<BadRequestObjectResult>();
-		var badRequestResult = (BadRequestObjectResult)result.Result!;
-		badRequestResult.Value.Should().BeAssignableTo<IEnumerable<ValidationError>>();
-		var validationErrors = (IEnumerable<ValidationError>)badRequestResult.Value!;
-		validationErrors.Should().Equal(expectedValidationErrors);
-	}
+        result.Result.Should().BeOfType<BadRequestObjectResult>();
+        var badRequestResult = (BadRequestObjectResult)result.Result!;
+        badRequestResult.Value.Should().BeAssignableTo<IEnumerable<ValidationError>>();
+        var validationErrors = (IEnumerable<ValidationError>)badRequestResult.Value!;
+        validationErrors.Should().Equal(expectedValidationErrors);
+    }
 
 	[Fact]
-	public async Task CommandReturnsUnhandledCreateResult_ThrowsException()
-	{
-		_mockMediator
-			.Setup(c => c.Send(It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new UnhandledCreateResult());
+    public async Task CommandReturnsUnhandledCreateResult_ThrowsException()
+    {
+        var request = _fixture.Create<SignificantChangeDecisionCommand>();
 
-		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+        _mockMediator
+        .Setup(c => c.Send(It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()))
+        .ReturnsAsync(new UnhandledCreateResult());
 
-		Func<Task> act = async () => await subject.Post(It.IsAny<SignificantChangeDecisionCommand>(), default);
-		await act.Should().ThrowAsync<NotImplementedException>();
-	}
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+
+        Func<Task> act = async () => await subject.Post(request, default);
+        await act.Should().ThrowAsync<NotImplementedException>();
+    }
 }
