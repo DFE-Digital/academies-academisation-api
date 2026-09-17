@@ -514,7 +514,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
-<<<<<<< HEAD
 
 	[Fact]
 		public void SetStakeholderObjections_ShouldSetDetailsProperties()
@@ -659,7 +658,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Tier.Should().Be(2);
 		}
 
-=======
     
 		[Fact]
 		public void SetAdmissionVariationConsultation_ShouldSetDetailsProperties()
@@ -751,6 +749,5 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Tier.Should().Be(2);
 		}
->>>>>>> d24b2a96851cbdb1f472404312191a4eb937b07f
 	}
 }
