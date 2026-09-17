@@ -11,7 +11,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		string typeOfSignificantChange, 
 		string schoolName, 
 		string? localAuthorityName = null, 
-		string? companiesHouseNumber = null
+		string? companiesHouseNumber = null,
+		string? regionName = null
 	);
 
 	
@@ -33,6 +34,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			TypeOfSignificantChange = options.typeOfSignificantChange;
 			LocalAuthorityName = options.localAuthorityName;
 			CompaniesHouseNumber = options.companiesHouseNumber;
+			RegionName = options.regionName;
 		}
 
 		public SignificantChangeStatus Status { get; private set; }
@@ -49,12 +51,26 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public SignificantChangeProjectDetails Details { get; private set; } = new();
 		public string? LocalAuthorityName { get; private set; }
 		public string? CompaniesHouseNumber { get; private set; }
+		public string? RegionName { get; private set; }
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
 			AssignedUserId = userId;
 			AssignedUserEmailAddress = userEmail;
 			AssignedUserFullName = userFullName;
+		}
+
+		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation, string? noAdmissionVariationReason)
+		{
+			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
+			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
+				? noAdmissionVariationReason
+				: null;
+
+			if (consultationIncludeAdmissionVariation is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
 		}
 
 		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)

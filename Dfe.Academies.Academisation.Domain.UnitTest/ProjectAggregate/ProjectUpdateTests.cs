@@ -26,6 +26,11 @@ public class ProjectUpdateTests
 			.With(x => x.ApplicationReceivedDate, new DateTime(2024, 12, 20, 23, 59, 58, DateTimeKind.Utc)) // before support grant deadline
 			.With(p => p.Urn, initialProject.Urn).Without(x => x.ConversionSupportGrantChangeReason)
 			.With(x => x.HeadTeacherBoardDate, (DateTime?)DateTime.Today.AddDays(40))
+			.With(x => x.ProposedConversionDate, (DateTime?)DateTime.Today.AddDays(60))
+			.With(x => x.RevenueCarryForwardAtEndMarchCurrentYear, (decimal?)1)
+			.With(x => x.CapitalCarryForwardAtEndMarchCurrentYear, (decimal?)1)
+			.With(x => x.ProjectedRevenueBalanceAtEndMarchNextYear, (decimal?)1)
+			.With(x => x.CapitalCarryForwardAtEndMarchNextYear, (decimal?)1)
 			.With(x => x.SfsoCommissioningRequestedDate, (DateTime?)DateTime.Today.AddDays(25)) // = HTB − 15, matches Update's derivation
 			.Create();
 
@@ -60,6 +65,47 @@ public class ProjectUpdateTests
 			() => Assert.Equal("Urn", validationErrors.First().PropertyName),
 			() => Assert.Equal("Urn in update model must match existing record", validationErrors.First().ErrorMessage),
 			() => Assert.Equivalent(existingProject, sut.Details)
+		);
+	}
+
+	[Fact]
+	public void Update_WhenProposedDecisionDateUnchanged_DoesNotRecalculateSfsoCommissioningRequestedDate()
+	{
+		// Arrange
+		var existingSfsoRequestedDate = DateTime.Today.AddDays(3);
+		var existingProjectDetails = new ProjectDetails
+		{
+			Urn = 1234,
+			HeadTeacherBoardDate = DateTime.Today.AddDays(10),
+			ProposedConversionDate = DateTime.Today.AddDays(60),
+			RevenueCarryForwardAtEndMarchCurrentYear = 1,
+			CapitalCarryForwardAtEndMarchCurrentYear = 1,
+			ProjectedRevenueBalanceAtEndMarchNextYear = 1,
+			CapitalCarryForwardAtEndMarchNextYear = 1,
+			SfsoCommissioningRequestedDate = existingSfsoRequestedDate
+		};
+
+		var sut = new Project(1, existingProjectDetails);
+
+		var updatedProjectDetails = new ProjectDetails
+		{
+			Urn = 1234,
+			HeadTeacherBoardDate = existingProjectDetails.HeadTeacherBoardDate,
+			ProposedConversionDate = DateTime.Today.AddDays(61),
+			RevenueCarryForwardAtEndMarchCurrentYear = 1,
+			CapitalCarryForwardAtEndMarchCurrentYear = 1,
+			ProjectedRevenueBalanceAtEndMarchNextYear = 1,
+			CapitalCarryForwardAtEndMarchNextYear = 1,
+			SfsoCommissioningRequestedDate = null
+		};
+
+		// Act
+		var result = sut.Update(updatedProjectDetails);
+
+		// Assert
+		Assert.Multiple(
+			() => Assert.IsType<CommandSuccessResult>(result),
+			() => Assert.Equal(existingSfsoRequestedDate, sut.Details.SfsoCommissioningRequestedDate)
 		);
 	}
 	public static IEnumerable<object[]> TypeChangedData => new List<object[]>
