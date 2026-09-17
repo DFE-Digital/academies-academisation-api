@@ -27,14 +27,18 @@ public class SignificantChangeDecisionControllerPostTests
 	public async Task CommandReturnsCreateSuccessResult_ReturnsCreatedAtRouteResult()
 	{
 		var decisionServiceModel = _fixture.Create<SignificantChangeDecisionServiceModel>();
+		var request = _fixture.Create<SignificantChangeDecisionCommand>();
 
 		_mockMediator
 			.Setup(c => c.Send(It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new CreateSuccessResult<SignificantChangeDecisionServiceModel>(decisionServiceModel));
+		_mockMediator
+			.Setup(c => c.Send(It.IsAny<SignificantChangeStatusCommand>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new CommandSuccessResult());
 
 		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
 
-		var result = await subject.Post(It.IsAny<SignificantChangeDecisionCommand>(), default);
+		var result = await subject.Post(request, default);
 
 		result.Result.Should().BeOfType<CreatedAtRouteResult>();
 		var createdResult = (CreatedAtRouteResult)result.Result!;
@@ -43,6 +47,10 @@ public class SignificantChangeDecisionControllerPostTests
 		createdResult.Value.Should().BeEquivalentTo(decisionServiceModel);
 		createdResult.RouteName.Should().Be("GetProject");
 		createdResult.RouteValues.Should().ContainKey("projectId");
+		_mockMediator.Verify(c => c.Send(
+			It.Is<SignificantChangeStatusCommand>(command =>
+				command.Id == request.SignificantChangeProjectId && command.Status == request.Decision),
+			It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[Fact]

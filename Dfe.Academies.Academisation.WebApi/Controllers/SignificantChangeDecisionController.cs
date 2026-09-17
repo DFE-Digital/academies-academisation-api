@@ -20,6 +20,12 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			var result = await mediator.Send(request, cancellationToken).ConfigureAwait(false);
 
+			if (result is CreateSuccessResult<SignificantChangeDecisionServiceModel>)
+			{
+				await mediator.Send(
+					new SignificantChangeStatusCommand(request.SignificantChangeProjectId.Value, request.Decision, request.ApprovedConditionsSet), cancellationToken);
+			}
+
 			return result switch
 			{
 				CreateSuccessResult<SignificantChangeDecisionServiceModel> successResult => CreatedAtRoute(
@@ -39,6 +45,13 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		public async Task<ActionResult> Put([FromBody] SignificantChangeUpdateDecisionCommand request, CancellationToken cancellationToken)
 		{
 			var result = await mediator.Send(request, cancellationToken);
+
+			if (result is CommandSuccessResult)
+			{
+				await mediator.Send(
+					new SignificantChangeStatusCommand(request.SignificantChangeProjectId.Value, request.Decision, request.ApprovedConditionsSet),
+					cancellationToken);
+			}
 
 			return result switch
 			{

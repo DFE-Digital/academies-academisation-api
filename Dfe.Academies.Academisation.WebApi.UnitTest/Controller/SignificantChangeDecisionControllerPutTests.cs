@@ -25,15 +25,23 @@ public class SignificantChangeDecisionControllerPutTests
 	[Fact]
 	public async Task CommandReturnsCommandSuccessResult_ReturnsOkResult()
 	{
+		var request = _fixture.Create<SignificantChangeUpdateDecisionCommand>();
 		_mockMediator
 			.Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync(new CommandSuccessResult());
+		_mockMediator
+			.Setup(c => c.Send(It.IsAny<SignificantChangeStatusCommand>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(new CommandSuccessResult());
 
 		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
 
-		var result = await subject.Put(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>());
+		var result = await subject.Put(request, It.IsAny<CancellationToken>());
 
 		result.Should().BeOfType<OkResult>();
+		_mockMediator.Verify(c => c.Send(
+			It.Is<SignificantChangeStatusCommand>(command =>
+				command.Id == request.SignificantChangeProjectId && command.Status == request.Decision),
+			It.IsAny<CancellationToken>()), Times.Once);
 	}
 
 	[Fact]
