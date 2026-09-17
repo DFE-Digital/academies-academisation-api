@@ -24,6 +24,19 @@ public class SignificantChangeDecisionControllerPostTests
 	private readonly Mock<IMediator> _mockMediator = new();
 
 	[Fact]
+	public async Task NullSignificantChangeProjectId_ReturnsBadRequestAndDoesNotSendCommand()
+	{
+		var request = new SignificantChangeDecisionCommand { SignificantChangeProjectId = null };
+		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+
+		var result = await subject.Post(request, default);
+
+		result.Result.Should().BeOfType<BadRequestObjectResult>();
+		_mockMediator.Verify(c => c.Send(
+			It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+	}
+
+	[Fact]
 	public async Task CommandReturnsCreateSuccessResult_ReturnsCreatedAtRouteResult()
 	{
 		var decisionServiceModel = _fixture.Create<SignificantChangeDecisionServiceModel>();

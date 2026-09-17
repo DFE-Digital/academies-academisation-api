@@ -18,6 +18,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost]
 		public async Task<ActionResult<SignificantChangeDecisionServiceModel>> Post([FromBody] SignificantChangeDecisionCommand request, CancellationToken cancellationToken)
 		{
+			if (request.SignificantChangeProjectId is null)
+			{
+				return new BadRequestObjectResult("SignificantChangeProjectId must not be null");
+			}
+
 			var result = await mediator.Send(request, cancellationToken).ConfigureAwait(false);
 
 			if (result is CreateSuccessResult<SignificantChangeDecisionServiceModel>)
