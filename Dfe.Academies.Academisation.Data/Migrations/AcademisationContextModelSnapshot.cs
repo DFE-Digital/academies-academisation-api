@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.17")
+                .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -2472,6 +2472,15 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("EqualitiesImpactIdentifiedMitigation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
+
+                            b1.Property<string>("LandTransactionConsentAdditionalInfo")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsentAdditionalInfo");
+
+                            b1.Property<string>("LandTransactionConsentSecured")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsentSecured");
+
                             b1.Property<DateTime?>("ProposedChangeDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedChangeDate");

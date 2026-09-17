@@ -13,6 +13,9 @@ public class SignificantChangeProjectDetails
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
 
+	public SignificantChangeLandTransactionConsent? LandTransactionConsentSecured { get; set; }
+	public string? LandTransactionConsentAdditionalInfo { get; set; }
+
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
@@ -71,6 +74,18 @@ public class SignificantChangeProjectDetails
 		{
 			return SignificantChangeTaskStatus.Completed;
 		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetStakeholderLandTransactionConsentTaskStatus()
+	{
+		if (!LandTransactionConsentSecured.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (TrustConsultedStakeholders.HasValue)
+			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
