@@ -2,7 +2,6 @@
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
-using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 
@@ -45,7 +44,13 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ProposedDecisionDate,
 				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
 			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
-				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()))
+			.ForMember(destination => destination.LandTransactionConsentSecured,
+				options => options.MapFrom(source => source.Details.LandTransactionConsentSecured.ToString()))
+			.ForMember(destination => destination.LandTransactionConsentAdditionalInfo, 
+				options => options.MapFrom(source => source.Details.LandTransactionConsentAdditionalInfo))
+			.ForMember(destination => destination.LandTransactionConsentTaskStatus, 
+				options => options.MapFrom(source => source.Details.GetLandTransactionConsentTaskStatus().ToString()));
 
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
@@ -63,6 +68,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 		CreateMap<SignificantChangeProjectDto, SignificantChangeReligiousBodyConsultationResponse>()
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.ReligiousBodyConsultationTaskStatus));
+		
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeLandTransactionResponse>()
+			.ForMember(destination => destination.Status, 
+				options => options.MapFrom(source => source.LandTransactionConsentTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
             .ForMember(destination => destination.AssignedUser,
@@ -91,11 +104,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ProjectDates,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.LandTransactionConsent,
 				options => options.MapFrom(source => source));
-
-		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
-			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
-
 	}
 }

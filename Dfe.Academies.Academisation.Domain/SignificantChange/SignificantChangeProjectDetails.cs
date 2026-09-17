@@ -16,6 +16,9 @@ public class SignificantChangeProjectDetails
   public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 
+	public SignificantChangeLandTransactionConsent? LandTransactionConsentSecured { get; set; }
+	public string? LandTransactionConsentAdditionalInfo { get; set; }
+
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
@@ -77,6 +80,18 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+
+	public SignificantChangeTaskStatus GetLandTransactionConsentTaskStatus()
+	{
+		if (!LandTransactionConsentSecured.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (LandTransactionConsentSecured.HasValue)
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
   
   public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
 	{
@@ -99,6 +114,4 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  
 }

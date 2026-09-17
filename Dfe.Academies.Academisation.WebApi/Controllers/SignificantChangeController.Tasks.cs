@@ -104,8 +104,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpPut("{id:int}/SetSignificantChangeLandTransactionConsent", Name = "SetSignificantChangeLandTransactionConsent")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeLandTransactionConsent(int id, [FromBody] SetSignificantChangeLandTransactionConsentPublicCommand request)
+		{
+			var command = new SetSignificantChangeLandTransactionConsentCommand(
+				id,
+				request.LandTransactionConsentSecured,
+				request.LandTransactionConsentAdditionalInfo);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
     
-    		[HttpPut("{id:int}/SetSignificantChangeAdmissionVariationConsultation", Name = "SetSignificantChangeAdmissionVariationConsultation")]
+    	[HttpPut("{id:int}/SetSignificantChangeAdmissionVariationConsultation", Name = "SetSignificantChangeAdmissionVariationConsultation")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]

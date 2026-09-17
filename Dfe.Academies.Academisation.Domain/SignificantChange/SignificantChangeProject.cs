@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using System.Security.Cryptography.X509Certificates;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
@@ -115,13 +116,21 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
-      
-    }
+    	}
     
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
 		{
 			Details.ProposedDecisionDate = proposedDecisionDate;
 			Details.ProposedChangeDate = proposedChangeDate;
+		}
+
+		public void SetLandTransactionConsent(SignificantChangeLandTransactionConsent? consentSecured, string? additionalInfo)
+		{
+			Details.LandTransactionConsentSecured = consentSecured;
+			Details.LandTransactionConsentAdditionalInfo = additionalInfo;
+
+			if(consentSecured is SignificantChangeLandTransactionConsent.No)
+				MoveToTierTwoIfApplicable();
 		}
 	}
 }
