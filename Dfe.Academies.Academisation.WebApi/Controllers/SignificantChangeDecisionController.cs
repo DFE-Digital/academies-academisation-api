@@ -49,6 +49,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> Put([FromBody] SignificantChangeUpdateDecisionCommand request, CancellationToken cancellationToken)
 		{
+			if (request.SignificantChangeProjectId is null)
+			{
+				return new BadRequestObjectResult("SignificantChangeProjectId must not be null");
+			}
+
 			var result = await mediator.Send(request, cancellationToken);
 
 			if (result is CommandSuccessResult)

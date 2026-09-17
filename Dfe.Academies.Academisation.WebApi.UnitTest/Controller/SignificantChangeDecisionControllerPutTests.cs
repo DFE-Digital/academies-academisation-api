@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -102,5 +102,19 @@ public class SignificantChangeDecisionControllerPutTests
 		Func<Task> act = () => subject.Put(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>());
 
 		await act.Should().ThrowAsync<NotImplementedException>();
+	}
+
+
+	[Fact]
+	public async Task NullSignificantChangeProjectId_ReturnsBadRequestAndDoesNotSendCommand()
+	{
+		var request = new SignificantChangeUpdateDecisionCommand { SignificantChangeProjectId = null };
+		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+
+		var result = await subject.Put(request, default);
+
+		result.Should().BeOfType<BadRequestObjectResult>();
+		_mockMediator.Verify(c => c.Send(
+			It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()), Times.Never);
 	}
 }
