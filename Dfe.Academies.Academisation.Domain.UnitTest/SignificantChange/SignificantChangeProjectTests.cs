@@ -627,7 +627,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.Yes, null);
 
-			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
     
 		[Fact]
