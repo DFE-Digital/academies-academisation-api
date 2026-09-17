@@ -1000,6 +1000,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		significantChangeConfiguration.Property(p => p.TrustName).HasColumnName("TrustName").IsRequired();
 		significantChangeConfiguration.Property(p => p.LocalAuthorityName).HasColumnName("LocalAuthorityName");
 		significantChangeConfiguration.Property(p => p.CompaniesHouseNumber).HasColumnName("CompaniesHouseNumber");
+		significantChangeConfiguration.Property(p => p.RegionName).HasColumnName("RegionName");
 
 		significantChangeConfiguration.OwnsOne(p => p.Details, details =>
 		{
