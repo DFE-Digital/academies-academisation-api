@@ -587,7 +587,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 landTransactionConsentAdditionalInfo: "Some additional info");
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionConsentPublicCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CommandSuccessResult());
 
             var result = await _controller.SetSignificantChangeLandTransactionConsent(routeId, request);
