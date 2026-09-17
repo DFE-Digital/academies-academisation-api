@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260914160238_AddSignificantChangeStakeholderObjectionsTask")]
+    partial class AddSignificantChangeStakeholderObjectionsTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -902,10 +905,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime?>("ReadOnlyDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("RegionName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("RegionName");
 
                     b.Property<string>("SchoolName")
                         .IsRequired()
@@ -2465,13 +2464,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
-                            b1.Property<bool?>("ConsultationIncludeAdmissionVariation")
-                                .HasColumnType("bit")
-                                .HasColumnName("ConsultationIncludeAdmissionVariation");
-
-                            b1.Property<string>("ConsultationNoAdmissionVariationReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ConsultationNoAdmissionVariationReason");
                             b1.Property<bool?>("EqualitiesImpactAssessmentCompleted")
                                 .HasColumnType("bit")
                                 .HasColumnName("EqualitiesImpactAssessmentCompleted");
