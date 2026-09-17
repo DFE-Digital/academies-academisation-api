@@ -517,6 +517,67 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			result.Should().BeOfType<NotFoundResult>();
 		}
 
+    [Fact]
+        public async Task SetLandTransactionConsent_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeLandTransactionConsentPublicCommand(
+                landTransactionConsentSecured: SignificantChangeLandTransactionConsent.NotApplicable,
+                landTransactionConsentAdditionalInfo: "Some additional info");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeLandTransactionConsent(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeLandTransactionConsentCommand>(c =>
+                    c.Id == routeId
+                    && c.LandTransactionConsentSecured == request.LandTransactionConsentSecured
+                    && c.LandTransactionConsentAdditionalInfo == request.LandTransactionConsentAdditionalInfo),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetLandTransactionConsent_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeLandTransactionConsentPublicCommand(
+                landTransactionConsentSecured: SignificantChangeLandTransactionConsent.No,
+                landTransactionConsentAdditionalInfo: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionConsentCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeLandTransactionConsent(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetLandTransactionConsent_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
+                trustConsultedReligiousBody: null,
+                trustConsultedReligiousBodyNotConsultedReason: null);
+
+            var validationErrors = new[]
+            {
+                new ValidationError("TrustConsultedReligiousBody", "Trust consulted religious body is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeReligiousBodyConsultation(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(

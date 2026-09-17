@@ -514,6 +514,122 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
+
+		[Fact]
+		public void SetLandTransactionConsent_ShouldSetDetailsProperties()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			var landTransactionConsent = SignificantChangeLandTransactionConsent.NotApplicable;
+			string additionalInfo = "Some additional info";
+
+			project.SetLandTransactionConsent(landTransactionConsent, additionalInfo);
+
+			project.Details.LandTransactionConsentSecured.Should().Be(landTransactionConsent);
+			project.Details.LandTransactionConsentAdditionalInfo.Should().Be(additionalInfo);
+		}
+
+		[Fact]
+		public void SetLandTransactionConsent_WhenNo_AndTierOne_MovesToTierTwo()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.No, null);
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void SetLandTransactionConsent_WhenTierMovedToTwo_DoesNotRevertToTierOne()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>());
+
+			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.No, null);
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.Yes, null);
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void GetLandTransactionConsentTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetLandTransactionConsentTaskStatus_WhenLandTransactionConsentDoesNotHaveValue_AndHasAdditionalInfo_ReturnsInProgress()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.SetLandTransactionConsent(null, "some additional info");
+
+			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetLandTransactionConsentTaskStatus_WhenLandTransactionConsentHasValue_ReturnsCompleted()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.Yes, null);
+
+			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
 	}
+
 }
 

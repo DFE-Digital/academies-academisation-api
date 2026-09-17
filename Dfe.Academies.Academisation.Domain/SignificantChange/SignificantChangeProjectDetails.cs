@@ -78,13 +78,13 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-	public SignificantChangeTaskStatus GetStakeholderLandTransactionConsentTaskStatus()
+	public SignificantChangeTaskStatus GetLandTransactionConsentTaskStatus()
 	{
 		if (!LandTransactionConsentSecured.HasValue
 			&& string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo))
 			return SignificantChangeTaskStatus.NotStarted;
 
-		if (TrustConsultedStakeholders.HasValue)
+		if (LandTransactionConsentSecured.HasValue)
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
