@@ -37,7 +37,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 					command.Route,
 					establishment.Name,
 					establishment.LocalAuthorityName,
-					trust.CompaniesHouseNumber),
+					trust.CompaniesHouseNumber,
+					establishment.Gor.Name),
 				dateTimeProvider.Now);
 
 			significantChangeProjectRepository.Insert(significantChangeProject);

@@ -29,6 +29,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 		private static readonly string schoolName = "a school name";
 		private static readonly string companiesHouseNumber = "12345678";
 		private static readonly string localAuthorityName = "a local authority";
+		private static readonly string regionName = "a region";
 
 
 		public CreateSignificantProjectCommandHandlerTests()
@@ -44,7 +45,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				.ReturnsAsync(new TrustDto() { Name = trustName, CompaniesHouseNumber = companiesHouseNumber });
 
 			_mockAcademiesQueryService.Setup(x => x.GetEstablishment(urn))
-				.ReturnsAsync(new EstablishmentDto() { Name = schoolName, LocalAuthorityName = localAuthorityName });
+				.ReturnsAsync(new EstablishmentDto() { Name = schoolName, LocalAuthorityName = localAuthorityName, Gor = new NameAndCodeDto { Name = regionName } });
 
 			var mockContext = new Mock<IUnitOfWork>();
 			_mockSignificantChangeProjectRepository.Setup(x => x.UnitOfWork).Returns(mockContext.Object);
@@ -82,7 +83,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				p.TypeOfSignificantChange == request.Route &&
 				p.Status == SignificantChangeStatus.PreDecision &&
 				p.LocalAuthorityName == localAuthorityName &&
-				p.CompaniesHouseNumber == companiesHouseNumber
+				p.CompaniesHouseNumber == companiesHouseNumber &&
+				p.RegionName == regionName
 			)), Times.Once);
 
 			_mockAcademiesQueryService.Verify(x => x.GetTrust(request.TrustUkprn), Times.Once);
