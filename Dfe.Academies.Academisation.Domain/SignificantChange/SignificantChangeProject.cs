@@ -135,5 +135,10 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.ProposedDecisionDate = proposedDecisionDate;
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
+
+		public void SetStatus(SignificantChangeStatus requestStatus)
+		{
+			Status = requestStatus;
+		}
 	}
 }
