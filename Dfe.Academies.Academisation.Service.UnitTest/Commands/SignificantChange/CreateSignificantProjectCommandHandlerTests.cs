@@ -137,7 +137,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 					It.IsAny<EventId>(),
 					It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains($"Trust with UKPRN {trustUkprn} not found")),
 					null,
-					It.IsAny<Func<It.IsAnyType, Exception, string>>()!),
+					It.IsAny<Func<It.IsAnyType, Exception, string>>()),
 				Times.Once);
 
 			result.Should().BeOfType<CreateValidationErrorResult>();
@@ -162,7 +162,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 					It.IsAny<EventId>(),
 					It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains($"School with URN {urn} not found")),
 					null,
-					It.IsAny<Func<It.IsAnyType, Exception, string>>()!),
+					It.IsAny<Func<It.IsAnyType, Exception, string>>()),
 				Times.Once);
 
 			result.Should().BeOfType<CreateValidationErrorResult>();
@@ -180,7 +180,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChang
 				Urn: urn,
 				Tier: 2,
 				Route: "Change of age range",
-				TrustUkprn: trustUkprn);
+				TrustUkprn: trustUkprn,
+				ApplicationId: null,
+				ApplicationReference: null);
 		}
 	}
 }
