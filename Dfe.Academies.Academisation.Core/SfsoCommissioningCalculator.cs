@@ -1,4 +1,4 @@
-
+﻿
 namespace Dfe.Academies.Academisation.Core
 {
 	public static class SfsoCommissioningCalculator
@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.Core
 
 			DateTime sendDate = proposedDecisionDate.Value.Date.AddDays(-LeadTimeInDays);
 			DateTime today = DateTime.Today;
-			return sendDate < today ? today : sendDate;
+			return sendDate < today ? null : sendDate;
 		}
 	}
 }

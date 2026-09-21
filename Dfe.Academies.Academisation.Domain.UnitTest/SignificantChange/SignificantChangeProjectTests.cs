@@ -80,6 +80,30 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 		}
 
+		[Theory]
+		[InlineData(SignificantChangeStatus.PreDecision)]
+		[InlineData(SignificantChangeStatus.Approved)]
+		[InlineData(SignificantChangeStatus.ApprovedWithConditions)]
+		[InlineData(SignificantChangeStatus.Deferred)]
+		[InlineData(SignificantChangeStatus.Declined)]
+		[InlineData(SignificantChangeStatus.Withdrawn)]
+		public void SetStatus_ShouldUpdateStatus(SignificantChangeStatus expectedStatus)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetStatus(expectedStatus);
+
+			project.Status.Should().Be(expectedStatus);
+		}
+
 		[Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
@@ -513,6 +537,251 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetEqualitiesImpactAssessment(true, impact, mitigation);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
+		}
+    
+		[Fact]
+		public void SetAdmissionVariationConsultation_ShouldSetDetailsProperties()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationConsultation(false, "No admission variation required");
+
+			project.Details.ConsultationIncludeAdmissionVariation.Should().BeFalse();
+			project.Details.ConsultationNoAdmissionVariationReason.Should().Be("No admission variation required");
+		}
+
+
+		[Fact]
+		public void GetAdmissionVariationConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetAdmissionVariationConsultationTaskStatus_WhenNoVariationWithoutReason_ReturnsInProgress()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationConsultation(false, null);
+
+			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetAdmissionVariationConsultationTaskStatus_WhenVariationIncluded_ReturnsCompleted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationConsultation(true, null);
+
+			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetAdmissionVariationConsultation_WhenNoVariationAndTierOne_MovesToTierTwo()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+
+			project.SetAdmissionVariationConsultation(false, "No admission variation required");
+
+			project.Tier.Should().Be(2);
+		}
+    
+    	[Fact]
+		public void SetConsultationDuration_ShouldSetDetailsProperties()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation ran for two weeks only");
+
+			project.Details.ConsultationLastedMinimumThreeWeeks.Should().Be(ConsultationDurationAnswer.No);
+			project.Details.ConsultationDurationNotMetReason.Should().Be("Consultation ran for two weeks only");
+		}
+
+		[Theory]
+		[InlineData(ConsultationDurationAnswer.Yes)]
+		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)]
+		public void SetConsultationDuration_WhenAnswerIsNotNo_ClearsReason(ConsultationDurationAnswer answer)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(answer, "This should be cleared");
+
+			project.Details.ConsultationLastedMinimumThreeWeeks.Should().Be(answer);
+			project.Details.ConsultationDurationNotMetReason.Should().BeNull();
+		}
+
+		[Fact]
+		public void SetConsultationDuration_WhenNo_AndTierOne_MovesToTierTwo()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Theory]
+		[InlineData(ConsultationDurationAnswer.Yes)]
+		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)]
+		public void SetConsultationDuration_WhenAnswerIsNotNo_DoesNotChangeTier(ConsultationDurationAnswer answer)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(answer, null);
+
+			project.Tier.Should().Be(1);
+		}
+
+		[Fact]
+		public void SetConsultationDuration_WhenTierMovedToTwo_DoesNotRevertToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
+			project.SetConsultationDuration(ConsultationDurationAnswer.Yes, null);
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void GetConsultationDurationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetConsultationDurationTaskStatus_WhenNoWithoutReason_ReturnsInProgress()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, null);
+
+			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Theory]
+		[InlineData(ConsultationDurationAnswer.Yes, null)]
+		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut, null)]
+		[InlineData(ConsultationDurationAnswer.No, "Consultation ran for two weeks only")]
+		public void GetConsultationDurationTaskStatus_WhenAnswered_ReturnsCompleted(
+			ConsultationDurationAnswer answer,
+			string? reason)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(answer, reason);
+
+			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 	}
 }

@@ -11,7 +11,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		string typeOfSignificantChange, 
 		string schoolName, 
 		string? localAuthorityName = null, 
-		string? companiesHouseNumber = null
+		string? companiesHouseNumber = null,
+		string? regionName = null
 	);
 
 	
@@ -33,6 +34,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			TypeOfSignificantChange = options.typeOfSignificantChange;
 			LocalAuthorityName = options.localAuthorityName;
 			CompaniesHouseNumber = options.companiesHouseNumber;
+			RegionName = options.regionName;
 		}
 
 		public SignificantChangeStatus Status { get; private set; }
@@ -51,12 +53,26 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public string? CompaniesHouseNumber { get; private set; }
 		public bool ProjectSentToComplete { get; private set; } = false;
 		public Guid? CompleteProjectId { get; private set; }
+		public string? RegionName { get; private set; }
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
 		{
 			AssignedUserId = userId;
 			AssignedUserEmailAddress = userEmail;
 			AssignedUserFullName = userFullName;
+		}
+
+		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation, string? noAdmissionVariationReason)
+		{
+			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
+			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
+				? noAdmissionVariationReason
+				: null;
+
+			if (consultationIncludeAdmissionVariation is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
 		}
 
 		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
@@ -67,6 +83,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				: null;
 
 			if (trustConsultedStakeholders is false)
+				MoveToTierTwoIfApplicable();
+		}
+		public void SetConsultationDuration(
+			ConsultationDurationAnswer? consultationLastedMinimumThreeWeeks,
+			string? consultationDurationNotMetReason)
+		{
+			Details.ConsultationLastedMinimumThreeWeeks = consultationLastedMinimumThreeWeeks;
+			Details.ConsultationDurationNotMetReason = consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
+				? consultationDurationNotMetReason
+				: null;
+
+			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
 				MoveToTierTwoIfApplicable();
 		}
 
@@ -114,6 +142,11 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		{
 			ProjectSentToComplete = true;
 			CompleteProjectId = completeProjectId;
+    }
+      
+		public void SetStatus(SignificantChangeStatus requestStatus)
+		{
+			Status = requestStatus;
 		}
 	}
 }

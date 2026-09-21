@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260817142045_AddSignificantChangeAdmissionsVariationConsultation")]
+    partial class AddSignificantChangeAdmissionsVariationConsultation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.11")
+                .HasAnnotation("ProductVersion", "8.0.17")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -444,9 +447,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SignificantChangeProjectId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("TransferProjectId")
                         .HasColumnType("int");
 
@@ -475,38 +475,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ConversionAdvisoryBoardDecision", "academisation");
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAONotIssuedReasonDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdvisoryBoardDecisionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdvisoryBoardDecisionId");
-
-                    b.ToTable("AdvisoryBoardDecisionDaoNotIssuedReason", "academisation");
                 });
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAORevokedReasonDetails", b =>
@@ -889,32 +857,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("AssignedUserId");
 
-                    b.Property<string>("CompaniesHouseNumber")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CompaniesHouseNumber");
-
-                    b.Property<Guid?>("CompleteProjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LocalAuthorityName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("LocalAuthorityName");
-
-                    b.Property<bool>("ProjectSentToComplete")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("ReadOnlyDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("RegionName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("RegionName");
 
                     b.Property<string>("SchoolName")
                         .IsRequired()
@@ -1850,8 +1800,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("DecisionMakerName");
 
                             b1.Property<int?>("SignificantChangeProjectId")
-                                .HasColumnType("int")
-                                .HasColumnName("SignificantChangeProjectId");
+                                .HasColumnType("int");
 
                             b1.Property<int?>("TransferProjectId")
                                 .HasColumnType("int")
@@ -1866,15 +1815,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         });
 
                     b.Navigation("AdvisoryBoardDecisionDetails")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDAONotIssuedReasonDetails", b =>
-                {
-                    b.HasOne("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", null)
-                        .WithMany("DaoNotIssuedReasons")
-                        .HasForeignKey("AdvisoryBoardDecisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2474,13 +2414,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
-                            b1.Property<string>("ConsultationDurationNotMetReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ConsultationDurationNotMetReason");
-
-                            b1.Property<string>("ConsultationLastedMinimumThreeWeeks")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ConsultationLastedMinimumThreeWeeks");
                             b1.Property<bool?>("ConsultationIncludeAdmissionVariation")
                                 .HasColumnType("bit")
                                 .HasColumnName("ConsultationIncludeAdmissionVariation");
@@ -2488,33 +2421,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("ConsultationNoAdmissionVariationReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationNoAdmissionVariationReason");
-                            b1.Property<bool?>("EqualitiesImpactAssessmentCompleted")
-                                .HasColumnType("bit")
-                                .HasColumnName("EqualitiesImpactAssessmentCompleted");
-
-                            b1.Property<string>("EqualitiesImpactIdentified")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("EqualitiesImpactIdentified");
-
-                            b1.Property<string>("EqualitiesImpactIdentifiedMitigation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("EqualitiesImpactIdentifiedMitigation");
-
-                            b1.Property<DateTime?>("ProposedChangeDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("ProposedChangeDate");
-
-                            b1.Property<DateTime?>("ProposedDecisionDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("ProposedDecisionDate");
-
-                            b1.Property<bool?>("TrustConsultedReligiousBody")
-                                .HasColumnType("bit")
-                                .HasColumnName("TrustConsultedReligiousBody");
-
-                            b1.Property<string>("TrustConsultedReligiousBodyNotConsultedReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
 
                             b1.Property<bool?>("TrustConsultedStakeholders")
                                 .HasColumnType("bit")
@@ -2580,8 +2486,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
             modelBuilder.Entity("Dfe.Academies.Academisation.Domain.ConversionAdvisoryBoardDecisionAggregate.ConversionAdvisoryBoardDecision", b =>
                 {
-                    b.Navigation("DaoNotIssuedReasons");
-
                     b.Navigation("DaoRevokedReasons");
 
                     b.Navigation("DeclinedReasons");

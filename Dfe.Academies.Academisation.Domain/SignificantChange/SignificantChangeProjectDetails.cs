@@ -12,6 +12,11 @@ public class SignificantChangeProjectDetails
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+  
+  public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
+	public string? ConsultationDurationNotMetReason { get; set; }	
+  public bool? ConsultationIncludeAdmissionVariation { get; set; }
+	public string? ConsultationNoAdmissionVariationReason { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -74,4 +79,45 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+  
+  public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
+	{
+		if (!ConsultationLastedMinimumThreeWeeks.HasValue
+			&& string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (ConsultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.Yes
+			or ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)
+			return SignificantChangeTaskStatus.Completed;
+
+		if (ConsultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
+			&& !string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+  
+  public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
+	{
+		if (!ConsultationIncludeAdmissionVariation.HasValue
+		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (ConsultationIncludeAdmissionVariation is true)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (ConsultationIncludeAdmissionVariation is false
+		    && !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+  
+  
 }

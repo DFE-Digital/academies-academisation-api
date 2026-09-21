@@ -31,32 +31,32 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-        [HttpPut("{id:int}/SetEqualitiesImpactAssessment", Name = "SetSignificantChangeEqualitiesImpactAssessment")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> SetSignificantChangeEqualitiesImpactAssessment(
-            int id,
-            [FromBody] SetSignificantChangeEqualitiesImpactAssessmentPublicCommand request)
-        {
-            var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
-                id, 
-                request.EqualitiesImpactAssessmentCompleted, 
-                request.EqualitiesImpactIdentified,
-                request.EqualitiesImpactIdentifiedMitigation);
+		[HttpPut("{id:int}/SetEqualitiesImpactAssessment", Name = "SetSignificantChangeEqualitiesImpactAssessment")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeEqualitiesImpactAssessment(
+			int id,
+			[FromBody] SetSignificantChangeEqualitiesImpactAssessmentPublicCommand request)
+		{
+			var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
+				id,
+				request.EqualitiesImpactAssessmentCompleted,
+				request.EqualitiesImpactIdentified,
+				request.EqualitiesImpactIdentifiedMitigation);
 
 			CommandResult result = await _mediator.Send(command);
 
-            return result switch
-            {
-                CommandSuccessResult => Ok(),
-                NotFoundCommandResult => NotFound(),
-                CommandValidationErrorResult validationErrorResult =>
-                    BadRequest(validationErrorResult.ValidationErrors),
-                _ => throw new NotImplementedException()
-            };
-        }
-    
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPut("{id:int}/SetReligiousBodyConsultation", Name = "SetSignificantChangeReligiousBodyConsultation")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -86,12 +86,64 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> SetSignificantChangeProjectDates(int id, [FromBody] SetSignificantChangeProjectDatesPublicCommand request)
+		public async Task<ActionResult> SetSignificantChangeProjectDates(int id,
+			[FromBody] SetSignificantChangeProjectDatesPublicCommand request)
 		{
 			var command = new SetSignificantChangeProjectDatesCommand(
 				id,
 				request.ProposedDecisionDate,
 				request.ProposedChangeDate);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/SetSignificantChangeAdmissionVariationConsultation",
+			Name = "SetSignificantChangeAdmissionVariationConsultation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeAdmissionVariationConsultation(
+			int id,
+			[FromBody] SetSignificantChangeAdmissionVariationConsultationPublicCommand request)
+		{
+			var command = new SetSignificantChangeAdmissionVariationConsultationCommand(
+				id: id,
+				consultationIncludeAdmissionVariation: request.ConsultationIncludeAdmissionVariation,
+				noAdmissionVariationReason: request.NoAdmissionVariationReason);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/SetConsultationDuration", Name = "SetSignificantChangeConsultationDuration")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeConsultationDuration(
+			int id,
+			[FromBody] SetSignificantChangeConsultationDurationPublicCommand request)
+		{
+			var command = new SetSignificantChangeConsultationDurationCommand(
+				id: id,
+				consultationLastedMinimumThreeWeeks: request.ConsultationLastedMinimumThreeWeeks,
+				consultationDurationNotMetReason: request.ConsultationDurationNotMetReason);
 
 			CommandResult result = await _mediator.Send(command);
 

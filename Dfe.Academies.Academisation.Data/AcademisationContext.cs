@@ -1000,11 +1000,16 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		significantChangeConfiguration.Property(p => p.TrustName).HasColumnName("TrustName").IsRequired();
 		significantChangeConfiguration.Property(p => p.LocalAuthorityName).HasColumnName("LocalAuthorityName");
 		significantChangeConfiguration.Property(p => p.CompaniesHouseNumber).HasColumnName("CompaniesHouseNumber");
+		significantChangeConfiguration.Property(p => p.RegionName).HasColumnName("RegionName");
 
 		significantChangeConfiguration.OwnsOne(p => p.Details, details =>
 		{
 			details.Property(d => d.TrustConsultedStakeholders).HasColumnName("TrustConsultedStakeholders");
 			details.Property(d => d.TrustConsultedStakeholdersNotConsultedReason).HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+			details.Property(d => d.ConsultationLastedMinimumThreeWeeks).HasConversion<string>().HasColumnName("ConsultationLastedMinimumThreeWeeks");
+			details.Property(d => d.ConsultationDurationNotMetReason).HasColumnName("ConsultationDurationNotMetReason");
+			details.Property(d => d.ConsultationIncludeAdmissionVariation).HasColumnName("ConsultationIncludeAdmissionVariation");
+			details.Property(d => d.ConsultationNoAdmissionVariationReason).HasColumnName("ConsultationNoAdmissionVariationReason");
 			details.Property(d => d.EqualitiesImpactAssessmentCompleted).HasColumnName("EqualitiesImpactAssessmentCompleted");
 			details.Property(d => d.EqualitiesImpactIdentified).HasColumnName("EqualitiesImpactIdentified").HasConversion<string>();
 			details.Property(d => d.EqualitiesImpactIdentifiedMitigation).HasColumnName("EqualitiesImpactIdentifiedMitigation");
