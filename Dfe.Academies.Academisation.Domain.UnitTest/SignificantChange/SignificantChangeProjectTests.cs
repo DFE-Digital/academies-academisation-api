@@ -80,6 +80,30 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 		}
 
+		[Theory]
+		[InlineData(SignificantChangeStatus.PreDecision)]
+		[InlineData(SignificantChangeStatus.Approved)]
+		[InlineData(SignificantChangeStatus.ApprovedWithConditions)]
+		[InlineData(SignificantChangeStatus.Deferred)]
+		[InlineData(SignificantChangeStatus.Declined)]
+		[InlineData(SignificantChangeStatus.Withdrawn)]
+		public void SetStatus_ShouldUpdateStatus(SignificantChangeStatus expectedStatus)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetStatus(expectedStatus);
+
+			project.Status.Should().Be(expectedStatus);
+		}
+
 		[Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
