@@ -56,6 +56,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Mitigation");
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
+			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -89,6 +90,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			result.ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.PlanningPermission.PlanningPermissionAnswer.Should().Be(PlanningPermissionAnswer.No);
+			result.PlanningPermission.AdditionalInformation.Should().Be("Awaiting final approval");
+			result.PlanningPermission.SupportingEvidence.Should().Be("Planning permission evidence uploaded");
+			result.PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]

@@ -11,4 +11,6 @@ public class SignificantChangeProjectSearchResponse : SignificantChangeProjectRe
 	public SignificantChangeReligiousBodyConsultationResponse ReligiousBodyConsultation { get; set; } = new();
 	public SignificantChangeProjectDatesResponse ProjectDates { get; set; } = new();
 	public SignificantChangeAdmissionVariationConsultationResponse AdmissionVariationConsultation { get; set; } = new();
+	public SignificantChangePlanningPermissionResponse PlanningPermission { get; set; } = new();
+
 }

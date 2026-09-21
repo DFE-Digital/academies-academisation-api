@@ -49,6 +49,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Needs mitigating actions");
 			projects[0].SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			projects[0].SetProjectDates(proposedDecisionDate, proposedChangeDate);
+			projects[0].SetPlanningPermission(PlanningPermissionAnswer.Yes, "Decision is pending final sign-off", "Outline permission summary");
 
 			_repositoryMock
 				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, null, null, null, null, null, cancellationToken))
@@ -84,6 +85,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			data[0].ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			data[0].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			data[0].PlanningPermission.PlanningPermissionAnswer.Should().Be(PlanningPermissionAnswer.Yes);
+			data[0].PlanningPermission.AdditionalInformation.Should().Be("Decision is pending final sign-off");
+			data[0].PlanningPermission.SupportingEvidence.Should().Be("Outline permission summary");
+			data[0].PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.ImpactsIdentified));

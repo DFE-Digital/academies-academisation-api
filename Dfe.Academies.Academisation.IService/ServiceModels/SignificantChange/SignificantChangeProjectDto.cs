@@ -38,4 +38,8 @@ public class SignificantChangeProjectDto
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
 	public string ConfirmProjectDatesTaskStatus { get; set; } = string.Empty;
+	public PlanningPermissionAnswer PlanningPermission { get; set; }
+	public string? PlanningPermissionAdditionalInformation { get; set; }
+	public string? PlanningPermissionSupportingEvidence { get; set; }
+	public string PlanningPermissionTaskStatus { get; set; } = string.Empty;
 }
