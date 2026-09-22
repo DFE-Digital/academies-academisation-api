@@ -56,7 +56,11 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 			await _context.SaveChangesAsync();
 
 			var (resultProjects, totalCount) =
-				await _repository.SearchSignificantChangeProjects(1, 10, null, null, null, null, null,
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 1,
+					Count = 10
+				},
 					CancellationToken.None);
 
 			totalCount.Should().Be(5);
@@ -82,7 +86,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 			var statuses = new List<string> { "predecision" };
 
 			var (resultProjects, totalCount) =
-				await _repository.SearchSignificantChangeProjects(1, 10, null, statuses, null, null, null, CancellationToken.None);
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 1,
+					Count = 10,
+					Status = statuses
+				}, CancellationToken.None);
 
 			totalCount.Should().Be(2);
 			resultProjects.Should().OnlyContain(p => p.Status == SignificantChangeStatus.PreDecision);
@@ -110,8 +119,13 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 			_context.SignificantChangeProjects.AddRange(projects);
 			await _context.SaveChangesAsync();
 
-			var (resultProjects, totalCount) =
-				await _repository.SearchSignificantChangeProjects(1, 10, keyword, null, null, null, null,
+			var (_, totalCount) =
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 1,
+					Count = 10,
+					Keyword = keyword
+				},
 					CancellationToken.None);
 
 			totalCount.Should().Be(expectedNumberOfResults);
@@ -137,7 +151,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 			var assignees = new List<string> { "john doe" };
 
 			var (resultProjects, totalCount) =
-				await _repository.SearchSignificantChangeProjects(1, 10, null, null, assignees, null, null,
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 1,
+					Count = 10,
+					Assignee = assignees
+				},
 					CancellationToken.None);
 
 
@@ -166,7 +185,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 			var assignees = new List<string> { "John Doe", "Not Assigned" };
 
 			var (resultProjects, totalCount) =
-				await _repository.SearchSignificantChangeProjects(1, 10, null, null, assignees, null, null,
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 1,
+					Count = 10,
+					Assignee = assignees
+				},
 					CancellationToken.None);
 
 			totalCount.Should().Be(3);
@@ -184,7 +208,11 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 
 			// Act
 			var (resultProjects, totalCount) =
-				await _repository.SearchSignificantChangeProjects(2, 5, null, null, null, null, null,
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 2,
+					Count = 5
+				},
 					CancellationToken.None);
 
 			// Assert
@@ -212,7 +240,12 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 
 
 			var (resultProjects, totalCount) =
-				await _repository.SearchSignificantChangeProjects(1, 10, null, null, null, null, routes.ToList(),
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 1,
+					Count = 10,
+					Route = routes.ToList()
+				},
 					CancellationToken.None);
 
 			totalCount.Should().Be(2);

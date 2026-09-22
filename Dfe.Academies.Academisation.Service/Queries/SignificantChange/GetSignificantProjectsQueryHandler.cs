@@ -11,7 +11,19 @@ namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 	{
 		public async Task<PagedDataResponse<SignificantChangeProjectSearchResponse>> Handle(GetSignificantProjectsQuery query, CancellationToken cancellationToken)
 		{
-			var (projects, totalCount) = await significantChangeProjectRepository.SearchSignificantChangeProjects(query.Page, query.Count, query.Keyword, query.Status, query.Assignee, query.Tier, query.Route, cancellationToken);
+			var searchOptions = new SignificantChangeProjectSearchOptions
+			{
+				Page = query.Page,
+				Count = query.Count,
+				Keyword = query.Keyword,
+				Status = query.Status,
+				Assignee = query.Assignee,
+				Tier = query.Tier,
+				Route = query.Route,
+				LocalAuthorities = query.LocalAuthority
+			};
+
+			var (projects, totalCount) = await significantChangeProjectRepository.SearchSignificantChangeProjects(searchOptions, cancellationToken);
 
 			var routeValues = new Dictionary<string, object?>();
 			var pageResponse = PagingResponseFactory.Create("significant-change/significant-change-projects", query.Page, query.Count, totalCount, routeValues);
