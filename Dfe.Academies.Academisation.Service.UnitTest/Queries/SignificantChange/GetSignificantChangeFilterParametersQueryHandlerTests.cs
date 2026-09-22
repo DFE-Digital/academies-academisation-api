@@ -26,8 +26,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			{
 				Statuses = [new FilterValueDisplay("PreDecision", "Pre decision")],
 				AssignedUsers = [new FilterValueDisplay("Assigned User", "Assigned User")],
-				Tiers = [new FilterValueDisplay("1", "Tier 1"), new FilterValueDisplay("2", "Tier 2")],
-				Routes = [new FilterValueDisplay("Change of age range", "Change of age range")]
+				Tiers = [new FilterValueDisplay("1", "1"), new FilterValueDisplay("2", "2")],
+				Routes = [new FilterValueDisplay("Change of age range", "Change of age range")],
+				LocalAuthorities = [new FilterValueDisplay("Leeds", "Leeds")]
 			};
 
 			_repositoryMock

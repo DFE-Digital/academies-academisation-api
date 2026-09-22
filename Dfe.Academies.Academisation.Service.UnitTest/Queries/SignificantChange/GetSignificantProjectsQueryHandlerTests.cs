@@ -183,7 +183,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		public async Task Handle_PassesQueryItems_ToRepository()
 		{
 			// Arrange
-			var query = new GetSignificantProjectsQuery(Page: 3, Count: 25, "school", ["InProgress"], ["Ste"], [1], ["a change"]);
+			var query = new GetSignificantProjectsQuery(Page: 3, Count: 25, "school", ["InProgress"], ["Ste"], [1], ["a change"], ["Leeds"]);
 
 			using var cts = new CancellationTokenSource();
 			var cancellationToken = cts.Token;
@@ -208,7 +208,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 						options.Assignee != null && options.Assignee.SequenceEqual(new List<string> { "Ste" }) &&
 						options.Tier != null && options.Tier.SequenceEqual(new List<byte> { 1 }) &&
 						options.Route != null && options.Route.SequenceEqual(new List<string> { "a change" }) &&
-						options.LocalAuthorities == null),
+						options.LocalAuthorities != null && options.LocalAuthorities.SequenceEqual(new List<string> { "Leeds" })),
 					It.Is<CancellationToken>(token => token == cancellationToken)),
 				Times.Once);
 		}

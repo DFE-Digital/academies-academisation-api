@@ -251,5 +251,40 @@ namespace Dfe.Academies.Academisation.Data.UnitTest.Repositories
 			totalCount.Should().Be(2);
 			resultProjects.Should().OnlyContain(p => routes.Contains(p.TypeOfSignificantChange, StringComparer.InvariantCultureIgnoreCase));
 		}
+
+		[Theory]
+		[InlineData("Leeds", "Bradford")]
+		[InlineData("LEEDS", "BRADFORD")]
+		public async Task SearchSignificantChangeProjects_FilterByLocalAuthority_ReturnsMatchingProjects(params string[] localAuthorities)
+		{
+			var projects = new List<SignificantChangeProject>
+			{
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					2222, 1, "trust", "66666", "Sponsored", "Test School", "Leeds"), DateTime.UtcNow),
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					3333, 1, "Test Trust", "77777", "Converter", "school", "Bradford"), DateTime.UtcNow),
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					4444, 1, "trust", "99999", "Form a MAT", "school", "Manchester"), DateTime.UtcNow),
+				SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+					5555, 1, "trust", "11111", "Form a MAT", "school", null), DateTime.UtcNow)
+			};
+
+			_context.SignificantChangeProjects.AddRange(projects);
+			await _context.SaveChangesAsync();
+
+			var (resultProjects, totalCount) =
+				await _repository.SearchSignificantChangeProjects(new SignificantChangeProjectSearchOptions
+				{
+					Page = 1,
+					Count = 10,
+					LocalAuthorities = localAuthorities.ToList()
+				},
+					CancellationToken.None);
+
+			totalCount.Should().Be(2);
+			resultProjects.Should().OnlyContain(p =>
+				p.LocalAuthorityName != null &&
+				localAuthorities.Contains(p.LocalAuthorityName, StringComparer.InvariantCultureIgnoreCase));
+		}
 	}
 }
