@@ -131,15 +131,22 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.OrderBy(route => route)
 				.ToListAsync(cancellationToken);
 
+			List<string> localAuthorities = await dbSet
+				.AsNoTracking()
+				.Select(project => project.LocalAuthorityName)
+				.Where(localAuthority => !string.IsNullOrEmpty(localAuthority))
+				.Select(localAuthority => localAuthority!)
+				.Distinct()
+				.OrderBy(localAuthority => localAuthority)
+				.ToListAsync(cancellationToken);
+
 			return new SignificantChangeFilterParameters
 			{
 				Statuses = [.. Enum.GetValues<SignificantChangeStatus>().Select(status => new FilterValueDisplay(status.ToString(), status.ToDisplayName()))],
-
 				Tiers = [.. SignificantChangeTiers.All.Select(tier => new FilterValueDisplay(tier.ToString(), tier.ToString()))],
-
 				AssignedUsers = [.. assignedUsers.Select(fullName => new FilterValueDisplay(fullName, fullName))],
-
-				Routes = [.. routes.Select(route => new FilterValueDisplay(route, route))]
+				Routes = [.. routes.Select(route => new FilterValueDisplay(route, route))],
+				LocalAuthorities = [.. localAuthorities.Select(localAuthority => new FilterValueDisplay(localAuthority, localAuthority))]
 			};
 		}
 

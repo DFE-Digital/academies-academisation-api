@@ -6,6 +6,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public List<FilterValueDisplay> AssignedUsers { get; set; } = [];
 		public List<FilterValueDisplay> Tiers { get; set; } = [];
 		public List<FilterValueDisplay> Routes { get; set; } = [];
+		public List<FilterValueDisplay> LocalAuthorities { get; set; } = [];
 	}
 
     public record FilterValueDisplay(string Value, string Display);
