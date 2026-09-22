@@ -52,7 +52,17 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].SetPlanningPermission(PlanningPermissionAnswer.Yes, "Decision is pending final sign-off", "Outline permission summary");
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, null, null, null, null, null, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(
+					It.Is<SignificantChangeProjectSearchOptions>(options =>
+						options.Page == query.Page &&
+						options.Count == query.Count &&
+						options.Keyword == null &&
+						options.Status == null &&
+						options.Assignee == null &&
+						options.Tier == null &&
+						options.Route == null &&
+						options.LocalAuthorities == null),
+					cancellationToken))
 				.ReturnsAsync((projects, totalCount: 3));
 
 			// Act
@@ -127,7 +137,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			};
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantChangeProjects(query.Page, query.Count, null, null, null, null, null, cancellationToken))
+				.Setup(x => x.SearchSignificantChangeProjects(
+					It.Is<SignificantChangeProjectSearchOptions>(options =>
+						options.Page == query.Page &&
+						options.Count == query.Count),
+					cancellationToken))
 				.ReturnsAsync((projects, totalCount: 4));
 
 			// Act
@@ -148,7 +162,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var cancellationToken = cts.Token;
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), null, null, null, null, null, It.IsAny<CancellationToken>()))
+				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<SignificantChangeProjectSearchOptions>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((Enumerable.Empty<SignificantChangeProject>(), 0));
 
 			// Act
@@ -157,13 +171,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			// Assert
 			_repositoryMock.Verify(
 				x => x.SearchSignificantChangeProjects(
-					It.Is<int>(page => page == 3),
-					It.Is<int>(count => count == 25),
-					null,
-					null,
-					null,
-					null,
-					null,
+					It.Is<SignificantChangeProjectSearchOptions>(options =>
+						options.Page == 3 &&
+						options.Count == 25 &&
+						options.Keyword == null &&
+						options.Status == null &&
+						options.Assignee == null &&
+						options.Tier == null &&
+						options.Route == null &&
+						options.LocalAuthorities == null),
 					It.Is<CancellationToken>(token => token == cancellationToken)),
 				Times.Once);
 		}
@@ -178,9 +194,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var cancellationToken = cts.Token;
 
 			_repositoryMock
-				.Setup(x => x.SearchSignificantChangeProjects(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(),
-					It.IsAny<List<string>>(), It.IsAny<List<string>>(), It.IsAny<List<byte>>(),
-					It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
+				.Setup(x => x.SearchSignificantChangeProjects(
+					It.IsAny<SignificantChangeProjectSearchOptions>(),
+					It.IsAny<CancellationToken>()))
 				.ReturnsAsync((Enumerable.Empty<SignificantChangeProject>(), 0));
 
 			// Act
@@ -189,13 +205,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			// Assert
 			_repositoryMock.Verify(
 				x => x.SearchSignificantChangeProjects(
-					It.Is<int>(page => page == 3),
-					It.Is<int>(count => count == 25),
-					It.Is<string>(keyword => keyword == "school"),
-					It.Is<List<string>>(status => status.SequenceEqual(new List<string> { "InProgress" })),
-					It.Is<List<string>>(assignee => assignee.SequenceEqual(new List<string> { "Ste" })),
-					It.Is<List<byte>>(tier => tier.SequenceEqual(new List<byte> { 1 })),
-					It.Is<List<string>>(route => route.SequenceEqual(new List<string> { "a change" })),
+					It.Is<SignificantChangeProjectSearchOptions>(options =>
+						options.Page == 3 &&
+						options.Count == 25 &&
+						options.Keyword == "school" &&
+						options.Status != null && options.Status.SequenceEqual(new List<string> { "InProgress" }) &&
+						options.Assignee != null && options.Assignee.SequenceEqual(new List<string> { "Ste" }) &&
+						options.Tier != null && options.Tier.SequenceEqual(new List<byte> { 1 }) &&
+						options.Route != null && options.Route.SequenceEqual(new List<string> { "a change" }) &&
+						options.LocalAuthorities == null),
 					It.Is<CancellationToken>(token => token == cancellationToken)),
 				Times.Once);
 		}

@@ -11,6 +11,8 @@ namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 		List<string>? Status = null,
 		List<string>? Assignee = null,
 		List<byte>? Tier = null,
-		List<string>? Route = null) 
+		List<string>? Route = null,
+		List<string>? LocalAuthority = null
+		) 
 		: IRequest<PagedDataResponse<SignificantChangeProjectSearchResponse>>;
 }
