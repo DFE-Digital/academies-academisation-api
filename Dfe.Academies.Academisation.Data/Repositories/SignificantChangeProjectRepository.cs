@@ -133,21 +133,13 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 
 			return new SignificantChangeFilterParameters
 			{
-				Statuses = Enum.GetValues<SignificantChangeStatus>()
-					.Select(status => new FilterValueDisplay(status.ToString(), status.ToDisplayName()))
-					.ToList(),
+				Statuses = [.. Enum.GetValues<SignificantChangeStatus>().Select(status => new FilterValueDisplay(status.ToString(), status.ToDisplayName()))],
 
-				Tiers = SignificantChangeTiers.All
-					.Select(tier => new FilterValueDisplay(tier.ToString(), $"Tier {tier}"))
-					.ToList(),
+				Tiers = [.. SignificantChangeTiers.All.Select(tier => new FilterValueDisplay(tier.ToString(), tier.ToString()))],
 
-				AssignedUsers = assignedUsers
-					.Select(fullName => new FilterValueDisplay(fullName, fullName))
-					.ToList(),
+				AssignedUsers = [.. assignedUsers.Select(fullName => new FilterValueDisplay(fullName, fullName))],
 
-				Routes = routes
-					.Select(route => new FilterValueDisplay(route, route))
-					.ToList()
+				Routes = [.. routes.Select(route => new FilterValueDisplay(route, route))]
 			};
 		}
 
