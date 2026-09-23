@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20260923133100_AddSignificantChangeRecommendationFields")]
+    [Migration("20260924133257_AddSignificantChangeRecommendationFields")]
     partial class AddSignificantChangeRecommendationFields
     {
         /// <inheritdoc />
@@ -2504,8 +2504,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedDecisionDate");
 
-                            b1.Property<int?>("Recommendation")
-                                .HasColumnType("int")
+                            b1.Property<string>("Recommendation")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Recommendation");
 
                             b1.Property<string>("RecommendationMoreInformation")

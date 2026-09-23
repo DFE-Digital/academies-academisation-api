@@ -2549,8 +2549,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("StakeholderObjectionsComment");
 
-                            b1.Property<int?>("Recommendation")
-                                .HasColumnType("int")
+                            b1.Property<string>("Recommendation")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Recommendation");
 
                             b1.Property<string>("RecommendationMoreInformation")
