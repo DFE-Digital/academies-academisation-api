@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260923133100_AddSignificantChangeRecommendationFields")]
+    partial class AddSignificantChangeRecommendationFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -443,9 +446,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("Response")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SignificantChangeProjectId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("TransferProjectId")
                         .HasColumnType("int");
@@ -877,14 +877,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationId")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ApplicationId");
-
-                    b.Property<string>("ApplicationReference")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ApplicationReference");
-
                     b.Property<string>("AssignedUserEmailAddress")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("AssignedUserEmailAddress");
@@ -901,9 +893,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("CompaniesHouseNumber");
 
-                    b.Property<Guid?>("CompleteProjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -913,9 +902,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                     b.Property<string>("LocalAuthorityName")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("LocalAuthorityName");
-
-                    b.Property<bool>("ProjectSentToComplete")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ReadOnlyDate")
                         .HasColumnType("datetime2");
@@ -2510,29 +2496,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
 
-                            b1.Property<string>("FundingAdditionalInformation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FundingAdditionalInformation");
-
-                            b1.Property<string>("FundingAnswer")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FundingAnswer");
-
-                            b1.Property<string>("FundingSupportingEvidence")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FundingSupportingEvidence");
-                            b1.Property<string>("PlanningPermission")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PlanningPermission");
-
-                            b1.Property<string>("PlanningPermissionAdditionalInformation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PlanningPermissionAdditionalInformation");
-
-                            b1.Property<string>("PlanningPermissionSupportingEvidence")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PlanningPermissionSupportingEvidence");
-
                             b1.Property<DateTime?>("ProposedChangeDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedChangeDate");
@@ -2540,14 +2503,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<DateTime?>("ProposedDecisionDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedDecisionDate");
-
-                            b1.Property<string>("StakeholderObjections")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StakeholderObjections");
-
-                            b1.Property<string>("StakeholderObjectionsComment")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StakeholderObjectionsComment");
 
                             b1.Property<int?>("Recommendation")
                                 .HasColumnType("int")

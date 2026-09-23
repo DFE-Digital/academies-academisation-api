@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+
+namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public class SignificantChangeProjectDetails
 {
@@ -24,6 +26,9 @@ public class SignificantChangeProjectDetails
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }
 	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
+
+	public Decision? Recommendation { get; set; }
+	public string? RecommendationMoreInformation { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
