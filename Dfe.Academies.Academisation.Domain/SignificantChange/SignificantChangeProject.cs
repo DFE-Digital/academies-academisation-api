@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
@@ -123,6 +124,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 			if (trustConsultedReligiousBody is false)
 				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetRecommendation(Decision? recommendation, string? recommendationMoreInformation)
+		{
+			Details.Recommendation = recommendation;
+			Details.RecommendationMoreInformation = recommendationMoreInformation;
 		}
 
 		public void MoveToTierTwoIfApplicable()

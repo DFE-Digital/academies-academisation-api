@@ -228,5 +228,30 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+		
+		[HttpPut("{id:int}/SetRecommendation", Name = "SetSignificantChangeRecommendation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeRecommendation(
+			int id,
+			[FromBody] SetSignificantChangeRecommendationPublicCommand request)
+		{
+			var command = new SetSignificantChangeRecommendationCommand(
+				id,
+				request.Recommendation,
+				request.RecommendationMoreInformation);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }
