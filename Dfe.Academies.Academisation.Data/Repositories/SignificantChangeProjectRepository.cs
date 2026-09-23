@@ -21,6 +21,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			queryable = FilterByTier(arguments.Tier, queryable);
 			queryable = FilterByRoute(arguments.Route, queryable);
 			queryable = FilterByLocalAuthority(arguments.LocalAuthorities, queryable);
+			queryable = FilterByRegion(arguments.Regions, queryable);
 
 			int totalProjects = await queryable.CountAsync(cancellationToken);
 			var projects = await queryable
@@ -54,6 +55,18 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			string[] lowerCaseLocalAuthorities = [.. localAuthorities.Select(x => x.ToLower())];
 
 			return queryable.Where(x => !string.IsNullOrEmpty(x.LocalAuthorityName) && lowerCaseLocalAuthorities.Contains(x.LocalAuthorityName.ToLower()));
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByRegion(List<string>? regions, IQueryable<SignificantChangeProject> queryable)
+		{
+			if (regions is null || regions.Count == 0)
+			{
+				return queryable;
+			}
+
+			string[] lowerCaseRegions = [.. regions.Select(x => x.ToLower())];
+
+			return queryable.Where(x => !string.IsNullOrEmpty(x.RegionName) && lowerCaseRegions.Contains(x.RegionName.ToLower()));
 		}
 
 		private static IQueryable<SignificantChangeProject> FilterByTier(List<byte>? tier, IQueryable<SignificantChangeProject> queryable)
