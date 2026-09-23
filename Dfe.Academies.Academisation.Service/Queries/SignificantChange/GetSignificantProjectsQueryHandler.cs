@@ -20,7 +20,8 @@ namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange
 				Assignee = query.Assignee,
 				Tier = query.Tier,
 				Route = query.Route,
-				LocalAuthorities = query.LocalAuthority
+				LocalAuthorities = query.LocalAuthority,
+				Regions = query.Region
 			};
 
 			var (projects, totalCount) = await significantChangeProjectRepository.SearchSignificantChangeProjects(searchOptions, cancellationToken);

@@ -17,6 +17,7 @@ public class SignificantChangeProjectDto
 	public string? ApplicationId { get; set; }
 	public string? ApplicationReference { get; set; }
 	public string? LocalAuthorityName { get; set; }
+	public string? RegionName { get; set; }
 	public string? CompaniesHouseNumber { get; set; }
 	public string Status { get; set; } = string.Empty;
 	public bool? TrustConsultedStakeholders { get; set; }

@@ -13,6 +13,7 @@
 		public required string? ApplicationReference { get; set; }
 		public required string Status { get; set; }
 		public string? LocalAuthorityName { get; set; }
+		public string? RegionName { get; set; }
 		public string? CompaniesHouseNumber { get; set; }
 	}
 }
