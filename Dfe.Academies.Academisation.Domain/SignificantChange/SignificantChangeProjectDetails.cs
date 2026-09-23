@@ -14,6 +14,8 @@ public class SignificantChangeProjectDetails
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
   
+  public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
+	public string? ConsultationDurationNotMetReason { get; set; }	
   public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 
@@ -93,6 +95,23 @@ public class SignificantChangeProjectDetails
 
 		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
 			&& !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+  
+  public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
+	{
+		if (!ConsultationLastedMinimumThreeWeeks.HasValue
+			&& string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (ConsultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.Yes
+			or ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)
+			return SignificantChangeTaskStatus.Completed;
+
+		if (ConsultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
+			&& !string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;

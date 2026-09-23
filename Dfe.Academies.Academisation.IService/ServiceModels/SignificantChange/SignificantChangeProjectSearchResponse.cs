@@ -1,15 +1,15 @@
 ﻿using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
+
 public class SignificantChangeProjectSearchResponse : SignificantChangeProjectResponse
 {
-    public User? AssignedUser { get; set; }
+	public User? AssignedUser { get; set; }
 	public SignificantChangeStakeholderConsultationResponse StakeholderConsultation { get; set; } = new();
-
-	public SignificantChangeAdmissionVariationConsultationResponse AdmissionVariationConsultation { get; set; } = new();
-
+	public SignificantChangeConsultationDurationResponse ConsultationDuration { get; set; } = new();
 	public EqualitiesImpactAssessmentResponse EqualitiesImpactAssessment { get; init; } = new();
 	public SignificantChangeReligiousBodyConsultationResponse ReligiousBodyConsultation { get; set; } = new();
 	public SignificantChangeProjectDatesResponse ProjectDates { get; set; } = new();
 	public SignificantChangeStakeholderObjectionsResponse StakeholderObjections { get; set; } = new();
+	public SignificantChangeAdmissionVariationConsultationResponse AdmissionVariationConsultation { get; set; } = new();
 }
