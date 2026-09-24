@@ -126,7 +126,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
-		public void SetRecommendation(Decision? recommendation, string? recommendationMoreInformation)
+		public void SetRecommendation(Recommendation? recommendation, string? recommendationMoreInformation)
 		{
 			Details.Recommendation = recommendation;
 			Details.RecommendationMoreInformation = recommendationMoreInformation;
@@ -153,9 +153,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
-
-		}
-
+    	}
+    
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
 		{
 			Details.ProposedDecisionDate = proposedDecisionDate;
