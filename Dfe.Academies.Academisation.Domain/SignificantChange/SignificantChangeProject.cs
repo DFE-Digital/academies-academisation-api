@@ -47,6 +47,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public string TrustName { get; private set; } = string.Empty;
 		public string TrustUkprn { get; private set; } = string.Empty;
 		public string TypeOfSignificantChange { get; private set; } = string.Empty;
+		public string? ApplicationId { get; set; }
+		public string? ApplicationReference { get; set; }
 		public DateTime? ReadOnlyDate { get; private set; }
 		public SignificantChangeProjectDetails Details { get; private set; } = new();
 		public string? LocalAuthorityName { get; private set; }
