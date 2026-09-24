@@ -59,7 +59,13 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ProposedDecisionDate,
 				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
 			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
-				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()))
+			.ForMember(destination => destination.StakeholderObjections,
+				options => options.MapFrom(source => source.Details.StakeholderObjections.ToString()))
+			.ForMember(destination => destination.StakeholderObjectionsComment,
+				options => options.MapFrom(source => source.Details.StakeholderObjectionsComment))
+			.ForMember(destination => destination.StakeholderObjectionsTaskStatus,
+				options => options.MapFrom(source => source.Details.GetStakeholderObjectionsTaskStatus().ToString()));
 
 		
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
@@ -81,6 +87,10 @@ public class SignificantChangeProjectMappingProfile : Profile
 		CreateMap<SignificantChangeProjectDto, SignificantChangeReligiousBodyConsultationResponse>()
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.ReligiousBodyConsultationTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderObjectionsResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.StakeholderObjectionsTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
 			.ForMember(destination => destination.ApplicationId,
@@ -113,6 +123,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 		
 			.ForMember(destination => destination.ReligiousBodyConsultation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.StakeholderObjections,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source));

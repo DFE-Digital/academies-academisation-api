@@ -140,6 +140,16 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
 
+		public void SetStakeholderObjections(SignificantChangeStakeholderObjections? stakeholderObjections, string? stakeholderObjectionsComment)
+		{
+			Details.StakeholderObjections = stakeholderObjections;
+			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
+
+			
+			if (stakeholderObjections is SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided)
+				MoveToTierTwoIfApplicable();
+		}
+
 		public void SetProjectSentToComplete(Guid? completeProjectId)
 		{
 			ProjectSentToComplete = true;

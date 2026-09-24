@@ -538,6 +538,150 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
+
+	[Fact]
+		public void SetStakeholderObjections_ShouldSetDetailsProperties()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further information supplied");
+
+			project.Details.StakeholderObjections.Should().Be(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided);
+			project.Details.StakeholderObjectionsComment.Should().Be("No further information supplied");
+		}
+
+		[Fact]
+		public void GetStakeholderObservationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetStakeholderObservationsTaskStatus_When_YesNoFurtherInformationProvided_Without_Comment_ReturnsInProgress()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, null);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetStakeholderObjectionsTaskStatus_When_YesAllObjectionsAddressed_ReturnsCompleted()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesAllObjectionsAddressed, null);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetStakeholderObjectionsTaskStatus_When_No_ReturnsCompleted()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.No, null);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetStakeholderObjectionsTaskStatus_When_YesNoFurtherInformationProvided_With_Comment_ReturnsCompleted()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "awaiting stakeholder objection deets");
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetStakeholderObjections_WhenYesNoFurtherInformationProvidedd_AndTierOne_MovesToTierTwo()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project =
+				new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further info");
+
+			project.Tier.Should().Be(2);
+		}
+
     
 		[Fact]
 		public void SetAdmissionVariationConsultation_ShouldSetDetailsProperties()
@@ -785,4 +929,3 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 	}
 }
-

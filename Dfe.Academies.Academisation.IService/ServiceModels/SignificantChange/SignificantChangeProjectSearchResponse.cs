@@ -10,5 +10,6 @@ public class SignificantChangeProjectSearchResponse : SignificantChangeProjectRe
 	public EqualitiesImpactAssessmentResponse EqualitiesImpactAssessment { get; init; } = new();
 	public SignificantChangeReligiousBodyConsultationResponse ReligiousBodyConsultation { get; set; } = new();
 	public SignificantChangeProjectDatesResponse ProjectDates { get; set; } = new();
+	public SignificantChangeStakeholderObjectionsResponse StakeholderObjections { get; set; } = new();
 	public SignificantChangeAdmissionVariationConsultationResponse AdmissionVariationConsultation { get; set; } = new();
 }

@@ -645,6 +645,67 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				.Which.Value.Should().BeEquivalentTo(validationErrors);
 		}
 
+        [Fact]
+        public async Task SetStakeholderObservations_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeStakeholderObjectionsPublicCommand(
+                stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
+                stakeholderObjectionsComment: "some comment");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeStakeholderObjections(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeStakeholderObjectionsCommand>(c =>
+                    c.Id == routeId
+                    && c.StakeholderObjections == request.StakeholderObjections
+                    && c.StakeholderObjectionsComment == request.StakeholderObjectionsComment),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetStakeholderObjections_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeStakeholderObjectionsPublicCommand(
+                stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
+                stakeholderObjectionsComment: "some comment");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeStakeholderObjections(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetStakeholderObservations_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeStakeholderObjectionsPublicCommand(
+                stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
+                stakeholderObjectionsComment: "some comment");
+
+            var validationErrors = new[]
+            {
+                new ValidationError("stakeholderObjections", "stakeholder objections is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeStakeholderObjections(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(
@@ -662,5 +723,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 Page: 1,
                 Count: 10);
         }
+        
     }
 }
