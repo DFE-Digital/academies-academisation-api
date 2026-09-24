@@ -11,22 +11,22 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 		public IUnitOfWork UnitOfWork => _context;
 
 		public async Task<(IEnumerable<SignificantChangeProject> projects, int totalCount)>
-			SearchSignificantChangeProjects(int page, int count, string? keyword, List<string>? status,
-				List<string>? assignee, List<byte>? tier, List<string>? route, CancellationToken cancellationToken)
+			SearchSignificantChangeProjects(SignificantChangeProjectSearchOptions arguments, CancellationToken cancellationToken)
 		{
 			IQueryable<SignificantChangeProject> queryable = dbSet;
 
-			queryable = FilterByStatus(status, queryable);
-			queryable = FilterByKeyword(keyword, queryable);
-			queryable = FilterByAssignee(assignee, queryable);
-			queryable = FilterByTier(tier, queryable);
-			queryable = FilterByRoute(route, queryable);
+			queryable = FilterByStatus(arguments.Status, queryable);
+			queryable = FilterByKeyword(arguments.Keyword, queryable);
+			queryable = FilterByAssignee(arguments.Assignee, queryable);
+			queryable = FilterByTier(arguments.Tier, queryable);
+			queryable = FilterByRoute(arguments.Route, queryable);
+			queryable = FilterByLocalAuthority(arguments.LocalAuthorities, queryable);
 
 			int totalProjects = await queryable.CountAsync(cancellationToken);
 			var projects = await queryable
 				.OrderByDescending(acp => acp.CreatedOn)
-				.Skip((page - 1) * count)
-				.Take(count)
+				.Skip((arguments.Page - 1) * arguments.Count)
+				.Take(arguments.Count)
 				.ToListAsync(cancellationToken);
 
 			return (projects, totalProjects);
@@ -42,6 +42,18 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			var lowerCaseRoutes = route.Select(x => x.ToLower()).ToArray();
 
 			return queryable.Where(x => lowerCaseRoutes.Contains(x.TypeOfSignificantChange.ToLower()));
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByLocalAuthority(List<string>? localAuthorities, IQueryable<SignificantChangeProject> queryable)
+		{
+			if (localAuthorities is null || localAuthorities.Count == 0)
+			{
+				return queryable;
+			}
+
+			string[] lowerCaseLocalAuthorities = [.. localAuthorities.Select(x => x.ToLower())];
+
+			return queryable.Where(x => !string.IsNullOrEmpty(x.LocalAuthorityName) && lowerCaseLocalAuthorities.Contains(x.LocalAuthorityName.ToLower()));
 		}
 
 		private static IQueryable<SignificantChangeProject> FilterByTier(List<byte>? tier, IQueryable<SignificantChangeProject> queryable)
@@ -131,23 +143,22 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.OrderBy(route => route)
 				.ToListAsync(cancellationToken);
 
+			List<string> localAuthorities = await dbSet
+				.AsNoTracking()
+				.Select(project => project.LocalAuthorityName)
+				.Where(localAuthority => !string.IsNullOrEmpty(localAuthority))
+				.Select(localAuthority => localAuthority!)
+				.Distinct()
+				.OrderBy(localAuthority => localAuthority)
+				.ToListAsync(cancellationToken);
+
 			return new SignificantChangeFilterParameters
 			{
-				Statuses = Enum.GetValues<SignificantChangeStatus>()
-					.Select(status => new FilterValueDisplay(status.ToString(), status.ToDisplayName()))
-					.ToList(),
-
-				Tiers = SignificantChangeTiers.All
-					.Select(tier => new FilterValueDisplay(tier.ToString(), $"Tier {tier}"))
-					.ToList(),
-
-				AssignedUsers = assignedUsers
-					.Select(fullName => new FilterValueDisplay(fullName, fullName))
-					.ToList(),
-
-				Routes = routes
-					.Select(route => new FilterValueDisplay(route, route))
-					.ToList()
+				Statuses = [.. Enum.GetValues<SignificantChangeStatus>().Select(status => new FilterValueDisplay(status.ToString(), status.ToDisplayName()))],
+				Tiers = [.. SignificantChangeTiers.All.Select(tier => new FilterValueDisplay(tier.ToString(), tier.ToString()))],
+				AssignedUsers = [.. assignedUsers.Select(fullName => new FilterValueDisplay(fullName, fullName))],
+				Routes = [.. routes.Select(route => new FilterValueDisplay(route, route))],
+				LocalAuthorities = [.. localAuthorities.Select(localAuthority => new FilterValueDisplay(localAuthority, localAuthority))]
 			};
 		}
 
