@@ -53,6 +53,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public SignificantChangeProjectDetails Details { get; private set; } = new();
 		public string? LocalAuthorityName { get; private set; }
 		public string? CompaniesHouseNumber { get; private set; }
+		public bool ProjectSentToComplete { get; private set; } = false;
+		public Guid? CompleteProjectId { get; private set; }
 		public string? RegionName { get; private set; }
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
@@ -138,6 +140,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
 
+		public void SetProjectSentToComplete(Guid? completeProjectId)
+		{
+			ProjectSentToComplete = true;
+			CompleteProjectId = completeProjectId;
+    }
+      
 		public void SetStatus(SignificantChangeStatus requestStatus)
 		{
 			Status = requestStatus;
