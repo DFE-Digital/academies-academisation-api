@@ -645,6 +645,71 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				.Which.Value.Should().BeEquivalentTo(validationErrors);
 		}
 
+		[Fact]
+		public async Task SetPlanningPermission_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+		{
+			var routeId = 100;
+			var request = new SetSignificantChangePlanningPermissionPublicCommand(
+				PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
+				AdditionalInformation: "Further detail",
+				SupportingEvidence: "Supporting document");
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangePlanningPermissionCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetSignificantChangePlanningPermission(routeId, request);
+
+			result.Should().BeOfType<OkResult>();
+			_mockMediator.Verify(m => m.Send(
+				It.Is<SetSignificantChangePlanningPermissionCommand>(c =>
+					c.Id == routeId
+					&& c.PlanningPermissionAnswer == request.PlanningPermissionAnswer
+					&& c.AdditionalInformation == request.AdditionalInformation
+					&& c.SupportingEvidence == request.SupportingEvidence),
+				It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[Fact]
+		public async Task SetPlanningPermission_ReturnsNotFound_WhenProjectDoesNotExist()
+		{
+			var request = new SetSignificantChangePlanningPermissionPublicCommand(
+				PlanningPermissionAnswer: PlanningPermissionAnswer.No,
+				AdditionalInformation: null,
+				SupportingEvidence: null);
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangePlanningPermissionCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetSignificantChangePlanningPermission(100, request);
+
+			result.Should().BeOfType<NotFoundResult>();
+		}
+
+		[Fact]
+		public async Task SetPlanningPermission_ReturnsBadRequest_WhenValidationFails()
+		{
+			var request = new SetSignificantChangePlanningPermissionPublicCommand(
+				PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
+				AdditionalInformation: null,
+				SupportingEvidence: null);
+
+			var validationErrors = new[]
+			{
+				new ValidationError("PlanningPermissionAnswer", "Planning permission answer is required")
+			};
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangePlanningPermissionCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+			var result = await _controller.SetSignificantChangePlanningPermission(100, request);
+
+			result.Should().BeOfType<BadRequestObjectResult>()
+				.Which.Value.Should().BeEquivalentTo(validationErrors);
+		}
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(

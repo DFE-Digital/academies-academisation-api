@@ -1019,6 +1019,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.TrustConsultedReligiousBodyNotConsultedReason).HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
 			details.Property(d => d.ProposedChangeDate).HasColumnName("ProposedChangeDate");
 			details.Property(d => d.ProposedDecisionDate).HasColumnName("ProposedDecisionDate");
+			details.Property(d => d.PlanningPermission).HasConversion<string>().HasColumnName("PlanningPermission");
+			details.Property(d => d.PlanningPermissionAdditionalInformation).HasColumnName("PlanningPermissionAdditionalInformation");
+			details.Property(d => d.PlanningPermissionSupportingEvidence).HasColumnName("PlanningPermissionSupportingEvidence");
 		});
 
 	}
