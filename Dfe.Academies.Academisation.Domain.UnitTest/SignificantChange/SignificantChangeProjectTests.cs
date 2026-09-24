@@ -403,6 +403,179 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
+		public void SetLocalAuthorityObjections_ShouldSetDetailsProperties()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: true,
+				localAuthorityObjectionsFurtherInformation: "The local authority has raised objections about safeguarding",
+				supportingEvidenceLink: "https://example.org/evidence");
+
+			project.Details.LocalAuthorityRaisedObjections.Should().BeTrue();
+			project.Details.LocalAuthorityObjectionsFurtherInformation.Should()
+				.Be("The local authority has raised objections about safeguarding");
+			project.Details.LocalAuthoritySupportingEvidenceLink.Should().Be("https://example.org/evidence");
+		}
+
+		[Fact]
+		public void SetLocalAuthorityObjections_WhenNotRaised_ClearsFurtherInformation_AndSetsEvidenceDirectly()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: true,
+				localAuthorityObjectionsFurtherInformation: "Initial objection details",
+				supportingEvidenceLink: "https://example.org/evidence");
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: false,
+				localAuthorityObjectionsFurtherInformation: "Should be cleared",
+				supportingEvidenceLink: "https://example.org/cleared");
+
+			project.Details.LocalAuthorityRaisedObjections.Should().BeFalse();
+			project.Details.LocalAuthorityObjectionsFurtherInformation.Should().BeNull();
+			project.Details.LocalAuthoritySupportingEvidenceLink.Should().Be("https://example.org/cleared");
+		}
+
+		[Fact]
+		public void GetLocalAuthorityObjectionsTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Details.GetLocalAuthorityObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetLocalAuthorityObjectionsTaskStatus_WhenOnlyEvidenceIsProvided_ReturnsInProgress()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: null,
+				localAuthorityObjectionsFurtherInformation: null,
+				supportingEvidenceLink: "https://example.org/evidence");
+
+			project.Details.GetLocalAuthorityObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetLocalAuthorityObjectionsTaskStatus_WhenRaisedWithoutFurtherInformation_ReturnsInProgress()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: true,
+				localAuthorityObjectionsFurtherInformation: null,
+				supportingEvidenceLink: "https://example.org/evidence");
+
+			project.Details.GetLocalAuthorityObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetLocalAuthorityObjectionsTaskStatus_WhenNotRaised_ReturnsCompleted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: false,
+				localAuthorityObjectionsFurtherInformation: null,
+				supportingEvidenceLink: null);
+
+			project.Details.GetLocalAuthorityObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetLocalAuthorityObjectionsTaskStatus_WhenRaisedWithFurtherInformationAndNoEvidence_ReturnsCompleted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: true,
+				localAuthorityObjectionsFurtherInformation: "Objection details",
+				supportingEvidenceLink: null);
+
+			project.Details.GetLocalAuthorityObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetLocalAuthorityObjections_WhenRaisedAndTierOne_MovesToTierTwo()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetLocalAuthorityObjections(
+				localAuthorityRaisedObjections: true,
+				localAuthorityObjectionsFurtherInformation: "Objection details",
+				supportingEvidenceLink: "https://example.org/evidence");
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
 		public void SetProjectDates_ShouldSetDates()
 		{
 			var project = SignificantChangeProject.Create(
