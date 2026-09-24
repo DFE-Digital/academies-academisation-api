@@ -76,7 +76,7 @@ public class SetSignificantChangeLocalAuthorityObjectionsCommandHandlerTests
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.LocalAuthorityRaisedObjections.Should().BeTrue();
 		project.Details.LocalAuthorityObjectionsFurtherInformation.Should().Be("Local authority has raised concerns");
-		project.Details.SupportingEvidenceLink.Should().Be("https://example.org/evidence");
+		project.Details.LocalAuthoritySupportingEvidenceLink.Should().Be("https://example.org/evidence");
 		project.Tier.Should().Be(2);
 		project.Details.GetLocalAuthorityObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 

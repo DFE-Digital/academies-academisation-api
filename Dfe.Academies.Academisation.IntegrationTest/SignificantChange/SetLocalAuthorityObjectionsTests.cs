@@ -53,7 +53,7 @@ public class SetLocalAuthorityObjectionsTests : IClassFixture<TestWebApplication
 			Assert.Equal((byte)2, updated.Tier);
 			Assert.True(updated.Details.LocalAuthorityRaisedObjections);
 			Assert.Equal("Local authority has raised objections", updated.Details.LocalAuthorityObjectionsFurtherInformation);
-			Assert.Equal("https://example.org/evidence", updated.Details.SupportingEvidenceLink);
+			Assert.Equal("https://example.org/evidence", updated.Details.LocalAuthoritySupportingEvidenceLink);
 		});
 	}
 

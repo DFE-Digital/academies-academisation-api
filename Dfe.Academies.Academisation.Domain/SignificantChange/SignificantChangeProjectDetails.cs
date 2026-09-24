@@ -27,7 +27,7 @@ public class SignificantChangeProjectDetails
 
 	public bool? LocalAuthorityRaisedObjections { get; set; }
 	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
-	public string? SupportingEvidenceLink { get; set; }
+	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -177,7 +177,7 @@ public class SignificantChangeProjectDetails
 	{
 		if (!LocalAuthorityRaisedObjections.HasValue
 		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
-		    && string.IsNullOrWhiteSpace(SupportingEvidenceLink))
+		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
 		{
 			return SignificantChangeTaskStatus.NotStarted;
 		}
