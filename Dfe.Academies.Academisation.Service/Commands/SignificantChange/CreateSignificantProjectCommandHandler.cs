@@ -41,6 +41,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 					establishment.Gor.Name),
 				dateTimeProvider.Now);
 
+			significantChangeProject.ApplicationId = command.ApplicationId;
+			significantChangeProject.ApplicationReference = command.ApplicationReference;
+
 			significantChangeProjectRepository.Insert(significantChangeProject);
 			await significantChangeProjectRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -55,7 +58,9 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				TypeOfSignificantChange = significantChangeProject.TypeOfSignificantChange,
 				Status = significantChangeProject.Status.ToString(),
 				LocalAuthorityName = significantChangeProject.LocalAuthorityName,
-				CompaniesHouseNumber = significantChangeProject.CompaniesHouseNumber
+				CompaniesHouseNumber = significantChangeProject.CompaniesHouseNumber,
+				ApplicationId = significantChangeProject.ApplicationId,
+				ApplicationReference = significantChangeProject.ApplicationReference
 			});
 		}
 

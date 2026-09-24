@@ -34,7 +34,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.TransferProject
 			};
 
 			_transferProjectRepositoryMock.Setup(x => x.GetByUrn(It.IsAny<int>()))
-				.ReturnsAsync((Domain.TransferProjectAggregate.TransferProject)null);
+				.ReturnsAsync((Domain.TransferProjectAggregate.TransferProject?)null);
 
 			// Act
 			var result = await _handler.Handle(command, default);

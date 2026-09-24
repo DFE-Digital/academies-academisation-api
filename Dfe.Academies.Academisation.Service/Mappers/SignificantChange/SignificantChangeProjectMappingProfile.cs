@@ -93,6 +93,10 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.StakeholderObjectionsTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
+			.ForMember(destination => destination.ApplicationId,
+				options => options.MapFrom(source => source.ApplicationId ?? string.Empty))
+			.ForMember(destination => destination.ApplicationReference,
+				options => options.MapFrom(source => source.ApplicationReference ?? string.Empty))
 			.ForMember(destination => destination.AssignedUser,
 				options => options.MapFrom(source => source.AssignedUserId == null
 					? null

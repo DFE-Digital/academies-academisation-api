@@ -38,6 +38,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 		private readonly Mock<ILogger<CreateCompleteTransferProjectsCommandHandler>> _mockLogger;
 		private CreateCompleteTransferProjectsCommandHandler? _handler;
 		private readonly Mock<IProjectsClient> _mockProjectsClient;
+		private readonly Mock<ISignificantChangeProjectsClient> _mockSignificantChangeProjectsClient;
 
 		public CreateCompleteTransferProjectsCommandHandlerTests()
 		{
@@ -52,6 +53,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 			_mockPollyPolicyFactory = mockRepository.Create<IPollyPolicyFactory>();
 			_mockLogger = mockRepository.Create<ILogger<CreateCompleteTransferProjectsCommandHandler>>();
 			_mockProjectsClient = mockRepository.Create<IProjectsClient>();
+			_mockSignificantChangeProjectsClient = mockRepository.Create<ISignificantChangeProjectsClient>();
 			_fixture.Customize(new AutoMoqCustomization());
 		}
 
@@ -63,7 +65,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.CompleteProject
 				_mockAcademiesQueryService.Object,
 				_mockCompleteTransmissionLogRepository.Object, 
 				_mockDateTimeProvider.Object,
-				new CompleteApiClientRetryFactory(_mockPollyPolicyFactory.Object, _mockProjectsClient.Object),
+				new CompleteApiClientRetryFactory(_mockPollyPolicyFactory.Object, _mockProjectsClient.Object, _mockSignificantChangeProjectsClient.Object),
 				_mockLogger.Object);
 		}
 

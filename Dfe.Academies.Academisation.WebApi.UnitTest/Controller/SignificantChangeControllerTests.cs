@@ -43,6 +43,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 TrustName = "Test Trust",
                 TrustUkprn = command.TrustUkprn,
                 TypeOfSignificantChange = command.Route,
+                ApplicationId = command.ApplicationId ?? string.Empty,
+                ApplicationReference = command.ApplicationReference ?? string.Empty,
                 Status = "InProgress"
             };
 
@@ -101,6 +103,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     TrustUkprn = "12345678",
                     AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
                     TypeOfSignificantChange = "Change of age range",
+                    ApplicationId = string.Empty,
+                    ApplicationReference = string.Empty,
                     Status = "InProgress"
                 }
             };
@@ -151,6 +155,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 TrustUkprn = "12345678",
                 AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
                 TypeOfSignificantChange = "Change of age range",
+                ApplicationId = string.Empty,
+                ApplicationReference = string.Empty,
                 Status = "InProgress"
             };
 
@@ -706,7 +712,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 Urn: 123456,
                 Tier: 2,
                 Route: "Change of age range",
-                TrustUkprn: "12345678");
+                TrustUkprn: "12345678",
+                ApplicationId: null,
+                ApplicationReference: null);
         }
 
         private static GetSignificantProjectsQuery CreateValidQuery()
