@@ -423,7 +423,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.LocalAuthorityRaisedObjections.Should().BeTrue();
 			project.Details.LocalAuthorityObjectionsFurtherInformation.Should()
 				.Be("The local authority has raised objections about safeguarding");
-			project.Details.SupportingEvidenceLink.Should().Be("https://example.org/evidence");
+			project.Details.LocalAuthoritySupportingEvidenceLink.Should().Be("https://example.org/evidence");
 		}
 
 		[Fact]
@@ -451,7 +451,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Details.LocalAuthorityRaisedObjections.Should().BeFalse();
 			project.Details.LocalAuthorityObjectionsFurtherInformation.Should().BeNull();
-			project.Details.SupportingEvidenceLink.Should().Be("https://example.org/cleared");
+			project.Details.LocalAuthoritySupportingEvidenceLink.Should().Be("https://example.org/cleared");
 		}
 
 		[Fact]

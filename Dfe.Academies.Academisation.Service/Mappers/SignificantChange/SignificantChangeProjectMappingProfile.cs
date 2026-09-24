@@ -44,7 +44,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.LocalAuthorityObjectionsFurtherInformation,
 				options => options.MapFrom(source => source.Details.LocalAuthorityObjectionsFurtherInformation))
 			.ForMember(destination => destination.SupportingEvidenceLink,
-				options => options.MapFrom(source => source.Details.SupportingEvidenceLink))
+				options => options.MapFrom(source => source.Details.LocalAuthoritySupportingEvidenceLink))
 			.ForMember(destination => destination.LocalAuthorityObjectionsTaskStatus,
 				options => options.MapFrom(source => source.Details.GetLocalAuthorityObjectionsTaskStatus().ToString()))
             .ForMember(destination=> destination.EqualitiesImpactAssessmentCompleted,

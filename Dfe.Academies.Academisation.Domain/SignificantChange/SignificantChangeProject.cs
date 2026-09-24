@@ -119,7 +119,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.LocalAuthorityObjectionsFurtherInformation = localAuthorityRaisedObjections is true
 				? localAuthorityObjectionsFurtherInformation
 				: null;
-			Details.SupportingEvidenceLink = supportingEvidenceLink;
+			Details.LocalAuthoritySupportingEvidenceLink = supportingEvidenceLink;
 
 			if (localAuthorityRaisedObjections is true)
 				MoveToTierTwoIfApplicable();

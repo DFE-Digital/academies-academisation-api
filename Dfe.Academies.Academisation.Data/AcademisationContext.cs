@@ -1019,7 +1019,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.TrustConsultedReligiousBodyNotConsultedReason).HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
 			details.Property(d => d.LocalAuthorityRaisedObjections).HasColumnName("LocalAuthorityRaisedObjections");
 			details.Property(d => d.LocalAuthorityObjectionsFurtherInformation).HasColumnName("LocalAuthorityObjectionsFurtherInformation");
-			details.Property(d => d.SupportingEvidenceLink).HasColumnName("SupportingEvidenceLink");
+			details.Property(d => d.LocalAuthoritySupportingEvidenceLink).HasColumnName("LocalAuthoritySupportingEvidenceLink");
 			details.Property(d => d.ProposedChangeDate).HasColumnName("ProposedChangeDate");
 			details.Property(d => d.ProposedDecisionDate).HasColumnName("ProposedDecisionDate");
 			details.Property(d => d.StakeholderObjections).HasColumnName("StakeholderObjections").HasConversion<string>();
