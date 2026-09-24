@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
@@ -139,6 +140,31 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
             result.Result.Should().BeOfType<OkObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
+        public async Task GetSignificantProjects_PassesRegionFilter_ToMediator()
+        {
+            var query = new GetSignificantProjectsQuery(
+                Page: 1,
+                Count: 10,
+                Region: ["North West"]);
+
+            var expectedResponse = new PagedDataResponse<SignificantChangeProjectSearchResponse>(
+                [],
+                new PagingResponse { Page = query.Page, RecordCount = 0, NextPageUrl = null });
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<GetSignificantProjectsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            await _controller.GetSignificantChangeProjects(query, CancellationToken.None);
+
+            _mockMediator.Verify(m => m.Send(
+                It.Is<GetSignificantProjectsQuery>(q =>
+                    q.Region != null &&
+                    q.Region.SequenceEqual(new List<string> { "North West" })),
+                It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]

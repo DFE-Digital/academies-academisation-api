@@ -21,6 +21,7 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			queryable = FilterByTier(arguments.Tier, queryable);
 			queryable = FilterByRoute(arguments.Route, queryable);
 			queryable = FilterByLocalAuthority(arguments.LocalAuthorities, queryable);
+			queryable = FilterByRegion(arguments.Regions, queryable);
 
 			int totalProjects = await queryable.CountAsync(cancellationToken);
 			var projects = await queryable
@@ -54,6 +55,18 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 			string[] lowerCaseLocalAuthorities = [.. localAuthorities.Select(x => x.ToLower())];
 
 			return queryable.Where(x => !string.IsNullOrEmpty(x.LocalAuthorityName) && lowerCaseLocalAuthorities.Contains(x.LocalAuthorityName.ToLower()));
+		}
+
+		private static IQueryable<SignificantChangeProject> FilterByRegion(List<string>? regions, IQueryable<SignificantChangeProject> queryable)
+		{
+			if (regions is null || regions.Count == 0)
+			{
+				return queryable;
+			}
+
+			string[] lowerCaseRegions = [.. regions.Select(x => x.ToLower())];
+
+			return queryable.Where(x => !string.IsNullOrEmpty(x.RegionName) && lowerCaseRegions.Contains(x.RegionName.ToLower()));
 		}
 
 		private static IQueryable<SignificantChangeProject> FilterByTier(List<byte>? tier, IQueryable<SignificantChangeProject> queryable)
@@ -152,13 +165,23 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 				.OrderBy(localAuthority => localAuthority)
 				.ToListAsync(cancellationToken);
 
+			List<string> regions = await dbSet
+				.AsNoTracking()
+				.Select(project => project.RegionName)
+				.Where(region => !string.IsNullOrEmpty(region))
+				.Select(region => region!)
+				.Distinct()
+				.OrderBy(region => region)
+				.ToListAsync(cancellationToken);
+
 			return new SignificantChangeFilterParameters
 			{
 				Statuses = [.. Enum.GetValues<SignificantChangeStatus>().Select(status => new FilterValueDisplay(status.ToString(), status.ToDisplayName()))],
 				Tiers = [.. SignificantChangeTiers.All.Select(tier => new FilterValueDisplay(tier.ToString(), tier.ToString()))],
 				AssignedUsers = [.. assignedUsers.Select(fullName => new FilterValueDisplay(fullName, fullName))],
 				Routes = [.. routes.Select(route => new FilterValueDisplay(route, route))],
-				LocalAuthorities = [.. localAuthorities.Select(localAuthority => new FilterValueDisplay(localAuthority, localAuthority))]
+				LocalAuthorities = [.. localAuthorities.Select(localAuthority => new FilterValueDisplay(localAuthority, localAuthority))],
+				Regions = [.. regions.Select(region => new FilterValueDisplay(region, region))]
 			};
 		}
 

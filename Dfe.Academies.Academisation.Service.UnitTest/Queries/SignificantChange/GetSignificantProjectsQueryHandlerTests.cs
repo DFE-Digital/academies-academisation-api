@@ -60,7 +60,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 						options.Assignee == null &&
 						options.Tier == null &&
 						options.Route == null &&
-						options.LocalAuthorities == null),
+						options.LocalAuthorities == null &&
+						options.Regions == null),
 					cancellationToken))
 				.ReturnsAsync((projects, totalCount: 3));
 
@@ -174,7 +175,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 						options.Assignee == null &&
 						options.Tier == null &&
 						options.Route == null &&
-						options.LocalAuthorities == null),
+						options.LocalAuthorities == null &&
+						options.Regions == null),
 					It.Is<CancellationToken>(token => token == cancellationToken)),
 				Times.Once);
 		}
@@ -183,7 +185,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		public async Task Handle_PassesQueryItems_ToRepository()
 		{
 			// Arrange
-			var query = new GetSignificantProjectsQuery(Page: 3, Count: 25, "school", ["InProgress"], ["Ste"], [1], ["a change"], ["Leeds"]);
+			var query = new GetSignificantProjectsQuery(Page: 3, Count: 25, "school", ["InProgress"], ["Ste"], [1], ["a change"], ["Leeds"], ["North West"]);
 
 			using var cts = new CancellationTokenSource();
 			var cancellationToken = cts.Token;
@@ -208,7 +210,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 						options.Assignee != null && options.Assignee.SequenceEqual(new List<string> { "Ste" }) &&
 						options.Tier != null && options.Tier.SequenceEqual(new List<byte> { 1 }) &&
 						options.Route != null && options.Route.SequenceEqual(new List<string> { "a change" }) &&
-						options.LocalAuthorities != null && options.LocalAuthorities.SequenceEqual(new List<string> { "Leeds" })),
+						options.LocalAuthorities != null && options.LocalAuthorities.SequenceEqual(new List<string> { "Leeds" }) &&
+						options.Regions != null && options.Regions.SequenceEqual(new List<string> { "North West" })),
 					It.Is<CancellationToken>(token => token == cancellationToken)),
 				Times.Once);
 		}
