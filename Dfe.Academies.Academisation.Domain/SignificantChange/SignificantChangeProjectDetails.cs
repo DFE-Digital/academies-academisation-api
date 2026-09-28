@@ -83,8 +83,27 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
+
+	public SignificantChangeTaskStatus GetStakeholderObjectionsTaskStatus()
+	{
+		if (!StakeholderObjections.HasValue
+		    && string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesAllObjectionsAddressed)
+			return SignificantChangeTaskStatus.Completed;
+
+		if (StakeholderObjections == SignificantChangeStakeholderObjections.No)
+			return SignificantChangeTaskStatus.Completed;
+
+		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
+		    && !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
 	{
 		if (!ConsultationLastedMinimumThreeWeeks.HasValue
 		    && string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
