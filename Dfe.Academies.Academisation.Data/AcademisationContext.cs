@@ -996,6 +996,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		significantChangeConfiguration.Property(p => p.AssignedUserFullName).HasColumnName("AssignedUserFullName");
 		significantChangeConfiguration.Property(p => p.Tier).HasColumnName("Tier").IsRequired();
 		significantChangeConfiguration.Property(p => p.TypeOfSignificantChange).HasColumnName("TypeOfSignificantChange").IsRequired();
+		significantChangeConfiguration.Property(p => p.ApplicationId).HasColumnName("ApplicationId");
+		significantChangeConfiguration.Property(p => p.ApplicationReference).HasColumnName("ApplicationReference");
 		significantChangeConfiguration.Property(p => p.TrustUkprn).HasColumnName("TrustUkprn").IsRequired();
 		significantChangeConfiguration.Property(p => p.TrustName).HasColumnName("TrustName").IsRequired();
 		significantChangeConfiguration.Property(p => p.LocalAuthorityName).HasColumnName("LocalAuthorityName");
@@ -1020,6 +1022,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.PlanningPermission).HasConversion<string>().HasColumnName("PlanningPermission");
 			details.Property(d => d.PlanningPermissionAdditionalInformation).HasColumnName("PlanningPermissionAdditionalInformation");
 			details.Property(d => d.PlanningPermissionSupportingEvidence).HasColumnName("PlanningPermissionSupportingEvidence");
+			details.Property(d => d.StakeholderObjections).HasColumnName("StakeholderObjections").HasConversion<string>();
+			details.Property(d => d.StakeholderObjectionsComment).HasColumnName("StakeholderObjectionsComment");
 		});
 
 	}

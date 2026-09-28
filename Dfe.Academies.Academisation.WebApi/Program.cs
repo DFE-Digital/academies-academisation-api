@@ -144,7 +144,8 @@ builder.Services.AddScoped<IApplicationFactory, ApplicationFactory>();
 builder.Services.AddScoped<IPollyPolicyFactory, PollyPolicyFactory>();
 builder.Services.AddScoped<ICompleteApiClientRetryFactory, CompleteApiClientRetryFactory>(); 
 
-builder.Services.AddCompleteApiClient<IProjectsClient, ProjectsClient>(builder.Configuration); 
+builder.Services.AddCompleteApiClient<IProjectsClient, ProjectsClient>(builder.Configuration);
+builder.Services.AddCompleteApiClient<ISignificantChangeProjectsClient, SignificantChangeProjectsClient>(builder.Configuration);
 //Validators
 builder.Services.AddSingleton<ICypressKeyValidator, CypressKeyValidator>();
 

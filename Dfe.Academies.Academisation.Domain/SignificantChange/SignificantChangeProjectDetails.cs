@@ -8,7 +8,8 @@ public class SignificantChangeProjectDetails
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
-
+	public SignificantChangeStakeholderObjections? StakeholderObjections { get; set; }
+	public string? StakeholderObjectionsComment { get; set; }
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
@@ -82,8 +83,8 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-
-	public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
+  
+  public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
 	{
 		if (!ConsultationLastedMinimumThreeWeeks.HasValue
 		    && string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))

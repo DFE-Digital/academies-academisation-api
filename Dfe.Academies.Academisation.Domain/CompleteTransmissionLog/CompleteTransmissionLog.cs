@@ -18,6 +18,7 @@ namespace Dfe.Academies.Academisation.Domain.CompleteTransmissionLog
 		public int? TransferringAcademyId { get; private set; }
 		public int? ConversionProjectId { get; private set;  }
 		public Guid? CompleteProjectId { get; private set; }
+		public int? SignificantChangeProjectId { get; private set; }
 
 		public bool IsSuccess { get; private set; }
 		public string Response { get; private set; }
@@ -29,6 +30,11 @@ namespace Dfe.Academies.Academisation.Domain.CompleteTransmissionLog
 		public static CompleteTransmissionLog CreateTransferProjectLog(int projectId, int transferringAcdemyId, Guid? completeProjectId, bool isSuccess, string response, DateTime createdOn)
 		{
 			return new CompleteTransmissionLog(isSuccess, response, createdOn) { TransferProjectId = projectId, TransferringAcademyId = transferringAcdemyId, CompleteProjectId = completeProjectId };
+		}
+
+		public static CompleteTransmissionLog CreateSignificantChangeProjectLog(int projectId, Guid? completeProjectId, bool isSuccess, string response, DateTime createdOn)
+		{
+			return new CompleteTransmissionLog(isSuccess, response, createdOn) { SignificantChangeProjectId = projectId, CompleteProjectId = completeProjectId };
 		}
 	}
 }

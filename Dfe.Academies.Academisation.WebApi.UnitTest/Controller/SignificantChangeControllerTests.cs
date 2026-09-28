@@ -43,6 +43,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 TrustName = "Test Trust",
                 TrustUkprn = command.TrustUkprn,
                 TypeOfSignificantChange = command.Route,
+                ApplicationId = command.ApplicationId ?? string.Empty,
+                ApplicationReference = command.ApplicationReference ?? string.Empty,
                 Status = "InProgress"
             };
 
@@ -101,6 +103,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     TrustUkprn = "12345678",
                     AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
                     TypeOfSignificantChange = "Change of age range",
+                    ApplicationId = string.Empty,
+                    ApplicationReference = string.Empty,
                     Status = "InProgress"
                 }
             };
@@ -151,6 +155,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 TrustUkprn = "12345678",
                 AssignedUser = new User(assignedUserId, "Assigned User", "assigned.user@test.local"),
                 TypeOfSignificantChange = "Change of age range",
+                ApplicationId = string.Empty,
+                ApplicationReference = string.Empty,
                 Status = "InProgress"
             };
 
@@ -638,7 +644,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			result.Should().BeOfType<BadRequestObjectResult>()
 				.Which.Value.Should().BeEquivalentTo(validationErrors);
 		}
-
+        
 		[Fact]
 		public async Task SetPlanningPermission_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
 		{
@@ -703,6 +709,66 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			result.Should().BeOfType<BadRequestObjectResult>()
 				.Which.Value.Should().BeEquivalentTo(validationErrors);
 		}
+        [Fact]
+        public async Task SetStakeholderObservations_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeStakeholderObjectionsPublicCommand(
+                stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
+                stakeholderObjectionsComment: "some comment");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeStakeholderObjections(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeStakeholderObjectionsCommand>(c =>
+                    c.Id == routeId
+                    && c.StakeholderObjections == request.StakeholderObjections
+                    && c.StakeholderObjectionsComment == request.StakeholderObjectionsComment),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetStakeholderObjections_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeStakeholderObjectionsPublicCommand(
+                stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
+                stakeholderObjectionsComment: "some comment");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeStakeholderObjections(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetStakeholderObservations_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeStakeholderObjectionsPublicCommand(
+                stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
+                stakeholderObjectionsComment: "some comment");
+
+            var validationErrors = new[]
+            {
+                new ValidationError("stakeholderObjections", "stakeholder objections is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeStakeholderObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeStakeholderObjections(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
 
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
@@ -710,7 +776,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 Urn: 123456,
                 Tier: 2,
                 Route: "Change of age range",
-                TrustUkprn: "12345678");
+                TrustUkprn: "12345678",
+                ApplicationId: null,
+                ApplicationReference: null);
         }
 
         private static GetSignificantProjectsQuery CreateValidQuery()
@@ -719,5 +787,6 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 Page: 1,
                 Count: 10);
         }
+        
     }
 }

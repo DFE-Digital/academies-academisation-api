@@ -11,5 +11,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		Task<SignificantChangeProject?> GetSignificantChangeProjectById(int id, CancellationToken cancellationToken);
 		Task<SignificantChangeFilterParameters> GetFilterParameters(CancellationToken cancellationToken);
-	}
+        Task<List<SignificantChangeProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken);
+    }
 }

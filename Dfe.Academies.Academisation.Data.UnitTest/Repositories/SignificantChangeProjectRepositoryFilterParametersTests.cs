@@ -97,4 +97,28 @@ public class SignificantChangeProjectRepositoryFilterParametersTests : TestAcade
 		result.Routes[0].Value.Should().Be("Change of age range");
 		result.Routes[0].Display.Should().Be("Change of age range");
 	}
+
+	[Fact]
+	public async Task GetProjectsToSendToComplete_ReturnsOnlyReadOnlyProjectsThatHaveNotBeenSent()
+	{
+		Seed();
+		using AcademisationContext context = CreateContext();
+		SignificantChangeProject eligible = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+			111111, 2, "Trust C", "10000003", "Change of age range", "School C"), DateTime.UtcNow);
+		eligible.SetReadOnlyDate(DateTime.UtcNow);
+		SignificantChangeProject notReadOnly = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+			222222, 2, "Trust D", "10000004", "Change of age range", "School D"), DateTime.UtcNow);
+		SignificantChangeProject alreadySent = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+			333333, 2, "Trust E", "10000005", "Change of age range", "School E"), DateTime.UtcNow);
+		alreadySent.SetReadOnlyDate(DateTime.UtcNow);
+		alreadySent.SetProjectSentToComplete(Guid.NewGuid());
+		context.AddRange(eligible, notReadOnly, alreadySent);
+		await context.SaveChangesAsync();
+
+		SignificantChangeProjectRepository sut = new(context);
+
+		var result = await sut.GetProjectsToSendToCompleteAsync(CancellationToken.None);
+
+		result.Should().ContainSingle(project => project.Id == eligible.Id);
+	}
 }

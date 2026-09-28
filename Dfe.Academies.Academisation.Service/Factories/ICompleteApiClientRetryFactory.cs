@@ -11,4 +11,5 @@ public interface ICompleteApiClientRetryFactory
 	Task<HttpResponseMessage> CreateConversionMatProjectAsync(CreateConversionMatProjectCommand command, IAsyncPolicy<HttpResponseMessage> retryPolicy, CancellationToken cancellationToken);
 	Task<HttpResponseMessage> CreateTransferProjectAsync(CreateTransferProjectCommand command, IAsyncPolicy<HttpResponseMessage> retryPolicy, CancellationToken cancellationToken);
 	Task<HttpResponseMessage> CreateTransferMatProjectAsync(CreateTransferMatProjectCommand command, IAsyncPolicy<HttpResponseMessage> retryPolicy, CancellationToken cancellationToken);
+	Task<HttpResponseMessage> CreateSignificantChangeProjectAsync(CreateSignificantChangeProjectCommand command, IAsyncPolicy<HttpResponseMessage> retryPolicy, CancellationToken cancellationToken);
 }

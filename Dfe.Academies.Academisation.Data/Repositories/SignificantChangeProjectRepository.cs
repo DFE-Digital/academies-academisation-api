@@ -150,5 +150,10 @@ namespace Dfe.Academies.Academisation.Data.Repositories
 					.ToList()
 			};
 		}
+
+		public async Task<List<SignificantChangeProject>> GetProjectsToSendToCompleteAsync(CancellationToken cancellationToken)
+		{
+			return await this.dbSet.Where(proj => !proj.ProjectSentToComplete && proj.ReadOnlyDate.HasValue).ToListAsync(cancellationToken);
+		}
 	}
 }
