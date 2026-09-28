@@ -55,6 +55,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetAdmissionVariationConsultation(false, "no information provided");
 			project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Mitigation");
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
+			project.SetLocalAuthorityObjections(true, "Local authority objections details", "https://example.org/evidence");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "stakeholders have objected");
 
@@ -90,6 +91,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
 			result.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
+			result.LocalAuthorityObjections.LocalAuthorityRaisedObjections.Should().BeTrue();
+			result.LocalAuthorityObjections.LocalAuthorityObjectionsFurtherInformation.Should().Be("Local authority objections details");
+			result.LocalAuthorityObjections.SupportingEvidenceLink.Should().Be("https://example.org/evidence");
+			result.LocalAuthorityObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			result.ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));

@@ -484,6 +484,71 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
 
+        [Fact]
+        public async Task SetLocalAuthorityObjections_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
+                localAuthorityRaisedObjections: true,
+                localAuthorityObjectionsFurtherInformation: "Local authority has raised objections",
+                supportingEvidenceLink: "https://example.org/evidence");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLocalAuthorityObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeLocalAuthorityObjections(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeLocalAuthorityObjectionsCommand>(c =>
+                    c.Id == routeId
+                    && c.LocalAuthorityRaisedObjections == request.LocalAuthorityRaisedObjections
+                    && c.LocalAuthorityObjectionsFurtherInformation == request.LocalAuthorityObjectionsFurtherInformation
+                    && c.SupportingEvidenceLink == request.SupportingEvidenceLink),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetLocalAuthorityObjections_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
+                localAuthorityRaisedObjections: false,
+                localAuthorityObjectionsFurtherInformation: null,
+                supportingEvidenceLink: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLocalAuthorityObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeLocalAuthorityObjections(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetLocalAuthorityObjections_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
+                localAuthorityRaisedObjections: true,
+                localAuthorityObjectionsFurtherInformation: null,
+                supportingEvidenceLink: null);
+
+            var validationErrors = new[]
+            {
+                new ValidationError("LocalAuthorityObjectionsFurtherInformation", "Further information is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLocalAuthorityObjectionsCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeLocalAuthorityObjections(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
 	    [Fact]
 		public async Task SetProjectDates_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
 		{

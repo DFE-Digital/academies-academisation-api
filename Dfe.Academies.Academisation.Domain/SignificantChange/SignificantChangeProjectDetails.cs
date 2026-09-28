@@ -14,10 +14,14 @@ public class SignificantChangeProjectDetails
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
   
-  public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
+  	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }	
-  public bool? ConsultationIncludeAdmissionVariation { get; set; }
+  	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
+
+	public bool? LocalAuthorityRaisedObjections { get; set; }
+	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
+	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -138,4 +142,29 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+
+	public SignificantChangeTaskStatus GetLocalAuthorityObjectionsTaskStatus()
+	{
+		if (!LocalAuthorityRaisedObjections.HasValue
+		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
+		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (LocalAuthorityRaisedObjections is false)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (LocalAuthorityRaisedObjections is true
+		    && !string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+  
+  
 }
