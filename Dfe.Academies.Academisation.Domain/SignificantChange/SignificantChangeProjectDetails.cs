@@ -13,11 +13,14 @@ public class SignificantChangeProjectDetails
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
-  
-  public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
-	public string? ConsultationDurationNotMetReason { get; set; }	
-  public bool? ConsultationIncludeAdmissionVariation { get; set; }
+
+	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
+	public string? ConsultationDurationNotMetReason { get; set; }
+	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
+	public FundingAnswer? FundingAnswer { get; set; }
+	public string? FundingAdditionalInformation { get; set; }
+	public string? FundingSupportingEvidence { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -35,21 +38,21 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-    public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
-    {
-        if (EqualitiesImpactAssessmentCompleted is null && EqualitiesImpactIdentified is null)
-        {
-            return SignificantChangeTaskStatus.NotStarted;
-        }
+	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
+	{
+		if (EqualitiesImpactAssessmentCompleted is null && EqualitiesImpactIdentified is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
 
-        if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
-        {
-            return SignificantChangeTaskStatus.Completed;
-        }
+		if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
 
-        return SignificantChangeTaskStatus.InProgress;
-    }
-  
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
 	public SignificantChangeTaskStatus GetReligiousBodyConsultationTaskStatus()
 	{
 		if (!TrustConsultedReligiousBody.HasValue
@@ -89,8 +92,8 @@ public class SignificantChangeProjectDetails
 
 		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesAllObjectionsAddressed)
 			return SignificantChangeTaskStatus.Completed;
-		
-		if(StakeholderObjections == SignificantChangeStakeholderObjections.No)
+
+		if (StakeholderObjections == SignificantChangeStakeholderObjections.No)
 			return SignificantChangeTaskStatus.Completed;
 
 		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
@@ -99,8 +102,8 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
+
+	public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
 	{
 		if (!ConsultationLastedMinimumThreeWeeks.HasValue
 			&& string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
@@ -116,11 +119,11 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
+
+	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
 	{
 		if (!ConsultationIncludeAdmissionVariation.HasValue
-		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+			&& string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
 		{
 			return SignificantChangeTaskStatus.NotStarted;
 		}
@@ -131,11 +134,29 @@ public class SignificantChangeProjectDetails
 		}
 
 		if (ConsultationIncludeAdmissionVariation is false
-		    && !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+			&& !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
 		{
 			return SignificantChangeTaskStatus.Completed;
 		}
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+
+	public SignificantChangeTaskStatus GetFundingTaskStatus()
+	{
+		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) && string.IsNullOrWhiteSpace(FundingSupportingEvidence))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (FundingAnswer is SignificantChange.FundingAnswer.No && string.IsNullOrWhiteSpace(FundingAdditionalInformation))
+		{
+			return SignificantChangeTaskStatus.InProgress;
+		}
+
+		return FundingAnswer.HasValue
+			? SignificantChangeTaskStatus.Completed
+			: SignificantChangeTaskStatus.InProgress;
+	}
+
 }

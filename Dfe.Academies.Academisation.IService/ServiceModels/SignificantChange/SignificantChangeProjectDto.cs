@@ -30,6 +30,10 @@ public class SignificantChangeProjectDto
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;
+	public FundingAnswer? FundingAnswer { get; set; }
+	public string? FundingAdditionalInformation { get; set; }
+	public string? FundingSupportingEvidence { get; set; }
+	public string FundingTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
