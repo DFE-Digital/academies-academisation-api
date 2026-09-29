@@ -4,18 +4,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
 
 	public record SignificantChangeProjectOptions(
-		int urn, 
-		byte tier, 
-		string trustName, 
-		string trustUkprn, 
-		string typeOfSignificantChange, 
-		string schoolName, 
-		string? localAuthorityName = null, 
+		int urn,
+		byte tier,
+		string trustName,
+		string trustUkprn,
+		string typeOfSignificantChange,
+		string schoolName,
+		string? localAuthorityName = null,
 		string? companiesHouseNumber = null,
 		string? regionName = null
 	);
 
-	
+
 	public class SignificantChangeProject : Entity, IAggregateRoot
 	{
 		// Private constructor for EF Core
@@ -64,7 +64,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation, string? noAdmissionVariationReason)
+		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
+			string? noAdmissionVariationReason)
 		{
 			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
 			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
@@ -77,7 +78,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			}
 		}
 
-		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
+		public void SetStakeholderConsultation(bool? trustConsultedStakeholders,
+			string? trustConsultedStakeholdersNotConsultedReason)
 		{
 			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
 			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
@@ -87,14 +89,16 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			if (trustConsultedStakeholders is false)
 				MoveToTierTwoIfApplicable();
 		}
+
 		public void SetConsultationDuration(
 			ConsultationDurationAnswer? consultationLastedMinimumThreeWeeks,
 			string? consultationDurationNotMetReason)
 		{
 			Details.ConsultationLastedMinimumThreeWeeks = consultationLastedMinimumThreeWeeks;
-			Details.ConsultationDurationNotMetReason = consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
-				? consultationDurationNotMetReason
-				: null;
+			Details.ConsultationDurationNotMetReason =
+				consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
+					? consultationDurationNotMetReason
+					: null;
 
 			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
 				MoveToTierTwoIfApplicable();
@@ -109,7 +113,17 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.FundingSupportingEvidence = supportingEvidence;
 		}
 
-		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody, string? trustConsultedReligiousBodyNotConsultedReason)
+		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.FundingAnswer = fundingAnswer;
+			Details.FundingAdditionalInformation = fundingAnswer is FundingAnswer.No
+				? additionalInformation
+				: null;
+			Details.FundingSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
+					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
 			Details.TrustConsultedReligiousBody = trustConsultedReligiousBody;
 			Details.TrustConsultedReligiousBodyNotConsultedReason = trustConsultedReligiousBody is false
@@ -135,14 +149,15 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			this.ReadOnlyDate = readOnlyDate;
 		}
 
-		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted, EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
+		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted,
+			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
 		{
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
-      
-    }
-    
+
+		}
+
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
 		{
 			Details.ProposedDecisionDate = proposedDecisionDate;
@@ -168,6 +183,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public void SetStatus(SignificantChangeStatus requestStatus)
 		{
 			Status = requestStatus;
+		}
+
+		public void SetPlanningPermission(PlanningPermissionAnswer planningPermissionAnswer,
+			string? additionalInformation, string? supportingEvidence)
+		{
+			Details.PlanningPermission = planningPermissionAnswer;
+			Details.PlanningPermissionAdditionalInformation = additionalInformation;
+			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
 		}
 	}
 }
