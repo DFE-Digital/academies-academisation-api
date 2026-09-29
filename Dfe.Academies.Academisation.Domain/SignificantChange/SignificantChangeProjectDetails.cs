@@ -122,11 +122,21 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
+
+	public SignificantChangeTaskStatus GetPlanningPermissionTaskStatus()
+	{
+		if (PlanningPermission is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
 	{
 		if (!ConsultationIncludeAdmissionVariation.HasValue
-			&& string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
 		{
 			return SignificantChangeTaskStatus.NotStarted;
 		}
@@ -137,11 +147,28 @@ public class SignificantChangeProjectDetails
 		}
 
 		if (ConsultationIncludeAdmissionVariation is false
-			&& !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
+		    && !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
 		{
 			return SignificantChangeTaskStatus.Completed;
 		}
 
 		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetFundingTaskStatus()
+	{
+		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) && string.IsNullOrWhiteSpace(FundingSupportingEvidence))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (FundingAnswer is SignificantChange.FundingAnswer.No && string.IsNullOrWhiteSpace(FundingAdditionalInformation))
+		{
+			return SignificantChangeTaskStatus.InProgress;
+		}
+
+		return FundingAnswer.HasValue
+			? SignificantChangeTaskStatus.Completed
+			: SignificantChangeTaskStatus.InProgress;
 	}
 }

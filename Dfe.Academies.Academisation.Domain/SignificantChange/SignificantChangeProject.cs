@@ -113,15 +113,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.FundingSupportingEvidence = supportingEvidence;
 		}
 
-		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
-		{
-			Details.FundingAnswer = fundingAnswer;
-			Details.FundingAdditionalInformation = fundingAnswer is FundingAnswer.No
-				? additionalInformation
-				: null;
-			Details.FundingSupportingEvidence = supportingEvidence;
-		}
-
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
 					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
