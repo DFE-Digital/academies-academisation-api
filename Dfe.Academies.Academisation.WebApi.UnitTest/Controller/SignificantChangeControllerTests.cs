@@ -190,12 +190,13 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 Statuses = [new FilterValueDisplay("PreDecision", "Pre decision")],
                 Tiers =
                 [
-                    new FilterValueDisplay("1", "Tier 1"),
-                    new FilterValueDisplay("2", "Tier 2"),
-                    new FilterValueDisplay("3", "Tier 3")
+                    new FilterValueDisplay("1", "1"),
+                    new FilterValueDisplay("2", "2"),
+                    new FilterValueDisplay("3", "3")
                 ],
                 AssignedUsers = [new FilterValueDisplay("Assigned User", "Assigned User")],
-                Routes = [new FilterValueDisplay("Change of age range", "Change of age range")]
+                Routes = [new FilterValueDisplay("Change of age range", "Change of age range")],
+                LocalAuthorities = [new FilterValueDisplay("Leeds", "Leeds")]
             };
 
             _mockMediator
