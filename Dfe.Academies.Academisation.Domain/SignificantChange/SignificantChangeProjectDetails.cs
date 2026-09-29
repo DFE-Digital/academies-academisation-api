@@ -13,54 +13,57 @@ public class SignificantChangeProjectDetails
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
-  
-  public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
-	public string? ConsultationDurationNotMetReason { get; set; }	
-  public bool? ConsultationIncludeAdmissionVariation { get; set; }
+
+	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
+	public string? ConsultationDurationNotMetReason { get; set; }
+	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
+	public PlanningPermissionAnswer? PlanningPermission { get; set; }
+	public string? PlanningPermissionSupportingEvidence { get; set; }
+	public string? PlanningPermissionAdditionalInformation { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
-			&& string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
+		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
 			return SignificantChangeTaskStatus.NotStarted;
 
 		if (TrustConsultedStakeholders is true)
 			return SignificantChangeTaskStatus.Completed;
 
 		if (TrustConsultedStakeholders is false
-			&& !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
+		    && !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-    public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
-    {
-        if (EqualitiesImpactAssessmentCompleted is null && EqualitiesImpactIdentified is null)
-        {
-            return SignificantChangeTaskStatus.NotStarted;
-        }
+	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
+	{
+		if (EqualitiesImpactAssessmentCompleted is null && EqualitiesImpactIdentified is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
 
-        if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
-        {
-            return SignificantChangeTaskStatus.Completed;
-        }
+		if (EqualitiesImpactAssessmentCompleted.HasValue && EqualitiesImpactIdentified.HasValue)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
 
-        return SignificantChangeTaskStatus.InProgress;
-    }
-  
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
 	public SignificantChangeTaskStatus GetReligiousBodyConsultationTaskStatus()
 	{
 		if (!TrustConsultedReligiousBody.HasValue
-			&& string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		    && string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
 			return SignificantChangeTaskStatus.NotStarted;
 
 		if (TrustConsultedReligiousBody is true)
 			return SignificantChangeTaskStatus.Completed;
 
 		if (TrustConsultedReligiousBody is false
-			&& !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		    && !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
@@ -84,40 +87,40 @@ public class SignificantChangeProjectDetails
 	public SignificantChangeTaskStatus GetStakeholderObjectionsTaskStatus()
 	{
 		if (!StakeholderObjections.HasValue
-			&& string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+		    && string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
 			return SignificantChangeTaskStatus.NotStarted;
 
 		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesAllObjectionsAddressed)
 			return SignificantChangeTaskStatus.Completed;
-		
-		if(StakeholderObjections == SignificantChangeStakeholderObjections.No)
+
+		if (StakeholderObjections == SignificantChangeStakeholderObjections.No)
 			return SignificantChangeTaskStatus.Completed;
 
 		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
-			&& !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+		    && !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
+
+	public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
 	{
 		if (!ConsultationLastedMinimumThreeWeeks.HasValue
-			&& string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
+		    && string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
 			return SignificantChangeTaskStatus.NotStarted;
 
 		if (ConsultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.Yes
-			or ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)
+		    or ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)
 			return SignificantChangeTaskStatus.Completed;
 
 		if (ConsultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
-			&& !string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
+		    && !string.IsNullOrWhiteSpace(ConsultationDurationNotMetReason))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
+
+	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
 	{
 		if (!ConsultationIncludeAdmissionVariation.HasValue
 		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
@@ -137,5 +140,15 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetPlanningPermissionTaskStatus()
+	{
+		if (PlanningPermission is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
 	}
 }

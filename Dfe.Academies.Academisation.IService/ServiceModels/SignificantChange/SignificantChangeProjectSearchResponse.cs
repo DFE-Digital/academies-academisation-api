@@ -12,4 +12,6 @@ public class SignificantChangeProjectSearchResponse : SignificantChangeProjectRe
 	public SignificantChangeProjectDatesResponse ProjectDates { get; set; } = new();
 	public SignificantChangeStakeholderObjectionsResponse StakeholderObjections { get; set; } = new();
 	public SignificantChangeAdmissionVariationConsultationResponse AdmissionVariationConsultation { get; set; } = new();
+	public SignificantChangePlanningPermissionResponse PlanningPermission { get; set; } = new();
+
 }
