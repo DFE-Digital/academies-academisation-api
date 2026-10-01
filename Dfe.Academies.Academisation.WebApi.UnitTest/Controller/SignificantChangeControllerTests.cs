@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
@@ -139,6 +140,31 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
             result.Result.Should().BeOfType<OkObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
+        public async Task GetSignificantProjects_PassesRegionFilter_ToMediator()
+        {
+            var query = new GetSignificantProjectsQuery(
+                Page: 1,
+                Count: 10,
+                Region: ["North West"]);
+
+            var expectedResponse = new PagedDataResponse<SignificantChangeProjectSearchResponse>(
+                [],
+                new PagingResponse { Page = query.Page, RecordCount = 0, NextPageUrl = null });
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<GetSignificantProjectsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedResponse);
+
+            await _controller.GetSignificantChangeProjects(query, CancellationToken.None);
+
+            _mockMediator.Verify(m => m.Send(
+                It.Is<GetSignificantProjectsQuery>(q =>
+                    q.Region != null &&
+                    q.Region.SequenceEqual(new List<string> { "North West" })),
+                It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -769,6 +795,42 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 
             result.Should().BeOfType<BadRequestObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
+        [Fact]
+        public async Task SetFunding_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeFundingPublicCommand(
+                FundingAnswer.No,
+                "Funding is unavailable",
+                "Business case");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFundingCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeFunding(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeFundingCommand>(command =>
+                    command.Id == 100
+                    && command.FundingAnswer == FundingAnswer.No
+                    && command.AdditionalInformation == "Funding is unavailable"
+                    && command.SupportingEvidence == "Business case"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetFunding_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeFundingPublicCommand(FundingAnswer.Yes, null, "Business case");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFundingCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeFunding(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
         }
 
         private static CreateSignificantProjectCommand CreateValidCommand()

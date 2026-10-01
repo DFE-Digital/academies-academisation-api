@@ -202,5 +202,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpPut("{id:int}/SetFunding", Name = "SetSignificantChangeFunding")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeFunding(
+			int id,
+			[FromBody] SetSignificantChangeFundingPublicCommand request)
+		{
+			var command = new SetSignificantChangeFundingCommand(
+				id,
+				request.FundingAnswer,
+				request.AdditionalInformation,
+				request.SupportingEvidence);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }

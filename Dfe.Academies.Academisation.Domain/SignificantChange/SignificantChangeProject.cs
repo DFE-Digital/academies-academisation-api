@@ -104,8 +104,17 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
+		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.FundingAnswer = fundingAnswer;
+			Details.FundingAdditionalInformation = fundingAnswer is FundingAnswer.No
+				? additionalInformation
+				: null;
+			Details.FundingSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
-			string? trustConsultedReligiousBodyNotConsultedReason)
+					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
 			Details.TrustConsultedReligiousBody = trustConsultedReligiousBody;
 			Details.TrustConsultedReligiousBodyNotConsultedReason = trustConsultedReligiousBody is false

@@ -17,6 +17,7 @@ public class SignificantChangeProjectDto
 	public string? ApplicationId { get; set; }
 	public string? ApplicationReference { get; set; }
 	public string? LocalAuthorityName { get; set; }
+	public string? RegionName { get; set; }
 	public string? CompaniesHouseNumber { get; set; }
 	public string Status { get; set; } = string.Empty;
 	public bool? TrustConsultedStakeholders { get; set; }
@@ -30,6 +31,10 @@ public class SignificantChangeProjectDto
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;
+	public FundingAnswer? FundingAnswer { get; set; }
+	public string? FundingAdditionalInformation { get; set; }
+	public string? FundingSupportingEvidence { get; set; }
+	public string FundingTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
