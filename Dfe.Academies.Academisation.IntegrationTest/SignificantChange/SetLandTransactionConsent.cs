@@ -23,8 +23,11 @@ public class SetLandTransactionConsentTests : IClassFixture<TestWebApplicationFa
 	{
 		var client = _factory.CreateClient();
 
-        var landTransactionConsentSecured = SignificantChangeLandTransactionConsent.No;
-        string landTransactionConsentAdditionalInfo = "some additional info";
+		var landTransactionApplication = SignificantChange_Generic_YesNoNa.No;
+		string landTransactionApplicationAdditionalInfo = "application details";
+		var landTransactionConsent = SignificantChange_Generic_YesNoNa.No;
+		string landTransactionConsentAdditionalInfo = "consent details";
+		string landTransactionSupportingEvidence = "evidence link";
 
 		var project = SignificantChangeProject.Create(
 			new SignificantChangeProjectOptions(
@@ -39,12 +42,15 @@ public class SetLandTransactionConsentTests : IClassFixture<TestWebApplicationFa
 		_factory.Context.Add(project);
 		await _factory.Context.SaveChangesAsync();
 
-		var request = new SetSignificantChangeLandTransactionConsentPublicCommand(
-			landTransactionConsentSecured,
-			landTransactionConsentAdditionalInfo
+		var request = new SetSignificantChangeLandTransactionPublicCommand(
+			landTransactionApplication,
+			landTransactionApplicationAdditionalInfo,
+			landTransactionConsent,
+			landTransactionConsentAdditionalInfo,
+			landTransactionSupportingEvidence
         );
 
-		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetSignificantChangeLandTransactionConsent", request);
+		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetSignificantChangeLandTransaction", request);
 
 		_factory.Context.ChangeTracker.Clear();
 		var updated = await _factory.Context.Set<SignificantChangeProject>()
@@ -54,8 +60,11 @@ public class SetLandTransactionConsentTests : IClassFixture<TestWebApplicationFa
 		{
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 			Assert.Equal((byte)2, updated.Tier);
-			Assert.Equal(landTransactionConsentSecured, updated.Details.LandTransactionConsentSecured);
+			Assert.Equal(landTransactionApplication, updated.Details.LandTransactionApplication);
+			Assert.Equal(landTransactionApplicationAdditionalInfo, updated.Details.LandTransactionApplicationAdditionalInfo);
+			Assert.Equal(landTransactionConsent, updated.Details.LandTransactionConsent);
 			Assert.Equal(landTransactionConsentAdditionalInfo, updated.Details.LandTransactionConsentAdditionalInfo);
+			Assert.Equal(landTransactionSupportingEvidence, updated.Details.LandTransactionSupportingEvidence);
 		});
 	}
 
@@ -63,12 +72,15 @@ public class SetLandTransactionConsentTests : IClassFixture<TestWebApplicationFa
 	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
 		var client = _factory.CreateClient();
-		var request = new SetSignificantChangeLandTransactionConsentPublicCommand(
-			SignificantChangeLandTransactionConsent.Yes, 
-            null
+		var request = new SetSignificantChangeLandTransactionPublicCommand(
+			SignificantChange_Generic_YesNoNa.Yes,
+			null,
+			SignificantChange_Generic_YesNoNa.Yes,
+			null,
+			null
         );
 
-		var response = await client.PutAsJsonAsync("/significant-change/99999/SetSignificantChangeLandTransactionConsent", request);
+		var response = await client.PutAsJsonAsync("/significant-change/99999/SetSignificantChangeLandTransaction", request);
 
 		Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 	}

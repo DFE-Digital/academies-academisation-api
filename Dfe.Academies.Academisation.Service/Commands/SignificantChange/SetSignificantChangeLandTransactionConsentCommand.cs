@@ -4,19 +4,28 @@ using MediatR;
 
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
-public class SetSignificantChangeLandTransactionConsentPublicCommand(
-	SignificantChangeLandTransactionConsent? landTransactionConsentSecured,
-	string? landTransactionConsentAdditionalInfo) : IRequest<CommandResult>
+public class SetSignificantChangeLandTransactionPublicCommand(
+	SignificantChange_Generic_YesNoNa? landTransactionApplication,
+	string? landTransactionApplicationAdditionalInfo,
+	SignificantChange_Generic_YesNoNa? landTransactionConsent,
+	string? landTransactionConsentAdditionalInfo,
+	string? landTransactionSupportingEvidence) : IRequest<CommandResult>
 {
-	public SignificantChangeLandTransactionConsent? LandTransactionConsentSecured { get; set; } = landTransactionConsentSecured;
+	public SignificantChange_Generic_YesNoNa? LandTransactionApplication { get; set; } = landTransactionApplication;
+	public string? LandTransactionApplicationAdditionalInfo { get; set; } = landTransactionApplicationAdditionalInfo;
+	public SignificantChange_Generic_YesNoNa? LandTransactionConsent { get; set; } = landTransactionConsent;
 	public string? LandTransactionConsentAdditionalInfo { get; set; } = landTransactionConsentAdditionalInfo;
+	public string? LandTransactionSupportingEvidence { get; set; } = landTransactionSupportingEvidence;
 }
 
-public class SetSignificantChangeLandTransactionConsentCommand(
+public class SetSignificantChangeLandTransactionCommand(
 	int id,
-	SignificantChangeLandTransactionConsent? landTransactionConsentSecured,
-	string? landTransactionConsentAdditionalInfo)
-	: SetSignificantChangeLandTransactionConsentPublicCommand(landTransactionConsentSecured, landTransactionConsentAdditionalInfo)
+	SignificantChange_Generic_YesNoNa? landTransactionApplication,
+	string? landTransactionApplicationAdditionalInfo,
+	SignificantChange_Generic_YesNoNa? landTransactionConsent,
+	string? landTransactionConsentAdditionalInfo,
+	string? landTransactionSupportingEvidence)
+	: SetSignificantChangeLandTransactionPublicCommand(landTransactionApplication, landTransactionApplicationAdditionalInfo, landTransactionConsent, landTransactionConsentAdditionalInfo, landTransactionSupportingEvidence)
 {
 	public int Id { get; set; } = id;
 }

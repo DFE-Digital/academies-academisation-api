@@ -579,40 +579,49 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
     [Fact]
-        public async Task SetLandTransactionConsent_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        public async Task SetLandTransaction_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;
-            var request = new SetSignificantChangeLandTransactionConsentPublicCommand(
-                landTransactionConsentSecured: SignificantChangeLandTransactionConsent.NotApplicable,
-                landTransactionConsentAdditionalInfo: "Some additional info");
+            var request = new SetSignificantChangeLandTransactionPublicCommand(
+                landTransactionApplication: SignificantChange_Generic_YesNoNa.NotApplicable,
+                landTransactionApplicationAdditionalInfo: "Application details",
+                landTransactionConsent: SignificantChange_Generic_YesNoNa.Yes,
+                landTransactionConsentAdditionalInfo: "Consent details",
+                landTransactionSupportingEvidence: "Evidence link");
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionConsentPublicCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CommandSuccessResult());
 
-            var result = await _controller.SetSignificantChangeLandTransactionConsent(routeId, request);
+            var result = await _controller.SetSignificantChangeLandTransaction(routeId, request);
 
             result.Should().BeOfType<OkResult>();
             _mockMediator.Verify(m => m.Send(
-                It.Is<SetSignificantChangeLandTransactionConsentCommand>(c =>
+                It.Is<SetSignificantChangeLandTransactionCommand>(c =>
                     c.Id == routeId
-                    && c.LandTransactionConsentSecured == request.LandTransactionConsentSecured
-                    && c.LandTransactionConsentAdditionalInfo == request.LandTransactionConsentAdditionalInfo),
+                    && c.LandTransactionApplication == request.LandTransactionApplication
+                    && c.LandTransactionApplicationAdditionalInfo == request.LandTransactionApplicationAdditionalInfo
+                    && c.LandTransactionConsent == request.LandTransactionConsent
+                    && c.LandTransactionConsentAdditionalInfo == request.LandTransactionConsentAdditionalInfo
+                    && c.LandTransactionSupportingEvidence == request.LandTransactionSupportingEvidence),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
-        public async Task SetLandTransactionConsent_ReturnsNotFound_WhenProjectDoesNotExist()
+        public async Task SetLandTransaction_ReturnsNotFound_WhenProjectDoesNotExist()
         {
-            var request = new SetSignificantChangeLandTransactionConsentPublicCommand(
-                landTransactionConsentSecured: SignificantChangeLandTransactionConsent.No,
-                landTransactionConsentAdditionalInfo: null);
+            var request = new SetSignificantChangeLandTransactionPublicCommand(
+                landTransactionApplication: SignificantChange_Generic_YesNoNa.Yes,
+                landTransactionApplicationAdditionalInfo: null,
+                landTransactionConsent: SignificantChange_Generic_YesNoNa.No,
+                landTransactionConsentAdditionalInfo: null,
+                landTransactionSupportingEvidence: null);
 
             _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionConsentCommand>(), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new NotFoundCommandResult());
 
-            var result = await _controller.SetSignificantChangeLandTransactionConsent(100, request);
+            var result = await _controller.SetSignificantChangeLandTransaction(100, request);
 
             result.Should().BeOfType<NotFoundResult>();
         }

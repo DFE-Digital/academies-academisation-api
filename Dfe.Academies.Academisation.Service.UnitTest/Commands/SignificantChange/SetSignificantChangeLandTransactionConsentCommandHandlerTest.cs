@@ -25,10 +25,13 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 	[Fact]
 	public async Task Handle_ProjectNotFound_ReturnsNotFoundCommandResult()
 	{
-		var command = new SetSignificantChangeLandTransactionConsentCommand(
+		var command = new SetSignificantChangeLandTransactionCommand(
 			id: 100,
-			landTransactionConsentSecured: SignificantChangeLandTransactionConsent.Yes,
-			landTransactionConsentAdditionalInfo: "some additional info"
+			landTransactionApplication: SignificantChange_Generic_YesNoNa.Yes,
+			landTransactionApplicationAdditionalInfo: null,
+			landTransactionConsent: SignificantChange_Generic_YesNoNa.Yes,
+			landTransactionConsentAdditionalInfo: null,
+			landTransactionSupportingEvidence: "evidence link"
         );
 
 		_repositoryMock
@@ -45,10 +48,13 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 	[Fact]
 	public async Task Handle_ProjectFound_UpdatesSectionAndPersistsChanges()
 	{
-		var command = new SetSignificantChangeLandTransactionConsentCommand(
+		var command = new SetSignificantChangeLandTransactionCommand(
 			id: 200,
-			landTransactionConsentSecured: SignificantChangeLandTransactionConsent.No,
-			landTransactionConsentAdditionalInfo: "some additional info"
+			landTransactionApplication: SignificantChange_Generic_YesNoNa.Yes,
+			landTransactionApplicationAdditionalInfo: null,
+			landTransactionConsent: SignificantChange_Generic_YesNoNa.No,
+			landTransactionConsentAdditionalInfo: "some additional info",
+			landTransactionSupportingEvidence: "evidence link"
         );
 
 		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
@@ -73,10 +79,13 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 		var result = await _handler.Handle(command, CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.Details.LandTransactionConsentSecured.Should().Be(command.LandTransactionConsentSecured);
+		project.Details.LandTransactionApplication.Should().Be(command.LandTransactionApplication);
+		project.Details.LandTransactionApplicationAdditionalInfo.Should().Be(command.LandTransactionApplicationAdditionalInfo);
+		project.Details.LandTransactionConsent.Should().Be(command.LandTransactionConsent);
 		project.Details.LandTransactionConsentAdditionalInfo.Should().Be(command.LandTransactionConsentAdditionalInfo);
+		project.Details.LandTransactionSupportingEvidence.Should().Be(command.LandTransactionSupportingEvidence);
 		project.Tier.Should().Be(2);
-		project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		project.Details.GetLandTransactionTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);
 		_repositoryMock.Verify(x => x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

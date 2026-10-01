@@ -1,11 +1,11 @@
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
-	public enum SignificantChangeLandTransactionConsent
+	public enum SignificantChange_Generic_YesNoNa
 	{
+		Yes,
 		No,
 		NotApplicable,
-		AwaitingLttDecision,
-        Yes
+        
 	}
 }
 

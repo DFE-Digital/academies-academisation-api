@@ -30,8 +30,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		{
 			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
 			var proposedChangeDate = DateTime.UtcNow.AddDays(20);
-			var landTransactionConsent = SignificantChangeLandTransactionConsent.NotApplicable;
-			string landtransactionConsentAdditionalInfo = "some additional info";
+			var landTransactionApplication = SignificantChange_Generic_YesNoNa.NotApplicable;
+			string landTransactionApplicationAdditionalInfo = "application details";
+			var landTransactionConsent = SignificantChange_Generic_YesNoNa.Yes;
+			string landtransactionConsentAdditionalInfo = "consent details";
+			string landTransactionSupportingEvidence = "evidence link";
 
 			var query = new GetSignificantChangeProjectByIdQuery(10);
 			var cancellationToken = CancellationToken.None;
@@ -58,7 +61,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Mitigation");
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
-			project.SetLandTransactionConsent(landTransactionConsent, landtransactionConsentAdditionalInfo);
+			project.SetLandTransaction(landTransactionApplication, landTransactionApplicationAdditionalInfo, landTransactionConsent, landtransactionConsentAdditionalInfo, landTransactionSupportingEvidence);
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -96,8 +99,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			result.ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
-			result.LandTransactionConsent.LandTransactionConsentSecured.Should().Be(landTransactionConsent);
-			result.LandTransactionConsent.LandTransactionConsentAdditionalInfo.Should().Be(landtransactionConsentAdditionalInfo);
+			result.LandTransaction.LandTransactionApplication.Should().Be(landTransactionApplication);
+			result.LandTransaction.LandTransactionApplicationAdditionalInfo.Should().Be(landTransactionApplicationAdditionalInfo);
+			result.LandTransaction.LandTransactionConsent.Should().Be(landTransactionConsent);
+			result.LandTransaction.LandTransactionConsentAdditionalInfo.Should().Be(landtransactionConsentAdditionalInfo);
+			result.LandTransaction.LandTransactionSupportingEvidence.Should().Be(landTransactionSupportingEvidence);
 		}
 
 		[Fact]

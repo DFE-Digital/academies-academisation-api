@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
-public class SetSignificantChangeLandTransactionConsentCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetSignificantChangeLandTransactionConsentCommandHandler> logger) : IRequestHandler<SetSignificantChangeLandTransactionConsentCommand, CommandResult>
+public class SetSignificantChangeLandTransactionConsentCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetSignificantChangeLandTransactionConsentCommandHandler> logger) : IRequestHandler<SetSignificantChangeLandTransactionCommand, CommandResult>
 {
 	private readonly ISignificantChangeProjectRepository _repository = repository;
 	private readonly ILogger<SetSignificantChangeLandTransactionConsentCommandHandler> _logger = logger;
 
-	public async Task<CommandResult> Handle(SetSignificantChangeLandTransactionConsentCommand request, CancellationToken cancellationToken)
+	public async Task<CommandResult> Handle(SetSignificantChangeLandTransactionCommand request, CancellationToken cancellationToken)
 	{
 		var existingProject = await _repository.GetSignificantChangeProjectById(request.Id, cancellationToken);
 
@@ -20,9 +20,12 @@ public class SetSignificantChangeLandTransactionConsentCommandHandler(ISignifica
 			return new NotFoundCommandResult();
 		}
 
-		existingProject.SetLandTransactionConsent(
-			request.LandTransactionConsentSecured,
-			request.LandTransactionConsentAdditionalInfo);
+		existingProject.SetLandTransaction(
+			request.LandTransactionApplication,
+			request.LandTransactionApplicationAdditionalInfo,
+			request.LandTransactionConsent,
+			request.LandTransactionConsentAdditionalInfo,
+			request.LandTransactionSupportingEvidence);
 
 		_repository.Update(existingProject);
 		await _repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

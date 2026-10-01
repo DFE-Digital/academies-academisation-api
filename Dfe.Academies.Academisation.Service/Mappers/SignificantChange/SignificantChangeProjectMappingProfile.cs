@@ -45,12 +45,19 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
 			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()))
-			.ForMember(destination => destination.LandTransactionConsentSecured,
-				options => options.MapFrom(source => source.Details.LandTransactionConsentSecured.ToString()))
+			
+			.ForMember(destination => destination.LandTransactionApplication,
+				options => options.MapFrom(source => source.Details.LandTransactionApplication.ToString()))
+			.ForMember(destination => destination.LandTransactionApplicationAdditionalInfo, 
+				options => options.MapFrom(source => source.Details.LandTransactionApplicationAdditionalInfo))
+			.ForMember(destination => destination.LandTransactionConsent,
+				options => options.MapFrom(source => source.Details.LandTransactionConsent.ToString()))
 			.ForMember(destination => destination.LandTransactionConsentAdditionalInfo, 
 				options => options.MapFrom(source => source.Details.LandTransactionConsentAdditionalInfo))
-			.ForMember(destination => destination.LandTransactionConsentTaskStatus, 
-				options => options.MapFrom(source => source.Details.GetLandTransactionConsentTaskStatus().ToString()));
+			.ForMember(destination => destination.LandTransactionSupportingEvidence, 
+				options => options.MapFrom(source => source.Details.LandTransactionSupportingEvidence))
+			.ForMember(destination => destination.LandTransactionTaskStatus, 
+				options => options.MapFrom(source => source.Details.GetLandTransactionTaskStatus().ToString()));
 
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderConsultationResponse>()
@@ -75,7 +82,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeLandTransactionResponse>()
 			.ForMember(destination => destination.Status, 
-				options => options.MapFrom(source => source.LandTransactionConsentTaskStatus));
+				options => options.MapFrom(source => source.LandTransactionTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
             .ForMember(destination => destination.AssignedUser,
@@ -105,7 +112,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source))
-			.ForMember(destination => destination.LandTransactionConsent,
+			.ForMember(destination => destination.LandTransaction,
 				options => options.MapFrom(source => source));
 	}
 }

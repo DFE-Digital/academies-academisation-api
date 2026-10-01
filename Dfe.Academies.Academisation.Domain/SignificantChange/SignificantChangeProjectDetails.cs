@@ -16,8 +16,11 @@ public class SignificantChangeProjectDetails
   public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 
-	public SignificantChangeLandTransactionConsent? LandTransactionConsentSecured { get; set; }
+	public SignificantChange_Generic_YesNoNa? LandTransactionConsent { get; set; }
 	public string? LandTransactionConsentAdditionalInfo { get; set; }
+	public SignificantChange_Generic_YesNoNa? LandTransactionApplication { get; set; }
+	public string? LandTransactionApplicationAdditionalInfo { get; set; }
+	public string? LandTransactionSupportingEvidence { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -81,13 +84,19 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-	public SignificantChangeTaskStatus GetLandTransactionConsentTaskStatus()
+	public SignificantChangeTaskStatus GetLandTransactionTaskStatus()
 	{
-		if (!LandTransactionConsentSecured.HasValue
-			&& string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo))
+		if (!LandTransactionApplication.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo)
+			&& !LandTransactionConsent.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)
+			&& string.IsNullOrWhiteSpace(LandTransactionSupportingEvidence) )
 			return SignificantChangeTaskStatus.NotStarted;
 
-		if (LandTransactionConsentSecured.HasValue)
+		if (LandTransactionApplication.HasValue
+			&& (LandTransactionApplication != SignificantChange_Generic_YesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo))
+			&& LandTransactionConsent.HasValue
+			&& (LandTransactionConsent != SignificantChange_Generic_YesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;

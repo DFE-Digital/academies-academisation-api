@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20260916214804_AddSignificantChangeLandTransactionConsent")]
-    partial class AddSignificantChangeLandTransactionConsent
+    [Migration("20260930112011_AddSignificantChangeLandTRansaction")]
+    partial class AddSignificantChangeLandTRansaction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -905,6 +905,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
 
                     b.Property<DateTime?>("ReadOnlyDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("RegionName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RegionName");
 
                     b.Property<string>("SchoolName")
                         .IsRequired()
@@ -2464,6 +2468,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
+                            b1.Property<bool?>("ConsultationIncludeAdmissionVariation")
+                                .HasColumnType("bit")
+                                .HasColumnName("ConsultationIncludeAdmissionVariation");
+
+                            b1.Property<string>("ConsultationNoAdmissionVariationReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ConsultationNoAdmissionVariationReason");
+
                             b1.Property<bool?>("EqualitiesImpactAssessmentCompleted")
                                 .HasColumnType("bit")
                                 .HasColumnName("EqualitiesImpactAssessmentCompleted");
@@ -2476,13 +2488,25 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
 
+                            b1.Property<string>("LandTransactionApplication")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplication");
+
+                            b1.Property<string>("LandTransactionApplicationAdditionalInfo")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplicationAdditionalInfo");
+
+                            b1.Property<string>("LandTransactionConsent")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsent");
+
                             b1.Property<string>("LandTransactionConsentAdditionalInfo")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("LandTransactionConsentAdditionalInfo");
 
-                            b1.Property<string>("LandTransactionConsentSecured")
+                            b1.Property<string>("LandTransactionSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LandTransactionConsentSecured");
+                                .HasColumnName("LandTransactionSupportingEvidence");
 
                             b1.Property<DateTime?>("ProposedChangeDate")
                                 .HasColumnType("datetime2")

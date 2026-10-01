@@ -2472,6 +2472,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("ConsultationNoAdmissionVariationReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationNoAdmissionVariationReason");
+
                             b1.Property<bool?>("EqualitiesImpactAssessmentCompleted")
                                 .HasColumnType("bit")
                                 .HasColumnName("EqualitiesImpactAssessmentCompleted");
@@ -2484,13 +2485,25 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
 
+                            b1.Property<string>("LandTransactionApplication")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplication");
+
+                            b1.Property<string>("LandTransactionApplicationAdditionalInfo")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplicationAdditionalInfo");
+
+                            b1.Property<string>("LandTransactionConsent")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsent");
+
                             b1.Property<string>("LandTransactionConsentAdditionalInfo")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("LandTransactionConsentAdditionalInfo");
 
-                            b1.Property<string>("LandTransactionConsentSecured")
+                            b1.Property<string>("LandTransactionSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LandTransactionConsentSecured");
+                                .HasColumnName("LandTransactionSupportingEvidence");
 
                             b1.Property<DateTime?>("ProposedChangeDate")
                                 .HasColumnType("datetime2")

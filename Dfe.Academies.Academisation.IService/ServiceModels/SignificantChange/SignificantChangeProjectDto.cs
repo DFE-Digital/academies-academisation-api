@@ -32,7 +32,10 @@ public class SignificantChangeProjectDto
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
 	public string ConfirmProjectDatesTaskStatus { get; set; } = string.Empty;
-	public string? LandTransactionConsentSecured { get; set; }
+	public string? LandTransactionApplication { get; set; }
+	public string? LandTransactionApplicationAdditionalInfo { get; set; }
+	public string? LandTransactionConsent { get; set; }
 	public string? LandTransactionConsentAdditionalInfo { get; set; }
-	public string LandTransactionConsentTaskStatus { get; set; } = string.Empty;
+	public string? LandTransactionSupportingEvidence { get; set; }
+	public string LandTransactionTaskStatus { get; set; } = string.Empty;
 }

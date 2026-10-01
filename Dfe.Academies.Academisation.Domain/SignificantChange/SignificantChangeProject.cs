@@ -124,12 +124,20 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
 
-		public void SetLandTransactionConsent(SignificantChangeLandTransactionConsent? consentSecured, string? additionalInfo)
+		public void SetLandTransaction(
+			SignificantChange_Generic_YesNoNa? landTransactionApplication, 
+			string? landTransactionApplicationAdditionalInfo,
+			SignificantChange_Generic_YesNoNa? landTransactionConsent, 
+			string? landTransactionConsentAdditionalInfo,  
+			string? landTransactionSupportingEvidence)
 		{
-			Details.LandTransactionConsentSecured = consentSecured;
-			Details.LandTransactionConsentAdditionalInfo = additionalInfo;
+			Details.LandTransactionApplication = landTransactionApplication;
+			Details.LandTransactionApplicationAdditionalInfo = landTransactionApplicationAdditionalInfo;
+			Details.LandTransactionConsent = landTransactionConsent;
+			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
+			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
 
-			if(consentSecured is SignificantChangeLandTransactionConsent.No)
+			if(landTransactionConsent is SignificantChange_Generic_YesNoNa.No || landTransactionApplication is SignificantChange_Generic_YesNoNa.No)
 				MoveToTierTwoIfApplicable();
 		}
 	}

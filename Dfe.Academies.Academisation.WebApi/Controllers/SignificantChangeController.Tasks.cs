@@ -105,16 +105,19 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
-		[HttpPut("{id:int}/SetSignificantChangeLandTransactionConsent", Name = "SetSignificantChangeLandTransactionConsent")]
+		[HttpPut("{id:int}/SetSignificantChangeLandTransaction", Name = "SetSignificantChangeLandTransaction")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult> SetSignificantChangeLandTransactionConsent(int id, [FromBody] SetSignificantChangeLandTransactionConsentPublicCommand request)
+		public async Task<ActionResult> SetSignificantChangeLandTransaction(int id, [FromBody] SetSignificantChangeLandTransactionPublicCommand request)
 		{
-			var command = new SetSignificantChangeLandTransactionConsentCommand(
+			var command = new SetSignificantChangeLandTransactionCommand(
 				id,
-				request.LandTransactionConsentSecured,
-				request.LandTransactionConsentAdditionalInfo);
+				request.LandTransactionApplication,
+				request.LandTransactionApplicationAdditionalInfo,
+				request.LandTransactionConsent,
+				request.LandTransactionConsentAdditionalInfo,
+				request.LandTransactionSupportingEvidence);
 
 			CommandResult result = await _mediator.Send(command);
 
