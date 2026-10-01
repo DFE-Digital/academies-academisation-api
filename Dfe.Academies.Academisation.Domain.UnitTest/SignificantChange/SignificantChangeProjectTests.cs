@@ -927,5 +927,50 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
+
+		[Fact]
+		public void SetFunding_WhenAnswerIsNotNo_ClearsAdditionalInformation()
+		{
+			var project = CreateProject();
+
+			project.SetFunding(FundingAnswer.Yes, "This should be cleared", "Business case");
+
+			project.Details.FundingAnswer.Should().Be(FundingAnswer.Yes);
+			project.Details.FundingAdditionalInformation.Should().BeNull();
+			project.Details.FundingSupportingEvidence.Should().Be("Business case");
+		}
+
+		[Theory]
+		[InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(FundingAnswer.No, null, "Business case", SignificantChangeTaskStatus.InProgress)]
+		[InlineData(FundingAnswer.No, "Funding is unavailable", "Business case", SignificantChangeTaskStatus.Completed)]
+		[InlineData(FundingAnswer.Yes, null, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(FundingAnswer.No, "Funding is unavailable", null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(FundingAnswer.NotApplicable, null, "Not applicable evidence", SignificantChangeTaskStatus.Completed)]
+		public void GetFundingTaskStatus_ReturnsExpectedStatus(
+			FundingAnswer? answer,
+			string? additionalInformation,
+			string? supportingEvidence,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetFunding(answer, additionalInformation, supportingEvidence);
+
+			project.Details.GetFundingTaskStatus().Should().Be(expected);
+		}
+
+		private SignificantChangeProject CreateProject()
+		{
+			return SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+		}
 	}
 }
