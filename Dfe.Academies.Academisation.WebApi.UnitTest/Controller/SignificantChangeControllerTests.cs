@@ -771,6 +771,42 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
 
+        [Fact]
+        public async Task SetFunding_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeFundingPublicCommand(
+                FundingAnswer.No,
+                "Funding is unavailable",
+                "Business case");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFundingCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeFunding(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeFundingCommand>(command =>
+                    command.Id == 100
+                    && command.FundingAnswer == FundingAnswer.No
+                    && command.AdditionalInformation == "Funding is unavailable"
+                    && command.SupportingEvidence == "Business case"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetFunding_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeFundingPublicCommand(FundingAnswer.Yes, null, "Business case");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFundingCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeFunding(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(

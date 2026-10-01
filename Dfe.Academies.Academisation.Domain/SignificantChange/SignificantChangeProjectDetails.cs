@@ -18,6 +18,9 @@ public class SignificantChangeProjectDetails
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
+	public FundingAnswer? FundingAnswer { get; set; }
+	public string? FundingAdditionalInformation { get; set; }
+	public string? FundingSupportingEvidence { get; set; }
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }
 	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
@@ -120,6 +123,16 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
+	public SignificantChangeTaskStatus GetPlanningPermissionTaskStatus()
+	{
+		if (PlanningPermission is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
+	}
+
 	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
 	{
 		if (!ConsultationIncludeAdmissionVariation.HasValue
@@ -142,13 +155,20 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-	public SignificantChangeTaskStatus GetPlanningPermissionTaskStatus()
+	public SignificantChangeTaskStatus GetFundingTaskStatus()
 	{
-		if (PlanningPermission is null)
+		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) && string.IsNullOrWhiteSpace(FundingSupportingEvidence))
 		{
 			return SignificantChangeTaskStatus.NotStarted;
 		}
 
-		return SignificantChangeTaskStatus.Completed;
+		if (FundingAnswer is SignificantChange.FundingAnswer.No && string.IsNullOrWhiteSpace(FundingAdditionalInformation))
+		{
+			return SignificantChangeTaskStatus.InProgress;
+		}
+
+		return FundingAnswer.HasValue
+			? SignificantChangeTaskStatus.Completed
+			: SignificantChangeTaskStatus.InProgress;
 	}
 }

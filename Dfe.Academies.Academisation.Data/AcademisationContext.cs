@@ -1012,6 +1012,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.ConsultationDurationNotMetReason).HasColumnName("ConsultationDurationNotMetReason");
 			details.Property(d => d.ConsultationIncludeAdmissionVariation).HasColumnName("ConsultationIncludeAdmissionVariation");
 			details.Property(d => d.ConsultationNoAdmissionVariationReason).HasColumnName("ConsultationNoAdmissionVariationReason");
+			details.Property(d => d.FundingAnswer).HasConversion<string>().HasColumnName("FundingAnswer");
+			details.Property(d => d.FundingAdditionalInformation).HasColumnName("FundingAdditionalInformation");
+			details.Property(d => d.FundingSupportingEvidence).HasColumnName("FundingSupportingEvidence");
 			details.Property(d => d.EqualitiesImpactAssessmentCompleted).HasColumnName("EqualitiesImpactAssessmentCompleted");
 			details.Property(d => d.EqualitiesImpactIdentified).HasColumnName("EqualitiesImpactIdentified").HasConversion<string>();
 			details.Property(d => d.EqualitiesImpactIdentifiedMitigation).HasColumnName("EqualitiesImpactIdentifiedMitigation");
