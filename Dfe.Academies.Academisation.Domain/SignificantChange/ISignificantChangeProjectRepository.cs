@@ -12,6 +12,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public List<byte>? Tier { get; init; }
 		public List<string>? Route { get; init; }
 		public List<string>? LocalAuthorities { get; init; }
+		public List<string>? Regions { get; init; }
 	}
 
 	public interface ISignificantChangeProjectRepository : IRepository<SignificantChangeProject>,
