@@ -2,8 +2,8 @@
 {
 	public enum EqualitiesImpact
 	{
-		None,
-		PotentialImpacts,
-		ImpactsIdentified
+		Unlikely,
+		SomeImpact,
+		Likely
 	}
 }

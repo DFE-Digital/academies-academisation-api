@@ -39,6 +39,7 @@ public class SignificantChangeProjectDto
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public bool? TrustConsultedReligiousBody { get; set; }
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public string ReligiousBodyConsultationTaskStatus { get; set; } = string.Empty;

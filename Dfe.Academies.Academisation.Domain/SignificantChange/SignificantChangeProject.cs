@@ -141,11 +141,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		}
 
 		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted,
-			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
+			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation, string? equalitiesImpactSupportingEvidence)
 		{
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
+			Details.EqualitiesImpactSupportingEvidence = equalitiesImpactSupportingEvidence;
 
 		}
 
