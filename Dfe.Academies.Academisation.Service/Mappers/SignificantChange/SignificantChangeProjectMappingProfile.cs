@@ -158,17 +158,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 						source.AssignedUserId.Value,
 						source.AssignedUserFullName ?? string.Empty,
 						source.AssignedUserEmailAddress ?? string.Empty)))
-			.ForMember(destination => destination.StakeholderConsultation,
-				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.EqualitiesImpactAssessment,
 				options => options.MapFrom(source => source))
-			.ForMember(destination => destination.AssignedUser,
-				options => options.MapFrom(source => source.AssignedUserId == null
-					? null
-					: new User(
-						source.AssignedUserId.Value,
-						source.AssignedUserFullName ?? string.Empty,
-						source.AssignedUserEmailAddress ?? string.Empty)))
 			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ConsultationDuration,
@@ -177,7 +168,6 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Funding,
 				options => options.MapFrom(source => source))
-		
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.StakeholderObjections,
@@ -188,11 +178,5 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source));
-
-
-		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
-			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
-
 	}
 }
