@@ -18,7 +18,18 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpPost]
 		public async Task<ActionResult<SignificantChangeDecisionServiceModel>> Post([FromBody] SignificantChangeDecisionCommand request, CancellationToken cancellationToken)
 		{
+			if (request.SignificantChangeProjectId is null)
+			{
+				return new BadRequestObjectResult("SignificantChangeProjectId must not be null");
+			}
+
 			var result = await mediator.Send(request, cancellationToken).ConfigureAwait(false);
+
+			if (result is CreateSuccessResult<SignificantChangeDecisionServiceModel>)
+			{
+				await mediator.Send(
+					new SignificantChangeStatusCommand(request.SignificantChangeProjectId.Value, request.Decision, request.ApprovedConditionsSet), cancellationToken);
+			}
 
 			return result switch
 			{
@@ -38,7 +49,19 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult> Put([FromBody] SignificantChangeUpdateDecisionCommand request, CancellationToken cancellationToken)
 		{
+			if (request.SignificantChangeProjectId is null)
+			{
+				return new BadRequestObjectResult("SignificantChangeProjectId must not be null");
+			}
+
 			var result = await mediator.Send(request, cancellationToken);
+
+			if (result is CommandSuccessResult)
+			{
+				await mediator.Send(
+					new SignificantChangeStatusCommand(request.SignificantChangeProjectId.Value, request.Decision, request.ApprovedConditionsSet),
+					cancellationToken);
+			}
 
 			return result switch
 			{

@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries
 				false,
 				DateTime.Now
 			);
-			_mockTransferProjectRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult(dummyTransferProject));
+			_mockTransferProjectRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns(Task.FromResult<TransferProject?>(dummyTransferProject));
 			var expectedResponse = AcademyTransferProjectResponseFactory.Create(dummyTransferProject);
 
 			// Action

@@ -80,6 +80,30 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 		}
 
+		[Theory]
+		[InlineData(SignificantChangeStatus.PreDecision)]
+		[InlineData(SignificantChangeStatus.Approved)]
+		[InlineData(SignificantChangeStatus.ApprovedWithConditions)]
+		[InlineData(SignificantChangeStatus.Deferred)]
+		[InlineData(SignificantChangeStatus.Declined)]
+		[InlineData(SignificantChangeStatus.Withdrawn)]
+		public void SetStatus_ShouldUpdateStatus(SignificantChangeStatus expectedStatus)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetStatus(expectedStatus);
+
+			project.Status.Should().Be(expectedStatus);
+		}
+
 		[Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
@@ -515,8 +539,151 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
 
+	[Fact]
+		public void SetStakeholderObjections_ShouldSetDetailsProperties()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further information supplied");
+
+			project.Details.StakeholderObjections.Should().Be(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided);
+			project.Details.StakeholderObjectionsComment.Should().Be("No further information supplied");
+		}
+
 		[Fact]
-		public void SetLandTransaction_ShouldSetDetailsProperties()
+		public void GetStakeholderObservationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetStakeholderObservationsTaskStatus_When_YesNoFurtherInformationProvided_Without_Comment_ReturnsInProgress()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, null);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Fact]
+		public void GetStakeholderObjectionsTaskStatus_When_YesAllObjectionsAddressed_ReturnsCompleted()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesAllObjectionsAddressed, null);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetStakeholderObjectionsTaskStatus_When_No_ReturnsCompleted()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.No, null);
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetStakeholderObjectionsTaskStatus_When_YesNoFurtherInformationProvided_With_Comment_ReturnsCompleted()
+		{
+			var status = _fixture.Create<SignificantChangeStatus>();
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "awaiting stakeholder objection deets");
+
+			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetStakeholderObjections_WhenYesNoFurtherInformationProvidedd_AndTierOne_MovesToTierTwo()
+		{
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				(byte)1,
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
+
+			var project =
+				new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further info");
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void SetLandTransactionConsent_ShouldSetDetailsProperties()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
@@ -529,23 +696,17 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			var landTransactionApplication = SignificantChange_Generic_YesNoNa.NotApplicable;
-			var landTransactionConsent = SignificantChange_Generic_YesNoNa.Yes;
-			string applicationAdditionalInfo = "Application details";
-			string consentAdditionalInfo = "Consent details";
-			string supportingEvidence = "Evidence link";
+			var landTransactionConsent = SignificantChangeLandTransactionConsent.NotApplicable;
+			string additionalInfo = "Some additional info";
 
-			project.SetLandTransaction(landTransactionApplication, applicationAdditionalInfo, landTransactionConsent, consentAdditionalInfo, supportingEvidence);
+			project.SetLandTransactionConsent(landTransactionConsent, additionalInfo);
 
-			project.Details.LandTransactionApplication.Should().Be(landTransactionApplication);
-			project.Details.LandTransactionApplicationAdditionalInfo.Should().Be(applicationAdditionalInfo);
-			project.Details.LandTransactionConsent.Should().Be(landTransactionConsent);
-			project.Details.LandTransactionConsentAdditionalInfo.Should().Be(consentAdditionalInfo);
-			project.Details.LandTransactionSupportingEvidence.Should().Be(supportingEvidence);
+			project.Details.LandTransactionConsentSecured.Should().Be(landTransactionConsent);
+			project.Details.LandTransactionConsentAdditionalInfo.Should().Be(additionalInfo);
 		}
 
 		[Fact]
-		public void SetLandTransaction_WhenApplicationIsNo_AndTierOne_MovesToTierTwo()
+		public void SetLandTransactionConsent_WhenNo_AndTierOne_MovesToTierTwo()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
@@ -557,13 +718,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetLandTransaction(SignificantChange_Generic_YesNoNa.No, "Application not required", null, null, null);
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.No, null);
 
 			project.Tier.Should().Be(2);
 		}
 
 		[Fact]
-		public void SetLandTransaction_WhenTierMovedToTwo_DoesNotRevertToTierOne()
+		public void SetLandTransactionConsent_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
@@ -575,14 +736,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetLandTransaction(SignificantChange_Generic_YesNoNa.No, "Application not required", null, null, null);
-			project.SetLandTransaction(SignificantChange_Generic_YesNoNa.Yes, null, SignificantChange_Generic_YesNoNa.Yes, null, null);
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.No, null);
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.Yes, null);
 
 			project.Tier.Should().Be(2);
 		}
 
 		[Fact]
-		public void GetLandTransactionTaskStatus_WhenNoValues_ReturnsNotStarted()
+		public void GetLandTransactionConsentTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
@@ -595,11 +756,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.Details.GetLandTransactionTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
 
 		[Fact]
-		public void GetLandTransactionTaskStatus_WhenLandTransactionApplicationDoesNotHaveValue_AndHasAdditionalInfo_ReturnsInProgress()
+		public void GetLandTransactionConsentTaskStatus_WhenLandTransactionConsentDoesNotHaveValue_AndHasAdditionalInfo_ReturnsInProgress()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
@@ -612,13 +773,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.SetLandTransaction(null, "some additional info", null, null, null);
+			project.SetLandTransactionConsent(null, "some additional info");
 
-			project.Details.GetLandTransactionTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
 
 		[Fact]
-		public void GetLandTransactionTaskStatus_WhenBothAnswersHaveValue_ReturnsCompleted()
+		public void GetLandTransactionConsentTaskStatus_WhenLandTransactionConsentHasValue_ReturnsCompleted()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
@@ -631,36 +792,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.SetLandTransaction(SignificantChange_Generic_YesNoNa.Yes, null, SignificantChange_Generic_YesNoNa.Yes, null, null);
+			project.SetLandTransactionConsent(SignificantChangeLandTransactionConsent.Yes, null);
 
-			project.Details.GetLandTransactionTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-
-		[Theory]
-		[InlineData(SignificantChange_Generic_YesNoNa.No, "application details", SignificantChange_Generic_YesNoNa.Yes, null, SignificantChangeTaskStatus.Completed)]
-		[InlineData(SignificantChange_Generic_YesNoNa.Yes, null, SignificantChange_Generic_YesNoNa.No, "consent details", SignificantChangeTaskStatus.Completed)]
-		[InlineData(SignificantChange_Generic_YesNoNa.No, null, SignificantChange_Generic_YesNoNa.Yes, null, SignificantChangeTaskStatus.InProgress)]
-		[InlineData(SignificantChange_Generic_YesNoNa.Yes, null, SignificantChange_Generic_YesNoNa.No, null, SignificantChangeTaskStatus.InProgress)]
-		public void GetLandTransactionTaskStatus_RequiresDetailsForEachNoAnswer(
-			SignificantChange_Generic_YesNoNa application,
-			string? applicationAdditionalInfo,
-			SignificantChange_Generic_YesNoNa consent,
-			string? consentAdditionalInfo,
-			SignificantChangeTaskStatus expectedStatus)
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.SetLandTransaction(application, applicationAdditionalInfo, consent, consentAdditionalInfo, null);
-
-			project.Details.GetLandTransactionTaskStatus().Should().Be(expectedStatus);
+			project.Details.GetLandTransactionConsentTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
     
 		[Fact]
@@ -753,7 +887,205 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Tier.Should().Be(2);
 		}
+    
+    	[Fact]
+		public void SetConsultationDuration_ShouldSetDetailsProperties()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation ran for two weeks only");
+
+			project.Details.ConsultationLastedMinimumThreeWeeks.Should().Be(ConsultationDurationAnswer.No);
+			project.Details.ConsultationDurationNotMetReason.Should().Be("Consultation ran for two weeks only");
+		}
+
+		[Theory]
+		[InlineData(ConsultationDurationAnswer.Yes)]
+		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)]
+		public void SetConsultationDuration_WhenAnswerIsNotNo_ClearsReason(ConsultationDurationAnswer answer)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(answer, "This should be cleared");
+
+			project.Details.ConsultationLastedMinimumThreeWeeks.Should().Be(answer);
+			project.Details.ConsultationDurationNotMetReason.Should().BeNull();
+		}
+
+		[Fact]
+		public void SetConsultationDuration_WhenNo_AndTierOne_MovesToTierTwo()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Theory]
+		[InlineData(ConsultationDurationAnswer.Yes)]
+		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)]
+		public void SetConsultationDuration_WhenAnswerIsNotNo_DoesNotChangeTier(ConsultationDurationAnswer answer)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(answer, null);
+
+			project.Tier.Should().Be(1);
+		}
+
+		[Fact]
+		public void SetConsultationDuration_WhenTierMovedToTwo_DoesNotRevertToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
+			project.SetConsultationDuration(ConsultationDurationAnswer.Yes, null);
+
+			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void GetConsultationDurationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetConsultationDurationTaskStatus_WhenNoWithoutReason_ReturnsInProgress()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, null);
+
+			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Theory]
+		[InlineData(ConsultationDurationAnswer.Yes, null)]
+		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut, null)]
+		[InlineData(ConsultationDurationAnswer.No, "Consultation ran for two weeks only")]
+		public void GetConsultationDurationTaskStatus_WhenAnswered_ReturnsCompleted(
+			ConsultationDurationAnswer answer,
+			string? reason)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetConsultationDuration(answer, reason);
+
+			project.Details.GetConsultationDurationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void SetFunding_WhenAnswerIsNotNo_ClearsAdditionalInformation()
+		{
+			var project = CreateProject();
+
+			project.SetFunding(FundingAnswer.Yes, "This should be cleared", "Business case");
+
+			project.Details.FundingAnswer.Should().Be(FundingAnswer.Yes);
+			project.Details.FundingAdditionalInformation.Should().BeNull();
+			project.Details.FundingSupportingEvidence.Should().Be("Business case");
+		}
+
+		[Theory]
+		[InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(FundingAnswer.No, null, "Business case", SignificantChangeTaskStatus.InProgress)]
+		[InlineData(FundingAnswer.No, "Funding is unavailable", "Business case", SignificantChangeTaskStatus.Completed)]
+		[InlineData(FundingAnswer.Yes, null, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(FundingAnswer.No, "Funding is unavailable", null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(FundingAnswer.NotApplicable, null, "Not applicable evidence", SignificantChangeTaskStatus.Completed)]
+		public void GetFundingTaskStatus_ReturnsExpectedStatus(
+			FundingAnswer? answer,
+			string? additionalInformation,
+			string? supportingEvidence,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetFunding(answer, additionalInformation, supportingEvidence);
+
+			project.Details.GetFundingTaskStatus().Should().Be(expected);
+		}
+
+		private SignificantChangeProject CreateProject()
+		{
+			return SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+		}
 	}
 
 }
-

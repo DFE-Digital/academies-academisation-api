@@ -62,6 +62,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetLandTransaction(landTransactionApplication, landTransactionApplicationAdditionalInfo, landTransactionConsent, landtransactionConsentAdditionalInfo, landTransactionSupportingEvidence);
+			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
+			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "stakeholders have objected");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -90,7 +92,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.ImpactsIdentified));
 			result.EqualitiesImpactAssessment.EqualitiesImpactIdentifiedMitigation.Should().Be("Mitigation");
 			result.EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
-
+			
 			result.ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().BeFalse();
 			result.ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
 			result.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
@@ -104,6 +106,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.LandTransaction.LandTransactionConsent.Should().Be(landTransactionConsent);
 			result.LandTransaction.LandTransactionConsentAdditionalInfo.Should().Be(landtransactionConsentAdditionalInfo);
 			result.LandTransaction.LandTransactionSupportingEvidence.Should().Be(landTransactionSupportingEvidence);
+			
+			result.PlanningPermission.PlanningPermissionAnswer.Should().Be(PlanningPermissionAnswer.No);
+			result.PlanningPermission.AdditionalInformation.Should().Be("Awaiting final approval");
+			result.PlanningPermission.SupportingEvidence.Should().Be("Planning permission evidence uploaded");
+			result.PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+
+			result.StakeholderObjections.StakeholderObjections.Should().Be(nameof(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided));
+			result.StakeholderObjections.StakeholderObjectionsComment.Should().Be("stakeholders have objected");
+			result.StakeholderObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]

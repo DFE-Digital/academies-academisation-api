@@ -8,12 +8,12 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 {
 	public class CreateSignificantProjectCommandValidatorTests
 	{
-		private CreateSignificantProjectCommandValidator _validator = new();
+		private readonly CreateSignificantProjectCommandValidator _validator = new();
 
 		[Fact]
 		public async Task Route_WhenEmpty_ShouldHaveValidationError()
 		{
-			var command = new CreateSignificantProjectCommand(1234, 1, string.Empty, "12345678");
+			var command = new CreateSignificantProjectCommand(1234, 1, string.Empty, "12345678", null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 
@@ -24,7 +24,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[Fact]
 		public async Task TrustUkprn_WhenNull_ShouldHaveValidationError()
 		{
-			var command = new CreateSignificantProjectCommand(1234, 1, "Sponsored", null);
+			var command = new CreateSignificantProjectCommand(1234, 1, "Sponsored", null, null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 
@@ -37,7 +37,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[InlineData("123456789")]
 		public async Task TrustUkprn_WhenLengthIsNot8_ShouldHaveValidationError(string trustUkprn)
 		{
-			var command = new CreateSignificantProjectCommand(1234, 1, "Sponsored", trustUkprn);
+			var command = new CreateSignificantProjectCommand(1234, 1, "Sponsored", trustUkprn, null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 			result.ShouldHaveValidationErrorFor(x => x.TrustUkprn)
@@ -47,7 +47,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[Fact]
 		public async Task TrustUkprn_WhenDoesNotStartWith1_ShouldHaveValidationError()
 		{
-			var command = new CreateSignificantProjectCommand(1234, 1, "Sponsored", "22345678");
+			var command = new CreateSignificantProjectCommand(1234, 1, "Sponsored", "22345678", null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 
@@ -61,7 +61,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[InlineData(1234)]
 		public async Task Urn_WhenNot6DigitsStartingWith1_ShouldHaveValidationError(int urn)
 		{
-			var command = new CreateSignificantProjectCommand(urn, 1, "Sponsored", "12345678");
+			var command = new CreateSignificantProjectCommand(urn, 1, "Sponsored", "12345678", null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 
@@ -75,7 +75,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[InlineData(199999)]
 		public async Task Urn_WhenValid_ShouldNotHaveValidationError(int urn)
 		{
-			var command = new CreateSignificantProjectCommand(urn, 1, "Sponsored", "12345678");
+			var command = new CreateSignificantProjectCommand(urn, 1, "Sponsored", "12345678", null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 
@@ -87,7 +87,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[InlineData((byte)4)]
 		public async Task Tier_WhenNotBetween1And3_ShouldHaveValidationError(byte tier)
 		{
-			var command = new CreateSignificantProjectCommand(123456, tier, "Sponsored", "12345678");
+			var command = new CreateSignificantProjectCommand(123456, tier, "Sponsored", "12345678", null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 
@@ -101,7 +101,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[InlineData((byte)3)]
 		public async Task Tier_WhenValid_ShouldNotHaveValidationError(byte tier)
 		{
-			var command = new CreateSignificantProjectCommand(123456, tier, "Sponsored", "12345678");
+			var command = new CreateSignificantProjectCommand(123456, tier, "Sponsored", "12345678", null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 
@@ -111,7 +111,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.CommandValidations
 		[Fact]
 		public async Task WhenValid_ShouldNotHaveValidationError()
 		{
-			var command = new CreateSignificantProjectCommand(123456, 1, "Sponsored", "12345678");
+			var command = new CreateSignificantProjectCommand(123456, 1, "Sponsored", "12345678", null, null);
 
 			var result = await _validator.TestValidateAsync(command);
 

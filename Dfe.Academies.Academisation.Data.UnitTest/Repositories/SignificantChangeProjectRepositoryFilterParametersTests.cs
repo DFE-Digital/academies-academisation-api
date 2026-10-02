@@ -28,14 +28,18 @@ public class SignificantChangeProjectRepositoryFilterParametersTests : TestAcade
 
 		SignificantChangeProject assigned = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
 			urn: 123456, tier: 2, trustName: "Trust A", trustUkprn: "10000001",
-			typeOfSignificantChange: "Change of age range", schoolName: "School A"), createdOn: new DateTime(2026, 1, 1));
+			typeOfSignificantChange: "Change of age range", schoolName: "School A", localAuthorityName: "Leeds", regionName: "London"), createdOn: new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 		assigned.AssignUser(Guid.NewGuid(), "assigned.user@test.local", "Assigned User");
 
 		SignificantChangeProject unassigned = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
 			urn: 654321, tier: 2, trustName: "Trust B", trustUkprn: "10000002",
-			typeOfSignificantChange: "Change of age range", schoolName: "School B"), createdOn: new DateTime(2026, 1, 2));
+			typeOfSignificantChange: "Change of age range", schoolName: "School B", localAuthorityName: "Bradford", regionName: "North"), createdOn: new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc));
 
-		context.AddRange(assigned, unassigned);
+		SignificantChangeProject duplicateLocalAuthority = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+			urn: 111222, tier: 2, trustName: "Trust C", trustUkprn: "10000003",
+			typeOfSignificantChange: "Change of age range", schoolName: "School C", localAuthorityName: "Leeds", regionName: "London"), createdOn: new DateTime(2026, 1, 3, 0, 0, 0, DateTimeKind.Utc));
+
+		context.AddRange(assigned, unassigned, duplicateLocalAuthority);
 		context.SaveChanges();
 	}
 
@@ -64,9 +68,9 @@ public class SignificantChangeProjectRepositoryFilterParametersTests : TestAcade
 
 		result.Tiers.Should().BeEquivalentTo(new List<FilterValueDisplay>
 		{
-			new("1", "Tier 1"),
-			new("2", "Tier 2"),
-			new("3", "Tier 3")
+			new("1", "1"),
+			new("2", "2"),
+			new("3", "3")
 		}, options => options.WithStrictOrdering());
 	}
 
@@ -96,5 +100,61 @@ public class SignificantChangeProjectRepositoryFilterParametersTests : TestAcade
 		result.Routes.Should().ContainSingle();
 		result.Routes[0].Value.Should().Be("Change of age range");
 		result.Routes[0].Display.Should().Be("Change of age range");
+	}
+
+	[Fact]
+	public async Task GetFilterParameters_ReturnsDistinctLocalAuthorities_WithValueEqualToDisplay()
+	{
+		Seed();
+		using AcademisationContext context = CreateContext();
+		SignificantChangeProjectRepository sut = new(context);
+
+		SignificantChangeFilterParameters result = await sut.GetFilterParameters(CancellationToken.None);
+
+		result.LocalAuthorities.Should().BeEquivalentTo(new List<FilterValueDisplay>
+		{
+			new("Bradford", "Bradford"),
+			new("Leeds", "Leeds")
+		}, options => options.WithStrictOrdering());
+	}
+
+	[Fact]
+	public async Task GetProjectsToSendToComplete_ReturnsOnlyReadOnlyProjectsThatHaveNotBeenSent()
+	{
+		Seed();
+		using AcademisationContext context = CreateContext();
+		SignificantChangeProject eligible = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+			111111, 2, "Trust C", "10000003", "Change of age range", "School C"), DateTime.UtcNow);
+		eligible.SetReadOnlyDate(DateTime.UtcNow);
+		SignificantChangeProject notReadOnly = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+			222222, 2, "Trust D", "10000004", "Change of age range", "School D"), DateTime.UtcNow);
+		SignificantChangeProject alreadySent = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
+			333333, 2, "Trust E", "10000005", "Change of age range", "School E"), DateTime.UtcNow);
+		alreadySent.SetReadOnlyDate(DateTime.UtcNow);
+		alreadySent.SetProjectSentToComplete(Guid.NewGuid());
+		context.AddRange(eligible, notReadOnly, alreadySent);
+		await context.SaveChangesAsync();
+
+		SignificantChangeProjectRepository sut = new(context);
+
+		var result = await sut.GetProjectsToSendToCompleteAsync(CancellationToken.None);
+
+		result.Should().ContainSingle(project => project.Id == eligible.Id);
+	}
+
+	[Fact]
+	public async Task GetFilterParameters_ReturnsDistinctRegions_WithValueEqualToDisplay()
+	{
+		Seed();
+		using AcademisationContext context = CreateContext();
+		SignificantChangeProjectRepository sut = new(context);
+
+		SignificantChangeFilterParameters result = await sut.GetFilterParameters(CancellationToken.None);
+
+		result.Regions.Should().BeEquivalentTo(new List<FilterValueDisplay>
+		{
+			new("London", "London"),
+			new("North", "North")
+		}, options => options.WithStrictOrdering());
 	}
 }

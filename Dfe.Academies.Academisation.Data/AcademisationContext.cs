@@ -996,6 +996,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		significantChangeConfiguration.Property(p => p.AssignedUserFullName).HasColumnName("AssignedUserFullName");
 		significantChangeConfiguration.Property(p => p.Tier).HasColumnName("Tier").IsRequired();
 		significantChangeConfiguration.Property(p => p.TypeOfSignificantChange).HasColumnName("TypeOfSignificantChange").IsRequired();
+		significantChangeConfiguration.Property(p => p.ApplicationId).HasColumnName("ApplicationId");
+		significantChangeConfiguration.Property(p => p.ApplicationReference).HasColumnName("ApplicationReference");
 		significantChangeConfiguration.Property(p => p.TrustUkprn).HasColumnName("TrustUkprn").IsRequired();
 		significantChangeConfiguration.Property(p => p.TrustName).HasColumnName("TrustName").IsRequired();
 		significantChangeConfiguration.Property(p => p.LocalAuthorityName).HasColumnName("LocalAuthorityName");
@@ -1006,8 +1008,13 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 		{
 			details.Property(d => d.TrustConsultedStakeholders).HasColumnName("TrustConsultedStakeholders");
 			details.Property(d => d.TrustConsultedStakeholdersNotConsultedReason).HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+			details.Property(d => d.ConsultationLastedMinimumThreeWeeks).HasConversion<string>().HasColumnName("ConsultationLastedMinimumThreeWeeks");
+			details.Property(d => d.ConsultationDurationNotMetReason).HasColumnName("ConsultationDurationNotMetReason");
 			details.Property(d => d.ConsultationIncludeAdmissionVariation).HasColumnName("ConsultationIncludeAdmissionVariation");
 			details.Property(d => d.ConsultationNoAdmissionVariationReason).HasColumnName("ConsultationNoAdmissionVariationReason");
+			details.Property(d => d.FundingAnswer).HasConversion<string>().HasColumnName("FundingAnswer");
+			details.Property(d => d.FundingAdditionalInformation).HasColumnName("FundingAdditionalInformation");
+			details.Property(d => d.FundingSupportingEvidence).HasColumnName("FundingSupportingEvidence");
 			details.Property(d => d.EqualitiesImpactAssessmentCompleted).HasColumnName("EqualitiesImpactAssessmentCompleted");
 			details.Property(d => d.EqualitiesImpactIdentified).HasColumnName("EqualitiesImpactIdentified").HasConversion<string>();
 			details.Property(d => d.EqualitiesImpactIdentifiedMitigation).HasColumnName("EqualitiesImpactIdentifiedMitigation");
@@ -1020,6 +1027,11 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.LandTransactionConsent).HasColumnName("LandTransactionConsent").HasConversion<string>();
 			details.Property(d => d.LandTransactionConsentAdditionalInfo).HasColumnName("LandTransactionConsentAdditionalInfo");
 			details.Property(d => d.LandTransactionSupportingEvidence).HasColumnName("LandTransactionSupportingEvidence");
+			details.Property(d => d.PlanningPermission).HasConversion<string>().HasColumnName("PlanningPermission");
+			details.Property(d => d.PlanningPermissionAdditionalInformation).HasColumnName("PlanningPermissionAdditionalInformation");
+			details.Property(d => d.PlanningPermissionSupportingEvidence).HasColumnName("PlanningPermissionSupportingEvidence");
+			details.Property(d => d.StakeholderObjections).HasColumnName("StakeholderObjections").HasConversion<string>();
+			details.Property(d => d.StakeholderObjectionsComment).HasColumnName("StakeholderObjectionsComment");
 		});
 
 	}

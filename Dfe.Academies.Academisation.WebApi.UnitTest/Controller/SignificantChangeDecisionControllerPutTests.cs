@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -17,82 +17,111 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller;
 
 public class SignificantChangeDecisionControllerPutTests
 {
-	private class UnhandledUpdateResult : CommandResult { }
+    private class UnhandledUpdateResult : CommandResult { }
 
-	private readonly Fixture _fixture = new();
-	private readonly Mock<IMediator> _mockMediator = new();
+    private readonly Fixture _fixture = new();
+    private readonly Mock<IMediator> _mockMediator = new();
 
-	[Fact]
-	public async Task CommandReturnsCommandSuccessResult_ReturnsOkResult()
-	{
-		_mockMediator
-			.Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new CommandSuccessResult());
+    [Fact]
+    public async Task CommandReturnsCommandSuccessResult_ReturnsOkResult()
+    {
+        var request = _fixture.Create<SignificantChangeUpdateDecisionCommand>();
+        _mockMediator
+            .Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new CommandSuccessResult());
+        _mockMediator
+            .Setup(c => c.Send(It.IsAny<SignificantChangeStatusCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new CommandSuccessResult());
 
-		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
 
-		var result = await subject.Put(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>());
+        var result = await subject.Put(request, default);
 
-		result.Should().BeOfType<OkResult>();
-	}
+        result.Should().BeOfType<OkResult>();
+        _mockMediator.Verify(c => c.Send(
+            It.Is<SignificantChangeStatusCommand>(command =>
+                command.Id == request.SignificantChangeProjectId && command.Status == request.Decision),
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
 
-	[Fact]
-	public async Task CommandReturnsNotFoundCommandResult_ReturnsNotFoundResult()
-	{
-		_mockMediator
-			.Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new NotFoundCommandResult());
+    [Fact]
+    public async Task CommandReturnsNotFoundCommandResult_ReturnsNotFoundResult()
+    {
+        var request = _fixture.Create<SignificantChangeUpdateDecisionCommand>();
 
-		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+        _mockMediator
+            .Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new NotFoundCommandResult());
 
-		var result = await subject.Put(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>());
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
 
-		result.Should().BeOfType<NotFoundResult>();
-	}
+        var result = await subject.Put(request, default);
 
-	[Fact]
-	public async Task CommandReturnsBadRequestCommandResult_ReturnsBadRequestResult()
-	{
-		_mockMediator
-			.Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new BadRequestCommandResult());
+        result.Should().BeOfType<NotFoundResult>();
+    }
 
-		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+    [Fact]
+    public async Task CommandReturnsBadRequestCommandResult_ReturnsBadRequestResult()
+    {
+        var request = _fixture.Create<SignificantChangeUpdateDecisionCommand>();
 
-		var result = await subject.Put(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>());
+        _mockMediator
+            .Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new BadRequestCommandResult());
 
-		result.Should().BeOfType<BadRequestResult>();
-	}
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
 
-	[Fact]
-	public async Task CommandReturnsCommandValidationErrorResult_ReturnsBadRequestResult()
-	{
-		var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
+        var result = await subject.Put(request, default);
 
-		_mockMediator
-			.Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new CommandValidationErrorResult(expectedValidationErrors));
+        result.Should().BeOfType<BadRequestResult>();
+    }
 
-		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+    [Fact]
+    public async Task CommandReturnsCommandValidationErrorResult_ReturnsBadRequestResult()
+    {
+        var request = _fixture.Create<SignificantChangeUpdateDecisionCommand>();
+        var expectedValidationErrors = _fixture.CreateMany<ValidationError>().ToList();
 
-		var result = await subject.Put(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>());
+        _mockMediator
+            .Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new CommandValidationErrorResult(expectedValidationErrors));
 
-		var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
-		var validationErrors = badRequestResult.Value.Should().BeAssignableTo<IEnumerable<ValidationError>>().Subject;
-		validationErrors.Should().Equal(expectedValidationErrors);
-	}
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
 
-	[Fact]
-	public async Task CommandReturnsUnhandledUpdateResult_ThrowsException()
-	{
-		_mockMediator
-			.Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(new UnhandledUpdateResult());
+        var result = await subject.Put(request, default);
 
-		var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+        var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
+        var validationErrors = badRequestResult.Value.Should().BeAssignableTo<IEnumerable<ValidationError>>().Subject;
+        validationErrors.Should().Equal(expectedValidationErrors);
+    }
 
-		Func<Task> act = () => subject.Put(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>());
+    [Fact]
+    public async Task CommandReturnsUnhandledUpdateResult_ThrowsException()
+    {
+        var request = _fixture.Create<SignificantChangeUpdateDecisionCommand>();
 
-		await act.Should().ThrowAsync<NotImplementedException>();
-	}
+        _mockMediator
+            .Setup(c => c.Send(It.IsAny<SignificantChangeUpdateDecisionCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new UnhandledUpdateResult());
+
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+
+        Func<Task> act = () => subject.Put(request, default);
+
+        await act.Should().ThrowAsync<NotImplementedException>();
+    }
+
+
+    [Fact]
+    public async Task NullSignificantChangeProjectId_ReturnsBadRequestAndDoesNotSendCommand()
+    {
+        var request = new SignificantChangeUpdateDecisionCommand { SignificantChangeProjectId = null };
+        var subject = new SignificantChangeDecisionController(_mockMediator.Object);
+
+        var result = await subject.Put(request, default);
+
+        result.Should().BeOfType<BadRequestObjectResult>();
+        _mockMediator.Verify(c => c.Send(
+            It.IsAny<SignificantChangeDecisionCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
 }

@@ -5,18 +5,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
 
 	public record SignificantChangeProjectOptions(
-		int urn, 
-		byte tier, 
-		string trustName, 
-		string trustUkprn, 
-		string typeOfSignificantChange, 
-		string schoolName, 
-		string? localAuthorityName = null, 
+		int urn,
+		byte tier,
+		string trustName,
+		string trustUkprn,
+		string typeOfSignificantChange,
+		string schoolName,
+		string? localAuthorityName = null,
 		string? companiesHouseNumber = null,
 		string? regionName = null
 	);
 
-	
+
 	public class SignificantChangeProject : Entity, IAggregateRoot
 	{
 		// Private constructor for EF Core
@@ -48,10 +48,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		public string TrustName { get; private set; } = string.Empty;
 		public string TrustUkprn { get; private set; } = string.Empty;
 		public string TypeOfSignificantChange { get; private set; } = string.Empty;
+		public string? ApplicationId { get; set; }
+		public string? ApplicationReference { get; set; }
 		public DateTime? ReadOnlyDate { get; private set; }
 		public SignificantChangeProjectDetails Details { get; private set; } = new();
 		public string? LocalAuthorityName { get; private set; }
 		public string? CompaniesHouseNumber { get; private set; }
+		public bool ProjectSentToComplete { get; private set; } = false;
+		public Guid? CompleteProjectId { get; private set; }
 		public string? RegionName { get; private set; }
 
 		public void AssignUser(Guid userId, string userEmail, string userFullName)
@@ -61,7 +65,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation, string? noAdmissionVariationReason)
+		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
+			string? noAdmissionVariationReason)
 		{
 			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
 			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
@@ -74,7 +79,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			}
 		}
 
-		public void SetStakeholderConsultation(bool? trustConsultedStakeholders, string? trustConsultedStakeholdersNotConsultedReason)
+		public void SetStakeholderConsultation(bool? trustConsultedStakeholders,
+			string? trustConsultedStakeholdersNotConsultedReason)
 		{
 			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
 			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
@@ -85,7 +91,31 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
-		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody, string? trustConsultedReligiousBodyNotConsultedReason)
+		public void SetConsultationDuration(
+			ConsultationDurationAnswer? consultationLastedMinimumThreeWeeks,
+			string? consultationDurationNotMetReason)
+		{
+			Details.ConsultationLastedMinimumThreeWeeks = consultationLastedMinimumThreeWeeks;
+			Details.ConsultationDurationNotMetReason =
+				consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No
+					? consultationDurationNotMetReason
+					: null;
+
+			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.FundingAnswer = fundingAnswer;
+			Details.FundingAdditionalInformation = fundingAnswer is FundingAnswer.No
+				? additionalInformation
+				: null;
+			Details.FundingSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
+					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
 			Details.TrustConsultedReligiousBody = trustConsultedReligiousBody;
 			Details.TrustConsultedReligiousBodyNotConsultedReason = trustConsultedReligiousBody is false
@@ -111,7 +141,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			this.ReadOnlyDate = readOnlyDate;
 		}
 
-		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted, EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
+		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted,
+			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
 		{
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
@@ -139,6 +170,34 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 			if(landTransactionConsent is SignificantChange_Generic_YesNoNa.No || landTransactionApplication is SignificantChange_Generic_YesNoNa.No)
 				MoveToTierTwoIfApplicable();
+		}
+		public void SetStakeholderObjections(SignificantChangeStakeholderObjections? stakeholderObjections, string? stakeholderObjectionsComment)
+		{
+			Details.StakeholderObjections = stakeholderObjections;
+			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
+
+			
+			if (stakeholderObjections is SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetProjectSentToComplete(Guid? completeProjectId)
+		{
+			ProjectSentToComplete = true;
+			CompleteProjectId = completeProjectId;
+    }
+      
+		public void SetStatus(SignificantChangeStatus requestStatus)
+		{
+			Status = requestStatus;
+		}
+
+		public void SetPlanningPermission(PlanningPermissionAnswer planningPermissionAnswer,
+			string? additionalInformation, string? supportingEvidence)
+		{
+			Details.PlanningPermission = planningPermissionAnswer;
+			Details.PlanningPermissionAdditionalInformation = additionalInformation;
+			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
 		}
 	}
 }
