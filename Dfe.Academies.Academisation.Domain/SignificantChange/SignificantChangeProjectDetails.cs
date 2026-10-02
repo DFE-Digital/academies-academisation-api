@@ -25,9 +25,9 @@ public class SignificantChangeProjectDetails
 	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
 
-	public SignificantChange_Generic_YesNoNa? LandTransactionConsent { get; set; }
+	public SignificantChangeGenericYesNoNa? LandTransactionConsent { get; set; }
 	public string? LandTransactionConsentAdditionalInfo { get; set; }
-	public SignificantChange_Generic_YesNoNa? LandTransactionApplication { get; set; }
+	public SignificantChangeGenericYesNoNa? LandTransactionApplication { get; set; }
 	public string? LandTransactionApplicationAdditionalInfo { get; set; }
 	public string? LandTransactionSupportingEvidence { get; set; }
 
@@ -103,9 +103,9 @@ public class SignificantChangeProjectDetails
 			return SignificantChangeTaskStatus.NotStarted;
 
 		if (LandTransactionApplication.HasValue
-			&& (LandTransactionApplication != SignificantChange_Generic_YesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo))
+			&& (LandTransactionApplication != SignificantChangeGenericYesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo))
 			&& LandTransactionConsent.HasValue
-			&& (LandTransactionConsent != SignificantChange_Generic_YesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)))
+			&& (LandTransactionConsent != SignificantChangeGenericYesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;

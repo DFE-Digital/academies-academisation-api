@@ -156,9 +156,9 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		}
 
 		public void SetLandTransaction(
-			SignificantChange_Generic_YesNoNa? landTransactionApplication, 
+			SignificantChangeGenericYesNoNa? landTransactionApplication, 
 			string? landTransactionApplicationAdditionalInfo,
-			SignificantChange_Generic_YesNoNa? landTransactionConsent, 
+			SignificantChangeGenericYesNoNa? landTransactionConsent, 
 			string? landTransactionConsentAdditionalInfo,  
 			string? landTransactionSupportingEvidence)
 		{
@@ -168,7 +168,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
 			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
 
-			if(landTransactionConsent is SignificantChange_Generic_YesNoNa.No || landTransactionApplication is SignificantChange_Generic_YesNoNa.No)
+			if(landTransactionConsent is SignificantChangeGenericYesNoNa.No || landTransactionApplication is SignificantChangeGenericYesNoNa.No)
 				MoveToTierTwoIfApplicable();
 		}
 		public void SetStakeholderObjections(SignificantChangeStakeholderObjections? stakeholderObjections, string? stakeholderObjectionsComment)

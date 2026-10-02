@@ -838,9 +838,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var routeId = 100;
             var request = new SetSignificantChangeLandTransactionPublicCommand(
-                landTransactionApplication: SignificantChange_Generic_YesNoNa.NotApplicable,
+                landTransactionApplication: SignificantChangeGenericYesNoNa.NotApplicable,
                 landTransactionApplicationAdditionalInfo: "Application details",
-                landTransactionConsent: SignificantChange_Generic_YesNoNa.Yes,
+                landTransactionConsent: SignificantChangeGenericYesNoNa.Yes,
                 landTransactionConsentAdditionalInfo: "Consent details",
                 landTransactionSupportingEvidence: "Evidence link");
 
@@ -866,9 +866,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task SetLandTransaction_ReturnsNotFound_WhenProjectDoesNotExist()
         {
             var request = new SetSignificantChangeLandTransactionPublicCommand(
-                landTransactionApplication: SignificantChange_Generic_YesNoNa.Yes,
+                landTransactionApplication: SignificantChangeGenericYesNoNa.Yes,
                 landTransactionApplicationAdditionalInfo: null,
-                landTransactionConsent: SignificantChange_Generic_YesNoNa.No,
+                landTransactionConsent: SignificantChangeGenericYesNoNa.No,
                 landTransactionConsentAdditionalInfo: null,
                 landTransactionSupportingEvidence: null);
 

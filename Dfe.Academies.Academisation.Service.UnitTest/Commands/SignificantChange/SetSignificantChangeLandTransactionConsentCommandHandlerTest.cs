@@ -27,9 +27,9 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 	{
 		var command = new SetSignificantChangeLandTransactionCommand(
 			id: 100,
-			landTransactionApplication: SignificantChange_Generic_YesNoNa.Yes,
+			landTransactionApplication: SignificantChangeGenericYesNoNa.Yes,
 			landTransactionApplicationAdditionalInfo: null,
-			landTransactionConsent: SignificantChange_Generic_YesNoNa.Yes,
+			landTransactionConsent: SignificantChangeGenericYesNoNa.Yes,
 			landTransactionConsentAdditionalInfo: null,
 			landTransactionSupportingEvidence: "evidence link"
         );
@@ -50,9 +50,9 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 	{
 		var command = new SetSignificantChangeLandTransactionCommand(
 			id: 200,
-			landTransactionApplication: SignificantChange_Generic_YesNoNa.Yes,
+			landTransactionApplication: SignificantChangeGenericYesNoNa.Yes,
 			landTransactionApplicationAdditionalInfo: null,
-			landTransactionConsent: SignificantChange_Generic_YesNoNa.No,
+			landTransactionConsent: SignificantChangeGenericYesNoNa.No,
 			landTransactionConsentAdditionalInfo: "some additional info",
 			landTransactionSupportingEvidence: "evidence link"
         );

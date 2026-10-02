@@ -1,6 +1,6 @@
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
-	public enum SignificantChange_Generic_YesNoNa
+	public enum SignificantChangeGenericYesNoNa
 	{
 		Yes,
 		No,
