@@ -1018,6 +1018,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.EqualitiesImpactAssessmentCompleted).HasColumnName("EqualitiesImpactAssessmentCompleted");
 			details.Property(d => d.EqualitiesImpactIdentified).HasColumnName("EqualitiesImpactIdentified").HasConversion<string>();
 			details.Property(d => d.EqualitiesImpactIdentifiedMitigation).HasColumnName("EqualitiesImpactIdentifiedMitigation");
+			details.Property(d => d.EqualitiesImpactSupportingEvidence).HasColumnName("EqualitiesImpactSupportingEvidence");
 			details.Property(d => d.TrustConsultedReligiousBody).HasColumnName("TrustConsultedReligiousBody");
 			details.Property(d => d.TrustConsultedReligiousBodyNotConsultedReason).HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
 			details.Property(d => d.ProposedChangeDate).HasColumnName("ProposedChangeDate");

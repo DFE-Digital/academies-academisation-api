@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    [Migration("20261002095811_AddEqualitiesImpactSupportingEvidence")]
+    [Migration("20261002150247_AddEqualitiesImpactSupportingEvidence")]
     partial class AddEqualitiesImpactSupportingEvidence
     {
         /// <inheritdoc />
@@ -2514,7 +2514,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
 
                             b1.Property<string>("EqualitiesImpactSupportingEvidence")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactSupportingEvidence");
 
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
