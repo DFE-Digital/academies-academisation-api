@@ -2511,7 +2511,8 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
 
                             b1.Property<string>("EqualitiesImpactSupportingEvidence")
-                                .HasColumnType("nvarchar(max)");
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactSupportingEvidence");
 
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
