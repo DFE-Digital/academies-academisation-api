@@ -212,27 +212,30 @@ public static class SeedProject
 		string assignedUser = Pick(ProjectConsts.CaseWorkers);
 		transfer.AssignUser(Guid.NewGuid(), $"{ToEmailLocalPart(assignedUser)}@education.gov.uk", assignedUser);
 
-		foreach (var academy in transferringAcademies)
-		{
-			string pfiScheme = NextBool(0.20) ? "Yes" : "No";
-			transfer.SetTransferringAcademyGeneralInformation(
-				transferringAcademyUkprn: academy.OutgoingAcademyUkprn,
-				pfiScheme: pfiScheme,
-				pfiSchemeDetails: pfiScheme == "Yes" ? "PFI arrangement in place with annual estate review." : string.Empty,
-				distanceFromAcademyToTrustHq: OptionalRef($"{NextInt(4, 75)} miles"),
-				distanceFromAcademyToTrustHqDetails: OptionalRef("Travel analysis completed with expected peak journey times."),
-				viabilityIssues: OptionalRef(NextBool(0.30) ? "Yes" : "No"),
-				financialDeficit: OptionalRef(NextBool(0.25) ? "Yes" : "No"),
-				mpNameAndParty: OptionalRef(Pick(ProjectConsts.MembersOfParliament)),
-				publishedAdmissionNumber: OptionalRef(NextInt(30, 360).ToString()));
+	foreach (string outgoingAcademyUkprn in transferringAcademies.Select(academy => academy.OutgoingAcademyUkprn))
+	{
+		string pfiScheme = NextBool(0.20) ? "Yes" : "No";
 
-			transfer.SetTransferringAcademiesSchoolData(
-				transferringAcademyUkprn: academy.OutgoingAcademyUkprn,
-				latestOfstedReportAdditionalInformation: OptionalRef("Most recent report highlights improving leadership and safeguarding consistency."),
-				pupilNumbersAdditionalInformation: OptionalRef("Pupil roll stable with increased admissions in lower year groups."),
-				keyStage2PerformanceAdditionalInformation: OptionalRef("Key stage 2 attainment has improved for reading and maths."),
-				keyStage4PerformanceAdditionalInformation: OptionalRef("Progress 8 trend is positive with improved attendance for disadvantaged pupils."),
-				keyStage5PerformanceAdditionalInformation: OptionalRef("Post-16 destinations remain stable with increased apprenticeship uptake."));
+		transfer.SetTransferringAcademyGeneralInformation(
+			transferringAcademyUkprn: outgoingAcademyUkprn,
+			pfiScheme: pfiScheme,
+			pfiSchemeDetails: pfiScheme == "Yes"
+				? "PFI arrangement in place with annual estate review."
+				: string.Empty,
+			distanceFromAcademyToTrustHq: OptionalRef($"{NextInt(4, 75)} miles"),
+			distanceFromAcademyToTrustHqDetails: OptionalRef("Travel analysis completed with expected peak journey times."),
+			viabilityIssues: OptionalRef(NextBool(0.30) ? "Yes" : "No"),
+			financialDeficit: OptionalRef(NextBool(0.25) ? "Yes" : "No"),
+			mpNameAndParty: OptionalRef(Pick(ProjectConsts.MembersOfParliament)),
+			publishedAdmissionNumber: OptionalRef(NextInt(30, 360).ToString()));
+
+		transfer.SetTransferringAcademiesSchoolData(
+			transferringAcademyUkprn: outgoingAcademyUkprn,
+			latestOfstedReportAdditionalInformation: OptionalRef("Most recent report highlights improving leadership and safeguarding consistency."),
+			pupilNumbersAdditionalInformation: OptionalRef("Pupil roll stable with increased admissions in lower year groups."),
+			keyStage2PerformanceAdditionalInformation: OptionalRef("Key stage 2 attainment has improved for reading and maths."),
+			keyStage4PerformanceAdditionalInformation: OptionalRef("Progress 8 trend is positive with improved attendance for disadvantaged pupils."),
+			keyStage5PerformanceAdditionalInformation: OptionalRef("Post-16 destinations remain stable with increased apprenticeship uptake."));
 		}
 
 		return transfer;
