@@ -13,7 +13,7 @@ public class SignificantChangeProjectDetails
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
-
+	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
