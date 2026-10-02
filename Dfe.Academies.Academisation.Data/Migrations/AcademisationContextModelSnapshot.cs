@@ -2510,6 +2510,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
 
+                            b1.Property<string>("EqualitiesImpactSupportingEvidence")
+                                .HasColumnType("nvarchar(max)");
+
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingAdditionalInformation");
@@ -2521,6 +2524,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("FundingSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingSupportingEvidence");
+
                             b1.Property<string>("PlanningPermission")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermission");
