@@ -4,6 +4,6 @@
 	{
 		Approve = 0,
 		Decline = 1,
-		Deferred = 2
+		Defer = 2
 	}
 }
