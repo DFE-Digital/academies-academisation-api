@@ -489,14 +489,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null);
+			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
 
 		[Theory]
-		[InlineData(EqualitiesImpact.None)]
-		[InlineData(EqualitiesImpact.PotentialImpacts)]
+		[InlineData(EqualitiesImpact.Unlikely)]
+		[InlineData(EqualitiesImpact.SomeImpact)]
 		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenSet_ReturnCompleted(EqualitiesImpact equalitiesImpact)
 		{
 			var project = SignificantChangeProject.Create(
@@ -510,15 +510,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null);
+			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 
 		[Theory]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, "", SignificantChangeTaskStatus.Completed)]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, null, SignificantChangeTaskStatus.Completed)]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, "Mitigation plan in place",
+		[InlineData(EqualitiesImpact.Likely, "", SignificantChangeTaskStatus.Completed)]
+		[InlineData(EqualitiesImpact.Likely, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(EqualitiesImpact.Likely, "Mitigation plan in place",
 			SignificantChangeTaskStatus.Completed)]
 		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenIdentified_ShouldReturnCorrectStatus(
 			EqualitiesImpact impact, string? mitigation, SignificantChangeTaskStatus expectedStatus)
@@ -534,7 +534,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, impact, mitigation);
+			project.SetEqualitiesImpactAssessment(true, impact, mitigation, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
