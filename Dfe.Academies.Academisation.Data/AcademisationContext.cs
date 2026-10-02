@@ -1022,6 +1022,11 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.TrustConsultedReligiousBodyNotConsultedReason).HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
 			details.Property(d => d.ProposedChangeDate).HasColumnName("ProposedChangeDate");
 			details.Property(d => d.ProposedDecisionDate).HasColumnName("ProposedDecisionDate");
+			details.Property(d => d.LandTransactionApplication).HasColumnName("LandTransactionApplication").HasConversion<string>();
+			details.Property(d => d.LandTransactionApplicationAdditionalInfo).HasColumnName("LandTransactionApplicationAdditionalInfo");
+			details.Property(d => d.LandTransactionConsent).HasColumnName("LandTransactionConsent").HasConversion<string>();
+			details.Property(d => d.LandTransactionConsentAdditionalInfo).HasColumnName("LandTransactionConsentAdditionalInfo");
+			details.Property(d => d.LandTransactionSupportingEvidence).HasColumnName("LandTransactionSupportingEvidence");
 			details.Property(d => d.PlanningPermission).HasConversion<string>().HasColumnName("PlanningPermission");
 			details.Property(d => d.PlanningPermissionAdditionalInformation).HasColumnName("PlanningPermissionAdditionalInformation");
 			details.Property(d => d.PlanningPermissionSupportingEvidence).HasColumnName("PlanningPermissionSupportingEvidence");

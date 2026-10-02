@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using System.Security.Cryptography.X509Certificates;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
@@ -146,15 +147,30 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
-
-		}
-
+    	}
+    
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
 		{
 			Details.ProposedDecisionDate = proposedDecisionDate;
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
 
+		public void SetLandTransaction(
+			SignificantChangeGenericYesNoNa? landTransactionApplication, 
+			string? landTransactionApplicationAdditionalInfo,
+			SignificantChangeGenericYesNoNa? landTransactionConsent, 
+			string? landTransactionConsentAdditionalInfo,  
+			string? landTransactionSupportingEvidence)
+		{
+			Details.LandTransactionApplication = landTransactionApplication;
+			Details.LandTransactionApplicationAdditionalInfo = landTransactionApplicationAdditionalInfo;
+			Details.LandTransactionConsent = landTransactionConsent;
+			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
+			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
+
+			if(landTransactionConsent is SignificantChangeGenericYesNoNa.No || landTransactionApplication is SignificantChangeGenericYesNoNa.No)
+				MoveToTierTwoIfApplicable();
+		}
 		public void SetStakeholderObjections(SignificantChangeStakeholderObjections? stakeholderObjections, string? stakeholderObjectionsComment)
 		{
 			Details.StakeholderObjections = stakeholderObjections;

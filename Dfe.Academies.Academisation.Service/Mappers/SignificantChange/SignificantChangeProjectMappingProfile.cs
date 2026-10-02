@@ -2,7 +2,6 @@
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
-using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 
@@ -69,6 +68,18 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
 			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()))
+			.ForMember(destination => destination.LandTransactionApplication,
+				options => options.MapFrom(source => source.Details.LandTransactionApplication.ToString()))
+			.ForMember(destination => destination.LandTransactionApplicationAdditionalInfo, 
+				options => options.MapFrom(source => source.Details.LandTransactionApplicationAdditionalInfo))
+			.ForMember(destination => destination.LandTransactionConsent,
+				options => options.MapFrom(source => source.Details.LandTransactionConsent.ToString()))
+			.ForMember(destination => destination.LandTransactionConsentAdditionalInfo, 
+				options => options.MapFrom(source => source.Details.LandTransactionConsentAdditionalInfo))
+			.ForMember(destination => destination.LandTransactionSupportingEvidence, 
+				options => options.MapFrom(source => source.Details.LandTransactionSupportingEvidence))
+			.ForMember(destination => destination.LandTransactionTaskStatus, 
+				options => options.MapFrom(source => source.Details.GetLandTransactionTaskStatus().ToString()))
 			.ForMember(destination => destination.StakeholderObjections,
 				options => options.MapFrom(source => source.Details.StakeholderObjections.ToString()))
 			.ForMember(destination => destination.StakeholderObjectionsComment,
@@ -112,6 +123,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 		CreateMap<SignificantChangeProjectDto, SignificantChangeReligiousBodyConsultationResponse>()
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.ReligiousBodyConsultationTaskStatus));
+		
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeLandTransactionResponse>()
+			.ForMember(destination => destination.Status, 
+				options => options.MapFrom(source => source.LandTransactionTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeStakeholderObjectionsResponse>()
 			.ForMember(destination => destination.Status,
@@ -139,17 +158,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 						source.AssignedUserId.Value,
 						source.AssignedUserFullName ?? string.Empty,
 						source.AssignedUserEmailAddress ?? string.Empty)))
-			.ForMember(destination => destination.StakeholderConsultation,
-				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.EqualitiesImpactAssessment,
 				options => options.MapFrom(source => source))
-			.ForMember(destination => destination.AssignedUser,
-				options => options.MapFrom(source => source.AssignedUserId == null
-					? null
-					: new User(
-						source.AssignedUserId.Value,
-						source.AssignedUserFullName ?? string.Empty,
-						source.AssignedUserEmailAddress ?? string.Empty)))
 			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ConsultationDuration,
@@ -158,20 +168,15 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Funding,
 				options => options.MapFrom(source => source))
-		
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.StakeholderObjections,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.LandTransaction,
+				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source));
-
-
-		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
-			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
-
 	}
 }
