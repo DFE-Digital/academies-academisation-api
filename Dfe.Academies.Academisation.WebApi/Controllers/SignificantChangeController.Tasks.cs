@@ -105,6 +105,32 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpPut("{id:int}/SetSignificantChangeLandTransaction", Name = "SetSignificantChangeLandTransaction")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeLandTransaction(int id, [FromBody] SetSignificantChangeLandTransactionPublicCommand request)
+		{
+			var command = new SetSignificantChangeLandTransactionCommand(
+				id,
+				request.LandTransactionApplication,
+				request.LandTransactionApplicationAdditionalInfo,
+				request.LandTransactionConsent,
+				request.LandTransactionConsentAdditionalInfo,
+				request.LandTransactionSupportingEvidence);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 		[HttpPut("{id:int}/SetStakeholderObjections", Name = "SetSignificantChangeStakeholderObjections")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]

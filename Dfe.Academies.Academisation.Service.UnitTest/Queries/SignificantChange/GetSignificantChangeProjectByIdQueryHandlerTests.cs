@@ -30,6 +30,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		{
 			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
 			var proposedChangeDate = DateTime.UtcNow.AddDays(20);
+			var landTransactionApplication = SignificantChangeGenericYesNoNa.NotApplicable;
+			string landTransactionApplicationAdditionalInfo = "application details";
+			var landTransactionConsent = SignificantChangeGenericYesNoNa.Yes;
+			string landtransactionConsentAdditionalInfo = "consent details";
+			string landTransactionSupportingEvidence = "evidence link";
 
 			var query = new GetSignificantChangeProjectByIdQuery(10);
 			var cancellationToken = CancellationToken.None;
@@ -56,6 +61,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.ImpactsIdentified, "Mitigation");
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
+			project.SetLandTransaction(landTransactionApplication, landTransactionApplicationAdditionalInfo, landTransactionConsent, landtransactionConsentAdditionalInfo, landTransactionSupportingEvidence);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "stakeholders have objected");
 
@@ -94,6 +100,13 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			result.ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+
+			result.LandTransaction.LandTransactionApplication.Should().Be(landTransactionApplication);
+			result.LandTransaction.LandTransactionApplicationAdditionalInfo.Should().Be(landTransactionApplicationAdditionalInfo);
+			result.LandTransaction.LandTransactionConsent.Should().Be(landTransactionConsent);
+			result.LandTransaction.LandTransactionConsentAdditionalInfo.Should().Be(landtransactionConsentAdditionalInfo);
+			result.LandTransaction.LandTransactionSupportingEvidence.Should().Be(landTransactionSupportingEvidence);
+			
 			result.PlanningPermission.PlanningPermissionAnswer.Should().Be(PlanningPermissionAnswer.No);
 			result.PlanningPermission.AdditionalInformation.Should().Be("Awaiting final approval");
 			result.PlanningPermission.SupportingEvidence.Should().Be("Planning permission evidence uploaded");
