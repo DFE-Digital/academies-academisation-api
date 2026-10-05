@@ -5,7 +5,5 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		Yes,
 		No,
 		NotApplicable,
-        
 	}
 }
-
