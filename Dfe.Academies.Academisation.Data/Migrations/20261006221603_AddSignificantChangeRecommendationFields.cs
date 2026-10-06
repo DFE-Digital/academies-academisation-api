@@ -10,29 +10,33 @@ namespace Dfe.Academies.Academisation.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.AddColumn<string>(
                 name: "Recommendation",
                 schema: "academisation",
                 table: "SignificantChangeProject",
                 type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "RecommendationMoreInformation",
+                schema: "academisation",
+                table: "SignificantChangeProject",
+                type: "nvarchar(max)",
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
+            migrationBuilder.DropColumn(
                 name: "Recommendation",
                 schema: "academisation",
-                table: "SignificantChangeProject",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
+                table: "SignificantChangeProject");
+
+            migrationBuilder.DropColumn(
+                name: "RecommendationMoreInformation",
+                schema: "academisation",
+                table: "SignificantChangeProject");
         }
     }
 }

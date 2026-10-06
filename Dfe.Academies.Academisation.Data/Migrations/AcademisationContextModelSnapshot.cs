@@ -2521,6 +2521,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("FundingSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingSupportingEvidence");
+
                             b1.Property<string>("PlanningPermission")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermission");
@@ -2541,14 +2542,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedDecisionDate");
 
-                            b1.Property<string>("StakeholderObjections")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StakeholderObjections");
-
-                            b1.Property<string>("StakeholderObjectionsComment")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StakeholderObjectionsComment");
-
                             b1.Property<string>("Recommendation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Recommendation");
@@ -2556,6 +2549,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("RecommendationMoreInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("RecommendationMoreInformation");
+
+                            b1.Property<string>("StakeholderObjections")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("StakeholderObjections");
+
+                            b1.Property<string>("StakeholderObjectionsComment")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("StakeholderObjectionsComment");
 
                             b1.Property<bool?>("TrustConsultedReligiousBody")
                                 .HasColumnType("bit")
