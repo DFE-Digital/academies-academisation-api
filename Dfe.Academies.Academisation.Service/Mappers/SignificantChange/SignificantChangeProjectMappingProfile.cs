@@ -70,6 +70,12 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
 			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()))
+			.ForMember(destination => destination.Recommendation,
+				options => options.MapFrom(source => source.Details.Recommendation))
+			.ForMember(destination => destination.RecommendationMoreInformation,
+				options => options.MapFrom(source => source.Details.RecommendationMoreInformation))
+			.ForMember(destination => destination.RecommendationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetRecommendationTaskStatus().ToString()))
 			.ForMember(destination => destination.StakeholderObjections,
 				options => options.MapFrom(source => source.Details.StakeholderObjections.ToString()))
 			.ForMember(destination => destination.StakeholderObjectionsComment,
@@ -132,7 +138,9 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Recommendation,
 				options => options.MapFrom(source => source.Recommendation))
 			.ForMember(destination => destination.RecommendationMoreInformation,
-				options => options.MapFrom(source => source.RecommendationMoreInformation));
+				options => options.MapFrom(source => source.RecommendationMoreInformation))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.RecommendationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
 			.ForMember(destination => destination.ApplicationId,

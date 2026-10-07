@@ -176,4 +176,15 @@ public class SignificantChangeProjectDetails
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
 	}
+
+	public SignificantChangeTaskStatus GetRecommendationTaskStatus()
+	{
+		if (!Recommendation.HasValue && string.IsNullOrWhiteSpace(RecommendationMoreInformation))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (Recommendation.HasValue)
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
 }
