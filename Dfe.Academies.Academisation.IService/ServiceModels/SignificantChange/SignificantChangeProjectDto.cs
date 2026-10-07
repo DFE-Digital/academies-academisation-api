@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
@@ -52,4 +53,6 @@ public class SignificantChangeProjectDto
 	public string? StakeholderObjections { get; set; }
 	public string? StakeholderObjectionsComment { get; set; }
 	public string StakeholderObjectionsTaskStatus { get; set; } = string.Empty;
+	public Recommendation? Recommendation { get; set; }
+	public string? RecommendationMoreInformation { get; set; }
 }
