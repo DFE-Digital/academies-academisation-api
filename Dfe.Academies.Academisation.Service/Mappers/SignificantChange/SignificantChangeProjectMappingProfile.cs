@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
@@ -127,6 +128,12 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.PlanningPermissionTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeRecommendationResponse>()
+			.ForMember(destination => destination.Recommendation,
+				options => options.MapFrom(source => source.Recommendation))
+			.ForMember(destination => destination.RecommendationMoreInformation,
+				options => options.MapFrom(source => source.RecommendationMoreInformation));
+
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
 			.ForMember(destination => destination.ApplicationId,
 				options => options.MapFrom(source => source.ApplicationId ?? string.Empty))
@@ -158,7 +165,6 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Funding,
 				options => options.MapFrom(source => source))
-		
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.StakeholderObjections,
@@ -166,8 +172,9 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.PlanningPermission,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.Recommendation,
 				options => options.MapFrom(source => source));
-
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
 			.ForMember(destination => destination.Status,
