@@ -52,4 +52,8 @@ public class SignificantChangeProjectDto
 	public string? StakeholderObjections { get; set; }
 	public string? StakeholderObjectionsComment { get; set; }
 	public string StakeholderObjectionsTaskStatus { get; set; } = string.Empty;
+	public AdmissionsVariationRecommendationAnswer AdmissionsVariationRecommendation { get; set; }
+	public string? AdmissionsVariationRecommendationAdditionalInformation { get; set; }
+	public string AdmissionsVariationRecommendationTaskStatus { get; set; } = string.Empty;
+
 }
