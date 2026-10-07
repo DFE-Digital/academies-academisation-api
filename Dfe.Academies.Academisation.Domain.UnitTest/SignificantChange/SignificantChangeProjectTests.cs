@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoFixture;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using FluentAssertions;
 using Xunit;
@@ -14,7 +15,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void Constructor_ShouldSetPropertiesCorrectly()
 		{
 			var status = _fixture.Create<SignificantChangeStatus>();
-
 			var urn = _fixture.Create<int>();
 			var tier = _fixture.Create<byte>();
 			var trustName = _fixture.Create<string>();
@@ -54,18 +54,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void AssignUser_ShouldSetUserProperties()
 		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			var userId = _fixture.Create<Guid>();
 			var userEmail = _fixture.Create<string>();
@@ -107,16 +96,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-			var project = SignificantChangeProject.Create(significantChangeProjectOptions, DateTime.UtcNow);
-
+			var project = CreateProject();
 			var readOnlyDate = DateTime.UtcNow.AddDays(-1);
 
 			project.SetReadOnlyDate(readOnlyDate);
@@ -127,18 +107,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetStakeholderConsultation_ShouldSetDetailsProperties()
 		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 
@@ -151,18 +120,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void GetStakeholderConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
 
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
@@ -170,18 +128,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
 		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetStakeholderConsultation(false, null);
 
@@ -190,18 +137,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
-		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+		{			var project = CreateProject();
 
 			project.SetStakeholderConsultation(true, null);
 
@@ -211,18 +147,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
 		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetStakeholderConsultation(false, "Consultation timeline does not allow this yet");
 
@@ -253,7 +178,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void SetStakeholderConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
 			var status = _fixture.Create<SignificantChangeStatus>();
-
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
 				(byte)1,
@@ -274,17 +198,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetReligiousBodyConsultation_ShouldSetDetailsProperties()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
-
+			var project = CreateProject();
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 
 			project.Details.TrustConsultedReligiousBody.Should().BeFalse();
@@ -294,33 +208,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
-
+			var project = CreateProject();
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
 
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetReligiousBodyConsultation(false, null);
 
@@ -330,16 +225,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetReligiousBodyConsultation(true, null);
 
@@ -349,16 +235,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetReligiousBodyConsultation(false, "Consultation timeline does not allow this yet");
 
@@ -542,18 +419,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 	[Fact]
 		public void SetStakeholderObjections_ShouldSetDetailsProperties()
 		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further information supplied");
 
@@ -565,18 +431,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void GetStakeholderObservationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
 
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
@@ -584,18 +439,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetStakeholderObservationsTaskStatus_When_YesNoFurtherInformationProvided_Without_Comment_ReturnsInProgress()
 		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, null);
 
@@ -604,18 +448,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 		[Fact]
 		public void GetStakeholderObjectionsTaskStatus_When_YesAllObjectionsAddressed_ReturnsCompleted()
-		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+		{			var project = CreateProject();
 
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesAllObjectionsAddressed, null);
 
@@ -624,18 +457,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 		[Fact]
 		public void GetStakeholderObjectionsTaskStatus_When_No_ReturnsCompleted()
-		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+		{			var project = CreateProject();
 
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.No, null);
 
@@ -644,18 +466,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 		[Fact]
 		public void GetStakeholderObjectionsTaskStatus_When_YesNoFurtherInformationProvided_With_Comment_ReturnsCompleted()
-		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+		{			var project = CreateProject();
 
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "awaiting stakeholder objection deets");
 
@@ -958,6 +769,35 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetFunding(answer, additionalInformation, supportingEvidence);
 
 			project.Details.GetFundingTaskStatus().Should().Be(expected);
+		}
+
+
+		[Fact]
+		public void SetRecommendation_WhenAnswersProvided_SetsAnswers()
+		{
+			var project = CreateProject();
+
+			project.SetRecommendation(Recommendation.Approve, "This is the recommendation comment");
+
+			project.Details.Recommendation.Should().Be(Recommendation.Approve);
+			project.Details.RecommendationMoreInformation.Should().Be("This is the recommendation comment");
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(Recommendation.Decline, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(null, "Blah blah 6 7", SignificantChangeTaskStatus.InProgress)]
+		[InlineData(Recommendation.Approve, "Yeah, I highly reommend approving because it's a really good idea", SignificantChangeTaskStatus.Completed)]
+		public void GetRecommendationTaskStatus_ReturnsExpectedStatus(
+			Recommendation? answer,
+			string? moreInformation,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetRecommendation(answer, moreInformation);
+
+			project.Details.GetRecommendationTaskStatus().Should().Be(expected);
 		}
 
 		private SignificantChangeProject CreateProject()
