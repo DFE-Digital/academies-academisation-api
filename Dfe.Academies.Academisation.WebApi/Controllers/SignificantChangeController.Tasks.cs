@@ -43,7 +43,8 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				id,
 				request.EqualitiesImpactAssessmentCompleted,
 				request.EqualitiesImpactIdentified,
-				request.EqualitiesImpactIdentifiedMitigation,
+				request.EqualitiesLikelyDetails,
+				request.EqualitiesSomeImpactDetails,
 				request.EqualitiesImpactSupportingEvidence);
 
 			CommandResult result = await _mediator.Send(command);

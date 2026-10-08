@@ -489,7 +489,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null, null);
+			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
@@ -510,7 +510,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null, null);
+			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -534,7 +534,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, impact, mitigation, null);
+			project.SetEqualitiesImpactAssessment(true, impact, mitigation, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}

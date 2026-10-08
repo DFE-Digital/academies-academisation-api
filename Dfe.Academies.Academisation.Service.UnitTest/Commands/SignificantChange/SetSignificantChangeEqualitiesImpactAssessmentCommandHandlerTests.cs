@@ -37,7 +37,8 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			Id: 100,
 			EqualitiesImpactAssessmentCompleted: true,
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
-			EqualitiesImpactIdentifiedMitigation: null,
+			EqualitiesLikelyDetails: null,
+			EqualitiesSomeImpactDetails: null,
 			EqualitiesImpactSupportingEvidence: null);
 
 		_repositoryMock
@@ -58,7 +59,8 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			Id: 200,
 			EqualitiesImpactAssessmentCompleted: true,
 			EqualitiesImpactIdentified: EqualitiesImpact.Likely,
-			EqualitiesImpactIdentifiedMitigation: "Mitigation plan in place",
+			EqualitiesLikelyDetails: "Mitigation plan in place",
+			EqualitiesSomeImpactDetails: null,
 			EqualitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence");
 
 		var project = CreateProject();
@@ -72,7 +74,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
 		project.Details.EqualitiesImpactIdentified.Should().Be(EqualitiesImpact.Likely);
-		project.Details.EqualitiesImpactIdentifiedMitigation.Should().Be("Mitigation plan in place");
+		project.Details.EqualitiesLikelyDetails.Should().Be("Mitigation plan in place");
 		project.Details.EqualitiesImpactSupportingEvidence.Should().Be("sharepoint.edu.gov.uk/evidence");
 		project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
@@ -87,7 +89,8 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			Id: 300,
 			EqualitiesImpactAssessmentCompleted: false,
 			EqualitiesImpactIdentified: null,
-			EqualitiesImpactIdentifiedMitigation: null,
+			EqualitiesLikelyDetails: null,
+			EqualitiesSomeImpactDetails: null,
 			EqualitiesImpactSupportingEvidence: null);
 
 		var project = CreateProject();
@@ -108,13 +111,14 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 	public async Task Handle_NullValues_ClearsPreviouslyAnsweredSection()
 	{
 		var project = CreateProject();
-		project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.Likely, "Previous mitigation", "sharepoint.edu.gov.uk/evidence");
+		project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.Likely, "Previous mitigation", null, "sharepoint.edu.gov.uk/evidence");
 
 		var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 			Id: 400,
 			EqualitiesImpactAssessmentCompleted: null,
 			EqualitiesImpactIdentified: null,
-			EqualitiesImpactIdentifiedMitigation: null,
+			EqualitiesLikelyDetails: null,
+			EqualitiesSomeImpactDetails: null,
 			EqualitiesImpactSupportingEvidence: null);
 
 		_repositoryMock
@@ -126,7 +130,8 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.EqualitiesImpactAssessmentCompleted.Should().BeNull();
 		project.Details.EqualitiesImpactIdentified.Should().BeNull();
-		project.Details.EqualitiesImpactIdentifiedMitigation.Should().BeNull();
+		project.Details.EqualitiesLikelyDetails.Should().BeNull();
+		project.Details.EqualitiesSomeImpactDetails.Should().BeNull();
 		project.Details.EqualitiesImpactSupportingEvidence.Should().BeNull();
 		project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 	}
@@ -138,7 +143,8 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			Id: 500,
 			EqualitiesImpactAssessmentCompleted: true,
 			EqualitiesImpactIdentified: EqualitiesImpact.SomeImpact,
-			EqualitiesImpactIdentifiedMitigation: null,
+			EqualitiesLikelyDetails: null,
+			EqualitiesSomeImpactDetails: null,
 			EqualitiesImpactSupportingEvidence: null);
 
 		var project = CreateProject();
@@ -162,7 +168,9 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			Id: 600,
 			EqualitiesImpactAssessmentCompleted: true,
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
-			EqualitiesImpactIdentifiedMitigation: null, EqualitiesImpactSupportingEvidence: null);
+			EqualitiesLikelyDetails: null,
+			EqualitiesSomeImpactDetails: null,
+			EqualitiesImpactSupportingEvidence: null);
 
 		var project = CreateProject();
 
