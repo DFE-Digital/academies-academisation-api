@@ -367,8 +367,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var routeId = 100;
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: true,
-                EqualitiesImpactIdentified: EqualitiesImpact.ImpactsIdentified,
-                EqualitiesImpactIdentifiedMitigation: "Mitigation plan in place");
+                EqualitiesImpactIdentified: EqualitiesImpact.Likely,
+                EqualitiesLikelyDetails: "Mitigation plan in place",
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -382,7 +384,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     c.Id == routeId
                     && c.EqualitiesImpactAssessmentCompleted == request.EqualitiesImpactAssessmentCompleted
                     && c.EqualitiesImpactIdentified == request.EqualitiesImpactIdentified
-                    && c.EqualitiesImpactIdentifiedMitigation == request.EqualitiesImpactIdentifiedMitigation),
+                    && c.EqualitiesLikelyDetails == request.EqualitiesLikelyDetails),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -392,7 +394,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: null,
                 EqualitiesImpactIdentified: null,
-                EqualitiesImpactIdentifiedMitigation: null);
+                EqualitiesLikelyDetails: null,
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -406,7 +410,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     c.Id == 100
                     && c.EqualitiesImpactAssessmentCompleted == null
                     && c.EqualitiesImpactIdentified == null
-                    && c.EqualitiesImpactIdentifiedMitigation == null),
+                    && c.EqualitiesLikelyDetails == null
+                    && c.EqualitiesImpactSupportingEvidence == null),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -415,8 +420,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: true,
-                EqualitiesImpactIdentified: EqualitiesImpact.None,
-                EqualitiesImpactIdentifiedMitigation: null);
+                EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
+                EqualitiesLikelyDetails: null,
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -433,7 +440,9 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: null,
                 EqualitiesImpactIdentified: null,
-                EqualitiesImpactIdentifiedMitigation: null);
+                EqualitiesLikelyDetails: null,
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: null);
 
             var validationErrors = new[]
             {

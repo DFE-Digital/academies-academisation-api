@@ -25,21 +25,12 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.ConsultationDurationNotMetReason))
 			.ForMember(destination => destination.ConsultationDurationTaskStatus,
 				options => options.MapFrom(source => source.Details.GetConsultationDurationTaskStatus().ToString()))
-			.ForMember(destination => destination.EqualitiesImpactAssessmentCompleted,
-				options => options.MapFrom(source => source.Details.EqualitiesImpactAssessmentCompleted))
-			.ForMember(destination => destination.EqualitiesImpactIdentified,
-				options => options.MapFrom(source => source.Details.EqualitiesImpactIdentified.ToString()))
-			.ForMember(destination => destination.EqualitiesImpactIdentifiedMitigation,
-				options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
-			.ForMember(destination => destination.EqualitiesTaskStatus,
-				options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
 			.ForMember(destination => destination.ConsultationIncludeAdmissionVariation,
 				options => options.MapFrom(source => source.Details.ConsultationIncludeAdmissionVariation))
 			.ForMember(destination => destination.ConsultationNoAdmissionVariationReason,
 				options => options.MapFrom(source => source.Details.ConsultationNoAdmissionVariationReason))
 			.ForMember(destination => destination.AdmissionVariationConsultationTaskStatus,
-				options => options.MapFrom(source =>
-					source.Details.GetAdmissionVariationConsultationTaskStatus().ToString()))
+				options => options.MapFrom(source => source.Details.GetAdmissionVariationConsultationTaskStatus().ToString()))
 			.ForMember(destination => destination.FundingAnswer,
 				options => options.MapFrom(source => source.Details.FundingAnswer))
 			.ForMember(destination => destination.FundingAdditionalInformation,
@@ -52,8 +43,12 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.EqualitiesImpactAssessmentCompleted))
 			.ForMember(destination => destination.EqualitiesImpactIdentified,
 				options => options.MapFrom(source => source.Details.EqualitiesImpactIdentified.ToString()))
-			.ForMember(destination => destination.EqualitiesImpactIdentifiedMitigation,
-				options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
+			.ForMember(destination => destination.EqualitiesLikelyDetails,
+				options => options.MapFrom(source => source.Details.EqualitiesLikelyDetails))
+			.ForMember(destination => destination.EqualitiesSomeImpactDetails,
+				options => options.MapFrom(source => source.Details.EqualitiesSomeImpactDetails))
+			.ForMember(destination => destination.EqualitiesImpactSupportingEvidence,
+				options => options.MapFrom(source => source.Details.EqualitiesImpactSupportingEvidence))
 			.ForMember(destination => destination.EqualitiesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
 			.ForMember(destination => destination.TrustConsultedReligiousBody,
@@ -61,8 +56,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.TrustConsultedReligiousBodyNotConsultedReason,
 				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBodyNotConsultedReason))
 			.ForMember(destination => destination.ReligiousBodyConsultationTaskStatus,
-				options => options.MapFrom(source =>
-					source.Details.GetReligiousBodyConsultationTaskStatus().ToString()))
+				options => options.MapFrom(source => source.Details.GetReligiousBodyConsultationTaskStatus().ToString()))
 			.ForMember(destination => destination.ProposedChangeDate,
 				options => options.MapFrom(source => source.Details.ProposedChangeDate))
 			.ForMember(destination => destination.ProposedDecisionDate,

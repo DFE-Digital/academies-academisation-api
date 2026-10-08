@@ -26,8 +26,10 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 
 		var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
 			EqualitiesImpactAssessmentCompleted: true,
-			EqualitiesImpactIdentified: EqualitiesImpact.ImpactsIdentified,
-			EqualitiesImpactIdentifiedMitigation: "Mitigation plan in place");
+			EqualitiesImpactIdentified: EqualitiesImpact.Likely,
+			EqualitiesLikelyDetails: "Mitigation plan in place",
+			EqualitiesSomeImpactDetails: null,
+			EqualitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence");
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetEqualitiesImpactAssessment", request);
 
@@ -39,8 +41,10 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 		{
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 			Assert.True(updated.Details.EqualitiesImpactAssessmentCompleted);
-			Assert.Equal(EqualitiesImpact.ImpactsIdentified, updated.Details.EqualitiesImpactIdentified);
-			Assert.Equal("Mitigation plan in place", updated.Details.EqualitiesImpactIdentifiedMitigation);
+			Assert.Equal(EqualitiesImpact.Likely, updated.Details.EqualitiesImpactIdentified);
+			Assert.Equal("Mitigation plan in place", updated.Details.EqualitiesLikelyDetails);
+			Assert.Null(updated.Details.EqualitiesSomeImpactDetails);
+			Assert.Equal("sharepoint.edu.gov.uk/evidence", updated.Details.EqualitiesImpactSupportingEvidence);
 			Assert.Equal((byte)1, updated.Tier);
 		});
 	}
@@ -50,13 +54,15 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 	{
 		var client = _factory.CreateClient();
 		var project = await CreateProjectAsync();
-		project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.PotentialImpacts, "Previous mitigation");
+		project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.SomeImpact, null, "Previous some impact details", "sharepoint.edu.gov.uk/evidence");
 		await _factory.Context.SaveChangesAsync();
 
 		var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
 			EqualitiesImpactAssessmentCompleted: null,
 			EqualitiesImpactIdentified: null,
-			EqualitiesImpactIdentifiedMitigation: null);
+			EqualitiesLikelyDetails: null,
+			EqualitiesSomeImpactDetails: null,
+			EqualitiesImpactSupportingEvidence: null);
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetEqualitiesImpactAssessment", request);
 
@@ -69,7 +75,9 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 			Assert.Null(updated.Details.EqualitiesImpactAssessmentCompleted);
 			Assert.Null(updated.Details.EqualitiesImpactIdentified);
-			Assert.Null(updated.Details.EqualitiesImpactIdentifiedMitigation);
+			Assert.Null(updated.Details.EqualitiesImpactSupportingEvidence);
+			Assert.Null(updated.Details.EqualitiesLikelyDetails);
+			Assert.Null(updated.Details.EqualitiesSomeImpactDetails);
 		});
 	}
 
@@ -79,8 +87,10 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 		var client = _factory.CreateClient();
 		var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
 			EqualitiesImpactAssessmentCompleted: true,
-			EqualitiesImpactIdentified: EqualitiesImpact.None,
-			EqualitiesImpactIdentifiedMitigation: null);
+			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
+			EqualitiesLikelyDetails: null,
+			EqualitiesSomeImpactDetails: null,
+			EqualitiesImpactSupportingEvidence: null);
 
 		var response = await client.PutAsJsonAsync("/significant-change/99999/SetEqualitiesImpactAssessment", request);
 

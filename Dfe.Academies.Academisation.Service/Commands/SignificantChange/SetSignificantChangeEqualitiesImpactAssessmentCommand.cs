@@ -7,12 +7,16 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
     public record SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
         bool? EqualitiesImpactAssessmentCompleted,
         EqualitiesImpact? EqualitiesImpactIdentified,
-        string? EqualitiesImpactIdentifiedMitigation);
+        string? EqualitiesLikelyDetails,
+        string? EqualitiesSomeImpactDetails,
+        string? EqualitiesImpactSupportingEvidence);
 
 
 	public record SetSignificantChangeEqualitiesImpactAssessmentCommand(
 		int Id,
 		bool? EqualitiesImpactAssessmentCompleted,
         EqualitiesImpact? EqualitiesImpactIdentified,
-        string? EqualitiesImpactIdentifiedMitigation): IRequest<CommandResult>;
+        string? EqualitiesLikelyDetails,
+        string? EqualitiesSomeImpactDetails,
+		string? EqualitiesImpactSupportingEvidence) : IRequest<CommandResult>;
 }

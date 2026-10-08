@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20261002150247_AddEqualitiesImpactSupportingEvidence")]
+    partial class AddEqualitiesImpactSupportingEvidence
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2506,17 +2509,13 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentified");
 
+                            b1.Property<string>("EqualitiesImpactIdentifiedMitigation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactIdentifiedMitigation");
+
                             b1.Property<string>("EqualitiesImpactSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactSupportingEvidence");
-
-                            b1.Property<string>("EqualitiesLikelyDetails")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("EqualitiesLikelyDetails");
-
-                            b1.Property<string>("EqualitiesSomeImpactDetails")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("EqualitiesSomeImpactDetails");
 
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
