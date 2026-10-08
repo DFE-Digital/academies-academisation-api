@@ -20,7 +20,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 			existingProject.SetEqualitiesImpactAssessment(
 				request.EqualitiesImpactAssessmentCompleted,
 				request.EqualitiesImpactIdentified,
-				request.EqualitiesImpactIdentifiedMitigation,
+				request.EqualitiesLikelyDetails,
+				request.EqualitiesSomeImpactDetails,
 				request.EqualitiesImpactSupportingEvidence);
 
 			repository.Update(existingProject);
