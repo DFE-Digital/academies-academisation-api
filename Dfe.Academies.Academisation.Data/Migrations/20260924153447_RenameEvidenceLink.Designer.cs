@@ -4,6 +4,7 @@ using Dfe.Academies.Academisation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dfe.Academies.Academisation.Data.Migrations
 {
     [DbContext(typeof(AcademisationContext))]
-    partial class AcademisationContextModelSnapshot : ModelSnapshot
+    [Migration("20260924153447_RenameEvidenceLink")]
+    partial class RenameEvidenceLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2509,29 +2512,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("EqualitiesImpactIdentifiedMitigation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentifiedMitigation");
-
-                            b1.Property<string>("FundingAdditionalInformation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FundingAdditionalInformation");
-
-                            b1.Property<string>("FundingAnswer")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FundingAnswer");
-
-                            b1.Property<string>("FundingSupportingEvidence")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FundingSupportingEvidence");
-                            b1.Property<string>("PlanningPermission")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PlanningPermission");
-
-                            b1.Property<string>("PlanningPermissionAdditionalInformation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PlanningPermissionAdditionalInformation");
-
-                            b1.Property<string>("PlanningPermissionSupportingEvidence")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PlanningPermissionSupportingEvidence");
 
                             b1.Property<string>("LocalAuthorityObjectionsFurtherInformation")
                                 .HasColumnType("nvarchar(max)")

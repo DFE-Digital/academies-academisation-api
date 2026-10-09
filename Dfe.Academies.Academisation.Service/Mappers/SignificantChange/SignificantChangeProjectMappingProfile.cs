@@ -56,6 +56,22 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
 			.ForMember(destination => destination.EqualitiesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
+			.ForMember(destination => destination.LocalAuthorityRaisedObjections,
+				options => options.MapFrom(source => source.Details.LocalAuthorityRaisedObjections))
+			.ForMember(destination => destination.LocalAuthorityObjectionsFurtherInformation,
+				options => options.MapFrom(source => source.Details.LocalAuthorityObjectionsFurtherInformation))
+			.ForMember(destination => destination.SupportingEvidenceLink,
+				options => options.MapFrom(source => source.Details.LocalAuthoritySupportingEvidenceLink))
+			.ForMember(destination => destination.LocalAuthorityObjectionsTaskStatus,
+				options => options.MapFrom(source => source.Details.GetLocalAuthorityObjectionsTaskStatus().ToString()))
+            .ForMember(destination=> destination.EqualitiesImpactAssessmentCompleted,
+                options=>options.MapFrom(source=> source.Details.EqualitiesImpactAssessmentCompleted))
+            .ForMember(destination => destination.EqualitiesImpactIdentified,
+                options => options.MapFrom(source => source.Details.EqualitiesImpactIdentified.ToString()))
+            .ForMember(destination => destination.EqualitiesImpactIdentifiedMitigation,
+                options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
+            .ForMember(destination => destination.EqualitiesTaskStatus,
+                options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
 			.ForMember(destination => destination.TrustConsultedReligiousBody,
 				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBody))
 			.ForMember(destination => destination.TrustConsultedReligiousBodyNotConsultedReason,
@@ -104,6 +120,10 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.FundingSupportingEvidence))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.FundingTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeLocalAuthorityObjectionsResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.LocalAuthorityObjectionsTaskStatus));
 
         CreateMap<SignificantChangeProjectDto, EqualitiesImpactAssessmentResponse>()
             .ForMember(destination => destination.Status,
@@ -158,7 +178,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Funding,
 				options => options.MapFrom(source => source))
-		
+			.ForMember(destination => destination.LocalAuthorityObjections,
+				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.StakeholderObjections,
