@@ -162,6 +162,9 @@ public class SignificantChangeProjectDetails
 	public SignificantChangeTaskStatus GetFundingTaskStatus()
 	{
 		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) && string.IsNullOrWhiteSpace(FundingSupportingEvidence))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
 
 		if (FundingAnswer is SignificantChange.FundingAnswer.No && string.IsNullOrWhiteSpace(FundingAdditionalInformation))
 		{
@@ -195,6 +198,4 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
-  
-  
 }

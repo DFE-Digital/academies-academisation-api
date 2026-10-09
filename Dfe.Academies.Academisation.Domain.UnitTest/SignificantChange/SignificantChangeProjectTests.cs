@@ -1120,7 +1120,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[InlineData(FundingAnswer.Yes, null, null, SignificantChangeTaskStatus.Completed)]
 		[InlineData(FundingAnswer.No, "Funding is unavailable", null, SignificantChangeTaskStatus.Completed)]
 		[InlineData(FundingAnswer.NotApplicable, null, "Not applicable evidence", SignificantChangeTaskStatus.Completed)]
-		public void GetFundingTaskStatus_ReturnsExpectedStatus(
+			public void GetFundingTaskStatus_ReturnsExpectedStatus(
 			FundingAnswer? answer,
 			string? additionalInformation,
 			string? supportingEvidence,
