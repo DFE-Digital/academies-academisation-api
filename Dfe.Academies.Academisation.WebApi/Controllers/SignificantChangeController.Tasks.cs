@@ -92,9 +92,9 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			var command = new SetSignificantChangeLocalAuthorityObjectionsCommand(
 				id,
-				localAuthorityRaisedObjections: request.LocalAuthorityRaisedObjections,
-				localAuthorityObjectionsFurtherInformation: request.LocalAuthorityObjectionsFurtherInformation,
-				supportingEvidenceLink: request.SupportingEvidenceLink);
+				request.LocalAuthorityRaisedObjections,
+				request.LocalAuthorityObjectionsFurtherInformation,
+				request.LocalAuthoritySupportingEvidenceLink);
 
 			CommandResult result = await _mediator.Send(command);
 

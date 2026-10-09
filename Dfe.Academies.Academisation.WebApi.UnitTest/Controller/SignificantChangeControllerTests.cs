@@ -532,7 +532,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     c.Id == routeId
                     && c.LocalAuthorityRaisedObjections == request.LocalAuthorityRaisedObjections
                     && c.LocalAuthorityObjectionsFurtherInformation == request.LocalAuthorityObjectionsFurtherInformation
-                    && c.SupportingEvidenceLink == request.SupportingEvidenceLink),
+                    && c.LocalAuthoritySupportingEvidenceLink == request.LocalAuthoritySupportingEvidenceLink),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
