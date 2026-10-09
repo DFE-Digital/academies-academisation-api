@@ -518,7 +518,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
                 localAuthorityRaisedObjections: true,
                 localAuthorityObjectionsFurtherInformation: "Local authority has raised objections",
-                supportingEvidenceLink: "https://example.org/evidence");
+                localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeLocalAuthorityObjectionsCommand>(), It.IsAny<CancellationToken>()))
@@ -542,7 +542,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
                 localAuthorityRaisedObjections: false,
                 localAuthorityObjectionsFurtherInformation: null,
-                supportingEvidenceLink: null);
+                localAuthoritySupportingEvidenceLink: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeLocalAuthorityObjectionsCommand>(), It.IsAny<CancellationToken>()))
@@ -559,7 +559,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
                 localAuthorityRaisedObjections: true,
                 localAuthorityObjectionsFurtherInformation: null,
-                supportingEvidenceLink: null);
+                localAuthoritySupportingEvidenceLink: null);
 
             var validationErrors = new[]
             {

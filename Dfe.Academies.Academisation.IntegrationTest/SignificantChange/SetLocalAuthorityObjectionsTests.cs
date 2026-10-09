@@ -39,7 +39,7 @@ public class SetLocalAuthorityObjectionsTests : IClassFixture<TestWebApplication
 		var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
 			localAuthorityRaisedObjections: true,
 			localAuthorityObjectionsFurtherInformation: "Local authority has raised objections",
-			supportingEvidenceLink: "https://example.org/evidence");
+			localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetLocalAuthorityObjections", request);
 
@@ -78,14 +78,14 @@ public class SetLocalAuthorityObjectionsTests : IClassFixture<TestWebApplication
 		var warmupRequest = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
 			localAuthorityRaisedObjections: false,
 			localAuthorityObjectionsFurtherInformation: null,
-			supportingEvidenceLink: null);
+			localAuthoritySupportingEvidenceLink: null);
 
 		await client.PutAsJsonAsync($"/significant-change/{existingProject.Id}/SetLocalAuthorityObjections", warmupRequest);
 
 		var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
 			localAuthorityRaisedObjections: false,
 			localAuthorityObjectionsFurtherInformation: null,
-			supportingEvidenceLink: null);
+			localAuthoritySupportingEvidenceLink: null);
 
 		var response = await client.PutAsJsonAsync("/significant-change/99999/SetLocalAuthorityObjections", request);
 
