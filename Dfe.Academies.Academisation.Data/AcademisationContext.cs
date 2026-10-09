@@ -1027,6 +1027,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.PlanningPermissionSupportingEvidence).HasColumnName("PlanningPermissionSupportingEvidence");
 			details.Property(d => d.StakeholderObjections).HasColumnName("StakeholderObjections").HasConversion<string>();
 			details.Property(d => d.StakeholderObjectionsComment).HasColumnName("StakeholderObjectionsComment");
+			details.Property(d => d.AdmissionsVariationRecommendation).HasConversion<string>().HasColumnName("AdmissionsVariationRecommendation");
+			details.Property(d => d.AdmissionsVariationRecommendationFurtherInformation).HasColumnName("AdmissionsVariationRecommendationFurtherInformation");
 		});
 
 	}
