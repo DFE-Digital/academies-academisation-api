@@ -134,9 +134,9 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.PlanningPermissionTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionsVariationRecommendationResponse>()
-			.ForMember(destination => destination.AdmissionsVariationRecommendation,
+			.ForMember(destination => destination.AdmissionsVariationRecommendationAnswer,
 				options => options.MapFrom(source => source.AdmissionsVariationRecommendation))
-			.ForMember(destination => destination.AdditionalInformation,
+			.ForMember(destination => destination.FurtherInformation,
 				options => options.MapFrom(source => source.AdmissionsVariationRecommendationAdditionalInformation))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.AdmissionsVariationRecommendationTaskStatus));
