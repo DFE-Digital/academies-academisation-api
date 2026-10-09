@@ -35,8 +35,6 @@ public class SignificantChangeStatusCommandHandlerTests
 	[InlineData(Decision.Approved, false, SignificantChangeStatus.Approved)]
 	[InlineData(Decision.Approved, true, SignificantChangeStatus.ApprovedWithConditions)]
 	[InlineData(Decision.Declined, false, SignificantChangeStatus.Declined)]
-	[InlineData(Decision.Deferred, false, SignificantChangeStatus.Deferred)]
-	[InlineData(Decision.Withdrawn, false, SignificantChangeStatus.Withdrawn)]
 	public async Task Handle_ProjectFound_UpdatesStatusAndPersistsChanges(
 		Decision decision,
 		bool approvedWithConditions,

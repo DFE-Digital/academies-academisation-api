@@ -52,8 +52,6 @@ public class PostTests(TestWebApplicationFactory factory)
 			ApprovedConditionsSet = null,
 			ApprovedConditionsDetails = null,
 			DeclinedReasons = [new(significantChangeProjectId, AdvisoryBoardDeclinedReason.Finance, "reason")],
-			DeferredReasons = [],
-			WithdrawnReasons = [],
 			DecisionDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion,
 			DecisionMakerName = "John Smith"

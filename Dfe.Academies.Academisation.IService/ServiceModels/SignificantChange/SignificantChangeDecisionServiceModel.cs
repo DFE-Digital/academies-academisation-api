@@ -11,8 +11,6 @@ public class SignificantChangeDecisionServiceModel
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
 	public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; }
-	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
-	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
 	public DateTime DecisionDate { get; set; }
 	public DecisionMadeBy DecisionMadeBy { get; set; }
 	public string? DecisionMakerName { get; set; }
