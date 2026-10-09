@@ -125,11 +125,9 @@ internal class AdvisoryBoardDecisionCreateCommandHandler(
 			request.DecisionMadeBy,
 			request.DecisionMakerName
 		);
-		var sigChangeDeferredReasons = request.DeferredReasons ?? [];
 		var sigChangeDeclinedReasons = request.DeclinedReasons ?? [];
-		var sigChangeWithdrawnReasons = request.WithdrawnReasons ?? [];
 
-		return factory.Create(significantChangeDetails, sigChangeDeferredReasons, sigChangeDeclinedReasons, sigChangeWithdrawnReasons, [], []);
+		return factory.Create(significantChangeDetails, [], sigChangeDeclinedReasons, [], [], []);
 	}
 	
 }

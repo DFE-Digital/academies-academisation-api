@@ -34,9 +34,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision
 			{
 				Decision.Approved when approvedWithConditions => SignificantChangeStatus.ApprovedWithConditions,
 				Decision.Approved => SignificantChangeStatus.Approved,
-				Decision.Deferred => SignificantChangeStatus.Deferred,
 				Decision.Declined => SignificantChangeStatus.Declined,
-				Decision.Withdrawn => SignificantChangeStatus.Withdrawn,
 				_ => SignificantChangeStatus.PreDecision
 			};
 		}
