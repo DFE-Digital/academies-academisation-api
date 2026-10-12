@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+
+namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
 public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectSearchResponse
 {
@@ -11,5 +13,7 @@ public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectS
 	public SignificantChangeAdmissionVariationConsultationResponse AdmissionVariationConsultation { get; set; } = new();
 	public SignificantChangeFundingResponse Funding { get; set; } = new();
 	public SignificantChangePlanningPermissionResponse PlanningPermission { get; set; } = new();
+	public Decision? Decision { get; set; }
+	public DateTime? DecisionDate { get; set; }
 
 }

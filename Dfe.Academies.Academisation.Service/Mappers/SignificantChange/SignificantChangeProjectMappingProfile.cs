@@ -159,7 +159,11 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.PlanningPermission,
-				options => options.MapFrom(source => source));
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.Decision,
+        		options => options.Ignore())
+    		.ForMember(destination => destination.DecisionDate,
+        		options => options.Ignore());
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
 			.ForMember(destination => destination.Status,
