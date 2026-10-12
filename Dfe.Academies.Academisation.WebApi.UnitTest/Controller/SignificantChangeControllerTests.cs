@@ -171,7 +171,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task GetSignificantChangeProject_ReturnsProject_WhenFound()
         {
             var assignedUserId = Guid.NewGuid();
-            var expectedResponse = new SignificantChangeProjectSearchResponse
+            var expectedResponse = new SignificantChangeProjectGetByIdResponse
             {
                 Id = 100,
                 Urn = 123456,
@@ -201,7 +201,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             _mockMediator
 				.Setup(m => m.Send(It.IsAny<GetSignificantChangeProjectByIdQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((SignificantChangeProjectSearchResponse?)null);
+                .ReturnsAsync((SignificantChangeProjectGetByIdResponse?)null);
 
             var result = await _controller.GetSignificantChangeProject(999, CancellationToken.None);
 

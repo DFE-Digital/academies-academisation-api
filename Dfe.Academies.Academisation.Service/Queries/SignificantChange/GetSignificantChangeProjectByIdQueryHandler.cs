@@ -6,10 +6,10 @@ using MediatR;
 namespace Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 
 public class GetSignificantChangeProjectByIdQueryHandler(ISignificantChangeProjectRepository significantChangeProjectRepository, IMapper mapper)
-	: IRequestHandler<GetSignificantChangeProjectByIdQuery, SignificantChangeProjectSearchResponse?>
+	: IRequestHandler<GetSignificantChangeProjectByIdQuery, SignificantChangeProjectGetByIdResponse?>
 {
 
-	public async Task<SignificantChangeProjectSearchResponse?> Handle(GetSignificantChangeProjectByIdQuery query,
+	public async Task<SignificantChangeProjectGetByIdResponse?> Handle(GetSignificantChangeProjectByIdQuery query,
 		CancellationToken cancellationToken)
 	{
 		SignificantChangeProject? project =
@@ -22,6 +22,6 @@ public class GetSignificantChangeProjectByIdQueryHandler(ISignificantChangeProje
 
 		SignificantChangeProjectDto projectDto = mapper.Map<SignificantChangeProjectDto>(project);
 
-		return mapper.Map<SignificantChangeProjectSearchResponse>(projectDto);
+		return mapper.Map<SignificantChangeProjectGetByIdResponse>(projectDto);
 	}
 }
