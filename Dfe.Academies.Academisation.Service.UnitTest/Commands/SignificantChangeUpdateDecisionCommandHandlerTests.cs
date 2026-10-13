@@ -37,6 +37,7 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 	[Theory]
 	[InlineData(Decision.Approved, AdvisoryBoardDecision.Approved)]
 	[InlineData(Decision.Declined, AdvisoryBoardDecision.Declined)]
+	[InlineData(Decision.Withdrawn, AdvisoryBoardDecision.Withdrawn)]
 	public async Task Handle_MapsDecisionAndPassesSignificantChangeProjectIdToDomain(
 		Decision sourceDecision,
 		AdvisoryBoardDecision expectedDecision)

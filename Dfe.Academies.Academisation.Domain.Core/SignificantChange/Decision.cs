@@ -3,6 +3,7 @@
 	public enum Decision
 	{
 		Approved = 0,
-		Declined = 1
+		Declined = 1,
+		Withdrawn = 3
 	}
 }
