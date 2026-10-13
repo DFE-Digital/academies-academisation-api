@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
@@ -16,7 +17,7 @@ internal static class SignificantChangeDecisionServiceModelMapper
 			Decision = decision.AdvisoryBoardDecisionDetails.Decision.MapToSignificantChangeDecision(),
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
-			DeclinedReasons = decision.DeclinedReasons.ToList(),
+			DeclinedReason = decision.DeclinedReasons.SingleOrDefault(reason => reason.Reason is AdvisoryBoardDeclinedReason.Other)?.Details,
 			WithdrawnReasons = decision.WithdrawnReasons.ToList(),
 			DecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,

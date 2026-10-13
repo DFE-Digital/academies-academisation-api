@@ -168,7 +168,7 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		DecisionDate = DateTime.UtcNow.AddDays(-1),
 		DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
 		DecisionMakerName = _fixture.Create<string>(),
-		DeclinedReasons = [],
+		DeclinedReason = string.Empty,
 		DeferredReasons = [],
 		WithdrawnReasons = []
 	};
