@@ -27,6 +27,7 @@ public class PutTests(TestWebApplicationFactory factory)
 			ApprovedConditionsSet = null,
 			ApprovedConditionsDetails = null,
 			DeclinedReasons = [new(significantChangeProjectId, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeclinedReason.Finance, "initial")],
+			WithdrawnReasons = [],
 			DecisionDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.RegionalDirectorForRegion,
 			DecisionMakerName = "John Smith"
@@ -46,6 +47,7 @@ public class PutTests(TestWebApplicationFactory factory)
 			ApprovedConditionsSet = true,
 			ApprovedConditionsDetails = "updated",
 			DeclinedReasons = [],
+			WithdrawnReasons = [],
 			DecisionDate = DateTime.UtcNow,
 			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.DirectorGeneral,
 			DecisionMakerName = "Jane Smith"
