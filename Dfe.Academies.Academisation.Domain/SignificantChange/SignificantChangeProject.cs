@@ -72,10 +72,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? noAdmissionVariationReason
 				: null;
 
-			if (consultationIncludeAdmissionVariation is false)
-			{
-				MoveToTierTwoIfApplicable();
-			}
+			SetProjectTier();
 		}
 
 		public void SetStakeholderConsultation(bool? trustConsultedStakeholders,
@@ -86,8 +83,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? trustConsultedStakeholdersNotConsultedReason
 				: null;
 
-			if (trustConsultedStakeholders is false)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetConsultationDuration(
@@ -100,8 +96,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 					? consultationDurationNotMetReason
 					: null;
 
-			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
@@ -111,6 +106,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? additionalInformation
 				: null;
 			Details.FundingSupportingEvidence = supportingEvidence;
+
+			SetProjectTier();
 		}
 
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
@@ -121,8 +118,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? trustConsultedReligiousBodyNotConsultedReason
 				: null;
 
-			if (trustConsultedReligiousBody is false)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void MoveToTierTwoIfApplicable()
@@ -147,6 +143,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
 
+			SetProjectTier();
+
 		}
 
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
@@ -160,9 +158,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.StakeholderObjections = stakeholderObjections;
 			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
 
-			
-			if (stakeholderObjections is SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetProjectSentToComplete(Guid? completeProjectId)
@@ -182,6 +178,39 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermission = planningPermissionAnswer;
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
+
+			SetProjectTier();
+		}
+
+		public void SetProjectTier()
+		{
+			bool shouldMoveToTierTwo =
+				// Has a 3 week consultation been completed? = NO
+				Details.ConsultationLastedMinimumThreeWeeks == ConsultationDurationAnswer.No
+				// Has the trust consulted stakeholders about the planned significant change? = NO
+				|| Details.TrustConsultedStakeholders == false
+				// Were there any objections raised?= NO - dont think thats right so set it to yesNoFurtherInformationProvided
+				|| Details.StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
+				// Have the relevant stakeholders been notified of the admissions changes? = NO
+				|| Details.ConsultationIncludeAdmissionVariation == false
+				// Have any relevant religious bodies been consulted about this significant change? = NO
+				|| Details.TrustConsultedReligiousBody == false
+				// Has the Public Sector Equality Duty been considered and an Equalities Impact Assessment been completed? = NO
+				|| Details.EqualitiesImpactAssessmentCompleted == false
+				// Is the decision likely to disproportionately affect any particular person or group who share protected characteristics? = LIKELY - this doesn't currently have likely as a value
+				// Details.EqualitiesImpactIdentified == EqualitiesImpact.ImpactsIdentified ||
+				// Has planning permission been secured? = NO
+				|| Details.PlanningPermission == PlanningPermissionAnswer.No
+				// Has funding been secured? = NO
+				|| Details.FundingAnswer == FundingAnswer.No;
+
+			if (shouldMoveToTierTwo)
+			{
+				MoveToTierTwoIfApplicable();
+				return;
+			}
+
+			Tier = 1;
 		}
 	}
 }
