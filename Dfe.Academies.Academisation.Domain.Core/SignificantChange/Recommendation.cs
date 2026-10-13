@@ -4,6 +4,6 @@
 	{
 		Approve = 0,
 		Decline = 1,
-		Defer = 2
+		Withdraw = 2
 	}
 }

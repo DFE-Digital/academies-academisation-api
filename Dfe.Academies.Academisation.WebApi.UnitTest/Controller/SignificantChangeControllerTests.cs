@@ -859,7 +859,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         [Fact]
         public async Task SetRecommendation_ReturnsNotFound_WhenProjectDoesNotExist()
         {
-            var request = new SetSignificantChangeRecommendationPublicCommand(Recommendation.Defer, null);
+            var request = new SetSignificantChangeRecommendationPublicCommand(Recommendation.Withdraw, null);
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeRecommendationCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new NotFoundCommandResult());
