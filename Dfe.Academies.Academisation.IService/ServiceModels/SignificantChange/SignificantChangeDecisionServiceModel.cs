@@ -10,7 +10,7 @@ public class SignificantChangeDecisionServiceModel
 	public Decision Decision { get; init; }
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
-	public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; }
+	public string? DeclinedReason { get; init; }
 	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
 	public DateTime DecisionDate { get; set; }
 	public DecisionMadeBy DecisionMadeBy { get; set; }

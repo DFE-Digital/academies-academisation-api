@@ -7,7 +7,6 @@ using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
-using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 using MediatR;
 
@@ -59,9 +58,19 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 			command.DecisionMakerName
 		);
 
+		var declinedReasons = !string.IsNullOrEmpty(command.DeclinedReason)
+			? new List<AdvisoryBoardDeclinedReasonDetails>
+			{
+				new(
+					command.AdvisoryBoardDecisionId,
+					AdvisoryBoardDeclinedReason.Other,
+					command.DeclinedReason)
+			}
+			: [];
+
 		return await UpdateDecisionAsync(
 			command.AdvisoryBoardDecisionId,
-			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>(), new List<AdvisoryBoardDAONotIssuedReasonDetails>()),
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, declinedReasons, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>(), new List<AdvisoryBoardDAONotIssuedReasonDetails>()),
 			cancellationToken);
 	}
 
