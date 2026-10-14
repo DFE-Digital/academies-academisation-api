@@ -52,7 +52,7 @@ public class PostTests(TestWebApplicationFactory factory)
 			ApprovedConditionsSet = null,
 			ApprovedConditionsDetails = null,
 			DeclinedReason = "reason",
-			WithdrawnReasons = [],
+			WithdrawnReason = null,
 			DecisionDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion,
 			DecisionMakerName = "John Smith"

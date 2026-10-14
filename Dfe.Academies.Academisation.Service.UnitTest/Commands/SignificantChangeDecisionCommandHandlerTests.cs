@@ -219,7 +219,7 @@ public class SignificantChangeDecisionCommandHandlerTests
 		DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
 		DecisionMakerName = _fixture.Create<string>(),
 		DeclinedReason = string.Empty,
-		WithdrawnReasons = []
+		WithdrawnReason = string.Empty
 	};
 
 	private void SetupSuccessfulCreate(AdvisoryBoardDecisionDetails? details = null)

@@ -18,7 +18,7 @@ internal static class SignificantChangeDecisionServiceModelMapper
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
 			DeclinedReason = decision.DeclinedReasons.SingleOrDefault(reason => reason.Reason is AdvisoryBoardDeclinedReason.Other)?.Details,
-			WithdrawnReasons = decision.WithdrawnReasons.ToList(),
+			WithdrawnReason = decision.WithdrawnReasons.SingleOrDefault(reason => reason.Reason is AdvisoryBoardWithdrawnReason.Other)?.Details,
 			DecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy,
 			DecisionMakerName = decision.AdvisoryBoardDecisionDetails.DecisionMakerName

@@ -27,7 +27,7 @@ public class PutTests(TestWebApplicationFactory factory)
 			ApprovedConditionsSet = null,
 			ApprovedConditionsDetails = null,
 			DeclinedReason = "initial",
-			WithdrawnReasons = [],
+			WithdrawnReason = null,
 			DecisionDate = DateTime.UtcNow.AddMonths(-1),
 			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.RegionalDirectorForRegion,
 			DecisionMakerName = "John Smith"

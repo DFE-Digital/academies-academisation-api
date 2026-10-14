@@ -134,7 +134,16 @@ internal class AdvisoryBoardDecisionCreateCommandHandler(
 					request.DeclinedReason)
 			}
 			: [];
-		var sigChangeWithdrawnReasons = request.WithdrawnReasons ?? [];
+
+		var sigChangeWithdrawnReasons = !string.IsNullOrEmpty(request.WithdrawnReason)
+			? new List<AdvisoryBoardWithdrawnReasonDetails>
+			{
+				new(
+					default,
+					AdvisoryBoardWithdrawnReason.Other,
+					request.WithdrawnReason)
+			}
+			: [];
 
 		return factory.Create(significantChangeDetails, [], sigChangeDeclinedReasons, sigChangeWithdrawnReasons, [], []);
 	}

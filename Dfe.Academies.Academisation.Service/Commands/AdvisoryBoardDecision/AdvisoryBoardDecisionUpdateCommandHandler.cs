@@ -68,9 +68,19 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 			}
 			: [];
 
+		var withdrawnReasons = !string.IsNullOrEmpty(command.WithdrawnReason)
+			? new List<AdvisoryBoardWithdrawnReasonDetails>
+			{
+				new(
+					command.AdvisoryBoardDecisionId,
+					AdvisoryBoardWithdrawnReason.Other,
+					command.WithdrawnReason)
+			}
+			: [];
+
 		return await UpdateDecisionAsync(
 			command.AdvisoryBoardDecisionId,
-			existingDecision => existingDecision.Update(details, command.DeferredReasons!, declinedReasons, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>(), new List<AdvisoryBoardDAONotIssuedReasonDetails>()),
+			existingDecision => existingDecision.Update(details, command.DeferredReasons!, declinedReasons, withdrawnReasons, [], []),
 			cancellationToken);
 	}
 
