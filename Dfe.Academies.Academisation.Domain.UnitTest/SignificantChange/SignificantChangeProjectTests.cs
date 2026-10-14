@@ -512,6 +512,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Tier.Should().Be(2);
 		}
 
+		[Fact]
+		public void SetEqualitiesImpactAssessment_WhenAssessmentIsCompleted_RevertsToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetEqualitiesImpactAssessment(false, null, null);
+			project.SetEqualitiesImpactAssessment(true, null, null);
+
+			project.Tier.Should().Be(1);
+		}
+
 		[Theory]
 		[InlineData(EqualitiesImpact.None)]
 		[InlineData(EqualitiesImpact.PotentialImpacts)]
@@ -997,6 +1016,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
+		public void SetFunding_WhenFundingIsSecured_RevertsToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetFunding(FundingAnswer.No, "Funding is unavailable", null);
+			project.SetFunding(FundingAnswer.Yes, null, null);
+
+			project.Tier.Should().Be(1);
+		}
+
+		[Fact]
 		public void SetPlanningPermission_WhenAnswerIsNo_AndTierOne_MovesToTierTwo()
 		{
 			var project = SignificantChangeProject.Create(
@@ -1012,6 +1050,25 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, null, null);
 
 			project.Tier.Should().Be(2);
+		}
+
+		[Fact]
+		public void SetPlanningPermission_WhenPermissionIsGranted_RevertsToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetPlanningPermission(PlanningPermissionAnswer.No, null, null);
+			project.SetPlanningPermission(PlanningPermissionAnswer.Yes, null, null);
+
+			project.Tier.Should().Be(1);
 		}
 
 		private SignificantChangeProject CreateProject()
