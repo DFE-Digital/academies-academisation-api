@@ -184,33 +184,56 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		public void SetProjectTier()
 		{
-			bool shouldMoveToTierTwo =
-				// Has a 3 week consultation been completed? = NO
-				Details.ConsultationLastedMinimumThreeWeeks == ConsultationDurationAnswer.No
-				// Has the trust consulted stakeholders about the planned significant change? = NO
-				|| Details.TrustConsultedStakeholders == false
-				// Were there any objections raised?= NO - dont think thats right so set it to yesNoFurtherInformationProvided
-				|| Details.StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
-				// Have the relevant stakeholders been notified of the admissions changes? = NO
-				|| Details.ConsultationIncludeAdmissionVariation == false
-				// Have any relevant religious bodies been consulted about this significant change? = NO
-				|| Details.TrustConsultedReligiousBody == false
-				// Has the Public Sector Equality Duty been considered and an Equalities Impact Assessment been completed? = NO
-				|| Details.EqualitiesImpactAssessmentCompleted == false
-				// Is the decision likely to disproportionately affect any particular person or group who share protected characteristics? = LIKELY - this doesn't currently have likely as a value
-				// Details.EqualitiesImpactIdentified == EqualitiesImpact.ImpactsIdentified ||
-				// Has planning permission been secured? = NO
-				|| Details.PlanningPermission == PlanningPermissionAnswer.No
-				// Has funding been secured? = NO
-				|| Details.FundingAnswer == FundingAnswer.No;
-
-			if (shouldMoveToTierTwo)
+			// if (TierShouldBeTierThree() && Tier != 3)
+			// {
+			// 	Tier = 3;
+			// 	return;
+			// }
+			
+			if (TierShouldBeTierTwo() && Tier != 2)
 			{
-				MoveToTierTwoIfApplicable();
+				Tier = 2;
 				return;
 			}
 
+			if (Tier != 1)
 			Tier = 1;
 		}
+
+        private bool TierShouldBeTierTwo()
+        {
+            return IsConsultationDurationInsufficient()
+                || HasNotConsultedStakeholders()
+                || HasUnresolvedStakeholderObjections()
+                || HasNotifiedAdmissionVariation() // false => not notified
+                || HasNotConsultedReligiousBody()
+                || EqualitiesImpactNotCompleted()
+                || PlanningPermissionNotSecured()
+                || FundingNotSecured();
+        }
+
+        private bool IsConsultationDurationInsufficient()
+            => Details.ConsultationLastedMinimumThreeWeeks == ConsultationDurationAnswer.No;
+
+        private bool HasNotConsultedStakeholders()
+            => Details.TrustConsultedStakeholders == false;
+
+        private bool HasUnresolvedStakeholderObjections()
+            => Details.StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided;
+
+        private bool HasNotifiedAdmissionVariation()
+            => Details.ConsultationIncludeAdmissionVariation == false;
+
+        private bool HasNotConsultedReligiousBody()
+            => Details.TrustConsultedReligiousBody == false;
+
+        private bool EqualitiesImpactNotCompleted()
+            => Details.EqualitiesImpactAssessmentCompleted == false;
+
+        private bool PlanningPermissionNotSecured()
+            => Details.PlanningPermission == PlanningPermissionAnswer.No;
+
+        private bool FundingNotSecured()
+            => Details.FundingAnswer == FundingAnswer.No;
 	}
 }
