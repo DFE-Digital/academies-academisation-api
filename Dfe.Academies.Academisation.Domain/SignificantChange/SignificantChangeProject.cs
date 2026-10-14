@@ -184,28 +184,27 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		public void SetProjectTier()
 		{
-			// if (TierShouldBeTierThree() && Tier != 3)
+			// if (ShouldBeTierThree())
 			// {
 			// 	Tier = 3;
 			// 	return;
 			// }
 			
-			if (TierShouldBeTierTwo() && Tier != 2)
+			if (ShouldBeTierTwo())
 			{
 				Tier = 2;
 				return;
 			}
 
-			if (Tier != 1)
 			Tier = 1;
 		}
 
-        private bool TierShouldBeTierTwo()
+        private bool ShouldBeTierTwo()
         {
             return IsConsultationDurationInsufficient()
                 || HasNotConsultedStakeholders()
                 || HasUnresolvedStakeholderObjections()
-                || HasNotifiedAdmissionVariation() // false => not notified
+                || HasNotNotifiedAdmissionVariation()
                 || HasNotConsultedReligiousBody()
                 || EqualitiesImpactNotCompleted()
                 || PlanningPermissionNotSecured()
@@ -221,7 +220,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
         private bool HasUnresolvedStakeholderObjections()
             => Details.StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided;
 
-        private bool HasNotifiedAdmissionVariation()
+        private bool HasNotNotifiedAdmissionVariation()
             => Details.ConsultationIncludeAdmissionVariation == false;
 
         private bool HasNotConsultedReligiousBody()
