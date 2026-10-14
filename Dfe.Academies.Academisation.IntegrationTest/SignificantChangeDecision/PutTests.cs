@@ -47,7 +47,7 @@ public class PutTests(TestWebApplicationFactory factory)
 			ApprovedConditionsSet = true,
 			ApprovedConditionsDetails = "updated",
 			DeclinedReason = string.Empty,
-			WithdrawnReasons = [],
+			WithdrawnReason = string.Empty,
 			DecisionDate = DateTime.UtcNow,
 			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.DirectorGeneral,
 			DecisionMakerName = "Jane Smith"
