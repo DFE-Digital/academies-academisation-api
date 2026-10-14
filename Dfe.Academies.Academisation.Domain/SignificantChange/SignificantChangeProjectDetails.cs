@@ -21,6 +21,9 @@ public class SignificantChangeProjectDetails
 	public FundingAnswer? FundingAnswer { get; set; }
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
+	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
+	public string? HqtfConsiderationAdditionalInformation { get; set; }
+	public string? HqtfConsiderationSupportingEvidence { get; set; }
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }
 	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
@@ -170,5 +173,15 @@ public class SignificantChangeProjectDetails
 		return FundingAnswer.HasValue
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetHqtfConsiderationTaskStatus()
+	{
+		if (HqtfConsiderationAnswer is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
 	}
 }

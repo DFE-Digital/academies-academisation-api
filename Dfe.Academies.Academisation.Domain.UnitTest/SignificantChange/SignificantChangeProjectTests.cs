@@ -940,6 +940,37 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.FundingSupportingEvidence.Should().Be("Business case");
 		}
 
+		[Fact]
+		public void SetHqtfConsideration_WhenAnswerIsNotYes_ClearsAdditionalInformation()
+		{
+			var project = CreateProject();
+
+			project.SetHqtfConsideration(HqtfConsiderationAnswer.No, "This should be cleared", "Evidence");
+
+			project.Details.HqtfConsiderationAnswer.Should().Be(HqtfConsiderationAnswer.No);
+			project.Details.HqtfConsiderationAdditionalInformation.Should().BeNull();
+			project.Details.HqtfConsiderationSupportingEvidence.Should().Be("Evidence");
+		}
+
+		[Theory]
+		[InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(HqtfConsiderationAnswer.Yes, "Not considered", "Evidence", SignificantChangeTaskStatus.Completed)]
+		[InlineData(HqtfConsiderationAnswer.No, null, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(HqtfConsiderationAnswer.No, "Not considered", null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(HqtfConsiderationAnswer.NotApplicable, null, "Not applicable evidence", SignificantChangeTaskStatus.Completed)]
+		public void GetHqtfConsiderationTaskStatus_ReturnsExpectedStatus(
+			HqtfConsiderationAnswer? answer,
+			string? additionalInformation,
+			string? supportingEvidence,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetHqtfConsideration(answer, additionalInformation, supportingEvidence);
+
+			project.Details.GetHqtfConsiderationTaskStatus().Should().Be(expected);
+		}
+
 		[Theory]
 		[InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
 		[InlineData(FundingAnswer.No, null, "Business case", SignificantChangeTaskStatus.InProgress)]
