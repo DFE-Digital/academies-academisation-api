@@ -80,7 +80,7 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 
 		return await UpdateDecisionAsync(
 			command.AdvisoryBoardDecisionId,
-			existingDecision => existingDecision.Update(details, command.DeferredReasons!, declinedReasons, withdrawnReasons, [], []),
+			existingDecision => existingDecision.Update(details, [], declinedReasons, withdrawnReasons, [], []),
 			cancellationToken);
 	}
 
@@ -103,11 +103,16 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 
 		var result = updateDecision(existingDecision);
 
+		if (result is null)
+		{
+			throw new InvalidOperationException("Advisory board decision update returned null.");
+		}
+
 		return result switch
 		{
 			CommandSuccessResult => await ExecuteDataCommand(existingDecision, cancellationToken),
 			CommandValidationErrorResult errorResult => errorResult,
-			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
+			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()})")
 		};
 	}
 
