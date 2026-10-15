@@ -16,6 +16,6 @@ public class SignificantChangeUpdateDecisionCommand : IRequest<CommandResult>
 	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; } = [];
 	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; } = [];
 	public DateTime DecisionDate { get; init; }
-	public DecisionMadeBy DecisionMadeBy { get; init; }
+	public SignificantChangeDecisionMadeBy DecisionMadeBy { get; init; }
 	public string? DecisionMakerName { get; set; }
 }
