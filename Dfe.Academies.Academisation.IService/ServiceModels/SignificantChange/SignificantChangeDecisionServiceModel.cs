@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
@@ -14,6 +14,6 @@ public class SignificantChangeDecisionServiceModel
 	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; }
 	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; }
 	public DateTime DecisionDate { get; set; }
-	public DecisionMadeBy DecisionMadeBy { get; set; }
+	public SignificantChangeDecisionMadeBy DecisionMadeBy { get; set; }
 	public string? DecisionMakerName { get; set; }
 }

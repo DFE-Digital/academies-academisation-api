@@ -14,8 +14,15 @@ public class GetSignificantChangeDecisionQueryHandlerTests
 {
 	private readonly Mock<IAdvisoryBoardDecisionRepository> _repositoryMock = new();
 
-	[Fact]
-	public async Task Handle_WhenDecisionExists_ReturnsMappedServiceModel()
+	[Theory]
+	[InlineData(DecisionMadeBy.RegionalDirectorForRegion, SignificantChangeDecisionMadeBy.RegionalDirector)]
+	[InlineData(DecisionMadeBy.Minister, SignificantChangeDecisionMadeBy.Minister)]
+	[InlineData(DecisionMadeBy.DirectorGeneral, SignificantChangeDecisionMadeBy.DirectorGeneral)]
+	[InlineData(DecisionMadeBy.DeputyDirector, SignificantChangeDecisionMadeBy.DeputyDirector)]
+	[InlineData(DecisionMadeBy.Grade6, SignificantChangeDecisionMadeBy.Grade6)]
+	public async Task Handle_WhenDecisionExists_ReturnsMappedServiceModel(
+		DecisionMadeBy domainDecisionMadeBy,
+		SignificantChangeDecisionMadeBy expectedDecisionMadeBy)
 	{
 		var projectId = 101;
 		var now = DateTime.UtcNow;
@@ -28,7 +35,7 @@ public class GetSignificantChangeDecisionQueryHandlerTests
 			"Conditions",
 			now,
 			null,
-			DecisionMadeBy.DirectorGeneral,
+			domainDecisionMadeBy,
 			"Decision Maker");
 
 		var decision = new ConversionAdvisoryBoardDecision(
@@ -54,6 +61,7 @@ public class GetSignificantChangeDecisionQueryHandlerTests
 		result!.AdvisoryBoardDecisionId.Should().Be(55);
 		result.SignificantChangeProjectId.Should().Be(projectId);
 		result.Decision.Should().Be(Decision.Approved);
+		result.DecisionMadeBy.Should().Be(expectedDecisionMadeBy);
 		_repositoryMock.Verify(r => r.GetSignificantChangeDecision(projectId), Times.Once);
 	}
 

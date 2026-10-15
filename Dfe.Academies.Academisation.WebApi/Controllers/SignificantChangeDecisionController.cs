@@ -1,5 +1,4 @@
 ﻿using Dfe.Academies.Academisation.Core;
-using Dfe.Academies.Academisation.IService.ServiceModels.ConversionAdvisoryBoardDecision;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
@@ -76,7 +75,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("{projectId:int}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<ConversionAdvisoryBoardDecisionServiceModel>> GetByProjectId(int projectId, CancellationToken cancellationToken)
+		public async Task<ActionResult<SignificantChangeDecisionServiceModel>> GetByProjectId(int projectId, CancellationToken cancellationToken)
 		{
 			var result = await mediator.Send(new GetSignificantChangeDecisionQuery(projectId), cancellationToken);
 

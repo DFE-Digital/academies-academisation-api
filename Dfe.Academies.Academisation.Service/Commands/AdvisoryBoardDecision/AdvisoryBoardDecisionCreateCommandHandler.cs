@@ -122,7 +122,7 @@ internal class AdvisoryBoardDecisionCreateCommandHandler(
 			request.ApprovedConditionsDetails,
 			request.DecisionDate,
 			null,
-			request.DecisionMadeBy,
+			request.DecisionMadeBy.MapToAdvisoryBoardDecisionMadeBy(),
 			request.DecisionMakerName
 		);
 		var sigChangeDeferredReasons = request.DeferredReasons ?? [];

@@ -55,7 +55,7 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 			command.ApprovedConditionsDetails,
 			command.DecisionDate,
 			null,
-			command.DecisionMadeBy,
+			command.DecisionMadeBy.MapToAdvisoryBoardDecisionMadeBy(),
 			command.DecisionMakerName
 		);
 

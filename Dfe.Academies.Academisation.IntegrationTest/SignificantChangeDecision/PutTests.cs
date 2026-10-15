@@ -30,7 +30,7 @@ public class PutTests(TestWebApplicationFactory factory)
 			DeferredReasons = [],
 			WithdrawnReasons = [],
 			DecisionDate = DateTime.UtcNow.AddMonths(-1),
-			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.RegionalDirectorForRegion,
+			DecisionMadeBy = SignificantChangeDecisionMadeBy.RegionalDirector,
 			DecisionMakerName = "John Smith"
 		};
 
@@ -51,7 +51,7 @@ public class PutTests(TestWebApplicationFactory factory)
 			DeferredReasons = [],
 			WithdrawnReasons = [],
 			DecisionDate = DateTime.UtcNow,
-			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.DirectorGeneral,
+			DecisionMadeBy = SignificantChangeDecisionMadeBy.DirectorGeneral,
 			DecisionMakerName = "Jane Smith"
 		};
 
