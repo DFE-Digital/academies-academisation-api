@@ -773,6 +773,63 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.Tier.Should().Be(2);
 		}
+
+		[Fact]
+		public void SetAdmissionsVariationRecommendation_ShouldSetDetailsProperties()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionsVariationRecommendation(
+				AdmissionsVariationRecommendationAnswer.Approve,
+				"Recommendation notes");
+
+			project.Details.AdmissionsVariationRecommendation.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
+			project.Details.AdmissionsVariationRecommendationFurtherInformation.Should().Be("Recommendation notes");
+		}
+
+		[Fact]
+		public void GetAdmissionsVariationRecommendationTaskStatus_WhenNoValue_ReturnsNotStarted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetAdmissionsVariationRecommendationTaskStatus_WhenValueSet_ReturnsCompleted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionsVariationRecommendation(
+				AdmissionsVariationRecommendationAnswer.NotApplicable,
+				null);
+
+			project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
     
     	[Fact]
 		public void SetConsultationDuration_ShouldSetDetailsProperties()

@@ -21,9 +21,11 @@ public class SignificantChangeProjectDetails
 	public FundingAnswer? FundingAnswer { get; set; }
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
-	public PlanningPermissionAnswer? PlanningPermission { get; set; }
+	public PlanningPermissionAnswer? PlanningPermission { get; set; }	
 	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
+	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
+	public string? AdmissionsVariationRecommendationFurtherInformation { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -170,5 +172,15 @@ public class SignificantChangeProjectDetails
 		return FundingAnswer.HasValue
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetAdmissionsVariationRecommendationTaskStatus()
+	{
+		if (AdmissionsVariationRecommendation.HasValue)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.NotStarted;
 	}
 }

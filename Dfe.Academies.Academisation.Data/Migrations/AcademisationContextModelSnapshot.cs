@@ -2482,6 +2482,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
+                            b1.Property<string>("AdmissionsVariationRecommendation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationRecommendation");
+
+                            b1.Property<string>("AdmissionsVariationRecommendationFurtherInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationRecommendationFurtherInformation");
+
                             b1.Property<string>("ConsultationDurationNotMetReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationDurationNotMetReason");
@@ -2521,6 +2529,7 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("FundingSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingSupportingEvidence");
+
                             b1.Property<string>("PlanningPermission")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermission");
