@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
@@ -125,6 +126,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
+		public void SetRecommendation(Recommendation? recommendation, string? recommendationMoreInformation)
+		{
+			Details.Recommendation = recommendation;
+			Details.RecommendationMoreInformation = recommendationMoreInformation;
+		}
+
 		public void MoveToTierTwoIfApplicable()
 		{
 			if (Tier == 1) Tier = 2;
@@ -146,9 +153,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
-
-		}
-
+    	}
+    
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
 		{
 			Details.ProposedDecisionDate = proposedDecisionDate;
