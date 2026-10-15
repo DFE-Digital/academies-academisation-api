@@ -11,6 +11,7 @@ Note: remember to update unrelease section when creating a new release.
 
 ### Added
 - [296559](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=296559) - Add religious body consultation task controller and handler
+- [301987](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=301987) - Add local authority objections task data endpoint and response updates
 
 ---
 ## [10.0.0][10.0.0] - 2026-08-26

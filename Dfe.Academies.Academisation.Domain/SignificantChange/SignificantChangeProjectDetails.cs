@@ -25,6 +25,10 @@ public class SignificantChangeProjectDetails
 	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
 
+	public bool? LocalAuthorityRaisedObjections { get; set; }
+	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
+	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
+
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
@@ -170,5 +174,28 @@ public class SignificantChangeProjectDetails
 		return FundingAnswer.HasValue
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetLocalAuthorityObjectionsTaskStatus()
+	{
+		if (!LocalAuthorityRaisedObjections.HasValue
+		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
+		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		if (LocalAuthorityRaisedObjections is false)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (LocalAuthorityRaisedObjections is true
+		    && !string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
 	}
 }
