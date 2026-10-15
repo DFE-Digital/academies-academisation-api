@@ -2502,6 +2502,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("bit")
                                 .HasColumnName("EqualitiesImpactAssessmentCompleted");
 
+                            b1.Property<string>("EqualitiesImpactAssessmentNoReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactAssessmentNoReason");
+
                             b1.Property<string>("EqualitiesImpactIdentified")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentified");

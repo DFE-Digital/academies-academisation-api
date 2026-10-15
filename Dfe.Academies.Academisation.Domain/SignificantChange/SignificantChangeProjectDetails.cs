@@ -23,10 +23,11 @@ public class SignificantChangeProjectDetails
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }
-	public string? PlanningPermissionSupportingEvidence { get; set; }
+	public string? PlanningPermissionSupportingEvidence { get; set; }    
 	public string? PlanningPermissionAdditionalInformation { get; set; }
+    public string? EqualitiesImpactAssessmentNoReason { get; set; }
 
-	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
+    public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
 		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))

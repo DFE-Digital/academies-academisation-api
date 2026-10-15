@@ -367,6 +367,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var routeId = 100;
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: true,
+				EqualitiesImpactAssessmentNoReason: null,
                 EqualitiesImpactIdentified: EqualitiesImpact.Likely,
                 EqualitiesLikelyDetails: "Mitigation plan in place",
                 EqualitiesSomeImpactDetails: null,
@@ -393,7 +394,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: null,
-                EqualitiesImpactIdentified: null,
+                EqualitiesImpactAssessmentNoReason: null,
+				EqualitiesImpactIdentified: null,
                 EqualitiesLikelyDetails: null,
                 EqualitiesSomeImpactDetails: null,
                 EqualitiesImpactSupportingEvidence: null);
@@ -409,6 +411,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 It.Is<SetSignificantChangeEqualitiesImpactAssessmentCommand>(c =>
                     c.Id == 100
                     && c.EqualitiesImpactAssessmentCompleted == null
+					&& c.EqualitiesImpactAssessmentNoReason == null
                     && c.EqualitiesImpactIdentified == null
                     && c.EqualitiesLikelyDetails == null
                     && c.EqualitiesImpactSupportingEvidence == null),
@@ -420,7 +423,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: true,
-                EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
+                EqualitiesImpactAssessmentNoReason: null,
+				EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
                 EqualitiesLikelyDetails: null,
                 EqualitiesSomeImpactDetails: null,
                 EqualitiesImpactSupportingEvidence: null);
@@ -439,7 +443,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: null,
-                EqualitiesImpactIdentified: null,
+                EqualitiesImpactAssessmentNoReason: null,
+				EqualitiesImpactIdentified: null,
                 EqualitiesLikelyDetails: null,
                 EqualitiesSomeImpactDetails: null,
                 EqualitiesImpactSupportingEvidence: null);

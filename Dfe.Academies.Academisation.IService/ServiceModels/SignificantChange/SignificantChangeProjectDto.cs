@@ -37,6 +37,7 @@ public class SignificantChangeProjectDto
 	public string FundingTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public string? EqualitiesImpactAssessmentNoReason { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesLikelyDetails { get; set; }
 	public string? EqualitiesSomeImpactDetails { get; set; }

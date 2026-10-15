@@ -6,7 +6,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 {
     public record SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
         bool? EqualitiesImpactAssessmentCompleted,
-        EqualitiesImpact? EqualitiesImpactIdentified,
+		string? EqualitiesImpactAssessmentNoReason,
+		EqualitiesImpact? EqualitiesImpactIdentified,
         string? EqualitiesLikelyDetails,
         string? EqualitiesSomeImpactDetails,
         string? EqualitiesImpactSupportingEvidence);
@@ -15,7 +16,8 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 	public record SetSignificantChangeEqualitiesImpactAssessmentCommand(
 		int Id,
 		bool? EqualitiesImpactAssessmentCompleted,
-        EqualitiesImpact? EqualitiesImpactIdentified,
+        string? EqualitiesImpactAssessmentNoReason,
+		EqualitiesImpact? EqualitiesImpactIdentified,
         string? EqualitiesLikelyDetails,
         string? EqualitiesSomeImpactDetails,
 		string? EqualitiesImpactSupportingEvidence) : IRequest<CommandResult>;

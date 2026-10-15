@@ -19,6 +19,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 
 			existingProject.SetEqualitiesImpactAssessment(
 				request.EqualitiesImpactAssessmentCompleted,
+				request.EqualitiesImpactAssessmentNoReason,
 				request.EqualitiesImpactIdentified,
 				request.EqualitiesLikelyDetails,
 				request.EqualitiesSomeImpactDetails,

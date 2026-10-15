@@ -46,7 +46,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			projects[0].SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 			projects[0].SetAdmissionVariationConsultation(false, "no information provided");
-			projects[0].SetEqualitiesImpactAssessment(true, EqualitiesImpact.Likely, "Needs mitigating actions", null, "sharepoint.edu.gov.uk/evidence");
+			projects[0].SetEqualitiesImpactAssessment(true, null, EqualitiesImpact.Likely, "Needs mitigating actions", null, "sharepoint.edu.gov.uk/evidence");
 			projects[0].SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			projects[0].SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			projects[0].SetPlanningPermission(PlanningPermissionAnswer.Yes, "Decision is pending final sign-off", "Outline permission summary");
@@ -102,6 +102,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
+			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentNoReason.Should().BeNull();
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.Likely));
 			data[0].EqualitiesImpactAssessment.EqualitiesLikelyDetails.Should().Be("Needs mitigating actions");
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactSupportingEvidence.Should().Be("sharepoint.edu.gov.uk/evidence");

@@ -42,6 +42,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 				id,
 				request.EqualitiesImpactAssessmentCompleted,
+				request.EqualitiesImpactAssessmentNoReason,
 				request.EqualitiesImpactIdentified,
 				request.EqualitiesLikelyDetails,
 				request.EqualitiesSomeImpactDetails,

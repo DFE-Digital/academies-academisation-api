@@ -140,11 +140,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			this.ReadOnlyDate = readOnlyDate;
 		}
 
-		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted,
+		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted, string? equalitiesImpactAssessmentNoReason,
 			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesLikelyDetails, string? equalitiesSomeImpactDetails,
 			string? equalitiesImpactSupportingEvidence)
 		{
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
+			Details.EqualitiesImpactAssessmentNoReason = equalitiesImpactAssessmentCompleted is false ? equalitiesImpactAssessmentNoReason : null;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
 			Details.EqualitiesLikelyDetails = equalitiesLikelyDetails;
 			Details.EqualitiesSomeImpactDetails = equalitiesSomeImpactDetails;

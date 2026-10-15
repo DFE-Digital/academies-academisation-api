@@ -489,7 +489,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null, null, null);
+			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
@@ -510,7 +510,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null, null, null);
+			project.SetEqualitiesImpactAssessment(true, null, equalitiesImpact, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -534,12 +534,35 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, impact, mitigation, null, null);
+			project.SetEqualitiesImpactAssessment(true, null, impact, mitigation, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
 
-	[Fact]
+        [Theory]
+        [InlineData(true, null)]
+        [InlineData(false, "some reason")]
+		public void SetEqualitiesImpactAssessment_ShouldSetReasonProperty(bool equalitiesImpactAssessmentComplete, string? expectedNoReason)
+        {
+            var project = SignificantChangeProject.Create(
+                new SignificantChangeProjectOptions(
+                    _fixture.Create<int>(),
+                    _fixture.Create<byte>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>()),
+                DateTime.UtcNow);
+
+
+            project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentComplete, "some reason", null, null, null, null);
+
+            project.Details.EqualitiesImpactAssessmentCompleted.Should().Be(equalitiesImpactAssessmentComplete);
+			project.Details.EqualitiesImpactAssessmentNoReason.Should().Be(expectedNoReason);
+		}
+
+
+		[Fact]
 		public void SetStakeholderObjections_ShouldSetDetailsProperties()
 		{
 			var status = _fixture.Create<SignificantChangeStatus>();

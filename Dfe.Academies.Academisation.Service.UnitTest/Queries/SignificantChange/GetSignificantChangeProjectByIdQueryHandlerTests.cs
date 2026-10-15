@@ -53,7 +53,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
 			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
 			project.SetAdmissionVariationConsultation(false, "no information provided");
-			project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.SomeImpact, null, "Mitigation", "sharepoint.edu.gov.uk/evidence");
+			project.SetEqualitiesImpactAssessment(true, null, EqualitiesImpact.SomeImpact, null, "Mitigation", "sharepoint.edu.gov.uk/evidence");
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
@@ -83,6 +83,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.AdmissionVariationConsultation.ConsultationNoAdmissionVariationReason.Should().Be("no information provided");
 
 			result.EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
+			result.EqualitiesImpactAssessment.EqualitiesImpactAssessmentNoReason.Should().BeNull();
 			result.EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.SomeImpact));
 			result.EqualitiesImpactAssessment.EqualitiesSomeImpactDetails.Should().Be("Mitigation");
 			result.EqualitiesImpactAssessment.EqualitiesImpactSupportingEvidence.Should().Be("sharepoint.edu.gov.uk/evidence");

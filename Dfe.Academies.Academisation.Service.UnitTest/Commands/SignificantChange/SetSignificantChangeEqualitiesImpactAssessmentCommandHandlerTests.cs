@@ -36,6 +36,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 		var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 			Id: 100,
 			EqualitiesImpactAssessmentCompleted: true,
+			EqualitiesImpactAssessmentNoReason: null,
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
@@ -58,6 +59,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 		var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 			Id: 200,
 			EqualitiesImpactAssessmentCompleted: true,
+            EqualitiesImpactAssessmentNoReason: null,
 			EqualitiesImpactIdentified: EqualitiesImpact.Likely,
 			EqualitiesLikelyDetails: "Mitigation plan in place",
 			EqualitiesSomeImpactDetails: null,
@@ -73,6 +75,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
+		project.Details.EqualitiesImpactAssessmentNoReason.Should().BeNull();
 		project.Details.EqualitiesImpactIdentified.Should().Be(EqualitiesImpact.Likely);
 		project.Details.EqualitiesLikelyDetails.Should().Be("Mitigation plan in place");
 		project.Details.EqualitiesImpactSupportingEvidence.Should().Be("sharepoint.edu.gov.uk/evidence");
@@ -88,6 +91,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 		var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 			Id: 300,
 			EqualitiesImpactAssessmentCompleted: false,
+            EqualitiesImpactAssessmentNoReason: null,
 			EqualitiesImpactIdentified: null,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
@@ -111,11 +115,12 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 	public async Task Handle_NullValues_ClearsPreviouslyAnsweredSection()
 	{
 		var project = CreateProject();
-		project.SetEqualitiesImpactAssessment(true, EqualitiesImpact.Likely, "Previous mitigation", null, "sharepoint.edu.gov.uk/evidence");
+		project.SetEqualitiesImpactAssessment(true, "testing 123", EqualitiesImpact.Likely, "Previous mitigation", null, "sharepoint.edu.gov.uk/evidence");
 
 		var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 			Id: 400,
 			EqualitiesImpactAssessmentCompleted: null,
+            EqualitiesImpactAssessmentNoReason: null,
 			EqualitiesImpactIdentified: null,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
@@ -129,6 +134,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.EqualitiesImpactAssessmentCompleted.Should().BeNull();
+		project.Details.EqualitiesImpactAssessmentNoReason.Should().BeNull();
 		project.Details.EqualitiesImpactIdentified.Should().BeNull();
 		project.Details.EqualitiesLikelyDetails.Should().BeNull();
 		project.Details.EqualitiesSomeImpactDetails.Should().BeNull();
@@ -142,6 +148,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 		var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 			Id: 500,
 			EqualitiesImpactAssessmentCompleted: true,
+            EqualitiesImpactAssessmentNoReason: null,
 			EqualitiesImpactIdentified: EqualitiesImpact.SomeImpact,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
@@ -167,6 +174,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 		var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 			Id: 600,
 			EqualitiesImpactAssessmentCompleted: true,
+            EqualitiesImpactAssessmentNoReason: null,
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
