@@ -19,6 +19,7 @@ using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 using WireMock.Util;
+using WebApiProgram = Dfe.Academies.Academisation.WebApi.Program;
 
 namespace Dfe.Academies.Academisation.SubcutaneousTest
 {
@@ -27,7 +28,7 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 		private readonly Fixture _fixture;
 		private readonly SqliteConnection _sqliteConnection;
 		private readonly string _sqliteConnectionString;
-		private readonly WebApplicationFactory<Program> _webApplicationFactory;
+		private readonly WebApplicationFactory<WebApiProgram> _webApplicationFactory;
 		protected readonly string _apiKey;
 		protected readonly HttpClient _httpClient;
 		protected AcademisationContext _dbContext;
@@ -68,9 +69,9 @@ namespace Dfe.Academies.Academisation.SubcutaneousTest
 			GC.SuppressFinalize(this);
 		}
 
-		private WebApplicationFactory<Program> Build()
+		private WebApplicationFactory<WebApiProgram> Build()
 		{
-			return new WebApplicationFactory<Program>()
+			return new WebApplicationFactory<WebApiProgram>()
 		   .WithWebHostBuilder(builder =>
 		   {
 			   builder.UseEnvironment("local");
