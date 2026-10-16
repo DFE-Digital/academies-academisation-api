@@ -15,5 +15,6 @@ public class SignificantChangeProjectSearchResponse : SignificantChangeProjectRe
 	public SignificantChangeAdmissionVariationConsultationResponse AdmissionVariationConsultation { get; set; } = new();
 	public SignificantChangeFundingResponse Funding { get; set; } = new();
 	public SignificantChangePlanningPermissionResponse PlanningPermission { get; set; } = new();
+	public SignificantChangeHqtfConsiderationResponse HqtfConsideration { get; set; } = new();
 
 }

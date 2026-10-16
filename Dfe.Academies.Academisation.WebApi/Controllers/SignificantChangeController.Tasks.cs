@@ -42,8 +42,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 				id,
 				request.EqualitiesImpactAssessmentCompleted,
+				request.EqualitiesImpactAssessmentNoReason,
 				request.EqualitiesImpactIdentified,
-				request.EqualitiesImpactIdentifiedMitigation);
+				request.EqualitiesLikelyDetails,
+				request.EqualitiesSomeImpactDetails,
+				request.EqualitiesImpactSupportingEvidence);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -240,6 +243,32 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var command = new SetSignificantChangeFundingCommand(
 				id,
 				request.FundingAnswer,
+				request.AdditionalInformation,
+				request.SupportingEvidence);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/SetHQTFConsideration", Name = "SetSignificantChangeHqtfConsideration")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeHqtfConsideration(
+			int id,
+			[FromBody] SetSignificantChangeHqtfConsiderationPublicCommand request)
+		{
+			var command = new SetSignificantChangeHqtfConsiderationCommand(
+				id,
+				request.HqtfConsiderationAnswer,
 				request.AdditionalInformation,
 				request.SupportingEvidence);
 
