@@ -40,7 +40,6 @@ public class SignificantChangeDecisionCommandHandlerTests
 	[Theory]
 	[InlineData(Decision.Approved, AdvisoryBoardDecision.Approved)]
 	[InlineData(Decision.Declined, AdvisoryBoardDecision.Declined)]
-	[InlineData(Decision.Deferred, AdvisoryBoardDecision.Deferred)]
 	[InlineData(Decision.Withdrawn, AdvisoryBoardDecision.Withdrawn)]
 	public async Task Handle_MapsDecisionAndPassesSignificantChangeProjectIdToFactory(
 		Decision sourceDecision,
@@ -219,9 +218,8 @@ public class SignificantChangeDecisionCommandHandlerTests
 		DecisionDate = DateTime.UtcNow.AddDays(-1),
 		DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
 		DecisionMakerName = _fixture.Create<string>(),
-		DeclinedReasons = [],
-		DeferredReasons = [],
-		WithdrawnReasons = []
+		DeclinedReason = string.Empty,
+		WithdrawnReason = string.Empty
 	};
 
 	private void SetupSuccessfulCreate(AdvisoryBoardDecisionDetails? details = null)
