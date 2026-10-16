@@ -138,27 +138,20 @@ public class SignificantChangeProjectMappingProfile : Profile
 					: new User(
 						source.AssignedUserId.Value,
 						source.AssignedUserFullName ?? string.Empty,
-						source.AssignedUserEmailAddress ?? string.Empty)))
-			.ForMember(destination => destination.StakeholderConsultation,
-				options => options.MapFrom(source => source))
-			.ForMember(destination => destination.EqualitiesImpactAssessment,
-				options => options.MapFrom(source => source))
-			.ForMember(destination => destination.AssignedUser,
-				options => options.MapFrom(source => source.AssignedUserId == null
-					? null
-					: new User(
-						source.AssignedUserId.Value,
-						source.AssignedUserFullName ?? string.Empty,
-						source.AssignedUserEmailAddress ?? string.Empty)))
+						source.AssignedUserEmailAddress ?? string.Empty)));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectGetByIdResponse>()
+			.IncludeBase<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
 			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ConsultationDuration,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.EqualitiesImpactAssessment,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.AdmissionVariationConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Funding,
 				options => options.MapFrom(source => source))
-		
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.StakeholderObjections,
@@ -166,8 +159,11 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.PlanningPermission,
-				options => options.MapFrom(source => source));
-
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.Decision,
+        		options => options.Ignore())
+    		.ForMember(destination => destination.DecisionDate,
+        		options => options.Ignore());
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
 			.ForMember(destination => destination.Status,

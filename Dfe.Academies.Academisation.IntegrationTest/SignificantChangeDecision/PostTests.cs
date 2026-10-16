@@ -55,7 +55,7 @@ public class PostTests(TestWebApplicationFactory factory)
 			DeferredReasons = [],
 			WithdrawnReasons = [],
 			DecisionDate = DateTime.UtcNow.AddMonths(-1),
-			DecisionMadeBy = DecisionMadeBy.RegionalDirectorForRegion,
+			DecisionMadeBy = SignificantChangeDecisionMadeBy.RegionalDirector,
 			DecisionMakerName = "John Smith"
 		};
 
@@ -74,10 +74,12 @@ public class PostTests(TestWebApplicationFactory factory)
 		{
 			Assert.Equal(System.Net.HttpStatusCode.Created, result.StatusCode);
 			Assert.NotNull(result.Result);
+			Assert.Equal(SignificantChangeDecisionMadeBy.RegionalDirector, result.Result!.DecisionMadeBy);
 
 			Assert.NotNull(outcome);
 			Assert.Equal(significantChangeProjectId, outcome.AdvisoryBoardDecisionDetails.SignificantChangeProjectId);
 			Assert.Equal(AdvisoryBoardDecision.Declined, outcome.AdvisoryBoardDecisionDetails.Decision);
+			Assert.Equal(DecisionMadeBy.RegionalDirectorForRegion, outcome.AdvisoryBoardDecisionDetails.DecisionMadeBy);
 		});
 	}
 

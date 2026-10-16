@@ -68,13 +68,39 @@ public class SignificantChangeDecisionCommandHandlerTests
 				d.ApprovedConditionsDetails == command.ApprovedConditionsDetails &&
 				d.AdvisoryBoardDecisionDate == command.DecisionDate &&
 				d.AcademyOrderDate == null &&
-				d.DecisionMadeBy == command.DecisionMadeBy &&
+				d.DecisionMadeBy == DecisionMadeBy.DirectorGeneral &&
 				d.DecisionMakerName == command.DecisionMakerName),
 			It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
 			It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
 			It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
 			It.Is<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(r => !r.Any()),
 			It.Is<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>(r=> !r.Any())), Times.Once);
+	}
+
+	[Theory]
+	[InlineData(SignificantChangeDecisionMadeBy.RegionalDirector, DecisionMadeBy.RegionalDirectorForRegion)]
+	[InlineData(SignificantChangeDecisionMadeBy.Minister, DecisionMadeBy.Minister)]
+	[InlineData(SignificantChangeDecisionMadeBy.DirectorGeneral, DecisionMadeBy.DirectorGeneral)]
+	[InlineData(SignificantChangeDecisionMadeBy.DeputyDirector, DecisionMadeBy.DeputyDirector)]
+	[InlineData(SignificantChangeDecisionMadeBy.Grade6, DecisionMadeBy.Grade6)]
+	public async Task Handle_MapsDecisionMadeByToSharedDomainEnum(
+		SignificantChangeDecisionMadeBy sourceDecisionMadeBy,
+		DecisionMadeBy expectedDecisionMadeBy)
+	{
+		var command = CreateCommand(_fixture.Create<int>(), Decision.Declined, sourceDecisionMadeBy);
+		SetupSuccessfulCreate();
+
+		var target = CreateHandler();
+
+		_ = await target.Handle(command, default);
+
+		_mockDecisionFactory.Verify(f => f.Create(
+			It.Is<AdvisoryBoardDecisionDetails>(details => details.DecisionMadeBy == expectedDecisionMadeBy),
+			It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()), Times.Once);
 	}
 
 	[Fact]
@@ -210,14 +236,17 @@ public class SignificantChangeDecisionCommandHandlerTests
 		await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
 	}
 
-	private SignificantChangeDecisionCommand CreateCommand(int projectId, Decision decision) => new()
+	private SignificantChangeDecisionCommand CreateCommand(
+		int projectId,
+		Decision decision,
+		SignificantChangeDecisionMadeBy decisionMadeBy = SignificantChangeDecisionMadeBy.DirectorGeneral) => new()
 	{
 		SignificantChangeProjectId = projectId,
 		Decision = decision,
 		ApprovedConditionsSet = decision == Decision.Approved ? true : null,
 		ApprovedConditionsDetails = decision == Decision.Approved ? _fixture.Create<string>() : null,
 		DecisionDate = DateTime.UtcNow.AddDays(-1),
-		DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
+		DecisionMadeBy = decisionMadeBy,
 		DecisionMakerName = _fixture.Create<string>(),
 		DeclinedReasons = [],
 		DeferredReasons = [],
@@ -226,7 +255,10 @@ public class SignificantChangeDecisionCommandHandlerTests
 
 	private void SetupSuccessfulCreate(AdvisoryBoardDecisionDetails? details = null)
 	{
-		details ??= _fixture.Create<AdvisoryBoardDecisionDetails>();
+		details ??= _fixture.Build<AdvisoryBoardDecisionDetails>()
+			.With(x => x.Decision, AdvisoryBoardDecision.Approved)
+			.With(x => x.DecisionMadeBy, DecisionMadeBy.DirectorGeneral)
+			.Create();
 
 		_mockDecisionFactory
 			.Setup(f => f.Create(
