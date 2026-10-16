@@ -42,8 +42,11 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var command = new SetSignificantChangeEqualitiesImpactAssessmentCommand(
 				id,
 				request.EqualitiesImpactAssessmentCompleted,
+				request.EqualitiesImpactAssessmentNoReason,
 				request.EqualitiesImpactIdentified,
-				request.EqualitiesImpactIdentifiedMitigation);
+				request.EqualitiesLikelyDetails,
+				request.EqualitiesSomeImpactDetails,
+				request.EqualitiesImpactSupportingEvidence);
 
 			CommandResult result = await _mediator.Send(command);
 

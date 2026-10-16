@@ -12,8 +12,9 @@ public class SignificantChangeProjectDetails
 	public string? StakeholderObjectionsComment { get; set; }
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
-	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
-
+	public string? EqualitiesLikelyDetails { get; set; }
+	public string? EqualitiesSomeImpactDetails { get; set; }
+	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
@@ -25,10 +26,11 @@ public class SignificantChangeProjectDetails
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }
-	public string? PlanningPermissionSupportingEvidence { get; set; }
+	public string? PlanningPermissionSupportingEvidence { get; set; }    
 	public string? PlanningPermissionAdditionalInformation { get; set; }
+    public string? EqualitiesImpactAssessmentNoReason { get; set; }
 
-	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
+    public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
 		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))

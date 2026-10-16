@@ -2502,13 +2502,25 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("bit")
                                 .HasColumnName("EqualitiesImpactAssessmentCompleted");
 
+                            b1.Property<string>("EqualitiesImpactAssessmentNoReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactAssessmentNoReason");
+
                             b1.Property<string>("EqualitiesImpactIdentified")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentified");
 
-                            b1.Property<string>("EqualitiesImpactIdentifiedMitigation")
+                            b1.Property<string>("EqualitiesImpactSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("EqualitiesImpactIdentifiedMitigation");
+                                .HasColumnName("EqualitiesImpactSupportingEvidence");
+
+                            b1.Property<string>("EqualitiesLikelyDetails")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesLikelyDetails");
+
+                            b1.Property<string>("EqualitiesSomeImpactDetails")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesSomeImpactDetails");
 
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")

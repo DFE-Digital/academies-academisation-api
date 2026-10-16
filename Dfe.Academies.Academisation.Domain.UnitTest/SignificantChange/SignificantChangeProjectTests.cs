@@ -489,14 +489,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null);
+			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
 
 		[Theory]
-		[InlineData(EqualitiesImpact.None)]
-		[InlineData(EqualitiesImpact.PotentialImpacts)]
+		[InlineData(EqualitiesImpact.Unlikely)]
+		[InlineData(EqualitiesImpact.SomeImpact)]
 		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenSet_ReturnCompleted(EqualitiesImpact equalitiesImpact)
 		{
 			var project = SignificantChangeProject.Create(
@@ -510,15 +510,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null);
+			project.SetEqualitiesImpactAssessment(true, null, equalitiesImpact, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 
 		[Theory]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, "", SignificantChangeTaskStatus.Completed)]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, null, SignificantChangeTaskStatus.Completed)]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, "Mitigation plan in place",
+		[InlineData(EqualitiesImpact.Likely, "", SignificantChangeTaskStatus.Completed)]
+		[InlineData(EqualitiesImpact.Likely, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(EqualitiesImpact.Likely, "Mitigation plan in place",
 			SignificantChangeTaskStatus.Completed)]
 		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenIdentified_ShouldReturnCorrectStatus(
 			EqualitiesImpact impact, string? mitigation, SignificantChangeTaskStatus expectedStatus)
@@ -534,12 +534,35 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, impact, mitigation);
+			project.SetEqualitiesImpactAssessment(true, null, impact, mitigation, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
 
-	[Fact]
+        [Theory]
+        [InlineData(true, null)]
+        [InlineData(false, "some reason")]
+		public void SetEqualitiesImpactAssessment_ShouldSetReasonProperty(bool equalitiesImpactAssessmentComplete, string? expectedNoReason)
+        {
+            var project = SignificantChangeProject.Create(
+                new SignificantChangeProjectOptions(
+                    _fixture.Create<int>(),
+                    _fixture.Create<byte>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>()),
+                DateTime.UtcNow);
+
+
+            project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentComplete, "some reason", null, null, null, null);
+
+            project.Details.EqualitiesImpactAssessmentCompleted.Should().Be(equalitiesImpactAssessmentComplete);
+			project.Details.EqualitiesImpactAssessmentNoReason.Should().Be(expectedNoReason);
+		}
+
+
+		[Fact]
 		public void SetStakeholderObjections_ShouldSetDetailsProperties()
 		{
 			var status = _fixture.Create<SignificantChangeStatus>();
