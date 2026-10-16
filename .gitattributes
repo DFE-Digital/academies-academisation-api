@@ -3,6 +3,10 @@
 ###############################################################################
 * text=auto
 
+#set default behavior to automatically normalize line endings for docker entrypoint.sh script
+script/webapi-docker-entrypoint.sh text eol=lf
+script/sqlcmd-docker-entrypoint.sh text eol=lf
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
