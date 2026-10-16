@@ -30,7 +30,13 @@ public class SignificantChangeProjectDetails
 	public string? PlanningPermissionAdditionalInformation { get; set; }
     public string? EqualitiesImpactAssessmentNoReason { get; set; }
 
-    public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
+	public SignificantChangeGenericYesNoNa? LandTransactionConsent { get; set; }
+	public string? LandTransactionConsentAdditionalInfo { get; set; }
+	public SignificantChangeGenericYesNoNa? LandTransactionApplication { get; set; }
+	public string? LandTransactionApplicationAdditionalInfo { get; set; }
+	public string? LandTransactionSupportingEvidence { get; set; }
+
+	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
 		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
@@ -92,6 +98,23 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
+	public SignificantChangeTaskStatus GetLandTransactionTaskStatus()
+	{
+		if (!LandTransactionApplication.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo)
+			&& !LandTransactionConsent.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)
+			&& string.IsNullOrWhiteSpace(LandTransactionSupportingEvidence) )
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (LandTransactionApplication.HasValue
+			&& (LandTransactionApplication != SignificantChangeGenericYesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo))
+			&& LandTransactionConsent.HasValue
+			&& (LandTransactionConsent != SignificantChangeGenericYesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
 	public SignificantChangeTaskStatus GetStakeholderObjectionsTaskStatus()
 	{
 		if (!StakeholderObjections.HasValue
