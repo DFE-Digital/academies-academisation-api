@@ -113,6 +113,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.FundingSupportingEvidence = supportingEvidence;
 		}
 
+		public void SetHqtfConsideration(
+			HqtfConsiderationAnswer? hqtfConsiderationAnswer,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.HqtfConsiderationAnswer = hqtfConsiderationAnswer;
+			Details.HqtfConsiderationAdditionalInformation = hqtfConsiderationAnswer is HqtfConsiderationAnswer.Yes
+				? additionalInformation
+				: null;
+			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
 					string? trustConsultedReligiousBodyNotConsultedReason)
 		{

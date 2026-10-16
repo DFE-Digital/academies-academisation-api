@@ -847,6 +847,43 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             result.Should().BeOfType<NotFoundResult>();
         }
 
+        [Fact]
+        public async Task SetHqtfConsideration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
+                HqtfConsiderationAnswer.No,
+                "Not considered",
+                "Evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeHqtfConsiderationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeHqtfConsideration(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeHqtfConsiderationCommand>(command =>
+                    command.Id == 100
+                    && command.HqtfConsiderationAnswer == HqtfConsiderationAnswer.No
+                    && command.AdditionalInformation == "Not considered"
+                    && command.SupportingEvidence == "Evidence"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetHqtfConsideration_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
+                HqtfConsiderationAnswer.Yes, null, "Evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeHqtfConsiderationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeHqtfConsideration(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
         private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(

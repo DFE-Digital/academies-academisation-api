@@ -39,6 +39,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.FundingSupportingEvidence))
 			.ForMember(destination => destination.FundingTaskStatus,
 				options => options.MapFrom(source => source.Details.GetFundingTaskStatus().ToString()))
+			.ForMember(destination => destination.HqtfConsiderationAnswer,
+				options => options.MapFrom(source => source.Details.HqtfConsiderationAnswer))
+			.ForMember(destination => destination.HqtfConsiderationAdditionalInformation,
+				options => options.MapFrom(source => source.Details.HqtfConsiderationAdditionalInformation))
+			.ForMember(destination => destination.HqtfConsiderationSupportingEvidence,
+				options => options.MapFrom(source => source.Details.HqtfConsiderationSupportingEvidence))
+			.ForMember(destination => destination.HqtfConsiderationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetHqtfConsiderationTaskStatus().ToString()))
 			.ForMember(destination => destination.EqualitiesImpactAssessmentCompleted,
 				options => options.MapFrom(source => source.Details.EqualitiesImpactAssessmentCompleted))
             .ForMember(destination => destination.EqualitiesImpactAssessmentNoReason,
@@ -101,6 +109,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.FundingTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeHqtfConsiderationResponse>()
+			.ForMember(destination => destination.AdditionalInformation,
+				options => options.MapFrom(source => source.HqtfConsiderationAdditionalInformation))
+			.ForMember(destination => destination.SupportingEvidence,
+				options => options.MapFrom(source => source.HqtfConsiderationSupportingEvidence))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.HqtfConsiderationTaskStatus));
+
         CreateMap<SignificantChangeProjectDto, EqualitiesImpactAssessmentResponse>()
             .ForMember(destination => destination.Status,
                 options => options.MapFrom(source => source.EqualitiesTaskStatus));
@@ -154,7 +170,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Funding,
 				options => options.MapFrom(source => source))
-		
+			.ForMember(destination => destination.HqtfConsideration,
+				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.StakeholderObjections,

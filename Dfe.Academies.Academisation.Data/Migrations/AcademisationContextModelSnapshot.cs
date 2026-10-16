@@ -2534,6 +2534,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingSupportingEvidence");
 
+                            b1.Property<string>("HqtfConsiderationAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("HqtfConsiderationAdditionalInformation");
+
+                            b1.Property<string>("HqtfConsiderationAnswer")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("HqtfConsiderationAnswer");
+
+                            b1.Property<string>("HqtfConsiderationSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("HqtfConsiderationSupportingEvidence");
+
                             b1.Property<string>("PlanningPermission")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermission");
