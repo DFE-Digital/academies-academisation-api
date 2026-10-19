@@ -113,6 +113,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.FundingSupportingEvidence = supportingEvidence;
 		}
 
+		public void SetHqtfConsideration(
+			HqtfConsiderationAnswer? hqtfConsiderationAnswer,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.HqtfConsiderationAnswer = hqtfConsiderationAnswer;
+			Details.HqtfConsiderationAdditionalInformation = hqtfConsiderationAnswer is HqtfConsiderationAnswer.Yes
+				? additionalInformation
+				: null;
+			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
 					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
@@ -154,12 +166,16 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			this.ReadOnlyDate = readOnlyDate;
 		}
 
-		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted,
-			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
+		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted, string? equalitiesImpactAssessmentNoReason,
+			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesLikelyDetails, string? equalitiesSomeImpactDetails,
+			string? equalitiesImpactSupportingEvidence)
 		{
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
+			Details.EqualitiesImpactAssessmentNoReason = equalitiesImpactAssessmentCompleted is false ? equalitiesImpactAssessmentNoReason : null;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
-			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
+			Details.EqualitiesLikelyDetails = equalitiesLikelyDetails;
+			Details.EqualitiesSomeImpactDetails = equalitiesSomeImpactDetails;
+			Details.EqualitiesImpactSupportingEvidence = equalitiesImpactSupportingEvidence;
 
 		}
 

@@ -12,8 +12,9 @@ public class SignificantChangeProjectDetails
 	public string? StakeholderObjectionsComment { get; set; }
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
-	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
-
+	public string? EqualitiesLikelyDetails { get; set; }
+	public string? EqualitiesSomeImpactDetails { get; set; }
+	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
@@ -21,9 +22,13 @@ public class SignificantChangeProjectDetails
 	public FundingAnswer? FundingAnswer { get; set; }
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
+	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
+	public string? HqtfConsiderationAdditionalInformation { get; set; }
+	public string? HqtfConsiderationSupportingEvidence { get; set; }
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }
-	public string? PlanningPermissionSupportingEvidence { get; set; }
+	public string? PlanningPermissionSupportingEvidence { get; set; }    
 	public string? PlanningPermissionAdditionalInformation { get; set; }
+    public string? EqualitiesImpactAssessmentNoReason { get; set; }
 
 	public bool? LocalAuthorityRaisedObjections { get; set; }
 	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
@@ -181,10 +186,7 @@ public class SignificantChangeProjectDetails
 		if (!LocalAuthorityRaisedObjections.HasValue
 		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
 		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
-		{
-			return SignificantChangeTaskStatus.NotStarted;
-		}
-
+		
 		if (LocalAuthorityRaisedObjections is false)
 		{
 			return SignificantChangeTaskStatus.Completed;
@@ -197,5 +199,14 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.InProgress;
+	}
+	public SignificantChangeTaskStatus GetHqtfConsiderationTaskStatus()
+	{
+		if (HqtfConsiderationAnswer is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
 	}
 }
