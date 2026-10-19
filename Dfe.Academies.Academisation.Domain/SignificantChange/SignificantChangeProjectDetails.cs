@@ -186,6 +186,9 @@ public class SignificantChangeProjectDetails
 		if (!LocalAuthorityRaisedObjections.HasValue
 		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
 		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
 		
 		if (LocalAuthorityRaisedObjections is false)
 		{
