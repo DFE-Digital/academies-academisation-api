@@ -917,6 +917,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             
             result.Should().BeOfType<NotFoundResult>();
         }
+        [Fact]
         public async Task SetHqtfConsideration_ReturnsNotFound_WhenProjectDoesNotExist()
         {
             var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
