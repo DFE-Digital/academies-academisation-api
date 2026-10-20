@@ -64,6 +64,27 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
+		public void SetAdmissionVariationDetails(
+			bool? admissionsVariationRequired,
+			string? supportingEvidence,
+			bool? admissionsVariationLocalAuthoritySupportive,
+			bool? admissionsVariationPupilPlacePlanningSupportive,
+			bool? admissionsVariationAdmissionsTeamSupportive)
+		{
+			Details.AdmissionsVariationRequired = admissionsVariationRequired;
+			Details.AdmissionsVariationSupportingEvidence = supportingEvidence;
+			Details.AdmissionsVariationLocalAuthoritySupportive = admissionsVariationLocalAuthoritySupportive;
+			Details.AdmissionsVariationPupilPlacePlanningSupportive = admissionsVariationPupilPlacePlanningSupportive;
+			Details.AdmissionsVariationAdmissionsTeamSupportive = admissionsVariationAdmissionsTeamSupportive;
+
+			if ( admissionsVariationLocalAuthoritySupportive is false 
+				|| admissionsVariationPupilPlacePlanningSupportive is false 
+				|| admissionsVariationAdmissionsTeamSupportive is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
+		}
+
 		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
 			string? noAdmissionVariationReason)
 		{
