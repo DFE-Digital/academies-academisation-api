@@ -1033,7 +1033,11 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.StakeholderObjections).HasColumnName("StakeholderObjections").HasConversion<string>();
 			details.Property(d => d.StakeholderObjectionsComment).HasColumnName("StakeholderObjectionsComment");
             details.Property(d => d.EqualitiesImpactAssessmentNoReason).HasColumnName("EqualitiesImpactAssessmentNoReason");
-        });
+            details.Property(d => d.OfstedInspectionDate).HasColumnName("OfstedInspectionDate");
+            details.Property(d => d.MeetsOfstedStandards).HasColumnName("MeetsOfstedStandards");
+            details.Property(d => d.OfstedAdditionalInformation).HasColumnName("OfstedAdditionalInformation");
+            details.Property(d => d.OfstedSupportingEvidence).HasColumnName("OfstedSupportingEvidence");
+		});
 
 	}
 }

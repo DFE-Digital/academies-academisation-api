@@ -2546,6 +2546,22 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("HqtfConsiderationSupportingEvidence");
 
+                            b1.Property<bool?>("MeetsOfstedStandards")
+                                .HasColumnType("bit")
+                                .HasColumnName("MeetsOfstedStandards");
+
+                            b1.Property<string>("OfstedAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("OfstedAdditionalInformation");
+
+                            b1.Property<DateTime?>("OfstedInspectionDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("OfstedInspectionDate");
+
+                            b1.Property<string>("OfstedSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("OfstedSupportingEvidence");
+
                             b1.Property<string>("PlanningPermission")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermission");
