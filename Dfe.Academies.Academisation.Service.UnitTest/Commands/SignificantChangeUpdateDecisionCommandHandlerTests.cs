@@ -104,11 +104,11 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		_mockDecision
 			.Setup(d => d.Update(
 				It.IsAny<AdvisoryBoardDecisionDetails>(),
-				It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
+				It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()))
 			.Returns(new CommandSuccessResult());
 
 		_mockRepo.Setup(r => r.GetAdvisoryBoardDecisionById(command.AdvisoryBoardDecisionId))
@@ -131,11 +131,11 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 
 		_mockDecision.Verify(d => d.Update(
 			It.Is<AdvisoryBoardDecisionDetails>(details => details.DecisionMadeBy == expectedDecisionMadeBy),
-			It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
-			It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
-			It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-			It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(),
-			It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()), Times.Once);
+			It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()), Times.Once);
 	}
 
 	[Fact]
