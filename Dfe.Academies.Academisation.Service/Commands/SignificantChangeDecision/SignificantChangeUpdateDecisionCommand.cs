@@ -12,9 +12,8 @@ public class SignificantChangeUpdateDecisionCommand : IRequest<CommandResult>
 	public Decision Decision { get; init; }
 	public bool? ApprovedConditionsSet { get; init; }
 	public string? ApprovedConditionsDetails { get; init; }
-	public List<AdvisoryBoardDeclinedReasonDetails>? DeclinedReasons { get; init; } = [];
-	public List<AdvisoryBoardDeferredReasonDetails>? DeferredReasons { get; init; } = [];
-	public List<AdvisoryBoardWithdrawnReasonDetails>? WithdrawnReasons { get; init; } = [];
+	public string? DeclinedReason { get; init; }
+	public string? WithdrawnReason { get; init; }
 	public DateTime DecisionDate { get; init; }
 	public DecisionMadeBy DecisionMadeBy { get; init; }
 	public string? DecisionMakerName { get; set; }

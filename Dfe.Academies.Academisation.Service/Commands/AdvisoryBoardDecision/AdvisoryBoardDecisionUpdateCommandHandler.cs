@@ -7,7 +7,6 @@ using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Domain.TransferProjectAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
-using Dfe.Academies.Academisation.Service.Mappers.AdvisoryBoardDecision;
 using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 using MediatR;
 
@@ -59,9 +58,29 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 			command.DecisionMakerName
 		);
 
+		var declinedReasons = !string.IsNullOrEmpty(command.DeclinedReason)
+			? new List<AdvisoryBoardDeclinedReasonDetails>
+			{
+				new(
+					command.AdvisoryBoardDecisionId,
+					AdvisoryBoardDeclinedReason.Other,
+					command.DeclinedReason)
+			}
+			: [];
+
+		var withdrawnReasons = !string.IsNullOrEmpty(command.WithdrawnReason)
+			? new List<AdvisoryBoardWithdrawnReasonDetails>
+			{
+				new(
+					command.AdvisoryBoardDecisionId,
+					AdvisoryBoardWithdrawnReason.Other,
+					command.WithdrawnReason)
+			}
+			: [];
+
 		return await UpdateDecisionAsync(
 			command.AdvisoryBoardDecisionId,
-			existingDecision => existingDecision.Update(details, command.DeferredReasons!, command.DeclinedReasons!, command.WithdrawnReasons!, new List<AdvisoryBoardDAORevokedReasonDetails>(), new List<AdvisoryBoardDAONotIssuedReasonDetails>()),
+			existingDecision => existingDecision.Update(details, [], declinedReasons, withdrawnReasons, [], []),
 			cancellationToken);
 	}
 
@@ -84,11 +103,16 @@ internal class AdvisoryBoardDecisionUpdateCommandHandler(
 
 		var result = updateDecision(existingDecision);
 
+		if (result is null)
+		{
+			throw new InvalidOperationException("Advisory board decision update returned null.");
+		}
+
 		return result switch
 		{
 			CommandSuccessResult => await ExecuteDataCommand(existingDecision, cancellationToken),
 			CommandValidationErrorResult errorResult => errorResult,
-			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()}")
+			_ => throw new NotImplementedException($"Other CreateResult types not expected ({result.GetType()})")
 		};
 	}
 
