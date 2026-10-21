@@ -2558,6 +2558,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermissionSupportingEvidence");
 
+                            b1.Property<string>("LocalAuthorityObjectionsFurtherInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LocalAuthorityObjectionsFurtherInformation");
+
+                            b1.Property<bool?>("LocalAuthorityRaisedObjections")
+                                .HasColumnType("bit")
+                                .HasColumnName("LocalAuthorityRaisedObjections");
+
+                            b1.Property<string>("LocalAuthoritySupportingEvidenceLink")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LocalAuthoritySupportingEvidenceLink");
+
                             b1.Property<DateTime?>("ProposedChangeDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedChangeDate");

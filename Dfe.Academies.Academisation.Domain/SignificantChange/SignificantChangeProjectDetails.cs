@@ -30,7 +30,11 @@ public class SignificantChangeProjectDetails
 	public string? PlanningPermissionAdditionalInformation { get; set; }
     public string? EqualitiesImpactAssessmentNoReason { get; set; }
 
-    public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
+	public bool? LocalAuthorityRaisedObjections { get; set; }
+	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
+	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
+
+	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
 		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
@@ -177,6 +181,28 @@ public class SignificantChangeProjectDetails
 			: SignificantChangeTaskStatus.InProgress;
 	}
 
+	public SignificantChangeTaskStatus GetLocalAuthorityObjectionsTaskStatus()
+	{
+		if (!LocalAuthorityRaisedObjections.HasValue
+		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
+		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+		
+		if (LocalAuthorityRaisedObjections is false)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (LocalAuthorityRaisedObjections is true
+		    && !string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
 	public SignificantChangeTaskStatus GetHqtfConsiderationTaskStatus()
 	{
 		if (HqtfConsiderationAnswer is null)

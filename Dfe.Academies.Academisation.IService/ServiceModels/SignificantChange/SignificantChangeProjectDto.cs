@@ -35,6 +35,10 @@ public class SignificantChangeProjectDto
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
 	public string FundingTaskStatus { get; set; } = string.Empty;
+	public bool? LocalAuthorityRaisedObjections { get; set; }
+	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
+	public string? SupportingEvidenceLink { get; set; }
+	public string LocalAuthorityObjectionsTaskStatus { get; set; } = string.Empty;
 	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }

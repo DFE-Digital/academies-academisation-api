@@ -48,6 +48,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].SetAdmissionVariationConsultation(false, "no information provided");
 			projects[0].SetEqualitiesImpactAssessment(true, null, EqualitiesImpact.Likely, "Needs mitigating actions", null, "sharepoint.edu.gov.uk/evidence");
 			projects[0].SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
+			projects[0].SetLocalAuthorityObjections(true, "Local authority objections details", "https://example.org/evidence");
 			projects[0].SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			projects[0].SetPlanningPermission(PlanningPermissionAnswer.Yes, "Decision is pending final sign-off", "Outline permission summary");
 			projects[0].SetHqtfConsideration(HqtfConsiderationAnswer.Yes, "HQTF consideration detail", "HQTF evidence");
@@ -94,6 +95,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().BeFalse();
 			data[0].ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
 			data[0].ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			data[0].LocalAuthorityObjections.LocalAuthorityRaisedObjections.Should().BeTrue();
+			data[0].LocalAuthorityObjections.LocalAuthorityObjectionsFurtherInformation.Should().Be("Local authority objections details");
+			data[0].LocalAuthorityObjections.SupportingEvidenceLink.Should().Be("https://example.org/evidence");
+			data[0].LocalAuthorityObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			data[0].ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			data[0].ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
 			data[0].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
@@ -132,6 +137,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[1].EqualitiesImpactAssessment.EqualitiesImpactSupportingEvidence.Should().BeNull();
 			data[1].EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 			data[1].ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
+			data[1].LocalAuthorityObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 			data[1].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 			data[1].HqtfConsideration.HqtfConsiderationAnswer.Should().BeNull();
 			data[1].HqtfConsideration.AdditionalInformation.Should().BeNull();

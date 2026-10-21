@@ -61,6 +61,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.EqualitiesImpactSupportingEvidence))
 			.ForMember(destination => destination.EqualitiesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
+			.ForMember(destination => destination.LocalAuthorityRaisedObjections,
+				options => options.MapFrom(source => source.Details.LocalAuthorityRaisedObjections))
+			.ForMember(destination => destination.LocalAuthorityObjectionsFurtherInformation,
+				options => options.MapFrom(source => source.Details.LocalAuthorityObjectionsFurtherInformation))
+			.ForMember(destination => destination.SupportingEvidenceLink,
+				options => options.MapFrom(source => source.Details.LocalAuthoritySupportingEvidenceLink))
+			.ForMember(destination => destination.LocalAuthorityObjectionsTaskStatus,
+				options => options.MapFrom(source => source.Details.GetLocalAuthorityObjectionsTaskStatus().ToString()))
 			.ForMember(destination => destination.TrustConsultedReligiousBody,
 				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBody))
 			.ForMember(destination => destination.TrustConsultedReligiousBodyNotConsultedReason,
@@ -109,6 +117,9 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.FundingTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeLocalAuthorityObjectionsResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.LocalAuthorityObjectionsTaskStatus));
 		CreateMap<SignificantChangeProjectDto, SignificantChangeHqtfConsiderationResponse>()
 			.ForMember(destination => destination.AdditionalInformation,
 				options => options.MapFrom(source => source.HqtfConsiderationAdditionalInformation))
@@ -169,6 +180,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.AdmissionVariationConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Funding,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.LocalAuthorityObjections,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.HqtfConsideration,
 				options => options.MapFrom(source => source))
