@@ -199,5 +199,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
 		}
+
+		public void SetOfstedInspection(DateTime? inspectionDate, bool? meetsOfstedStandards,
+			string? additionalInformation, string? supportingEvidence)
+		{
+			Details.OfstedInspectionDate = inspectionDate;
+			Details.MeetsOfstedStandards = meetsOfstedStandards;
+			Details.OfstedAdditionalInformation = meetsOfstedStandards == true ? null : additionalInformation;
+			Details.OfstedSupportingEvidence = supportingEvidence;
+		}
 	}
 }

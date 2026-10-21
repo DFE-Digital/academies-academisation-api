@@ -58,6 +58,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "stakeholders have objected");
+			project.SetOfstedInspection(proposedDecisionDate, false, "Ofsted standards not met", "Ofsted evidence");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -104,6 +105,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.StakeholderObjections.StakeholderObjections.Should().Be(nameof(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided));
 			result.StakeholderObjections.StakeholderObjectionsComment.Should().Be("stakeholders have objected");
 			result.StakeholderObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.OfstedInspection.InspectionDate.Should().Be(proposedDecisionDate);
+			result.OfstedInspection.MeetsOfstedStandards.Should().BeFalse();
+			result.OfstedInspection.AdditionalInformation.Should().Be("Ofsted standards not met");
+			result.OfstedInspection.SupportingEvidence.Should().Be("Ofsted evidence");
+			result.OfstedInspection.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]
