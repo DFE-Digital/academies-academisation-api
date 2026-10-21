@@ -1,4 +1,4 @@
-﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IDomain.ConversionAdvisoryBoardDecisionAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
@@ -17,9 +17,8 @@ internal static class SignificantChangeDecisionServiceModelMapper
 			Decision = decision.AdvisoryBoardDecisionDetails.Decision.MapToSignificantChangeDecision(),
 			ApprovedConditionsSet = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsSet,
 			ApprovedConditionsDetails = decision.AdvisoryBoardDecisionDetails.ApprovedConditionsDetails,
-			DeclinedReasons = decision.DeclinedReasons.ToList(),
-			DeferredReasons = decision.DeferredReasons.ToList(),
-			WithdrawnReasons = decision.WithdrawnReasons.ToList(),
+			DeclinedReason = decision.DeclinedReasons.SingleOrDefault(reason => reason.Reason is AdvisoryBoardDeclinedReason.Other)?.Details,
+			WithdrawnReason = decision.WithdrawnReasons.SingleOrDefault(reason => reason.Reason is AdvisoryBoardWithdrawnReason.Other)?.Details,
 			DecisionDate = decision.AdvisoryBoardDecisionDetails.AdvisoryBoardDecisionDate,
 			DecisionMadeBy = decision.AdvisoryBoardDecisionDetails.DecisionMadeBy.MapToSignificantChangeDecisionMadeBy(),
 			DecisionMakerName = decision.AdvisoryBoardDecisionDetails.DecisionMakerName
@@ -32,7 +31,6 @@ internal static class SignificantChangeDecisionServiceModelMapper
 		{
 			Decision.Approved => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved,
 			Decision.Declined => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Declined,
-			Decision.Deferred => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Deferred,
 			Decision.Withdrawn => Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Withdrawn,
 			_ => throw new ArgumentOutOfRangeException(nameof(decision), decision, null)
 		};
@@ -43,8 +41,7 @@ internal static class SignificantChangeDecisionServiceModelMapper
 		{
 			Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Approved => Decision.Approved,
 			Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Declined => Decision.Declined,
-			Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Deferred => Decision.Deferred,
-			Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Withdrawn => Decision.Withdrawn,
+			Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDecision.Withdrawn =>Decision.Withdrawn,
 			_ => throw new ArgumentOutOfRangeException(nameof(decision), decision, null)
 		};
 

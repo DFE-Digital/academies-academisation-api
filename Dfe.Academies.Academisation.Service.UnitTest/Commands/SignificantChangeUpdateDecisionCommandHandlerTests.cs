@@ -14,6 +14,7 @@ using Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using System.Linq;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands;
 
@@ -37,7 +38,6 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 	[Theory]
 	[InlineData(Decision.Approved, AdvisoryBoardDecision.Approved)]
 	[InlineData(Decision.Declined, AdvisoryBoardDecision.Declined)]
-	[InlineData(Decision.Deferred, AdvisoryBoardDecision.Deferred)]
 	[InlineData(Decision.Withdrawn, AdvisoryBoardDecision.Withdrawn)]
 	public async Task Handle_MapsDecisionAndPassesSignificantChangeProjectIdToDomain(
 		Decision sourceDecision,
@@ -48,11 +48,11 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		_mockDecision
 			.Setup(d => d.Update(
 				It.IsAny<AdvisoryBoardDecisionDetails>(),
-				It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
+				It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>() ))
 			.Returns(new CommandSuccessResult());
 
 		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails).Returns(_fixture.Build<AdvisoryBoardDecisionDetails>()
@@ -82,11 +82,11 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 				details.AcademyOrderDate == null &&
 				details.DecisionMadeBy == DecisionMadeBy.DirectorGeneral &&
 				details.DecisionMakerName == command.DecisionMakerName),
-			It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
-			It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
-			It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-			It.Is<List<AdvisoryBoardDAORevokedReasonDetails>>(r => r.Count == 0),
-			It.Is<List<AdvisoryBoardDAONotIssuedReasonDetails>>(r=> r.Count == 0)), Times.Once);
+			It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+			It.Is<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(r => !r.Any()),
+			It.Is<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>(r=> !r.Any())), Times.Once);
 	}
 
 	[Theory]
@@ -162,11 +162,11 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		_mockDecision
 			.Setup(d => d.Update(
 				It.IsAny<AdvisoryBoardDecisionDetails>(),
-				It.IsAny<List<AdvisoryBoardDeferredReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDeclinedReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardWithdrawnReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAORevokedReasonDetails>>(),
-				It.IsAny<List<AdvisoryBoardDAONotIssuedReasonDetails>>()))
+				It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>() ))
 			.Returns(new CommandSuccessResult());
 
 		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails).Returns(new AdvisoryBoardDecisionDetails(
@@ -221,9 +221,8 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		DecisionDate = DateTime.UtcNow.AddDays(-1),
 		DecisionMadeBy = decisionMadeBy,
 		DecisionMakerName = _fixture.Create<string>(),
-		DeclinedReasons = [],
-		DeferredReasons = [],
-		WithdrawnReasons = []
+		DeclinedReason = string.Empty,
+		WithdrawnReason = string.Empty
 	};
 
 	private AdvisoryBoardDecisionUpdateCommandHandler CreateHandler() =>

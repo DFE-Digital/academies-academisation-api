@@ -3,6 +3,9 @@
     "WSL": {
       "commandName": "WSL2",
       "distributionName": ""
+    },
+    "Seeder": {
+      "commandName": "Project"
     }
   }
 }
