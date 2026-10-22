@@ -15,6 +15,6 @@ public class SignificantChangeUpdateDecisionCommand : IRequest<CommandResult>
 	public string? DeclinedReason { get; init; }
 	public string? WithdrawnReason { get; init; }
 	public DateTime DecisionDate { get; init; }
-	public DecisionMadeBy DecisionMadeBy { get; init; }
+	public SignificantChangeDecisionMadeBy DecisionMadeBy { get; init; }
 	public string? DecisionMakerName { get; set; }
 }
