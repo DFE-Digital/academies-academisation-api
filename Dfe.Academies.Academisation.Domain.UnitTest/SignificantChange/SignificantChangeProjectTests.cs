@@ -811,13 +811,24 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
 
-			project.SetAdmissionVariationDetails(false, "Supporting evidence", false, false, false);
+			project.SetAdmissionVariationDetails(
+				false,
+				"Supporting evidence",
+				false,
+				false,
+				false,
+				"Local authority concerns",
+				"Place planning concerns",
+				"Admissions team concerns");
 
 			project.Details.AdmissionsVariationRequired.Should().BeFalse();
 			project.Details.AdmissionsVariationSupportingEvidence.Should().Be("Supporting evidence");
 			project.Details.AdmissionsVariationLocalAuthoritySupportive.Should().BeFalse();
+			project.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation.Should().Be("Local authority concerns");
 			project.Details.AdmissionsVariationPupilPlacePlanningSupportive.Should().BeFalse();
+			project.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation.Should().Be("Place planning concerns");
 			project.Details.AdmissionsVariationAdmissionsTeamSupportive.Should().BeFalse();
+			project.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation.Should().Be("Admissions team concerns");
 		}
 
 
@@ -850,7 +861,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
 
-			project.SetAdmissionVariationDetails(false, null, null, null, null);
+			project.SetAdmissionVariationDetails(false, null, null, null, null, null, null, null);
 
 			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -868,10 +879,49 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
 
-			project.SetAdmissionVariationDetails(true, null, true, true, true);
+			project.SetAdmissionVariationDetails(true, null, true, true, true, null, null, null);
 
 			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 			project.Tier.Should().Be(1);
+		}
+
+		[Fact]
+		public void SetAdmissionVariationDetails_WhenSupportive_ClearsAdditionalInformation()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationDetails(true, null, false, false, false, "LA", "Planning", "Admissions");
+			project.SetAdmissionVariationDetails(true, null, true, true, true, "LA", "Planning", "Admissions");
+
+			project.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation.Should().BeNull();
+			project.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation.Should().BeNull();
+			project.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation.Should().BeNull();
+		}
+
+		[Fact]
+		public void GetAdmissionVariationTaskStatus_WhenNoAnswerHasNoAdditionalInformation_ReturnsInProgress()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationDetails(true, null, false, true, true, null, null, null);
+
+			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
 
 		[Theory]

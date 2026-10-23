@@ -634,8 +634,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 AdmissionsVariationRequired: false,
                 AdmissionsVariationSupportingEvidence: "No admission variation required",
                 AdmissionsVariationLocalAuthoritySupportive: null,
+                AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
                 AdmissionsVariationPupilPlacePlanningSupportive: null,
-                AdmissionsVariationAdmissionsTeamSupportive: null
+                AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation: null,
+                AdmissionsVariationAdmissionsTeamSupportive: null,
+                AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation: null
                 );
 
             _mockMediator
@@ -651,8 +654,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     && c.AdmissionsVariationRequired == request.AdmissionsVariationRequired
                     && c.AdmissionsVariationSupportingEvidence == request.AdmissionsVariationSupportingEvidence
                     && c.AdmissionsVariationLocalAuthoritySupportive == request.AdmissionsVariationLocalAuthoritySupportive
+                    && c.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation == request.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation
                     && c.AdmissionsVariationPupilPlacePlanningSupportive == request.AdmissionsVariationPupilPlacePlanningSupportive
-                    && c.AdmissionsVariationAdmissionsTeamSupportive == request.AdmissionsVariationAdmissionsTeamSupportive),
+                    && c.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation == request.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation
+                    && c.AdmissionsVariationAdmissionsTeamSupportive == request.AdmissionsVariationAdmissionsTeamSupportive
+                    && c.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation == request.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -663,8 +669,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 AdmissionsVariationRequired: true,
                 AdmissionsVariationSupportingEvidence: null,
                 AdmissionsVariationLocalAuthoritySupportive: null,
+                AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
                 AdmissionsVariationPupilPlacePlanningSupportive: null,
-                AdmissionsVariationAdmissionsTeamSupportive: null);
+                AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation: null,
+                AdmissionsVariationAdmissionsTeamSupportive: null,
+                AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionVariationCommand>(), It.IsAny<CancellationToken>()))
@@ -682,8 +691,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 AdmissionsVariationRequired: null,
                 AdmissionsVariationSupportingEvidence: null,
                 AdmissionsVariationLocalAuthoritySupportive: null,
+                AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
                 AdmissionsVariationPupilPlacePlanningSupportive: null,
-                AdmissionsVariationAdmissionsTeamSupportive: null);
+                AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation: null,
+                AdmissionsVariationAdmissionsTeamSupportive: null,
+                AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation: null);
 
             var validationErrors = new[]
             {

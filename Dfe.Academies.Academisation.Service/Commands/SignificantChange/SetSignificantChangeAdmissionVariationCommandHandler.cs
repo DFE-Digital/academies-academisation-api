@@ -22,7 +22,10 @@ public class SetSignificantChangeAdmissionVariationCommandHandler(ISignificantCh
 			request.AdmissionsVariationSupportingEvidence,
 			request.AdmissionsVariationLocalAuthoritySupportive,
 			request.AdmissionsVariationPupilPlacePlanningSupportive,
-			request.AdmissionsVariationAdmissionsTeamSupportive
+			request.AdmissionsVariationAdmissionsTeamSupportive,
+			request.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+			request.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+			request.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation
 		);
 
 		repository.Update(existingProject);

@@ -69,13 +69,28 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			string? supportingEvidence,
 			bool? admissionsVariationLocalAuthoritySupportive,
 			bool? admissionsVariationPupilPlacePlanningSupportive,
-			bool? admissionsVariationAdmissionsTeamSupportive)
+			bool? admissionsVariationAdmissionsTeamSupportive,
+			string? admissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+			string? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+			string? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation)
 		{
 			Details.AdmissionsVariationRequired = admissionsVariationRequired;
 			Details.AdmissionsVariationSupportingEvidence = supportingEvidence;
 			Details.AdmissionsVariationLocalAuthoritySupportive = admissionsVariationLocalAuthoritySupportive;
+			Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation =
+				admissionsVariationLocalAuthoritySupportive is false
+					? admissionsVariationLocalAuthoritySupportiveAdditionalInformation
+					: null;
 			Details.AdmissionsVariationPupilPlacePlanningSupportive = admissionsVariationPupilPlacePlanningSupportive;
+			Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation =
+				admissionsVariationPupilPlacePlanningSupportive is false
+					? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation
+					: null;
 			Details.AdmissionsVariationAdmissionsTeamSupportive = admissionsVariationAdmissionsTeamSupportive;
+			Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation =
+				admissionsVariationAdmissionsTeamSupportive is false
+					? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+					: null;
 
 			if ( admissionsVariationLocalAuthoritySupportive is false 
 				|| admissionsVariationPupilPlacePlanningSupportive is false 

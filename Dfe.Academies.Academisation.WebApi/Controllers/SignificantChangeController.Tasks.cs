@@ -272,7 +272,10 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				request.AdmissionsVariationSupportingEvidence,
 				request.AdmissionsVariationLocalAuthoritySupportive,
 				request.AdmissionsVariationPupilPlacePlanningSupportive,
-				request.AdmissionsVariationAdmissionsTeamSupportive);
+				request.AdmissionsVariationAdmissionsTeamSupportive,
+				request.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+				request.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+				request.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation);
 
 			CommandResult result = await _mediator.Send(command);
 

@@ -8,7 +8,10 @@ public record SetSignificantChangeAdmissionVariationPublicCommand(
 	string? AdmissionsVariationSupportingEvidence,
 	bool? AdmissionsVariationLocalAuthoritySupportive,
 	bool? AdmissionsVariationPupilPlacePlanningSupportive,
-	bool? AdmissionsVariationAdmissionsTeamSupportive
+	bool? AdmissionsVariationAdmissionsTeamSupportive,
+	string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+	string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+	string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation
 );
 
 public record SetSignificantChangeAdmissionVariationCommand(
@@ -17,13 +20,19 @@ public record SetSignificantChangeAdmissionVariationCommand(
 		string? AdmissionsVariationSupportingEvidence,
 		bool? AdmissionsVariationLocalAuthoritySupportive,
 		bool? AdmissionsVariationPupilPlacePlanningSupportive,
-		bool? AdmissionsVariationAdmissionsTeamSupportive
+		bool? AdmissionsVariationAdmissionsTeamSupportive,
+		string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+		string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+		string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation
 	)
 	: SetSignificantChangeAdmissionVariationPublicCommand(
 		AdmissionsVariationRequired,
 		AdmissionsVariationSupportingEvidence,
 		AdmissionsVariationLocalAuthoritySupportive,
 		AdmissionsVariationPupilPlacePlanningSupportive,
-		AdmissionsVariationAdmissionsTeamSupportive
+		AdmissionsVariationAdmissionsTeamSupportive,
+		AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+		AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+		AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation
 	),
 		IRequest<CommandResult>;

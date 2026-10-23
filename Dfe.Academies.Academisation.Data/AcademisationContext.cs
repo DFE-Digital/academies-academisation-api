@@ -1036,8 +1036,11 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
             details.Property(d => d.AdmissionsVariationRequired).HasColumnName("AdmissionsVariationRequired");
             details.Property(d => d.AdmissionsVariationSupportingEvidence).HasColumnName("AdmissionsVariationSupportingEvidence");
             details.Property(d => d.AdmissionsVariationAdmissionsTeamSupportive).HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");
+            details.Property(d => d.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation");
             details.Property(d => d.AdmissionsVariationLocalAuthoritySupportive).HasColumnName("AdmissionsVariationLocalAuthoritySupportive");
+            details.Property(d => d.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation).HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportive).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
+            details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
         });
 
 	}

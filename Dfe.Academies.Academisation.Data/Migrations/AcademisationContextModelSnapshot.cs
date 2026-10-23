@@ -2486,13 +2486,25 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("bit")
                                 .HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");
 
+                            b1.Property<string>("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation");
+
                             b1.Property<bool?>("AdmissionsVariationLocalAuthoritySupportive")
                                 .HasColumnType("bit")
                                 .HasColumnName("AdmissionsVariationLocalAuthoritySupportive");
 
+                            b1.Property<string>("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
+
                             b1.Property<bool?>("AdmissionsVariationPupilPlacePlanningSupportive")
                                 .HasColumnType("bit")
                                 .HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
+
+                            b1.Property<string>("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
 
                             b1.Property<bool?>("AdmissionsVariationRequired")
                                 .HasColumnType("bit")

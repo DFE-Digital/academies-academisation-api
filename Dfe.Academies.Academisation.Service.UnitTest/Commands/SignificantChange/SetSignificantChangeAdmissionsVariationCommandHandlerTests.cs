@@ -24,7 +24,8 @@ public class SetSignificantChangeAdmissionsVariationCommandHandlerTests
 	[Fact]
 	public async Task Handle_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
-		var command = new SetSignificantChangeAdmissionVariationCommand(72, true, "", true, true, true);
+		var command = new SetSignificantChangeAdmissionVariationCommand(
+			72, true, "", true, true, true, null, null, null);
 		_repository.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
 			.ReturnsAsync((SignificantChangeProject?)null);
 
@@ -50,15 +51,21 @@ public class SetSignificantChangeAdmissionsVariationCommandHandlerTests
 				"www.example.com",
 				false,
 				true,
-				false),
+				false,
+				"Local authority concerns",
+				null,
+				"Admissions team concerns"),
 			CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.AdmissionsVariationRequired.Should().BeTrue();
 		project.Details.AdmissionsVariationSupportingEvidence.Should().Be("www.example.com");
 		project.Details.AdmissionsVariationLocalAuthoritySupportive.Should().BeFalse();
+		project.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation.Should().Be("Local authority concerns");
 		project.Details.AdmissionsVariationPupilPlacePlanningSupportive.Should().BeTrue();
+		project.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation.Should().BeNull();
 		project.Details.AdmissionsVariationAdmissionsTeamSupportive.Should().BeFalse();
+		project.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation.Should().Be("Admissions team concerns");
 	
 		_repository.Verify(x => x.Update(project), Times.Once);
 		unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

@@ -92,10 +92,16 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.AdmissionsVariationSupportingEvidence))
 			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportive,
 				options => options.MapFrom(source => source.Details.AdmissionsVariationLocalAuthoritySupportive))
+			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation))
 			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportive,
 				options => options.MapFrom(source => source.Details.AdmissionsVariationPupilPlacePlanningSupportive))
+			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation))
 			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportive,
 				options => options.MapFrom(source => source.Details.AdmissionsVariationAdmissionsTeamSupportive))
+			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
 			.ForMember(destination => destination.AdmissionsVariationTaskStatus,
 				options => options.MapFrom(source => source.Details.GetAdmissionVariationTaskStatus().ToString()));
 
@@ -157,10 +163,16 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.AdmissionsVariationSupportingEvidence))
 			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportive,
 				options => options.MapFrom(source => source.AdmissionsVariationLocalAuthoritySupportive))
+			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation))
 			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportive,
 				options => options.MapFrom(source => source.AdmissionsVariationPupilPlacePlanningSupportive))
+			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation))
 			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportive,
 				options => options.MapFrom(source => source.AdmissionsVariationAdmissionsTeamSupportive))
+			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.AdmissionsVariationTaskStatus));
 
