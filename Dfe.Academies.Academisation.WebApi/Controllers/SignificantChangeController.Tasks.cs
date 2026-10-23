@@ -257,5 +257,36 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		[HttpPut("{id:int}/SetAdmissionsVariation", Name = "SetSignificantChangeAdmissionsVariation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeAdmissionsVariation(
+			int id,
+			[FromBody] SetSignificantChangeAdmissionVariationPublicCommand request)
+		{
+			var command = new SetSignificantChangeAdmissionVariationCommand(
+				id,
+				request.AdmissionsVariationRequired,
+				request.AdmissionsVariationSupportingEvidence,
+				request.AdmissionsVariationLocalAuthoritySupportive,
+				request.AdmissionsVariationPupilPlacePlanningSupportive,
+				request.AdmissionsVariationAdmissionsTeamSupportive,
+				request.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+				request.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+				request.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }
