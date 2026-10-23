@@ -172,7 +172,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task GetSignificantChangeProject_ReturnsProject_WhenFound()
         {
             var assignedUserId = Guid.NewGuid();
-            var expectedResponse = new SignificantChangeProjectSearchResponse
+            var expectedResponse = new SignificantChangeProjectGetByIdResponse
             {
                 Id = 100,
                 Urn = 123456,
@@ -202,7 +202,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             _mockMediator
 				.Setup(m => m.Send(It.IsAny<GetSignificantChangeProjectByIdQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((SignificantChangeProjectSearchResponse?)null);
+                .ReturnsAsync((SignificantChangeProjectGetByIdResponse?)null);
 
             var result = await _controller.GetSignificantChangeProject(999, CancellationToken.None);
 
@@ -368,8 +368,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var routeId = 100;
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: true,
-                EqualitiesImpactIdentified: EqualitiesImpact.ImpactsIdentified,
-                EqualitiesImpactIdentifiedMitigation: "Mitigation plan in place");
+				EqualitiesImpactAssessmentNoReason: null,
+                EqualitiesImpactIdentified: EqualitiesImpact.Likely,
+                EqualitiesLikelyDetails: "Mitigation plan in place",
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -383,7 +386,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     c.Id == routeId
                     && c.EqualitiesImpactAssessmentCompleted == request.EqualitiesImpactAssessmentCompleted
                     && c.EqualitiesImpactIdentified == request.EqualitiesImpactIdentified
-                    && c.EqualitiesImpactIdentifiedMitigation == request.EqualitiesImpactIdentifiedMitigation),
+                    && c.EqualitiesLikelyDetails == request.EqualitiesLikelyDetails),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -392,8 +395,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: null,
-                EqualitiesImpactIdentified: null,
-                EqualitiesImpactIdentifiedMitigation: null);
+                EqualitiesImpactAssessmentNoReason: null,
+				EqualitiesImpactIdentified: null,
+                EqualitiesLikelyDetails: null,
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -406,8 +412,10 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 It.Is<SetSignificantChangeEqualitiesImpactAssessmentCommand>(c =>
                     c.Id == 100
                     && c.EqualitiesImpactAssessmentCompleted == null
+					&& c.EqualitiesImpactAssessmentNoReason == null
                     && c.EqualitiesImpactIdentified == null
-                    && c.EqualitiesImpactIdentifiedMitigation == null),
+                    && c.EqualitiesLikelyDetails == null
+                    && c.EqualitiesImpactSupportingEvidence == null),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -416,8 +424,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: true,
-                EqualitiesImpactIdentified: EqualitiesImpact.None,
-                EqualitiesImpactIdentifiedMitigation: null);
+                EqualitiesImpactAssessmentNoReason: null,
+				EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
+                EqualitiesLikelyDetails: null,
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -433,8 +444,11 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeEqualitiesImpactAssessmentPublicCommand(
                 EqualitiesImpactAssessmentCompleted: null,
-                EqualitiesImpactIdentified: null,
-                EqualitiesImpactIdentifiedMitigation: null);
+                EqualitiesImpactAssessmentNoReason: null,
+				EqualitiesImpactIdentified: null,
+                EqualitiesLikelyDetails: null,
+                EqualitiesSomeImpactDetails: null,
+                EqualitiesImpactSupportingEvidence: null);
 
             var validationErrors = new[]
             {
@@ -857,6 +871,29 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task SetHqtfConsideration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
+                HqtfConsiderationAnswer.No,
+                "Not considered",
+                "Evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeHqtfConsiderationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeHqtfConsideration(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeHqtfConsiderationCommand>(command =>
+                    command.Id == 100
+                    && command.HqtfConsiderationAnswer == HqtfConsiderationAnswer.No
+                    && command.AdditionalInformation == "Not considered"
+                    && command.SupportingEvidence == "Evidence"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
         public async Task SetRecommendation_ReturnsNotFound_WhenProjectDoesNotExist()
         {
             var request = new SetSignificantChangeRecommendationPublicCommand(Recommendation.Withdraw, null);
@@ -865,6 +902,20 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .ReturnsAsync(new NotFoundCommandResult());
 
             var result = await _controller.SetSignificantChangeRecommendation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetHqtfConsideration_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
+                HqtfConsiderationAnswer.Yes, null, "Evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeHqtfConsiderationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeHqtfConsideration(100, request);
 
             result.Should().BeOfType<NotFoundResult>();
         }

@@ -124,9 +124,9 @@ namespace Dfe.Academies.Academisation.Seed
 		
 		public static EqualitiesImpact[] EqualitiesImpacts { get; } =
 		[
-			EqualitiesImpact.None,
-			EqualitiesImpact.PotentialImpacts,
-			EqualitiesImpact.ImpactsIdentified,
+			EqualitiesImpact.Unlikely,
+			EqualitiesImpact.SomeImpact,
+			EqualitiesImpact.Likely,
 		];
 		
 		public static SignificantChangeStakeholderObjections[] StakeholderObjections { get; } =

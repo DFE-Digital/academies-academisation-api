@@ -294,10 +294,16 @@ public static class SeedProject
 		var equalitiesImpact = Optional(Pick(ProjectConsts.EqualitiesImpacts));
 		project.SetEqualitiesImpactAssessment(
 			equalitiesImpactAssessmentCompleted: NextBool(0.75),
+			null,
 			equalitiesImpactIdentified: equalitiesImpact,
-			equalitiesImpactIdentifiedMitigation: equalitiesImpact == EqualitiesImpact.None
-				? "No disproportional impacts identified through screening assessment."
-				: "Mitigation includes transport support, phased transition, and SEND casework tracking.");
+			equalitiesLikelyDetails: equalitiesImpact == EqualitiesImpact.Likely
+				? "Potential impact identified for pupils with SEND and EAL during transition period."
+				: null,
+			equalitiesSomeImpactDetails: equalitiesImpact == EqualitiesImpact.SomeImpact
+			? "Mitigation includes phased onboarding, SEND review meetings, and transport support."
+				: null,
+			equalitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence"
+			);
 
 		var stakeholderObjections = Optional(Pick(ProjectConsts.StakeholderObjections));
 		project.SetStakeholderObjections(
