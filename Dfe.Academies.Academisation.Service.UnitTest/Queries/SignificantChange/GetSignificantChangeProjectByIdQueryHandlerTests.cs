@@ -63,6 +63,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "stakeholders have objected");
+			project.SetFhaRisksOrIssuesRaised(true, "Risks need consideration", "FHA evidence");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -119,6 +120,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.StakeholderObjections.StakeholderObjections.Should().Be(nameof(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided));
 			result.StakeholderObjections.StakeholderObjectionsComment.Should().Be("stakeholders have objected");
 			result.StakeholderObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.FhaRisksOrIssuesRaised.FhaRisksOrIssuesRaised.Should().BeTrue();
+			result.FhaRisksOrIssuesRaised.AdditionalInformation.Should().Be("Risks need consideration");
+			result.FhaRisksOrIssuesRaised.SupportingEvidence.Should().Be("FHA evidence");
+			result.FhaRisksOrIssuesRaised.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]

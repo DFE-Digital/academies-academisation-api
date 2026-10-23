@@ -14,6 +14,7 @@ public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectS
 	public SignificantChangeFundingResponse Funding { get; set; } = new();
 	public SignificantChangePlanningPermissionResponse PlanningPermission { get; set; } = new();
 	public SignificantChangeHqtfConsiderationResponse HqtfConsideration { get; set; } = new();
+	public SignificantChangeFhaRisksOrIssuesRaisedResponse FhaRisksOrIssuesRaised { get; set; } = new();
 	public Decision? Decision { get; set; }
 	public DateTime? DecisionDate { get; set; }
 

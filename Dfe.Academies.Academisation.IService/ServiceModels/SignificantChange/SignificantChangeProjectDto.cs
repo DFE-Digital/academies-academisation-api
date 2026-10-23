@@ -39,6 +39,10 @@ public class SignificantChangeProjectDto
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }
 	public string HqtfConsiderationTaskStatus { get; set; } = string.Empty;
+	public bool? FhaRisksOrIssuesRaised { get; set; }
+	public string? FhaRisksOrIssuesRaisedAdditionalInformation { get; set; }
+	public string? FhaRisksOrIssuesRaisedSupportingEvidence { get; set; }
+	public string FhaRisksOrIssuesRaisedTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactAssessmentNoReason { get; set; }
