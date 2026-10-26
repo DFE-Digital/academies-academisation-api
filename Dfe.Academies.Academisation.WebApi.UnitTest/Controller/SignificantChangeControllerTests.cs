@@ -616,8 +616,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var routeId = 100;
             var request = new SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
-                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve,
-                FurtherInformation: "Recommendation notes");
+                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionsVariationRecommendationCommand>(), It.IsAny<CancellationToken>()))
@@ -629,8 +628,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             _mockMediator.Verify(m => m.Send(
                 It.Is<SetSignificantChangeAdmissionsVariationRecommendationCommand>(c =>
                     c.Id == routeId
-                    && c.RecommendationAnswer == request.RecommendationAnswer
-                    && c.FurtherInformation == request.FurtherInformation),
+                    && c.RecommendationAnswer == request.RecommendationAnswer),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -638,8 +636,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task SetAdmissionsVariationRecommendation_ReturnsNotFound_WhenProjectDoesNotExist()
         {
             var request = new SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
-                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Decline,
-                FurtherInformation: "Declined due to objections");
+                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Decline);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionsVariationRecommendationCommand>(), It.IsAny<CancellationToken>()))
@@ -650,29 +647,8 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             result.Should().BeOfType<NotFoundResult>();
         }
 
-        [Fact]
-        public async Task SetAdmissionsVariationRecommendation_ReturnsBadRequest_WhenValidationFails()
-        {
-            var request = new SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
-                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve,
-                FurtherInformation: null);
-
-            var validationErrors = new[]
-            {
-                new ValidationError("FurtherInformation", "Further information is required")
-            };
-
-            _mockMediator
-                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionsVariationRecommendationCommand>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
-
-            var result = await _controller.SetSignificantChangeAdmissionsVariationRecommendation(100, request);
-
-            result.Should().BeOfType<BadRequestObjectResult>()
-                .Which.Value.Should().BeEquivalentTo(validationErrors);
-        }
       
-                   		[Fact]
+        [Fact]
 		public async Task SetConsultationDuration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
 		{
 			var routeId = 100;

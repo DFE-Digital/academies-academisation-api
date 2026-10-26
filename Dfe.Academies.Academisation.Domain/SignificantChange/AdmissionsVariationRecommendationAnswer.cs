@@ -3,8 +3,7 @@
 	public enum AdmissionsVariationRecommendationAnswer
 	{
 		Approve = 1,
-		Defer = 2,
-		Decline = 3,
-		NotApplicable = 4
+		Decline = 2,
+		NotApplicable = 3
 	}
 }

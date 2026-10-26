@@ -2486,10 +2486,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("AdmissionsVariationRecommendation");
 
-                            b1.Property<string>("AdmissionsVariationRecommendationFurtherInformation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("AdmissionsVariationRecommendationFurtherInformation");
-
                             b1.Property<string>("ConsultationDurationNotMetReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationDurationNotMetReason");

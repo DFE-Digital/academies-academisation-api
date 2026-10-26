@@ -184,11 +184,9 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
 		}
 
-		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation, string? furtherInformation)
+		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation)
 		{
 			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
-			Details.AdmissionsVariationRecommendationFurtherInformation = furtherInformation;
-
 		}
 	}
 }

@@ -5,14 +5,12 @@ using MediatR;
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 {
 	public record SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
-		AdmissionsVariationRecommendationAnswer RecommendationAnswer,
-		string? FurtherInformation);
+		AdmissionsVariationRecommendationAnswer RecommendationAnswer);
 
 	public record SetSignificantChangeAdmissionsVariationRecommendationCommand(
 		int Id,
-		AdmissionsVariationRecommendationAnswer RecommendationAnswer,
-		string? FurtherInformation)
-		: SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(RecommendationAnswer, FurtherInformation),
+		AdmissionsVariationRecommendationAnswer RecommendationAnswer)
+		: SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(RecommendationAnswer),
 			IRequest<CommandResult>;
 
 }

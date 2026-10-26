@@ -240,8 +240,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		{
 			var command = new SetSignificantChangeAdmissionsVariationRecommendationCommand(
 				id,
-				request.RecommendationAnswer,
-				request.FurtherInformation);
+				request.RecommendationAnswer);
 
 			CommandResult result = await _mediator.Send(command);
 

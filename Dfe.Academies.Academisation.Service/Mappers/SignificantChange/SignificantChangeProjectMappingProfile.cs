@@ -75,7 +75,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.StakeholderObjectionsComment))
 			.ForMember(destination => destination.StakeholderObjectionsTaskStatus,
 				options => options.MapFrom(source => source.Details.GetStakeholderObjectionsTaskStatus().ToString()))
-				.ForMember(destination => destination.PlanningPermission,
+			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source.Details.PlanningPermission))
 			.ForMember(destination => destination.PlanningPermissionAdditionalInformation,
 				options => options.MapFrom(source => source.Details.PlanningPermissionAdditionalInformation))
@@ -84,11 +84,10 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.PlanningPermissionTaskStatus,
 				options => options.MapFrom(source => source.Details.GetPlanningPermissionTaskStatus().ToString()))
 			.ForMember(destination => destination.AdmissionsVariationRecommendationTaskStatus,
-				options => options.MapFrom(source => source.Details.GetAdmissionsVariationRecommendationTaskStatus().ToString()))
+				options => options.MapFrom(source =>
+					source.Details.GetAdmissionsVariationRecommendationTaskStatus().ToString()))
 			.ForMember(destination => destination.AdmissionsVariationRecommendation,
-				options => options.MapFrom(source => source.Details.AdmissionsVariationRecommendation))
-			.ForMember(destination => destination.AdmissionsVariationRecommendationAdditionalInformation,
-				options => options.MapFrom(source => source.Details.AdmissionsVariationRecommendationFurtherInformation));
+				options => options.MapFrom(source => source.Details.AdmissionsVariationRecommendation));
 
 		
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
@@ -136,8 +135,6 @@ public class SignificantChangeProjectMappingProfile : Profile
 		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionsVariationRecommendationResponse>()
 			.ForMember(destination => destination.AdmissionsVariationRecommendationAnswer,
 				options => options.MapFrom(source => source.AdmissionsVariationRecommendation))
-			.ForMember(destination => destination.FurtherInformation,
-				options => options.MapFrom(source => source.AdmissionsVariationRecommendationAdditionalInformation))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.AdmissionsVariationRecommendationTaskStatus));
 

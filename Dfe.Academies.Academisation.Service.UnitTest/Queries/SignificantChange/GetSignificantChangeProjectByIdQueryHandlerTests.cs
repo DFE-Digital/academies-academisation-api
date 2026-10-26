@@ -57,7 +57,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
-			project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Approve, "Recommendation notes");
+			project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Approve);
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "stakeholders have objected");
 
 			_repositoryMock
@@ -101,7 +101,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			result.AdmissionsVariationRecommendation.AdmissionsVariationRecommendationAnswer.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
-			result.AdmissionsVariationRecommendation.FurtherInformation.Should().Be("Recommendation notes");
 			result.AdmissionsVariationRecommendation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			result.StakeholderObjections.StakeholderObjections.Should().Be(nameof(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided));

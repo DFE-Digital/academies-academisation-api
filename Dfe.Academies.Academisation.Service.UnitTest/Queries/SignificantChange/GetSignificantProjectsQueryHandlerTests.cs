@@ -50,7 +50,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			projects[0].SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			projects[0].SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			projects[0].SetPlanningPermission(PlanningPermissionAnswer.Yes, "Decision is pending final sign-off", "Outline permission summary");
-			projects[0].SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Defer, "Deferred pending review");
+			projects[0].SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Decline);
 
 			_repositoryMock
 				.Setup(x => x.SearchSignificantChangeProjects(
@@ -102,8 +102,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].PlanningPermission.SupportingEvidence.Should().Be("Outline permission summary");
 			data[0].PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
-			data[0].AdmissionsVariationRecommendation.AdmissionsVariationRecommendationAnswer.Should().Be(AdmissionsVariationRecommendationAnswer.Defer);
-			data[0].AdmissionsVariationRecommendation.FurtherInformation.Should().Be("Deferred pending review");
+			data[0].AdmissionsVariationRecommendation.AdmissionsVariationRecommendationAnswer.Should().Be(AdmissionsVariationRecommendationAnswer.Decline);
 			data[0].AdmissionsVariationRecommendation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();

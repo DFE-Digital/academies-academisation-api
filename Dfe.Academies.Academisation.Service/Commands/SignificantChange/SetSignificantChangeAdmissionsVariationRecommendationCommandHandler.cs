@@ -18,7 +18,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				return new NotFoundCommandResult();
 			}
 
-			existingProject.SetAdmissionsVariationRecommendation(request.RecommendationAnswer, request.FurtherInformation);
+			existingProject.SetAdmissionsVariationRecommendation(request.RecommendationAnswer);
 
 			repository.Update(existingProject);
 			await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

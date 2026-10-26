@@ -788,11 +788,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 			project.SetAdmissionsVariationRecommendation(
-				AdmissionsVariationRecommendationAnswer.Approve,
-				"Recommendation notes");
+				AdmissionsVariationRecommendationAnswer.Approve);
 
 			project.Details.AdmissionsVariationRecommendation.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
-			project.Details.AdmissionsVariationRecommendationFurtherInformation.Should().Be("Recommendation notes");
 		}
 
 		[Fact]
@@ -825,8 +823,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 			project.SetAdmissionsVariationRecommendation(
-				AdmissionsVariationRecommendationAnswer.NotApplicable,
-				null);
+				AdmissionsVariationRecommendationAnswer.NotApplicable);
 
 			project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}

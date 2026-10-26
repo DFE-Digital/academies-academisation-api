@@ -25,7 +25,6 @@ public class SignificantChangeProjectDetails
 	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
 	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
-	public string? AdmissionsVariationRecommendationFurtherInformation { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{

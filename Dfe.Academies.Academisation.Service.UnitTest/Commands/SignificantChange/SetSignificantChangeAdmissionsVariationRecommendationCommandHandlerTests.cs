@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
@@ -27,8 +27,7 @@ public class SetSignificantChangeAdmissionsVariationRecommendationCommandHandler
 	{
 		var command = new SetSignificantChangeAdmissionsVariationRecommendationCommand(
 			Id: 100,
-			RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve,
-			FurtherInformation: "Approved with conditions");
+			RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve);
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -46,8 +45,7 @@ public class SetSignificantChangeAdmissionsVariationRecommendationCommandHandler
 	{
 		var command = new SetSignificantChangeAdmissionsVariationRecommendationCommand(
 			Id: 200,
-			RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Defer,
-			FurtherInformation: "Deferred pending review");
+			RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Decline);
 
 		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
 				123456,
@@ -71,8 +69,7 @@ public class SetSignificantChangeAdmissionsVariationRecommendationCommandHandler
 		var result = await _handler.Handle(command, CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.Details.AdmissionsVariationRecommendation.Should().Be(AdmissionsVariationRecommendationAnswer.Defer);
-		project.Details.AdmissionsVariationRecommendationFurtherInformation.Should().Be("Deferred pending review");
+		project.Details.AdmissionsVariationRecommendation.Should().Be(AdmissionsVariationRecommendationAnswer.Decline);
 		project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);
