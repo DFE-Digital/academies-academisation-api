@@ -950,7 +950,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				"Supporting evidence",
 				admissionsVariationLocalAuthoritySupportive,
 				admissionsVariationPupilPlacePlanningSupportive,
-				admissionsVariationAdmissionsTeamSupportive
+				admissionsVariationAdmissionsTeamSupportive,
+				null,
+				null,
+				null
 			);
 
 			project.Tier.Should().Be(2);
