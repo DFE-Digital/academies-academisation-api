@@ -108,10 +108,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? noAdmissionVariationReason
 				: null;
 
-			if (consultationIncludeAdmissionVariation is false)
-			{
-				MoveToTierTwoIfApplicable();
-			}
+			SetProjectTier();
 		}
 
 		public void SetStakeholderConsultation(bool? trustConsultedStakeholders,
@@ -122,8 +119,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? trustConsultedStakeholdersNotConsultedReason
 				: null;
 
-			if (trustConsultedStakeholders is false)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetConsultationDuration(
@@ -136,8 +132,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 					? consultationDurationNotMetReason
 					: null;
 
-			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
@@ -147,6 +142,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? additionalInformation
 				: null;
 			Details.FundingSupportingEvidence = supportingEvidence;
+
+			SetProjectTier();
 		}
 
 		public void SetHqtfConsideration(
@@ -169,8 +166,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? trustConsultedReligiousBodyNotConsultedReason
 				: null;
 
-			if (trustConsultedReligiousBody is false)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void MoveToTierTwoIfApplicable()
@@ -199,6 +195,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesSomeImpactDetails = equalitiesSomeImpactDetails;
 			Details.EqualitiesImpactSupportingEvidence = equalitiesImpactSupportingEvidence;
 
+			SetProjectTier();
+
 		}
 
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
@@ -212,9 +210,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.StakeholderObjections = stakeholderObjections;
 			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
 
-			
-			if (stakeholderObjections is SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetProjectSentToComplete(Guid? completeProjectId)
@@ -234,6 +230,61 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermission = planningPermissionAnswer;
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
+
+			SetProjectTier();
 		}
+
+		public void SetProjectTier()
+		{
+			// if (ShouldBeTierThree())
+			// {
+			// 	Tier = 3;
+			// 	return;
+			// }
+			
+			if (ShouldBeTierTwo())
+			{
+				Tier = 2;
+				return;
+			}
+
+			Tier = 1;
+		}
+
+        private bool ShouldBeTierTwo()
+        {
+            return IsConsultationDurationInsufficient()
+                || HasNotConsultedStakeholders()
+                || HasUnresolvedStakeholderObjections()
+                || HasNotNotifiedAdmissionVariation()
+                || HasNotConsultedReligiousBody()
+                || EqualitiesImpactNotCompleted()
+                || PlanningPermissionNotSecured()
+                || FundingNotSecured();
+        }
+
+        private bool IsConsultationDurationInsufficient()
+            => Details.ConsultationLastedMinimumThreeWeeks == ConsultationDurationAnswer.No;
+
+        private bool HasNotConsultedStakeholders()
+            => Details.TrustConsultedStakeholders == false;
+
+        private bool HasUnresolvedStakeholderObjections()
+            => Details.StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided;
+
+        private bool HasNotNotifiedAdmissionVariation()
+            => Details.ConsultationIncludeAdmissionVariation == false;
+
+        private bool HasNotConsultedReligiousBody()
+            => Details.TrustConsultedReligiousBody == false;
+
+        private bool EqualitiesImpactNotCompleted()
+            => Details.EqualitiesImpactAssessmentCompleted == false;
+
+        private bool PlanningPermissionNotSecured()
+            => Details.PlanningPermission == PlanningPermissionAnswer.No;
+
+        private bool FundingNotSecured()
+            => Details.FundingAnswer == FundingAnswer.No;
 	}
 }
