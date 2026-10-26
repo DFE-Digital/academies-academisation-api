@@ -29,6 +29,16 @@ public class SignificantChangeProjectDto
 	public string ConsultationDurationTaskStatus { get; set; } = string.Empty;
 
 
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
+	public string AdmissionsVariationTaskStatus { get; set; } = string.Empty;
+
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;

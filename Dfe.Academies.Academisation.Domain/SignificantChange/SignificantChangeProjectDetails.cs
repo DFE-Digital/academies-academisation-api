@@ -31,6 +31,14 @@ public class SignificantChangeProjectDetails
 	public string? PlanningPermissionSupportingEvidence { get; set; }    
 	public string? PlanningPermissionAdditionalInformation { get; set; }
     public string? EqualitiesImpactAssessmentNoReason { get; set; }
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
 
 	public Recommendation? Recommendation { get; set; }
 	public string? RecommendationMoreInformation { get; set; }
@@ -163,6 +171,31 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetAdmissionVariationTaskStatus()
+	{
+		if (AdmissionsVariationRequired is false) return SignificantChangeTaskStatus.Completed;
+		if (
+			AdmissionsVariationAdmissionsTeamSupportive is not null
+			&& AdmissionsVariationLocalAuthoritySupportive is not null
+			&& AdmissionsVariationPupilPlacePlanningSupportive is not null
+		)
+		{
+			if (AdmissionsVariationLocalAuthoritySupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation)
+			    || AdmissionsVariationPupilPlacePlanningSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation)
+			    || AdmissionsVariationAdmissionsTeamSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
+			{
+				return SignificantChangeTaskStatus.InProgress;
+			}
+
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.NotStarted;
 	}
 
 	public SignificantChangeTaskStatus GetFundingTaskStatus()

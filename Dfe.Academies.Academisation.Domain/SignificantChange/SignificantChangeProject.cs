@@ -65,6 +65,42 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
+		public void SetAdmissionVariationDetails(
+			bool? admissionsVariationRequired,
+			string? supportingEvidence,
+			bool? admissionsVariationLocalAuthoritySupportive,
+			bool? admissionsVariationPupilPlacePlanningSupportive,
+			bool? admissionsVariationAdmissionsTeamSupportive,
+			string? admissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+			string? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+			string? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation)
+		{
+			Details.AdmissionsVariationRequired = admissionsVariationRequired;
+			Details.AdmissionsVariationSupportingEvidence = supportingEvidence;
+			Details.AdmissionsVariationLocalAuthoritySupportive = admissionsVariationLocalAuthoritySupportive;
+			Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation =
+				admissionsVariationLocalAuthoritySupportive is false
+					? admissionsVariationLocalAuthoritySupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationPupilPlacePlanningSupportive = admissionsVariationPupilPlacePlanningSupportive;
+			Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation =
+				admissionsVariationPupilPlacePlanningSupportive is false
+					? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationAdmissionsTeamSupportive = admissionsVariationAdmissionsTeamSupportive;
+			Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation =
+				admissionsVariationAdmissionsTeamSupportive is false
+					? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+					: null;
+
+			if ( admissionsVariationLocalAuthoritySupportive is false 
+				|| admissionsVariationPupilPlacePlanningSupportive is false 
+				|| admissionsVariationAdmissionsTeamSupportive is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
+		}
+
 		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
 			string? noAdmissionVariationReason)
 		{
