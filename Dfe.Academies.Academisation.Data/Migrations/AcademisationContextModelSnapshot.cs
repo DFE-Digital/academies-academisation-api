@@ -2482,6 +2482,38 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
+                            b1.Property<bool?>("AdmissionsVariationAdmissionsTeamSupportive")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");
+
+                            b1.Property<string>("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation");
+
+                            b1.Property<bool?>("AdmissionsVariationLocalAuthoritySupportive")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationLocalAuthoritySupportive");
+
+                            b1.Property<string>("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
+
+                            b1.Property<bool?>("AdmissionsVariationPupilPlacePlanningSupportive")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
+
+                            b1.Property<string>("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
+
+                            b1.Property<bool?>("AdmissionsVariationRequired")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationRequired");
+
+                            b1.Property<string>("AdmissionsVariationSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationSupportingEvidence");
+
                             b1.Property<string>("ConsultationDurationNotMetReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationDurationNotMetReason");
