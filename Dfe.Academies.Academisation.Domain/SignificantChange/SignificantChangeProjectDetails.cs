@@ -6,6 +6,17 @@ public class SignificantChangeProjectDetails
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
 	public bool? TrustConsultedReligiousBody { get; set; }
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
+	public YesNoNotApplicableAnswer? TrustConsultedReligiousBodyAnswer { get; set; }
+	public YesNoNotApplicableAnswer? ReligiousBodyRaisedObjection { get; set; }
+	public string? ReligiousBodyRaisedObjectionReason { get; set; }
+	public YesNoNotApplicableAnswer? ReligiousBodyConsentGranted { get; set; }
+	public string? ReligiousBodyConsentNotGrantedReason { get; set; }
+	public string? ReligiousBodySupportingEvidence { get; set; }
+	public bool? WereThereAnyObjectionsRaised { get; set; }
+	public string? StakeholderObjectionsDetails { get; set; }
+	public YesNoNotApplicableAnswer? RelevantStakeholdersNotifiedOfAdmissionsChanges { get; set; }
+	public string? RelevantStakeholdersNotifiedOfAdmissionsChangesReason { get; set; }
+	public string? OtherStakeholderEngagementSupportingEvidence { get; set; }
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
 	public SignificantChangeStakeholderObjections? StakeholderObjections { get; set; }
@@ -71,18 +82,42 @@ public class SignificantChangeProjectDetails
 
 	public SignificantChangeTaskStatus GetReligiousBodyConsultationTaskStatus()
 	{
-		if (!TrustConsultedReligiousBody.HasValue
-		    && string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		if (TrustConsultedReligiousBodyAnswer is null
+		    && ReligiousBodyRaisedObjection is null
+		    && ReligiousBodyConsentGranted is null
+		    && string.IsNullOrWhiteSpace(ReligiousBodySupportingEvidence))
 			return SignificantChangeTaskStatus.NotStarted;
 
-		if (TrustConsultedReligiousBody is true)
-			return SignificantChangeTaskStatus.Completed;
-
-		if (TrustConsultedReligiousBody is false
-		    && !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		if (HasCompletedAnswer(TrustConsultedReligiousBodyAnswer, TrustConsultedReligiousBodyNotConsultedReason)
+		    && HasCompletedAnswer(ReligiousBodyRaisedObjection, ReligiousBodyRaisedObjectionReason)
+		    && HasCompletedAnswer(ReligiousBodyConsentGranted, ReligiousBodyConsentNotGrantedReason))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetOtherStakeholderEngagementTaskStatus()
+	{
+		if (TrustConsultedStakeholders is null
+		    && WereThereAnyObjectionsRaised is null
+		    && RelevantStakeholdersNotifiedOfAdmissionsChanges is null
+		    && string.IsNullOrWhiteSpace(OtherStakeholderEngagementSupportingEvidence))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (TrustConsultedStakeholders.HasValue
+		    && (TrustConsultedStakeholders is not false || !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
+		    && WereThereAnyObjectionsRaised.HasValue
+		    && (WereThereAnyObjectionsRaised is not true || !string.IsNullOrWhiteSpace(StakeholderObjectionsDetails))
+		    && HasCompletedAnswer(RelevantStakeholdersNotifiedOfAdmissionsChanges, RelevantStakeholdersNotifiedOfAdmissionsChangesReason))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	private static bool HasCompletedAnswer(YesNoNotApplicableAnswer? answer, string? reason)
+	{
+		return answer.HasValue
+		       && (answer is not YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(reason));
 	}
 
 	public SignificantChangeTaskStatus GetConfirmProjectDatesTaskStatus()

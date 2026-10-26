@@ -19,7 +19,12 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandler(ISignif
 
 		existingProject.SetReligiousBodyConsultation(
 			request.TrustConsultedReligiousBody,
-			request.TrustConsultedReligiousBodyNotConsultedReason);
+			request.TrustConsultedReligiousBodyNotConsultedReason,
+			request.ReligiousBodyRaisedObjection,
+			request.ReligiousBodyRaisedObjectionReason,
+			request.ReligiousBodyConsentGranted,
+			request.ReligiousBodyConsentNotGrantedReason,
+			request.SupportingEvidence);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

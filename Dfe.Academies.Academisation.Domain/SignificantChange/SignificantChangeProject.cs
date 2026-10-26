@@ -173,6 +173,56 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
+		public void SetReligiousBodyConsultation(
+			YesNoNotApplicableAnswer? trustConsultedReligiousBody,
+			string? trustConsultedReligiousBodyNotConsultedReason,
+			YesNoNotApplicableAnswer? religiousBodyRaisedObjection,
+			string? religiousBodyRaisedObjectionReason,
+			YesNoNotApplicableAnswer? religiousBodyConsentGranted,
+			string? religiousBodyConsentNotGrantedReason,
+			string? supportingEvidence)
+		{
+			Details.TrustConsultedReligiousBodyAnswer = trustConsultedReligiousBody;
+			Details.TrustConsultedReligiousBodyNotConsultedReason =
+				trustConsultedReligiousBody is YesNoNotApplicableAnswer.No ? trustConsultedReligiousBodyNotConsultedReason : null;
+			Details.ReligiousBodyRaisedObjection = religiousBodyRaisedObjection;
+			Details.ReligiousBodyRaisedObjectionReason =
+				religiousBodyRaisedObjection is YesNoNotApplicableAnswer.No ? religiousBodyRaisedObjectionReason : null;
+			Details.ReligiousBodyConsentGranted = religiousBodyConsentGranted;
+			Details.ReligiousBodyConsentNotGrantedReason =
+				religiousBodyConsentGranted is YesNoNotApplicableAnswer.No ? religiousBodyConsentNotGrantedReason : null;
+			Details.ReligiousBodySupportingEvidence = supportingEvidence;
+
+			if (trustConsultedReligiousBody is YesNoNotApplicableAnswer.No)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetOtherStakeholderEngagement(
+			bool? trustConsultedStakeholders,
+			string? trustConsultedStakeholdersNotConsultedReason,
+			bool? wereThereAnyObjectionsRaised,
+			string? stakeholderObjectionsDetails,
+			YesNoNotApplicableAnswer? relevantStakeholdersNotifiedOfAdmissionsChanges,
+			string? relevantStakeholdersNotifiedOfAdmissionsChangesReason,
+			string? supportingEvidence)
+		{
+			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
+			Details.TrustConsultedStakeholdersNotConsultedReason =
+				trustConsultedStakeholders is false ? trustConsultedStakeholdersNotConsultedReason : null;
+			Details.WereThereAnyObjectionsRaised = wereThereAnyObjectionsRaised;
+			Details.StakeholderObjectionsDetails =
+				wereThereAnyObjectionsRaised is true ? stakeholderObjectionsDetails : null;
+			Details.RelevantStakeholdersNotifiedOfAdmissionsChanges = relevantStakeholdersNotifiedOfAdmissionsChanges;
+			Details.RelevantStakeholdersNotifiedOfAdmissionsChangesReason =
+				relevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.No
+					? relevantStakeholdersNotifiedOfAdmissionsChangesReason
+					: null;
+			Details.OtherStakeholderEngagementSupportingEvidence = supportingEvidence;
+
+			if (trustConsultedStakeholders is false)
+				MoveToTierTwoIfApplicable();
+		}
+
 		public void MoveToTierTwoIfApplicable()
 		{
 			if (Tier == 1) Tier = 2;

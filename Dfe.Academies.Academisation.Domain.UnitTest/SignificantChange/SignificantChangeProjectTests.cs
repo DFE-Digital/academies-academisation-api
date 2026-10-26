@@ -285,10 +285,17 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No,
+				"Trust has not consulted religious bodies",
+				YesNoNotApplicableAnswer.Yes,
+				null,
+				YesNoNotApplicableAnswer.Yes,
+				null,
+				null);
 
-			project.Details.TrustConsultedReligiousBody.Should().BeFalse();
-			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
+			project.Details.TrustConsultedReligiousBodyAnswer.Should().Be(YesNoNotApplicableAnswer.No);
+			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious bodies");
 		}
 
 		[Fact]
@@ -322,7 +329,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(false, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, null,
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
@@ -341,7 +351,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(true, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -360,7 +373,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(false, "Consultation timeline does not allow this yet");
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "Consultation timeline does not allow this yet",
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -378,7 +394,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(false, "No consultation carried out");
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "No consultation carried out",
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Tier.Should().Be(2);
 		}
@@ -396,8 +415,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(false, "No consultation carried out");
-			project.SetReligiousBodyConsultation(true, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "No consultation carried out",
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Tier.Should().Be(2);
 		}

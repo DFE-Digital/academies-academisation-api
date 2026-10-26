@@ -1025,6 +1025,17 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.EqualitiesImpactSupportingEvidence).HasColumnName("EqualitiesImpactSupportingEvidence");
 			details.Property(d => d.TrustConsultedReligiousBody).HasColumnName("TrustConsultedReligiousBody");
 			details.Property(d => d.TrustConsultedReligiousBodyNotConsultedReason).HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
+			details.Property(d => d.TrustConsultedReligiousBodyAnswer).HasConversion<string>().HasColumnName("TrustConsultedReligiousBodyAnswer");
+			details.Property(d => d.ReligiousBodyRaisedObjection).HasConversion<string>().HasColumnName("ReligiousBodyRaisedObjection");
+			details.Property(d => d.ReligiousBodyRaisedObjectionReason).HasColumnName("ReligiousBodyRaisedObjectionReason");
+			details.Property(d => d.ReligiousBodyConsentGranted).HasConversion<string>().HasColumnName("ReligiousBodyConsentGranted");
+			details.Property(d => d.ReligiousBodyConsentNotGrantedReason).HasColumnName("ReligiousBodyConsentNotGrantedReason");
+			details.Property(d => d.ReligiousBodySupportingEvidence).HasColumnName("ReligiousBodySupportingEvidence");
+			details.Property(d => d.WereThereAnyObjectionsRaised).HasColumnName("WereThereAnyObjectionsRaised");
+			details.Property(d => d.StakeholderObjectionsDetails).HasColumnName("StakeholderObjectionsDetails");
+			details.Property(d => d.RelevantStakeholdersNotifiedOfAdmissionsChanges).HasConversion<string>().HasColumnName("RelevantStakeholdersNotifiedOfAdmissionsChanges");
+			details.Property(d => d.RelevantStakeholdersNotifiedOfAdmissionsChangesReason).HasColumnName("RelevantStakeholdersNotifiedOfAdmissionsChangesReason");
+			details.Property(d => d.OtherStakeholderEngagementSupportingEvidence).HasColumnName("OtherStakeholderEngagementSupportingEvidence");
 			details.Property(d => d.ProposedChangeDate).HasColumnName("ProposedChangeDate");
 			details.Property(d => d.ProposedDecisionDate).HasColumnName("ProposedDecisionDate");
 			details.Property(d => d.PlanningPermission).HasConversion<string>().HasColumnName("PlanningPermission");
