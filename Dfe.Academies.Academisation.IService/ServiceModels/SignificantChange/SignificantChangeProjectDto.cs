@@ -28,6 +28,16 @@ public class SignificantChangeProjectDto
 	public string ConsultationDurationTaskStatus { get; set; } = string.Empty;
 
 
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
+	public string AdmissionsVariationTaskStatus { get; set; } = string.Empty;
+
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;
@@ -35,10 +45,17 @@ public class SignificantChangeProjectDto
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
 	public string FundingTaskStatus { get; set; } = string.Empty;
+	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
+	public string? HqtfConsiderationAdditionalInformation { get; set; }
+	public string? HqtfConsiderationSupportingEvidence { get; set; }
+	public string HqtfConsiderationTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
+	public string? EqualitiesImpactAssessmentNoReason { get; set; }
 	public string? EqualitiesImpactIdentified { get; set; }
-	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
+	public string? EqualitiesLikelyDetails { get; set; }
+	public string? EqualitiesSomeImpactDetails { get; set; }
+	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public bool? TrustConsultedReligiousBody { get; set; }
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public string ReligiousBodyConsultationTaskStatus { get; set; } = string.Empty;

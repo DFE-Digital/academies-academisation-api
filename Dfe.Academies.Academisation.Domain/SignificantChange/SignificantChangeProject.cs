@@ -64,6 +64,42 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
+		public void SetAdmissionVariationDetails(
+			bool? admissionsVariationRequired,
+			string? supportingEvidence,
+			bool? admissionsVariationLocalAuthoritySupportive,
+			bool? admissionsVariationPupilPlacePlanningSupportive,
+			bool? admissionsVariationAdmissionsTeamSupportive,
+			string? admissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+			string? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+			string? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation)
+		{
+			Details.AdmissionsVariationRequired = admissionsVariationRequired;
+			Details.AdmissionsVariationSupportingEvidence = supportingEvidence;
+			Details.AdmissionsVariationLocalAuthoritySupportive = admissionsVariationLocalAuthoritySupportive;
+			Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation =
+				admissionsVariationLocalAuthoritySupportive is false
+					? admissionsVariationLocalAuthoritySupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationPupilPlacePlanningSupportive = admissionsVariationPupilPlacePlanningSupportive;
+			Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation =
+				admissionsVariationPupilPlacePlanningSupportive is false
+					? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationAdmissionsTeamSupportive = admissionsVariationAdmissionsTeamSupportive;
+			Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation =
+				admissionsVariationAdmissionsTeamSupportive is false
+					? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+					: null;
+
+			if ( admissionsVariationLocalAuthoritySupportive is false 
+				|| admissionsVariationPupilPlacePlanningSupportive is false 
+				|| admissionsVariationAdmissionsTeamSupportive is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
+		}
+
 		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
 			string? noAdmissionVariationReason)
 		{
@@ -113,6 +149,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.FundingSupportingEvidence = supportingEvidence;
 		}
 
+		public void SetHqtfConsideration(
+			HqtfConsiderationAnswer? hqtfConsiderationAnswer,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.HqtfConsiderationAnswer = hqtfConsiderationAnswer;
+			Details.HqtfConsiderationAdditionalInformation = hqtfConsiderationAnswer is HqtfConsiderationAnswer.Yes
+				? additionalInformation
+				: null;
+			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
 					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
@@ -140,12 +188,16 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			this.ReadOnlyDate = readOnlyDate;
 		}
 
-		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted,
-			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
+		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted, string? equalitiesImpactAssessmentNoReason,
+			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesLikelyDetails, string? equalitiesSomeImpactDetails,
+			string? equalitiesImpactSupportingEvidence)
 		{
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
+			Details.EqualitiesImpactAssessmentNoReason = equalitiesImpactAssessmentCompleted is false ? equalitiesImpactAssessmentNoReason : null;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
-			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
+			Details.EqualitiesLikelyDetails = equalitiesLikelyDetails;
+			Details.EqualitiesSomeImpactDetails = equalitiesSomeImpactDetails;
+			Details.EqualitiesImpactSupportingEvidence = equalitiesImpactSupportingEvidence;
 
 		}
 

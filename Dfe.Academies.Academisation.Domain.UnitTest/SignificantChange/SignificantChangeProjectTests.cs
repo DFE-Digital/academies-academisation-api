@@ -489,14 +489,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null);
+			project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentCompleted, null, null, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
 
 		[Theory]
-		[InlineData(EqualitiesImpact.None)]
-		[InlineData(EqualitiesImpact.PotentialImpacts)]
+		[InlineData(EqualitiesImpact.Unlikely)]
+		[InlineData(EqualitiesImpact.SomeImpact)]
 		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenSet_ReturnCompleted(EqualitiesImpact equalitiesImpact)
 		{
 			var project = SignificantChangeProject.Create(
@@ -510,15 +510,15 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, equalitiesImpact, null);
+			project.SetEqualitiesImpactAssessment(true, null, equalitiesImpact, null, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 
 		[Theory]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, "", SignificantChangeTaskStatus.Completed)]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, null, SignificantChangeTaskStatus.Completed)]
-		[InlineData(EqualitiesImpact.ImpactsIdentified, "Mitigation plan in place",
+		[InlineData(EqualitiesImpact.Likely, "", SignificantChangeTaskStatus.Completed)]
+		[InlineData(EqualitiesImpact.Likely, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(EqualitiesImpact.Likely, "Mitigation plan in place",
 			SignificantChangeTaskStatus.Completed)]
 		public void GetEqualitiesTaskStatus_WhenImpactsHaveBeenIdentified_ShouldReturnCorrectStatus(
 			EqualitiesImpact impact, string? mitigation, SignificantChangeTaskStatus expectedStatus)
@@ -534,12 +534,35 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 
-			project.SetEqualitiesImpactAssessment(true, impact, mitigation);
+			project.SetEqualitiesImpactAssessment(true, null, impact, mitigation, null, null);
 
 			project.Details.GetEqualitiesTaskStatus().Should().Be(expectedStatus);
 		}
 
-	[Fact]
+        [Theory]
+        [InlineData(true, null)]
+        [InlineData(false, "some reason")]
+		public void SetEqualitiesImpactAssessment_ShouldSetReasonProperty(bool equalitiesImpactAssessmentComplete, string? expectedNoReason)
+        {
+            var project = SignificantChangeProject.Create(
+                new SignificantChangeProjectOptions(
+                    _fixture.Create<int>(),
+                    _fixture.Create<byte>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>(),
+                    _fixture.Create<string>()),
+                DateTime.UtcNow);
+
+
+            project.SetEqualitiesImpactAssessment(equalitiesImpactAssessmentComplete, "some reason", null, null, null, null);
+
+            project.Details.EqualitiesImpactAssessmentCompleted.Should().Be(equalitiesImpactAssessmentComplete);
+			project.Details.EqualitiesImpactAssessmentNoReason.Should().Be(expectedNoReason);
+		}
+
+
+		[Fact]
 		public void SetStakeholderObjections_ShouldSetDetailsProperties()
 		{
 			var status = _fixture.Create<SignificantChangeStatus>();
@@ -828,6 +851,168 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
     
+    
+		[Fact]
+		public void SetAdmissionVariationDetails_ShouldSetDetailsProperties()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationDetails(
+				false,
+				"Supporting evidence",
+				false,
+				false,
+				false,
+				"Local authority concerns",
+				"Place planning concerns",
+				"Admissions team concerns");
+
+			project.Details.AdmissionsVariationRequired.Should().BeFalse();
+			project.Details.AdmissionsVariationSupportingEvidence.Should().Be("Supporting evidence");
+			project.Details.AdmissionsVariationLocalAuthoritySupportive.Should().BeFalse();
+			project.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation.Should().Be("Local authority concerns");
+			project.Details.AdmissionsVariationPupilPlacePlanningSupportive.Should().BeFalse();
+			project.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation.Should().Be("Place planning concerns");
+			project.Details.AdmissionsVariationAdmissionsTeamSupportive.Should().BeFalse();
+			project.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation.Should().Be("Admissions team concerns");
+		}
+
+
+		[Fact]
+		public void GetAdmissionVariationTaskStatus_WhenNoValues_ReturnsNotStarted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
+		}
+
+		[Fact]
+		public void GetAdmissionVariationTaskStatus_WhenNotRequired_ReturnsCompleted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					_fixture.Create<byte>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationDetails(false, null, null, null, null, null, null, null);
+
+			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+
+		[Fact]
+		public void GetAdmissionVariationTaskStatus_WhenAllQuestionsAnswered_ReturnsCompleted()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationDetails(true, null, true, true, true, null, null, null);
+
+			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+			project.Tier.Should().Be(1);
+		}
+
+		[Fact]
+		public void SetAdmissionVariationDetails_WhenSupportive_ClearsAdditionalInformation()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationDetails(true, null, false, false, false, "LA", "Planning", "Admissions");
+			project.SetAdmissionVariationDetails(true, null, true, true, true, "LA", "Planning", "Admissions");
+
+			project.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation.Should().BeNull();
+			project.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation.Should().BeNull();
+			project.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation.Should().BeNull();
+		}
+
+		[Fact]
+		public void GetAdmissionVariationTaskStatus_WhenNoAnswerHasNoAdditionalInformation_ReturnsInProgress()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.SetAdmissionVariationDetails(true, null, false, true, true, null, null, null);
+
+			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
+		}
+
+		[Theory]
+		[InlineData (false, true, true)]
+		[InlineData (true, true, false)]
+		[InlineData (true, false, true)]
+		public void SetAdmissionVariationDetails_WhenUnsupported_MovesToTierTwo(
+			bool admissionsVariationLocalAuthoritySupportive,
+			bool admissionsVariationPupilPlacePlanningSupportive,
+			bool admissionsVariationAdmissionsTeamSupportive
+		)
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+
+			project.SetAdmissionVariationDetails(
+				true,
+				"Supporting evidence",
+				admissionsVariationLocalAuthoritySupportive,
+				admissionsVariationPupilPlacePlanningSupportive,
+				admissionsVariationAdmissionsTeamSupportive,
+				null,
+				null,
+				null
+			);
+
+			project.Tier.Should().Be(2);
+		}
+    
     	[Fact]
 		public void SetConsultationDuration_ShouldSetDetailsProperties()
 		{
@@ -992,6 +1177,37 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.FundingAnswer.Should().Be(FundingAnswer.Yes);
 			project.Details.FundingAdditionalInformation.Should().BeNull();
 			project.Details.FundingSupportingEvidence.Should().Be("Business case");
+		}
+
+		[Fact]
+		public void SetHqtfConsideration_WhenAnswerIsNotYes_ClearsAdditionalInformation()
+		{
+			var project = CreateProject();
+
+			project.SetHqtfConsideration(HqtfConsiderationAnswer.No, "This should be cleared", "Evidence");
+
+			project.Details.HqtfConsiderationAnswer.Should().Be(HqtfConsiderationAnswer.No);
+			project.Details.HqtfConsiderationAdditionalInformation.Should().BeNull();
+			project.Details.HqtfConsiderationSupportingEvidence.Should().Be("Evidence");
+		}
+
+		[Theory]
+		[InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(HqtfConsiderationAnswer.Yes, "Not considered", "Evidence", SignificantChangeTaskStatus.Completed)]
+		[InlineData(HqtfConsiderationAnswer.No, null, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(HqtfConsiderationAnswer.No, "Not considered", null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(HqtfConsiderationAnswer.NotApplicable, null, "Not applicable evidence", SignificantChangeTaskStatus.Completed)]
+		public void GetHqtfConsiderationTaskStatus_ReturnsExpectedStatus(
+			HqtfConsiderationAnswer? answer,
+			string? additionalInformation,
+			string? supportingEvidence,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetHqtfConsideration(answer, additionalInformation, supportingEvidence);
+
+			project.Details.GetHqtfConsiderationTaskStatus().Should().Be(expected);
 		}
 
 		[Theory]

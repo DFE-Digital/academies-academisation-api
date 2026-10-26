@@ -12,8 +12,9 @@ public class SignificantChangeProjectDetails
 	public string? StakeholderObjectionsComment { get; set; }
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
-	public string? EqualitiesImpactIdentifiedMitigation { get; set; }
-
+	public string? EqualitiesLikelyDetails { get; set; }
+	public string? EqualitiesSomeImpactDetails { get; set; }
+	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
@@ -21,12 +22,24 @@ public class SignificantChangeProjectDetails
 	public FundingAnswer? FundingAnswer { get; set; }
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
+	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
+	public string? HqtfConsiderationAdditionalInformation { get; set; }
+	public string? HqtfConsiderationSupportingEvidence { get; set; }
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }	
-	public string? PlanningPermissionSupportingEvidence { get; set; }
+	public string? PlanningPermissionSupportingEvidence { get; set; }    
 	public string? PlanningPermissionAdditionalInformation { get; set; }
+    public string? EqualitiesImpactAssessmentNoReason { get; set; }
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
 	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
 
-	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
+    public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
 		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
@@ -156,6 +169,31 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
+	public SignificantChangeTaskStatus GetAdmissionVariationTaskStatus()
+	{
+		if (AdmissionsVariationRequired is false) return SignificantChangeTaskStatus.Completed;
+		if (
+			AdmissionsVariationAdmissionsTeamSupportive is not null
+			&& AdmissionsVariationLocalAuthoritySupportive is not null
+			&& AdmissionsVariationPupilPlacePlanningSupportive is not null
+		)
+		{
+			if (AdmissionsVariationLocalAuthoritySupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation)
+			    || AdmissionsVariationPupilPlacePlanningSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation)
+			    || AdmissionsVariationAdmissionsTeamSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
+			{
+				return SignificantChangeTaskStatus.InProgress;
+			}
+
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.NotStarted;
+	}
+
 	public SignificantChangeTaskStatus GetFundingTaskStatus()
 	{
 		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) && string.IsNullOrWhiteSpace(FundingSupportingEvidence))
@@ -171,6 +209,16 @@ public class SignificantChangeProjectDetails
 		return FundingAnswer.HasValue
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetHqtfConsiderationTaskStatus()
+	{
+		if (HqtfConsiderationAnswer is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
 	}
 
 	public SignificantChangeTaskStatus GetAdmissionsVariationRecommendationTaskStatus()

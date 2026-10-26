@@ -2486,6 +2486,38 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("AdmissionsVariationRecommendation");
 
+                            b1.Property<bool?>("AdmissionsVariationAdmissionsTeamSupportive")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");
+
+                            b1.Property<string>("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation");
+
+                            b1.Property<bool?>("AdmissionsVariationLocalAuthoritySupportive")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationLocalAuthoritySupportive");
+
+                            b1.Property<string>("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
+
+                            b1.Property<bool?>("AdmissionsVariationPupilPlacePlanningSupportive")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
+
+                            b1.Property<string>("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
+
+                            b1.Property<bool?>("AdmissionsVariationRequired")
+                                .HasColumnType("bit")
+                                .HasColumnName("AdmissionsVariationRequired");
+
+                            b1.Property<string>("AdmissionsVariationSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationSupportingEvidence");
+
                             b1.Property<string>("ConsultationDurationNotMetReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationDurationNotMetReason");
@@ -2506,13 +2538,25 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("bit")
                                 .HasColumnName("EqualitiesImpactAssessmentCompleted");
 
+                            b1.Property<string>("EqualitiesImpactAssessmentNoReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesImpactAssessmentNoReason");
+
                             b1.Property<string>("EqualitiesImpactIdentified")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesImpactIdentified");
 
-                            b1.Property<string>("EqualitiesImpactIdentifiedMitigation")
+                            b1.Property<string>("EqualitiesImpactSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("EqualitiesImpactIdentifiedMitigation");
+                                .HasColumnName("EqualitiesImpactSupportingEvidence");
+
+                            b1.Property<string>("EqualitiesLikelyDetails")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesLikelyDetails");
+
+                            b1.Property<string>("EqualitiesSomeImpactDetails")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EqualitiesSomeImpactDetails");
 
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
@@ -2525,6 +2569,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("FundingSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingSupportingEvidence");
+
+                            b1.Property<string>("HqtfConsiderationAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("HqtfConsiderationAdditionalInformation");
+
+                            b1.Property<string>("HqtfConsiderationAnswer")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("HqtfConsiderationAnswer");
+
+                            b1.Property<string>("HqtfConsiderationSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("HqtfConsiderationSupportingEvidence");
 
                             b1.Property<string>("PlanningPermission")
                                 .HasColumnType("nvarchar(max)")
