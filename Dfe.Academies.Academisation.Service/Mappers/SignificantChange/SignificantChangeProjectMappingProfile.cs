@@ -85,7 +85,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.StakeholderObjectionsComment))
 			.ForMember(destination => destination.StakeholderObjectionsTaskStatus,
 				options => options.MapFrom(source => source.Details.GetStakeholderObjectionsTaskStatus().ToString()))
-				.ForMember(destination => destination.PlanningPermission,
+			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source.Details.PlanningPermission))
 			.ForMember(destination => destination.PlanningPermissionAdditionalInformation,
 				options => options.MapFrom(source => source.Details.PlanningPermissionAdditionalInformation))
@@ -93,6 +93,11 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.PlanningPermissionSupportingEvidence))
 			.ForMember(destination => destination.PlanningPermissionTaskStatus,
 				options => options.MapFrom(source => source.Details.GetPlanningPermissionTaskStatus().ToString()))
+			.ForMember(destination => destination.AdmissionsVariationRecommendationTaskStatus,
+				options => options.MapFrom(source =>
+					source.Details.GetAdmissionsVariationRecommendationTaskStatus().ToString()))
+			.ForMember(destination => destination.AdmissionsVariationRecommendation,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationRecommendation))
 			.ForMember(destination => destination.AdmissionsVariationRequired,
 				options => options.MapFrom(source => source.Details.AdmissionsVariationRequired))
 			.ForMember(destination => destination.AdmissionsVariationSupportingEvidence,
@@ -113,6 +118,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.GetAdmissionVariationTaskStatus().ToString()));
 
 
+		
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.ConsultationDurationTaskStatus));
@@ -163,6 +169,11 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.PlanningPermissionTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionsVariationRecommendationResponse>()
+			.ForMember(destination => destination.AdmissionsVariationRecommendationAnswer,
+				options => options.MapFrom(source => source.AdmissionsVariationRecommendation))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.AdmissionsVariationRecommendationTaskStatus));
 		CreateMap<SignificantChangeProjectDto, SignificantChangeRecommendationResponse>()
 			.ForMember(destination => destination.Recommendation,
 				options => options.MapFrom(source => source.Recommendation))
@@ -226,6 +237,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.AdmissionsVariationRecommendation,
+      	options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Recommendation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.AdmissionsVariation,
@@ -234,6 +247,7 @@ public class SignificantChangeProjectMappingProfile : Profile
         		options => options.Ignore())
     		.ForMember(destination => destination.DecisionDate,
         		options => options.Ignore());
+
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
 			.ForMember(destination => destination.Status,

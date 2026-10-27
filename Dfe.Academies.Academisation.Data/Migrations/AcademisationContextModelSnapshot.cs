@@ -2482,6 +2482,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
+                            b1.Property<string>("AdmissionsVariationRecommendation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationRecommendation");
+
                             b1.Property<bool?>("AdmissionsVariationAdmissionsTeamSupportive")
                                 .HasColumnType("bit")
                                 .HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");

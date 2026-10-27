@@ -1043,6 +1043,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
             details.Property(d => d.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation).HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportive).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
+			details.Property(d => d.AdmissionsVariationRecommendation).HasConversion<string>().HasColumnName("AdmissionsVariationRecommendation");
         });
 
 	}
