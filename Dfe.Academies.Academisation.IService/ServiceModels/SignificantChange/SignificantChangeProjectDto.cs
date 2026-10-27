@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
@@ -27,6 +28,16 @@ public class SignificantChangeProjectDto
 	public string? ConsultationDurationNotMetReason { get; set; }
 	public string ConsultationDurationTaskStatus { get; set; } = string.Empty;
 
+
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
+	public string AdmissionsVariationTaskStatus { get; set; } = string.Empty;
 
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
@@ -64,4 +75,7 @@ public class SignificantChangeProjectDto
 	public string? OfstedAdditionalInformation { get; set; }
 	public string? OfstedSupportingEvidence { get; set; }
 	public string OfstedTaskStatus { get; set; } = string.Empty;
+	public string RecommendationTaskStatus { get; set; } = string.Empty;
+	public Recommendation? Recommendation { get; set; }
+	public string? RecommendationMoreInformation { get; set; }
 }

@@ -80,13 +80,62 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 				details.ApprovedConditionsDetails == command.ApprovedConditionsDetails &&
 				details.AdvisoryBoardDecisionDate == command.DecisionDate &&
 				details.AcademyOrderDate == null &&
-				details.DecisionMadeBy == command.DecisionMadeBy &&
+				details.DecisionMadeBy == DecisionMadeBy.DirectorGeneral &&
 				details.DecisionMakerName == command.DecisionMakerName),
 			It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
 			It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
 			It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
 			It.Is<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(r => !r.Any()),
 			It.Is<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>(r=> !r.Any())), Times.Once);
+	}
+
+	[Theory]
+	[InlineData(SignificantChangeDecisionMadeBy.RegionalDirector, DecisionMadeBy.RegionalDirectorForRegion)]
+	[InlineData(SignificantChangeDecisionMadeBy.Minister, DecisionMadeBy.Minister)]
+	[InlineData(SignificantChangeDecisionMadeBy.DirectorGeneral, DecisionMadeBy.DirectorGeneral)]
+	[InlineData(SignificantChangeDecisionMadeBy.DeputyDirector, DecisionMadeBy.DeputyDirector)]
+	[InlineData(SignificantChangeDecisionMadeBy.Grade6, DecisionMadeBy.Grade6)]
+	public async Task Handle_MapsDecisionMadeByToSharedDomainEnum(
+		SignificantChangeDecisionMadeBy sourceDecisionMadeBy,
+		DecisionMadeBy expectedDecisionMadeBy)
+	{
+		var command = CreateCommand(_fixture.Create<int>(), Decision.Approved, sourceDecisionMadeBy);
+
+		_mockDecision
+			.Setup(d => d.Update(
+				It.IsAny<AdvisoryBoardDecisionDetails>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+				It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()))
+			.Returns(new CommandSuccessResult());
+
+		_mockRepo.Setup(r => r.GetAdvisoryBoardDecisionById(command.AdvisoryBoardDecisionId))
+			.ReturnsAsync(_mockDecision.Object);
+		_mockDecision.SetupGet(d => d.AdvisoryBoardDecisionDetails).Returns(new AdvisoryBoardDecisionDetails(
+			null,
+			null,
+			command.SignificantChangeProjectId,
+			AdvisoryBoardDecision.Declined,
+			null,
+			null,
+			command.DecisionDate,
+			null,
+			DecisionMadeBy.DirectorGeneral,
+			null));
+
+		var target = CreateHandler();
+
+		_ = await target.Handle(command, default);
+
+		_mockDecision.Verify(d => d.Update(
+			It.Is<AdvisoryBoardDecisionDetails>(details => details.DecisionMadeBy == expectedDecisionMadeBy),
+			It.IsAny<IEnumerable<AdvisoryBoardDeferredReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDeclinedReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardWithdrawnReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDAORevokedReasonDetails>>(),
+			It.IsAny<IEnumerable<AdvisoryBoardDAONotIssuedReasonDetails>>()), Times.Once);
 	}
 
 	[Fact]
@@ -159,7 +208,10 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
 	}
 
-	private SignificantChangeUpdateDecisionCommand CreateCommand(int projectId, Decision decision) => new()
+	private SignificantChangeUpdateDecisionCommand CreateCommand(
+		int projectId,
+		Decision decision,
+		SignificantChangeDecisionMadeBy decisionMadeBy = SignificantChangeDecisionMadeBy.DirectorGeneral) => new()
 	{
 		AdvisoryBoardDecisionId = _fixture.Create<int>(),
 		SignificantChangeProjectId = projectId,
@@ -167,7 +219,7 @@ public class SignificantChangeUpdateDecisionCommandHandlerTests
 		ApprovedConditionsSet = decision == Decision.Approved ? true : null,
 		ApprovedConditionsDetails = decision == Decision.Approved ? _fixture.Create<string>() : null,
 		DecisionDate = DateTime.UtcNow.AddDays(-1),
-		DecisionMadeBy = DecisionMadeBy.DirectorGeneral,
+		DecisionMadeBy = decisionMadeBy,
 		DecisionMakerName = _fixture.Create<string>(),
 		DeclinedReason = string.Empty,
 		WithdrawnReason = string.Empty

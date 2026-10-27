@@ -14,7 +14,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChangeDecision
 		public string? DeclinedReason { get; init; }
 		public string? WithdrawnReason { get; init; }
 		public DateTime DecisionDate { get; set; }
-		public DecisionMadeBy DecisionMadeBy { get; set; }
+		public SignificantChangeDecisionMadeBy DecisionMadeBy { get; set; }
 		public string? DecisionMakerName { get; set; }
 	}
 }

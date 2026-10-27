@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
+using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 using Dfe.Academies.Academisation.Service.Queries.SignificantChange;
 using FluentAssertions;
+using MediatR;
 using Moq;
 using Xunit;
 
@@ -12,6 +15,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 	public class GetSignificantChangeProjectByIdQueryHandlerTests
 	{
 		private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
+		private readonly Mock<ISender> _senderMock;
 		private readonly GetSignificantChangeProjectByIdQueryHandler _handler;
 
 		public GetSignificantChangeProjectByIdQueryHandlerTests()
@@ -21,8 +25,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 				configuration.AddProfile<SignificantChangeProjectMappingProfile>());
 			mapperConfiguration.AssertConfigurationIsValid();
 			var mapper = mapperConfiguration.CreateMapper();
+			_senderMock = new Mock<ISender>();
 
-			_handler = new GetSignificantChangeProjectByIdQueryHandler(_repositoryMock.Object, mapper);
+			_handler = new GetSignificantChangeProjectByIdQueryHandler(_repositoryMock.Object, mapper, _senderMock.Object);
 		}
 
 		[Fact]
@@ -64,6 +69,14 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
 				.ReturnsAsync(project);
 
+			var expectedDecisionDate = DateTime.UtcNow.AddDays(-5);
+			_senderMock
+				.Setup(x => x.Send(It.IsAny<GetSignificantChangeDecisionQuery>(), cancellationToken))
+				.ReturnsAsync(new SignificantChangeDecisionServiceModel
+				{
+					Decision = Decision.Approved,
+					DecisionDate = expectedDecisionDate
+				});
 			var result = await _handler.Handle(query, cancellationToken);
 
 			result.Should().NotBeNull();
@@ -76,6 +89,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.AssignedUser.Should().BeEquivalentTo(new User(assignedUserId, "Assigned User", "assigned.user@test.local"));
 			result.TypeOfSignificantChange.Should().Be("Change of age range");
 			result.Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
+			result.Decision.Should().Be(Decision.Approved);
+			result.DecisionDate.Should().Be(expectedDecisionDate);
 
 			result.StakeholderConsultation.TrustConsultedStakeholders.Should().BeFalse();
 			result.StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");

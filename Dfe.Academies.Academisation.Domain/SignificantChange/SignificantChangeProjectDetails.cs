@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+
+namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public class SignificantChangeProjectDetails
 {
@@ -33,6 +35,19 @@ public class SignificantChangeProjectDetails
 	public bool? MeetsOfstedStandards { get; set; }
 	public string? OfstedAdditionalInformation { get; set; }
 	public string? OfstedSupportingEvidence { get; set; }
+
+    public string? EqualitiesImpactAssessmentNoReason { get; set; }
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
+
+	public Recommendation? Recommendation { get; set; }
+	public string? RecommendationMoreInformation { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -164,6 +179,31 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
+	public SignificantChangeTaskStatus GetAdmissionVariationTaskStatus()
+	{
+		if (AdmissionsVariationRequired is false) return SignificantChangeTaskStatus.Completed;
+		if (
+			AdmissionsVariationAdmissionsTeamSupportive is not null
+			&& AdmissionsVariationLocalAuthoritySupportive is not null
+			&& AdmissionsVariationPupilPlacePlanningSupportive is not null
+		)
+		{
+			if (AdmissionsVariationLocalAuthoritySupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation)
+			    || AdmissionsVariationPupilPlacePlanningSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation)
+			    || AdmissionsVariationAdmissionsTeamSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
+			{
+				return SignificantChangeTaskStatus.InProgress;
+			}
+
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.NotStarted;
+	}
+
 	public SignificantChangeTaskStatus GetFundingTaskStatus()
 	{
 		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) &&
@@ -181,6 +221,17 @@ public class SignificantChangeProjectDetails
 		return FundingAnswer.HasValue
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetRecommendationTaskStatus()
+	{
+		if (!Recommendation.HasValue && string.IsNullOrWhiteSpace(RecommendationMoreInformation))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (Recommendation.HasValue)
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
 	}
 
 	public SignificantChangeTaskStatus GetHqtfConsiderationTaskStatus()

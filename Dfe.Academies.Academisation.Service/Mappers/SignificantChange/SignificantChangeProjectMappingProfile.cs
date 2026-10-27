@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
-using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Dfe.Academies.Academisation.Service.Mappers.SignificantChange;
 
@@ -75,6 +75,12 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
 			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()))
+			.ForMember(destination => destination.Recommendation,
+				options => options.MapFrom(source => source.Details.Recommendation))
+			.ForMember(destination => destination.RecommendationMoreInformation,
+				options => options.MapFrom(source => source.Details.RecommendationMoreInformation))
+			.ForMember(destination => destination.RecommendationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetRecommendationTaskStatus().ToString()))
 			.ForMember(destination => destination.StakeholderObjections,
 				options => options.MapFrom(source => source.Details.StakeholderObjections.ToString()))
 			.ForMember(destination => destination.StakeholderObjectionsComment,
@@ -98,7 +104,25 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.OfstedSupportingEvidence,
 				options => options.MapFrom(source => source.Details.OfstedSupportingEvidence))
 			.ForMember(destination => destination.OfstedTaskStatus,
-				options => options.MapFrom(source => source.Details.GetOfstedTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetOfstedTaskStatus().ToString()))
+			.ForMember(destination => destination.AdmissionsVariationRequired,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationRequired))
+			.ForMember(destination => destination.AdmissionsVariationSupportingEvidence,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationSupportingEvidence))
+			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportive,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationLocalAuthoritySupportive))
+			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation))
+			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportive,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationPupilPlacePlanningSupportive))
+			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation))
+			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportive,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationAdmissionsTeamSupportive))
+			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
+			.ForMember(destination => destination.AdmissionsVariationTaskStatus,
+				options => options.MapFrom(source => source.Details.GetAdmissionVariationTaskStatus().ToString()));
 
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
@@ -162,6 +186,33 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.OfstedSupportingEvidence))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.OfstedTaskStatus));
+		CreateMap<SignificantChangeProjectDto, SignificantChangeRecommendationResponse>()
+			.ForMember(destination => destination.Recommendation,
+				options => options.MapFrom(source => source.Recommendation))
+			.ForMember(destination => destination.RecommendationMoreInformation,
+				options => options.MapFrom(source => source.RecommendationMoreInformation))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.RecommendationTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionVariationResponse>()
+			.ForMember(destination => destination.AdmissionsVariationRequired,
+				options => options.MapFrom(source => source.AdmissionsVariationRequired))
+			.ForMember(destination => destination.AdmissionsVariationSupportingEvidence,
+				options => options.MapFrom(source => source.AdmissionsVariationSupportingEvidence))
+			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportive,
+				options => options.MapFrom(source => source.AdmissionsVariationLocalAuthoritySupportive))
+			.ForMember(destination => destination.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation))
+			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportive,
+				options => options.MapFrom(source => source.AdmissionsVariationPupilPlacePlanningSupportive))
+			.ForMember(destination => destination.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation))
+			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportive,
+				options => options.MapFrom(source => source.AdmissionsVariationAdmissionsTeamSupportive))
+			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation,
+				options => options.MapFrom(source => source.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.AdmissionsVariationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
 			.ForMember(destination => destination.ApplicationId,
@@ -174,21 +225,15 @@ public class SignificantChangeProjectMappingProfile : Profile
 					: new User(
 						source.AssignedUserId.Value,
 						source.AssignedUserFullName ?? string.Empty,
-						source.AssignedUserEmailAddress ?? string.Empty)))
-			.ForMember(destination => destination.StakeholderConsultation,
-				options => options.MapFrom(source => source))
-			.ForMember(destination => destination.EqualitiesImpactAssessment,
-				options => options.MapFrom(source => source))
-			.ForMember(destination => destination.AssignedUser,
-				options => options.MapFrom(source => source.AssignedUserId == null
-					? null
-					: new User(
-						source.AssignedUserId.Value,
-						source.AssignedUserFullName ?? string.Empty,
-						source.AssignedUserEmailAddress ?? string.Empty)))
+						source.AssignedUserEmailAddress ?? string.Empty)));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectGetByIdResponse>()
+			.IncludeBase<SignificantChangeProjectDto, SignificantChangeProjectSearchResponse>()
 			.ForMember(destination => destination.StakeholderConsultation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ConsultationDuration,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.EqualitiesImpactAssessment,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.AdmissionVariationConsultation,
 				options => options.MapFrom(source => source))
@@ -205,8 +250,15 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.OfstedInspection,
-				options => options.MapFrom(source => source));
-
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.Recommendation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.AdmissionsVariation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.Decision,
+        		options => options.Ignore())
+    		.ForMember(destination => destination.DecisionDate,
+        		options => options.Ignore());
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
 			.ForMember(destination => destination.Status,
