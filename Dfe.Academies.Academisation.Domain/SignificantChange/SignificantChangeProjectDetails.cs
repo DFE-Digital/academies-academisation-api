@@ -36,7 +36,6 @@ public class SignificantChangeProjectDetails
 	public string? OfstedAdditionalInformation { get; set; }
 	public string? OfstedSupportingEvidence { get; set; }
 
-    public string? EqualitiesImpactAssessmentNoReason { get; set; }
 	public bool? AdmissionsVariationRequired { get; set; }
 	public string? AdmissionsVariationSupportingEvidence { get; set; }
 	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
