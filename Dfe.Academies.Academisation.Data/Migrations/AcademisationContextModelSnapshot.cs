@@ -2518,17 +2518,9 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationDurationNotMetReason");
 
-                            b1.Property<bool?>("ConsultationIncludeAdmissionVariation")
-                                .HasColumnType("bit")
-                                .HasColumnName("ConsultationIncludeAdmissionVariation");
-
                             b1.Property<string>("ConsultationLastedMinimumThreeWeeks")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ConsultationLastedMinimumThreeWeeks");
-
-                            b1.Property<string>("ConsultationNoAdmissionVariationReason")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("ConsultationNoAdmissionVariationReason");
 
                             b1.Property<bool?>("EqualitiesImpactAssessmentCompleted")
                                 .HasColumnType("bit")
@@ -2578,6 +2570,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("HqtfConsiderationSupportingEvidence");
 
+                            b1.Property<string>("OtherStakeholderEngagementSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("OtherStakeholderEngagementSupportingEvidence");
+
                             b1.Property<string>("PlanningPermission")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermission");
@@ -2598,17 +2594,41 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedDecisionDate");
 
-                            b1.Property<string>("StakeholderObjections")
+                            b1.Property<string>("RelevantStakeholdersNotifiedOfAdmissionsChanges")
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StakeholderObjections");
+                                .HasColumnName("RelevantStakeholdersNotifiedOfAdmissionsChanges");
 
-                            b1.Property<string>("StakeholderObjectionsComment")
+                            b1.Property<string>("RelevantStakeholdersNotifiedOfAdmissionsChangesReason")
                                 .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StakeholderObjectionsComment");
+                                .HasColumnName("RelevantStakeholdersNotifiedOfAdmissionsChangesReason");
 
-                            b1.Property<bool?>("TrustConsultedReligiousBody")
-                                .HasColumnType("bit")
-                                .HasColumnName("TrustConsultedReligiousBody");
+                            b1.Property<string>("ReligiousBodyConsentGranted")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ReligiousBodyConsentGranted");
+
+                            b1.Property<string>("ReligiousBodyConsentNotGrantedReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ReligiousBodyConsentNotGrantedReason");
+
+                            b1.Property<string>("ReligiousBodyRaisedObjection")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ReligiousBodyRaisedObjection");
+
+                            b1.Property<string>("ReligiousBodyRaisedObjectionReason")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ReligiousBodyRaisedObjectionReason");
+
+                            b1.Property<string>("ReligiousBodySupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ReligiousBodySupportingEvidence");
+
+                            b1.Property<string>("StakeholderObjectionsDetails")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("StakeholderObjectionsDetails");
+
+                            b1.Property<string>("TrustConsultedReligiousBodyAnswer")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustConsultedReligiousBodyAnswer");
 
                             b1.Property<string>("TrustConsultedReligiousBodyNotConsultedReason")
                                 .HasColumnType("nvarchar(max)")
@@ -2621,6 +2641,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("TrustConsultedStakeholdersNotConsultedReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+
+                            b1.Property<bool?>("WereThereAnyObjectionsRaised")
+                                .HasColumnType("bit")
+                                .HasColumnName("WereThereAnyObjectionsRaised");
 
                             b1.HasKey("SignificantChangeProjectId");
 

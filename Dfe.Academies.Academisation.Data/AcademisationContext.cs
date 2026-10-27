@@ -1010,8 +1010,6 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.TrustConsultedStakeholdersNotConsultedReason).HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
 			details.Property(d => d.ConsultationLastedMinimumThreeWeeks).HasConversion<string>().HasColumnName("ConsultationLastedMinimumThreeWeeks");
 			details.Property(d => d.ConsultationDurationNotMetReason).HasColumnName("ConsultationDurationNotMetReason");
-			details.Property(d => d.ConsultationIncludeAdmissionVariation).HasColumnName("ConsultationIncludeAdmissionVariation");
-			details.Property(d => d.ConsultationNoAdmissionVariationReason).HasColumnName("ConsultationNoAdmissionVariationReason");
 			details.Property(d => d.FundingAnswer).HasConversion<string>().HasColumnName("FundingAnswer");
 			details.Property(d => d.FundingAdditionalInformation).HasColumnName("FundingAdditionalInformation");
 			details.Property(d => d.FundingSupportingEvidence).HasColumnName("FundingSupportingEvidence");
@@ -1023,7 +1021,6 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.EqualitiesLikelyDetails).HasColumnName("EqualitiesLikelyDetails");
 			details.Property(d => d.EqualitiesSomeImpactDetails).HasColumnName("EqualitiesSomeImpactDetails");
 			details.Property(d => d.EqualitiesImpactSupportingEvidence).HasColumnName("EqualitiesImpactSupportingEvidence");
-			details.Property(d => d.TrustConsultedReligiousBody).HasColumnName("TrustConsultedReligiousBody");
 			details.Property(d => d.TrustConsultedReligiousBodyNotConsultedReason).HasColumnName("TrustConsultedReligiousBodyNotConsultedReason");
 			details.Property(d => d.TrustConsultedReligiousBodyAnswer).HasConversion<string>().HasColumnName("TrustConsultedReligiousBodyAnswer");
 			details.Property(d => d.ReligiousBodyRaisedObjection).HasConversion<string>().HasColumnName("ReligiousBodyRaisedObjection");
@@ -1041,8 +1038,6 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.PlanningPermission).HasConversion<string>().HasColumnName("PlanningPermission");
 			details.Property(d => d.PlanningPermissionAdditionalInformation).HasColumnName("PlanningPermissionAdditionalInformation");
 			details.Property(d => d.PlanningPermissionSupportingEvidence).HasColumnName("PlanningPermissionSupportingEvidence");
-			details.Property(d => d.StakeholderObjections).HasColumnName("StakeholderObjections").HasConversion<string>();
-			details.Property(d => d.StakeholderObjectionsComment).HasColumnName("StakeholderObjectionsComment");
             details.Property(d => d.EqualitiesImpactAssessmentNoReason).HasColumnName("EqualitiesImpactAssessmentNoReason");
             details.Property(d => d.AdmissionsVariationRequired).HasColumnName("AdmissionsVariationRequired");
             details.Property(d => d.AdmissionsVariationSupportingEvidence).HasColumnName("AdmissionsVariationSupportingEvidence");

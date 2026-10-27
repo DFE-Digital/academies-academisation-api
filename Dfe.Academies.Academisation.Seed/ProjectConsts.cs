@@ -129,11 +129,5 @@ namespace Dfe.Academies.Academisation.Seed
 			EqualitiesImpact.Likely,
 		];
 		
-		public static SignificantChangeStakeholderObjections[] StakeholderObjections { get; } =
-		[
-			SignificantChangeStakeholderObjections.No,
-			SignificantChangeStakeholderObjections.YesAllObjectionsAddressed,
-			SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
-		];
 	}
 }

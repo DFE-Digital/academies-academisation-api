@@ -147,12 +147,16 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => (int?)source.ReligiousBodyRaisedObjection))
 			.ForMember(destination => destination.ReligiousBodyConsentGranted,
 				options => options.MapFrom(source => (int?)source.ReligiousBodyConsentGranted))
+			.ForMember(destination => destination.SupportingEvidence,
+				options => options.MapFrom(source => source.ReligiousBodySupportingEvidence))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => (int)source.ReligiousBodyConsultationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeOtherStakeholderEngagementResponse>()
 			.ForMember(destination => destination.RelevantStakeholdersNotifiedOfAdmissionsChanges,
 				options => options.MapFrom(source => (int?)source.RelevantStakeholdersNotifiedOfAdmissionsChanges))
+			.ForMember(destination => destination.SupportingEvidence,
+				options => options.MapFrom(source => source.OtherStakeholderEngagementSupportingEvidence))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => (int)source.OtherStakeholderEngagementTaskStatus));
 

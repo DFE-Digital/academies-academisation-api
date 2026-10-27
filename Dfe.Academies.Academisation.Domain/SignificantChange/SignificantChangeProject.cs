@@ -100,32 +100,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			}
 		}
 
-		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
-			string? noAdmissionVariationReason)
-		{
-			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
-			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
-				? noAdmissionVariationReason
-				: null;
-
-			if (consultationIncludeAdmissionVariation is false)
-			{
-				MoveToTierTwoIfApplicable();
-			}
-		}
-
-		public void SetStakeholderConsultation(bool? trustConsultedStakeholders,
-			string? trustConsultedStakeholdersNotConsultedReason)
-		{
-			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
-			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
-				? trustConsultedStakeholdersNotConsultedReason
-				: null;
-
-			if (trustConsultedStakeholders is false)
-				MoveToTierTwoIfApplicable();
-		}
-
 		public void SetConsultationDuration(
 			ConsultationDurationAnswer? consultationLastedMinimumThreeWeeks,
 			string? consultationDurationNotMetReason)
@@ -159,18 +133,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? additionalInformation
 				: null;
 			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
-		}
-
-		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
-					string? trustConsultedReligiousBodyNotConsultedReason)
-		{
-			Details.TrustConsultedReligiousBody = trustConsultedReligiousBody;
-			Details.TrustConsultedReligiousBodyNotConsultedReason = trustConsultedReligiousBody is false
-				? trustConsultedReligiousBodyNotConsultedReason
-				: null;
-
-			if (trustConsultedReligiousBody is false)
-				MoveToTierTwoIfApplicable();
 		}
 
 		public void SetReligiousBodyConsultation(
@@ -255,16 +217,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		{
 			Details.ProposedDecisionDate = proposedDecisionDate;
 			Details.ProposedChangeDate = proposedChangeDate;
-		}
-
-		public void SetStakeholderObjections(SignificantChangeStakeholderObjections? stakeholderObjections, string? stakeholderObjectionsComment)
-		{
-			Details.StakeholderObjections = stakeholderObjections;
-			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
-
-			
-			if (stakeholderObjections is SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided)
-				MoveToTierTwoIfApplicable();
 		}
 
 		public void SetProjectSentToComplete(Guid? completeProjectId)

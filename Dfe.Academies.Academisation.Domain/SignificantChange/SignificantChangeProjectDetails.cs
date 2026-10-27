@@ -2,9 +2,6 @@
 
 public class SignificantChangeProjectDetails
 {
-	public bool? TrustConsultedStakeholders { get; set; }
-	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
-	public bool? TrustConsultedReligiousBody { get; set; }
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public YesNoNotApplicableAnswer? TrustConsultedReligiousBodyAnswer { get; set; }
 	public YesNoNotApplicableAnswer? ReligiousBodyRaisedObjection { get; set; }
@@ -17,10 +14,10 @@ public class SignificantChangeProjectDetails
 	public YesNoNotApplicableAnswer? RelevantStakeholdersNotifiedOfAdmissionsChanges { get; set; }
 	public string? RelevantStakeholdersNotifiedOfAdmissionsChangesReason { get; set; }
 	public string? OtherStakeholderEngagementSupportingEvidence { get; set; }
+	public bool? TrustConsultedStakeholders { get; set; }
+	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
-	public SignificantChangeStakeholderObjections? StakeholderObjections { get; set; }
-	public string? StakeholderObjectionsComment { get; set; }
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesLikelyDetails { get; set; }
@@ -28,8 +25,6 @@ public class SignificantChangeProjectDetails
 	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
-	public bool? ConsultationIncludeAdmissionVariation { get; set; }
-	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public FundingAnswer? FundingAnswer { get; set; }
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
@@ -48,22 +43,6 @@ public class SignificantChangeProjectDetails
 	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
 	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
 	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
-
-    public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
-	{
-		if (!TrustConsultedStakeholders.HasValue
-		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
-			return SignificantChangeTaskStatus.NotStarted;
-
-		if (TrustConsultedStakeholders is true)
-			return SignificantChangeTaskStatus.Completed;
-
-		if (TrustConsultedStakeholders is false
-		    && !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
-			return SignificantChangeTaskStatus.Completed;
-
-		return SignificantChangeTaskStatus.InProgress;
-	}
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
 	{
@@ -135,25 +114,6 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-	public SignificantChangeTaskStatus GetStakeholderObjectionsTaskStatus()
-	{
-		if (!StakeholderObjections.HasValue
-		    && string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
-			return SignificantChangeTaskStatus.NotStarted;
-
-		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesAllObjectionsAddressed)
-			return SignificantChangeTaskStatus.Completed;
-
-		if (StakeholderObjections == SignificantChangeStakeholderObjections.No)
-			return SignificantChangeTaskStatus.Completed;
-
-		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
-		    && !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
-			return SignificantChangeTaskStatus.Completed;
-
-		return SignificantChangeTaskStatus.InProgress;
-	}
-
 	public SignificantChangeTaskStatus GetConsultationDurationTaskStatus()
 	{
 		if (!ConsultationLastedMinimumThreeWeeks.HasValue
@@ -179,28 +139,6 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.Completed;
-	}
-
-	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
-	{
-		if (!ConsultationIncludeAdmissionVariation.HasValue
-		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
-		{
-			return SignificantChangeTaskStatus.NotStarted;
-		}
-
-		if (ConsultationIncludeAdmissionVariation is true)
-		{
-			return SignificantChangeTaskStatus.Completed;
-		}
-
-		if (ConsultationIncludeAdmissionVariation is false
-		    && !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
-		{
-			return SignificantChangeTaskStatus.Completed;
-		}
-
-		return SignificantChangeTaskStatus.InProgress;
 	}
 
 	public SignificantChangeTaskStatus GetAdmissionVariationTaskStatus()
