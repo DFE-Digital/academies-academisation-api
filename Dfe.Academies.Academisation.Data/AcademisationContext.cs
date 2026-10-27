@@ -1015,6 +1015,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.FundingAnswer).HasConversion<string>().HasColumnName("FundingAnswer");
 			details.Property(d => d.FundingAdditionalInformation).HasColumnName("FundingAdditionalInformation");
 			details.Property(d => d.FundingSupportingEvidence).HasColumnName("FundingSupportingEvidence");
+			details.Property(d => d.Recommendation).HasColumnName("Recommendation").HasConversion<string>();
+			details.Property(d => d.RecommendationMoreInformation).HasColumnName("RecommendationMoreInformation");
 			details.Property(d => d.HqtfConsiderationAnswer).HasConversion<string>().HasColumnName("HqtfConsiderationAnswer");
 			details.Property(d => d.HqtfConsiderationAdditionalInformation).HasColumnName("HqtfConsiderationAdditionalInformation");
 			details.Property(d => d.HqtfConsiderationSupportingEvidence).HasColumnName("HqtfConsiderationSupportingEvidence");
@@ -1036,6 +1038,15 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.StakeholderObjections).HasColumnName("StakeholderObjections").HasConversion<string>();
 			details.Property(d => d.StakeholderObjectionsComment).HasColumnName("StakeholderObjectionsComment");
             details.Property(d => d.EqualitiesImpactAssessmentNoReason).HasColumnName("EqualitiesImpactAssessmentNoReason");
+            details.Property(d => d.AdmissionsVariationRequired).HasColumnName("AdmissionsVariationRequired");
+            details.Property(d => d.AdmissionsVariationSupportingEvidence).HasColumnName("AdmissionsVariationSupportingEvidence");
+            details.Property(d => d.AdmissionsVariationAdmissionsTeamSupportive).HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");
+            details.Property(d => d.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation");
+            details.Property(d => d.AdmissionsVariationLocalAuthoritySupportive).HasColumnName("AdmissionsVariationLocalAuthoritySupportive");
+            details.Property(d => d.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation).HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
+            details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportive).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
+            details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
+			details.Property(d => d.AdmissionsVariationRecommendation).HasConversion<string>().HasColumnName("AdmissionsVariationRecommendation");
         });
 
 	}

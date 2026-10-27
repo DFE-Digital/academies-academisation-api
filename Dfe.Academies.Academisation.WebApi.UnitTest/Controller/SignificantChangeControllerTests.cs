@@ -16,6 +16,7 @@ using Moq;
 using Xunit;
 using System;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -564,7 +565,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			result.Should().BeOfType<NotFoundResult>();
 		}
       
-           [Fact]
+        [Fact]
         public async Task SetAdmissionVariationConsultation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var routeId = 100;
@@ -624,8 +625,131 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             result.Should().BeOfType<BadRequestObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
+
+        [Fact]
+        public async Task SetAdmissionsVariationRecommendation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
+                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionsVariationRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeAdmissionsVariationRecommendation(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeAdmissionsVariationRecommendationCommand>(c =>
+                    c.Id == routeId
+                    && c.RecommendationAnswer == request.RecommendationAnswer),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetAdmissionsVariationRecommendation_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
+                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Decline);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionsVariationRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeAdmissionsVariationRecommendation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+          
+        [Fact]
+        public async Task SetAdmissionVariation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            int routeId = 1001;
+            var request = new SetSignificantChangeAdmissionVariationPublicCommand(
+                AdmissionsVariationRequired: false,
+                AdmissionsVariationSupportingEvidence: "No admission variation required",
+                AdmissionsVariationLocalAuthoritySupportive: null,
+                AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
+                AdmissionsVariationPupilPlacePlanningSupportive: null,
+                AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation: null,
+                AdmissionsVariationAdmissionsTeamSupportive: null,
+                AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation: null
+                );
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionVariationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeAdmissionsVariation(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeAdmissionVariationCommand>(c =>
+                    c.Id == routeId
+                    && c.AdmissionsVariationRequired == request.AdmissionsVariationRequired
+                    && c.AdmissionsVariationSupportingEvidence == request.AdmissionsVariationSupportingEvidence
+                    && c.AdmissionsVariationLocalAuthoritySupportive == request.AdmissionsVariationLocalAuthoritySupportive
+                    && c.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation == request.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation
+                    && c.AdmissionsVariationPupilPlacePlanningSupportive == request.AdmissionsVariationPupilPlacePlanningSupportive
+                    && c.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation == request.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation
+                    && c.AdmissionsVariationAdmissionsTeamSupportive == request.AdmissionsVariationAdmissionsTeamSupportive
+                    && c.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation == request.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetAdmissionVariation_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeAdmissionVariationPublicCommand(
+                AdmissionsVariationRequired: true,
+                AdmissionsVariationSupportingEvidence: null,
+                AdmissionsVariationLocalAuthoritySupportive: null,
+                AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
+                AdmissionsVariationPupilPlacePlanningSupportive: null,
+                AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation: null,
+                AdmissionsVariationAdmissionsTeamSupportive: null,
+                AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation: null);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionVariationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeAdmissionsVariation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetAdmissionVariation_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeAdmissionVariationPublicCommand(
+                AdmissionsVariationRequired: null,
+                AdmissionsVariationSupportingEvidence: null,
+                AdmissionsVariationLocalAuthoritySupportive: null,
+                AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
+                AdmissionsVariationPupilPlacePlanningSupportive: null,
+                AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation: null,
+                AdmissionsVariationAdmissionsTeamSupportive: null,
+                AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation: null);
+
+            var validationErrors = new[]
+            {
+                new ValidationError("AdmissionsVariationRequired", "Admissions variation required is required")
+            };
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionVariationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeAdmissionsVariation(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
       
-                   		[Fact]
+        [Fact]
 		public async Task SetConsultationDuration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
 		{
 			var routeId = 100;
@@ -848,6 +972,28 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task SetRecommendation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeRecommendationPublicCommand(
+                Recommendation.Approve,
+                "Yeah go for it");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeRecommendation(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeRecommendationCommand>(command =>
+                    command.Id == 100
+                    && command.Recommendation == Recommendation.Approve
+                    && command.RecommendationMoreInformation == "Yeah go for it"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
         public async Task SetHqtfConsideration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
@@ -868,6 +1014,19 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     && command.AdditionalInformation == "Not considered"
                     && command.SupportingEvidence == "Evidence"),
                 It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetRecommendation_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeRecommendationPublicCommand(Recommendation.Withdraw, null);
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeRecommendation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]
