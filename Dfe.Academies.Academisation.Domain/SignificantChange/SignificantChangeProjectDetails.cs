@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+
+namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public class SignificantChangeProjectDetails
 {
@@ -38,7 +40,10 @@ public class SignificantChangeProjectDetails
 	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
 	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
 
-    public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
+	public Recommendation? Recommendation { get; set; }
+	public string? RecommendationMoreInformation { get; set; }
+
+	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
 		if (!TrustConsultedStakeholders.HasValue
 		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
@@ -208,6 +213,17 @@ public class SignificantChangeProjectDetails
 		return FundingAnswer.HasValue
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetRecommendationTaskStatus()
+	{
+		if (!Recommendation.HasValue && string.IsNullOrWhiteSpace(RecommendationMoreInformation))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (Recommendation.HasValue)
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
 	}
 
 	public SignificantChangeTaskStatus GetHqtfConsiderationTaskStatus()

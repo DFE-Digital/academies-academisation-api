@@ -16,6 +16,7 @@ using Moq;
 using Xunit;
 using System;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 
 namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 {
@@ -935,6 +936,28 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task SetRecommendation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeRecommendationPublicCommand(
+                Recommendation.Approve,
+                "Yeah go for it");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeRecommendation(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeRecommendationCommand>(command =>
+                    command.Id == 100
+                    && command.Recommendation == Recommendation.Approve
+                    && command.RecommendationMoreInformation == "Yeah go for it"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
         public async Task SetHqtfConsideration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
@@ -955,6 +978,19 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     && command.AdditionalInformation == "Not considered"
                     && command.SupportingEvidence == "Evidence"),
                 It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetRecommendation_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeRecommendationPublicCommand(Recommendation.Withdraw, null);
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeRecommendation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
         }
 
         [Fact]

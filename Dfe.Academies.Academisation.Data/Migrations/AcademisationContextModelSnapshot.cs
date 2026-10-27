@@ -2598,6 +2598,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedDecisionDate");
 
+                            b1.Property<string>("Recommendation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Recommendation");
+
+                            b1.Property<string>("RecommendationMoreInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RecommendationMoreInformation");
+
                             b1.Property<string>("StakeholderObjections")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("StakeholderObjections");
