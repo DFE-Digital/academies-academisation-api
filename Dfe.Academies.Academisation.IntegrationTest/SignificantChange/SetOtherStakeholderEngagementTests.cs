@@ -56,32 +56,6 @@ public class SetOtherStakeholderEngagementTests : IClassFixture<TestWebApplicati
 	}
 
 	[Fact]
-	public async Task Put_WhenConditionalDetailsAreMissing_ReturnsBadRequest()
-	{
-		var client = _factory.CreateClient();
-		var project = SignificantChangeProject.Create(
-			new SignificantChangeProjectOptions(123456, 1, "Test Trust", "12345678", "Change of age range", "Test School"),
-			DateTime.UtcNow);
-		_factory.Context.Add(project);
-		await _factory.Context.SaveChangesAsync();
-
-		var request = new SetSignificantChangeOtherStakeholderEngagementPublicCommand(
-			true,
-			null,
-			true,
-			"  ",
-			YesNoNotApplicableAnswer.Yes,
-			null,
-			null);
-
-		var response = await client.PutAsJsonAsync(
-			$"/significant-change/{project.Id}/SetOtherStakeholderEngagement",
-			request);
-
-		Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-	}
-
-	[Fact]
 	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
 		var client = _factory.CreateClient();

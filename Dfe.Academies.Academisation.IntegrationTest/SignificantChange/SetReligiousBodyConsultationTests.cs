@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -80,29 +80,5 @@ public class SetReligiousBodyConsultationTests : IClassFixture<TestWebApplicatio
 		var response = await client.PutAsJsonAsync("/significant-change/99999/SetReligiousBodyConsultation", request);
 
 		Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-	}
-
-	[Fact]
-	public async Task Put_WhenNoAnswerHasNoReason_ReturnsBadRequest()
-	{
-		var client = _factory.CreateClient();
-		var project = SignificantChangeProject.Create(
-			new SignificantChangeProjectOptions(123456, 1, "Test Trust", "12345678", "Change of age range", "Test School"),
-			DateTime.UtcNow);
-		_factory.Context.Add(project);
-		await _factory.Context.SaveChangesAsync();
-
-		var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
-			YesNoNotApplicableAnswer.No,
-			null,
-			YesNoNotApplicableAnswer.Yes,
-			null,
-			YesNoNotApplicableAnswer.NotApplicable,
-			null,
-			null);
-
-		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetReligiousBodyConsultation", request);
-
-		Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 	}
 }

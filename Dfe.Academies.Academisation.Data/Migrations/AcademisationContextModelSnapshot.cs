@@ -2482,6 +2482,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
+                            b1.Property<string>("AdmissionsVariationRecommendation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationRecommendation");
+
                             b1.Property<bool?>("AdmissionsVariationAdmissionsTeamSupportive")
                                 .HasColumnType("bit")
                                 .HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");
@@ -2593,6 +2597,14 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<DateTime?>("ProposedDecisionDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedDecisionDate");
+
+                            b1.Property<string>("Recommendation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Recommendation");
+
+                            b1.Property<string>("RecommendationMoreInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RecommendationMoreInformation");
 
                             b1.Property<string>("RelevantStakeholdersNotifiedOfAdmissionsChanges")
                                 .HasColumnType("nvarchar(max)")

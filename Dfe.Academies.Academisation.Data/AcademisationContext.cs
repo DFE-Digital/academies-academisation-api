@@ -1013,6 +1013,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.FundingAnswer).HasConversion<string>().HasColumnName("FundingAnswer");
 			details.Property(d => d.FundingAdditionalInformation).HasColumnName("FundingAdditionalInformation");
 			details.Property(d => d.FundingSupportingEvidence).HasColumnName("FundingSupportingEvidence");
+			details.Property(d => d.Recommendation).HasColumnName("Recommendation").HasConversion<string>();
+			details.Property(d => d.RecommendationMoreInformation).HasColumnName("RecommendationMoreInformation");
 			details.Property(d => d.HqtfConsiderationAnswer).HasConversion<string>().HasColumnName("HqtfConsiderationAnswer");
 			details.Property(d => d.HqtfConsiderationAdditionalInformation).HasColumnName("HqtfConsiderationAdditionalInformation");
 			details.Property(d => d.HqtfConsiderationSupportingEvidence).HasColumnName("HqtfConsiderationSupportingEvidence");
@@ -1047,6 +1049,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
             details.Property(d => d.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation).HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportive).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
+			details.Property(d => d.AdmissionsVariationRecommendation).HasConversion<string>().HasColumnName("AdmissionsVariationRecommendation");
         });
 
 	}

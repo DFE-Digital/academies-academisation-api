@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoFixture;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using FluentAssertions;
 using Xunit;
@@ -14,7 +15,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void Constructor_ShouldSetPropertiesCorrectly()
 		{
 			var status = _fixture.Create<SignificantChangeStatus>();
-
 			var urn = _fixture.Create<int>();
 			var tier = _fixture.Create<byte>();
 			var trustName = _fixture.Create<string>();
@@ -54,18 +54,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void AssignUser_ShouldSetUserProperties()
 		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
+			var project = CreateProject();
 
 			var userId = _fixture.Create<Guid>();
 			var userEmail = _fixture.Create<string>();
@@ -107,16 +96,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void SetReadOnlyDate_ShouldSetReadOnlyDate()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-			var project = SignificantChangeProject.Create(significantChangeProjectOptions, DateTime.UtcNow);
-
+			var project = CreateProject();
 			var readOnlyDate = DateTime.UtcNow.AddDays(-1);
 
 			project.SetReadOnlyDate(readOnlyDate);
@@ -154,33 +134,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
-
+			var project = CreateProject();
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
 		}
 
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.No, null,
@@ -193,16 +154,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.Yes, null,
@@ -215,16 +167,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[Fact]
 		public void GetReligiousBodyConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
 		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				_fixture.Create<byte>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+			var project = CreateProject();
 
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.No, "Consultation timeline does not allow this yet",
@@ -438,7 +381,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
             project.Details.EqualitiesImpactAssessmentCompleted.Should().Be(equalitiesImpactAssessmentComplete);
 			project.Details.EqualitiesImpactAssessmentNoReason.Should().Be(expectedNoReason);
 		}
-
 
 		[Fact]
 		public void SetAdmissionVariationDetails_ShouldSetDetailsProperties()
@@ -816,6 +758,35 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetFunding(answer, additionalInformation, supportingEvidence);
 
 			project.Details.GetFundingTaskStatus().Should().Be(expected);
+		}
+
+
+		[Fact]
+		public void SetRecommendation_WhenAnswersProvided_SetsAnswers()
+		{
+			var project = CreateProject();
+
+			project.SetRecommendation(Recommendation.Approve, "This is the recommendation comment");
+
+			project.Details.Recommendation.Should().Be(Recommendation.Approve);
+			project.Details.RecommendationMoreInformation.Should().Be("This is the recommendation comment");
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(Recommendation.Decline, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(null, "Blah blah 6 7", SignificantChangeTaskStatus.InProgress)]
+		[InlineData(Recommendation.Approve, "Yeah, I highly reommend approving because it's a really good idea", SignificantChangeTaskStatus.Completed)]
+		public void GetRecommendationTaskStatus_ReturnsExpectedStatus(
+			Recommendation? answer,
+			string? moreInformation,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetRecommendation(answer, moreInformation);
+
+			project.Details.GetRecommendationTaskStatus().Should().Be(expected);
 		}
 
 		private SignificantChangeProject CreateProject()

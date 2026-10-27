@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
@@ -185,6 +186,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
+		public void SetRecommendation(Recommendation? recommendation, string? recommendationMoreInformation)
+		{
+			Details.Recommendation = recommendation;
+			Details.RecommendationMoreInformation = recommendationMoreInformation;
+		}
+
 		public void MoveToTierTwoIfApplicable()
 		{
 			if (Tier == 1) Tier = 2;
@@ -210,7 +217,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesLikelyDetails = equalitiesLikelyDetails;
 			Details.EqualitiesSomeImpactDetails = equalitiesSomeImpactDetails;
 			Details.EqualitiesImpactSupportingEvidence = equalitiesImpactSupportingEvidence;
-
 		}
 
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
@@ -236,6 +242,11 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermission = planningPermissionAnswer;
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation)
+		{
+			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
 		}
 	}
 }
