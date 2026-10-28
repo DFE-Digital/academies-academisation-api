@@ -1020,6 +1020,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.HqtfConsiderationAnswer).HasConversion<string>().HasColumnName("HqtfConsiderationAnswer");
 			details.Property(d => d.HqtfConsiderationAdditionalInformation).HasColumnName("HqtfConsiderationAdditionalInformation");
 			details.Property(d => d.HqtfConsiderationSupportingEvidence).HasColumnName("HqtfConsiderationSupportingEvidence");
+			details.Property(d => d.FhaRisksOrIssuesRaised).HasColumnName("FhaRisksOrIssuesRaised");
+			details.Property(d => d.FhaRisksOrIssuesRaisedAdditionalInformation).HasColumnName("FhaRisksOrIssuesRaisedAdditionalInformation");
+			details.Property(d => d.FhaRisksOrIssuesRaisedSupportingEvidence).HasColumnName("FhaRisksOrIssuesRaisedSupportingEvidence");
 			details.Property(d => d.EqualitiesImpactAssessmentCompleted).HasColumnName("EqualitiesImpactAssessmentCompleted");
 			details.Property(d => d.EqualitiesImpactIdentified).HasColumnName("EqualitiesImpactIdentified").HasConversion<string>();
 			details.Property(d => d.EqualitiesLikelyDetails).HasColumnName("EqualitiesLikelyDetails");
@@ -1047,6 +1050,7 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
             details.Property(d => d.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation).HasColumnName("AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportive).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
+			details.Property(d => d.AdmissionsVariationRecommendation).HasConversion<string>().HasColumnName("AdmissionsVariationRecommendation");
         });
 
 	}

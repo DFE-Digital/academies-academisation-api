@@ -625,8 +625,44 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             result.Should().BeOfType<BadRequestObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(validationErrors);
         }
-      
-      
+
+        [Fact]
+        public async Task SetAdmissionsVariationRecommendation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var routeId = 100;
+            var request = new SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
+                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionsVariationRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeAdmissionsVariationRecommendation(routeId, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeAdmissionsVariationRecommendationCommand>(c =>
+                    c.Id == routeId
+                    && c.RecommendationAnswer == request.RecommendationAnswer),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetAdmissionsVariationRecommendation_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeAdmissionsVariationRecommendationPublicCommand(
+                RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Decline);
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeAdmissionsVariationRecommendationCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeAdmissionsVariationRecommendation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+          
         [Fact]
         public async Task SetAdmissionVariation_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
@@ -1060,6 +1096,42 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .ReturnsAsync(new NotFoundCommandResult());
 
             var result = await _controller.SetSignificantChangeHqtfConsideration(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetFhaRisksOrIssuesRaised_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(
+                true,
+                "Risks need consideration",
+                "FHA evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFhaRisksOrIssuesRaisedCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeFhaRisksOrIssuesRaised(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeFhaRisksOrIssuesRaisedCommand>(command =>
+                    command.Id == 100
+                    && command.FhaRisksOrIssuesRaised == true
+                    && command.AdditionalInformation == "Risks need consideration"
+                    && command.SupportingEvidence == "FHA evidence"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetFhaRisksOrIssuesRaised_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(false, null, "FHA evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFhaRisksOrIssuesRaisedCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeFhaRisksOrIssuesRaised(100, request);
 
             result.Should().BeOfType<NotFoundResult>();
         }

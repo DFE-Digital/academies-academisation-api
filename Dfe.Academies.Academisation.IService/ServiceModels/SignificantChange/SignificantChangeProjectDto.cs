@@ -50,6 +50,10 @@ public class SignificantChangeProjectDto
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }
 	public string HqtfConsiderationTaskStatus { get; set; } = string.Empty;
+	public bool? FhaRisksOrIssuesRaised { get; set; }
+	public string? FhaRisksOrIssuesRaisedAdditionalInformation { get; set; }
+	public string? FhaRisksOrIssuesRaisedSupportingEvidence { get; set; }
+	public string FhaRisksOrIssuesRaisedTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactAssessmentNoReason { get; set; }
@@ -75,6 +79,8 @@ public class SignificantChangeProjectDto
 	public string? OfstedAdditionalInformation { get; set; }
 	public string? OfstedSupportingEvidence { get; set; }
 	public string OfstedTaskStatus { get; set; } = string.Empty;
+	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
+	public string AdmissionsVariationRecommendationTaskStatus { get; set; } = string.Empty;
 	public string RecommendationTaskStatus { get; set; } = string.Empty;
 	public Recommendation? Recommendation { get; set; }
 	public string? RecommendationMoreInformation { get; set; }

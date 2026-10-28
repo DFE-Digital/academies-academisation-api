@@ -62,8 +62,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
+			project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Approve);
 			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "stakeholders have objected");
 			project.SetOfstedInspection(proposedDecisionDate, false, "Ofsted standards not met", "Ofsted evidence");
+			project.SetFhaRisksOrIssuesRaised(true, "Risks need consideration", "FHA evidence");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -117,6 +119,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.PlanningPermission.SupportingEvidence.Should().Be("Planning permission evidence uploaded");
 			result.PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
+			result.AdmissionsVariationRecommendation.AdmissionsVariationRecommendationAnswer.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
+			result.AdmissionsVariationRecommendation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+
 			result.StakeholderObjections.StakeholderObjections.Should().Be(nameof(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided));
 			result.StakeholderObjections.StakeholderObjectionsComment.Should().Be("stakeholders have objected");
 			result.StakeholderObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
@@ -125,6 +130,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.OfstedInspection.AdditionalInformation.Should().Be("Ofsted standards not met");
 			result.OfstedInspection.SupportingEvidence.Should().Be("Ofsted evidence");
 			result.OfstedInspection.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.FhaRisksOrIssuesRaised.FhaRisksOrIssuesRaised.Should().BeTrue();
+			result.FhaRisksOrIssuesRaised.AdditionalInformation.Should().Be("Risks need consideration");
+			result.FhaRisksOrIssuesRaised.SupportingEvidence.Should().Be("FHA evidence");
+			result.FhaRisksOrIssuesRaised.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]

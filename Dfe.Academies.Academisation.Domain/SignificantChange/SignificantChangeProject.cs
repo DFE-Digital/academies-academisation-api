@@ -162,6 +162,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
 		}
 
+		public void SetFhaRisksOrIssuesRaised(
+			bool? fhaRisksOrIssuesRaised,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.FhaRisksOrIssuesRaised = fhaRisksOrIssuesRaised;
+			Details.FhaRisksOrIssuesRaisedAdditionalInformation = fhaRisksOrIssuesRaised is true
+				? additionalInformation
+				: null;
+			Details.FhaRisksOrIssuesRaisedSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
 					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
@@ -249,6 +261,11 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.MeetsOfstedStandards = meetsOfstedStandards;
 			Details.OfstedAdditionalInformation = meetsOfstedStandards == true ? null : additionalInformation;
 			Details.OfstedSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation)
+		{
+			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
 		}
 	}
 }
