@@ -171,7 +171,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.No, "Consultation timeline does not allow this yet",
-				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.No, null,
 				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
