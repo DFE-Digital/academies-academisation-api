@@ -269,15 +269,19 @@ public static class SeedProject
 		var proposedChangeDate = Optional(proposedDecisionDate?.AddDays(NextInt(45, 240)));
 		project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 
-		bool trustConsultedStakeholders = NextBool(0.80);
-		project.SetStakeholderConsultation(
-			Optional(trustConsultedStakeholders),
-			trustConsultedStakeholders ? null : OptionalRef("Consultation is being re-run to include newly affected stakeholder groups."));
-
-		bool trustConsultedReligiousBody = NextBool(0.60);
+		var trustConsultedReligiousBody = NextBool(0.60)
+			? YesNoNotApplicableAnswer.Yes
+			: YesNoNotApplicableAnswer.No;
 		project.SetReligiousBodyConsultation(
-			Optional(trustConsultedReligiousBody),
-			trustConsultedReligiousBody ? null : OptionalRef("School has no formal religious character requiring consultation."));
+			trustConsultedReligiousBody,
+			trustConsultedReligiousBody is YesNoNotApplicableAnswer.No
+				? OptionalRef("School has no formal religious character requiring consultation.")
+				: null,
+			YesNoNotApplicableAnswer.Yes,
+			null,
+			YesNoNotApplicableAnswer.Yes,
+			null,
+			"sharepoint.edu.gov.uk/evidence");
 
 		var consultationDuration = Pick(ProjectConsts.ConsultationDurationAnswers);
 		project.SetConsultationDuration(
@@ -285,11 +289,6 @@ public static class SeedProject
 			consultationDuration == ConsultationDurationAnswer.No
 				? OptionalRef("Initial consultation did not meet minimum period due to exceptional operational pressures.")
 				: null);
-
-		bool includeAdmissionVariation = NextBool(0.50);
-		project.SetAdmissionVariationConsultation(
-			Optional(includeAdmissionVariation),
-			includeAdmissionVariation ? null : OptionalRef("No admission number variation is proposed as part of this change."));
 
 		var equalitiesImpact = Optional(Pick(ProjectConsts.EqualitiesImpacts));
 		project.SetEqualitiesImpactAssessment(
@@ -305,12 +304,22 @@ public static class SeedProject
 			equalitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence"
 			);
 
-		var stakeholderObjections = Optional(Pick(ProjectConsts.StakeholderObjections));
-		project.SetStakeholderObjections(
-			stakeholderObjections,
-			stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
-				? "Two objections relating to transport distance remain under active review."
-				: null);
+		var trustConsultedStakeholders = NextBool(0.8);
+		var wereThereAnyObjectionsRaised = NextBool(0.25);
+		var notifiedAnswer = Pick(new[]
+		{
+			YesNoNotApplicableAnswer.Yes,
+			YesNoNotApplicableAnswer.No,
+			YesNoNotApplicableAnswer.NotApplicable
+		});
+		project.SetOtherStakeholderEngagement(
+			trustConsultedStakeholders,
+			trustConsultedStakeholders ? null : "Consultation was not possible before the application deadline.",
+			wereThereAnyObjectionsRaised,
+			wereThereAnyObjectionsRaised ? "Objections relating to transport distance remain under review." : null,
+			notifiedAnswer,
+			notifiedAnswer is YesNoNotApplicableAnswer.No ? "Admission change notifications are pending." : null,
+			"sharepoint.edu.gov.uk/evidence");
 
 		if (status != SignificantChangeStatus.PreDecision)
 		{
@@ -388,5 +397,4 @@ public static class SeedProject
 	private static T? OptionalRef<T>(T data) where T : class =>
 		NextBool(0.3) ? data : null;
 }
-
 

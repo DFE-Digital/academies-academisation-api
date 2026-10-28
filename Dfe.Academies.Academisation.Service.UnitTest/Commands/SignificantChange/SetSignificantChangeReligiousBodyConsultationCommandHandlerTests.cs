@@ -27,8 +27,13 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 	{
 		var command = new SetSignificantChangeReligiousBodyConsultationCommand(
 			id: 100,
-			trustConsultedReligiousBody: true,
-			trustConsultedReligiousBodyNotConsultedReason: null);
+			trustConsultedReligiousBody: YesNoNotApplicableAnswer.Yes,
+			trustConsultedReligiousBodyNotConsultedReason: null,
+			religiousBodyRaisedObjection: YesNoNotApplicableAnswer.No,
+			religiousBodyRaisedObjectionReason: "Objection details",
+			religiousBodyConsentGranted: YesNoNotApplicableAnswer.NotApplicable,
+			religiousBodyConsentNotGrantedReason: null,
+			supportingEvidence: null);
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -46,8 +51,13 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 	{
 		var command = new SetSignificantChangeReligiousBodyConsultationCommand(
 			id: 200,
-			trustConsultedReligiousBody: false,
-			trustConsultedReligiousBodyNotConsultedReason: "Trust did not consult religious body");
+			trustConsultedReligiousBody: YesNoNotApplicableAnswer.No,
+			trustConsultedReligiousBodyNotConsultedReason: "Trust did not consult religious body",
+			religiousBodyRaisedObjection: YesNoNotApplicableAnswer.Yes,
+			religiousBodyRaisedObjectionReason: "Religious body raised an objection",
+			religiousBodyConsentGranted: YesNoNotApplicableAnswer.Yes,
+			religiousBodyConsentNotGrantedReason: null,
+			supportingEvidence: "https://example.com/evidence");
 
 		var project = SignificantChangeProject.Create(
 			new SignificantChangeProjectOptions(
@@ -72,8 +82,12 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 		var result = await _handler.Handle(command, CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.Details.TrustConsultedReligiousBody.Should().BeFalse();
+		project.Details.TrustConsultedReligiousBodyAnswer.Should().Be(YesNoNotApplicableAnswer.No);
 		project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust did not consult religious body");
+		project.Details.ReligiousBodyRaisedObjection.Should().Be(YesNoNotApplicableAnswer.Yes);
+		project.Details.ReligiousBodyRaisedObjectionReason.Should().Be("Religious body raised an objection");
+		project.Details.ReligiousBodyConsentGranted.Should().Be(YesNoNotApplicableAnswer.Yes);
+		project.Details.ReligiousBodySupportingEvidence.Should().Be("https://example.com/evidence");
 		project.Tier.Should().Be(2);
 		project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
