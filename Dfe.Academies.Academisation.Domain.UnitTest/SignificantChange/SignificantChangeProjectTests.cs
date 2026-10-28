@@ -158,7 +158,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.Yes, null,
-				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.No, null,
 				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
@@ -221,6 +221,114 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Tier.Should().Be(2);
+		}
+
+		[Theory]
+		[InlineData(-1, null)]
+		[InlineData(0, null)]
+		[InlineData(1, "")]
+		[InlineData(2, "  ")]
+		public void ReligiousBodyConsultation_StatusRequiresEveryAnswerAndApplicableDetails(int missingDetail, string? text)
+		{
+			YesNoNotApplicableAnswer?[] answers =
+				[null, YesNoNotApplicableAnswer.Yes, YesNoNotApplicableAnswer.No, YesNoNotApplicableAnswer.NotApplicable];
+
+			foreach (var consulted in answers)
+			foreach (var objections in answers)
+			foreach (var consent in answers)
+			{
+				var project = CreateProject();
+				project.SetReligiousBodyConsultation(
+					consulted, missingDetail == 0 ? text : "Consultation details",
+					objections, missingDetail == 1 ? text : "Objection details",
+					consent, missingDetail == 2 ? text : "Consent details", null);
+
+				var expected = consulted is null && objections is null && consent is null
+					? SignificantChangeTaskStatus.NotStarted
+					: consulted.HasValue && objections.HasValue && consent.HasValue
+					  && (consulted != YesNoNotApplicableAnswer.No || missingDetail != 0)
+					  && (objections != YesNoNotApplicableAnswer.Yes || missingDetail != 1)
+					  && (consent != YesNoNotApplicableAnswer.No || missingDetail != 2)
+						? SignificantChangeTaskStatus.Completed
+						: SignificantChangeTaskStatus.InProgress;
+
+				project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(expected,
+					"answers are {0}, {1}, {2}, and missing detail is {3}", consulted, objections, consent, missingDetail);
+			}
+		}
+
+		[Theory]
+		[InlineData(-1, null)]
+		[InlineData(0, null)]
+		[InlineData(1, "")]
+		[InlineData(2, "  ")]
+		public void OtherStakeholderEngagement_StatusRequiresEveryAnswerAndApplicableDetails(int missingDetail, string? text)
+		{
+			bool?[] answers = [null, true, false];
+			YesNoNotApplicableAnswer?[] notificationAnswers =
+				[null, YesNoNotApplicableAnswer.Yes, YesNoNotApplicableAnswer.No, YesNoNotApplicableAnswer.NotApplicable];
+
+			foreach (var consulted in answers)
+			foreach (var objections in answers)
+			foreach (var notified in notificationAnswers)
+			{
+				var project = CreateProject();
+				project.SetOtherStakeholderEngagement(
+					consulted, missingDetail == 0 ? text : "Consultation details",
+					objections, missingDetail == 1 ? text : "Objection details",
+					notified, missingDetail == 2 ? text : "Notification details", null);
+
+				var expected = consulted is null && objections is null && notified is null
+					? SignificantChangeTaskStatus.NotStarted
+					: consulted.HasValue && objections.HasValue && notified.HasValue
+					  && (consulted != false || missingDetail != 0)
+					  && (objections != true || missingDetail != 1)
+					  && (notified != YesNoNotApplicableAnswer.No || missingDetail != 2)
+						? SignificantChangeTaskStatus.Completed
+						: SignificantChangeTaskStatus.InProgress;
+
+				project.Details.GetOtherStakeholderEngagementTaskStatus().Should().Be(expected,
+					"answers are {0}, {1}, {2}, and missing detail is {3}", consulted, objections, notified, missingDetail);
+			}
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData(YesNoNotApplicableAnswer.Yes)]
+		[InlineData(YesNoNotApplicableAnswer.No)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
+		public void SetReligiousBodyConsultation_ClearsDetailsThatDoNotApply(YesNoNotApplicableAnswer? answer)
+		{
+			var project = CreateProject();
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "Old consultation",
+				YesNoNotApplicableAnswer.Yes, "Old objection",
+				YesNoNotApplicableAnswer.No, "Old consent", null);
+
+			project.SetReligiousBodyConsultation(answer, "Consultation", answer, "Objection", answer, "Consent", "Evidence");
+
+			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be(answer == YesNoNotApplicableAnswer.No ? "Consultation" : null);
+			project.Details.ReligiousBodyRaisedObjectionReason.Should().Be(answer == YesNoNotApplicableAnswer.Yes ? "Objection" : null);
+			project.Details.ReligiousBodyConsentNotGrantedReason.Should().Be(answer == YesNoNotApplicableAnswer.No ? "Consent" : null);
+			project.Details.ReligiousBodySupportingEvidence.Should().Be("Evidence");
+		}
+
+		[Theory]
+		[InlineData(null, null)]
+		[InlineData(true, YesNoNotApplicableAnswer.Yes)]
+		[InlineData(false, YesNoNotApplicableAnswer.No)]
+		[InlineData(true, YesNoNotApplicableAnswer.NotApplicable)]
+		public void SetOtherStakeholderEngagement_ClearsDetailsThatDoNotApply(bool? answer, YesNoNotApplicableAnswer? notified)
+		{
+			var project = CreateProject();
+			project.SetOtherStakeholderEngagement(false, "Old consultation", true, "Old objection", YesNoNotApplicableAnswer.No, "Old notification", null);
+
+			project.SetOtherStakeholderEngagement(answer, "Consultation", answer, "Objection", notified, "Notification", "Evidence");
+
+			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be(answer == false ? "Consultation" : null);
+			project.Details.StakeholderObjectionsDetails.Should().Be(answer == true ? "Objection" : null);
+			project.Details.RelevantStakeholdersNotifiedOfAdmissionsChangesReason.Should().Be(notified == YesNoNotApplicableAnswer.No ? "Notification" : null);
+			project.Details.OtherStakeholderEngagementSupportingEvidence.Should().Be("Evidence");
 		}
 
 		[Fact]

@@ -150,7 +150,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				trustConsultedReligiousBody is YesNoNotApplicableAnswer.No ? trustConsultedReligiousBodyNotConsultedReason : null;
 			Details.ReligiousBodyRaisedObjection = religiousBodyRaisedObjection;
 			Details.ReligiousBodyRaisedObjectionReason =
-				religiousBodyRaisedObjection is YesNoNotApplicableAnswer.No ? religiousBodyRaisedObjectionReason : null;
+				religiousBodyRaisedObjection is YesNoNotApplicableAnswer.Yes ? religiousBodyRaisedObjectionReason : null;
 			Details.ReligiousBodyConsentGranted = religiousBodyConsentGranted;
 			Details.ReligiousBodyConsentNotGrantedReason =
 				religiousBodyConsentGranted is YesNoNotApplicableAnswer.No ? religiousBodyConsentNotGrantedReason : null;

@@ -72,9 +72,12 @@ public class SignificantChangeProjectDetails
 		    && string.IsNullOrWhiteSpace(ReligiousBodySupportingEvidence))
 			return SignificantChangeTaskStatus.NotStarted;
 
-		if (TrustConsultedReligiousBodyAnswer.HasValue && TrustConsultedReligiousBodyAnswer is not YesNoNotApplicableAnswer.No || !string.IsNullOrEmpty(TrustConsultedReligiousBodyNotConsultedReason)
-		    && ReligiousBodyRaisedObjection.HasValue && ReligiousBodyRaisedObjection is not YesNoNotApplicableAnswer.Yes || !string.IsNullOrEmpty(ReligiousBodyRaisedObjectionReason)
-		    && ReligiousBodyConsentGranted.HasValue && ReligiousBodyConsentGranted is not  YesNoNotApplicableAnswer.No || !string.IsNullOrEmpty(ReligiousBodyConsentNotGrantedReason))
+		if (TrustConsultedReligiousBodyAnswer.HasValue
+		    && (TrustConsultedReligiousBodyAnswer is not YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		    && ReligiousBodyRaisedObjection.HasValue
+		    && (ReligiousBodyRaisedObjection is not YesNoNotApplicableAnswer.Yes || !string.IsNullOrWhiteSpace(ReligiousBodyRaisedObjectionReason))
+		    && ReligiousBodyConsentGranted.HasValue
+		    && (ReligiousBodyConsentGranted is not YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(ReligiousBodyConsentNotGrantedReason)))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
@@ -89,8 +92,8 @@ public class SignificantChangeProjectDetails
 			return SignificantChangeTaskStatus.NotStarted;
 
 		if (
-			TrustConsultedStakeholders is true || TrustConsultedStakeholders is false && !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason)
-			&& WereThereAnyObjectionsRaised is false || WereThereAnyObjectionsRaised is true && !string.IsNullOrWhiteSpace(StakeholderObjectionsDetails)
+			(TrustConsultedStakeholders is true || TrustConsultedStakeholders is false && !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
+			&& (WereThereAnyObjectionsRaised is false || WereThereAnyObjectionsRaised is true && !string.IsNullOrWhiteSpace(StakeholderObjectionsDetails))
 			&& (RelevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.Yes
 				|| RelevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.NotApplicable
 				|| RelevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.No && !string.IsNullOrWhiteSpace(RelevantStakeholdersNotifiedOfAdmissionsChangesReason))

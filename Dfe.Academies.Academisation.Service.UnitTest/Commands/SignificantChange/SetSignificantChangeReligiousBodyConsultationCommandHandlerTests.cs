@@ -53,7 +53,7 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 			id: 200,
 			trustConsultedReligiousBody: YesNoNotApplicableAnswer.No,
 			trustConsultedReligiousBodyNotConsultedReason: "Trust did not consult religious body",
-			religiousBodyRaisedObjection: YesNoNotApplicableAnswer.No,
+			religiousBodyRaisedObjection: YesNoNotApplicableAnswer.Yes,
 			religiousBodyRaisedObjectionReason: "Religious body raised an objection",
 			religiousBodyConsentGranted: YesNoNotApplicableAnswer.Yes,
 			religiousBodyConsentNotGrantedReason: null,
@@ -84,7 +84,7 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 		result.Should().BeOfType<CommandSuccessResult>();
 		project.Details.TrustConsultedReligiousBodyAnswer.Should().Be(YesNoNotApplicableAnswer.No);
 		project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust did not consult religious body");
-		project.Details.ReligiousBodyRaisedObjection.Should().Be(YesNoNotApplicableAnswer.No);
+		project.Details.ReligiousBodyRaisedObjection.Should().Be(YesNoNotApplicableAnswer.Yes);
 		project.Details.ReligiousBodyRaisedObjectionReason.Should().Be("Religious body raised an objection");
 		project.Details.ReligiousBodyConsentGranted.Should().Be(YesNoNotApplicableAnswer.Yes);
 		project.Details.ReligiousBodySupportingEvidence.Should().Be("https://example.com/evidence");

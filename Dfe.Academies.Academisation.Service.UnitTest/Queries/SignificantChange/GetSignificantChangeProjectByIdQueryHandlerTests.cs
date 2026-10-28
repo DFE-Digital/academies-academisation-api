@@ -69,7 +69,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.No,
 				"Trust has not consulted religious bodies",
-				YesNoNotApplicableAnswer.No,
+				YesNoNotApplicableAnswer.Yes,
 				"A religious body objected",
 				YesNoNotApplicableAnswer.Yes,
 				null,
@@ -117,7 +117,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			
 			result.ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().Be((int)YesNoNotApplicableAnswer.No);
 			result.ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious bodies");
-			result.ReligiousBodyConsultation.ReligiousBodyRaisedObjection.Should().Be((int)YesNoNotApplicableAnswer.No);
+			result.ReligiousBodyConsultation.ReligiousBodyRaisedObjection.Should().Be((int)YesNoNotApplicableAnswer.Yes);
 			result.ReligiousBodyConsultation.ReligiousBodyRaisedObjectionReason.Should().Be("A religious body objected");
 			result.ReligiousBodyConsultation.ReligiousBodyConsentGranted.Should().Be((int)YesNoNotApplicableAnswer.Yes);
 			result.ReligiousBodyConsultation.SupportingEvidence.Should().Be("https://example.com/religious-evidence");
