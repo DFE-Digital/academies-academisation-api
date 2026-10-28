@@ -136,6 +136,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
 		}
 
+		public void SetFhaRisksOrIssuesRaised(
+			bool? fhaRisksOrIssuesRaised,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.FhaRisksOrIssuesRaised = fhaRisksOrIssuesRaised;
+			Details.FhaRisksOrIssuesRaisedAdditionalInformation = fhaRisksOrIssuesRaised is true
+				? additionalInformation
+				: null;
+			Details.FhaRisksOrIssuesRaisedSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(
 			YesNoNotApplicableAnswer? trustConsultedReligiousBody,
 			string? trustConsultedReligiousBodyNotConsultedReason,
@@ -242,6 +254,15 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermission = planningPermissionAnswer;
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetOfstedInspection(DateTime? inspectionDate, bool? meetsOfstedStandards,
+			string? additionalInformation, string? supportingEvidence)
+		{
+			Details.OfstedInspectionDate = inspectionDate;
+			Details.MeetsOfstedStandards = meetsOfstedStandards;
+			Details.OfstedAdditionalInformation = meetsOfstedStandards == true ? null : additionalInformation;
+			Details.OfstedSupportingEvidence = supportingEvidence;
 		}
 
 		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation)

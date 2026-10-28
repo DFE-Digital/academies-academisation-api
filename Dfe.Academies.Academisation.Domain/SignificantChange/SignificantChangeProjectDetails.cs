@@ -33,10 +33,18 @@ public class SignificantChangeProjectDetails
 	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }
-	public PlanningPermissionAnswer? PlanningPermission { get; set; }	
-	public string? PlanningPermissionSupportingEvidence { get; set; }    
+	public bool? FhaRisksOrIssuesRaised { get; set; }
+	public string? FhaRisksOrIssuesRaisedAdditionalInformation { get; set; }
+	public string? FhaRisksOrIssuesRaisedSupportingEvidence { get; set; }
+	public PlanningPermissionAnswer? PlanningPermission { get; set; }
+	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
-    public string? EqualitiesImpactAssessmentNoReason { get; set; }
+	public string? EqualitiesImpactAssessmentNoReason { get; set; }
+	public DateTime? OfstedInspectionDate { get; set; }
+	public bool? MeetsOfstedStandards { get; set; }
+	public string? OfstedAdditionalInformation { get; set; }
+	public string? OfstedSupportingEvidence { get; set; }
+
 	public bool? AdmissionsVariationRequired { get; set; }
 	public string? AdmissionsVariationSupportingEvidence { get; set; }
 	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
@@ -172,12 +180,14 @@ public class SignificantChangeProjectDetails
 
 	public SignificantChangeTaskStatus GetFundingTaskStatus()
 	{
-		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) && string.IsNullOrWhiteSpace(FundingSupportingEvidence))
+		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) &&
+		    string.IsNullOrWhiteSpace(FundingSupportingEvidence))
 		{
 			return SignificantChangeTaskStatus.NotStarted;
 		}
 
-		if (FundingAnswer is SignificantChange.FundingAnswer.No && string.IsNullOrWhiteSpace(FundingAdditionalInformation))
+		if (FundingAnswer is SignificantChange.FundingAnswer.No &&
+		    string.IsNullOrWhiteSpace(FundingAdditionalInformation))
 		{
 			return SignificantChangeTaskStatus.InProgress;
 		}
@@ -206,6 +216,23 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetOfstedTaskStatus()
+	{
+		if (OfstedInspectionDate is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetFhaRisksOrIssuesRaisedTaskStatus()
+	{
+		return FhaRisksOrIssuesRaised.HasValue
+			? SignificantChangeTaskStatus.Completed
+			: SignificantChangeTaskStatus.NotStarted;
 	}
 
 	public SignificantChangeTaskStatus GetAdmissionsVariationRecommendationTaskStatus()

@@ -76,6 +76,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 				"https://example.com/religious-evidence");
 			project.SetProjectDates(proposedDecisionDate, proposedChangeDate);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
+			project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Approve);
+			project.SetOfstedInspection(proposedDecisionDate, false, "Ofsted standards not met", "Ofsted evidence");
+			project.SetFhaRisksOrIssuesRaised(true, "Risks need consideration", "FHA evidence");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -140,6 +143,16 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.PlanningPermission.SupportingEvidence.Should().Be("Planning permission evidence uploaded");
 			result.PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
+			result.OfstedInspection.InspectionDate.Should().Be(proposedDecisionDate);
+			result.OfstedInspection.MeetsOfstedStandards.Should().BeFalse();
+			result.OfstedInspection.AdditionalInformation.Should().Be("Ofsted standards not met");
+			result.OfstedInspection.SupportingEvidence.Should().Be("Ofsted evidence");
+			result.OfstedInspection.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.FhaRisksOrIssuesRaised.FhaRisksOrIssuesRaised.Should().BeTrue();
+			result.FhaRisksOrIssuesRaised.AdditionalInformation.Should().Be("Risks need consideration");
+			result.FhaRisksOrIssuesRaised.SupportingEvidence.Should().Be("FHA evidence");
+			result.FhaRisksOrIssuesRaised.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.AdmissionsVariationRecommendation.AdmissionsVariationRecommendationAnswer.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
 		}
 
 		[Fact]

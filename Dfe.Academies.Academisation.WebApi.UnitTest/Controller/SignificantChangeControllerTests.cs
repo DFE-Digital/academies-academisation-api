@@ -848,6 +848,63 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task SetOfstedInspection_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var inspectionDate = new DateTime(2026, 10, 20);
+            var request = new SetSignificantChangeOfstedInspectionPublicCommand(
+                inspectionDate,
+                false,
+                "Standards were not met",
+                "Inspection evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeOfstedInspectionCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeOfstedInspection(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeOfstedInspectionCommand>(command =>
+                    command.Id == 100
+                    && command.InspectionDate == inspectionDate
+                    && command.MeetsOfstedStandards == false
+                    && command.AdditionalInformation == "Standards were not met"
+                    && command.SupportingEvidence == "Inspection evidence"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetOfstedInspection_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeOfstedInspectionPublicCommand(null, null, null, null);
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeOfstedInspectionCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeOfstedInspection(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetOfstedInspection_ReturnsBadRequest_WhenValidationFails()
+        {
+            var request = new SetSignificantChangeOfstedInspectionPublicCommand(null, null, null, null);
+            var validationErrors = new[]
+            {
+                new ValidationError("inspectionDate", "inspection date is required")
+            };
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeOfstedInspectionCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandValidationErrorResult(validationErrors));
+
+            var result = await _controller.SetSignificantChangeOfstedInspection(100, request);
+
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(validationErrors);
+        }
+
+        [Fact]
         public async Task SetHqtfConsideration_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var request = new SetSignificantChangeHqtfConsiderationPublicCommand(
@@ -893,6 +950,42 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .ReturnsAsync(new NotFoundCommandResult());
 
             var result = await _controller.SetSignificantChangeHqtfConsideration(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetFhaRisksOrIssuesRaised_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(
+                true,
+                "Risks need consideration",
+                "FHA evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFhaRisksOrIssuesRaisedCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeFhaRisksOrIssuesRaised(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeFhaRisksOrIssuesRaisedCommand>(command =>
+                    command.Id == 100
+                    && command.FhaRisksOrIssuesRaised == true
+                    && command.AdditionalInformation == "Risks need consideration"
+                    && command.SupportingEvidence == "FHA evidence"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetFhaRisksOrIssuesRaised_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(false, null, "FHA evidence");
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeFhaRisksOrIssuesRaisedCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeFhaRisksOrIssuesRaised(100, request);
 
             result.Should().BeOfType<NotFoundResult>();
         }

@@ -2550,6 +2550,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesSomeImpactDetails");
 
+                            b1.Property<bool?>("FhaRisksOrIssuesRaised")
+                                .HasColumnType("bit")
+                                .HasColumnName("FhaRisksOrIssuesRaised");
+
+                            b1.Property<string>("FhaRisksOrIssuesRaisedAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FhaRisksOrIssuesRaisedAdditionalInformation");
+
+                            b1.Property<string>("FhaRisksOrIssuesRaisedSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FhaRisksOrIssuesRaisedSupportingEvidence");
+
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingAdditionalInformation");
@@ -2573,6 +2585,22 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("HqtfConsiderationSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("HqtfConsiderationSupportingEvidence");
+
+                            b1.Property<bool?>("MeetsOfstedStandards")
+                                .HasColumnType("bit")
+                                .HasColumnName("MeetsOfstedStandards");
+
+                            b1.Property<string>("OfstedAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("OfstedAdditionalInformation");
+
+                            b1.Property<DateTime?>("OfstedInspectionDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("OfstedInspectionDate");
+
+                            b1.Property<string>("OfstedSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("OfstedSupportingEvidence");
 
                             b1.Property<string>("OtherStakeholderEngagementSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
