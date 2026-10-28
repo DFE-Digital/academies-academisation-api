@@ -83,6 +83,7 @@ public class SignificantChangeProjectDto
 	public string? OfstedAdditionalInformation { get; set; }
 	public string? OfstedSupportingEvidence { get; set; }
 	public string OfstedTaskStatus { get; set; } = string.Empty;
+	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
 	public string AdmissionsVariationRecommendationTaskStatus { get; set; } = string.Empty;
 	public string RecommendationTaskStatus { get; set; } = string.Empty;
 	public Recommendation? Recommendation { get; set; }
