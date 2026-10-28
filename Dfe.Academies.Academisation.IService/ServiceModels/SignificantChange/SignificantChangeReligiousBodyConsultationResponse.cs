@@ -14,5 +14,5 @@ public class SignificantChangeReligiousBodyConsultationResponse
 	public int? ReligiousBodyConsentGranted { get; set; }
 	public string? ReligiousBodyConsentNotGrantedReason { get; set; }
 	public string? SupportingEvidence { get; set; }
-	public int Status { get; set; }
+	public string Status { get; set; } = string.Empty;
 }

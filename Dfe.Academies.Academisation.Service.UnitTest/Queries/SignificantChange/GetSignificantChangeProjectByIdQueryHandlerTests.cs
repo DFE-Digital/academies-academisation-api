@@ -106,7 +106,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 
 			result.ConsultationDuration.ConsultationLastedMinimumThreeWeeks.Should().Be((int)ConsultationDurationAnswer.No);
 			result.ConsultationDuration.ConsultationDurationNotMetReason.Should().Be("Consultation was too short");
-			result.ConsultationDuration.Status.Should().Be((int)SignificantChangeTaskStatus.Completed);
+			result.ConsultationDuration.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			result.EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
 			result.EqualitiesImpactAssessment.EqualitiesImpactAssessmentNoReason.Should().BeNull();
@@ -121,7 +121,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.ReligiousBodyConsultation.ReligiousBodyRaisedObjectionReason.Should().Be("A religious body objected");
 			result.ReligiousBodyConsultation.ReligiousBodyConsentGranted.Should().Be((int)YesNoNotApplicableAnswer.Yes);
 			result.ReligiousBodyConsultation.SupportingEvidence.Should().Be("https://example.com/religious-evidence");
-			result.ReligiousBodyConsultation.Status.Should().Be((int)SignificantChangeTaskStatus.Completed);
+			result.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			result.OtherStakeholderEngagement.TrustConsultedStakeholders.Should().BeFalse();
 			result.OtherStakeholderEngagement.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
@@ -130,7 +130,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.OtherStakeholderEngagement.RelevantStakeholdersNotifiedOfAdmissionsChanges.Should().Be((int)YesNoNotApplicableAnswer.No);
 			result.OtherStakeholderEngagement.RelevantStakeholdersNotifiedOfAdmissionsChangesReason.Should().Be("Admissions stakeholders not notified");
 			result.OtherStakeholderEngagement.SupportingEvidence.Should().Be("https://example.com/stakeholder-evidence");
-			result.OtherStakeholderEngagement.Status.Should().Be((int)SignificantChangeTaskStatus.Completed);
+			result.OtherStakeholderEngagement.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			result.ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
 			result.ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
@@ -161,15 +161,15 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			var response = await _handler.Handle(query, CancellationToken.None);
 
 			response!.ConsultationDuration.ConsultationLastedMinimumThreeWeeks.Should().BeNull();
-			response.ConsultationDuration.Status.Should().Be((int)SignificantChangeTaskStatus.NotStarted);
+			response.ConsultationDuration.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 			response.ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().BeNull();
 			response.ReligiousBodyConsultation.ReligiousBodyRaisedObjection.Should().BeNull();
 			response.ReligiousBodyConsultation.ReligiousBodyConsentGranted.Should().BeNull();
-			response.ReligiousBodyConsultation.Status.Should().Be((int)SignificantChangeTaskStatus.NotStarted);
+			response.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 			response.OtherStakeholderEngagement.TrustConsultedStakeholders.Should().BeNull();
 			response.OtherStakeholderEngagement.WereThereAnyObjectionsRaised.Should().BeNull();
 			response.OtherStakeholderEngagement.RelevantStakeholdersNotifiedOfAdmissionsChanges.Should().BeNull();
-			response.OtherStakeholderEngagement.Status.Should().Be((int)SignificantChangeTaskStatus.NotStarted);
+			response.OtherStakeholderEngagement.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 		}
 
 		[Fact]

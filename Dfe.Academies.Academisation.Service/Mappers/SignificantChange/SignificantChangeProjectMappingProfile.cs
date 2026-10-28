@@ -22,7 +22,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ConsultationDurationNotMetReason,
 				options => options.MapFrom(source => source.Details.ConsultationDurationNotMetReason))
 			.ForMember(destination => destination.ConsultationDurationTaskStatus,
-				options => options.MapFrom(source => source.Details.GetConsultationDurationTaskStatus()))
+				options => options.MapFrom(source => source.Details.GetConsultationDurationTaskStatus().ToString()))
 			.ForMember(destination => destination.FundingAnswer,
 				options => options.MapFrom(source => source.Details.FundingAnswer))
 			.ForMember(destination => destination.FundingAdditionalInformation,
@@ -58,7 +58,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.TrustConsultedReligiousBodyNotConsultedReason,
 				options => options.MapFrom(source => source.Details.TrustConsultedReligiousBodyNotConsultedReason))
 			.ForMember(destination => destination.ReligiousBodyConsultationTaskStatus,
-				options => options.MapFrom(source => source.Details.GetReligiousBodyConsultationTaskStatus()))
+				options => options.MapFrom(source => source.Details.GetReligiousBodyConsultationTaskStatus().ToString()))
 			.ForMember(destination => destination.ReligiousBodyRaisedObjection,
 				options => options.MapFrom(source => source.Details.ReligiousBodyRaisedObjection))
 			.ForMember(destination => destination.ReligiousBodyRaisedObjectionReason,
@@ -80,7 +80,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.OtherStakeholderEngagementSupportingEvidence,
 				options => options.MapFrom(source => source.Details.OtherStakeholderEngagementSupportingEvidence))
 			.ForMember(destination => destination.OtherStakeholderEngagementTaskStatus,
-				options => options.MapFrom(source => source.Details.GetOtherStakeholderEngagementTaskStatus()))
+				options => options.MapFrom(source => source.Details.GetOtherStakeholderEngagementTaskStatus().ToString()))
 			.ForMember(destination => destination.ProposedChangeDate,
 				options => options.MapFrom(source => source.Details.ProposedChangeDate))
 			.ForMember(destination => destination.ProposedDecisionDate,
@@ -131,7 +131,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.ConsultationLastedMinimumThreeWeeks,
 				options => options.MapFrom(source => (int?)source.ConsultationLastedMinimumThreeWeeks))
 			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => (int)source.ConsultationDurationTaskStatus));
+				options => options.MapFrom(source => source.ConsultationDurationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeFundingResponse>()
 			.ForMember(destination => destination.AdditionalInformation,
@@ -163,7 +163,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.SupportingEvidence,
 				options => options.MapFrom(source => source.ReligiousBodySupportingEvidence))
 			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => (int)source.ReligiousBodyConsultationTaskStatus));
+				options => options.MapFrom(source => source.ReligiousBodyConsultationTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeOtherStakeholderEngagementResponse>()
 			.ForMember(destination => destination.RelevantStakeholdersNotifiedOfAdmissionsChanges,
@@ -171,7 +171,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.SupportingEvidence,
 				options => options.MapFrom(source => source.OtherStakeholderEngagementSupportingEvidence))
 			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => (int)source.OtherStakeholderEngagementTaskStatus));
+				options => options.MapFrom(source => source.OtherStakeholderEngagementTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangePlanningPermissionResponse>()
 			.ForMember(destination => destination.PlanningPermissionAnswer,

@@ -8,5 +8,5 @@ public class SignificantChangeConsultationDurationResponse
 	[JsonProperty(NullValueHandling = NullValueHandling.Include)]
 	public int? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
-	public int Status { get; set; }
+	public string Status { get; set; } = string.Empty;
 }

@@ -25,7 +25,7 @@ public class SignificantChangeProjectDto
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
-	public SignificantChangeTaskStatus ConsultationDurationTaskStatus { get; set; }
+	public string ConsultationDurationTaskStatus { get; set; } = string.Empty;
 
 
 	public bool? AdmissionsVariationRequired { get; set; }
@@ -60,13 +60,13 @@ public class SignificantChangeProjectDto
 	public YesNoNotApplicableAnswer? ReligiousBodyConsentGranted { get; set; }
 	public string? ReligiousBodyConsentNotGrantedReason { get; set; }
 	public string? ReligiousBodySupportingEvidence { get; set; }
-	public SignificantChangeTaskStatus ReligiousBodyConsultationTaskStatus { get; set; }
+	public string ReligiousBodyConsultationTaskStatus { get; set; } = string.Empty;
 	public bool? WereThereAnyObjectionsRaised { get; set; }
 	public string? StakeholderObjectionsDetails { get; set; }
 	public YesNoNotApplicableAnswer? RelevantStakeholdersNotifiedOfAdmissionsChanges { get; set; }
 	public string? RelevantStakeholdersNotifiedOfAdmissionsChangesReason { get; set; }
 	public string? OtherStakeholderEngagementSupportingEvidence { get; set; }
-	public SignificantChangeTaskStatus OtherStakeholderEngagementTaskStatus { get; set; }
+	public string OtherStakeholderEngagementTaskStatus { get; set; } = string.Empty;
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
 	public string ConfirmProjectDatesTaskStatus { get; set; } = string.Empty;

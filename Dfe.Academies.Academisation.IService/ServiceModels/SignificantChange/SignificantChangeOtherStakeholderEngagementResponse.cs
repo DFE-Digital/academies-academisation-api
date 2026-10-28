@@ -14,5 +14,5 @@ public class SignificantChangeOtherStakeholderEngagementResponse
 	public int? RelevantStakeholdersNotifiedOfAdmissionsChanges { get; set; }
 	public string? RelevantStakeholdersNotifiedOfAdmissionsChangesReason { get; set; }
 	public string? SupportingEvidence { get; set; }
-	public int Status { get; set; }
+	public string Status { get; set; } = string.Empty;
 }
