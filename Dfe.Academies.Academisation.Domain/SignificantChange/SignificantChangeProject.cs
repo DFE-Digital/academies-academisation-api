@@ -162,6 +162,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
 		}
 
+		public void SetFhaRisksOrIssuesRaised(
+			bool? fhaRisksOrIssuesRaised,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.FhaRisksOrIssuesRaised = fhaRisksOrIssuesRaised;
+			Details.FhaRisksOrIssuesRaisedAdditionalInformation = fhaRisksOrIssuesRaised is true
+				? additionalInformation
+				: null;
+			Details.FhaRisksOrIssuesRaisedSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
 					string? trustConsultedReligiousBodyNotConsultedReason)
 		{

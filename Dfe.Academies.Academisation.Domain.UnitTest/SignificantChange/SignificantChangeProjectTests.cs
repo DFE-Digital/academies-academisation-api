@@ -1002,6 +1002,35 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.HqtfConsiderationSupportingEvidence.Should().Be("Evidence");
 		}
 
+		[Fact]
+		public void SetFhaRisksOrIssuesRaised_WhenAnswerIsNotYes_ClearsAdditionalInformation()
+		{
+			var project = CreateProject();
+
+			project.SetFhaRisksOrIssuesRaised(false, "This should be cleared", "Evidence");
+
+			project.Details.FhaRisksOrIssuesRaised.Should().BeFalse();
+			project.Details.FhaRisksOrIssuesRaisedAdditionalInformation.Should().BeNull();
+			project.Details.FhaRisksOrIssuesRaisedSupportingEvidence.Should().Be("Evidence");
+		}
+
+		[Theory]
+		[InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(true, "Risks need consideration", "Evidence", SignificantChangeTaskStatus.Completed)]
+		[InlineData(false, null, null, SignificantChangeTaskStatus.Completed)]
+		public void GetFhaRisksOrIssuesRaisedTaskStatus_ReturnsExpectedStatus(
+			bool? answer,
+			string? additionalInformation,
+			string? supportingEvidence,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetFhaRisksOrIssuesRaised(answer, additionalInformation, supportingEvidence);
+
+			project.Details.GetFhaRisksOrIssuesRaisedTaskStatus().Should().Be(expected);
+		}
+
 		[Theory]
 		[InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
 		[InlineData(HqtfConsiderationAnswer.Yes, "Not considered", "Evidence", SignificantChangeTaskStatus.Completed)]

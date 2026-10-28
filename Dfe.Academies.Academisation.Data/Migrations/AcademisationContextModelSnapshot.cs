@@ -2558,6 +2558,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("EqualitiesSomeImpactDetails");
 
+                            b1.Property<bool?>("FhaRisksOrIssuesRaised")
+                                .HasColumnType("bit")
+                                .HasColumnName("FhaRisksOrIssuesRaised");
+
+                            b1.Property<string>("FhaRisksOrIssuesRaisedAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FhaRisksOrIssuesRaisedAdditionalInformation");
+
+                            b1.Property<string>("FhaRisksOrIssuesRaisedSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("FhaRisksOrIssuesRaisedSupportingEvidence");
+
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingAdditionalInformation");

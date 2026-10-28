@@ -27,7 +27,10 @@ public class SignificantChangeProjectDetails
 	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }
-	public PlanningPermissionAnswer? PlanningPermission { get; set; }	
+	public bool? FhaRisksOrIssuesRaised { get; set; }
+	public string? FhaRisksOrIssuesRaisedAdditionalInformation { get; set; }
+	public string? FhaRisksOrIssuesRaisedSupportingEvidence { get; set; }
+	public PlanningPermissionAnswer? PlanningPermission { get; set; }
 	public string? PlanningPermissionSupportingEvidence { get; set; }    
 	public string? PlanningPermissionAdditionalInformation { get; set; }
     public string? EqualitiesImpactAssessmentNoReason { get; set; }
@@ -235,6 +238,13 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetFhaRisksOrIssuesRaisedTaskStatus()
+	{
+		return FhaRisksOrIssuesRaised.HasValue
+			? SignificantChangeTaskStatus.Completed
+			: SignificantChangeTaskStatus.NotStarted;
 	}
 
 	public SignificantChangeTaskStatus GetAdmissionsVariationRecommendationTaskStatus()

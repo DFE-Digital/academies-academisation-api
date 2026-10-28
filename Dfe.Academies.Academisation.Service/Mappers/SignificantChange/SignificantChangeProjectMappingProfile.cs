@@ -47,6 +47,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.HqtfConsiderationSupportingEvidence))
 			.ForMember(destination => destination.HqtfConsiderationTaskStatus,
 				options => options.MapFrom(source => source.Details.GetHqtfConsiderationTaskStatus().ToString()))
+			.ForMember(destination => destination.FhaRisksOrIssuesRaised,
+				options => options.MapFrom(source => source.Details.FhaRisksOrIssuesRaised))
+			.ForMember(destination => destination.FhaRisksOrIssuesRaisedAdditionalInformation,
+				options => options.MapFrom(source => source.Details.FhaRisksOrIssuesRaisedAdditionalInformation))
+			.ForMember(destination => destination.FhaRisksOrIssuesRaisedSupportingEvidence,
+				options => options.MapFrom(source => source.Details.FhaRisksOrIssuesRaisedSupportingEvidence))
+			.ForMember(destination => destination.FhaRisksOrIssuesRaisedTaskStatus,
+				options => options.MapFrom(source => source.Details.GetFhaRisksOrIssuesRaisedTaskStatus().ToString()))
 			.ForMember(destination => destination.EqualitiesImpactAssessmentCompleted,
 				options => options.MapFrom(source => source.Details.EqualitiesImpactAssessmentCompleted))
             .ForMember(destination => destination.EqualitiesImpactAssessmentNoReason,
@@ -147,6 +155,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.HqtfConsiderationTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeFhaRisksOrIssuesRaisedResponse>()
+			.ForMember(destination => destination.AdditionalInformation,
+				options => options.MapFrom(source => source.FhaRisksOrIssuesRaisedAdditionalInformation))
+			.ForMember(destination => destination.SupportingEvidence,
+				options => options.MapFrom(source => source.FhaRisksOrIssuesRaisedSupportingEvidence))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.FhaRisksOrIssuesRaisedTaskStatus));
+
         CreateMap<SignificantChangeProjectDto, EqualitiesImpactAssessmentResponse>()
             .ForMember(destination => destination.Status,
                 options => options.MapFrom(source => source.EqualitiesTaskStatus));
@@ -228,6 +244,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Funding,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.HqtfConsideration,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.FhaRisksOrIssuesRaised,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ReligiousBodyConsultation,
 				options => options.MapFrom(source => source))
