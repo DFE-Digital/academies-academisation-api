@@ -1070,7 +1070,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetFundingTaskStatus().Should().Be(expected);
 		}
 
+		[Fact]
+		public void SetOfstedInspection_ShouldSetDetailsAndClearAdditionalInformationWhenStandardsAreMet()
+		{
+			var project = CreateProject();
 
+			var inspectionDate = new DateTime(2026, 10, 20);
+
+			project.SetOfstedInspection(inspectionDate, true, "Additional information", "Supporting evidence");
+
+			project.Details.OfstedInspectionDate.Should().Be(inspectionDate);
+			project.Details.MeetsOfstedStandards.Should().BeTrue();
+			project.Details.OfstedAdditionalInformation.Should().BeNull();
+			project.Details.OfstedSupportingEvidence.Should().Be("Supporting evidence");
+			project.Details.GetOfstedTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		}
+		
 		[Fact]
 		public void SetRecommendation_WhenAnswersProvided_SetsAnswers()
 		{
