@@ -2570,6 +2570,25 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FhaRisksOrIssuesRaisedSupportingEvidence");
 
+                            b1.Property<string>("LandTransactionApplication")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplication");
+
+                            b1.Property<string>("LandTransactionApplicationAdditionalInfo")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplicationAdditionalInfo");
+
+                            b1.Property<string>("LandTransactionConsent")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsent");
+
+                            b1.Property<string>("LandTransactionConsentAdditionalInfo")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsentAdditionalInfo");
+
+                            b1.Property<string>("LandTransactionSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionSupportingEvidence");
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingAdditionalInformation");
