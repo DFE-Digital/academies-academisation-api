@@ -257,6 +257,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+		
+		[HttpPut("{id:int}/SetRecommendation", Name = "SetSignificantChangeRecommendation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeRecommendation(
+			int id,
+			[FromBody] SetSignificantChangeRecommendationPublicCommand request)
+		{
+			var command = new SetSignificantChangeRecommendationCommand(
+				id,
+				request.Recommendation,
+				request.RecommendationMoreInformation);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 
 		[HttpPut("{id:int}/SetHQTFConsideration", Name = "SetSignificantChangeHqtfConsideration")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
@@ -271,6 +296,113 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				request.HqtfConsiderationAnswer,
 				request.AdditionalInformation,
 				request.SupportingEvidence);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/SetFHARisksOrIssuesRaised", Name = "SetSignificantChangeFhaRisksOrIssuesRaised")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeFhaRisksOrIssuesRaised(
+			int id,
+			[FromBody] SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand request)
+		{
+			var command = new SetSignificantChangeFhaRisksOrIssuesRaisedCommand(
+				id,
+				request.FhaRisksOrIssuesRaised,
+				request.AdditionalInformation,
+				request.SupportingEvidence);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/SetAdmissionsVariation", Name = "SetSignificantChangeAdmissionsVariation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeAdmissionsVariation(
+			int id,
+			[FromBody] SetSignificantChangeAdmissionVariationPublicCommand request)
+		{
+			var command = new SetSignificantChangeAdmissionVariationCommand(
+				id,
+				request.AdmissionsVariationRequired,
+				request.AdmissionsVariationSupportingEvidence,
+				request.AdmissionsVariationLocalAuthoritySupportive,
+				request.AdmissionsVariationPupilPlacePlanningSupportive,
+				request.AdmissionsVariationAdmissionsTeamSupportive,
+				request.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+				request.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+				request.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/SetOfstedInspection", Name = "SetSignificantChangeOfstedInspection")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeOfstedInspection(
+			int id,
+			[FromBody] SetSignificantChangeOfstedInspectionPublicCommand request)
+		{
+			var command = new SetSignificantChangeOfstedInspectionCommand(
+				id,
+				request.InspectionDate,
+				request.MeetsOfstedStandards,
+				request.AdditionalInformation,
+				request.SupportingEvidence);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationError => BadRequest(validationError.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		[HttpPut("{id:int}/AdmissionsVariationRecommendation", Name = "SetSignificantChangeAdmissionsVariationRecommendation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeAdmissionsVariationRecommendation(
+			int id,
+			[FromBody] SetSignificantChangeAdmissionsVariationRecommendationPublicCommand request)
+		{
+			var command = new SetSignificantChangeAdmissionsVariationRecommendationCommand(
+				id,
+				request.RecommendationAnswer);
 
 			CommandResult result = await _mediator.Send(command);
 

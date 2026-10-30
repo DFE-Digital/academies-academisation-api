@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
@@ -28,6 +29,16 @@ public class SignificantChangeProjectDto
 	public string ConsultationDurationTaskStatus { get; set; } = string.Empty;
 
 
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
+	public string AdmissionsVariationTaskStatus { get; set; } = string.Empty;
+
 	public bool? ConsultationIncludeAdmissionVariation { get; set; }
 	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public string AdmissionVariationConsultationTaskStatus { get; set; } = string.Empty;
@@ -39,6 +50,10 @@ public class SignificantChangeProjectDto
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }
 	public string HqtfConsiderationTaskStatus { get; set; } = string.Empty;
+	public bool? FhaRisksOrIssuesRaised { get; set; }
+	public string? FhaRisksOrIssuesRaisedAdditionalInformation { get; set; }
+	public string? FhaRisksOrIssuesRaisedSupportingEvidence { get; set; }
+	public string FhaRisksOrIssuesRaisedTaskStatus { get; set; } = string.Empty;
 	public string EqualitiesTaskStatus { get; set; } = string.Empty;
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public string? EqualitiesImpactAssessmentNoReason { get; set; }
@@ -65,4 +80,14 @@ public class SignificantChangeProjectDto
 	public string? StakeholderObjections { get; set; }
 	public string? StakeholderObjectionsComment { get; set; }
 	public string StakeholderObjectionsTaskStatus { get; set; } = string.Empty;
+	public DateTime? OfstedInspectionDate { get; set; }
+	public bool? MeetsOfstedStandards { get; set; }
+	public string? OfstedAdditionalInformation { get; set; }
+	public string? OfstedSupportingEvidence { get; set; }
+	public string OfstedTaskStatus { get; set; } = string.Empty;
+	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
+	public string AdmissionsVariationRecommendationTaskStatus { get; set; } = string.Empty;
+	public string RecommendationTaskStatus { get; set; } = string.Empty;
+	public Recommendation? Recommendation { get; set; }
+	public string? RecommendationMoreInformation { get; set; }
 }

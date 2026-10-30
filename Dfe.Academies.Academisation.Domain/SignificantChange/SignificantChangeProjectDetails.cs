@@ -1,4 +1,6 @@
-﻿namespace Dfe.Academies.Academisation.Domain.SignificantChange;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+
+namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public class SignificantChangeProjectDetails
 {
@@ -25,16 +27,34 @@ public class SignificantChangeProjectDetails
 	public HqtfConsiderationAnswer? HqtfConsiderationAnswer { get; set; }
 	public string? HqtfConsiderationAdditionalInformation { get; set; }
 	public string? HqtfConsiderationSupportingEvidence { get; set; }
+	public bool? FhaRisksOrIssuesRaised { get; set; }
+	public string? FhaRisksOrIssuesRaisedAdditionalInformation { get; set; }
+	public string? FhaRisksOrIssuesRaisedSupportingEvidence { get; set; }
 	public PlanningPermissionAnswer? PlanningPermission { get; set; }
-	public string? PlanningPermissionSupportingEvidence { get; set; }    
+	public string? PlanningPermissionSupportingEvidence { get; set; }
 	public string? PlanningPermissionAdditionalInformation { get; set; }
-    public string? EqualitiesImpactAssessmentNoReason { get; set; }
-
+	public string? EqualitiesImpactAssessmentNoReason { get; set; }
+	public DateTime? OfstedInspectionDate { get; set; }
+	public bool? MeetsOfstedStandards { get; set; }
+	public string? OfstedAdditionalInformation { get; set; }
+	public string? OfstedSupportingEvidence { get; set; }
 	public SignificantChangeGenericYesNoNa? LandTransactionConsent { get; set; }
 	public string? LandTransactionConsentAdditionalInfo { get; set; }
 	public SignificantChangeGenericYesNoNa? LandTransactionApplication { get; set; }
 	public string? LandTransactionApplicationAdditionalInfo { get; set; }
 	public string? LandTransactionSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationRequired { get; set; }
+	public string? AdmissionsVariationSupportingEvidence { get; set; }
+	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
+	public string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationPupilPlacePlanningSupportive { get; set; }
+	public string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation { get; set; }
+	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
+	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
+	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
+
+	public Recommendation? Recommendation { get; set; }
+	public string? RecommendationMoreInformation { get; set; }
 
 	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
 	{
@@ -183,14 +203,41 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
+	public SignificantChangeTaskStatus GetAdmissionVariationTaskStatus()
+	{
+		if (AdmissionsVariationRequired is false) return SignificantChangeTaskStatus.Completed;
+		if (
+			AdmissionsVariationAdmissionsTeamSupportive is not null
+			&& AdmissionsVariationLocalAuthoritySupportive is not null
+			&& AdmissionsVariationPupilPlacePlanningSupportive is not null
+		)
+		{
+			if (AdmissionsVariationLocalAuthoritySupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation)
+			    || AdmissionsVariationPupilPlacePlanningSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation)
+			    || AdmissionsVariationAdmissionsTeamSupportive is false
+			    && string.IsNullOrWhiteSpace(AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
+			{
+				return SignificantChangeTaskStatus.InProgress;
+			}
+
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.NotStarted;
+	}
+
 	public SignificantChangeTaskStatus GetFundingTaskStatus()
 	{
-		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) && string.IsNullOrWhiteSpace(FundingSupportingEvidence))
+		if (!FundingAnswer.HasValue && string.IsNullOrWhiteSpace(FundingAdditionalInformation) &&
+		    string.IsNullOrWhiteSpace(FundingSupportingEvidence))
 		{
 			return SignificantChangeTaskStatus.NotStarted;
 		}
 
-		if (FundingAnswer is SignificantChange.FundingAnswer.No && string.IsNullOrWhiteSpace(FundingAdditionalInformation))
+		if (FundingAnswer is SignificantChange.FundingAnswer.No &&
+		    string.IsNullOrWhiteSpace(FundingAdditionalInformation))
 		{
 			return SignificantChangeTaskStatus.InProgress;
 		}
@@ -198,6 +245,17 @@ public class SignificantChangeProjectDetails
 		return FundingAnswer.HasValue
 			? SignificantChangeTaskStatus.Completed
 			: SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetRecommendationTaskStatus()
+	{
+		if (!Recommendation.HasValue && string.IsNullOrWhiteSpace(RecommendationMoreInformation))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (Recommendation.HasValue)
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
 	}
 
 	public SignificantChangeTaskStatus GetHqtfConsiderationTaskStatus()
@@ -208,5 +266,32 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetOfstedTaskStatus()
+	{
+		if (OfstedInspectionDate is null)
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+
+		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetFhaRisksOrIssuesRaisedTaskStatus()
+	{
+		return FhaRisksOrIssuesRaised.HasValue
+			? SignificantChangeTaskStatus.Completed
+			: SignificantChangeTaskStatus.NotStarted;
+	}
+
+	public SignificantChangeTaskStatus GetAdmissionsVariationRecommendationTaskStatus()
+	{
+		if (AdmissionsVariationRecommendation.HasValue)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.NotStarted;
 	}
 }

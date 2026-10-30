@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
@@ -65,6 +65,42 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
+		public void SetAdmissionVariationDetails(
+			bool? admissionsVariationRequired,
+			string? supportingEvidence,
+			bool? admissionsVariationLocalAuthoritySupportive,
+			bool? admissionsVariationPupilPlacePlanningSupportive,
+			bool? admissionsVariationAdmissionsTeamSupportive,
+			string? admissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+			string? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+			string? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation)
+		{
+			Details.AdmissionsVariationRequired = admissionsVariationRequired;
+			Details.AdmissionsVariationSupportingEvidence = supportingEvidence;
+			Details.AdmissionsVariationLocalAuthoritySupportive = admissionsVariationLocalAuthoritySupportive;
+			Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation =
+				admissionsVariationLocalAuthoritySupportive is false
+					? admissionsVariationLocalAuthoritySupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationPupilPlacePlanningSupportive = admissionsVariationPupilPlacePlanningSupportive;
+			Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation =
+				admissionsVariationPupilPlacePlanningSupportive is false
+					? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationAdmissionsTeamSupportive = admissionsVariationAdmissionsTeamSupportive;
+			Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation =
+				admissionsVariationAdmissionsTeamSupportive is false
+					? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+					: null;
+
+			if ( admissionsVariationLocalAuthoritySupportive is false 
+				|| admissionsVariationPupilPlacePlanningSupportive is false 
+				|| admissionsVariationAdmissionsTeamSupportive is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
+		}
+
 		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
 			string? noAdmissionVariationReason)
 		{
@@ -126,6 +162,18 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
 		}
 
+		public void SetFhaRisksOrIssuesRaised(
+			bool? fhaRisksOrIssuesRaised,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.FhaRisksOrIssuesRaised = fhaRisksOrIssuesRaised;
+			Details.FhaRisksOrIssuesRaisedAdditionalInformation = fhaRisksOrIssuesRaised is true
+				? additionalInformation
+				: null;
+			Details.FhaRisksOrIssuesRaisedSupportingEvidence = supportingEvidence;
+		}
+
 		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
 					string? trustConsultedReligiousBodyNotConsultedReason)
 		{
@@ -136,6 +184,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 			if (trustConsultedReligiousBody is false)
 				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetRecommendation(Recommendation? recommendation, string? recommendationMoreInformation)
+		{
+			Details.Recommendation = recommendation;
+			Details.RecommendationMoreInformation = recommendationMoreInformation;
 		}
 
 		public void MoveToTierTwoIfApplicable()
@@ -214,6 +268,20 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermission = planningPermissionAnswer;
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetOfstedInspection(DateTime? inspectionDate, bool? meetsOfstedStandards,
+			string? additionalInformation, string? supportingEvidence)
+		{
+			Details.OfstedInspectionDate = inspectionDate;
+			Details.MeetsOfstedStandards = meetsOfstedStandards;
+			Details.OfstedAdditionalInformation = meetsOfstedStandards == true ? null : additionalInformation;
+			Details.OfstedSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation)
+		{
+			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
 		}
 	}
 }

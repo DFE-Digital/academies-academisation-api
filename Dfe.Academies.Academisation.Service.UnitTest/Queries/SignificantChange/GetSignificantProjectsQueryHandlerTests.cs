@@ -44,13 +44,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			};
 
 			projects[0].AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
-			projects[0].SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
-			projects[0].SetAdmissionVariationConsultation(false, "no information provided");
-			projects[0].SetEqualitiesImpactAssessment(true, null, EqualitiesImpact.Likely, "Needs mitigating actions", null, "sharepoint.edu.gov.uk/evidence");
-			projects[0].SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
-			projects[0].SetProjectDates(proposedDecisionDate, proposedChangeDate);
-			projects[0].SetPlanningPermission(PlanningPermissionAnswer.Yes, "Decision is pending final sign-off", "Outline permission summary");
-			projects[0].SetHqtfConsideration(HqtfConsiderationAnswer.Yes, "HQTF consideration detail", "HQTF evidence");
 
 			_repositoryMock
 				.Setup(x => x.SearchSignificantChangeProjects(
@@ -86,32 +79,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[0].AssignedUser.Should().BeEquivalentTo(new User(assignedUserId, "Assigned User", "assigned.user@test.local"));
 			data[0].TypeOfSignificantChange.Should().Be("Change of age range");
 			data[0].Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
-			data[0].StakeholderConsultation.TrustConsultedStakeholders.Should().BeFalse();
-			data[0].StakeholderConsultation.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
-			data[0].StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
-			data[0].AdmissionVariationConsultation.ConsultationIncludeAdmissionVariation.Should().BeFalse();
-			data[0].AdmissionVariationConsultation.ConsultationNoAdmissionVariationReason.Should().Be("no information provided");
-			data[0].ReligiousBodyConsultation.TrustConsultedReligiousBody.Should().BeFalse();
-			data[0].ReligiousBodyConsultation.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
-			data[0].ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
-			data[0].ProjectDates.ProposedDecisionDate.Should().Be(proposedDecisionDate);
-			data[0].ProjectDates.ProposedChangeDate.Should().Be(proposedChangeDate);
-			data[0].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
-			data[0].PlanningPermission.PlanningPermissionAnswer.Should().Be(PlanningPermissionAnswer.Yes);
-			data[0].PlanningPermission.AdditionalInformation.Should().Be("Decision is pending final sign-off");
-			data[0].PlanningPermission.SupportingEvidence.Should().Be("Outline permission summary");
-			data[0].PlanningPermission.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
-
-			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeTrue();
-			data[0].EqualitiesImpactAssessment.EqualitiesImpactAssessmentNoReason.Should().BeNull();
-			data[0].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().Be(nameof(EqualitiesImpact.Likely));
-			data[0].EqualitiesImpactAssessment.EqualitiesLikelyDetails.Should().Be("Needs mitigating actions");
-			data[0].EqualitiesImpactAssessment.EqualitiesImpactSupportingEvidence.Should().Be("sharepoint.edu.gov.uk/evidence");
-			data[0].EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
-			data[0].HqtfConsideration.HqtfConsiderationAnswer.Should().Be(HqtfConsiderationAnswer.Yes);
-			data[0].HqtfConsideration.AdditionalInformation.Should().Be("HQTF consideration detail");
-			data[0].HqtfConsideration.SupportingEvidence.Should().Be("HQTF evidence");
-			data[0].HqtfConsideration.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			data[1].Id.Should().Be(11);
 			data[1].Urn.Should().Be(654321);
@@ -122,21 +89,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			data[1].AssignedUser.Should().BeNull();
 			data[1].TypeOfSignificantChange.Should().Be("Change of gender composition");
 			data[1].Status.Should().Be(nameof(SignificantChangeStatus.PreDecision));
-			data[1].StakeholderConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
-			data[1].AdmissionVariationConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
-
-			data[1].EqualitiesImpactAssessment.EqualitiesImpactAssessmentCompleted.Should().BeNull();
-			data[1].EqualitiesImpactAssessment.EqualitiesImpactIdentified.Should().BeNull();
-			data[1].EqualitiesImpactAssessment.EqualitiesLikelyDetails.Should().BeNull();
-			data[1].EqualitiesImpactAssessment.EqualitiesSomeImpactDetails.Should().BeNull();
-			data[1].EqualitiesImpactAssessment.EqualitiesImpactSupportingEvidence.Should().BeNull();
-			data[1].EqualitiesImpactAssessment.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
-			data[1].ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
-			data[1].ProjectDates.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
-			data[1].HqtfConsideration.HqtfConsiderationAnswer.Should().BeNull();
-			data[1].HqtfConsideration.AdditionalInformation.Should().BeNull();
-			data[1].HqtfConsideration.SupportingEvidence.Should().BeNull();
-			data[1].HqtfConsideration.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 		}
 
 		[Fact]
