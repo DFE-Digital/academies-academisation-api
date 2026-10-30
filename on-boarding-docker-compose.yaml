@@ -37,3 +37,7 @@ services:
       networks:
         - dfe-academies-network
         - dfe-shared-network
+
+secrets:
+  github_token:
+    environment: GITHUB_TOKEN
