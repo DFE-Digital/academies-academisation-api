@@ -1,0 +1,39 @@
+name: dfe-academies
+
+networks:
+    dfe-academies-network:
+        name: dfe-academies-network
+        driver: bridge
+        external: true
+    dfe-shared-network:
+        name: dfe-shared-network
+        external: true
+
+services:
+  academies-academisation-api:
+      container_name: academies-academisation-api
+      cap_add:
+      - SYS_PTRACE
+      security_opt:
+        - seccomp:unconfined
+      build:
+        context: ${REPO_PATH}/academies-academisation-api
+        dockerfile: Dockerfile.dev
+        secrets:
+          - github_token
+      ports:
+        - 7099:8080
+        - 5099:8081
+      restart: unless-stopped
+      environment:
+        - ASPNETCORE_URLS=https://+:8081;http://+:8080
+        - ASPNETCORE_Kestrel__Certificates__Default__Password=Pa55w0rd
+        - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/docker_dev_cert.pfx
+        - ASPNETCORE_ENVIRONMENT=Development
+      volumes:
+        - ${APPDATA}/dev-certs/docker_dev_cert.pfx:/https/docker_dev_cert.pfx:ro
+        - ${APPDATA}/Microsoft/UserSecrets/6f4c8083-5fb2-462d-8a9e-0edd188d37d3:/home/app/.microsoft/usersecrets/6f4c8083-5fb2-462d-8a9e-0edd188d37d3:ro
+        - ${APPDATA}/mkcert/rootCA.pem:/usr/local/share/ca-certificates/mkcert-rootCA.crt:ro
+      networks:
+        - dfe-academies-network
+        - dfe-shared-network
