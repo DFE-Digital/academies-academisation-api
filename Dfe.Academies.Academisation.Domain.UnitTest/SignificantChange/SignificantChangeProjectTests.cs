@@ -105,104 +105,30 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
-		public void SetStakeholderConsultation_ShouldSetDetailsProperties()
-		{
-			var project = CreateProject();
-
-			project.SetStakeholderConsultation(false, "Trust has not consulted stakeholders yet");
-
-			project.Details.TrustConsultedStakeholders.Should().BeFalse();
-			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should()
-				.Be("Trust has not consulted stakeholders yet");
-		}
-
-		[Fact]
-		public void GetStakeholderConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
-		{
-
-			var project = CreateProject();
-
-			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
-		}
-
-		[Fact]
-		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithoutReason_ReturnsInProgress()
-		{
-			var project = CreateProject();
-
-			project.SetStakeholderConsultation(false, null);
-
-			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
-		}
-
-		[Fact]
-		public void GetStakeholderConsultationTaskStatus_WhenConsulted_ReturnsCompleted()
-		{			var project = CreateProject();
-
-			project.SetStakeholderConsultation(true, null);
-
-			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-
-		[Fact]
-		public void GetStakeholderConsultationTaskStatus_WhenNotConsultedWithReason_ReturnsCompleted()
-		{
-			var project = CreateProject();
-
-			project.SetStakeholderConsultation(false, "Consultation timeline does not allow this yet");
-
-			project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-
-		[Fact]
-		public void SetStakeholderConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
-		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				(byte)1,
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project =
-				new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
-
-			project.SetStakeholderConsultation(false, "No consultation carried out");
-
-			project.Tier.Should().Be(2);
-		}
-
-		[Fact]
-		public void SetStakeholderConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
-		{
-			var status = _fixture.Create<SignificantChangeStatus>();
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				(byte)1,
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
-
-			project.SetStakeholderConsultation(false, "No consultation carried out");
-			project.SetStakeholderConsultation(true, null);
-
-			project.Tier.Should().Be(2);
-		}
-
-		[Fact]
 		public void SetReligiousBodyConsultation_ShouldSetDetailsProperties()
 		{
-			var project = CreateProject();
-			project.SetReligiousBodyConsultation(false, "Trust has not consulted religious body yet");
+			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
+				_fixture.Create<int>(),
+				_fixture.Create<byte>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>(),
+				_fixture.Create<string>()
+			);
 
-			project.Details.TrustConsultedReligiousBody.Should().BeFalse();
-			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious body yet");
+			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
+
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No,
+				"Trust has not consulted religious bodies",
+				YesNoNotApplicableAnswer.Yes,
+				null,
+				YesNoNotApplicableAnswer.Yes,
+				null,
+				null);
+
+			project.Details.TrustConsultedReligiousBodyAnswer.Should().Be(YesNoNotApplicableAnswer.No);
+			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Trust has not consulted religious bodies");
 		}
 
 		[Fact]
@@ -217,7 +143,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		{
 			var project = CreateProject();
 
-			project.SetReligiousBodyConsultation(false, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, null,
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
 		}
@@ -227,7 +156,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		{
 			var project = CreateProject();
 
-			project.SetReligiousBodyConsultation(true, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.No, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -237,7 +169,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		{
 			var project = CreateProject();
 
-			project.SetReligiousBodyConsultation(false, "Consultation timeline does not allow this yet");
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "Consultation timeline does not allow this yet",
+				YesNoNotApplicableAnswer.No, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
@@ -255,7 +190,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(false, "No consultation carried out");
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "No consultation carried out",
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Tier.Should().Be(2);
 		}
@@ -273,10 +211,124 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(false, "No consultation carried out");
-			project.SetReligiousBodyConsultation(true, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "No consultation carried out",
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Tier.Should().Be(2);
+		}
+
+		[Theory]
+		[InlineData(-1, null)]
+		[InlineData(0, null)]
+		[InlineData(1, "")]
+		[InlineData(2, "  ")]
+		public void ReligiousBodyConsultation_StatusRequiresEveryAnswerAndApplicableDetails(int missingDetail, string? text)
+		{
+			YesNoNotApplicableAnswer?[] answers =
+				[null, YesNoNotApplicableAnswer.Yes, YesNoNotApplicableAnswer.No, YesNoNotApplicableAnswer.NotApplicable];
+
+			foreach (var consulted in answers)
+			foreach (var objections in answers)
+			foreach (var consent in answers)
+			{
+				var project = CreateProject();
+				project.SetReligiousBodyConsultation(
+					consulted, missingDetail == 0 ? text : "Consultation details",
+					objections, missingDetail == 1 ? text : "Objection details",
+					consent, missingDetail == 2 ? text : "Consent details", null);
+
+				var expected = consulted is null && objections is null && consent is null
+					? SignificantChangeTaskStatus.NotStarted
+					: consulted.HasValue && objections.HasValue && consent.HasValue
+					  && (consulted != YesNoNotApplicableAnswer.No || missingDetail != 0)
+					  && (objections != YesNoNotApplicableAnswer.Yes || missingDetail != 1)
+					  && (consent != YesNoNotApplicableAnswer.No || missingDetail != 2)
+						? SignificantChangeTaskStatus.Completed
+						: SignificantChangeTaskStatus.InProgress;
+
+				project.Details.GetReligiousBodyConsultationTaskStatus().Should().Be(expected,
+					"answers are {0}, {1}, {2}, and missing detail is {3}", consulted, objections, consent, missingDetail);
+			}
+		}
+
+		[Theory]
+		[InlineData(-1, null)]
+		[InlineData(0, null)]
+		[InlineData(1, "")]
+		[InlineData(2, "  ")]
+		public void OtherStakeholderEngagement_StatusRequiresEveryAnswerAndApplicableDetails(int missingDetail, string? text)
+		{
+			bool?[] answers = [null, true, false];
+			YesNoNotApplicableAnswer?[] notificationAnswers =
+				[null, YesNoNotApplicableAnswer.Yes, YesNoNotApplicableAnswer.No, YesNoNotApplicableAnswer.NotApplicable];
+
+			foreach (var consulted in answers)
+			foreach (var objections in answers)
+			foreach (var notified in notificationAnswers)
+			{
+				var project = CreateProject();
+				project.SetOtherStakeholderEngagement(
+					consulted, missingDetail == 0 ? text : "Consultation details",
+					objections, missingDetail == 1 ? text : "Objection details",
+					notified, missingDetail == 2 ? text : "Notification details", null);
+
+				var expected = consulted is null && objections is null && notified is null
+					? SignificantChangeTaskStatus.NotStarted
+					: consulted.HasValue && objections.HasValue && notified.HasValue
+					  && (consulted != false || missingDetail != 0)
+					  && (objections != true || missingDetail != 1)
+					  && (notified != YesNoNotApplicableAnswer.No || missingDetail != 2)
+						? SignificantChangeTaskStatus.Completed
+						: SignificantChangeTaskStatus.InProgress;
+
+				project.Details.GetOtherStakeholderEngagementTaskStatus().Should().Be(expected,
+					"answers are {0}, {1}, {2}, and missing detail is {3}", consulted, objections, notified, missingDetail);
+			}
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData(YesNoNotApplicableAnswer.Yes)]
+		[InlineData(YesNoNotApplicableAnswer.No)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
+		public void SetReligiousBodyConsultation_ClearsDetailsThatDoNotApply(YesNoNotApplicableAnswer? answer)
+		{
+			var project = CreateProject();
+			project.SetReligiousBodyConsultation(
+				YesNoNotApplicableAnswer.No, "Old consultation",
+				YesNoNotApplicableAnswer.Yes, "Old objection",
+				YesNoNotApplicableAnswer.No, "Old consent", null);
+
+			project.SetReligiousBodyConsultation(answer, "Consultation", answer, "Objection", answer, "Consent", "Evidence");
+
+			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be(answer == YesNoNotApplicableAnswer.No ? "Consultation" : null);
+			project.Details.ReligiousBodyRaisedObjectionReason.Should().Be(answer == YesNoNotApplicableAnswer.Yes ? "Objection" : null);
+			project.Details.ReligiousBodyConsentNotGrantedReason.Should().Be(answer == YesNoNotApplicableAnswer.No ? "Consent" : null);
+			project.Details.ReligiousBodySupportingEvidence.Should().Be("Evidence");
+		}
+
+		[Theory]
+		[InlineData(null, null)]
+		[InlineData(true, YesNoNotApplicableAnswer.Yes)]
+		[InlineData(false, YesNoNotApplicableAnswer.No)]
+		[InlineData(true, YesNoNotApplicableAnswer.NotApplicable)]
+		public void SetOtherStakeholderEngagement_ClearsDetailsThatDoNotApply(bool? answer, YesNoNotApplicableAnswer? notified)
+		{
+			var project = CreateProject();
+			project.SetOtherStakeholderEngagement(false, "Old consultation", true, "Old objection", YesNoNotApplicableAnswer.No, "Old notification", null);
+
+			project.SetOtherStakeholderEngagement(answer, "Consultation", answer, "Objection", notified, "Notification", "Evidence");
+
+			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be(answer == false ? "Consultation" : null);
+			project.Details.StakeholderObjectionsDetails.Should().Be(answer == true ? "Objection" : null);
+			project.Details.RelevantStakeholdersNotifiedOfAdmissionsChangesReason.Should().Be(notified == YesNoNotApplicableAnswer.No ? "Notification" : null);
+			project.Details.OtherStakeholderEngagementSupportingEvidence.Should().Be("Evidence");
 		}
 
 		[Fact]
@@ -438,231 +490,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.EqualitiesImpactAssessmentNoReason.Should().Be(expectedNoReason);
 		}
 
-
-		[Fact]
-		public void SetStakeholderObjections_ShouldSetDetailsProperties()
-		{
-			var project = CreateProject();
-
-			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further information supplied");
-
-			project.Details.StakeholderObjections.Should().Be(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided);
-			project.Details.StakeholderObjectionsComment.Should().Be("No further information supplied");
-		}
-
-		[Fact]
-		public void GetStakeholderObservationTaskStatus_WhenNoValues_ReturnsNotStarted()
-		{
-
-			var project = CreateProject();
-
-			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
-		}
-
-		[Fact]
-		public void GetStakeholderObservationsTaskStatus_When_YesNoFurtherInformationProvided_Without_Comment_ReturnsInProgress()
-		{
-			var project = CreateProject();
-
-			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, null);
-
-			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
-		}
-
-		[Fact]
-		public void GetStakeholderObjectionsTaskStatus_When_YesAllObjectionsAddressed_ReturnsCompleted()
-		{			var project = CreateProject();
-
-			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesAllObjectionsAddressed, null);
-
-			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-
-		[Fact]
-		public void GetStakeholderObjectionsTaskStatus_When_No_ReturnsCompleted()
-		{			var project = CreateProject();
-
-			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.No, null);
-
-			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-
-		[Fact]
-		public void GetStakeholderObjectionsTaskStatus_When_YesNoFurtherInformationProvided_With_Comment_ReturnsCompleted()
-		{			var project = CreateProject();
-
-			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "awaiting stakeholder objection deets");
-
-			project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-
-		[Fact]
-		public void SetStakeholderObjections_WhenYesNoFurtherInformationProvidedd_AndTierOne_MovesToTierTwo()
-		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				(byte)1,
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>()
-			);
-
-			var project =
-				new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
-
-			project.SetStakeholderObjections(SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided, "No further info");
-
-			project.Tier.Should().Be(2);
-		}
-
-    
-		[Fact]
-		public void SetAdmissionVariationConsultation_ShouldSetDetailsProperties()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.SetAdmissionVariationConsultation(false, "No admission variation required");
-
-			project.Details.ConsultationIncludeAdmissionVariation.Should().BeFalse();
-			project.Details.ConsultationNoAdmissionVariationReason.Should().Be("No admission variation required");
-		}
-
-
-		[Fact]
-		public void GetAdmissionVariationConsultationTaskStatus_WhenNoValues_ReturnsNotStarted()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
-		}
-
-		[Fact]
-		public void GetAdmissionVariationConsultationTaskStatus_WhenNoVariationWithoutReason_ReturnsInProgress()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.SetAdmissionVariationConsultation(false, null);
-
-			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.InProgress);
-		}
-
-		[Fact]
-		public void GetAdmissionVariationConsultationTaskStatus_WhenVariationIncluded_ReturnsCompleted()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.SetAdmissionVariationConsultation(true, null);
-
-			project.Details.GetAdmissionVariationConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-
-		[Fact]
-		public void SetAdmissionVariationConsultation_WhenNoVariationAndTierOne_MovesToTierTwo()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					1,
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-
-			project.SetAdmissionVariationConsultation(false, "No admission variation required");
-
-			project.Tier.Should().Be(2);
-		}
-
-		[Fact]
-		public void SetAdmissionsVariationRecommendation_ShouldSetDetailsProperties()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.SetAdmissionsVariationRecommendation(
-				AdmissionsVariationRecommendationAnswer.Approve);
-
-			project.Details.AdmissionsVariationRecommendation.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
-		}
-
-		[Fact]
-		public void GetAdmissionsVariationRecommendationTaskStatus_WhenNoValue_ReturnsNotStarted()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.NotStarted);
-		}
-
-		[Fact]
-		public void GetAdmissionsVariationRecommendationTaskStatus_WhenValueSet_ReturnsCompleted()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					_fixture.Create<byte>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.SetAdmissionsVariationRecommendation(
-				AdmissionsVariationRecommendationAnswer.NotApplicable);
-
-			project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
-		}
-    
-    
 		[Fact]
 		public void SetAdmissionVariationDetails_ShouldSetDetailsProperties()
 		{

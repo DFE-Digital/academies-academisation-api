@@ -28,8 +28,6 @@ using Dfe.Academies.Academisation.Service.Commands.Application.School;
 using Dfe.Academies.Academisation.Service.Commands.Legacy.Project;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Commands.ProjectGroup.QueryService;
-using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
-using Dfe.Academies.Academisation.Service.Commands.TransferProject;
 using Dfe.Academies.Academisation.Service.CommandValidations;
 using Dfe.Academies.Academisation.Service.CommandValidations.ProjectGroup;
 using Dfe.Academies.Academisation.Service.Factories;
