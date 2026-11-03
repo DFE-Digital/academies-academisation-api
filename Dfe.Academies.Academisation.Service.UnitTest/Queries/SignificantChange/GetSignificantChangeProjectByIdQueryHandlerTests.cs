@@ -35,9 +35,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 		{
 			var proposedDecisionDate = DateTime.UtcNow.AddDays(10);
 			var proposedChangeDate = DateTime.UtcNow.AddDays(20);
-			var landTransactionApplication = SignificantChangeGenericYesNoNa.NotApplicable;
+			var landTransactionApplication = YesNoNotApplicableAnswer.NotApplicable;
 			string landTransactionApplicationAdditionalInfo = "application details";
-			var landTransactionConsent = SignificantChangeGenericYesNoNa.Yes;
+			var landTransactionConsent = YesNoNotApplicableAnswer.Yes;
 			string landtransactionConsentAdditionalInfo = "consent details";
 			string landTransactionSupportingEvidence = "evidence link";
 

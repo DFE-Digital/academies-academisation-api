@@ -238,9 +238,9 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		}
 
 		public void SetLandTransaction(
-			SignificantChangeGenericYesNoNa? landTransactionApplication, 
+			YesNoNotApplicableAnswer? landTransactionApplication, 
 			string? landTransactionApplicationAdditionalInfo,
-			SignificantChangeGenericYesNoNa? landTransactionConsent, 
+			YesNoNotApplicableAnswer? landTransactionConsent, 
 			string? landTransactionConsentAdditionalInfo,  
 			string? landTransactionSupportingEvidence)
 		{
@@ -250,7 +250,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
 			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
 
-			if(landTransactionConsent is SignificantChangeGenericYesNoNa.No || landTransactionApplication is SignificantChangeGenericYesNoNa.No)
+			if(landTransactionConsent is YesNoNotApplicableAnswer.No || landTransactionApplication is YesNoNotApplicableAnswer.No)
 				MoveToTierTwoIfApplicable();
 		}
 		public void SetProjectSentToComplete(Guid? completeProjectId)

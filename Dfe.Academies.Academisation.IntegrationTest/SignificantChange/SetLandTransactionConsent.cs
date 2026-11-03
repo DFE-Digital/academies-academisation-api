@@ -23,9 +23,9 @@ public class SetLandTransactionConsentTests : IClassFixture<TestWebApplicationFa
 	{
 		var client = _factory.CreateClient();
 
-		var landTransactionApplication = SignificantChangeGenericYesNoNa.No;
+		var landTransactionApplication = YesNoNotApplicableAnswer.No;
 		string landTransactionApplicationAdditionalInfo = "application details";
-		var landTransactionConsent = SignificantChangeGenericYesNoNa.No;
+		var landTransactionConsent = YesNoNotApplicableAnswer.No;
 		string landTransactionConsentAdditionalInfo = "consent details";
 		string landTransactionSupportingEvidence = "evidence link";
 
@@ -73,9 +73,9 @@ public class SetLandTransactionConsentTests : IClassFixture<TestWebApplicationFa
 	{
 		var client = _factory.CreateClient();
 		var request = new SetSignificantChangeLandTransactionPublicCommand(
-			SignificantChangeGenericYesNoNa.Yes,
+			YesNoNotApplicableAnswer.Yes,
 			null,
-			SignificantChangeGenericYesNoNa.Yes,
+			YesNoNotApplicableAnswer.Yes,
 			null,
 			null
         );

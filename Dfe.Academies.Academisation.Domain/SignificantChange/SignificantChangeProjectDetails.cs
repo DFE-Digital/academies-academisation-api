@@ -44,9 +44,9 @@ public class SignificantChangeProjectDetails
 	public bool? MeetsOfstedStandards { get; set; }
 	public string? OfstedAdditionalInformation { get; set; }
 	public string? OfstedSupportingEvidence { get; set; }
-	public SignificantChangeGenericYesNoNa? LandTransactionConsent { get; set; }
+	public YesNoNotApplicableAnswer? LandTransactionConsent { get; set; }
 	public string? LandTransactionConsentAdditionalInfo { get; set; }
-	public SignificantChangeGenericYesNoNa? LandTransactionApplication { get; set; }
+	public YesNoNotApplicableAnswer? LandTransactionApplication { get; set; }
 	public string? LandTransactionApplicationAdditionalInfo { get; set; }
 	public string? LandTransactionSupportingEvidence { get; set; }
 	public bool? AdmissionsVariationRequired { get; set; }
@@ -140,9 +140,9 @@ public class SignificantChangeProjectDetails
 			return SignificantChangeTaskStatus.NotStarted;
 
 		if (LandTransactionApplication.HasValue
-			&& (LandTransactionApplication != SignificantChangeGenericYesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo))
+			&& (LandTransactionApplication != YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo))
 			&& LandTransactionConsent.HasValue
-			&& (LandTransactionConsent != SignificantChangeGenericYesNoNa.No || !string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)))
+			&& (LandTransactionConsent != YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;

@@ -506,11 +506,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(status, significantChangeProjectOptions);
 
-			project.SetLandTransaction(SignificantChangeGenericYesNoNa.Yes, "Application Additional info", SignificantChangeGenericYesNoNa.Yes, "Consent Additional info", "supporting evidence");
+			project.SetLandTransaction(YesNoNotApplicableAnswer.Yes, "Application Additional info", YesNoNotApplicableAnswer.Yes, "Consent Additional info", "supporting evidence");
 
-			project.Details.LandTransactionApplication.Should().Be(SignificantChangeGenericYesNoNa.Yes);
+			project.Details.LandTransactionApplication.Should().Be(YesNoNotApplicableAnswer.Yes);
 			project.Details.LandTransactionApplicationAdditionalInfo.Should().Be("Application Additional info");
-			project.Details.LandTransactionConsent.Should().Be(SignificantChangeGenericYesNoNa.Yes);
+			project.Details.LandTransactionConsent.Should().Be(YesNoNotApplicableAnswer.Yes);
 			project.Details.LandTransactionConsentAdditionalInfo.Should().Be("Consent Additional info");
 			project.Details.LandTransactionSupportingEvidence.Should().Be("supporting evidence");
 		}
@@ -528,7 +528,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetLandTransaction(SignificantChangeGenericYesNoNa.No, "Application not required", null, null, null);
+			project.SetLandTransaction(YesNoNotApplicableAnswer.No, "Application not required", null, null, null);
 
 			project.Tier.Should().Be(2);
 		}
@@ -546,8 +546,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetLandTransaction(SignificantChangeGenericYesNoNa.No, "Application not required", null, null, null);
-			project.SetLandTransaction(SignificantChangeGenericYesNoNa.Yes, null, SignificantChangeGenericYesNoNa.Yes, null, null);
+			project.SetLandTransaction(YesNoNotApplicableAnswer.No, "Application not required", null, null, null);
+			project.SetLandTransaction(YesNoNotApplicableAnswer.Yes, null, YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Tier.Should().Be(2);
 		}
@@ -602,20 +602,20 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(_fixture.Create<SignificantChangeStatus>(), significantChangeProjectOptions);
 
-			project.SetLandTransaction(SignificantChangeGenericYesNoNa.Yes, null, SignificantChangeGenericYesNoNa.Yes, null, null);
+			project.SetLandTransaction(YesNoNotApplicableAnswer.Yes, null, YesNoNotApplicableAnswer.Yes, null, null);
 
 			project.Details.GetLandTransactionTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 		}
 
 		[Theory]
-		[InlineData(SignificantChangeGenericYesNoNa.No, "application details", SignificantChangeGenericYesNoNa.Yes, null, SignificantChangeTaskStatus.Completed)]
-		[InlineData(SignificantChangeGenericYesNoNa.Yes, null, SignificantChangeGenericYesNoNa.No, "consent details", SignificantChangeTaskStatus.Completed)]
-		[InlineData(SignificantChangeGenericYesNoNa.No, null, SignificantChangeGenericYesNoNa.Yes, null, SignificantChangeTaskStatus.InProgress)]
-		[InlineData(SignificantChangeGenericYesNoNa.Yes, null, SignificantChangeGenericYesNoNa.No, null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.No, "application details", YesNoNotApplicableAnswer.Yes, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, null, YesNoNotApplicableAnswer.No, "consent details", SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.No, null, YesNoNotApplicableAnswer.Yes, null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, null, YesNoNotApplicableAnswer.No, null, SignificantChangeTaskStatus.InProgress)]
 		public void GetLandTransactionTaskStatus_RequiresDetailsForEachNoAnswer(
-			SignificantChangeGenericYesNoNa application,
+			YesNoNotApplicableAnswer application,
 			string? applicationAdditionalInfo,
-			SignificantChangeGenericYesNoNa consent,
+			YesNoNotApplicableAnswer consent,
 			string? consentAdditionalInfo,
 			SignificantChangeTaskStatus expectedStatus)
 		{
