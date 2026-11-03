@@ -1006,8 +1006,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         public async Task SetLandTransactionConsent_ReturnsBadRequest_WhenValidationFails()
         {
             var request = new SetSignificantChangeReligiousBodyConsultationPublicCommand(
-                trustConsultedReligiousBody: null,
-                trustConsultedReligiousBodyNotConsultedReason: null);
+                null, null, null, null, null, null, null);
 
             var validationErrors = new[]
             {
