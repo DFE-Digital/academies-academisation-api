@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
-public class SetSignificantChangeAdmissionVariationConsultationCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetSignificantChangeAdmissionVariationConsultationCommandHandler> logger) : IRequestHandler<SetSignificantChangeAdmissionVariationConsultationCommand, CommandResult>
+public class SetSignificantChangeRecommendationCommandHandler(ISignificantChangeProjectRepository repository, ILogger<SetSignificantChangeRecommendationCommandHandler> logger) : IRequestHandler<SetSignificantChangeRecommendationCommand, CommandResult>
 {
-	public async Task<CommandResult> Handle(SetSignificantChangeAdmissionVariationConsultationCommand request, CancellationToken cancellationToken)
+	public async Task<CommandResult> Handle(SetSignificantChangeRecommendationCommand request, CancellationToken cancellationToken)
 	{
 		var existingProject = await repository.GetSignificantChangeProjectById(request.Id, cancellationToken);
 
@@ -17,9 +17,9 @@ public class SetSignificantChangeAdmissionVariationConsultationCommandHandler(IS
 			return new NotFoundCommandResult();
 		}
 
-		existingProject.SetAdmissionVariationConsultation(
-			request.ConsultationIncludeAdmissionVariation,
-			request.NoAdmissionVariationReason);
+		existingProject.SetRecommendation(
+			request.Recommendation,
+			request.RecommendationMoreInformation);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

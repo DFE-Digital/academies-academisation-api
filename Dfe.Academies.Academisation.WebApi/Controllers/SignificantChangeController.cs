@@ -87,7 +87,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 		[HttpGet("{id:int}", Name = "GetSignificantChangeProjectById")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<SignificantChangeProjectSearchResponse>> GetSignificantChangeProject(int id,
+		public async Task<ActionResult<SignificantChangeProjectGetByIdResponse>> GetSignificantChangeProject(int id,
 			CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Getting significant change project with id {Id}", id);

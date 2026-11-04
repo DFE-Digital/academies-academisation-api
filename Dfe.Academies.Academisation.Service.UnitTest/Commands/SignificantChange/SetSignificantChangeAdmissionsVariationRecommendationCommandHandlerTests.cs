@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
@@ -9,26 +9,25 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChange;
 
-public class SetSignificantChangeStakeholderObjectionsCommandHandlerTests
+public class SetSignificantChangeAdmissionsVariationRecommendationCommandHandlerTests
 {
 	private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
-	private readonly Mock<ILogger<SetSignificantChangeStakeholderObjectionsCommandHandler>> _loggerMock;
-	private readonly SetSignificantChangeStakeholderObjectionsCommandHandler _handler;
+	private readonly Mock<ILogger<SetSignificantChangeAdmissionsVariationRecommendationCommandHandler>> _loggerMock;
+	private readonly SetSignificantChangeAdmissionsVariationRecommendationCommandHandler _handler;
 
-	public SetSignificantChangeStakeholderObjectionsCommandHandlerTests()
+	public SetSignificantChangeAdmissionsVariationRecommendationCommandHandlerTests()
 	{
 		_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-		_loggerMock = new Mock<ILogger<SetSignificantChangeStakeholderObjectionsCommandHandler>>();
-		_handler = new SetSignificantChangeStakeholderObjectionsCommandHandler(_repositoryMock.Object, _loggerMock.Object);
+		_loggerMock = new Mock<ILogger<SetSignificantChangeAdmissionsVariationRecommendationCommandHandler>>();
+		_handler = new SetSignificantChangeAdmissionsVariationRecommendationCommandHandler(_repositoryMock.Object, _loggerMock.Object);
 	}
 
 	[Fact]
 	public async Task Handle_ProjectNotFound_ReturnsNotFoundCommandResult()
 	{
-		var command = new SetSignificantChangeStakeholderObjectionsCommand(
-			id: 100,
-			stakeholderObjections: SignificantChangeStakeholderObjections.No,
-			stakeholderObjectionsComment: null);
+		var command = new SetSignificantChangeAdmissionsVariationRecommendationCommand(
+			Id: 100,
+			RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Approve);
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -42,21 +41,20 @@ public class SetSignificantChangeStakeholderObjectionsCommandHandlerTests
 	}
 
 	[Fact]
-	public async Task Handle_ProjectFound_UpdatesSectionAndPersistsChanges()
+	public async Task Handle_ProjectFound_UpdatesRecommendationAndPersistsChanges()
 	{
-		var command = new SetSignificantChangeStakeholderObjectionsCommand(
-			id: 200,
-			stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
-			stakeholderObjectionsComment: "some comment");
+		var command = new SetSignificantChangeAdmissionsVariationRecommendationCommand(
+			Id: 200,
+			RecommendationAnswer: AdmissionsVariationRecommendationAnswer.Decline);
 
 		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			typeOfSignificantChange: "Change of age range",
-			schoolName: "Test School"),
-			createdOn: DateTime.UtcNow);
+				123456,
+				1,
+				"Test Trust",
+				"12345678",
+				"Change of age range",
+				"Test School"), DateTime.UtcNow
+		);
 
 		var unitOfWorkMock = new Mock<IUnitOfWork>();
 		unitOfWorkMock
@@ -71,10 +69,8 @@ public class SetSignificantChangeStakeholderObjectionsCommandHandlerTests
 		var result = await _handler.Handle(command, CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.Details.StakeholderObjections.Should().Be(command.StakeholderObjections);
-		project.Details.StakeholderObjectionsComment.Should().Be(command.StakeholderObjectionsComment);
-		project.Tier.Should().Be(2);
-		project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		project.Details.AdmissionsVariationRecommendation.Should().Be(AdmissionsVariationRecommendationAnswer.Decline);
+		project.Details.GetAdmissionsVariationRecommendationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);
 		_repositoryMock.Verify(x => x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

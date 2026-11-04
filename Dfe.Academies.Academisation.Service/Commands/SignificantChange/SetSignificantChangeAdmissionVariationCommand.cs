@@ -1,0 +1,38 @@
+using Dfe.Academies.Academisation.Core;
+using MediatR;
+
+namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
+
+public record SetSignificantChangeAdmissionVariationPublicCommand(
+	bool? AdmissionsVariationRequired,
+	string? AdmissionsVariationSupportingEvidence,
+	bool? AdmissionsVariationLocalAuthoritySupportive,
+	bool? AdmissionsVariationPupilPlacePlanningSupportive,
+	bool? AdmissionsVariationAdmissionsTeamSupportive,
+	string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+	string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+	string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+);
+
+public record SetSignificantChangeAdmissionVariationCommand(
+		int Id,
+		bool? AdmissionsVariationRequired,
+		string? AdmissionsVariationSupportingEvidence,
+		bool? AdmissionsVariationLocalAuthoritySupportive,
+		bool? AdmissionsVariationPupilPlacePlanningSupportive,
+		bool? AdmissionsVariationAdmissionsTeamSupportive,
+		string? AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+		string? AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+		string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+	)
+	: SetSignificantChangeAdmissionVariationPublicCommand(
+		AdmissionsVariationRequired,
+		AdmissionsVariationSupportingEvidence,
+		AdmissionsVariationLocalAuthoritySupportive,
+		AdmissionsVariationPupilPlacePlanningSupportive,
+		AdmissionsVariationAdmissionsTeamSupportive,
+		AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+		AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+		AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+	),
+		IRequest<CommandResult>;
