@@ -130,8 +130,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
 			result.LocalAuthorityObjections.LocalAuthorityRaisedObjections.Should().BeTrue();
-			result.LocalAuthorityObjections.LocalAuthorityObjectionsFurtherInformation.Should().Be("Local authority objections details");
-			result.LocalAuthorityObjections.SupportingEvidenceLink.Should().Be("https://example.org/evidence");
+			result.LocalAuthorityObjections.LocalAuthorityObjectionsFurtherInformation.Should().Be("bad things n stuff");
+			result.LocalAuthorityObjections.SupportingEvidenceLink.Should().Be("i-did-do-it.com");
 			result.LocalAuthorityObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.OtherStakeholderEngagement.TrustConsultedStakeholders.Should().BeFalse();
 			result.OtherStakeholderEngagement.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
@@ -160,11 +160,6 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.FhaRisksOrIssuesRaised.SupportingEvidence.Should().Be("FHA evidence");
 			result.FhaRisksOrIssuesRaised.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.AdmissionsVariationRecommendation.AdmissionsVariationRecommendationAnswer.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
-
-			result.LocalAuthorityObjections.LocalAuthorityRaisedObjections.Should().BeTrue();
-			result.LocalAuthorityObjections.LocalAuthorityObjectionsFurtherInformation.Should().Be("bad things n stuff");
-			result.LocalAuthorityObjections.SupportingEvidenceLink.Should().Be("i-did-do-it.com");
-			result.LocalAuthorityObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 		}
 
 		[Fact]

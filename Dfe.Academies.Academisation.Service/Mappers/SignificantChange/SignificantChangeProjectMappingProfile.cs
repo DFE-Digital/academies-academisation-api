@@ -73,8 +73,6 @@ public class SignificantChangeProjectMappingProfile : Profile
                 options=>options.MapFrom(source=> source.Details.EqualitiesImpactAssessmentCompleted))
             .ForMember(destination => destination.EqualitiesImpactIdentified,
                 options => options.MapFrom(source => source.Details.EqualitiesImpactIdentified.ToString()))
-            .ForMember(destination => destination.EqualitiesImpactIdentifiedMitigation,
-                options => options.MapFrom(source => source.Details.EqualitiesImpactIdentifiedMitigation))
             .ForMember(destination => destination.EqualitiesTaskStatus,
                 options => options.MapFrom(source => source.Details.GetEqualitiesTaskStatus().ToString()))
 			.ForMember(destination => destination.TrustConsultedReligiousBody,
