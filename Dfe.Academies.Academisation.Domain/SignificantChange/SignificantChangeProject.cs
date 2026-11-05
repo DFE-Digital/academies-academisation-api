@@ -172,6 +172,20 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				MoveToTierTwoIfApplicable();
 		}
 
+		public void SetLocalAuthorityObjections(bool? localAuthorityRaisedObjections,
+			string? localAuthorityObjectionsFurtherInformation,
+			string? supportingEvidenceLink)
+		{
+			Details.LocalAuthorityRaisedObjections = localAuthorityRaisedObjections;
+			Details.LocalAuthorityObjectionsFurtherInformation = localAuthorityRaisedObjections is true
+				? localAuthorityObjectionsFurtherInformation
+				: null;
+			Details.LocalAuthoritySupportingEvidenceLink = supportingEvidenceLink;
+
+			if (localAuthorityRaisedObjections is true)
+				MoveToTierTwoIfApplicable();
+		}
+
 		public void SetOtherStakeholderEngagement(
 			bool? trustConsultedStakeholders,
 			string? trustConsultedStakeholdersNotConsultedReason,

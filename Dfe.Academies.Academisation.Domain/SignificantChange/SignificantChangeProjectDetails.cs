@@ -60,6 +60,10 @@ public class SignificantChangeProjectDetails
 	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
 	public Recommendation? Recommendation { get; set; }
 	public string? RecommendationMoreInformation { get; set; }
+	public bool? LocalAuthorityRaisedObjections { get; set; }
+	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
+	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
+
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
 	{
@@ -265,5 +269,28 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.NotStarted;
+	}
+
+	public SignificantChangeTaskStatus GetLocalAuthorityObjectionsTaskStatus()
+	{
+		if (!LocalAuthorityRaisedObjections.HasValue
+		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
+		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+		
+		if (LocalAuthorityRaisedObjections is false)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (LocalAuthorityRaisedObjections is true
+		    && !string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
 	}
 }

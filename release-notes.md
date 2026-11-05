@@ -8,12 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-10-26.727...HEAD)
 Note: remember to update unrelease section when creating a new release.
+- [301987](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=301987) - Add local authority objections task data endpoint and response updates
 
 ## [10.1.0][10.1.0] - 2026-10-26
 
 ### Added
 - [296559](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=296559) - Add religious body consultation task controller and handler
- - [302674](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/302674) - Add Task -  admissions variation
+- [302674](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/302674) - Add Task -  admissions variation
 - [296556](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296556) - Add Task - Consultation duration
 - [305712](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/305712) - Add Task - Public-Sector-Equality-Duty
 - [298244](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/298244) - FHA - add additional mandatory items

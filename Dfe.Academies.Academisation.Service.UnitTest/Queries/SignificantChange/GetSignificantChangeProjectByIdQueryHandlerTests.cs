@@ -61,6 +61,8 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			};
 
 			project.AssignUser(assignedUserId, "assigned.user@test.local", "Assigned User");
+			project.SetEqualitiesImpactAssessment(true, null, EqualitiesImpact.Likely, "Mitigation", null, null);
+			project.SetLocalAuthorityObjections(true, "Local authority objections details", "https://example.org/evidence");
 			project.SetOtherStakeholderEngagement(
 				false,
 				"Trust has not consulted stakeholders yet",
@@ -85,6 +87,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Approve);
 			project.SetOfstedInspection(proposedDecisionDate, false, "Ofsted standards not met", "Ofsted evidence");
 			project.SetFhaRisksOrIssuesRaised(true, "Risks need consideration", "FHA evidence");
+			project.SetLocalAuthorityObjections(true, "bad things n stuff", "i-did-do-it.com");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -132,6 +135,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.ReligiousBodyConsultation.SupportingEvidence.Should().Be("https://example.com/religious-evidence");
 			result.ReligiousBodyConsultation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 
+			result.LocalAuthorityObjections.LocalAuthorityRaisedObjections.Should().BeTrue();
+			result.LocalAuthorityObjections.LocalAuthorityObjectionsFurtherInformation.Should().Be("bad things n stuff");
+			result.LocalAuthorityObjections.SupportingEvidenceLink.Should().Be("i-did-do-it.com");
+			result.LocalAuthorityObjections.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.OtherStakeholderEngagement.TrustConsultedStakeholders.Should().BeFalse();
 			result.OtherStakeholderEngagement.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust has not consulted stakeholders yet");
 			result.OtherStakeholderEngagement.WereThereAnyObjectionsRaised.Should().BeTrue();
