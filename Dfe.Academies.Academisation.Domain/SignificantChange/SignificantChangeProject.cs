@@ -251,11 +251,27 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
 
+		public void SetLandTransaction(
+			YesNoNotApplicableAnswer? landTransactionApplication, 
+			string? landTransactionApplicationAdditionalInfo,
+			YesNoNotApplicableAnswer? landTransactionConsent, 
+			string? landTransactionConsentAdditionalInfo,  
+			string? landTransactionSupportingEvidence)
+		{
+			Details.LandTransactionApplication = landTransactionApplication;
+			Details.LandTransactionApplicationAdditionalInfo = landTransactionApplicationAdditionalInfo;
+			Details.LandTransactionConsent = landTransactionConsent;
+			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
+			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
+
+			if(landTransactionConsent is YesNoNotApplicableAnswer.No || landTransactionApplication is YesNoNotApplicableAnswer.No)
+				MoveToTierTwoIfApplicable();
+		}
 		public void SetProjectSentToComplete(Guid? completeProjectId)
 		{
 			ProjectSentToComplete = true;
 			CompleteProjectId = completeProjectId;
-    }
+    	}
       
 		public void SetStatus(SignificantChangeStatus requestStatus)
 		{

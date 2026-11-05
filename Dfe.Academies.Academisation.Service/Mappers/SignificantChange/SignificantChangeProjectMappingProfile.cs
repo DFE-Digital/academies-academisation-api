@@ -109,6 +109,18 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.ProposedDecisionDate))
 			.ForMember(destination => destination.ConfirmProjectDatesTaskStatus,
 				options => options.MapFrom(source => source.Details.GetConfirmProjectDatesTaskStatus().ToString()))
+			.ForMember(destination => destination.LandTransactionApplication,
+				options => options.MapFrom(source => source.Details.LandTransactionApplication.ToString()))
+			.ForMember(destination => destination.LandTransactionApplicationAdditionalInfo, 
+				options => options.MapFrom(source => source.Details.LandTransactionApplicationAdditionalInfo))
+			.ForMember(destination => destination.LandTransactionConsent,
+				options => options.MapFrom(source => source.Details.LandTransactionConsent.ToString()))
+			.ForMember(destination => destination.LandTransactionConsentAdditionalInfo, 
+				options => options.MapFrom(source => source.Details.LandTransactionConsentAdditionalInfo))
+			.ForMember(destination => destination.LandTransactionSupportingEvidence, 
+				options => options.MapFrom(source => source.Details.LandTransactionSupportingEvidence))
+			.ForMember(destination => destination.LandTransactionTaskStatus, 
+				options => options.MapFrom(source => source.Details.GetLandTransactionTaskStatus().ToString()))
 			.ForMember(destination => destination.Recommendation,
 				options => options.MapFrom(source => source.Details.Recommendation))
 			.ForMember(destination => destination.RecommendationMoreInformation,
@@ -208,6 +220,14 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.ReligiousBodySupportingEvidence))
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.ReligiousBodyConsultationTaskStatus));
+		
+		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
+
+		CreateMap<SignificantChangeProjectDto, SignificantChangeLandTransactionResponse>()
+			.ForMember(destination => destination.Status, 
+				options => options.MapFrom(source => source.LandTransactionTaskStatus));
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeOtherStakeholderEngagementResponse>()
 			.ForMember(destination => destination.RelevantStakeholdersNotifiedOfAdmissionsChanges,
@@ -305,6 +325,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.ProjectDates,
 				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.LandTransaction,
+				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.OfstedInspection,
@@ -319,11 +341,5 @@ public class SignificantChangeProjectMappingProfile : Profile
         		options => options.Ignore())
     		.ForMember(destination => destination.DecisionDate,
         		options => options.Ignore());
-
-
-		CreateMap<SignificantChangeProjectDto, SignificantChangeProjectDatesResponse>()
-			.ForMember(destination => destination.Status,
-				options => options.MapFrom(source => source.ConfirmProjectDatesTaskStatus));
-
 	}
 }
