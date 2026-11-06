@@ -15,10 +15,38 @@ namespace Dfe.Academies.Academisation.IntegrationTest.SignificantChangeDecision;
 public class PutTests(TestWebApplicationFactory factory)
 {
 	[Fact]
+	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
+	{
+		var client = factory.CreateClient();
+		const int missingProjectId = int.MaxValue;
+		Assert.False(await factory.Context.Set<Domain.SignificantChange.SignificantChangeProject>()
+			.AnyAsync(project => project.Id == missingProjectId));
+
+		var updateRequest = new SignificantChangeUpdateDecisionCommand
+		{
+			AdvisoryBoardDecisionId = 1,
+			SignificantChangeProjectId = missingProjectId,
+			Decision = Decision.Approved,
+			ApprovedConditionsSet = true,
+			ApprovedConditionsDetails = "updated",
+			DeclinedReason = string.Empty,
+			WithdrawnReason = string.Empty,
+			DecisionDate = DateTime.UtcNow,
+			DecisionMadeBy = SignificantChangeDecisionMadeBy.DirectorGeneral,
+			DecisionMakerName = "Jane Smith"
+		};
+
+		var result = await client.PutAsJsonAsync("/significant-change/decision", updateRequest);
+
+		Assert.Equal(System.Net.HttpStatusCode.NotFound, result.StatusCode);
+	}
+
+	[Fact]
 	public async Task Put_WithValidRequest_ReturnsOkAndUpdatesDatabase()
 	{
-		const int significantChangeProjectId = 9001;
 		var client = factory.CreateClient();
+		var project = await factory.CreateSignificantChangeProjectWithCompletedTasksAsync();
+		var significantChangeProjectId = project.Id;
 
 		var createRequest = new SignificantChangeDecisionCommand
 		{
