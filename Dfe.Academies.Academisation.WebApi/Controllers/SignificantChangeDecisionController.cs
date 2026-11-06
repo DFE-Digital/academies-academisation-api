@@ -115,7 +115,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
             return null;
         }
 
-        private Task UpdateStatusAsync(int projectId, Decision decision, bool? approvedConditionsSet, CancellationToken cancellationToken) =>
+        private Task<CommandResult> UpdateStatusAsync(int projectId, Decision decision, bool? approvedConditionsSet, CancellationToken cancellationToken) =>
             mediator.Send(new SignificantChangeStatusCommand(projectId, decision, approvedConditionsSet), cancellationToken);
     }
 }
