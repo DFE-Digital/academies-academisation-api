@@ -1,0 +1,33 @@
+using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
+using MediatR;
+using Microsoft.Extensions.Logging;
+
+namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
+
+public class SetSignificantChangeHqtfConsiderationCommandHandler(
+	ISignificantChangeProjectRepository repository,
+	ILogger<SetSignificantChangeHqtfConsiderationCommandHandler> logger)
+	: IRequestHandler<SetSignificantChangeHqtfConsiderationCommand, CommandResult>
+{
+	public async Task<CommandResult> Handle(SetSignificantChangeHqtfConsiderationCommand request, CancellationToken cancellationToken)
+	{
+		var existingProject = await repository.GetSignificantChangeProjectById(request.Id, cancellationToken);
+
+		if (existingProject is null)
+		{
+			logger.LogError("Significant change project not found with id: {ProjectId}", request.Id);
+			return new NotFoundCommandResult();
+		}
+
+		existingProject.SetHqtfConsideration(
+			request.HqtfConsiderationAnswer,
+			request.AdditionalInformation,
+			request.SupportingEvidence);
+
+		repository.Update(existingProject);
+		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+		return new CommandSuccessResult();
+	}
+}

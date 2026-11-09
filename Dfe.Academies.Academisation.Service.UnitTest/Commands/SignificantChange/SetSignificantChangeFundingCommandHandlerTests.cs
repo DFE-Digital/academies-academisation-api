@@ -1,4 +1,5 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
 using Dfe.Academies.Academisation.Domain.SeedWork;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
@@ -9,22 +10,22 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChange;
 
-public class SetSignificantChangeFundingCommandHandlerTests
+public class SetSignificantChangeRecommendationCommandHandlerTests
 {
 	private readonly Mock<ISignificantChangeProjectRepository> _repository = new();
-	private readonly SetSignificantChangeFundingCommandHandler _handler;
+	private readonly SetSignificantChangeRecommendationCommandHandler _handler;
 
-	public SetSignificantChangeFundingCommandHandlerTests()
+	public SetSignificantChangeRecommendationCommandHandlerTests()
 	{
-		_handler = new SetSignificantChangeFundingCommandHandler(
+		_handler = new SetSignificantChangeRecommendationCommandHandler(
 			_repository.Object,
-			Mock.Of<ILogger<SetSignificantChangeFundingCommandHandler>>());
+			Mock.Of<ILogger<SetSignificantChangeRecommendationCommandHandler>>());
 	}
 
 	[Fact]
 	public async Task Handle_WhenProjectDoesNotExist_ReturnsNotFound()
 	{
-		var command = new SetSignificantChangeFundingCommand(100, FundingAnswer.Yes, null, "Business case");
+		var command = new SetSignificantChangeRecommendationCommand(66, Recommendation.Approve, "Business case");
 		_repository.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
 			.ReturnsAsync((SignificantChangeProject?)null);
 
@@ -35,22 +36,21 @@ public class SetSignificantChangeFundingCommandHandlerTests
 	}
 
 	[Fact]
-	public async Task Handle_WhenProjectExists_UpdatesFundingAndPersistsChanges()
+	public async Task Handle_WhenProjectExists_UpdatesRecommendationAndPersistsChanges()
 	{
 		var project = CreateProject();
 		var unitOfWork = new Mock<IUnitOfWork>();
 		unitOfWork.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 		_repository.Setup(x => x.UnitOfWork).Returns(unitOfWork.Object);
-		_repository.Setup(x => x.GetSignificantChangeProjectById(200, It.IsAny<CancellationToken>())).ReturnsAsync(project);
+		_repository.Setup(x => x.GetSignificantChangeProjectById(180, It.IsAny<CancellationToken>())).ReturnsAsync(project);
 
 		var result = await _handler.Handle(
-			new SetSignificantChangeFundingCommand(200, FundingAnswer.No, "Funding is unavailable", "Business case"),
+			new SetSignificantChangeRecommendationCommand(180, Recommendation.Decline, "Not a good idea"),
 			CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.Details.FundingAnswer.Should().Be(FundingAnswer.No);
-		project.Details.FundingAdditionalInformation.Should().Be("Funding is unavailable");
-		project.Details.FundingSupportingEvidence.Should().Be("Business case");
+		project.Details.Recommendation.Should().Be(Recommendation.Decline);
+		project.Details.RecommendationMoreInformation.Should().Be("Not a good idea");
 		_repository.Verify(x => x.Update(project), Times.Once);
 		unitOfWork.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 	}

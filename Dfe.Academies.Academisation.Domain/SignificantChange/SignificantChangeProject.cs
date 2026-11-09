@@ -1,4 +1,5 @@
-﻿using Dfe.Academies.Academisation.Domain.SeedWork;
+﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SeedWork;
 
 namespace Dfe.Academies.Academisation.Domain.SignificantChange
 {
@@ -64,26 +65,40 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			AssignedUserFullName = userFullName;
 		}
 
-		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
-			string? noAdmissionVariationReason)
+		public void SetAdmissionVariationDetails(
+			bool? admissionsVariationRequired,
+			string? supportingEvidence,
+			bool? admissionsVariationLocalAuthoritySupportive,
+			bool? admissionsVariationPupilPlacePlanningSupportive,
+			bool? admissionsVariationAdmissionsTeamSupportive,
+			string? admissionsVariationLocalAuthoritySupportiveAdditionalInformation,
+			string? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation,
+			string? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation)
 		{
-			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
-			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
-				? noAdmissionVariationReason
-				: null;
+			Details.AdmissionsVariationRequired = admissionsVariationRequired;
+			Details.AdmissionsVariationSupportingEvidence = supportingEvidence;
+			Details.AdmissionsVariationLocalAuthoritySupportive = admissionsVariationLocalAuthoritySupportive;
+			Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation =
+				admissionsVariationLocalAuthoritySupportive is false
+					? admissionsVariationLocalAuthoritySupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationPupilPlacePlanningSupportive = admissionsVariationPupilPlacePlanningSupportive;
+			Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation =
+				admissionsVariationPupilPlacePlanningSupportive is false
+					? admissionsVariationPupilPlacePlanningSupportiveAdditionalInformation
+					: null;
+			Details.AdmissionsVariationAdmissionsTeamSupportive = admissionsVariationAdmissionsTeamSupportive;
+			Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation =
+				admissionsVariationAdmissionsTeamSupportive is false
+					? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation
+					: null;
 
-			SetProjectTier();
-		}
-
-		public void SetStakeholderConsultation(bool? trustConsultedStakeholders,
-			string? trustConsultedStakeholdersNotConsultedReason)
-		{
-			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
-			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
-				? trustConsultedStakeholdersNotConsultedReason
-				: null;
-
-			SetProjectTier();
+			if ( admissionsVariationLocalAuthoritySupportive is false 
+				|| admissionsVariationPupilPlacePlanningSupportive is false 
+				|| admissionsVariationAdmissionsTeamSupportive is false)
+			{
+				MoveToTierTwoIfApplicable();
+			}
 		}
 
 		public void SetConsultationDuration(
@@ -96,7 +111,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 					? consultationDurationNotMetReason
 					: null;
 
-			SetProjectTier();
+			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
+				MoveToTierTwoIfApplicable();
 		}
 
 		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
@@ -106,19 +122,100 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? additionalInformation
 				: null;
 			Details.FundingSupportingEvidence = supportingEvidence;
-
-			SetProjectTier();
 		}
 
-		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
-					string? trustConsultedReligiousBodyNotConsultedReason)
+		public void SetHqtfConsideration(
+			HqtfConsiderationAnswer? hqtfConsiderationAnswer,
+			string? additionalInformation,
+			string? supportingEvidence)
 		{
-			Details.TrustConsultedReligiousBody = trustConsultedReligiousBody;
-			Details.TrustConsultedReligiousBodyNotConsultedReason = trustConsultedReligiousBody is false
-				? trustConsultedReligiousBodyNotConsultedReason
+			Details.HqtfConsiderationAnswer = hqtfConsiderationAnswer;
+			Details.HqtfConsiderationAdditionalInformation = hqtfConsiderationAnswer is HqtfConsiderationAnswer.Yes
+				? additionalInformation
 				: null;
+			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
+		}
 
-			SetProjectTier();
+		public void SetFhaRisksOrIssuesRaised(
+			bool? fhaRisksOrIssuesRaised,
+			string? additionalInformation,
+			string? supportingEvidence)
+		{
+			Details.FhaRisksOrIssuesRaised = fhaRisksOrIssuesRaised;
+			Details.FhaRisksOrIssuesRaisedAdditionalInformation = fhaRisksOrIssuesRaised is true
+				? additionalInformation
+				: null;
+			Details.FhaRisksOrIssuesRaisedSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetReligiousBodyConsultation(
+			YesNoNotApplicableAnswer? trustConsultedReligiousBody,
+			string? trustConsultedReligiousBodyNotConsultedReason,
+			YesNoNotApplicableAnswer? religiousBodyRaisedObjection,
+			string? religiousBodyRaisedObjectionReason,
+			YesNoNotApplicableAnswer? religiousBodyConsentGranted,
+			string? religiousBodyConsentNotGrantedReason,
+			string? supportingEvidence)
+		{
+			Details.TrustConsultedReligiousBodyAnswer = trustConsultedReligiousBody;
+			Details.TrustConsultedReligiousBodyNotConsultedReason =
+				trustConsultedReligiousBody is YesNoNotApplicableAnswer.No ? trustConsultedReligiousBodyNotConsultedReason : null;
+			Details.ReligiousBodyRaisedObjection = religiousBodyRaisedObjection;
+			Details.ReligiousBodyRaisedObjectionReason =
+				religiousBodyRaisedObjection is YesNoNotApplicableAnswer.Yes ? religiousBodyRaisedObjectionReason : null;
+			Details.ReligiousBodyConsentGranted = religiousBodyConsentGranted;
+			Details.ReligiousBodyConsentNotGrantedReason =
+				religiousBodyConsentGranted is YesNoNotApplicableAnswer.No ? religiousBodyConsentNotGrantedReason : null;
+			Details.ReligiousBodySupportingEvidence = supportingEvidence;
+
+			if (trustConsultedReligiousBody is YesNoNotApplicableAnswer.No)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetLocalAuthorityObjections(bool? localAuthorityRaisedObjections,
+			string? localAuthorityObjectionsFurtherInformation,
+			string? supportingEvidenceLink)
+		{
+			Details.LocalAuthorityRaisedObjections = localAuthorityRaisedObjections;
+			Details.LocalAuthorityObjectionsFurtherInformation = localAuthorityRaisedObjections is true
+				? localAuthorityObjectionsFurtherInformation
+				: null;
+			Details.LocalAuthoritySupportingEvidenceLink = supportingEvidenceLink;
+
+			if (localAuthorityRaisedObjections is true)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetOtherStakeholderEngagement(
+			bool? trustConsultedStakeholders,
+			string? trustConsultedStakeholdersNotConsultedReason,
+			bool? wereThereAnyObjectionsRaised,
+			string? stakeholderObjectionsDetails,
+			YesNoNotApplicableAnswer? relevantStakeholdersNotifiedOfAdmissionsChanges,
+			string? relevantStakeholdersNotifiedOfAdmissionsChangesReason,
+			string? supportingEvidence)
+		{
+			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
+			Details.TrustConsultedStakeholdersNotConsultedReason =
+				trustConsultedStakeholders is false ? trustConsultedStakeholdersNotConsultedReason : null;
+			Details.WereThereAnyObjectionsRaised = wereThereAnyObjectionsRaised;
+			Details.StakeholderObjectionsDetails =
+				wereThereAnyObjectionsRaised is true ? stakeholderObjectionsDetails : null;
+			Details.RelevantStakeholdersNotifiedOfAdmissionsChanges = relevantStakeholdersNotifiedOfAdmissionsChanges;
+			Details.RelevantStakeholdersNotifiedOfAdmissionsChangesReason =
+				relevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.No
+					? relevantStakeholdersNotifiedOfAdmissionsChangesReason
+					: null;
+			Details.OtherStakeholderEngagementSupportingEvidence = supportingEvidence;
+
+			if (trustConsultedStakeholders is false)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetRecommendation(Recommendation? recommendation, string? recommendationMoreInformation)
+		{
+			Details.Recommendation = recommendation;
+			Details.RecommendationMoreInformation = recommendationMoreInformation;
 		}
 
 		public void MoveToTierTwoIfApplicable()
@@ -136,15 +233,16 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			this.ReadOnlyDate = readOnlyDate;
 		}
 
-		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted,
-			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesImpactIdentifiedMitigation)
+		public void SetEqualitiesImpactAssessment(bool? equalitiesImpactAssessmentCompleted, string? equalitiesImpactAssessmentNoReason,
+			EqualitiesImpact? equalitiesImpactIdentified, string? equalitiesLikelyDetails, string? equalitiesSomeImpactDetails,
+			string? equalitiesImpactSupportingEvidence)
 		{
 			Details.EqualitiesImpactAssessmentCompleted = equalitiesImpactAssessmentCompleted;
+			Details.EqualitiesImpactAssessmentNoReason = equalitiesImpactAssessmentCompleted is false ? equalitiesImpactAssessmentNoReason : null;
 			Details.EqualitiesImpactIdentified = equalitiesImpactIdentified;
-			Details.EqualitiesImpactIdentifiedMitigation = equalitiesImpactIdentifiedMitigation;
-
-			SetProjectTier();
-
+			Details.EqualitiesLikelyDetails = equalitiesLikelyDetails;
+			Details.EqualitiesSomeImpactDetails = equalitiesSomeImpactDetails;
+			Details.EqualitiesImpactSupportingEvidence = equalitiesImpactSupportingEvidence;
 		}
 
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
@@ -153,19 +251,27 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
 
-		public void SetStakeholderObjections(SignificantChangeStakeholderObjections? stakeholderObjections, string? stakeholderObjectionsComment)
+		public void SetLandTransaction(
+			YesNoNotApplicableAnswer? landTransactionApplication, 
+			string? landTransactionApplicationAdditionalInfo,
+			YesNoNotApplicableAnswer? landTransactionConsent, 
+			string? landTransactionConsentAdditionalInfo,  
+			string? landTransactionSupportingEvidence)
 		{
-			Details.StakeholderObjections = stakeholderObjections;
-			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
+			Details.LandTransactionApplication = landTransactionApplication;
+			Details.LandTransactionApplicationAdditionalInfo = landTransactionApplicationAdditionalInfo;
+			Details.LandTransactionConsent = landTransactionConsent;
+			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
+			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
 
-			SetProjectTier();
+			if(landTransactionConsent is YesNoNotApplicableAnswer.No || landTransactionApplication is YesNoNotApplicableAnswer.No)
+				MoveToTierTwoIfApplicable();
 		}
-
 		public void SetProjectSentToComplete(Guid? completeProjectId)
 		{
 			ProjectSentToComplete = true;
 			CompleteProjectId = completeProjectId;
-    }
+    	}
       
 		public void SetStatus(SignificantChangeStatus requestStatus)
 		{
@@ -178,8 +284,20 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermission = planningPermissionAnswer;
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
+		}
 
-			SetProjectTier();
+		public void SetOfstedInspection(DateTime? inspectionDate, bool? meetsOfstedStandards,
+			string? additionalInformation, string? supportingEvidence)
+		{
+			Details.OfstedInspectionDate = inspectionDate;
+			Details.MeetsOfstedStandards = meetsOfstedStandards;
+			Details.OfstedAdditionalInformation = meetsOfstedStandards == true ? null : additionalInformation;
+			Details.OfstedSupportingEvidence = supportingEvidence;
+		}
+
+		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation)
+		{
+			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
 		}
 
 		public void SetProjectTier()
@@ -199,40 +317,83 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Tier = 1;
 		}
 
-        private bool ShouldBeTierTwo()
-        {
-            return IsConsultationDurationInsufficient()
-                || HasNotConsultedStakeholders()
-                || HasUnresolvedStakeholderObjections()
-                || HasNotNotifiedAdmissionVariation()
-                || HasNotConsultedReligiousBody()
-                || EqualitiesImpactNotCompleted()
-                || PlanningPermissionNotSecured()
-                || FundingNotSecured();
-        }
+		private bool ShouldBeTierTwo()
+		{
+			return HasAdmissionsVariationTierTwoCombination()
+				|| ConsultationDurationIsInsufficient()
+				|| HasNotConsultedStakeholders()
+				|| HasStakeholderObjectionsRaised()
+				|| HasNotNotifiedAdmissionVariation()
+				|| HasLocalAuthorityObjections()
+				|| HasNotConsultedReligiousBody()
+				|| HasReligiousBodyObjection()
+				|| HasReligiousBodyConsentNotGranted()
+				|| OfstedStandardsNotMet()
+				|| EqualitiesImpactNotCompleted()
+				|| EqualitiesImpactIsLikely()
+				|| LandTransactionApplicationNotSubmitted()
+				|| LandTransactionConsentNotGranted()
+				|| PlanningPermissionNotSecured()
+				|| FundingNotSecured()
+				|| HasFhaRisksOrIssuesRaised()
+				|| HasHqtfIssuesOrRisks();
+		}
 
-        private bool IsConsultationDurationInsufficient()
-            => Details.ConsultationLastedMinimumThreeWeeks == ConsultationDurationAnswer.No;
+		private bool HasAdmissionsVariationTierTwoCombination()
+			=> Details.AdmissionsVariationRequired is true
+			   && (Details.AdmissionsVariationLocalAuthoritySupportive is false
+			   || Details.AdmissionsVariationPupilPlacePlanningSupportive is false
+			   || Details.AdmissionsVariationAdmissionsTeamSupportive is false);
 
-        private bool HasNotConsultedStakeholders()
-            => Details.TrustConsultedStakeholders == false;
+		private bool ConsultationDurationIsInsufficient()
+			=> Details.ConsultationLastedMinimumThreeWeeks == ConsultationDurationAnswer.No;
 
-        private bool HasUnresolvedStakeholderObjections()
-            => Details.StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided;
+		private bool HasNotConsultedStakeholders()
+			=> Details.TrustConsultedStakeholders == false;
 
-        private bool HasNotNotifiedAdmissionVariation()
-            => Details.ConsultationIncludeAdmissionVariation == false;
+		private bool HasStakeholderObjectionsRaised()
+			=> Details.WereThereAnyObjectionsRaised == true;
 
-        private bool HasNotConsultedReligiousBody()
-            => Details.TrustConsultedReligiousBody == false;
+		private bool HasNotNotifiedAdmissionVariation()
+			=> Details.RelevantStakeholdersNotifiedOfAdmissionsChanges == YesNoNotApplicableAnswer.No;
 
-        private bool EqualitiesImpactNotCompleted()
-            => Details.EqualitiesImpactAssessmentCompleted == false;
+		private bool HasLocalAuthorityObjections()
+			=> Details.LocalAuthorityRaisedObjections == true;
 
-        private bool PlanningPermissionNotSecured()
-            => Details.PlanningPermission == PlanningPermissionAnswer.No;
+		private bool HasNotConsultedReligiousBody()
+			=> Details.TrustConsultedReligiousBodyAnswer == YesNoNotApplicableAnswer.No;
 
-        private bool FundingNotSecured()
-            => Details.FundingAnswer == FundingAnswer.No;
+		private bool HasReligiousBodyObjection()
+			=> Details.ReligiousBodyRaisedObjection == YesNoNotApplicableAnswer.Yes;
+
+		private bool HasReligiousBodyConsentNotGranted()
+			=> Details.ReligiousBodyConsentGranted == YesNoNotApplicableAnswer.No;
+
+		private bool OfstedStandardsNotMet()
+			=> Details.MeetsOfstedStandards == false;
+
+		private bool EqualitiesImpactNotCompleted()
+			=> Details.EqualitiesImpactAssessmentCompleted == false;
+
+		private bool EqualitiesImpactIsLikely()
+			=> Details.EqualitiesImpactIdentified == EqualitiesImpact.Likely;
+
+		private bool LandTransactionApplicationNotSubmitted()
+			=> Details.LandTransactionApplication == YesNoNotApplicableAnswer.No;
+
+		private bool LandTransactionConsentNotGranted()
+			=> Details.LandTransactionConsent == YesNoNotApplicableAnswer.No;
+
+		private bool PlanningPermissionNotSecured()
+			=> Details.PlanningPermission == PlanningPermissionAnswer.No;
+
+		private bool FundingNotSecured()
+			=> Details.FundingAnswer == FundingAnswer.No;
+
+		private bool HasFhaRisksOrIssuesRaised()
+			=> Details.FhaRisksOrIssuesRaised == true;
+
+		private bool HasHqtfIssuesOrRisks()
+			=> Details.HqtfConsiderationAnswer == HqtfConsiderationAnswer.Yes;
 	}
 }

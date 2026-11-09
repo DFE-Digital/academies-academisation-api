@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -26,11 +26,10 @@ public class PutTests(TestWebApplicationFactory factory)
 			Decision = Decision.Declined,
 			ApprovedConditionsSet = null,
 			ApprovedConditionsDetails = null,
-			DeclinedReasons = [new(significantChangeProjectId, Domain.Core.ConversionAdvisoryBoardDecisionAggregate.AdvisoryBoardDeclinedReason.Finance, "initial")],
-			DeferredReasons = [],
-			WithdrawnReasons = [],
+			DeclinedReason = "initial",
+			WithdrawnReason = null,
 			DecisionDate = DateTime.UtcNow.AddMonths(-1),
-			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.RegionalDirectorForRegion,
+			DecisionMadeBy = SignificantChangeDecisionMadeBy.RegionalDirector,
 			DecisionMakerName = "John Smith"
 		};
 
@@ -47,11 +46,10 @@ public class PutTests(TestWebApplicationFactory factory)
 			Decision = Decision.Approved,
 			ApprovedConditionsSet = true,
 			ApprovedConditionsDetails = "updated",
-			DeclinedReasons = [],
-			DeferredReasons = [],
-			WithdrawnReasons = [],
+			DeclinedReason = string.Empty,
+			WithdrawnReason = string.Empty,
 			DecisionDate = DateTime.UtcNow,
-			DecisionMadeBy = Domain.Core.ConversionAdvisoryBoardDecisionAggregate.DecisionMadeBy.DirectorGeneral,
+			DecisionMadeBy = SignificantChangeDecisionMadeBy.DirectorGeneral,
 			DecisionMakerName = "Jane Smith"
 		};
 

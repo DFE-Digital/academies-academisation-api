@@ -4,7 +4,6 @@
 	{
 		Approved = 0,
 		Declined = 1,
-		Deferred = 2,
 		Withdrawn = 3
 	}
 }
