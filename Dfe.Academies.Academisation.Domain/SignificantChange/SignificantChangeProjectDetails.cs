@@ -4,14 +4,22 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange;
 
 public class SignificantChangeProjectDetails
 {
+	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
+	public YesNoNotApplicableAnswer? TrustConsultedReligiousBodyAnswer { get; set; }
+	public YesNoNotApplicableAnswer? ReligiousBodyRaisedObjection { get; set; }
+	public string? ReligiousBodyRaisedObjectionReason { get; set; }
+	public YesNoNotApplicableAnswer? ReligiousBodyConsentGranted { get; set; }
+	public string? ReligiousBodyConsentNotGrantedReason { get; set; }
+	public string? ReligiousBodySupportingEvidence { get; set; }
+	public bool? WereThereAnyObjectionsRaised { get; set; }
+	public string? StakeholderObjectionsDetails { get; set; }
+	public YesNoNotApplicableAnswer? RelevantStakeholdersNotifiedOfAdmissionsChanges { get; set; }
+	public string? RelevantStakeholdersNotifiedOfAdmissionsChangesReason { get; set; }
+	public string? OtherStakeholderEngagementSupportingEvidence { get; set; }
 	public bool? TrustConsultedStakeholders { get; set; }
 	public string? TrustConsultedStakeholdersNotConsultedReason { get; set; }
-	public bool? TrustConsultedReligiousBody { get; set; }
-	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; }
 	public DateTime? ProposedDecisionDate { get; set; }
 	public DateTime? ProposedChangeDate { get; set; }
-	public SignificantChangeStakeholderObjections? StakeholderObjections { get; set; }
-	public string? StakeholderObjectionsComment { get; set; }
 	public bool? EqualitiesImpactAssessmentCompleted { get; set; }
 	public EqualitiesImpact? EqualitiesImpactIdentified { get; set; }
 	public string? EqualitiesLikelyDetails { get; set; }
@@ -19,8 +27,6 @@ public class SignificantChangeProjectDetails
 	public string? EqualitiesImpactSupportingEvidence { get; set; }
 	public ConsultationDurationAnswer? ConsultationLastedMinimumThreeWeeks { get; set; }
 	public string? ConsultationDurationNotMetReason { get; set; }
-	public bool? ConsultationIncludeAdmissionVariation { get; set; }
-	public string? ConsultationNoAdmissionVariationReason { get; set; }
 	public FundingAnswer? FundingAnswer { get; set; }
 	public string? FundingAdditionalInformation { get; set; }
 	public string? FundingSupportingEvidence { get; set; }
@@ -38,7 +44,11 @@ public class SignificantChangeProjectDetails
 	public bool? MeetsOfstedStandards { get; set; }
 	public string? OfstedAdditionalInformation { get; set; }
 	public string? OfstedSupportingEvidence { get; set; }
-
+	public YesNoNotApplicableAnswer? LandTransactionConsent { get; set; }
+	public string? LandTransactionConsentAdditionalInfo { get; set; }
+	public YesNoNotApplicableAnswer? LandTransactionApplication { get; set; }
+	public string? LandTransactionApplicationAdditionalInfo { get; set; }
+	public string? LandTransactionSupportingEvidence { get; set; }
 	public bool? AdmissionsVariationRequired { get; set; }
 	public string? AdmissionsVariationSupportingEvidence { get; set; }
 	public bool? AdmissionsVariationLocalAuthoritySupportive { get; set; }
@@ -48,25 +58,12 @@ public class SignificantChangeProjectDetails
 	public bool? AdmissionsVariationAdmissionsTeamSupportive { get; set; }
 	public string? AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation { get; set; }
 	public AdmissionsVariationRecommendationAnswer? AdmissionsVariationRecommendation { get; set; }
-
 	public Recommendation? Recommendation { get; set; }
 	public string? RecommendationMoreInformation { get; set; }
+	public bool? LocalAuthorityRaisedObjections { get; set; }
+	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
+	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
 
-	public SignificantChangeTaskStatus GetStakeholderConsultationTaskStatus()
-	{
-		if (!TrustConsultedStakeholders.HasValue
-		    && string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
-			return SignificantChangeTaskStatus.NotStarted;
-
-		if (TrustConsultedStakeholders is true)
-			return SignificantChangeTaskStatus.Completed;
-
-		if (TrustConsultedStakeholders is false
-		    && !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
-			return SignificantChangeTaskStatus.Completed;
-
-		return SignificantChangeTaskStatus.InProgress;
-	}
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
 	{
@@ -85,15 +82,38 @@ public class SignificantChangeProjectDetails
 
 	public SignificantChangeTaskStatus GetReligiousBodyConsultationTaskStatus()
 	{
-		if (!TrustConsultedReligiousBody.HasValue
-		    && string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		if (TrustConsultedReligiousBodyAnswer is null
+		    && ReligiousBodyRaisedObjection is null
+		    && ReligiousBodyConsentGranted is null
+		    && string.IsNullOrWhiteSpace(ReligiousBodySupportingEvidence))
 			return SignificantChangeTaskStatus.NotStarted;
 
-		if (TrustConsultedReligiousBody is true)
+		if (TrustConsultedReligiousBodyAnswer.HasValue
+		    && (TrustConsultedReligiousBodyAnswer is not YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		    && ReligiousBodyRaisedObjection.HasValue
+		    && (ReligiousBodyRaisedObjection is not YesNoNotApplicableAnswer.Yes || !string.IsNullOrWhiteSpace(ReligiousBodyRaisedObjectionReason))
+		    && ReligiousBodyConsentGranted.HasValue
+		    && (ReligiousBodyConsentGranted is not YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(ReligiousBodyConsentNotGrantedReason)))
 			return SignificantChangeTaskStatus.Completed;
 
-		if (TrustConsultedReligiousBody is false
-		    && !string.IsNullOrWhiteSpace(TrustConsultedReligiousBodyNotConsultedReason))
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetOtherStakeholderEngagementTaskStatus()
+	{
+		if (TrustConsultedStakeholders is null
+		    && WereThereAnyObjectionsRaised is null
+		    && RelevantStakeholdersNotifiedOfAdmissionsChanges is null
+		    && string.IsNullOrWhiteSpace(OtherStakeholderEngagementSupportingEvidence))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (
+			(TrustConsultedStakeholders is true || TrustConsultedStakeholders is false && !string.IsNullOrWhiteSpace(TrustConsultedStakeholdersNotConsultedReason))
+			&& (WereThereAnyObjectionsRaised is false || WereThereAnyObjectionsRaised is true && !string.IsNullOrWhiteSpace(StakeholderObjectionsDetails))
+			&& (RelevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.Yes
+				|| RelevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.NotApplicable
+				|| RelevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.No && !string.IsNullOrWhiteSpace(RelevantStakeholdersNotifiedOfAdmissionsChangesReason))
+		)
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
@@ -114,20 +134,19 @@ public class SignificantChangeProjectDetails
 		return SignificantChangeTaskStatus.InProgress;
 	}
 
-	public SignificantChangeTaskStatus GetStakeholderObjectionsTaskStatus()
+	public SignificantChangeTaskStatus GetLandTransactionTaskStatus()
 	{
-		if (!StakeholderObjections.HasValue
-		    && string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+		if (!LandTransactionApplication.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo)
+			&& !LandTransactionConsent.HasValue
+			&& string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)
+			&& string.IsNullOrWhiteSpace(LandTransactionSupportingEvidence) )
 			return SignificantChangeTaskStatus.NotStarted;
 
-		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesAllObjectionsAddressed)
-			return SignificantChangeTaskStatus.Completed;
-
-		if (StakeholderObjections == SignificantChangeStakeholderObjections.No)
-			return SignificantChangeTaskStatus.Completed;
-
-		if (StakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided
-		    && !string.IsNullOrWhiteSpace(StakeholderObjectionsComment))
+		if (LandTransactionApplication.HasValue
+			&& (LandTransactionApplication != YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(LandTransactionApplicationAdditionalInfo))
+			&& LandTransactionConsent.HasValue
+			&& (LandTransactionConsent != YesNoNotApplicableAnswer.No || !string.IsNullOrWhiteSpace(LandTransactionConsentAdditionalInfo)))
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
@@ -158,28 +177,6 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.Completed;
-	}
-
-	public SignificantChangeTaskStatus GetAdmissionVariationConsultationTaskStatus()
-	{
-		if (!ConsultationIncludeAdmissionVariation.HasValue
-		    && string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
-		{
-			return SignificantChangeTaskStatus.NotStarted;
-		}
-
-		if (ConsultationIncludeAdmissionVariation is true)
-		{
-			return SignificantChangeTaskStatus.Completed;
-		}
-
-		if (ConsultationIncludeAdmissionVariation is false
-		    && !string.IsNullOrWhiteSpace(ConsultationNoAdmissionVariationReason))
-		{
-			return SignificantChangeTaskStatus.Completed;
-		}
-
-		return SignificantChangeTaskStatus.InProgress;
 	}
 
 	public SignificantChangeTaskStatus GetAdmissionVariationTaskStatus()
@@ -272,5 +269,28 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.NotStarted;
+	}
+
+	public SignificantChangeTaskStatus GetLocalAuthorityObjectionsTaskStatus()
+	{
+		if (!LocalAuthorityRaisedObjections.HasValue
+		    && string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation)
+		    && string.IsNullOrWhiteSpace(LocalAuthoritySupportingEvidenceLink))
+		{
+			return SignificantChangeTaskStatus.NotStarted;
+		}
+		
+		if (LocalAuthorityRaisedObjections is false)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		if (LocalAuthorityRaisedObjections is true
+		    && !string.IsNullOrWhiteSpace(LocalAuthorityObjectionsFurtherInformation))
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.InProgress;
 	}
 }

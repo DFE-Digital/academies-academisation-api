@@ -9,26 +9,27 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChange;
 
-public class SetSignificantChangeStakeholderObjectionsCommandHandlerTests
+public class SetSignificantChangeLocalAuthorityObjectionsCommandHandlerTests
 {
 	private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
-	private readonly Mock<ILogger<SetSignificantChangeStakeholderObjectionsCommandHandler>> _loggerMock;
-	private readonly SetSignificantChangeStakeholderObjectionsCommandHandler _handler;
+	private readonly Mock<ILogger<SetSignificantChangeLocalAuthorityObjectionsCommandHandler>> _loggerMock;
+	private readonly SetSignificantChangeLocalAuthorityObjectionsCommandHandler _handler;
 
-	public SetSignificantChangeStakeholderObjectionsCommandHandlerTests()
+	public SetSignificantChangeLocalAuthorityObjectionsCommandHandlerTests()
 	{
 		_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-		_loggerMock = new Mock<ILogger<SetSignificantChangeStakeholderObjectionsCommandHandler>>();
-		_handler = new SetSignificantChangeStakeholderObjectionsCommandHandler(_repositoryMock.Object, _loggerMock.Object);
+		_loggerMock = new Mock<ILogger<SetSignificantChangeLocalAuthorityObjectionsCommandHandler>>();
+		_handler = new SetSignificantChangeLocalAuthorityObjectionsCommandHandler(_repositoryMock.Object, _loggerMock.Object);
 	}
 
 	[Fact]
 	public async Task Handle_ProjectNotFound_ReturnsNotFoundCommandResult()
 	{
-		var command = new SetSignificantChangeStakeholderObjectionsCommand(
+		var command = new SetSignificantChangeLocalAuthorityObjectionsCommand(
 			id: 100,
-			stakeholderObjections: SignificantChangeStakeholderObjections.No,
-			stakeholderObjectionsComment: null);
+			localAuthorityRaisedObjections: true,
+			localAuthorityObjectionsFurtherInformation: "Local authority objection details",
+			localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -44,19 +45,21 @@ public class SetSignificantChangeStakeholderObjectionsCommandHandlerTests
 	[Fact]
 	public async Task Handle_ProjectFound_UpdatesSectionAndPersistsChanges()
 	{
-		var command = new SetSignificantChangeStakeholderObjectionsCommand(
+		var command = new SetSignificantChangeLocalAuthorityObjectionsCommand(
 			id: 200,
-			stakeholderObjections: SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided,
-			stakeholderObjectionsComment: "some comment");
+			localAuthorityRaisedObjections: true,
+			localAuthorityObjectionsFurtherInformation: "Local authority has raised concerns",
+			localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
 
-		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
-			urn: 123456,
-			tier: 1,
-			trustName: "Test Trust",
-			trustUkprn: "12345678",
-			typeOfSignificantChange: "Change of age range",
-			schoolName: "Test School"),
-			createdOn: DateTime.UtcNow);
+		var project = SignificantChangeProject.Create(
+			new SignificantChangeProjectOptions(
+				123456,
+				1,
+				"Test Trust",
+				"12345678",
+				"Change of age range",
+				"Test School"),
+			DateTime.UtcNow);
 
 		var unitOfWorkMock = new Mock<IUnitOfWork>();
 		unitOfWorkMock
@@ -71,10 +74,11 @@ public class SetSignificantChangeStakeholderObjectionsCommandHandlerTests
 		var result = await _handler.Handle(command, CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.Details.StakeholderObjections.Should().Be(command.StakeholderObjections);
-		project.Details.StakeholderObjectionsComment.Should().Be(command.StakeholderObjectionsComment);
+		project.Details.LocalAuthorityRaisedObjections.Should().BeTrue();
+		project.Details.LocalAuthorityObjectionsFurtherInformation.Should().Be("Local authority has raised concerns");
+		project.Details.LocalAuthoritySupportingEvidenceLink.Should().Be("https://example.org/evidence");
 		project.Tier.Should().Be(2);
-		project.Details.GetStakeholderObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		project.Details.GetLocalAuthorityObjectionsTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);
 		_repositoryMock.Verify(x => x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

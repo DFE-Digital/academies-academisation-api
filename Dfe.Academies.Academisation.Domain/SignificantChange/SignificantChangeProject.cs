@@ -101,32 +101,6 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			}
 		}
 
-		public void SetAdmissionVariationConsultation(bool? consultationIncludeAdmissionVariation,
-			string? noAdmissionVariationReason)
-		{
-			Details.ConsultationIncludeAdmissionVariation = consultationIncludeAdmissionVariation;
-			Details.ConsultationNoAdmissionVariationReason = consultationIncludeAdmissionVariation is false
-				? noAdmissionVariationReason
-				: null;
-
-			if (consultationIncludeAdmissionVariation is false)
-			{
-				MoveToTierTwoIfApplicable();
-			}
-		}
-
-		public void SetStakeholderConsultation(bool? trustConsultedStakeholders,
-			string? trustConsultedStakeholdersNotConsultedReason)
-		{
-			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
-			Details.TrustConsultedStakeholdersNotConsultedReason = trustConsultedStakeholders is false
-				? trustConsultedStakeholdersNotConsultedReason
-				: null;
-
-			if (trustConsultedStakeholders is false)
-				MoveToTierTwoIfApplicable();
-		}
-
 		public void SetConsultationDuration(
 			ConsultationDurationAnswer? consultationLastedMinimumThreeWeeks,
 			string? consultationDurationNotMetReason)
@@ -174,15 +148,67 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.FhaRisksOrIssuesRaisedSupportingEvidence = supportingEvidence;
 		}
 
-		public void SetReligiousBodyConsultation(bool? trustConsultedReligiousBody,
-					string? trustConsultedReligiousBodyNotConsultedReason)
+		public void SetReligiousBodyConsultation(
+			YesNoNotApplicableAnswer? trustConsultedReligiousBody,
+			string? trustConsultedReligiousBodyNotConsultedReason,
+			YesNoNotApplicableAnswer? religiousBodyRaisedObjection,
+			string? religiousBodyRaisedObjectionReason,
+			YesNoNotApplicableAnswer? religiousBodyConsentGranted,
+			string? religiousBodyConsentNotGrantedReason,
+			string? supportingEvidence)
 		{
-			Details.TrustConsultedReligiousBody = trustConsultedReligiousBody;
-			Details.TrustConsultedReligiousBodyNotConsultedReason = trustConsultedReligiousBody is false
-				? trustConsultedReligiousBodyNotConsultedReason
-				: null;
+			Details.TrustConsultedReligiousBodyAnswer = trustConsultedReligiousBody;
+			Details.TrustConsultedReligiousBodyNotConsultedReason =
+				trustConsultedReligiousBody is YesNoNotApplicableAnswer.No ? trustConsultedReligiousBodyNotConsultedReason : null;
+			Details.ReligiousBodyRaisedObjection = religiousBodyRaisedObjection;
+			Details.ReligiousBodyRaisedObjectionReason =
+				religiousBodyRaisedObjection is YesNoNotApplicableAnswer.Yes ? religiousBodyRaisedObjectionReason : null;
+			Details.ReligiousBodyConsentGranted = religiousBodyConsentGranted;
+			Details.ReligiousBodyConsentNotGrantedReason =
+				religiousBodyConsentGranted is YesNoNotApplicableAnswer.No ? religiousBodyConsentNotGrantedReason : null;
+			Details.ReligiousBodySupportingEvidence = supportingEvidence;
 
-			if (trustConsultedReligiousBody is false)
+			if (trustConsultedReligiousBody is YesNoNotApplicableAnswer.No)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetLocalAuthorityObjections(bool? localAuthorityRaisedObjections,
+			string? localAuthorityObjectionsFurtherInformation,
+			string? supportingEvidenceLink)
+		{
+			Details.LocalAuthorityRaisedObjections = localAuthorityRaisedObjections;
+			Details.LocalAuthorityObjectionsFurtherInformation = localAuthorityRaisedObjections is true
+				? localAuthorityObjectionsFurtherInformation
+				: null;
+			Details.LocalAuthoritySupportingEvidenceLink = supportingEvidenceLink;
+
+			if (localAuthorityRaisedObjections is true)
+				MoveToTierTwoIfApplicable();
+		}
+
+		public void SetOtherStakeholderEngagement(
+			bool? trustConsultedStakeholders,
+			string? trustConsultedStakeholdersNotConsultedReason,
+			bool? wereThereAnyObjectionsRaised,
+			string? stakeholderObjectionsDetails,
+			YesNoNotApplicableAnswer? relevantStakeholdersNotifiedOfAdmissionsChanges,
+			string? relevantStakeholdersNotifiedOfAdmissionsChangesReason,
+			string? supportingEvidence)
+		{
+			Details.TrustConsultedStakeholders = trustConsultedStakeholders;
+			Details.TrustConsultedStakeholdersNotConsultedReason =
+				trustConsultedStakeholders is false ? trustConsultedStakeholdersNotConsultedReason : null;
+			Details.WereThereAnyObjectionsRaised = wereThereAnyObjectionsRaised;
+			Details.StakeholderObjectionsDetails =
+				wereThereAnyObjectionsRaised is true ? stakeholderObjectionsDetails : null;
+			Details.RelevantStakeholdersNotifiedOfAdmissionsChanges = relevantStakeholdersNotifiedOfAdmissionsChanges;
+			Details.RelevantStakeholdersNotifiedOfAdmissionsChangesReason =
+				relevantStakeholdersNotifiedOfAdmissionsChanges is YesNoNotApplicableAnswer.No
+					? relevantStakeholdersNotifiedOfAdmissionsChangesReason
+					: null;
+			Details.OtherStakeholderEngagementSupportingEvidence = supportingEvidence;
+
+			if (trustConsultedStakeholders is false)
 				MoveToTierTwoIfApplicable();
 		}
 
@@ -225,21 +251,27 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.ProposedChangeDate = proposedChangeDate;
 		}
 
-		public void SetStakeholderObjections(SignificantChangeStakeholderObjections? stakeholderObjections, string? stakeholderObjectionsComment)
+		public void SetLandTransaction(
+			YesNoNotApplicableAnswer? landTransactionApplication, 
+			string? landTransactionApplicationAdditionalInfo,
+			YesNoNotApplicableAnswer? landTransactionConsent, 
+			string? landTransactionConsentAdditionalInfo,  
+			string? landTransactionSupportingEvidence)
 		{
-			Details.StakeholderObjections = stakeholderObjections;
-			Details.StakeholderObjectionsComment = stakeholderObjections == SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided ? stakeholderObjectionsComment : null;
+			Details.LandTransactionApplication = landTransactionApplication;
+			Details.LandTransactionApplicationAdditionalInfo = landTransactionApplicationAdditionalInfo;
+			Details.LandTransactionConsent = landTransactionConsent;
+			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
+			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
 
-			
-			if (stakeholderObjections is SignificantChangeStakeholderObjections.YesNoFurtherInformationProvided)
+			if(landTransactionConsent is YesNoNotApplicableAnswer.No || landTransactionApplication is YesNoNotApplicableAnswer.No)
 				MoveToTierTwoIfApplicable();
 		}
-
 		public void SetProjectSentToComplete(Guid? completeProjectId)
 		{
 			ProjectSentToComplete = true;
 			CompleteProjectId = completeProjectId;
-    }
+    	}
       
 		public void SetStatus(SignificantChangeStatus requestStatus)
 		{

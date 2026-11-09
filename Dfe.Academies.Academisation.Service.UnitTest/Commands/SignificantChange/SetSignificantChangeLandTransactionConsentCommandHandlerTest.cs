@@ -9,26 +9,30 @@ using Xunit;
 
 namespace Dfe.Academies.Academisation.Service.UnitTest.Commands.SignificantChange;
 
-public class SetSignificantChangeStakeholderConsultationCommandHandlerTests
+public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 {
 	private readonly Mock<ISignificantChangeProjectRepository> _repositoryMock;
-	private readonly Mock<ILogger<SetSignificantChangeStakeholderConsultationCommandHandler>> _loggerMock;
-	private readonly SetSignificantChangeStakeholderConsultationCommandHandler _handler;
+	private readonly Mock<ILogger<SetSignificantChangeLandTransactionConsentCommandHandler>> _loggerMock;
+	private readonly SetSignificantChangeLandTransactionConsentCommandHandler _handler;
 
-	public SetSignificantChangeStakeholderConsultationCommandHandlerTests()
+	public SetSignificantChangeLandTransactionConsentCommandHandlerTests()
 	{
 		_repositoryMock = new Mock<ISignificantChangeProjectRepository>();
-		_loggerMock = new Mock<ILogger<SetSignificantChangeStakeholderConsultationCommandHandler>>();
-		_handler = new SetSignificantChangeStakeholderConsultationCommandHandler(_repositoryMock.Object, _loggerMock.Object);
+		_loggerMock = new Mock<ILogger<SetSignificantChangeLandTransactionConsentCommandHandler>>();
+		_handler = new SetSignificantChangeLandTransactionConsentCommandHandler(_repositoryMock.Object, _loggerMock.Object);
 	}
 
 	[Fact]
 	public async Task Handle_ProjectNotFound_ReturnsNotFoundCommandResult()
 	{
-		var command = new SetSignificantChangeStakeholderConsultationCommand(
+		var command = new SetSignificantChangeLandTransactionCommand(
 			id: 100,
-			trustConsultedStakeholders: true,
-			trustConsultedStakeholdersNotConsultedReason: null);
+			landTransactionApplication: YesNoNotApplicableAnswer.Yes,
+			landTransactionApplicationAdditionalInfo: null,
+			landTransactionConsent: YesNoNotApplicableAnswer.Yes,
+			landTransactionConsentAdditionalInfo: null,
+			landTransactionSupportingEvidence: "evidence link"
+        );
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -44,10 +48,14 @@ public class SetSignificantChangeStakeholderConsultationCommandHandlerTests
 	[Fact]
 	public async Task Handle_ProjectFound_UpdatesSectionAndPersistsChanges()
 	{
-		var command = new SetSignificantChangeStakeholderConsultationCommand(
+		var command = new SetSignificantChangeLandTransactionCommand(
 			id: 200,
-			trustConsultedStakeholders: false,
-			trustConsultedStakeholdersNotConsultedReason: "Trust did not consult stakeholders");
+			landTransactionApplication: YesNoNotApplicableAnswer.Yes,
+			landTransactionApplicationAdditionalInfo: null,
+			landTransactionConsent: YesNoNotApplicableAnswer.No,
+			landTransactionConsentAdditionalInfo: "some additional info",
+			landTransactionSupportingEvidence: "evidence link"
+        );
 
 		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
 			urn: 123456,
@@ -71,10 +79,13 @@ public class SetSignificantChangeStakeholderConsultationCommandHandlerTests
 		var result = await _handler.Handle(command, CancellationToken.None);
 
 		result.Should().BeOfType<CommandSuccessResult>();
-		project.Details.TrustConsultedStakeholders.Should().BeFalse();
-		project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Trust did not consult stakeholders");
+		project.Details.LandTransactionApplication.Should().Be(command.LandTransactionApplication);
+		project.Details.LandTransactionApplicationAdditionalInfo.Should().Be(command.LandTransactionApplicationAdditionalInfo);
+		project.Details.LandTransactionConsent.Should().Be(command.LandTransactionConsent);
+		project.Details.LandTransactionConsentAdditionalInfo.Should().Be(command.LandTransactionConsentAdditionalInfo);
+		project.Details.LandTransactionSupportingEvidence.Should().Be(command.LandTransactionSupportingEvidence);
 		project.Tier.Should().Be(2);
-		project.Details.GetStakeholderConsultationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
+		project.Details.GetLandTransactionTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 
 		_repositoryMock.Verify(x => x.Update(project), Times.Once);
 		_repositoryMock.Verify(x => x.UnitOfWork.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
