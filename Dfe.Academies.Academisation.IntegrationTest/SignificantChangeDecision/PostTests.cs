@@ -15,10 +15,27 @@ namespace Dfe.Academies.Academisation.IntegrationTest.SignificantChangeDecision;
 public class PostTests(TestWebApplicationFactory factory)
 {
 	[Fact]
+	public async Task Post_WhenProjectDoesNotExist_ReturnsNotFound()
+	{
+		var client = factory.CreateClient();
+		const int missingProjectId = int.MaxValue;
+		Assert.False(await factory.Context.Set<Domain.SignificantChange.SignificantChangeProject>()
+			.AnyAsync(project => project.Id == missingProjectId));
+
+		var request = new SignificantChangeDecisionCommand { SignificantChangeProjectId = missingProjectId };
+
+		var result = await client.PostAsJsonDeserialized<SignificantChangeDecisionServiceModel>(
+			"/significant-change/decision", request);
+
+		Assert.Equal(System.Net.HttpStatusCode.NotFound, result.StatusCode);
+	}
+
+	[Fact]
 	public async Task Post_WhenRequestIsNotValid_ReturnsBadRequest_DoesNotUpdateDatabase()
 	{
-		const int significantChangeProjectId = 9000;
 		var client = factory.CreateClient();
+		var project = await factory.CreateSignificantChangeProjectWithCompletedTasksAsync();
+		var significantChangeProjectId = project.Id;
 		var request = new SignificantChangeDecisionCommand { SignificantChangeProjectId = significantChangeProjectId };
 
 		var result = await client.PostAsJsonDeserialized<SignificantChangeDecisionServiceModel>(
@@ -43,8 +60,9 @@ public class PostTests(TestWebApplicationFactory factory)
 	public async Task Post_WithValidRequest_ReturnsCreatedAndUpdatesDatabase()
 	{
 		//Arrange
-		const int significantChangeProjectId = 9001;
 		var client = factory.CreateClient();
+		var project = await factory.CreateSignificantChangeProjectWithCompletedTasksAsync();
+		var significantChangeProjectId = project.Id;
 		var request = new SignificantChangeDecisionCommand
 		{
 			SignificantChangeProjectId = significantChangeProjectId,
