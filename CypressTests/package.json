@@ -40,7 +40,7 @@
     "cypress": "13.17.0",
     "cypress-multi-reporters": "2.0.5",
     "cypress-plugin-api": "2.11.2",
-    "cypress-slack-reporter": "1.5.4",
+    "cypress-slack-reporter": "1.5.5",
     "dotenv": "16.4.7",
     "eslint": "8.57.1",
     "eslint-plugin-cypress": "3.4.0",
