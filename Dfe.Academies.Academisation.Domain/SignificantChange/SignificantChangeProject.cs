@@ -93,12 +93,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 					? admissionsVariationAdmissionsTeamSupportiveAdditionalInformation
 					: null;
 
-			if ( admissionsVariationLocalAuthoritySupportive is false 
-				|| admissionsVariationPupilPlacePlanningSupportive is false 
-				|| admissionsVariationAdmissionsTeamSupportive is false)
-			{
-				MoveToTierTwoIfApplicable();
-			}
+			SetProjectTier();
 		}
 
 		public void SetConsultationDuration(
@@ -111,8 +106,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 					? consultationDurationNotMetReason
 					: null;
 
-			if (consultationLastedMinimumThreeWeeks is ConsultationDurationAnswer.No)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetFunding(FundingAnswer? fundingAnswer, string? additionalInformation, string? supportingEvidence)
@@ -122,6 +116,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? additionalInformation
 				: null;
 			Details.FundingSupportingEvidence = supportingEvidence;
+
+			SetProjectTier();
 		}
 
 		public void SetHqtfConsideration(
@@ -134,6 +130,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? additionalInformation
 				: null;
 			Details.HqtfConsiderationSupportingEvidence = supportingEvidence;
+
+			SetProjectTier();
 		}
 
 		public void SetFhaRisksOrIssuesRaised(
@@ -146,6 +144,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				? additionalInformation
 				: null;
 			Details.FhaRisksOrIssuesRaisedSupportingEvidence = supportingEvidence;
+			SetProjectTier();
 		}
 
 		public void SetReligiousBodyConsultation(
@@ -168,8 +167,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				religiousBodyConsentGranted is YesNoNotApplicableAnswer.No ? religiousBodyConsentNotGrantedReason : null;
 			Details.ReligiousBodySupportingEvidence = supportingEvidence;
 
-			if (trustConsultedReligiousBody is YesNoNotApplicableAnswer.No)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetLocalAuthorityObjections(bool? localAuthorityRaisedObjections,
@@ -182,8 +180,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				: null;
 			Details.LocalAuthoritySupportingEvidenceLink = supportingEvidenceLink;
 
-			if (localAuthorityRaisedObjections is true)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetOtherStakeholderEngagement(
@@ -208,19 +205,13 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 					: null;
 			Details.OtherStakeholderEngagementSupportingEvidence = supportingEvidence;
 
-			if (trustConsultedStakeholders is false)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 
 		public void SetRecommendation(Recommendation? recommendation, string? recommendationMoreInformation)
 		{
 			Details.Recommendation = recommendation;
 			Details.RecommendationMoreInformation = recommendationMoreInformation;
-		}
-
-		public void MoveToTierTwoIfApplicable()
-		{
-			if (Tier == 1) Tier = 2;
 		}
 
 		public static SignificantChangeProject Create(SignificantChangeProjectOptions options, DateTime createdOn)
@@ -243,6 +234,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.EqualitiesLikelyDetails = equalitiesLikelyDetails;
 			Details.EqualitiesSomeImpactDetails = equalitiesSomeImpactDetails;
 			Details.EqualitiesImpactSupportingEvidence = equalitiesImpactSupportingEvidence;
+			SetProjectTier();
 		}
 
 		public void SetProjectDates(DateTime? proposedDecisionDate, DateTime? proposedChangeDate)
@@ -264,8 +256,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.LandTransactionConsentAdditionalInfo = landTransactionConsentAdditionalInfo;
 			Details.LandTransactionSupportingEvidence = landTransactionSupportingEvidence;
 
-			if(landTransactionConsent is YesNoNotApplicableAnswer.No || landTransactionApplication is YesNoNotApplicableAnswer.No)
-				MoveToTierTwoIfApplicable();
+			SetProjectTier();
 		}
 		public void SetProjectSentToComplete(Guid? completeProjectId)
 		{
@@ -284,6 +275,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.PlanningPermission = planningPermissionAnswer;
 			Details.PlanningPermissionAdditionalInformation = additionalInformation;
 			Details.PlanningPermissionSupportingEvidence = supportingEvidence;
+			SetProjectTier();
 		}
 
 		public void SetOfstedInspection(DateTime? inspectionDate, bool? meetsOfstedStandards,
@@ -293,6 +285,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.MeetsOfstedStandards = meetsOfstedStandards;
 			Details.OfstedAdditionalInformation = meetsOfstedStandards == true ? null : additionalInformation;
 			Details.OfstedSupportingEvidence = supportingEvidence;
+			SetProjectTier();
 		}
 
 		public void SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer admissionsVariationRecommendation)

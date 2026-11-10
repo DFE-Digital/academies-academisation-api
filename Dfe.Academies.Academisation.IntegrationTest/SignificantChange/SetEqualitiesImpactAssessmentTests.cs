@@ -47,7 +47,7 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 			Assert.Equal("Mitigation plan in place", updated.Details.EqualitiesLikelyDetails);
 			Assert.Null(updated.Details.EqualitiesSomeImpactDetails);
 			Assert.Equal("sharepoint.edu.gov.uk/evidence", updated.Details.EqualitiesImpactSupportingEvidence);
-			Assert.Equal((byte)1, updated.Tier);
+			Assert.Equal((byte)2, updated.Tier);
 		});
 	}
 
