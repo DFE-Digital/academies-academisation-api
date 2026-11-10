@@ -295,11 +295,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		public void SetProjectTier()
 		{
-			// if (ShouldBeTierThree())
-			// {
-			// 	Tier = 3;
-			// 	return;
-			// }
+			if (Tier == 3) return;
 			
 			if (ShouldBeTierTwo())
 			{
