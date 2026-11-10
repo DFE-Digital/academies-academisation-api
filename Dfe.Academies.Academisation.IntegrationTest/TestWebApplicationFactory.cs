@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.Core.ConversionAdvisoryBoardDecisionAggregate;
+using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.WebApi.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -76,6 +79,41 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		));
 
 		_dbContext.SaveChanges();
+	}
+
+	public async Task<SignificantChangeProject> CreateSignificantChangeProjectWithCompletedTasksAsync()
+	{
+		var project = SignificantChangeProject.Create(
+			new SignificantChangeProjectOptions(123456, 1, "Test Trust", "12345678", "Change of age range", "Test School"),
+			DateTime.UtcNow);
+
+		project.AssignUser(Guid.NewGuid(), "test.user@example.com", "Test User");
+		project.SetConsultationDuration(ConsultationDurationAnswer.Yes, null);
+		project.SetEqualitiesImpactAssessment(true, null, EqualitiesImpact.Unlikely, null, null, null);
+		project.SetReligiousBodyConsultation(
+			YesNoNotApplicableAnswer.Yes, null,
+			YesNoNotApplicableAnswer.No, null,
+			YesNoNotApplicableAnswer.Yes, null, null);
+		project.SetProjectDates(DateTime.UtcNow, DateTime.UtcNow.AddMonths(1));
+		project.SetLandTransaction(
+			YesNoNotApplicableAnswer.NotApplicable, null,
+			YesNoNotApplicableAnswer.NotApplicable, null, null);
+		project.SetOtherStakeholderEngagement(
+			true, null, false, null, YesNoNotApplicableAnswer.NotApplicable, null, null);
+		project.SetFunding(FundingAnswer.Yes, null, null);
+		project.SetPlanningPermission(PlanningPermissionAnswer.NotApplicable, null, null);
+		project.SetRecommendation(Recommendation.Approve, null);
+		project.SetHqtfConsideration(HqtfConsiderationAnswer.NotApplicable, null, null);
+		project.SetFhaRisksOrIssuesRaised(false, null, null);
+		project.SetAdmissionVariationDetails(false, null, null, null, null, null, null, null);
+		project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.NotApplicable);
+		project.SetOfstedInspection(DateTime.UtcNow.AddMonths(-1), true, null, null);
+		project.SetLocalAuthorityObjections(false, null, null);
+
+		Context.Add(project);
+		await Context.SaveChangesAsync();
+
+		return project;
 	}
 
 	protected override void Dispose(bool disposing)

@@ -1,4 +1,5 @@
 ﻿using Dfe.Academies.Academisation.Domain.Core.SignificantChange;
+using Dfe.Academies.Academisation.Domain.SignificantChange;
 
 namespace Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 
@@ -21,4 +22,25 @@ public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectS
 	public SignificantChangeAdmissionsVariationRecommendationResponse AdmissionsVariationRecommendation { get; set; } = new();
 	public Decision? Decision { get; set; }
 	public DateTime? DecisionDate { get; set; }
+
+    public bool AllTasksComplete()
+    {
+	    string completeText = nameof(SignificantChangeTaskStatus.Completed);
+
+        return ConsultationDuration.Status == completeText
+		&& EqualitiesImpactAssessment.Status == completeText
+		&& ReligiousBodyConsultation.Status == completeText
+		&& ProjectDates.Status == completeText
+		&& LandTransaction.Status == completeText
+		&& OtherStakeholderEngagement.Status == completeText
+		&& Funding.Status == completeText
+		&& PlanningPermission.Status == completeText
+		&& Recommendation.Status == completeText
+		&& HqtfConsideration.Status == completeText
+		&& FhaRisksOrIssuesRaised.Status == completeText
+		&& AdmissionsVariation.Status == completeText
+		&& OfstedInspection.Status == completeText
+		&& LocalAuthorityObjections.Status == completeText
+		&& AdmissionsVariationRecommendation.Status == completeText;
+    }
 }
