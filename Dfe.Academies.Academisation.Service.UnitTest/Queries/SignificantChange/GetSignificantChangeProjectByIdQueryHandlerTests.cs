@@ -85,6 +85,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetLandTransaction(landTransactionApplication, landTransactionApplicationAdditionalInfo, landTransactionConsent, landtransactionConsentAdditionalInfo, landTransactionSupportingEvidence);
 			project.SetPlanningPermission(PlanningPermissionAnswer.No, "Awaiting final approval", "Planning permission evidence uploaded");
 			project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.Approve);
+			project.SetRecommendation(Recommendation.Approve, "Recommendation details");
 			project.SetOfstedInspection(proposedDecisionDate, false, "Ofsted standards not met", "Ofsted evidence");
 			project.SetFhaRisksOrIssuesRaised(true, "Risks need consideration", "FHA evidence");
 			project.SetLocalAuthorityObjections(true, "bad things n stuff", "i-did-do-it.com");
@@ -168,6 +169,9 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.OfstedInspection.AdditionalInformation.Should().Be("Ofsted standards not met");
 			result.OfstedInspection.SupportingEvidence.Should().Be("Ofsted evidence");
 			result.OfstedInspection.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
+			result.Recommendation.Recommendation.Should().Be(Recommendation.Approve);
+			result.Recommendation.RecommendationMoreInformation.Should().Be("Recommendation details");
+			result.Recommendation.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.FhaRisksOrIssuesRaised.FhaRisksOrIssuesRaised.Should().BeTrue();
 			result.FhaRisksOrIssuesRaised.AdditionalInformation.Should().Be("Risks need consideration");
 			result.FhaRisksOrIssuesRaised.SupportingEvidence.Should().Be("FHA evidence");
@@ -203,8 +207,11 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			response.OtherStakeholderEngagement.WereThereAnyObjectionsRaised.Should().BeNull();
 			response.OtherStakeholderEngagement.RelevantStakeholdersNotifiedOfAdmissionsChanges.Should().BeNull();
 			response.OtherStakeholderEngagement.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
+			response.Recommendation.Recommendation.Should().BeNull();
+			response.Recommendation.RecommendationMoreInformation.Should().BeNull();
+			response.Recommendation.Status.Should().Be(nameof(SignificantChangeTaskStatus.NotStarted));
 		}
-
+		
 		[Fact]
 		public async Task Handle_ProjectDoesNotExist_ReturnsNull()
 		{
