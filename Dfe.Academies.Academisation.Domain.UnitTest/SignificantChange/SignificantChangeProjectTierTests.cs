@@ -23,6 +23,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			OfstedStandardsNotMet,
 			EqualitiesImpactAssessmentNotCompleted,
 			EqualitiesImpactLikely,
+			EqualitiesImpactSomeImpact,
 			LandTransactionApplicationNotSubmitted,
 			LandTransactionConsentNotGranted,
 			PlanningPermissionNotSecured,
@@ -126,6 +127,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					TierTwoTrigger.EqualitiesImpactLikely
 				},
 				{
+					"equalities impact has some impact",
+					TierTwoTrigger.EqualitiesImpactSomeImpact
+				},
+				{
 					"land transaction application has not been submitted",
 					TierTwoTrigger.LandTransactionApplicationNotSubmitted
 				},
@@ -196,6 +201,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					break;
 				case TierTwoTrigger.EqualitiesImpactLikely:
 					project.Details.EqualitiesImpactIdentified = EqualitiesImpact.Likely;
+					break;
+				case TierTwoTrigger.EqualitiesImpactSomeImpact:
+					project.Details.EqualitiesImpactIdentified = EqualitiesImpact.SomeImpact;
 					break;
 				case TierTwoTrigger.LandTransactionApplicationNotSubmitted:
 					project.Details.LandTransactionApplication = YesNoNotApplicableAnswer.No;

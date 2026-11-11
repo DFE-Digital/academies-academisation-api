@@ -365,7 +365,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			=> Details.EqualitiesImpactAssessmentCompleted == false;
 
 		private bool EqualitiesImpactIsLikely()
-			=> Details.EqualitiesImpactIdentified == EqualitiesImpact.Likely;
+			=> Details.EqualitiesImpactIdentified == EqualitiesImpact.Likely
+			|| Details.EqualitiesImpactIdentified == EqualitiesImpact.SomeImpact;
 
 		private bool LandTransactionApplicationNotSubmitted()
 			=> Details.LandTransactionApplication == YesNoNotApplicableAnswer.No;
