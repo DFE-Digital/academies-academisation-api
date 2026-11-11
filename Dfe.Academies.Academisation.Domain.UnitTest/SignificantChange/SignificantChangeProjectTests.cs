@@ -1226,7 +1226,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
 		[InlineData(Recommendation.Decline, null, SignificantChangeTaskStatus.Completed)]
 		[InlineData(null, "Blah blah 6 7", SignificantChangeTaskStatus.InProgress)]
-		[InlineData(Recommendation.Approve, "Yeah, I highly reommend approving because it's a really good idea", SignificantChangeTaskStatus.Completed)]
+		[InlineData(Recommendation.Approve, "Yeah, I highly recommend approving because it's a really good idea", SignificantChangeTaskStatus.Completed)]
 		public void GetRecommendationTaskStatus_ReturnsExpectedStatus(
 			Recommendation? answer,
 			string? moreInformation,
@@ -1237,6 +1237,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetRecommendation(answer, moreInformation);
 
 			project.Details.GetRecommendationTaskStatus().Should().Be(expected);
+			project.Details.Recommendation.Should().Be(answer);
+			project.Details.RecommendationMoreInformation.Should().Be(moreInformation);
 		}
 
 		[Fact]
