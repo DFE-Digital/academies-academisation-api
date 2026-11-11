@@ -149,7 +149,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			Id: 500,
 			EqualitiesImpactAssessmentCompleted: true,
             EqualitiesImpactAssessmentNoReason: null,
-			EqualitiesImpactIdentified: EqualitiesImpact.SomeImpact,
+			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
 			EqualitiesImpactSupportingEvidence: null);
