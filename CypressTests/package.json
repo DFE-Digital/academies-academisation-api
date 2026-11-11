@@ -48,6 +48,6 @@
     "mochawesome": "7.1.4",
     "mochawesome-merge": "5.0.0",
     "mochawesome-report-generator": "6.2.0",
-    "zaproxy": "2.0.0-rc.6"
+    "zaproxy": "2.0.0-rc.7"
   }
 }
