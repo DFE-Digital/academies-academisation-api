@@ -178,7 +178,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
-		public void SetReligiousBodyConsultation_WhenNotConsulted_AndTierOne_MovesToTierTwo()
+		public void SetReligiousBodyConsultation_WhenTierTwoConditionNoLongerApplies_RevertsToTierOne()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
 				_fixture.Create<int>(),
@@ -190,37 +190,19 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetReligiousBodyConsultation(
-				YesNoNotApplicableAnswer.No, "No consultation carried out",
-				YesNoNotApplicableAnswer.Yes, null,
-				YesNoNotApplicableAnswer.Yes, null, null);
-
-			project.Tier.Should().Be(2);
-		}
-
-		[Fact]
-		public void SetReligiousBodyConsultation_WhenTierMovedToTwo_DoesNotRevertToTierOne()
-		{
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				(byte)1,
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
-
-			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
+			project.Tier.Should().Be(1);
 
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.No, "No consultation carried out",
 				YesNoNotApplicableAnswer.Yes, null,
 				YesNoNotApplicableAnswer.Yes, null, null);
+			project.Tier.Should().Be(2);
+
 			project.SetReligiousBodyConsultation(
 				YesNoNotApplicableAnswer.Yes, null,
-				YesNoNotApplicableAnswer.Yes, null,
+				YesNoNotApplicableAnswer.No, null,
 				YesNoNotApplicableAnswer.Yes, null, null);
-
-			project.Tier.Should().Be(2);
+			project.Tier.Should().Be(1);
 		}
 
 		[Theory]
@@ -305,6 +287,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				YesNoNotApplicableAnswer.Yes, "Old objection",
 				YesNoNotApplicableAnswer.No, "Old consent", null);
 
+			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be("Old consultation");
+			project.Details.ReligiousBodyRaisedObjectionReason.Should().Be("Old objection");
+			project.Details.ReligiousBodyConsentNotGrantedReason.Should().Be("Old consent");
+			project.Details.ReligiousBodySupportingEvidence.Should().BeNull();
+
 			project.SetReligiousBodyConsultation(answer, "Consultation", answer, "Objection", answer, "Consent", "Evidence");
 
 			project.Details.TrustConsultedReligiousBodyNotConsultedReason.Should().Be(answer == YesNoNotApplicableAnswer.No ? "Consultation" : null);
@@ -322,6 +309,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		{
 			var project = CreateProject();
 			project.SetOtherStakeholderEngagement(false, "Old consultation", true, "Old objection", YesNoNotApplicableAnswer.No, "Old notification", null);
+
+			project.Details.TrustConsultedStakeholdersNotConsultedReason.Should().Be("Old consultation");
+			project.Details.StakeholderObjectionsDetails.Should().Be("Old objection");
+			project.Details.RelevantStakeholdersNotifiedOfAdmissionsChangesReason.Should().Be("Old notification");
+			project.Details.OtherStakeholderEngagementSupportingEvidence.Should().BeNull();
 
 			project.SetOtherStakeholderEngagement(answer, "Consultation", answer, "Objection", notified, "Notification", "Evidence");
 
@@ -372,6 +364,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				localAuthorityRaisedObjections: true,
 				localAuthorityObjectionsFurtherInformation: "Initial objection details",
 				supportingEvidenceLink: "https://example.org/evidence");
+
+			project.Details.LocalAuthorityRaisedObjections.Should().BeTrue();
+			project.Details.LocalAuthorityObjectionsFurtherInformation.Should().Be("Initial objection details");
+			project.Details.LocalAuthoritySupportingEvidenceLink.Should().Be("https://example.org/evidence");
 
 			project.SetLocalAuthorityObjections(
 				localAuthorityRaisedObjections: false,
@@ -495,6 +491,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>(),
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
+
+			project.Tier.Should().Be(1);
 
 			project.SetLocalAuthorityObjections(
 				localAuthorityRaisedObjections: true,
@@ -689,24 +687,6 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
-		public void SetLandTransaction_WhenApplicationIsNo_AndTierOne_MovesToTierTwo(){
-			
-			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
-				_fixture.Create<int>(),
-				(byte)1,
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>(),
-				_fixture.Create<string>());
-
-			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
-
-			project.SetLandTransaction(YesNoNotApplicableAnswer.No, "Application not required", null, null, null);
-
-			project.Tier.Should().Be(2);
-		}
-
-		[Fact]
 		public void SetLandTransaction_WhenTierMovedToTwo_DoesNotRevertToTierOne()
 		{
 			var significantChangeProjectOptions = new SignificantChangeProjectOptions(
@@ -719,10 +699,13 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var project = new SignificantChangeProject(SignificantChangeStatus.PreDecision, significantChangeProjectOptions);
 
-			project.SetLandTransaction(YesNoNotApplicableAnswer.No, "Application not required", null, null, null);
-			project.SetLandTransaction(YesNoNotApplicableAnswer.Yes, null, YesNoNotApplicableAnswer.Yes, null, null);
+			project.Tier.Should().Be(1);
 
+			project.SetLandTransaction(YesNoNotApplicableAnswer.No, "Application not required", null, null, null);
 			project.Tier.Should().Be(2);
+
+			project.SetLandTransaction(YesNoNotApplicableAnswer.Yes, null, YesNoNotApplicableAnswer.Yes, null, null);
+			project.Tier.Should().Be(1);
 		}
 
 		[Fact]
@@ -888,6 +871,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
 
+			project.Tier.Should().Be(1);
+
 			project.SetAdmissionVariationDetails(true, null, true, true, true, null, null, null);
 
 			project.Details.GetAdmissionVariationTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
@@ -908,6 +893,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				DateTime.UtcNow);
 
 			project.SetAdmissionVariationDetails(true, null, false, false, false, "LA", "Planning", "Admissions");
+			project.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation.Should().Be("LA");
+			project.Details.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation.Should().Be("Planning");
+			project.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation.Should().Be("Admissions");
+
 			project.SetAdmissionVariationDetails(true, null, true, true, true, "LA", "Planning", "Admissions");
 
 			project.Details.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation.Should().BeNull();
@@ -952,6 +941,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>(),
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
+
+			project.Tier.Should().Be(1);
 
 
 			project.SetAdmissionVariationDetails(
@@ -1002,6 +993,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
 
+			project.SetConsultationDuration(ConsultationDurationAnswer.No, "This should be cleared");
+			project.Details.ConsultationLastedMinimumThreeWeeks.Should().Be(ConsultationDurationAnswer.No);
+			project.Details.ConsultationDurationNotMetReason.Should().Be("This should be cleared");
+
 			project.SetConsultationDuration(answer, "This should be cleared");
 
 			project.Details.ConsultationLastedMinimumThreeWeeks.Should().Be(answer);
@@ -1009,7 +1004,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Fact]
-		public void SetConsultationDuration_WhenNo_AndTierOne_MovesToTierTwo()
+		public void SetConsultationDuration_WhenTierTwoConditionNoLongerApplies_RevertsToTierOne()
 		{
 			var project = SignificantChangeProject.Create(
 				new SignificantChangeProjectOptions(
@@ -1020,49 +1015,14 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 					_fixture.Create<string>(),
 					_fixture.Create<string>()),
 				DateTime.UtcNow);
-
-			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
-
-			project.Tier.Should().Be(2);
-		}
-
-		[Theory]
-		[InlineData(ConsultationDurationAnswer.Yes)]
-		[InlineData(ConsultationDurationAnswer.NoSatisfactoryConsultationCarriedOut)]
-		public void SetConsultationDuration_WhenAnswerIsNotNo_DoesNotChangeTier(ConsultationDurationAnswer answer)
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					1,
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
-
-			project.SetConsultationDuration(answer, null);
 
 			project.Tier.Should().Be(1);
-		}
-
-		[Fact]
-		public void SetConsultationDuration_WhenTierMovedToTwo_DoesNotRevertToTierOne()
-		{
-			var project = SignificantChangeProject.Create(
-				new SignificantChangeProjectOptions(
-					_fixture.Create<int>(),
-					1,
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>(),
-					_fixture.Create<string>()),
-				DateTime.UtcNow);
 
 			project.SetConsultationDuration(ConsultationDurationAnswer.No, "Consultation was too short");
-			project.SetConsultationDuration(ConsultationDurationAnswer.Yes, null);
-
 			project.Tier.Should().Be(2);
+
+			project.SetConsultationDuration(ConsultationDurationAnswer.Yes, null);
+			project.Tier.Should().Be(1);
 		}
 
 		[Fact]
@@ -1126,6 +1086,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void SetFunding_WhenAnswerIsNotNo_ClearsAdditionalInformation()
 		{
 			var project = CreateProject();
+			project.SetFunding(FundingAnswer.No, "This should be cleared", "Business case");
+
+			project.Details.FundingAnswer.Should().Be(FundingAnswer.No);
+			project.Details.FundingAdditionalInformation.Should().Be("This should be cleared");
+			project.Details.FundingSupportingEvidence.Should().Be("Business case");
 
 			project.SetFunding(FundingAnswer.Yes, "This should be cleared", "Business case");
 
@@ -1138,6 +1103,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void SetHqtfConsideration_WhenAnswerIsNotYes_ClearsAdditionalInformation()
 		{
 			var project = CreateProject();
+			project.SetHqtfConsideration(HqtfConsiderationAnswer.Yes, "This should be cleared", "Evidence");
+
+			project.Details.HqtfConsiderationAnswer.Should().Be(HqtfConsiderationAnswer.Yes);
+			project.Details.HqtfConsiderationAdditionalInformation.Should().Be("This should be cleared");
+			project.Details.HqtfConsiderationSupportingEvidence.Should().Be("Evidence");
 
 			project.SetHqtfConsideration(HqtfConsiderationAnswer.No, "This should be cleared", "Evidence");
 
@@ -1150,6 +1120,11 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		public void SetFhaRisksOrIssuesRaised_WhenAnswerIsNotYes_ClearsAdditionalInformation()
 		{
 			var project = CreateProject();
+			project.SetFhaRisksOrIssuesRaised(true, "This should be cleared", "Evidence");
+
+			project.Details.FhaRisksOrIssuesRaised.Should().BeTrue();
+			project.Details.FhaRisksOrIssuesRaisedAdditionalInformation.Should().Be("This should be cleared");
+			project.Details.FhaRisksOrIssuesRaisedSupportingEvidence.Should().Be("Evidence");
 
 			project.SetFhaRisksOrIssuesRaised(false, "This should be cleared", "Evidence");
 
@@ -1221,6 +1196,12 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 
 			var inspectionDate = new DateTime(2026, 10, 20);
 
+			project.SetOfstedInspection(inspectionDate, false, "Additional information", "Supporting evidence");
+			project.Details.OfstedInspectionDate.Should().Be(inspectionDate);
+			project.Details.MeetsOfstedStandards.Should().BeFalse();
+			project.Details.OfstedAdditionalInformation.Should().Be("Additional information");
+			project.Details.OfstedSupportingEvidence.Should().Be("Supporting evidence");
+
 			project.SetOfstedInspection(inspectionDate, true, "Additional information", "Supporting evidence");
 
 			project.Details.OfstedInspectionDate.Should().Be(inspectionDate);
@@ -1258,6 +1239,72 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetRecommendationTaskStatus().Should().Be(expected);
 			project.Details.Recommendation.Should().Be(answer);
 			project.Details.RecommendationMoreInformation.Should().Be(moreInformation);
+		}
+
+		[Fact]
+		public void SetFunding_WhenFundingIsSecured_RevertsToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Tier.Should().Be(1);
+
+			project.SetFunding(FundingAnswer.No, "Funding is unavailable", null);
+			project.Tier.Should().Be(2);
+
+			project.SetFunding(FundingAnswer.Yes, null, null);
+			project.Tier.Should().Be(1);
+		}
+
+		[Fact]
+		public void SetPlanningPermission_WhenPermissionIsGranted_RevertsToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Tier.Should().Be(1);
+
+			project.SetPlanningPermission(PlanningPermissionAnswer.No, null, null);
+			project.Tier.Should().Be(2);
+
+			project.SetPlanningPermission(PlanningPermissionAnswer.Yes, null, null);
+			project.Tier.Should().Be(1);
+		}
+
+		[Fact]
+		public void SetEqualitiesImpactAssessment_WhenAssessmentIsCompleted_RevertsToTierOne()
+		{
+			var project = SignificantChangeProject.Create(
+				new SignificantChangeProjectOptions(
+					_fixture.Create<int>(),
+					1,
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>(),
+					_fixture.Create<string>()),
+				DateTime.UtcNow);
+
+			project.Tier.Should().Be(1);
+
+			project.SetEqualitiesImpactAssessment(false, null, null, null, null, null);
+			project.Tier.Should().Be(2);
+
+			project.SetEqualitiesImpactAssessment(true, null, null, null, null, null);
+			project.Tier.Should().Be(1);
 		}
 
 		private SignificantChangeProject CreateProject()
