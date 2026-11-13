@@ -167,10 +167,18 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation,
 				options => options.MapFrom(source => source.Details.AdmissionsVariationAdmissionsTeamSupportiveAdditionalInformation))
 			.ForMember(destination => destination.AdmissionsVariationTaskStatus,
-				options => options.MapFrom(source => source.Details.GetAdmissionVariationTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetAdmissionVariationTaskStatus().ToString()))
+			.ForMember(destination=> destination.SpecialSchoolSatelliteConsiderationsMeetRequirements,
+				options=> options.MapFrom(source=>source.Details.SpecialSchoolSatelliteConsiderationsMeetRequirements))
+			.ForMember(destination=> destination.SpecialSchoolSatelliteConsiderationsAdditionalInformation,
+				options=> options.MapFrom(source=>source.Details.SpecialSchoolSatelliteConsiderationsAdditionalInformation))
+			.ForMember(destination=> destination.SpecialSchoolSatelliteConsiderationsSupportingEvidence,
+				options=> options.MapFrom(source=>source.Details.SpecialSchoolSatelliteConsiderationsSupportingEvidence))
+			.ForMember(destination=> destination.SpecialSchoolSatelliteConsiderationsTaskStatus,
+				options=> options.MapFrom(source=>source.Details.GetSpecialSchoolSatelliteConsiderationsTaskStatus().ToString()));
 
 
-		
+
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
 			.ForMember(destination => destination.ConsultationLastedMinimumThreeWeeks,
 				options => options.MapFrom(source => (int?)source.ConsultationLastedMinimumThreeWeeks))
@@ -272,6 +280,16 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.RecommendationTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeSpecialSchoolSatelliteConsiderationsResponse>()
+			.ForMember(destination => destination.Answer,
+				options => options.MapFrom(source => source.SpecialSchoolSatelliteConsiderationsMeetRequirements))
+			.ForMember(destination => destination.AdditionalInformation,
+				options => options.MapFrom(source => source.SpecialSchoolSatelliteConsiderationsAdditionalInformation))
+			.ForMember(destination => destination.SupportingEvidence,
+				options => options.MapFrom(source => source.SpecialSchoolSatelliteConsiderationsSupportingEvidence))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.SpecialSchoolSatelliteConsiderationsTaskStatus));
+
 		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionVariationResponse>()
 			.ForMember(destination => destination.AdmissionsVariationRequired,
 				options => options.MapFrom(source => source.AdmissionsVariationRequired))
@@ -338,8 +356,10 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.AdmissionsVariation,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Decision,
-        		options => options.Ignore())
-    		.ForMember(destination => destination.DecisionDate,
-        		options => options.Ignore());
+				options => options.Ignore())
+			.ForMember(destination => destination.DecisionDate,
+				options => options.Ignore())
+			.ForMember(destination => destination.SpecialSchoolSatelliteConsiderations,
+				options => options.MapFrom(source => source));
 	}
 }

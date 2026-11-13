@@ -1089,7 +1089,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
-        public async Task SetFhaRisksOrIssuesRaised_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        public async Task SetFhaRisksOrIssuesRaised_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessfull()
         {
             var request = new SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(
                 true,
@@ -1124,7 +1124,45 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             result.Should().BeOfType<NotFoundResult>();
         }
 
-        private static CreateSignificantProjectCommand CreateValidCommand()
+		[Fact]
+		public async Task SetSignificantChangeSpecialSchoolSatelliteConsiderations_ReturnsNotFound_WhenProjectDoesNotExist()
+		{
+			var request = new SetSignificantChangeSpecialSchoolSatelliteConsiderationsPublicCommand(YesNoNotApplicableAnswer.Yes, null, "Evidence");
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeSpecialSchoolSatelliteConsiderationsCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new NotFoundCommandResult());
+
+			var result = await _controller.SetSignificantChangeSpecialSchoolSatelliteConsiderations(100, request);
+
+			result.Should().BeOfType<NotFoundResult>();
+		}
+
+		[Fact]
+		public async Task SetSignificantChangeSpecialSchoolSatelliteConsiderations_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessfull()
+		{
+			var request = new SetSignificantChangeSpecialSchoolSatelliteConsiderationsPublicCommand(
+				YesNoNotApplicableAnswer.Yes,
+				null,
+				"Evidence");
+
+			_mockMediator
+				.Setup(m => m.Send(It.IsAny<SetSignificantChangeSpecialSchoolSatelliteConsiderationsCommand>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new CommandSuccessResult());
+
+			var result = await _controller.SetSignificantChangeSpecialSchoolSatelliteConsiderations(100, request);
+
+			result.Should().BeOfType<OkResult>();
+			_mockMediator.Verify(m => m.Send(
+				It.Is<SetSignificantChangeSpecialSchoolSatelliteConsiderationsCommand>(command =>
+					command.Id == 100
+					&& command.Answer == YesNoNotApplicableAnswer.Yes
+					&& command.AdditionalInformation == null
+					&& command.SupportingEvidence == "Evidence"),
+				It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+
+		private static CreateSignificantProjectCommand CreateValidCommand()
         {
             return new CreateSignificantProjectCommand(
                 Urn: 123456,
