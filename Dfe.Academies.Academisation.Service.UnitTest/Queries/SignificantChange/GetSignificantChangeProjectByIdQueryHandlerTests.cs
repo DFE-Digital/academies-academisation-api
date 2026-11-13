@@ -89,6 +89,7 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			project.SetOfstedInspection(proposedDecisionDate, false, "Ofsted standards not met", "Ofsted evidence");
 			project.SetFhaRisksOrIssuesRaised(true, "Risks need consideration", "FHA evidence");
 			project.SetLocalAuthorityObjections(true, "bad things n stuff", "i-did-do-it.com");
+			project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.No, "Additional info", "Evidence");
 
 			_repositoryMock
 				.Setup(x => x.GetSignificantChangeProjectById(query.Id, cancellationToken))
@@ -177,6 +178,10 @@ namespace Dfe.Academies.Academisation.Service.UnitTest.Queries.SignificantChange
 			result.FhaRisksOrIssuesRaised.SupportingEvidence.Should().Be("FHA evidence");
 			result.FhaRisksOrIssuesRaised.Status.Should().Be(nameof(SignificantChangeTaskStatus.Completed));
 			result.AdmissionsVariationRecommendation.AdmissionsVariationRecommendationAnswer.Should().Be(AdmissionsVariationRecommendationAnswer.Approve);
+
+			result.SpecialSchoolSatelliteConsiderations.Answer.Should().Be(YesNoNotApplicableAnswer.No);
+			result.SpecialSchoolSatelliteConsiderations.AdditionalInformation.Should().Be("Additional info");
+			result.SpecialSchoolSatelliteConsiderations.SupportingEvidence.Should().Be("Evidence");
 		}
 
 		[Fact]
