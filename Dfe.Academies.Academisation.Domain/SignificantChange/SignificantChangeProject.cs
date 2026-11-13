@@ -301,6 +301,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			SetProjectTier();
 		}
 
+		public void SetSatelliteSiteArrangement(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.SatelliteSiteArrangementAnswer = answer;
+			Details.SatelliteSiteArrangementAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
+			Details.SatelliteSiteArrangementSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetProjectTier()
 		{
 			if (Tier == 3) return;
@@ -334,7 +342,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| FundingNotSecured()
 				|| HasFhaRisksOrIssuesRaised()
 				|| HasHqtfIssuesOrRisks()
-				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements();
+				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
+				|| Details.SatelliteSiteArrangementAnswer == YesNoNotApplicableAnswer.No;
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()

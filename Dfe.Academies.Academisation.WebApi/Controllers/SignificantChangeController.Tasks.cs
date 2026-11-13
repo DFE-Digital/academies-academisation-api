@@ -427,5 +427,33 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		/// <summary>Updates the satellite site arrangement assessment.</summary>
+		[HttpPut("{id:int}/SatelliteSiteArrangement", Name = "SetSignificantChangeSatelliteSiteArrangement")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeSatelliteSiteArrangement(
+			int id,
+			[FromBody] SetSignificantChangeSatelliteSiteArrangementPublicCommand request,
+			CancellationToken cancellationToken)
+		{
+			var command = new SetSignificantChangeSatelliteSiteArrangementCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidence);
+
+			CommandResult result = await _mediator.Send(command, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }
