@@ -293,6 +293,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
 		}
 
+		public void SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.SpecialSchoolSatelliteConsiderationsMeetRequirements = answer;
+			Details.SpecialSchoolSatelliteConsiderationsAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
+			Details.SpecialSchoolSatelliteConsiderationsSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetProjectTier()
 		{
 			if (Tier == 3) return;
@@ -325,7 +333,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| PlanningPermissionNotSecured()
 				|| FundingNotSecured()
 				|| HasFhaRisksOrIssuesRaised()
-				|| HasHqtfIssuesOrRisks();
+				|| HasHqtfIssuesOrRisks()
+				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements();
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()
@@ -385,5 +394,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasHqtfIssuesOrRisks()
 			=> Details.HqtfConsiderationAnswer == HqtfConsiderationAnswer.Yes;
+
+		private bool HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
+			=> Details.SpecialSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
 	}
 }

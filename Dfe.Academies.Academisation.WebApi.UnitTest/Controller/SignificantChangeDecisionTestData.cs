@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Xunit;
@@ -34,7 +34,8 @@ public static class SignificantChangeDecisionTestData
 			AdmissionsVariation = new() { Status = completed },
 			OfstedInspection = new() { Status = completed },
 			LocalAuthorityObjections = new() { Status = completed },
-			AdmissionsVariationRecommendation = new() { Status = completed }
+			AdmissionsVariationRecommendation = new() { Status = completed },
+			SpecialSchoolSatelliteConsiderations = new () { Status = completed }
 		};
 	}
 

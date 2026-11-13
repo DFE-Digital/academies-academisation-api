@@ -1307,6 +1307,62 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Tier.Should().Be(1);
 		}
 
+        [Theory]
+        [InlineData(YesNoNotApplicableAnswer.Yes, null)]
+        [InlineData(YesNoNotApplicableAnswer.NotApplicable, null)]
+        [InlineData(YesNoNotApplicableAnswer.No, "information")]
+		public void SetSpecialSchoolSatelliteConsiderations_WhenAnswerIsNotNo_ClearsAdditionalInformation(YesNoNotApplicableAnswer answer, string? expected)
+        {
+            var project = CreateProject();
+
+            project.SetSpecialSchoolSatelliteConsiderations(answer, "information", "Evidence");
+
+	        project.Details.SpecialSchoolSatelliteConsiderationsMeetRequirements.Should().Be(answer);
+			project.Details.SpecialSchoolSatelliteConsiderationsAdditionalInformation.Should().Be(expected);
+            project.Details.SpecialSchoolSatelliteConsiderationsSupportingEvidence.Should().Be("Evidence");
+        }
+
+        [Theory]
+        [InlineData(null, null, null, SignificantChangeTaskStatus.NotStarted)]
+        [InlineData(YesNoNotApplicableAnswer.Yes, "Not considered", "Evidence", SignificantChangeTaskStatus.Completed)]
+        [InlineData(YesNoNotApplicableAnswer.No, null, null, SignificantChangeTaskStatus.Completed)]
+        [InlineData(YesNoNotApplicableAnswer.No, "Not considered", null, SignificantChangeTaskStatus.Completed)]
+        [InlineData(YesNoNotApplicableAnswer.NotApplicable, null, "Not applicable evidence", SignificantChangeTaskStatus.Completed)]
+        public void GetSpecialSchoolSatelliteConsiderationsTaskStatus_ReturnsExpectedStatus(
+	        YesNoNotApplicableAnswer? answer,
+	        string? additionalInformation,
+	        string? supportingEvidence,
+	        SignificantChangeTaskStatus expected)
+        {
+	        var project = CreateProject();
+
+	        project.SetSpecialSchoolSatelliteConsiderations(answer, additionalInformation, supportingEvidence);
+
+	        project.Details.GetSpecialSchoolSatelliteConsiderationsTaskStatus().Should().Be(expected);
+        }
+
+        [Fact]
+        public void SetSpecialSchoolSatelliteConsiderations_WhenMeetsRequirements_RevertsToTierOne()
+        {
+	        var project = SignificantChangeProject.Create(
+		        new SignificantChangeProjectOptions(
+			        _fixture.Create<int>(),
+			        1,
+			        _fixture.Create<string>(),
+			        _fixture.Create<string>(),
+			        _fixture.Create<string>(),
+			        _fixture.Create<string>()),
+		        DateTime.UtcNow);
+
+	        project.Tier.Should().Be(1);
+
+	        project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.No, null, null);
+	        project.Tier.Should().Be(2);
+
+			project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.Yes, null, null);
+			project.Tier.Should().Be(1);
+        }
+
 		private SignificantChangeProject CreateProject()
 		{
 			return SignificantChangeProject.Create(
