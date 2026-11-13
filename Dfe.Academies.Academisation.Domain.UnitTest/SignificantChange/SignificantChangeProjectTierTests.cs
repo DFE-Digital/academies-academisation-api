@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using FluentAssertions;
 using Xunit;
@@ -29,7 +29,8 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			PlanningPermissionNotSecured,
 			FundingNotSecured,
 			FhaRisksOrIssuesRaised,
-			HqtfIssuesOrRisksIdentified
+			HqtfIssuesOrRisksIdentified,
+			SpecialSchoolSatelliteConsiderations
 		}
 
 		[Fact]
@@ -153,6 +154,10 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				{
 					"hqtf issues or risks have been identified",
 					TierTwoTrigger.HqtfIssuesOrRisksIdentified
+				},
+				{
+					"does not meet the requirements for satellite sites",
+					TierTwoTrigger.SpecialSchoolSatelliteConsiderations
 				}
 			};
 
@@ -223,6 +228,9 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 				case TierTwoTrigger.HqtfIssuesOrRisksIdentified:
 					project.Details.HqtfConsiderationAnswer = HqtfConsiderationAnswer.Yes;
 					break;
+				case TierTwoTrigger.SpecialSchoolSatelliteConsiderations:
+					project.Details.SpecialSchoolSatelliteConsiderationsMeetRequirements = YesNoNotApplicableAnswer.No;
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(trigger), trigger, "Unknown tier-two trigger");
 			}
@@ -253,6 +261,7 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.FundingAnswer = FundingAnswer.Yes;
 			project.Details.FhaRisksOrIssuesRaised = false;
 			project.Details.HqtfConsiderationAnswer = HqtfConsiderationAnswer.No;
+			project.Details.SpecialSchoolSatelliteConsiderationsMeetRequirements = YesNoNotApplicableAnswer.Yes;
 
 			return project;
 		}
