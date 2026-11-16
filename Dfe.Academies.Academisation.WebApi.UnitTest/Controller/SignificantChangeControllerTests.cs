@@ -1157,7 +1157,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 					command.Id == 100
 					&& command.Answer == YesNoNotApplicableAnswer.Yes
 					&& command.AdditionalInformation == null
-					&& command.SupportingEvidence == "Evidence"),
+					&& command.SupportingEvidenceSharepointLink == "Evidence"),
 				It.IsAny<CancellationToken>()), Times.Once);
 		}
 
