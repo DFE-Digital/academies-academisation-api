@@ -9,13 +9,13 @@ public class SetSignificantChangeLandTransactionPublicCommand(
 	string? landTransactionApplicationAdditionalInfo,
 	YesNoNotApplicableAnswer? landTransactionConsent,
 	string? landTransactionConsentAdditionalInfo,
-	string? landTransactionSupportingEvidence) : IRequest<CommandResult>
+	string? landTransactionSupportingEvidenceSharepointLink) : IRequest<CommandResult>
 {
 	public YesNoNotApplicableAnswer? LandTransactionApplication { get; set; } = landTransactionApplication;
 	public string? LandTransactionApplicationAdditionalInfo { get; set; } = landTransactionApplicationAdditionalInfo;
 	public YesNoNotApplicableAnswer? LandTransactionConsent { get; set; } = landTransactionConsent;
 	public string? LandTransactionConsentAdditionalInfo { get; set; } = landTransactionConsentAdditionalInfo;
-	public string? LandTransactionSupportingEvidence { get; set; } = landTransactionSupportingEvidence;
+	public string? LandTransactionSupportingEvidenceSharepointLink { get; set; } = landTransactionSupportingEvidenceSharepointLink;
 }
 
 public class SetSignificantChangeLandTransactionCommand(
@@ -24,8 +24,8 @@ public class SetSignificantChangeLandTransactionCommand(
 	string? landTransactionApplicationAdditionalInfo,
 	YesNoNotApplicableAnswer? landTransactionConsent,
 	string? landTransactionConsentAdditionalInfo,
-	string? landTransactionSupportingEvidence)
-	: SetSignificantChangeLandTransactionPublicCommand(landTransactionApplication, landTransactionApplicationAdditionalInfo, landTransactionConsent, landTransactionConsentAdditionalInfo, landTransactionSupportingEvidence)
+	string? landTransactionSupportingEvidenceSharepointLink)
+	: SetSignificantChangeLandTransactionPublicCommand(landTransactionApplication, landTransactionApplicationAdditionalInfo, landTransactionConsent, landTransactionConsentAdditionalInfo, landTransactionSupportingEvidenceSharepointLink)
 {
 	public int Id { get; set; } = id;
 }

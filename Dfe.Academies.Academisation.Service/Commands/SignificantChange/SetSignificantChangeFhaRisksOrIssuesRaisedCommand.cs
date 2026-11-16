@@ -6,12 +6,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 public record SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(
 	bool? FhaRisksOrIssuesRaised,
 	string? AdditionalInformation,
-	string? SupportingEvidence);
+	string? SupportingEvidenceSharepointLink);
 
 public record SetSignificantChangeFhaRisksOrIssuesRaisedCommand(
 	int Id,
 	bool? FhaRisksOrIssuesRaised,
 	string? AdditionalInformation,
-	string? SupportingEvidence)
-	: SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(FhaRisksOrIssuesRaised, AdditionalInformation, SupportingEvidence),
+	string? SupportingEvidenceSharepointLink)
+	: SetSignificantChangeFhaRisksOrIssuesRaisedPublicCommand(FhaRisksOrIssuesRaised, AdditionalInformation, SupportingEvidenceSharepointLink),
 		IRequest<CommandResult>;

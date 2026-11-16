@@ -19,7 +19,7 @@ public class SetSignificantChangeAdmissionVariationCommandHandler(ISignificantCh
 
 		existingProject.SetAdmissionVariationDetails(
 			request.AdmissionsVariationRequired,
-			request.AdmissionsVariationSupportingEvidence,
+			request.AdmissionsVariationSupportingEvidenceSharepointLink,
 			request.AdmissionsVariationLocalAuthoritySupportive,
 			request.AdmissionsVariationPupilPlacePlanningSupportive,
 			request.AdmissionsVariationAdmissionsTeamSupportive,

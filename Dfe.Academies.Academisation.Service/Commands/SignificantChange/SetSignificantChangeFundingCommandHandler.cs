@@ -20,7 +20,7 @@ public class SetSignificantChangeFundingCommandHandler(
 			return new NotFoundCommandResult();
 		}
 
-		existingProject.SetFunding(request.FundingAnswer, request.AdditionalInformation, request.SupportingEvidence);
+		existingProject.SetFunding(request.FundingAnswer, request.AdditionalInformation, request.SupportingEvidenceSharepointLink);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				request.EqualitiesImpactIdentified,
 				request.EqualitiesLikelyDetails,
 				request.EqualitiesSomeImpactDetails,
-				request.EqualitiesImpactSupportingEvidence);
+				request.EqualitiesImpactSupportingEvidenceSharepointLink);
 
 			repository.Update(existingProject);
 			await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

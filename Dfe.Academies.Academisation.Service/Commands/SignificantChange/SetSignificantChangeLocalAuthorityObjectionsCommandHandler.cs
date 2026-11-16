@@ -24,7 +24,7 @@ public class SetSignificantChangeLocalAuthorityObjectionsCommandHandler(
 		existingProject.SetLocalAuthorityObjections(
 			request.LocalAuthorityRaisedObjections,
 			request.LocalAuthorityObjectionsFurtherInformation,
-			request.LocalAuthoritySupportingEvidenceLink);
+			request.LocalAuthoritySupportingEvidenceLinkSharepointLink);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

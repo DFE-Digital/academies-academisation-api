@@ -33,7 +33,7 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 			religiousBodyRaisedObjectionReason: "Objection details",
 			religiousBodyConsentGranted: YesNoNotApplicableAnswer.NotApplicable,
 			religiousBodyConsentNotGrantedReason: null,
-			supportingEvidence: null);
+			supportingEvidenceSharepointLink: null);
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -57,7 +57,7 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandlerTests
 			religiousBodyRaisedObjectionReason: "Religious body raised an objection",
 			religiousBodyConsentGranted: YesNoNotApplicableAnswer.Yes,
 			religiousBodyConsentNotGrantedReason: null,
-			supportingEvidence: "https://example.com/evidence");
+			supportingEvidenceSharepointLink: "https://example.com/evidence");
 
 		var project = SignificantChangeProject.Create(
 			new SignificantChangeProjectOptions(

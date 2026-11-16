@@ -31,7 +31,7 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 			landTransactionApplicationAdditionalInfo: null,
 			landTransactionConsent: YesNoNotApplicableAnswer.Yes,
 			landTransactionConsentAdditionalInfo: null,
-			landTransactionSupportingEvidence: "evidence link"
+			landTransactionSupportingEvidenceSharepointLink: "evidence link"
         );
 
 		_repositoryMock
@@ -54,7 +54,7 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 			landTransactionApplicationAdditionalInfo: null,
 			landTransactionConsent: YesNoNotApplicableAnswer.No,
 			landTransactionConsentAdditionalInfo: "some additional info",
-			landTransactionSupportingEvidence: "evidence link"
+			landTransactionSupportingEvidenceSharepointLink: "evidence link"
         );
 
 		var project = SignificantChangeProject.Create(new SignificantChangeProjectOptions(
@@ -83,7 +83,7 @@ public class SetSignificantChangeLandTransactionConsentCommandHandlerTests
 		project.Details.LandTransactionApplicationAdditionalInfo.Should().Be(command.LandTransactionApplicationAdditionalInfo);
 		project.Details.LandTransactionConsent.Should().Be(command.LandTransactionConsent);
 		project.Details.LandTransactionConsentAdditionalInfo.Should().Be(command.LandTransactionConsentAdditionalInfo);
-		project.Details.LandTransactionSupportingEvidence.Should().Be(command.LandTransactionSupportingEvidence);
+		project.Details.LandTransactionSupportingEvidence.Should().Be(command.LandTransactionSupportingEvidenceSharepointLink);
 		project.Tier.Should().Be(2);
 		project.Details.GetLandTransactionTaskStatus().Should().Be(SignificantChangeTaskStatus.Completed);
 

@@ -7,12 +7,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 		DateTime? InspectionDate,
 		bool? MeetsOfstedStandards,
 		string? AdditionalInformation,
-		string? SupportingEvidence);
+		string? SupportingEvidenceSharepointLink);
 
 	public record SetSignificantChangeOfstedInspectionCommand(
 		int Id,
 		DateTime? InspectionDate,
 		bool? MeetsOfstedStandards,
 		string? AdditionalInformation,
-		string? SupportingEvidence) : IRequest<CommandResult>;
+		string? SupportingEvidenceSharepointLink) : IRequest<CommandResult>;
 }

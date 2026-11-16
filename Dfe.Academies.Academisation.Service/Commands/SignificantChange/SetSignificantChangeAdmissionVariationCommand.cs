@@ -5,7 +5,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 
 public record SetSignificantChangeAdmissionVariationPublicCommand(
 	bool? AdmissionsVariationRequired,
-	string? AdmissionsVariationSupportingEvidence,
+	string? AdmissionsVariationSupportingEvidenceSharepointLink,
 	bool? AdmissionsVariationLocalAuthoritySupportive,
 	bool? AdmissionsVariationPupilPlacePlanningSupportive,
 	bool? AdmissionsVariationAdmissionsTeamSupportive,
@@ -17,7 +17,7 @@ public record SetSignificantChangeAdmissionVariationPublicCommand(
 public record SetSignificantChangeAdmissionVariationCommand(
 		int Id,
 		bool? AdmissionsVariationRequired,
-		string? AdmissionsVariationSupportingEvidence,
+		string? AdmissionsVariationSupportingEvidenceSharepointLink,
 		bool? AdmissionsVariationLocalAuthoritySupportive,
 		bool? AdmissionsVariationPupilPlacePlanningSupportive,
 		bool? AdmissionsVariationAdmissionsTeamSupportive,
@@ -27,7 +27,7 @@ public record SetSignificantChangeAdmissionVariationCommand(
 	)
 	: SetSignificantChangeAdmissionVariationPublicCommand(
 		AdmissionsVariationRequired,
-		AdmissionsVariationSupportingEvidence,
+		AdmissionsVariationSupportingEvidenceSharepointLink,
 		AdmissionsVariationLocalAuthoritySupportive,
 		AdmissionsVariationPupilPlacePlanningSupportive,
 		AdmissionsVariationAdmissionsTeamSupportive,
