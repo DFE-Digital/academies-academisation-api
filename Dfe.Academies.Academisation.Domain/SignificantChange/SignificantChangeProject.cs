@@ -343,7 +343,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| HasFhaRisksOrIssuesRaised()
 				|| HasHqtfIssuesOrRisks()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
-				|| Details.SatelliteSiteArrangementAnswer == YesNoNotApplicableAnswer.No;
+				|| SateliteSiteNotAGenuineExpansion();
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()
@@ -406,5 +406,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.SpecialSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
+
+		private bool SateliteSiteNotAGenuineExpansion()
+			=> Details.SatelliteSiteArrangementAnswer == YesNoNotApplicableAnswer.No;
 	}
 }
