@@ -29,7 +29,7 @@ public class SetSignificantChangeOtherStakeholderEngagementCommandHandler(
 			request.StakeholderObjectionsDetails,
 			request.RelevantStakeholdersNotifiedOfAdmissionsChanges,
 			request.RelevantStakeholdersNotifiedOfAdmissionsChangesReason,
-			request.SupportingEvidence);
+			request.SupportingEvidenceSharepointLink);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

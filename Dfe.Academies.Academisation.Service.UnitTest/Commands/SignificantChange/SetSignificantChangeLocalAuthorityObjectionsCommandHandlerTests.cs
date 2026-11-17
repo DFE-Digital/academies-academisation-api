@@ -29,7 +29,7 @@ public class SetSignificantChangeLocalAuthorityObjectionsCommandHandlerTests
 			id: 100,
 			localAuthorityRaisedObjections: true,
 			localAuthorityObjectionsFurtherInformation: "Local authority objection details",
-			localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
+			localAuthoritySupportingEvidenceLinkSharepointLink: "https://example.org/evidence");
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -49,7 +49,7 @@ public class SetSignificantChangeLocalAuthorityObjectionsCommandHandlerTests
 			id: 200,
 			localAuthorityRaisedObjections: true,
 			localAuthorityObjectionsFurtherInformation: "Local authority has raised concerns",
-			localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
+			localAuthoritySupportingEvidenceLinkSharepointLink: "https://example.org/evidence");
 
 		var project = SignificantChangeProject.Create(
 			new SignificantChangeProjectOptions(

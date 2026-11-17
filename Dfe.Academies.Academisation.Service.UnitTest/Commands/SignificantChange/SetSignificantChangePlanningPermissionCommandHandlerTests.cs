@@ -29,7 +29,7 @@ public class SetSignificantChangePlanningPermissionCommandHandlerTests
 			Id: 100,
 			PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
 			AdditionalInformation: "Further detail",
-			SupportingEvidence: "Supporting evidence");
+			SupportingEvidenceSharepointLink: "Supporting evidence");
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -49,7 +49,7 @@ public class SetSignificantChangePlanningPermissionCommandHandlerTests
 			Id: 200,
 			PlanningPermissionAnswer: PlanningPermissionAnswer.No,
 			AdditionalInformation: "Planning permission not granted yet",
-			SupportingEvidence: "Awaiting local authority determination");
+			SupportingEvidenceSharepointLink: "Awaiting local authority determination");
 
 		var project = BuildProject();
 		var unitOfWorkMock = new Mock<IUnitOfWork>();

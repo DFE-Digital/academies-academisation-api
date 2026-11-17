@@ -23,7 +23,7 @@ public class SetSignificantChangeHqtfConsiderationCommandHandler(
 		existingProject.SetHqtfConsideration(
 			request.HqtfConsiderationAnswer,
 			request.AdditionalInformation,
-			request.SupportingEvidence);
+			request.SupportingEvidenceSharepointLink);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
