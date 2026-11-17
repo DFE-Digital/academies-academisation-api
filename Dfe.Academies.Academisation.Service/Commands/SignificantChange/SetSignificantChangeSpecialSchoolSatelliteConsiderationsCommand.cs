@@ -8,11 +8,11 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 	public record SetSignificantChangeSpecialSchoolSatelliteConsiderationsPublicCommand(
 		YesNoNotApplicableAnswer? Answer,
 		string? AdditionalInformation,
-		string? SupportingEvidence);
+		string? SupportingEvidenceSharepointLink);
 
 	public record SetSignificantChangeSpecialSchoolSatelliteConsiderationsCommand(
 		int Id,
 		YesNoNotApplicableAnswer? Answer,
 		string? AdditionalInformation,
-		string? SupportingEvidence) : IRequest<CommandResult>;
+		string? SupportingEvidenceSharepointLink) : IRequest<CommandResult>;
 }
