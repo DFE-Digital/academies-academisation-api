@@ -1,4 +1,0 @@
-<Project>
-  <Import Project="Directory.Build.targets.user"
-          Condition="Exists('Directory.Build.targets.user')" />
-</Project>
