@@ -184,6 +184,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.SatelliteSiteArrangementSupportingEvidence))
 			.ForMember(destination => destination.SatelliteSiteArrangementTaskStatus,
 				options => options.MapFrom(source => source.Details.GetSatelliteSiteArrangementTaskStatus().ToString()));
+				options=> options.MapFrom(source=>source.Details.GetSpecialSchoolSatelliteConsiderationsTaskStatus().ToString()));
 
 
 

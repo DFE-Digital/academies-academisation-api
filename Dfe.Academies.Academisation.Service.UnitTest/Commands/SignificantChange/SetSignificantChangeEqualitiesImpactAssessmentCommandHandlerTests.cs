@@ -40,7 +40,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: null);
+			EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -63,7 +63,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			EqualitiesImpactIdentified: EqualitiesImpact.Likely,
 			EqualitiesLikelyDetails: "Mitigation plan in place",
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence");
+			EqualitiesImpactSupportingEvidenceSharepointLink: "sharepoint.edu.gov.uk/evidence");
 
 		var project = CreateProject();
 
@@ -95,7 +95,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			EqualitiesImpactIdentified: null,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: null);
+			EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
 		var project = CreateProject();
 
@@ -124,7 +124,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			EqualitiesImpactIdentified: null,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: null);
+			EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
 		_repositoryMock
 			.Setup(x => x.GetSignificantChangeProjectById(command.Id, It.IsAny<CancellationToken>()))
@@ -152,7 +152,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: null);
+			EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
 		var project = CreateProject();
 
@@ -178,7 +178,7 @@ public class SetSignificantChangeEqualitiesImpactAssessmentCommandHandlerTests
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: null);
+			EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
 		var project = CreateProject();
 

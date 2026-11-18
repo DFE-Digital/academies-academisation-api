@@ -25,7 +25,7 @@ public class SetSignificantChangeLandTransactionConsentCommandHandler(ISignifica
 			request.LandTransactionApplicationAdditionalInfo,
 			request.LandTransactionConsent,
 			request.LandTransactionConsentAdditionalInfo,
-			request.LandTransactionSupportingEvidence);
+			request.LandTransactionSupportingEvidenceSharepointLink);
 
 		_repository.Update(existingProject);
 		await _repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

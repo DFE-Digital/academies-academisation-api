@@ -342,8 +342,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| FundingNotSecured()
 				|| HasFhaRisksOrIssuesRaised()
 				|| HasHqtfIssuesOrRisks()
-				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 				|| SateliteSiteNotAGenuineExpansion();
+				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements();
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()

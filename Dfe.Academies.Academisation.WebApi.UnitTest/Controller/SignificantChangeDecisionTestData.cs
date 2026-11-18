@@ -35,8 +35,8 @@ public static class SignificantChangeDecisionTestData
 			OfstedInspection = new() { Status = completed },
 			LocalAuthorityObjections = new() { Status = completed },
 			AdmissionsVariationRecommendation = new() { Status = completed },
-			SpecialSchoolSatelliteConsiderations = new () { Status = completed },
 			SatelliteSiteArrangement = new() { Status = completed }
+			SpecialSchoolSatelliteConsiderations = new () { Status = completed }
 		};
 	}
 

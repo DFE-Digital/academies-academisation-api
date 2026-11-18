@@ -23,7 +23,7 @@ public class SetPlanningPermissionTests(TestWebApplicationFactory factory) : ICl
 		var request = new SetSignificantChangePlanningPermissionPublicCommand(
 			PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
 			AdditionalInformation: "Planning permission granted",
-			SupportingEvidence: "Evidence attached");
+			SupportingEvidenceSharepointLink: "Evidence attached");
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetPlanningPermission", request);
 
@@ -47,7 +47,7 @@ public class SetPlanningPermissionTests(TestWebApplicationFactory factory) : ICl
 		var request = new SetSignificantChangePlanningPermissionPublicCommand(
 			PlanningPermissionAnswer: PlanningPermissionAnswer.NotApplicable,
 			AdditionalInformation: null,
-			SupportingEvidence: null);
+			SupportingEvidenceSharepointLink: null);
 
 		var response = await client.PutAsJsonAsync("/significant-change/99999/SetPlanningPermission", request);
 

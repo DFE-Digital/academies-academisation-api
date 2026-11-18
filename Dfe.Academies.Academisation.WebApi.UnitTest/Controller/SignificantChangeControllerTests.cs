@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.IService.ServiceModels.Legacy.ProjectAggregate;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
@@ -311,7 +312,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 EqualitiesImpactIdentified: EqualitiesImpact.Likely,
                 EqualitiesLikelyDetails: "Mitigation plan in place",
                 EqualitiesSomeImpactDetails: null,
-                EqualitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence");
+                EqualitiesImpactSupportingEvidenceSharepointLink: "sharepoint.edu.gov.uk/evidence");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -338,7 +339,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				EqualitiesImpactIdentified: null,
                 EqualitiesLikelyDetails: null,
                 EqualitiesSomeImpactDetails: null,
-                EqualitiesImpactSupportingEvidence: null);
+                EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -354,7 +355,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 					&& c.EqualitiesImpactAssessmentNoReason == null
                     && c.EqualitiesImpactIdentified == null
                     && c.EqualitiesLikelyDetails == null
-                    && c.EqualitiesImpactSupportingEvidence == null),
+                    && c.EqualitiesImpactSupportingEvidenceSharepointLink == null),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -367,7 +368,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
                 EqualitiesLikelyDetails: null,
                 EqualitiesSomeImpactDetails: null,
-                EqualitiesImpactSupportingEvidence: null);
+                EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeEqualitiesImpactAssessmentCommand>(), It.IsAny<CancellationToken>()))
@@ -387,7 +388,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 				EqualitiesImpactIdentified: null,
                 EqualitiesLikelyDetails: null,
                 EqualitiesSomeImpactDetails: null,
-                EqualitiesImpactSupportingEvidence: null);
+                EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
             var validationErrors = new[]
             {
@@ -415,7 +416,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 religiousBodyRaisedObjectionReason: null,
                 religiousBodyConsentGranted: YesNoNotApplicableAnswer.NotApplicable,
                 religiousBodyConsentNotGrantedReason: null,
-                supportingEvidence: "https://example.com/evidence");
+                supportingEvidenceSharepointLink: "https://example.com/evidence");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
@@ -433,7 +434,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     && c.ReligiousBodyRaisedObjectionReason == request.ReligiousBodyRaisedObjectionReason
                     && c.ReligiousBodyConsentGranted == request.ReligiousBodyConsentGranted
                     && c.ReligiousBodyConsentNotGrantedReason == request.ReligiousBodyConsentNotGrantedReason
-                    && c.SupportingEvidence == request.SupportingEvidence),
+                    && c.SupportingEvidenceSharepointLink == request.SupportingEvidenceSharepointLink),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -447,7 +448,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 religiousBodyRaisedObjectionReason: "An objection",
                 religiousBodyConsentGranted: YesNoNotApplicableAnswer.Yes,
                 religiousBodyConsentNotGrantedReason: null,
-                supportingEvidence: null);
+                supportingEvidenceSharepointLink: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeReligiousBodyConsultationCommand>(), It.IsAny<CancellationToken>()))
@@ -468,7 +469,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 religiousBodyRaisedObjectionReason: null,
                 religiousBodyConsentGranted: null,
                 religiousBodyConsentNotGrantedReason: null,
-                supportingEvidence: null);
+                supportingEvidenceSharepointLink: null);
 
             var validationErrors = new[]
             {
@@ -492,7 +493,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
                 localAuthorityRaisedObjections: true,
                 localAuthorityObjectionsFurtherInformation: "Local authority has raised objections",
-                localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
+                localAuthoritySupportingEvidenceLinkSharepointLink: "https://example.org/evidence");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeLocalAuthorityObjectionsCommand>(), It.IsAny<CancellationToken>()))
@@ -506,7 +507,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     c.Id == routeId
                     && c.LocalAuthorityRaisedObjections == request.LocalAuthorityRaisedObjections
                     && c.LocalAuthorityObjectionsFurtherInformation == request.LocalAuthorityObjectionsFurtherInformation
-                    && c.LocalAuthoritySupportingEvidenceLink == request.LocalAuthoritySupportingEvidenceLink),
+                    && c.LocalAuthoritySupportingEvidenceLinkSharepointLink == request.LocalAuthoritySupportingEvidenceLinkSharepointLink),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -516,7 +517,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
                 localAuthorityRaisedObjections: false,
                 localAuthorityObjectionsFurtherInformation: null,
-                localAuthoritySupportingEvidenceLink: null);
+                localAuthoritySupportingEvidenceLinkSharepointLink: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeLocalAuthorityObjectionsCommand>(), It.IsAny<CancellationToken>()))
@@ -533,7 +534,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
                 localAuthorityRaisedObjections: true,
                 localAuthorityObjectionsFurtherInformation: null,
-                localAuthoritySupportingEvidenceLink: null);
+                localAuthoritySupportingEvidenceLinkSharepointLink: null);
 
             var validationErrors = new[]
             {
@@ -595,7 +596,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
             int routeId = 1001;
             var request = new SetSignificantChangeAdmissionVariationPublicCommand(
                 AdmissionsVariationRequired: false,
-                AdmissionsVariationSupportingEvidence: "No admission variation required",
+                AdmissionsVariationSupportingEvidenceSharepointLink: "No admission variation required",
                 AdmissionsVariationLocalAuthoritySupportive: null,
                 AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
                 AdmissionsVariationPupilPlacePlanningSupportive: null,
@@ -615,7 +616,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 It.Is<SetSignificantChangeAdmissionVariationCommand>(c =>
                     c.Id == routeId
                     && c.AdmissionsVariationRequired == request.AdmissionsVariationRequired
-                    && c.AdmissionsVariationSupportingEvidence == request.AdmissionsVariationSupportingEvidence
+                    && c.AdmissionsVariationSupportingEvidenceSharepointLink == request.AdmissionsVariationSupportingEvidenceSharepointLink
                     && c.AdmissionsVariationLocalAuthoritySupportive == request.AdmissionsVariationLocalAuthoritySupportive
                     && c.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation == request.AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation
                     && c.AdmissionsVariationPupilPlacePlanningSupportive == request.AdmissionsVariationPupilPlacePlanningSupportive
@@ -630,7 +631,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeAdmissionVariationPublicCommand(
                 AdmissionsVariationRequired: true,
-                AdmissionsVariationSupportingEvidence: null,
+                AdmissionsVariationSupportingEvidenceSharepointLink: null,
                 AdmissionsVariationLocalAuthoritySupportive: null,
                 AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
                 AdmissionsVariationPupilPlacePlanningSupportive: null,
@@ -652,7 +653,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         {
             var request = new SetSignificantChangeAdmissionVariationPublicCommand(
                 AdmissionsVariationRequired: null,
-                AdmissionsVariationSupportingEvidence: null,
+                AdmissionsVariationSupportingEvidenceSharepointLink: null,
                 AdmissionsVariationLocalAuthoritySupportive: null,
                 AdmissionsVariationLocalAuthoritySupportiveAdditionalInformation: null,
                 AdmissionsVariationPupilPlacePlanningSupportive: null,
@@ -743,7 +744,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var request = new SetSignificantChangePlanningPermissionPublicCommand(
 				PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
 				AdditionalInformation: "Further detail",
-				SupportingEvidence: "Supporting document");
+				SupportingEvidenceSharepointLink: "Supporting document");
 
 			_mockMediator
 				.Setup(m => m.Send(It.IsAny<SetSignificantChangePlanningPermissionCommand>(), It.IsAny<CancellationToken>()))
@@ -757,7 +758,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 					c.Id == routeId
 					&& c.PlanningPermissionAnswer == request.PlanningPermissionAnswer
 					&& c.AdditionalInformation == request.AdditionalInformation
-					&& c.SupportingEvidence == request.SupportingEvidence),
+					&& c.SupportingEvidenceSharepointLink == request.SupportingEvidenceSharepointLink),
 				It.IsAny<CancellationToken>()), Times.Once);
 		}
 
@@ -767,7 +768,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var request = new SetSignificantChangePlanningPermissionPublicCommand(
 				PlanningPermissionAnswer: PlanningPermissionAnswer.No,
 				AdditionalInformation: null,
-				SupportingEvidence: null);
+				SupportingEvidenceSharepointLink: null);
 
 			_mockMediator
 				.Setup(m => m.Send(It.IsAny<SetSignificantChangePlanningPermissionCommand>(), It.IsAny<CancellationToken>()))
@@ -784,7 +785,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
 			var request = new SetSignificantChangePlanningPermissionPublicCommand(
 				PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
 				AdditionalInformation: null,
-				SupportingEvidence: null);
+				SupportingEvidenceSharepointLink: null);
 
 			var validationErrors = new[]
 			{
@@ -811,7 +812,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 stakeholderObjectionsDetails: "Objection details",
                 relevantStakeholdersNotifiedOfAdmissionsChanges: YesNoNotApplicableAnswer.No,
                 relevantStakeholdersNotifiedOfAdmissionsChangesReason: "Notification details",
-                supportingEvidence: "https://example.com/evidence");
+                supportingEvidenceSharepointLink: "https://example.com/evidence");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeOtherStakeholderEngagementCommand>(), It.IsAny<CancellationToken>()))
@@ -829,7 +830,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     && c.StakeholderObjectionsDetails == request.StakeholderObjectionsDetails
                     && c.RelevantStakeholdersNotifiedOfAdmissionsChanges == request.RelevantStakeholdersNotifiedOfAdmissionsChanges
                     && c.RelevantStakeholdersNotifiedOfAdmissionsChangesReason == request.RelevantStakeholdersNotifiedOfAdmissionsChangesReason
-                    && c.SupportingEvidence == request.SupportingEvidence),
+                    && c.SupportingEvidenceSharepointLink == request.SupportingEvidenceSharepointLink),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -843,7 +844,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 stakeholderObjectionsDetails: null,
                 relevantStakeholdersNotifiedOfAdmissionsChanges: YesNoNotApplicableAnswer.Yes,
                 relevantStakeholdersNotifiedOfAdmissionsChangesReason: null,
-                supportingEvidence: null);
+                supportingEvidenceSharepointLink: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeOtherStakeholderEngagementCommand>(), It.IsAny<CancellationToken>()))
@@ -873,7 +874,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     command.Id == 100
                     && command.FundingAnswer == FundingAnswer.No
                     && command.AdditionalInformation == "Funding is unavailable"
-                    && command.SupportingEvidence == "Business case"),
+                    && command.SupportingEvidenceSharepointLink == "Business case"),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -899,7 +900,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 landTransactionApplicationAdditionalInfo: "Application details",
                 landTransactionConsent: YesNoNotApplicableAnswer.Yes,
                 landTransactionConsentAdditionalInfo: "Consent details",
-                landTransactionSupportingEvidence: "Evidence link");
+                landTransactionSupportingEvidenceSharepointLink: "Evidence link");
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionCommand>(), It.IsAny<CancellationToken>()))
@@ -915,7 +916,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     && c.LandTransactionApplicationAdditionalInfo == request.LandTransactionApplicationAdditionalInfo
                     && c.LandTransactionConsent == request.LandTransactionConsent
                     && c.LandTransactionConsentAdditionalInfo == request.LandTransactionConsentAdditionalInfo
-                    && c.LandTransactionSupportingEvidence == request.LandTransactionSupportingEvidence),
+                    && c.LandTransactionSupportingEvidenceSharepointLink == request.LandTransactionSupportingEvidenceSharepointLink),
                     It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -963,7 +964,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     && command.InspectionDate == inspectionDate
                     && command.MeetsOfstedStandards == false
                     && command.AdditionalInformation == "Standards were not met"
-                    && command.SupportingEvidence == "Inspection evidence"),
+                    && command.SupportingEvidenceSharepointLink == "Inspection evidence"),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -1017,7 +1018,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     command.Id == 100
                     && command.HqtfConsiderationAnswer == HqtfConsiderationAnswer.No
                     && command.AdditionalInformation == "Not considered"
-                    && command.SupportingEvidence == "Evidence"),
+                    && command.SupportingEvidenceSharepointLink == "Evidence"),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -1029,7 +1030,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 landTransactionApplicationAdditionalInfo: null,
                 landTransactionConsent: YesNoNotApplicableAnswer.No,
                 landTransactionConsentAdditionalInfo: null,
-                landTransactionSupportingEvidence: null);
+                landTransactionSupportingEvidenceSharepointLink: null);
 
             _mockMediator
                 .Setup(m => m.Send(It.IsAny<SetSignificantChangeLandTransactionCommand>(), It.IsAny<CancellationToken>()))
@@ -1107,7 +1108,7 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                     command.Id == 100
                     && command.FhaRisksOrIssuesRaised == true
                     && command.AdditionalInformation == "Risks need consideration"
-                    && command.SupportingEvidence == "FHA evidence"),
+                    && command.SupportingEvidenceSharepointLink == "FHA evidence"),
                 It.IsAny<CancellationToken>()), Times.Once);
         }
 

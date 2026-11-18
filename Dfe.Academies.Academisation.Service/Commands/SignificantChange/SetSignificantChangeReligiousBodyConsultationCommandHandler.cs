@@ -24,7 +24,7 @@ public class SetSignificantChangeReligiousBodyConsultationCommandHandler(ISignif
 			request.ReligiousBodyRaisedObjectionReason,
 			request.ReligiousBodyConsentGranted,
 			request.ReligiousBodyConsentNotGrantedReason,
-			request.SupportingEvidence);
+			request.SupportingEvidenceSharepointLink);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
