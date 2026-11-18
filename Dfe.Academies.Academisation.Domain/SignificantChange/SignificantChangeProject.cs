@@ -342,7 +342,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| FundingNotSecured()
 				|| HasFhaRisksOrIssuesRaised()
 				|| HasHqtfIssuesOrRisks()
-				|| SateliteSiteNotAGenuineExpansion();
+				|| SatelliteSiteNotAGenuineExpansion()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements();
 		}
 
@@ -407,7 +407,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 		private bool HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.SpecialSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
 
-		private bool SateliteSiteNotAGenuineExpansion()
+		private bool SatelliteSiteNotAGenuineExpansion()
 			=> Details.SatelliteSiteArrangementAnswer == YesNoNotApplicableAnswer.No;
 	}
 }
