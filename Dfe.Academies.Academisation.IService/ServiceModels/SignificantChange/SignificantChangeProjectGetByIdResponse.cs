@@ -21,6 +21,7 @@ public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectS
 	public SignificantChangeLocalAuthorityObjectionsResponse LocalAuthorityObjections { get; set; } = new();
 	public SignificantChangeAdmissionsVariationRecommendationResponse AdmissionsVariationRecommendation { get; set; } = new();
 	public SignificantChangeSpecialSchoolSatelliteConsiderationsResponse SpecialSchoolSatelliteConsiderations { get; set; } = new();
+	public SignificantChangeMainstreamSchoolSatelliteConsiderationsResponse MainstreamSchoolSatelliteConsiderations { get; set; } = new();
 	public Decision? Decision { get; set; }
 	public DateTime? DecisionDate { get; set; }
 
@@ -43,6 +44,7 @@ public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectS
 		&& OfstedInspection.Status == completeText
 		&& LocalAuthorityObjections.Status == completeText
 		&& AdmissionsVariationRecommendation.Status == completeText
-		&& SpecialSchoolSatelliteConsiderations.Status == completeText;
+		&& SpecialSchoolSatelliteConsiderations.Status == completeText
+		&& MainstreamSchoolSatelliteConsiderations.Status == completeText;
     }
 }

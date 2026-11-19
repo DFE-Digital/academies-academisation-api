@@ -102,5 +102,9 @@ public class SignificantChangeProjectDto
 	public string? SpecialSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? SpecialSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
 	public string SpecialSchoolSatelliteConsiderationsTaskStatus { get; set; } = string.Empty;
+	public YesNoNotApplicableAnswer? MainstreamSchoolSatelliteConsiderationsMeetRequirements { get; set; }
+	public string? MainstreamSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
+	public string? MainstreamSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
+	public string MainstreamSchoolSatelliteConsiderationsTaskStatus { get; set; } = string.Empty;
 
 }

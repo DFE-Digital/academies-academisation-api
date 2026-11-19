@@ -1068,6 +1068,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.SpecialSchoolSatelliteConsiderationsMeetRequirements).HasConversion<string>().HasColumnName("SpecialSchoolSatelliteConsiderationsMeetRequirements");
 			details.Property(d => d.SpecialSchoolSatelliteConsiderationsAdditionalInformation).HasColumnName("SpecialSchoolSatelliteConsiderationsAdditionalInformation");
 			details.Property(d => d.SpecialSchoolSatelliteConsiderationsSupportingEvidence).HasColumnName("SpecialSchoolSatelliteConsiderationsSupportingEvidence");
+			details.Property(d => d.MainstreamSchoolSatelliteConsiderationsMeetRequirements).HasConversion<string>().HasColumnName("MainstreamSchoolSatelliteConsiderationsMeetRequirements");
+			details.Property(d => d.MainstreamSchoolSatelliteConsiderationsAdditionalInformation).HasColumnName("MainstreamSchoolSatelliteConsiderationsAdditionalInformation");
+			details.Property(d => d.MainstreamSchoolSatelliteConsiderationsSupportingEvidence).HasColumnName("MainstreamSchoolSatelliteConsiderationsSupportingEvidence");
 		});
 	}
 }
