@@ -17,7 +17,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 				return new NotFoundCommandResult();
 			}
 
-			existingProject.SetPlanningPermission(request.PlanningPermissionAnswer, request.AdditionalInformation, request.SupportingEvidence);
+			existingProject.SetPlanningPermission(request.PlanningPermissionAnswer, request.AdditionalInformation, request.SupportingEvidenceSharepointLink);
 
 			repository.Update(existingProject);
 			await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

@@ -11,7 +11,7 @@ public class SetSignificantChangeReligiousBodyConsultationPublicCommand(
 	string? religiousBodyRaisedObjectionReason,
 	YesNoNotApplicableAnswer? religiousBodyConsentGranted,
 	string? religiousBodyConsentNotGrantedReason,
-	string? supportingEvidence) : IRequest<CommandResult>
+	string? supportingEvidenceSharepointLink) : IRequest<CommandResult>
 {
 	public YesNoNotApplicableAnswer? TrustConsultedReligiousBody { get; set; } = trustConsultedReligiousBody;
 	public string? TrustConsultedReligiousBodyNotConsultedReason { get; set; } = trustConsultedReligiousBodyNotConsultedReason;
@@ -19,7 +19,7 @@ public class SetSignificantChangeReligiousBodyConsultationPublicCommand(
 	public string? ReligiousBodyRaisedObjectionReason { get; set; } = religiousBodyRaisedObjectionReason;
 	public YesNoNotApplicableAnswer? ReligiousBodyConsentGranted { get; set; } = religiousBodyConsentGranted;
 	public string? ReligiousBodyConsentNotGrantedReason { get; set; } = religiousBodyConsentNotGrantedReason;
-	public string? SupportingEvidence { get; set; } = supportingEvidence;
+	public string? SupportingEvidenceSharepointLink { get; set; } = supportingEvidenceSharepointLink;
 }
 
 public class SetSignificantChangeReligiousBodyConsultationCommand(
@@ -30,14 +30,14 @@ public class SetSignificantChangeReligiousBodyConsultationCommand(
 	string? religiousBodyRaisedObjectionReason,
 	YesNoNotApplicableAnswer? religiousBodyConsentGranted,
 	string? religiousBodyConsentNotGrantedReason,
-	string? supportingEvidence)
+	string? supportingEvidenceSharepointLink)
 	: SetSignificantChangeReligiousBodyConsultationPublicCommand(trustConsultedReligiousBody,
 		trustConsultedReligiousBodyNotConsultedReason,
 		religiousBodyRaisedObjection,
 		religiousBodyRaisedObjectionReason,
 		religiousBodyConsentGranted,
 		religiousBodyConsentNotGrantedReason,
-		supportingEvidence)
+		supportingEvidenceSharepointLink)
 {
 	public int Id { get; set; } = id;
 }

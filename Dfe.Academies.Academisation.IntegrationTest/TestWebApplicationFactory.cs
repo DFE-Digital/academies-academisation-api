@@ -109,6 +109,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.NotApplicable);
 		project.SetOfstedInspection(DateTime.UtcNow.AddMonths(-1), true, null, null);
 		project.SetLocalAuthorityObjections(false, null, null);
+		project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
 
 		Context.Add(project);
 		await Context.SaveChangesAsync();

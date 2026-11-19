@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -39,7 +39,7 @@ public class SetLocalAuthorityObjectionsTests : IClassFixture<TestWebApplication
 		var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
 			localAuthorityRaisedObjections: true,
 			localAuthorityObjectionsFurtherInformation: "Local authority has raised objections",
-			localAuthoritySupportingEvidenceLink: "https://example.org/evidence");
+			localAuthoritySupportingEvidenceLinkSharepointLink: "https://example.org/evidence");
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetLocalAuthorityObjections", request);
 
@@ -78,14 +78,14 @@ public class SetLocalAuthorityObjectionsTests : IClassFixture<TestWebApplication
 		var warmupRequest = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
 			localAuthorityRaisedObjections: false,
 			localAuthorityObjectionsFurtherInformation: null,
-			localAuthoritySupportingEvidenceLink: null);
+			localAuthoritySupportingEvidenceLinkSharepointLink: null);
 
 		await client.PutAsJsonAsync($"/significant-change/{existingProject.Id}/SetLocalAuthorityObjections", warmupRequest);
 
 		var request = new SetSignificantChangeLocalAuthorityObjectionsPublicCommand(
 			localAuthorityRaisedObjections: false,
 			localAuthorityObjectionsFurtherInformation: null,
-			localAuthoritySupportingEvidenceLink: null);
+			localAuthoritySupportingEvidenceLinkSharepointLink: null);
 
 		var response = await client.PutAsJsonAsync("/significant-change/99999/SetLocalAuthorityObjections", request);
 

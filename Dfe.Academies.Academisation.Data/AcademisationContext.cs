@@ -1065,8 +1065,10 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportive).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportive");
             details.Property(d => d.AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation).HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
 			details.Property(d => d.AdmissionsVariationRecommendation).HasConversion<string>().HasColumnName("AdmissionsVariationRecommendation");
-        });
-
+			details.Property(d => d.SpecialSchoolSatelliteConsiderationsMeetRequirements).HasConversion<string>().HasColumnName("SpecialSchoolSatelliteConsiderationsMeetRequirements");
+			details.Property(d => d.SpecialSchoolSatelliteConsiderationsAdditionalInformation).HasColumnName("SpecialSchoolSatelliteConsiderationsAdditionalInformation");
+			details.Property(d => d.SpecialSchoolSatelliteConsiderationsSupportingEvidence).HasColumnName("SpecialSchoolSatelliteConsiderationsSupportingEvidence");
+		});
 	}
 }
 

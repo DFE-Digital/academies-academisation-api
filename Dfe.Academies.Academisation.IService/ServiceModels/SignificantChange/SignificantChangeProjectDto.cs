@@ -98,4 +98,9 @@ public class SignificantChangeProjectDto
 	public string RecommendationTaskStatus { get; set; } = string.Empty;
 	public Recommendation? Recommendation { get; set; }
 	public string? RecommendationMoreInformation { get; set; }
+	public YesNoNotApplicableAnswer? SpecialSchoolSatelliteConsiderationsMeetRequirements { get; set; }
+	public string? SpecialSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
+	public string? SpecialSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
+	public string SpecialSchoolSatelliteConsiderationsTaskStatus { get; set; } = string.Empty;
+
 }

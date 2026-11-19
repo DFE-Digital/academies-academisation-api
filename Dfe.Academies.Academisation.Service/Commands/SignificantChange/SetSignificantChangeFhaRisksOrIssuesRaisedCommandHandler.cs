@@ -25,7 +25,7 @@ public class SetSignificantChangeFhaRisksOrIssuesRaisedCommandHandler(
 		existingProject.SetFhaRisksOrIssuesRaised(
 			request.FhaRisksOrIssuesRaised,
 			request.AdditionalInformation,
-			request.SupportingEvidence);
+			request.SupportingEvidenceSharepointLink);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
