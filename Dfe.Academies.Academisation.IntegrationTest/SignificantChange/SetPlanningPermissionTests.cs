@@ -2,9 +2,11 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Dfe.Academies.Academisation.Data;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Dfe.Academies.Academisation.IntegrationTest.SignificantChange;
@@ -12,33 +14,38 @@ namespace Dfe.Academies.Academisation.IntegrationTest.SignificantChange;
 public class SetPlanningPermissionTests(TestWebApplicationFactory factory) : IClassFixture<TestWebApplicationFactory>
 {
 	[Fact]
-	public async Task Put_WhenPlanningPermissionIsProvided_ReturnsOk_PersistsFields()
-	{
-		var client = factory.CreateClient();
-		var project = CreateProject();
+    public async Task Put_WhenPlanningPermissionIsProvided_ReturnsOk_PersistsFields()
+    {
+        var client = factory.CreateClient();
+        var project = CreateProject();
 
-		factory.Context.Add(project);
-		await factory.Context.SaveChangesAsync();
+        factory.Context.Add(project);
+        await factory.Context.SaveChangesAsync();
 
-		var request = new SetSignificantChangePlanningPermissionPublicCommand(
-			PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
-			AdditionalInformation: "Planning permission granted",
-			SupportingEvidenceSharepointLink: "Evidence attached");
+        var request = new SetSignificantChangePlanningPermissionPublicCommand(
+        PlanningPermissionAnswer: PlanningPermissionAnswer.Yes,
+        AdditionalInformation: "Planning permission granted",
+        SupportingEvidenceSharepointLink: "Evidence attached");
 
-		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetPlanningPermission", request);
+        var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetPlanningPermission", request);
 
-		factory.Context.ChangeTracker.Clear();
-		var updated = await factory.Context.Set<SignificantChangeProject>()
-			.SingleAsync(x => x.Id == project.Id);
+        // Use a fresh scope/context for verification to avoid reusing a context
+        // whose underlying connection may still have a pending transaction from
+        // the HTTP request pipeline (causes "command to have a transaction object" errors).
+        using var scope = factory.Services.CreateScope();
+        var verificationContext = scope.ServiceProvider.GetRequiredService<AcademisationContext>();
 
-		Assert.Multiple(() =>
-		{
-			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-			Assert.Equal(PlanningPermissionAnswer.Yes, updated.Details.PlanningPermission);
-			Assert.Equal("Planning permission granted", updated.Details.PlanningPermissionAdditionalInformation);
-			Assert.Equal("Evidence attached", updated.Details.PlanningPermissionSupportingEvidence);
-		});
-	}
+        var updated = await verificationContext.Set<SignificantChangeProject>()
+        .SingleAsync(x => x.Id == project.Id);
+
+        Assert.Multiple(() =>
+        {
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(PlanningPermissionAnswer.Yes, updated.Details.PlanningPermission);
+            Assert.Equal("Planning permission granted", updated.Details.PlanningPermissionAdditionalInformation);
+            Assert.Equal("Evidence attached", updated.Details.PlanningPermissionSupportingEvidence);
+        });
+    }
 
 	[Fact]
 	public async Task Put_WhenProjectDoesNotExist_ReturnsNotFound()
