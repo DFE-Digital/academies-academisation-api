@@ -1,4 +1,4 @@
-using Dfe.Academies.Academisation.Core;
+﻿using Dfe.Academies.Academisation.Core;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -20,7 +20,7 @@ public class SetSignificantChangeSatelliteSiteArrangementCommandHandler(
 			return new NotFoundCommandResult();
 		}
 
-		existingProject.SetSatelliteSiteArrangement(request.Answer, request.AdditionalInformation, request.SupportingEvidence);
+		existingProject.SetSatelliteSiteArrangement(request.Answer, request.AdditionalInformation, request.SupportingEvidenceSharepointLink);
 
 		repository.Update(existingProject);
 		await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

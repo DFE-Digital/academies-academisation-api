@@ -442,7 +442,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				id,
 				request.Answer,
 				request.AdditionalInformation,
-				request.SupportingEvidence);
+				request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command, cancellationToken);
 
