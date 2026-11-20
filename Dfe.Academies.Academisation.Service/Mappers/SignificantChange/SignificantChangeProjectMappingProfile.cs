@@ -202,7 +202,7 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.MainstreamSchoolSatelliteConsiderationsSupportingEvidence,
 				options => options.MapFrom(source => source.Details.MainstreamSchoolSatelliteConsiderationsSupportingEvidence))
 			.ForMember(destination => destination.MainstreamSchoolSatelliteConsiderationsTaskStatus,
-				options => options.MapFrom(source => source.Details.GetMainstreamSchoolSatelliteConsiderationsTaskStatus().ToString())
+				options => options.MapFrom(source => source.Details.GetMainstreamSchoolSatelliteConsiderationsTaskStatus().ToString()))
 			.ForMember(destination => destination.LocalSenPlansConflict,
 				options => options.MapFrom(source => source.Details.LocalSenPlansConflict))
 			.ForMember(destination => destination.LocalSenPlansAdditionalInformation,
