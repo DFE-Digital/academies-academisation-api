@@ -301,6 +301,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			SetProjectTier();
 		}
 
+		public void SetSatelliteSiteArrangement(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.SatelliteSiteArrangementAnswer = answer;
+			Details.SatelliteSiteArrangementAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
+			Details.SatelliteSiteArrangementSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetMainstreamSchoolSatelliteConsiderations(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
 		{
 			Details.MainstreamSchoolSatelliteConsiderationsMeetRequirements = answer;
@@ -342,6 +350,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| FundingNotSecured()
 				|| HasFhaRisksOrIssuesRaised()
 				|| HasHqtfIssuesOrRisks()
+				|| SatelliteSiteNotAGenuineExpansion()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 				|| HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements();
 		}
@@ -406,6 +415,9 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.SpecialSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
+
+		private bool SatelliteSiteNotAGenuineExpansion()
+			=> Details.SatelliteSiteArrangementAnswer == YesNoNotApplicableAnswer.No;
 
 		private bool HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.MainstreamSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
