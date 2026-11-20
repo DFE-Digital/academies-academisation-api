@@ -317,6 +317,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			SetProjectTier();
 		}
 
+		public void SetTrustExperienceAndGovernance(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.TrustExperienceAndGovernanceAnswer = answer;
+			Details.TrustExperienceAndGovernanceAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
+			Details.TrustExperienceAndGovernanceSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetProjectTier()
 		{
 			if (Tier == 3) return;
@@ -352,7 +360,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| HasHqtfIssuesOrRisks()
 				|| SatelliteSiteNotAGenuineExpansion()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
-				|| HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements();
+				|| HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
+				|| HasTrustExperienceAndGovernanceNotMetRequirements();
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()
@@ -421,5 +430,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.MainstreamSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
+
+		private bool HasTrustExperienceAndGovernanceNotMetRequirements()
+			=> Details.TrustExperienceAndGovernanceAnswer == YesNoNotApplicableAnswer.No;
 	}
 }

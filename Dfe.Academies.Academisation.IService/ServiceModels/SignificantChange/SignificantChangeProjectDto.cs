@@ -110,5 +110,9 @@ public class SignificantChangeProjectDto
 	public string? MainstreamSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? MainstreamSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
 	public string MainstreamSchoolSatelliteConsiderationsTaskStatus { get; set; } = string.Empty;
+	public YesNoNotApplicableAnswer? TrustExperienceAndGovernanceAnswer { get; set; }
+	public string? TrustExperienceAndGovernanceAdditionalInformation { get; set; }
+	public string? TrustExperienceAndGovernanceSupportingEvidence { get; set; }
+	public string TrustExperienceAndGovernanceTaskStatus { get; set; } = string.Empty;
 
 }
