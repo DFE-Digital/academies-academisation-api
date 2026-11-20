@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Dfe.Academies.Academisation.IntegrationTest;
@@ -51,6 +52,9 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		builder.UseEnvironment("production");
 		builder.ConfigureTestServices(services =>
 		{
+			// Database polling jobs must not compete with requests on the shared SQLite connection
+			services.RemoveAll<IHostedService>();
+
 			// Remove the options AND the underlying configure-action descriptor, otherwise the
 			// original UseSqlServer configuration still gets applied alongside UseSqlite below.
 			services.RemoveAll<DbContextOptions<AcademisationContext>>();
@@ -111,6 +115,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		project.SetLocalAuthorityObjections(false, null, null);
 		project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetSatelliteSiteArrangement(YesNoNotApplicableAnswer.NotApplicable, null, null);
+		project.SetMainstreamSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetLocalSenPlans(YesNoNotApplicableAnswer.NotApplicable, null, null);
 
 		Context.Add(project);

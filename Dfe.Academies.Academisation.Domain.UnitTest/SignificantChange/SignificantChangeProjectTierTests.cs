@@ -44,6 +44,55 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Theory]
+		[InlineData(YesNoNotApplicableAnswer.Yes)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
+		[InlineData(null)]
+		public void SetMainstreamSchoolSatelliteConsiderations_WhenNoLongerNo_ClearsDetailsAndRecalculatesTier(YesNoNotApplicableAnswer? answer)
+		{
+			var project = CreateTierOneProject();
+			project.SetMainstreamSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.No, "Requirements gap", "Evidence");
+			project.Tier.Should().Be(2);
+			project.Details.MainstreamSchoolSatelliteConsiderationsAdditionalInformation.Should().Be("Requirements gap");
+
+			project.SetMainstreamSchoolSatelliteConsiderations(answer, "Stale details", "Updated evidence");
+
+			project.Tier.Should().Be(1);
+			project.Details.MainstreamSchoolSatelliteConsiderationsMeetRequirements.Should().Be(answer);
+			project.Details.MainstreamSchoolSatelliteConsiderationsAdditionalInformation.Should().BeNull();
+			project.Details.MainstreamSchoolSatelliteConsiderationsSupportingEvidence.Should().Be("Updated evidence");
+		}
+
+		[Theory]
+		[InlineData(3, false, 3)]
+		[InlineData(1, true, 2)]
+		public void SetMainstreamSchoolSatelliteConsiderations_PreservesOtherTierTriggers(byte tier, bool otherTrigger, byte expected)
+		{
+			var project = CreateTierOneProject(tier);
+			project.Details.FhaRisksOrIssuesRaised = otherTrigger;
+
+			project.SetMainstreamSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.No, "Details", null);
+			project.SetMainstreamSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.Yes, null, null);
+
+			project.Tier.Should().Be(expected);
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(YesNoNotApplicableAnswer.No, null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.No, " ", SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.No, "Details", SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable, null, SignificantChangeTaskStatus.Completed)]
+		public void GetMainstreamSchoolSatelliteConsiderationsTaskStatus_RequiresDetailsOnlyForNo(
+			YesNoNotApplicableAnswer? answer, string? details, SignificantChangeTaskStatus expected)
+		{
+			var project = CreateTierOneProject();
+			project.SetMainstreamSchoolSatelliteConsiderations(answer, details, null);
+
+			project.Details.GetMainstreamSchoolSatelliteConsiderationsTaskStatus().Should().Be(expected);
+		}
+
+		[Theory]
 		[InlineData(YesNoNotApplicableAnswer.No)]
 		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
 		[InlineData(null)]
