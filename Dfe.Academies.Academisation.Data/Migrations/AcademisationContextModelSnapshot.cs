@@ -2618,6 +2618,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("LocalAuthoritySupportingEvidenceLink");
 
+                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsAdditionalInformation");
+
+                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsMeetRequirements")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsMeetRequirements");
+
+                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsSupportingEvidence");
+
                             b1.Property<bool?>("MeetsOfstedStandards")
                                 .HasColumnType("bit")
                                 .HasColumnName("MeetsOfstedStandards");
