@@ -202,7 +202,15 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.MainstreamSchoolSatelliteConsiderationsSupportingEvidence,
 				options => options.MapFrom(source => source.Details.MainstreamSchoolSatelliteConsiderationsSupportingEvidence))
 			.ForMember(destination => destination.MainstreamSchoolSatelliteConsiderationsTaskStatus,
-				options => options.MapFrom(source => source.Details.GetMainstreamSchoolSatelliteConsiderationsTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetMainstreamSchoolSatelliteConsiderationsTaskStatus().ToString()))
+			.ForMember(destination => destination.TrustExperienceAndGovernanceAnswer,
+				options => options.MapFrom(source => source.Details.TrustExperienceAndGovernanceAnswer))
+			.ForMember(destination => destination.TrustExperienceAndGovernanceAdditionalInformation,
+				options => options.MapFrom(source => source.Details.TrustExperienceAndGovernanceAdditionalInformation))
+			.ForMember(destination => destination.TrustExperienceAndGovernanceSupportingEvidence,
+				options => options.MapFrom(source => source.Details.TrustExperienceAndGovernanceSupportingEvidence))
+			.ForMember(destination => destination.TrustExperienceAndGovernanceTaskStatus,
+				options => options.MapFrom(source => source.Details.GetTrustExperienceAndGovernanceTaskStatus().ToString()));
 
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
@@ -336,6 +344,16 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.MainstreamSchoolSatelliteConsiderationsTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeTrustExperienceAndGovernanceResponse>()
+			.ForMember(destination => destination.Answer,
+				options => options.MapFrom(source => source.TrustExperienceAndGovernanceAnswer))
+			.ForMember(destination => destination.AdditionalInformation,
+				options => options.MapFrom(source => source.TrustExperienceAndGovernanceAdditionalInformation))
+			.ForMember(destination => destination.SupportingEvidence,
+				options => options.MapFrom(source => source.TrustExperienceAndGovernanceSupportingEvidence))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.TrustExperienceAndGovernanceTaskStatus));
+
 		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionVariationResponse>()
 			.ForMember(destination => destination.AdmissionsVariationRequired,
 				options => options.MapFrom(source => source.AdmissionsVariationRequired))
@@ -410,6 +428,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.SatelliteSiteArrangement,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.MainstreamSchoolSatelliteConsiderations,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.TrustExperienceAndGovernance,
 				options => options.MapFrom(source => source));
 	}
 }
