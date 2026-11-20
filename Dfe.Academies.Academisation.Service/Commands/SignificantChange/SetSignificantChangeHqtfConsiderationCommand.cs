@@ -7,12 +7,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange;
 public record SetSignificantChangeHqtfConsiderationPublicCommand(
 	HqtfConsiderationAnswer? HqtfConsiderationAnswer,
 	string? AdditionalInformation,
-	string? SupportingEvidence);
+	string? SupportingEvidenceSharepointLink);
 
 public record SetSignificantChangeHqtfConsiderationCommand(
 	int Id,
 	HqtfConsiderationAnswer? HqtfConsiderationAnswer,
 	string? AdditionalInformation,
-	string? SupportingEvidence)
-	: SetSignificantChangeHqtfConsiderationPublicCommand(HqtfConsiderationAnswer, AdditionalInformation, SupportingEvidence),
+	string? SupportingEvidenceSharepointLink)
+	: SetSignificantChangeHqtfConsiderationPublicCommand(HqtfConsiderationAnswer, AdditionalInformation, SupportingEvidenceSharepointLink),
 		IRequest<CommandResult>;

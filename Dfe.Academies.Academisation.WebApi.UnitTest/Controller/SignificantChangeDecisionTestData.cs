@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Dfe.Academies.Academisation.Domain.SignificantChange;
 using Dfe.Academies.Academisation.IService.ServiceModels.SignificantChange;
 using Xunit;
@@ -35,7 +35,9 @@ public static class SignificantChangeDecisionTestData
 			OfstedInspection = new() { Status = completed },
 			LocalAuthorityObjections = new() { Status = completed },
 			AdmissionsVariationRecommendation = new() { Status = completed },
-			Clearance = new() { Status = completed }
+			Clearance = new() { Status = completed },
+			SatelliteSiteArrangement = new() { Status = completed },
+			SpecialSchoolSatelliteConsiderations = new () { Status = completed }
 		};
 	}
 
@@ -60,7 +62,8 @@ public static class SignificantChangeDecisionTestData
 				(project, status) => project.OfstedInspection.Status = status,
 				(project, status) => project.LocalAuthorityObjections.Status = status,
 				(project, status) => project.AdmissionsVariationRecommendation.Status = status,
-				(project, status) => project.Clearance.Status = status
+				(project, status) => project.Clearance.Status = status,
+				(project, status) => project.SatelliteSiteArrangement = project.SatelliteSiteArrangement with { Status = status }
 			];
 			var data = new TheoryData<Action<SignificantChangeProjectGetByIdResponse, string>, SignificantChangeTaskStatus>();
 			foreach (var setTaskStatus in setTaskStatuses)

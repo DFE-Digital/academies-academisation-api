@@ -7,12 +7,12 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 	public record SetSignificantChangePlanningPermissionPublicCommand(
 		PlanningPermissionAnswer PlanningPermissionAnswer,
 		string? AdditionalInformation,
-		string? SupportingEvidence);
+		string? SupportingEvidenceSharepointLink);
 
 	public record SetSignificantChangePlanningPermissionCommand(
 		int Id,
 		PlanningPermissionAnswer PlanningPermissionAnswer,
 		string? AdditionalInformation,
-		string? SupportingEvidence)
-		: SetSignificantChangePlanningPermissionPublicCommand(PlanningPermissionAnswer, AdditionalInformation, SupportingEvidence), IRequest<CommandResult>;
+		string? SupportingEvidenceSharepointLink)
+		: SetSignificantChangePlanningPermissionPublicCommand(PlanningPermissionAnswer, AdditionalInformation, SupportingEvidenceSharepointLink), IRequest<CommandResult>;
 }

@@ -65,6 +65,28 @@ public class SignificantChangeProjectDetails
 	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
 	public string? RegionsGroupClearance { get; set; }
 	public string? TrustRegulationClearance { get; set; }
+	public YesNoNotApplicableAnswer? SpecialSchoolSatelliteConsiderationsMeetRequirements { get; set; }
+	public string? SpecialSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
+	public string? SpecialSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
+	public YesNoNotApplicableAnswer? SatelliteSiteArrangementAnswer { get; set; }
+	public string? SatelliteSiteArrangementAdditionalInformation { get; set; }
+	public string? SatelliteSiteArrangementSupportingEvidence { get; set; }
+
+	public SignificantChangeTaskStatus GetSatelliteSiteArrangementTaskStatus()
+	{
+		if (!SatelliteSiteArrangementAnswer.HasValue
+		    && string.IsNullOrWhiteSpace(SatelliteSiteArrangementSupportingEvidence)
+		    && string.IsNullOrWhiteSpace(SatelliteSiteArrangementAdditionalInformation))
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (SatelliteSiteArrangementAnswer.HasValue
+		    && (SatelliteSiteArrangementAnswer != YesNoNotApplicableAnswer.No
+		        || !string.IsNullOrWhiteSpace(SatelliteSiteArrangementAdditionalInformation)))
+			return SignificantChangeTaskStatus.Completed;
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
 
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
@@ -308,5 +330,16 @@ public class SignificantChangeProjectDetails
 			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetSpecialSchoolSatelliteConsiderationsTaskStatus()
+	{
+		if (SpecialSchoolSatelliteConsiderationsMeetRequirements.HasValue)
+		{
+			return SignificantChangeTaskStatus.Completed;
+		}
+
+		return SignificantChangeTaskStatus.NotStarted;
+
 	}
 }

@@ -10,7 +10,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 		EqualitiesImpact? EqualitiesImpactIdentified,
         string? EqualitiesLikelyDetails,
         string? EqualitiesSomeImpactDetails,
-        string? EqualitiesImpactSupportingEvidence);
+        string? EqualitiesImpactSupportingEvidenceSharepointLink);
 
 
 	public record SetSignificantChangeEqualitiesImpactAssessmentCommand(
@@ -20,5 +20,5 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 		EqualitiesImpact? EqualitiesImpactIdentified,
         string? EqualitiesLikelyDetails,
         string? EqualitiesSomeImpactDetails,
-		string? EqualitiesImpactSupportingEvidence) : IRequest<CommandResult>;
+		string? EqualitiesImpactSupportingEvidenceSharepointLink) : IRequest<CommandResult>;
 }

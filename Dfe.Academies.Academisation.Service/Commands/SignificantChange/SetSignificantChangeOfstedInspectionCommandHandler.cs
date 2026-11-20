@@ -23,7 +23,7 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 			}
 
 			existingProject.SetOfstedInspection(request.InspectionDate, request.MeetsOfstedStandards,
-				request.AdditionalInformation, request.SupportingEvidence);
+				request.AdditionalInformation, request.SupportingEvidenceSharepointLink);
 
 			repository.Update(existingProject);
 			await repository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

@@ -7,14 +7,14 @@ namespace Dfe.Academies.Academisation.Service.Commands.SignificantChange
 	public record SetSignificantChangeFundingPublicCommand(
 		FundingAnswer? FundingAnswer,
 		string? AdditionalInformation,
-		string? SupportingEvidence);
+		string? SupportingEvidenceSharepointLink);
 
 
 	public record SetSignificantChangeFundingCommand(
 		int Id,
 		FundingAnswer? FundingAnswer,
 		string? AdditionalInformation,
-		string? SupportingEvidence)
-		: SetSignificantChangeFundingPublicCommand(FundingAnswer, AdditionalInformation, SupportingEvidence),
+		string? SupportingEvidenceSharepointLink)
+		: SetSignificantChangeFundingPublicCommand(FundingAnswer, AdditionalInformation, SupportingEvidenceSharepointLink),
 			IRequest<CommandResult>;
 }

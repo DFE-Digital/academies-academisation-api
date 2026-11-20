@@ -30,7 +30,7 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 			EqualitiesImpactIdentified: EqualitiesImpact.Likely,
 			EqualitiesLikelyDetails: "Mitigation plan in place",
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: "sharepoint.edu.gov.uk/evidence");
+			EqualitiesImpactSupportingEvidenceSharepointLink: "sharepoint.edu.gov.uk/evidence");
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetEqualitiesImpactAssessment", request);
 
@@ -47,7 +47,7 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 			Assert.Equal("Mitigation plan in place", updated.Details.EqualitiesLikelyDetails);
 			Assert.Null(updated.Details.EqualitiesSomeImpactDetails);
 			Assert.Equal("sharepoint.edu.gov.uk/evidence", updated.Details.EqualitiesImpactSupportingEvidence);
-			Assert.Equal((byte)1, updated.Tier);
+			Assert.Equal((byte)2, updated.Tier);
 		});
 	}
 
@@ -65,7 +65,7 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 			EqualitiesImpactIdentified: null,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: null);
+			EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetEqualitiesImpactAssessment", request);
 
@@ -95,7 +95,7 @@ public class SetEqualitiesImpactAssessmentTests : IClassFixture<TestWebApplicati
 			EqualitiesImpactIdentified: EqualitiesImpact.Unlikely,
 			EqualitiesLikelyDetails: null,
 			EqualitiesSomeImpactDetails: null,
-			EqualitiesImpactSupportingEvidence: null);
+			EqualitiesImpactSupportingEvidenceSharepointLink: null);
 
 		var response = await client.PutAsJsonAsync("/significant-change/99999/SetEqualitiesImpactAssessment", request);
 

@@ -43,7 +43,7 @@ public class SetReligiousBodyConsultationTests : IClassFixture<TestWebApplicatio
 			religiousBodyRaisedObjectionReason: "Religious body objection",
 			religiousBodyConsentGranted: YesNoNotApplicableAnswer.NotApplicable,
 			religiousBodyConsentNotGrantedReason: null,
-			supportingEvidence: "https://example.com/evidence");
+			supportingEvidenceSharepointLink: "https://example.com/evidence");
 
 		var response = await client.PutAsJsonAsync($"/significant-change/{project.Id}/SetReligiousBodyConsultation", request);
 
@@ -115,7 +115,7 @@ public class SetReligiousBodyConsultationTests : IClassFixture<TestWebApplicatio
 			religiousBodyRaisedObjectionReason: "Objection details",
 			religiousBodyConsentGranted: YesNoNotApplicableAnswer.Yes,
 			religiousBodyConsentNotGrantedReason: null,
-			supportingEvidence: null);
+			supportingEvidenceSharepointLink: null);
 
 		var response = await client.PutAsJsonAsync("/significant-change/99999/SetReligiousBodyConsultation", request);
 

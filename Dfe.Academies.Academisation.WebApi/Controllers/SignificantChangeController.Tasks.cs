@@ -21,7 +21,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				request.EqualitiesImpactIdentified,
 				request.EqualitiesLikelyDetails,
 				request.EqualitiesSomeImpactDetails,
-				request.EqualitiesImpactSupportingEvidence);
+				request.EqualitiesImpactSupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -51,7 +51,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				religiousBodyRaisedObjectionReason: request.ReligiousBodyRaisedObjectionReason,
 				religiousBodyConsentGranted: request.ReligiousBodyConsentGranted,
 				religiousBodyConsentNotGrantedReason: request.ReligiousBodyConsentNotGrantedReason,
-				supportingEvidence: request.SupportingEvidence);
+				supportingEvidenceSharepointLink: request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -81,7 +81,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				request.StakeholderObjectionsDetails,
 				request.RelevantStakeholdersNotifiedOfAdmissionsChanges,
 				request.RelevantStakeholdersNotifiedOfAdmissionsChangesReason,
-				request.SupportingEvidence);
+				request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -107,7 +107,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				id,
 				request.LocalAuthorityRaisedObjections,
 				request.LocalAuthorityObjectionsFurtherInformation,
-				request.LocalAuthoritySupportingEvidenceLink);
+				request.LocalAuthoritySupportingEvidenceLinkSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -157,7 +157,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				request.LandTransactionApplicationAdditionalInfo,
 				request.LandTransactionConsent,
 				request.LandTransactionConsentAdditionalInfo,
-				request.LandTransactionSupportingEvidence);
+				request.LandTransactionSupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -204,7 +204,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			int id,
 			[FromBody] SetSignificantChangePlanningPermissionPublicCommand request)
 		{
-			var command = new SetSignificantChangePlanningPermissionCommand(id, request.PlanningPermissionAnswer, request.AdditionalInformation, request.SupportingEvidence);
+			var command = new SetSignificantChangePlanningPermissionCommand(id, request.PlanningPermissionAnswer, request.AdditionalInformation, request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -230,7 +230,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				id,
 				request.FundingAnswer,
 				request.AdditionalInformation,
-				request.SupportingEvidence);
+				request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -281,7 +281,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				id,
 				request.HqtfConsiderationAnswer,
 				request.AdditionalInformation,
-				request.SupportingEvidence);
+				request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -307,7 +307,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				id,
 				request.FhaRisksOrIssuesRaised,
 				request.AdditionalInformation,
-				request.SupportingEvidence);
+				request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -332,7 +332,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			var command = new SetSignificantChangeAdmissionVariationCommand(
 				id,
 				request.AdmissionsVariationRequired,
-				request.AdmissionsVariationSupportingEvidence,
+				request.AdmissionsVariationSupportingEvidenceSharepointLink,
 				request.AdmissionsVariationLocalAuthoritySupportive,
 				request.AdmissionsVariationPupilPlacePlanningSupportive,
 				request.AdmissionsVariationAdmissionsTeamSupportive,
@@ -365,7 +365,7 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				request.InspectionDate,
 				request.MeetsOfstedStandards,
 				request.AdditionalInformation,
-				request.SupportingEvidence);
+				request.SupportingEvidenceSharepointLink);
 
 			CommandResult result = await _mediator.Send(command);
 
@@ -426,5 +426,58 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
-	}
+
+		[HttpPut("{id:int}/SpecialSchoolSatelliteConsiderations", Name = "SetSignificantChangeSpecialSchoolSatelliteConsiderations")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeSpecialSchoolSatelliteConsiderations(
+			int id,
+			[FromBody] SetSignificantChangeSpecialSchoolSatelliteConsiderationsPublicCommand request)
+		{
+			var command = new SetSignificantChangeSpecialSchoolSatelliteConsiderationsCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidenceSharepointLink);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		/// <summary>Updates the satellite site arrangement assessment.</summary>
+		[HttpPut("{id:int}/SatelliteSiteArrangement", Name = "SetSignificantChangeSatelliteSiteArrangement")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeSatelliteSiteArrangement(
+			int id,
+			[FromBody] SetSignificantChangeSatelliteSiteArrangementPublicCommand request,
+			CancellationToken cancellationToken)
+		{
+			var command = new SetSignificantChangeSatelliteSiteArrangementCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidenceSharepointLink);
+
+			CommandResult result = await _mediator.Send(command, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}	}
 }
