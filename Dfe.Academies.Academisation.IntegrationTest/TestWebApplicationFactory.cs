@@ -107,6 +107,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		project.SetFhaRisksOrIssuesRaised(false, null, null);
 		project.SetAdmissionVariationDetails(false, null, null, null, null, null, null, null);
 		project.SetAdmissionsVariationRecommendation(AdmissionsVariationRecommendationAnswer.NotApplicable);
+		project.SetClearance("Regions group cleared", "Trust regulation cleared");
 		project.SetOfstedInspection(DateTime.UtcNow.AddMonths(-1), true, null, null);
 		project.SetLocalAuthorityObjections(false, null, null);
 		project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
