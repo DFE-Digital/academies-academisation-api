@@ -293,6 +293,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
 		}
 
+		public void SetClearance(string? regionsGroupClearance, string? trustRegulationClearance)
+		{
+			Details.RegionsGroupClearance = regionsGroupClearance;
+			Details.TrustRegulationClearance = trustRegulationClearance;
+		}
+
 		public void SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
 		{
 			Details.SpecialSchoolSatelliteConsiderationsMeetRequirements = answer;

@@ -63,6 +63,8 @@ public class SignificantChangeProjectDetails
 	public bool? LocalAuthorityRaisedObjections { get; set; }
 	public string? LocalAuthorityObjectionsFurtherInformation { get; set; }
 	public string? LocalAuthoritySupportingEvidenceLink { get; set; }
+	public string? RegionsGroupClearance { get; set; }
+	public string? TrustRegulationClearance { get; set; }
 	public YesNoNotApplicableAnswer? SpecialSchoolSatelliteConsiderationsMeetRequirements { get; set; }
 	public string? SpecialSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? SpecialSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
@@ -87,6 +89,7 @@ public class SignificantChangeProjectDetails
 	public YesNoNotApplicableAnswer? MainstreamSchoolSatelliteConsiderationsMeetRequirements { get; set; }
 	public string? MainstreamSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? MainstreamSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
+
 
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
@@ -314,6 +317,20 @@ public class SignificantChangeProjectDetails
 		{
 			return SignificantChangeTaskStatus.Completed;
 		}
+
+		return SignificantChangeTaskStatus.InProgress;
+	}
+
+	public SignificantChangeTaskStatus GetClearanceTaskStatus()
+	{
+		var hasRegionsGroupClearance = !string.IsNullOrWhiteSpace(RegionsGroupClearance);
+		var hasTrustRegulationClearance = !string.IsNullOrWhiteSpace(TrustRegulationClearance);
+
+		if (!hasRegionsGroupClearance && !hasTrustRegulationClearance)
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (hasRegionsGroupClearance && hasTrustRegulationClearance)
+			return SignificantChangeTaskStatus.Completed;
 
 		return SignificantChangeTaskStatus.InProgress;
 	}

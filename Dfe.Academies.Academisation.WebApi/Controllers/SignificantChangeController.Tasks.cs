@@ -402,6 +402,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{id:int}/SetClearance", Name = "SetSignificantChangeClearance")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeClearance(
+			int id,
+			[FromBody] SetSignificantChangeClearancePublicCommand request)
+		{
+			var command = new SetSignificantChangeClearanceCommand(
+				id,
+				request.RegionsGroupClearance,
+				request.TrustRegulationClearance);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPut("{id:int}/SpecialSchoolSatelliteConsiderations", Name = "SetSignificantChangeSpecialSchoolSatelliteConsiderations")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]

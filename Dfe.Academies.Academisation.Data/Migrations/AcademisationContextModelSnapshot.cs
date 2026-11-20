@@ -2678,6 +2678,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("RecommendationMoreInformation");
 
+                            b1.Property<string>("RegionsGroupClearance")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RegionsGroupClearance");
+
                             b1.Property<string>("RelevantStakeholdersNotifiedOfAdmissionsChanges")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("RelevantStakeholdersNotifiedOfAdmissionsChanges");
@@ -2749,6 +2753,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("TrustConsultedStakeholdersNotConsultedReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+
+                            b1.Property<string>("TrustRegulationClearance")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustRegulationClearance");
 
                             b1.Property<bool?>("WereThereAnyObjectionsRaised")
                                 .HasColumnType("bit")

@@ -35,6 +35,7 @@ public static class SignificantChangeDecisionTestData
 			OfstedInspection = new() { Status = completed },
 			LocalAuthorityObjections = new() { Status = completed },
 			AdmissionsVariationRecommendation = new() { Status = completed },
+			Clearance = new() { Status = completed },
 			SatelliteSiteArrangement = new() { Status = completed },
 			SpecialSchoolSatelliteConsiderations = new () { Status = completed },
 			MainstreamSchoolSatelliteConsiderations = new() { Status = completed }
@@ -62,6 +63,7 @@ public static class SignificantChangeDecisionTestData
 				(project, status) => project.OfstedInspection.Status = status,
 				(project, status) => project.LocalAuthorityObjections.Status = status,
 				(project, status) => project.AdmissionsVariationRecommendation.Status = status,
+				(project, status) => project.Clearance.Status = status,
 				(project, status) => project.SatelliteSiteArrangement = project.SatelliteSiteArrangement with { Status = status },
 				(project, status) => project.MainstreamSchoolSatelliteConsiderations = new() { Status = status }
 			];
