@@ -127,6 +127,12 @@ public class SignificantChangeProjectMappingProfile : Profile
 				options => options.MapFrom(source => source.Details.RecommendationMoreInformation))
 			.ForMember(destination => destination.RecommendationTaskStatus,
 				options => options.MapFrom(source => source.Details.GetRecommendationTaskStatus().ToString()))
+			.ForMember(destination => destination.RegionsGroupClearance,
+				options => options.MapFrom(source => source.Details.RegionsGroupClearance))
+			.ForMember(destination => destination.TrustRegulationClearance,
+				options => options.MapFrom(source => source.Details.TrustRegulationClearance))
+			.ForMember(destination => destination.ClearanceTaskStatus,
+				options => options.MapFrom(source => source.Details.GetClearanceTaskStatus().ToString()))
 			.ForMember(destination => destination.PlanningPermission,
 				options => options.MapFrom(source => source.Details.PlanningPermission))
 			.ForMember(destination => destination.PlanningPermissionAdditionalInformation,
@@ -272,6 +278,10 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.RecommendationTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeClearanceResponse>()
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ClearanceTaskStatus));
+
 		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionVariationResponse>()
 			.ForMember(destination => destination.AdmissionsVariationRequired,
 				options => options.MapFrom(source => source.AdmissionsVariationRequired))
@@ -332,6 +342,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.OfstedInspection,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.AdmissionsVariationRecommendation,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.Clearance,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.Recommendation,
 				options => options.MapFrom(source => source))

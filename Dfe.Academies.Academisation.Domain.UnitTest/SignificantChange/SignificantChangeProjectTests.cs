@@ -1258,6 +1258,34 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetRecommendationTaskStatus().Should().Be(expected);
 		}
 
+		[Fact]
+		public void SetClearance_WhenAnswersProvided_SetsAnswers()
+		{
+			var project = CreateProject();
+
+			project.SetClearance("Jane Smith", "John Doe");
+
+			project.Details.RegionsGroupClearance.Should().Be("Jane Smith");
+			project.Details.TrustRegulationClearance.Should().Be("John Doe");
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData("Jane Smith", null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(null, "John Doe", SignificantChangeTaskStatus.InProgress)]
+		[InlineData("Jane Smith", "John Doe", SignificantChangeTaskStatus.Completed)]
+		public void GetClearanceTaskStatus_ReturnsExpectedStatus(
+			string? regionsGroupClearance,
+			string? trustRegulationClearance,
+			SignificantChangeTaskStatus expected)
+		{
+			var project = CreateProject();
+
+			project.SetClearance(regionsGroupClearance, trustRegulationClearance);
+
+			project.Details.GetClearanceTaskStatus().Should().Be(expected);
+		}
+
 		private SignificantChangeProject CreateProject()
 		{
 			return SignificantChangeProject.Create(

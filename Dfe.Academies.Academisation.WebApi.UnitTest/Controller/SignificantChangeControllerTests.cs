@@ -942,6 +942,26 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
         }
 
         [Fact]
+        public async Task SetClearance_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
+        {
+            var request = new SetSignificantChangeClearancePublicCommand("Jane Smith", "John Doe");
+
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeClearanceCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandSuccessResult());
+
+            var result = await _controller.SetSignificantChangeClearance(100, request);
+
+            result.Should().BeOfType<OkResult>();
+            _mockMediator.Verify(m => m.Send(
+                It.Is<SetSignificantChangeClearanceCommand>(command =>
+                    command.Id == 100
+                    && command.RegionsGroupClearance == "Jane Smith"
+                    && command.TrustRegulationClearance == "John Doe"),
+                It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
         public async Task SetOfstedInspection_ReturnsOk_AndUsesRouteId_WhenCommandIsSuccessful()
         {
             var inspectionDate = new DateTime(2026, 10, 20);
@@ -1049,6 +1069,19 @@ namespace Dfe.Academies.Academisation.WebApi.UnitTest.Controller
                 .ReturnsAsync(new NotFoundCommandResult());
 
             var result = await _controller.SetSignificantChangeRecommendation(100, request);
+
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task SetClearance_ReturnsNotFound_WhenProjectDoesNotExist()
+        {
+            var request = new SetSignificantChangeClearancePublicCommand("Jane Smith", null);
+            _mockMediator
+                .Setup(m => m.Send(It.IsAny<SetSignificantChangeClearanceCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new NotFoundCommandResult());
+
+            var result = await _controller.SetSignificantChangeClearance(100, request);
 
             result.Should().BeOfType<NotFoundResult>();
         }

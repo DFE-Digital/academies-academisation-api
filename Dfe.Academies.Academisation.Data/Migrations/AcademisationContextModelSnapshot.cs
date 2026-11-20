@@ -2482,10 +2482,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<int>("SignificantChangeProjectId")
                                 .HasColumnType("int");
 
-                            b1.Property<string>("AdmissionsVariationRecommendation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("AdmissionsVariationRecommendation");
-
                             b1.Property<bool?>("AdmissionsVariationAdmissionsTeamSupportive")
                                 .HasColumnType("bit")
                                 .HasColumnName("AdmissionsVariationAdmissionsTeamSupportive");
@@ -2509,6 +2505,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("AdmissionsVariationPupilPlacePlanningSupportiveAdditionalInformation");
+
+                            b1.Property<string>("AdmissionsVariationRecommendation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("AdmissionsVariationRecommendation");
 
                             b1.Property<bool?>("AdmissionsVariationRequired")
                                 .HasColumnType("bit")
@@ -2562,25 +2562,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FhaRisksOrIssuesRaisedSupportingEvidence");
 
-                            b1.Property<string>("LandTransactionApplication")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LandTransactionApplication");
-
-                            b1.Property<string>("LandTransactionApplicationAdditionalInfo")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LandTransactionApplicationAdditionalInfo");
-
-                            b1.Property<string>("LandTransactionConsent")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LandTransactionConsent");
-
-                            b1.Property<string>("LandTransactionConsentAdditionalInfo")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LandTransactionConsentAdditionalInfo");
-
-                            b1.Property<string>("LandTransactionSupportingEvidence")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LandTransactionSupportingEvidence");
                             b1.Property<string>("FundingAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("FundingAdditionalInformation");
@@ -2604,6 +2585,38 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("HqtfConsiderationSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("HqtfConsiderationSupportingEvidence");
+
+                            b1.Property<string>("LandTransactionApplication")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplication");
+
+                            b1.Property<string>("LandTransactionApplicationAdditionalInfo")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionApplicationAdditionalInfo");
+
+                            b1.Property<string>("LandTransactionConsent")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsent");
+
+                            b1.Property<string>("LandTransactionConsentAdditionalInfo")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionConsentAdditionalInfo");
+
+                            b1.Property<string>("LandTransactionSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LandTransactionSupportingEvidence");
+
+                            b1.Property<string>("LocalAuthorityObjectionsFurtherInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LocalAuthorityObjectionsFurtherInformation");
+
+                            b1.Property<bool?>("LocalAuthorityRaisedObjections")
+                                .HasColumnType("bit")
+                                .HasColumnName("LocalAuthorityRaisedObjections");
+
+                            b1.Property<string>("LocalAuthoritySupportingEvidenceLink")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LocalAuthoritySupportingEvidenceLink");
 
                             b1.Property<bool?>("MeetsOfstedStandards")
                                 .HasColumnType("bit")
@@ -2637,18 +2650,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PlanningPermissionSupportingEvidence");
 
-                            b1.Property<string>("LocalAuthorityObjectionsFurtherInformation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LocalAuthorityObjectionsFurtherInformation");
-
-                            b1.Property<bool?>("LocalAuthorityRaisedObjections")
-                                .HasColumnType("bit")
-                                .HasColumnName("LocalAuthorityRaisedObjections");
-
-                            b1.Property<string>("LocalAuthoritySupportingEvidenceLink")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LocalAuthoritySupportingEvidenceLink");
-
                             b1.Property<DateTime?>("ProposedChangeDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ProposedChangeDate");
@@ -2664,6 +2665,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("RecommendationMoreInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("RecommendationMoreInformation");
+
+                            b1.Property<string>("RegionsGroupClearance")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RegionsGroupClearance");
 
                             b1.Property<string>("RelevantStakeholdersNotifiedOfAdmissionsChanges")
                                 .HasColumnType("nvarchar(max)")
@@ -2712,6 +2717,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("TrustConsultedStakeholdersNotConsultedReason")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
+
+                            b1.Property<string>("TrustRegulationClearance")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustRegulationClearance");
 
                             b1.Property<bool?>("WereThereAnyObjectionsRaised")
                                 .HasColumnType("bit")
