@@ -455,5 +455,33 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		/// <summary>Updates mainstream school satellite considerations for a significant change project.</summary>
+		[HttpPut("{id:int}/MainstreamSchoolSatelliteConsiderations", Name = "SetSignificantChangeMainstreamSchoolSatelliteConsiderations")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeMainstreamSchoolSatelliteConsiderations(
+			int id,
+			[FromBody] SetSignificantChangeMainstreamSchoolSatelliteConsiderationsPublicCommand request,
+			CancellationToken cancellationToken)
+		{
+			var command = new SetSignificantChangeMainstreamSchoolSatelliteConsiderationsCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidenceSharepointLink);
+
+			CommandResult result = await _mediator.Send(command, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }

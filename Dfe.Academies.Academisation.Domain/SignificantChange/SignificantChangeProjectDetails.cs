@@ -84,6 +84,9 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.InProgress;
 	}
+	public YesNoNotApplicableAnswer? MainstreamSchoolSatelliteConsiderationsMeetRequirements { get; set; }
+	public string? MainstreamSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
+	public string? MainstreamSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
 
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
@@ -323,6 +326,17 @@ public class SignificantChangeProjectDetails
 		}
 
 		return SignificantChangeTaskStatus.NotStarted;
+	}
 
+	public SignificantChangeTaskStatus GetMainstreamSchoolSatelliteConsiderationsTaskStatus()
+	{
+		if (!MainstreamSchoolSatelliteConsiderationsMeetRequirements.HasValue)
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (MainstreamSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No
+			&& string.IsNullOrWhiteSpace(MainstreamSchoolSatelliteConsiderationsAdditionalInformation))
+			return SignificantChangeTaskStatus.InProgress;
+
+		return SignificantChangeTaskStatus.Completed;
 	}
 }

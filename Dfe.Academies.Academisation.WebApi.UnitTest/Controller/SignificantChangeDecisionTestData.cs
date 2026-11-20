@@ -36,7 +36,8 @@ public static class SignificantChangeDecisionTestData
 			LocalAuthorityObjections = new() { Status = completed },
 			AdmissionsVariationRecommendation = new() { Status = completed },
 			SatelliteSiteArrangement = new() { Status = completed },
-			SpecialSchoolSatelliteConsiderations = new () { Status = completed }
+			SpecialSchoolSatelliteConsiderations = new () { Status = completed },
+			MainstreamSchoolSatelliteConsiderations = new() { Status = completed }
 		};
 	}
 
@@ -61,7 +62,8 @@ public static class SignificantChangeDecisionTestData
 				(project, status) => project.OfstedInspection.Status = status,
 				(project, status) => project.LocalAuthorityObjections.Status = status,
 				(project, status) => project.AdmissionsVariationRecommendation.Status = status,
-				(project, status) => project.SatelliteSiteArrangement = project.SatelliteSiteArrangement with { Status = status }
+				(project, status) => project.SatelliteSiteArrangement = project.SatelliteSiteArrangement with { Status = status },
+				(project, status) => project.MainstreamSchoolSatelliteConsiderations = new() { Status = status }
 			];
 			var data = new TheoryData<Action<SignificantChangeProjectGetByIdResponse, string>, SignificantChangeTaskStatus>();
 			foreach (var setTaskStatus in setTaskStatuses)
