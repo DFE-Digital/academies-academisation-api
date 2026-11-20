@@ -2706,6 +2706,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("ReligiousBodySupportingEvidence");
 
+                            b1.Property<string>("SatelliteSiteArrangementAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("SatelliteSiteArrangementAdditionalInformation");
+
+                            b1.Property<string>("SatelliteSiteArrangementAnswer")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("SatelliteSiteArrangementAnswer");
+
+                            b1.Property<string>("SatelliteSiteArrangementSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("SatelliteSiteArrangementSupportingEvidence");
+
                             b1.Property<string>("SpecialSchoolSatelliteConsiderationsAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("SpecialSchoolSatelliteConsiderationsAdditionalInformation");

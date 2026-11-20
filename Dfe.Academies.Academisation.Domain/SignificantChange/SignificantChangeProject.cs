@@ -301,6 +301,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			SetProjectTier();
 		}
 
+		public void SetSatelliteSiteArrangement(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.SatelliteSiteArrangementAnswer = answer;
+			Details.SatelliteSiteArrangementAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
+			Details.SatelliteSiteArrangementSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetLocalSenPlans(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
 		{
 			Details.LocalSenPlansConflict = answer;
@@ -342,6 +350,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| FundingNotSecured()
 				|| HasFhaRisksOrIssuesRaised()
 				|| HasHqtfIssuesOrRisks()
+				|| SatelliteSiteNotAGenuineExpansion()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 				|| HasLocalSenPlansConflict();
 		}
@@ -409,5 +418,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasLocalSenPlansConflict()
 			=> Details.LocalSenPlansConflict == YesNoNotApplicableAnswer.Yes;
+
+		private bool SatelliteSiteNotAGenuineExpansion()
+			=> Details.SatelliteSiteArrangementAnswer == YesNoNotApplicableAnswer.No;
 	}
 }

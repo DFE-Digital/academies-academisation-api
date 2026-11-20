@@ -110,6 +110,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		project.SetOfstedInspection(DateTime.UtcNow.AddMonths(-1), true, null, null);
 		project.SetLocalAuthorityObjections(false, null, null);
 		project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
+		project.SetSatelliteSiteArrangement(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetLocalSenPlans(YesNoNotApplicableAnswer.NotApplicable, null, null);
 
 		Context.Add(project);
