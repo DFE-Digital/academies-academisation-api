@@ -69,6 +69,10 @@ public class SignificantChangeProjectDetails
 	public YesNoNotApplicableAnswer? SatelliteSiteArrangementAnswer { get; set; }
 	public string? SatelliteSiteArrangementAdditionalInformation { get; set; }
 	public string? SatelliteSiteArrangementSupportingEvidence { get; set; }
+	public YesNoNotApplicableAnswer? LocalSenPlansConflict { get; set; }
+	public string? LocalSenPlansAdditionalInformation { get; set; }
+	public string? LocalSenPlansSupportingEvidence { get; set; }
+
 
 	public SignificantChangeTaskStatus GetSatelliteSiteArrangementTaskStatus()
 	{
@@ -87,7 +91,6 @@ public class SignificantChangeProjectDetails
 	public YesNoNotApplicableAnswer? MainstreamSchoolSatelliteConsiderationsMeetRequirements { get; set; }
 	public string? MainstreamSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? MainstreamSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
-
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
 	{
@@ -335,6 +338,18 @@ public class SignificantChangeProjectDetails
 
 		if (MainstreamSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No
 			&& string.IsNullOrWhiteSpace(MainstreamSchoolSatelliteConsiderationsAdditionalInformation))
+			return SignificantChangeTaskStatus.InProgress;
+
+		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetLocalSenPlansTaskStatus()
+	{
+		if (!LocalSenPlansConflict.HasValue)
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (LocalSenPlansConflict == YesNoNotApplicableAnswer.Yes
+		    && string.IsNullOrWhiteSpace(LocalSenPlansAdditionalInformation))
 			return SignificantChangeTaskStatus.InProgress;
 
 		return SignificantChangeTaskStatus.Completed;
