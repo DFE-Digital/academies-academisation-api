@@ -301,6 +301,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			SetProjectTier();
 		}
 
+		public void SetLocalSenPlans(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.LocalSenPlansConflict = answer;
+			Details.LocalSenPlansAdditionalInformation = answer is YesNoNotApplicableAnswer.Yes ? additionalInformation : null;
+			Details.LocalSenPlansSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetProjectTier()
 		{
 			if (Tier == 3) return;
@@ -334,7 +342,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| FundingNotSecured()
 				|| HasFhaRisksOrIssuesRaised()
 				|| HasHqtfIssuesOrRisks()
-				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements();
+				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
+				|| HasLocalSenPlansConflict();
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()
@@ -397,5 +406,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.SpecialSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
+
+		private bool HasLocalSenPlansConflict()
+			=> Details.LocalSenPlansConflict == YesNoNotApplicableAnswer.Yes;
 	}
 }

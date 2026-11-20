@@ -66,6 +66,10 @@ public class SignificantChangeProjectDetails
 	public YesNoNotApplicableAnswer? SpecialSchoolSatelliteConsiderationsMeetRequirements { get; set; }
 	public string? SpecialSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? SpecialSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
+	public YesNoNotApplicableAnswer? LocalSenPlansConflict { get; set; }
+	public string? LocalSenPlansAdditionalInformation { get; set; }
+	public string? LocalSenPlansSupportingEvidence { get; set; }
+
 
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
@@ -306,5 +310,17 @@ public class SignificantChangeProjectDetails
 
 		return SignificantChangeTaskStatus.NotStarted;
 
+	}
+
+	public SignificantChangeTaskStatus GetLocalSenPlansTaskStatus()
+	{
+		if (!LocalSenPlansConflict.HasValue)
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (LocalSenPlansConflict == YesNoNotApplicableAnswer.Yes
+		    && string.IsNullOrWhiteSpace(LocalSenPlansAdditionalInformation))
+			return SignificantChangeTaskStatus.InProgress;
+
+		return SignificantChangeTaskStatus.Completed;
 	}
 }
