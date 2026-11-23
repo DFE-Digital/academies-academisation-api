@@ -1031,6 +1031,8 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.LocalAuthorityRaisedObjections).HasColumnName("LocalAuthorityRaisedObjections");
 			details.Property(d => d.LocalAuthorityObjectionsFurtherInformation).HasColumnName("LocalAuthorityObjectionsFurtherInformation");
 			details.Property(d => d.LocalAuthoritySupportingEvidenceLink).HasColumnName("LocalAuthoritySupportingEvidenceLink");
+			details.Property(d => d.RegionsGroupClearance).HasColumnName("RegionsGroupClearance");
+			details.Property(d => d.TrustRegulationClearance).HasColumnName("TrustRegulationClearance");
 			details.Property(d => d.ReligiousBodyRaisedObjection).HasConversion<string>().HasColumnName("ReligiousBodyRaisedObjection");
 			details.Property(d => d.ReligiousBodyRaisedObjectionReason).HasColumnName("ReligiousBodyRaisedObjectionReason");
 			details.Property(d => d.ReligiousBodyConsentGranted).HasConversion<string>().HasColumnName("ReligiousBodyConsentGranted");
