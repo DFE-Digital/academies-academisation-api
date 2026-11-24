@@ -24,6 +24,7 @@ public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectS
 	public SignificantChangeSpecialSchoolSatelliteConsiderationsResponse SpecialSchoolSatelliteConsiderations { get; set; } = new();
 	public SignificantChangeSatelliteSiteArrangementResponse SatelliteSiteArrangement { get; set; } = new();
 	public SignificantChangeMainstreamSchoolSatelliteConsiderationsResponse MainstreamSchoolSatelliteConsiderations { get; set; } = new();
+	public SignificantChangeLocalSenPlansResponse LocalSenPlans { get; set; } = new();
 	public Decision? Decision { get; set; }
 	public DateTime? DecisionDate { get; set; }
 
@@ -49,6 +50,7 @@ public class SignificantChangeProjectGetByIdResponse : SignificantChangeProjectS
 		&& Clearance.Status == completeText
 		&& SpecialSchoolSatelliteConsiderations.Status == completeText
 		&& SatelliteSiteArrangement.Status == completeText
-		&& MainstreamSchoolSatelliteConsiderations.Status == completeText;
+		&& MainstreamSchoolSatelliteConsiderations.Status == completeText
+		&& LocalSenPlans.Status == completeText;
     }
 }

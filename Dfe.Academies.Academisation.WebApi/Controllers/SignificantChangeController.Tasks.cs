@@ -508,5 +508,33 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		/// <summary>Updates whether the proposal conflicts with a Local SEN Reform Plan for a significant change project.</summary>
+		[HttpPut("{id:int}/LocalSenPlans", Name = "SetSignificantChangeLocalSenPlans")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeLocalSenPlans(
+			int id,
+			[FromBody] SetSignificantChangeLocalSenPlansPublicCommand request,
+			CancellationToken cancellationToken)
+		{
+			var command = new SetSignificantChangeLocalSenPlansCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidenceSharepointLink);
+
+			CommandResult result = await _mediator.Send(command, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }
