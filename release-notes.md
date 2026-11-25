@@ -8,40 +8,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-10-26.727...HEAD)
 Note: remember to update unrelease section when creating a new release.
-- [301987](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=301987) - Add local authority objections task data endpoint and response updates
-- [304182](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304182) - Add clearance details task data endpoint and response updates
+- [301987](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301987) - SIG-Add local authority objections task for significant change
+- [304182](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304182) Sig - Add clearance details task for significant change
+- [309557](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304182) - Sig- Task - Record FHA outcomes
+- [303867](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/303867) Sig - Task - record recommendation - Admissions variation
+- [301988](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301988) Sig - Task - Ofsted
+- [305725](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/305725) - Sig - consolidate consultation details
+- [311113](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/311113) - Sig - task return button doesn't match proto
+- [301992](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301992) - Sig - Task - land transaction
+- [310801](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/310801) - Sig -  prevent decision until required info & tasks complete
+- [302150](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/302150) - Sig -  Tier 2 Identification
+- [313303](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/313303) - Sig -  Sharepoint evidence link SIG
+- [311060](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/311060) - Sig -  Task - Special school satellite site considerations
+- [311059](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/311059) - Sig -  Task - Satellite site arrangement
+- [311061](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/311061) - Sig -  Task - mainstream school satellite considerations
+- [311058](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/311058) - Sig -  Task - Local SEN plans
+- [313461](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/313461) - Sig -  Radio button pre-selected when create project
 
 ## [10.1.0][10.1.0] - 2026-10-26
 
 ### Added
-- [296559](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=296559) - Add religious body consultation task controller and handler
-- [302674](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/302674) - Add Task -  admissions variation
-- [296556](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296556) - Add Task - Consultation duration
-- [305712](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/305712) - Add Task - Public-Sector-Equality-Duty
+- [296559](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=296559) Sig - Add religious body consultation task controller and handler
+- [302674](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/302674) Sig - Add Task -  admissions variation
+- [296556](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296556) Sig - Add Task - Consultation duration
+- [305712](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/305712) Sig - Add Task - Public-Sector-Equality-Duty
 - [298244](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/298244) - FHA - add additional mandatory items
 - [298313](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/298313) - FHA - prevent requests inside 15 days
-- [296556](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296556) - Task - Consultation duration
-- [303294](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/303294) - status not updating & duplicate decision
-- [301993](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301993) - Task - planning permission
-- [300439](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/300439) - Receive FlexForms application into prepare (foundational)
+- [296556](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296556) Sig - Task - Consultation duration
+- [303294](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/303294) Sig - status not updating & duplicate decision
+- [301993](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301993) Sig - Task - planning permission
+- [300439](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/300439) Sig - Receive FlexForms application into prepare (foundational)
 - [301915](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301915) - Sig - Filter By Tiers
 - [299268](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/299268) - Sig - filter by project status
 - [299264](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/299264) - Sig - filter by region
 - [299265](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/299265) - Sig - Sig- filter by LA
 - [299266](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/299266) - Sig - filter by "assigned to"
-- [301991](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301991) - Add Task - funding
-- [304177](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304177) - Add Task - HQTF - Proportionate assessment
+- [301991](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301991) Sig - Add Task - funding
+- [304177](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304177) Sig - Add Task - HQTF - Proportionate assessment
 - [305714](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/305714) - Sig - add useful links to all tasks
-- [303684](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/303684) - Add Task - record recommendation - significant change
+- [303684](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/303684) Sig - Add Task - record recommendation - significant change
 - [306456](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/306456) - Sig- Withdraw Decision
 - [303131](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/303131) - Sig- approve Decision
 - [306455](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/306455) - Sig- decline Decision
 - [307540](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/307540) - Sig add the "Record a Decision" CTA to the Task list page
 - [302574](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/302574) - Sig - Select a Decision
 - [300438](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/300438) - Sig Record decision - send project to complete
-- [296557](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296557) - Add -Task - consultation admissions variation
-- [290429](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290429) - Sig Record a decision
-- [296558](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296558) - Sig Add -Task - stakeholder objections
+- [296557](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296557) Sig - Add -Task - consultation admissions variation
+- [290429](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/290429) Sig - Record a decision
+- [296558](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/296558) Sig- Add -Task - stakeholder objections
 - [306993](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/306993) - Tech debt - academisation seeder tidy up
 - [301918](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301918) - Upgrade to dotnet 10
 - [298051](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/298051) - Add companies house and local authority to sig. change post request/db
