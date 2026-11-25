@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
  
-## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-10-26.727...HEAD)
+## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-11-25.791...HEAD)
 Note: remember to update unrelease section when creating a new release.
+
+
+---
+## [10.2.0][10.2.0] - 2026-11-25
+
+### Added
 - [301987](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/301987) - SIG-Add local authority objections task for significant change
 - [304182](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304182) Sig - Add clearance details task for significant change
 - [309557](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304182) - Sig- Task - Record FHA outcomes
@@ -24,6 +30,9 @@ Note: remember to update unrelease section when creating a new release.
 - [311061](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/311061) - Sig -  Task - mainstream school satellite considerations
 - [311058](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/311058) - Sig -  Task - Local SEN plans
 - [313461](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/313461) - Sig -  Radio button pre-selected when create project
+
+
+---
 
 ## [10.1.0][10.1.0] - 2026-10-26
 
@@ -545,7 +554,8 @@ Note: remember to update unrelease section when creating a new release.
 * User Story 129594 : The Local Authority and Region for a school is now passed up to the Academisation Api during involuntary project creation. This avoids the delay in populating the two values within the Academisation Api as they're already known during the conversion process.
 * LA Dates can be set back to null
 ---
-
+[10.2.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-11-25.791
+[10.1.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-10-26.727
 [10.0.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-08-26.647
 [9.48.0]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-04-20.581
 [9.47.1]: https://github.com/DFE-Digital/academies-academisation-api/releases/tag/production-2026-04-02.577
