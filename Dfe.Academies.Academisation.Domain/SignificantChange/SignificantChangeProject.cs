@@ -293,6 +293,12 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.AdmissionsVariationRecommendation = admissionsVariationRecommendation;
 		}
 
+		public void SetClearance(string? regionsGroupClearance, string? trustRegulationClearance)
+		{
+			Details.RegionsGroupClearance = regionsGroupClearance;
+			Details.TrustRegulationClearance = trustRegulationClearance;
+		}
+
 		public void SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
 		{
 			Details.SpecialSchoolSatelliteConsiderationsMeetRequirements = answer;
@@ -322,6 +328,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			Details.TrustExperienceAndGovernanceAnswer = answer;
 			Details.TrustExperienceAndGovernanceAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
 			Details.TrustExperienceAndGovernanceSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
+		public void SetLocalSenPlans(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.LocalSenPlansConflict = answer;
+			Details.LocalSenPlansAdditionalInformation = answer is YesNoNotApplicableAnswer.Yes ? additionalInformation : null;
+			Details.LocalSenPlansSupportingEvidence = supportingEvidence;
 			SetProjectTier();
 		}
 
@@ -361,7 +375,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| SatelliteSiteNotAGenuineExpansion()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 				|| HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
-				|| HasTrustExperienceAndGovernanceNotMetRequirements();
+				|| HasTrustExperienceAndGovernanceNotMetRequirements()
+				|| HasLocalSenPlansConflict();
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()
@@ -424,6 +439,9 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.SpecialSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
+
+		private bool HasLocalSenPlansConflict()
+			=> Details.LocalSenPlansConflict == YesNoNotApplicableAnswer.Yes;
 
 		private bool SatelliteSiteNotAGenuineExpansion()
 			=> Details.SatelliteSiteArrangementAnswer == YesNoNotApplicableAnswer.No;

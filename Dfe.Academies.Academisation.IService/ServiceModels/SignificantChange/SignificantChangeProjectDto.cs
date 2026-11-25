@@ -98,6 +98,9 @@ public class SignificantChangeProjectDto
 	public string RecommendationTaskStatus { get; set; } = string.Empty;
 	public Recommendation? Recommendation { get; set; }
 	public string? RecommendationMoreInformation { get; set; }
+	public string? RegionsGroupClearance { get; set; }
+	public string? TrustRegulationClearance { get; set; }
+	public string ClearanceTaskStatus { get; set; } = string.Empty;
 	public YesNoNotApplicableAnswer? SpecialSchoolSatelliteConsiderationsMeetRequirements { get; set; }
 	public string? SpecialSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? SpecialSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
@@ -114,5 +117,9 @@ public class SignificantChangeProjectDto
 	public string? TrustExperienceAndGovernanceAdditionalInformation { get; set; }
 	public string? TrustExperienceAndGovernanceSupportingEvidence { get; set; }
 	public string TrustExperienceAndGovernanceTaskStatus { get; set; } = string.Empty;
+	public YesNoNotApplicableAnswer? LocalSenPlansConflict { get; set; }
+	public string? LocalSenPlansAdditionalInformation { get; set; }
+	public string? LocalSenPlansSupportingEvidence { get; set; }
+	public string LocalSenPlansTaskStatus { get; set; } = string.Empty;
 
 }

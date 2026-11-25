@@ -402,6 +402,31 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		[HttpPut("{id:int}/SetClearance", Name = "SetSignificantChangeClearance")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeClearance(
+			int id,
+			[FromBody] SetSignificantChangeClearancePublicCommand request)
+		{
+			var command = new SetSignificantChangeClearanceCommand(
+				id,
+				request.RegionsGroupClearance,
+				request.TrustRegulationClearance);
+
+			CommandResult result = await _mediator.Send(command);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		[HttpPut("{id:int}/SpecialSchoolSatelliteConsiderations", Name = "SetSignificantChangeSpecialSchoolSatelliteConsiderations")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -495,6 +520,34 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			CancellationToken cancellationToken)
 		{
 			var command = new SetSignificantChangeTrustExperienceAndGovernanceCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidenceSharepointLink);
+
+			CommandResult result = await _mediator.Send(command, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
+		/// <summary>Updates whether the proposal conflicts with a Local SEN Reform Plan for a significant change project.</summary>
+		[HttpPut("{id:int}/LocalSenPlans", Name = "SetSignificantChangeLocalSenPlans")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeLocalSenPlans(
+			int id,
+			[FromBody] SetSignificantChangeLocalSenPlansPublicCommand request,
+			CancellationToken cancellationToken)
+		{
+			var command = new SetSignificantChangeLocalSenPlansCommand(
 				id,
 				request.Answer,
 				request.AdditionalInformation,

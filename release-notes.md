@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Note: remember to update unrelease section when creating a new release.
 - [301987](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=301987) - Add local authority objections task data endpoint and response updates
 - [311062](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=311062) - Add Trust experience and governance task endpoint and migration
+- [304182](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_workitems/edit/304182) - Add clearance details task data endpoint and response updates
 
 ## [10.1.0][10.1.0] - 2026-10-26
 

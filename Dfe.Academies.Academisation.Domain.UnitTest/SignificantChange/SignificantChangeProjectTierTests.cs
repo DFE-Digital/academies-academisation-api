@@ -111,6 +111,39 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Theory]
+		[InlineData(YesNoNotApplicableAnswer.No)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
+		[InlineData(null)]
+		public void SetLocalSenPlans_WhenNoLongerYes_ClearsDetailsAndRecalculatesTier(YesNoNotApplicableAnswer? answer)
+		{
+			var project = CreateTierOneProject();
+			project.SetLocalSenPlans(YesNoNotApplicableAnswer.Yes, "Conflicts with plan", "Evidence");
+			project.Tier.Should().Be(2);
+			project.Details.LocalSenPlansAdditionalInformation.Should().Be("Conflicts with plan");
+
+			project.SetLocalSenPlans(answer, "Stale details", "Updated evidence");
+
+			project.Tier.Should().Be(1);
+			project.Details.LocalSenPlansConflict.Should().Be(answer);
+			project.Details.LocalSenPlansAdditionalInformation.Should().BeNull();
+			project.Details.LocalSenPlansSupportingEvidence.Should().Be("Updated evidence");
+		}
+
+		[Theory]
+		[InlineData(3, false, 3)]
+		[InlineData(1, true, 2)]
+		public void SetLocalSenPlans_PreservesOtherTierTriggers(byte tier, bool otherTrigger, byte expected)
+		{
+			var project = CreateTierOneProject(tier);
+			project.Details.FhaRisksOrIssuesRaised = otherTrigger;
+
+			project.SetLocalSenPlans(YesNoNotApplicableAnswer.Yes, "Details", null);
+			project.SetLocalSenPlans(YesNoNotApplicableAnswer.No, null, null);
+
+			project.Tier.Should().Be(expected);
+		}
+
+		[Theory]
 		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
 		[InlineData(YesNoNotApplicableAnswer.No, null, SignificantChangeTaskStatus.InProgress)]
 		[InlineData(YesNoNotApplicableAnswer.No, "Details", SignificantChangeTaskStatus.Completed)]
@@ -122,6 +155,22 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetTrustExperienceAndGovernance(answer, details, null);
 
 			project.Details.GetTrustExperienceAndGovernanceTaskStatus().Should().Be(expected);
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, " ", SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, "Details", SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.No, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable, null, SignificantChangeTaskStatus.Completed)]
+		public void GetLocalSenPlansTaskStatus_RequiresDetailsOnlyForYes(
+			YesNoNotApplicableAnswer? answer, string? details, SignificantChangeTaskStatus expected)
+		{
+			var project = CreateTierOneProject();
+			project.SetLocalSenPlans(answer, details, null);
+
+			project.Details.GetLocalSenPlansTaskStatus().Should().Be(expected);
 		}
 
 		[Fact]

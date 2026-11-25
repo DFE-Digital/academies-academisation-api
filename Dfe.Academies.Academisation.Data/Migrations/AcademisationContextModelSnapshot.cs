@@ -2630,6 +2630,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("MainstreamSchoolSatelliteConsiderationsSupportingEvidence");
 
+                            b1.Property<string>("LocalSenPlansAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LocalSenPlansAdditionalInformation");
+
+                            b1.Property<string>("LocalSenPlansConflict")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LocalSenPlansConflict");
+
+                            b1.Property<string>("LocalSenPlansSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("LocalSenPlansSupportingEvidence");
+
                             b1.Property<bool?>("MeetsOfstedStandards")
                                 .HasColumnType("bit")
                                 .HasColumnName("MeetsOfstedStandards");
@@ -2677,6 +2689,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("RecommendationMoreInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("RecommendationMoreInformation");
+
+                            b1.Property<string>("RegionsGroupClearance")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("RegionsGroupClearance");
 
                             b1.Property<string>("RelevantStakeholdersNotifiedOfAdmissionsChanges")
                                 .HasColumnType("nvarchar(max)")
@@ -2761,6 +2777,10 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("TrustExperienceAndGovernanceSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TrustExperienceAndGovernanceSupportingEvidence");
+
+                            b1.Property<string>("TrustRegulationClearance")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustRegulationClearance");
 
                             b1.Property<bool?>("WereThereAnyObjectionsRaised")
                                 .HasColumnType("bit")
