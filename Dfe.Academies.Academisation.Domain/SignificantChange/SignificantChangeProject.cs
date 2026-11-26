@@ -331,6 +331,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			SetProjectTier();
 		}
 
+		public void SetImpactOnSenProvision(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.ImpactOnSenProvisionImprovesProvision = answer;
+			Details.ImpactOnSenProvisionAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
+			Details.ImpactOnSenProvisionSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetProjectTier()
 		{
 			if (Tier == 3) return;
@@ -367,7 +375,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| SatelliteSiteNotAGenuineExpansion()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 				|| HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
-				|| HasLocalSenPlansConflict();
+				|| HasLocalSenPlansConflict()
+				|| SenProvisionNotImproved();
 		}
 
 		private bool HasAdmissionsVariationTierTwoCombination()
@@ -439,5 +448,8 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.MainstreamSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
+
+		private bool SenProvisionNotImproved()
+			=> Details.ImpactOnSenProvisionImprovesProvision == YesNoNotApplicableAnswer.No;
 	}
 }

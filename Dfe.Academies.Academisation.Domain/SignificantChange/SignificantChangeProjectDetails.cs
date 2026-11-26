@@ -74,6 +74,9 @@ public class SignificantChangeProjectDetails
 	public YesNoNotApplicableAnswer? LocalSenPlansConflict { get; set; }
 	public string? LocalSenPlansAdditionalInformation { get; set; }
 	public string? LocalSenPlansSupportingEvidence { get; set; }
+	public YesNoNotApplicableAnswer? ImpactOnSenProvisionImprovesProvision { get; set; }
+	public string? ImpactOnSenProvisionAdditionalInformation { get; set; }
+	public string? ImpactOnSenProvisionSupportingEvidence { get; set; }
 
 
 	public SignificantChangeTaskStatus GetSatelliteSiteArrangementTaskStatus()
@@ -366,6 +369,18 @@ public class SignificantChangeProjectDetails
 
 		if (LocalSenPlansConflict == YesNoNotApplicableAnswer.Yes
 		    && string.IsNullOrWhiteSpace(LocalSenPlansAdditionalInformation))
+			return SignificantChangeTaskStatus.InProgress;
+
+		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetImpactOnSenProvisionTaskStatus()
+	{
+		if (!ImpactOnSenProvisionImprovesProvision.HasValue)
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (ImpactOnSenProvisionImprovesProvision == YesNoNotApplicableAnswer.No
+		    && string.IsNullOrWhiteSpace(ImpactOnSenProvisionAdditionalInformation))
 			return SignificantChangeTaskStatus.InProgress;
 
 		return SignificantChangeTaskStatus.Completed;

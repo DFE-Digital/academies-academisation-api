@@ -536,5 +536,33 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 				_ => throw new NotImplementedException()
 			};
 		}
+
+		/// <summary>Updates whether the proposal is likely to improve the standard, quality and range of SEN provision for a significant change project.</summary>
+		[HttpPut("{id:int}/ImpactOnSenProvision", Name = "SetSignificantChangeImpactOnSenProvision")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeImpactOnSenProvision(
+			int id,
+			[FromBody] SetSignificantChangeImpactOnSenProvisionPublicCommand request,
+			CancellationToken cancellationToken)
+		{
+			var command = new SetSignificantChangeImpactOnSenProvisionCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidenceSharepointLink);
+
+			CommandResult result = await _mediator.Send(command, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
 	}
 }

@@ -141,6 +141,55 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.Details.GetLocalSenPlansTaskStatus().Should().Be(expected);
 		}
 
+		[Theory]
+		[InlineData(YesNoNotApplicableAnswer.Yes)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
+		[InlineData(null)]
+		public void SetImpactOnSenProvision_WhenNoLongerNo_ClearsDetailsAndRecalculatesTier(YesNoNotApplicableAnswer? answer)
+		{
+			var project = CreateTierOneProject();
+			project.SetImpactOnSenProvision(YesNoNotApplicableAnswer.No, "Provision reduced", "Evidence");
+			project.Tier.Should().Be(2);
+			project.Details.ImpactOnSenProvisionAdditionalInformation.Should().Be("Provision reduced");
+
+			project.SetImpactOnSenProvision(answer, "Stale details", "Updated evidence");
+
+			project.Tier.Should().Be(1);
+			project.Details.ImpactOnSenProvisionImprovesProvision.Should().Be(answer);
+			project.Details.ImpactOnSenProvisionAdditionalInformation.Should().BeNull();
+			project.Details.ImpactOnSenProvisionSupportingEvidence.Should().Be("Updated evidence");
+		}
+
+		[Theory]
+		[InlineData(3, false, 3)]
+		[InlineData(1, true, 2)]
+		public void SetImpactOnSenProvision_PreservesOtherTierTriggers(byte tier, bool otherTrigger, byte expected)
+		{
+			var project = CreateTierOneProject(tier);
+			project.Details.FhaRisksOrIssuesRaised = otherTrigger;
+
+			project.SetImpactOnSenProvision(YesNoNotApplicableAnswer.No, "Details", null);
+			project.SetImpactOnSenProvision(YesNoNotApplicableAnswer.Yes, null, null);
+
+			project.Tier.Should().Be(expected);
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(YesNoNotApplicableAnswer.No, null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.No, " ", SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.No, "Details", SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, null, SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable, null, SignificantChangeTaskStatus.Completed)]
+		public void GetImpactOnSenProvisionTaskStatus_RequiresDetailsOnlyForNo(
+			YesNoNotApplicableAnswer? answer, string? details, SignificantChangeTaskStatus expected)
+		{
+			var project = CreateTierOneProject();
+			project.SetImpactOnSenProvision(answer, details, null);
+
+			project.Details.GetImpactOnSenProvisionTaskStatus().Should().Be(expected);
+		}
+
 		[Fact]
 		public void SetProjectTier_WhenConsultationIsNoSatisfactoryConsultationCarriedOut_SetsTierOne()
 		{

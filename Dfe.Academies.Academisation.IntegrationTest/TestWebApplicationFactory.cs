@@ -118,6 +118,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		project.SetSatelliteSiteArrangement(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetMainstreamSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetLocalSenPlans(YesNoNotApplicableAnswer.NotApplicable, null, null);
+		project.SetImpactOnSenProvision(YesNoNotApplicableAnswer.NotApplicable, null, null);
 
 		Context.Add(project);
 		await Context.SaveChangesAsync();
