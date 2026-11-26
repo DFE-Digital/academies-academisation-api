@@ -224,7 +224,15 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.LocalSenPlansSupportingEvidence,
 				options => options.MapFrom(source => source.Details.LocalSenPlansSupportingEvidence))
 			.ForMember(destination => destination.LocalSenPlansTaskStatus,
-				options => options.MapFrom(source => source.Details.GetLocalSenPlansTaskStatus().ToString()));
+				options => options.MapFrom(source => source.Details.GetLocalSenPlansTaskStatus().ToString()))
+			.ForMember(destination => destination.ImpactOnSenProvisionImprovesProvision,
+				options => options.MapFrom(source => source.Details.ImpactOnSenProvisionImprovesProvision))
+			.ForMember(destination => destination.ImpactOnSenProvisionAdditionalInformation,
+				options => options.MapFrom(source => source.Details.ImpactOnSenProvisionAdditionalInformation))
+			.ForMember(destination => destination.ImpactOnSenProvisionSupportingEvidence,
+				options => options.MapFrom(source => source.Details.ImpactOnSenProvisionSupportingEvidence))
+			.ForMember(destination => destination.ImpactOnSenProvisionTaskStatus,
+				options => options.MapFrom(source => source.Details.GetImpactOnSenProvisionTaskStatus().ToString()));
 
 
 		CreateMap<SignificantChangeProjectDto, SignificantChangeConsultationDurationResponse>()
@@ -382,6 +390,16 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.Status,
 				options => options.MapFrom(source => source.LocalSenPlansTaskStatus));
 
+		CreateMap<SignificantChangeProjectDto, SignificantChangeImpactOnSenProvisionResponse>()
+			.ForMember(destination => destination.Answer,
+				options => options.MapFrom(source => source.ImpactOnSenProvisionImprovesProvision))
+			.ForMember(destination => destination.AdditionalInformation,
+				options => options.MapFrom(source => source.ImpactOnSenProvisionAdditionalInformation))
+			.ForMember(destination => destination.SupportingEvidence,
+				options => options.MapFrom(source => source.ImpactOnSenProvisionSupportingEvidence))
+			.ForMember(destination => destination.Status,
+				options => options.MapFrom(source => source.ImpactOnSenProvisionTaskStatus));
+
 		CreateMap<SignificantChangeProjectDto, SignificantChangeAdmissionVariationResponse>()
 			.ForMember(destination => destination.AdmissionsVariationRequired,
 				options => options.MapFrom(source => source.AdmissionsVariationRequired))
@@ -462,6 +480,8 @@ public class SignificantChangeProjectMappingProfile : Profile
 			.ForMember(destination => destination.TrustExperienceAndGovernance,
 				options => options.MapFrom(source => source))
 			.ForMember(destination => destination.LocalSenPlans,
+				options => options.MapFrom(source => source))
+			.ForMember(destination => destination.ImpactOnSenProvision,
 				options => options.MapFrom(source => source));
 	}
 }

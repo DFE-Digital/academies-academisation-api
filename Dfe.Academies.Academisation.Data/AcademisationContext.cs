@@ -1082,6 +1082,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.LocalSenPlansConflict).HasConversion<string>().HasColumnName("LocalSenPlansConflict");
 			details.Property(d => d.LocalSenPlansAdditionalInformation).HasColumnName("LocalSenPlansAdditionalInformation");
 			details.Property(d => d.LocalSenPlansSupportingEvidence).HasColumnName("LocalSenPlansSupportingEvidence");
+			details.Property(d => d.ImpactOnSenProvisionImprovesProvision).HasConversion<string>().HasColumnName("ImpactOnSenProvisionImprovesProvision");
+			details.Property(d => d.ImpactOnSenProvisionAdditionalInformation).HasColumnName("ImpactOnSenProvisionAdditionalInformation");
+			details.Property(d => d.ImpactOnSenProvisionSupportingEvidence).HasColumnName("ImpactOnSenProvisionSupportingEvidence");
 		});
 	}
 }

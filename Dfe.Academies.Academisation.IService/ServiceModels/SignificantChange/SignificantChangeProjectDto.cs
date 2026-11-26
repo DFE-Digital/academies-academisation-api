@@ -121,5 +121,9 @@ public class SignificantChangeProjectDto
 	public string? LocalSenPlansAdditionalInformation { get; set; }
 	public string? LocalSenPlansSupportingEvidence { get; set; }
 	public string LocalSenPlansTaskStatus { get; set; } = string.Empty;
+	public YesNoNotApplicableAnswer? ImpactOnSenProvisionImprovesProvision { get; set; }
+	public string? ImpactOnSenProvisionAdditionalInformation { get; set; }
+	public string? ImpactOnSenProvisionSupportingEvidence { get; set; }
+	public string ImpactOnSenProvisionTaskStatus { get; set; } = string.Empty;
 
 }

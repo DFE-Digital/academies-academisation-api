@@ -2586,6 +2586,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("HqtfConsiderationSupportingEvidence");
 
+                            b1.Property<string>("ImpactOnSenProvisionAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ImpactOnSenProvisionAdditionalInformation");
+
+                            b1.Property<string>("ImpactOnSenProvisionImprovesProvision")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ImpactOnSenProvisionImprovesProvision");
+
+                            b1.Property<string>("ImpactOnSenProvisionSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("ImpactOnSenProvisionSupportingEvidence");
+
                             b1.Property<string>("LandTransactionApplication")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("LandTransactionApplication");
@@ -2618,18 +2630,6 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("LocalAuthoritySupportingEvidenceLink");
 
-                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsAdditionalInformation")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsAdditionalInformation");
-
-                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsMeetRequirements")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsMeetRequirements");
-
-                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsSupportingEvidence")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsSupportingEvidence");
-
                             b1.Property<string>("LocalSenPlansAdditionalInformation")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("LocalSenPlansAdditionalInformation");
@@ -2641,6 +2641,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                             b1.Property<string>("LocalSenPlansSupportingEvidence")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("LocalSenPlansSupportingEvidence");
+
+                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsAdditionalInformation");
+
+                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsMeetRequirements")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsMeetRequirements");
+
+                            b1.Property<string>("MainstreamSchoolSatelliteConsiderationsSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MainstreamSchoolSatelliteConsiderationsSupportingEvidence");
 
                             b1.Property<bool?>("MeetsOfstedStandards")
                                 .HasColumnType("bit")
