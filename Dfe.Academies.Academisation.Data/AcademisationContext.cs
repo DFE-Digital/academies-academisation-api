@@ -1076,6 +1076,9 @@ public class AcademisationContext(DbContextOptions<AcademisationContext> options
 			details.Property(d => d.MainstreamSchoolSatelliteConsiderationsMeetRequirements).HasConversion<string>().HasColumnName("MainstreamSchoolSatelliteConsiderationsMeetRequirements");
 			details.Property(d => d.MainstreamSchoolSatelliteConsiderationsAdditionalInformation).HasColumnName("MainstreamSchoolSatelliteConsiderationsAdditionalInformation");
 			details.Property(d => d.MainstreamSchoolSatelliteConsiderationsSupportingEvidence).HasColumnName("MainstreamSchoolSatelliteConsiderationsSupportingEvidence");
+			details.Property(d => d.TrustExperienceAndGovernanceAnswer).HasConversion<string>().HasColumnName("TrustExperienceAndGovernanceAnswer");
+			details.Property(d => d.TrustExperienceAndGovernanceAdditionalInformation).HasColumnName("TrustExperienceAndGovernanceAdditionalInformation");
+			details.Property(d => d.TrustExperienceAndGovernanceSupportingEvidence).HasColumnName("TrustExperienceAndGovernanceSupportingEvidence");
 			details.Property(d => d.LocalSenPlansConflict).HasConversion<string>().HasColumnName("LocalSenPlansConflict");
 			details.Property(d => d.LocalSenPlansAdditionalInformation).HasColumnName("LocalSenPlansAdditionalInformation");
 			details.Property(d => d.LocalSenPlansSupportingEvidence).HasColumnName("LocalSenPlansSupportingEvidence");

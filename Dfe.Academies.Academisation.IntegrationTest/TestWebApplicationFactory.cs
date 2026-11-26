@@ -117,6 +117,7 @@ public class TestWebApplicationFactory : WebApplicationFactory<WebApi.Program>
 		project.SetSpecialSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetSatelliteSiteArrangement(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetMainstreamSchoolSatelliteConsiderations(YesNoNotApplicableAnswer.NotApplicable, null, null);
+		project.SetTrustExperienceAndGovernance(YesNoNotApplicableAnswer.NotApplicable, null, null);
 		project.SetLocalSenPlans(YesNoNotApplicableAnswer.NotApplicable, null, null);
 
 		Context.Add(project);
