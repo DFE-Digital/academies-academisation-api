@@ -93,6 +93,24 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 		}
 
 		[Theory]
+		[InlineData(YesNoNotApplicableAnswer.Yes)]
+		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
+		[InlineData(null)]
+		public void SetTrustExperienceAndGovernance_WhenNoLongerNo_ClearsDetailsAndRecalculatesTier(YesNoNotApplicableAnswer? answer)
+		{
+			var project = CreateTierOneProject();
+			project.SetTrustExperienceAndGovernance(YesNoNotApplicableAnswer.No, "Governance gap", "Evidence");
+			project.Tier.Should().Be(2);
+
+			project.SetTrustExperienceAndGovernance(answer, "Stale details", "Updated evidence");
+
+			project.Tier.Should().Be(1);
+			project.Details.TrustExperienceAndGovernanceAnswer.Should().Be(answer);
+			project.Details.TrustExperienceAndGovernanceAdditionalInformation.Should().BeNull();
+			project.Details.TrustExperienceAndGovernanceSupportingEvidence.Should().Be("Updated evidence");
+		}
+
+		[Theory]
 		[InlineData(YesNoNotApplicableAnswer.No)]
 		[InlineData(YesNoNotApplicableAnswer.NotApplicable)]
 		[InlineData(null)]
@@ -123,6 +141,20 @@ namespace Dfe.Academies.Academisation.Domain.UnitTest.SignificantChange
 			project.SetLocalSenPlans(YesNoNotApplicableAnswer.No, null, null);
 
 			project.Tier.Should().Be(expected);
+		}
+
+		[Theory]
+		[InlineData(null, null, SignificantChangeTaskStatus.NotStarted)]
+		[InlineData(YesNoNotApplicableAnswer.No, null, SignificantChangeTaskStatus.InProgress)]
+		[InlineData(YesNoNotApplicableAnswer.No, "Details", SignificantChangeTaskStatus.Completed)]
+		[InlineData(YesNoNotApplicableAnswer.Yes, null, SignificantChangeTaskStatus.Completed)]
+		public void GetTrustExperienceAndGovernanceTaskStatus_RequiresDetailsOnlyForNo(
+			YesNoNotApplicableAnswer? answer, string? details, SignificantChangeTaskStatus expected)
+		{
+			var project = CreateTierOneProject();
+			project.SetTrustExperienceAndGovernance(answer, details, null);
+
+			project.Details.GetTrustExperienceAndGovernanceTaskStatus().Should().Be(expected);
 		}
 
 		[Theory]

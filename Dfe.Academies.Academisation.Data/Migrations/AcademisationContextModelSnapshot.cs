@@ -2778,6 +2778,18 @@ namespace Dfe.Academies.Academisation.Data.Migrations
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TrustConsultedStakeholdersNotConsultedReason");
 
+                            b1.Property<string>("TrustExperienceAndGovernanceAdditionalInformation")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustExperienceAndGovernanceAdditionalInformation");
+
+                            b1.Property<string>("TrustExperienceAndGovernanceAnswer")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustExperienceAndGovernanceAnswer");
+
+                            b1.Property<string>("TrustExperienceAndGovernanceSupportingEvidence")
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("TrustExperienceAndGovernanceSupportingEvidence");
+
                             b1.Property<string>("TrustRegulationClearance")
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("TrustRegulationClearance");

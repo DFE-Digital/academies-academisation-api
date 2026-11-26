@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  
 ## [Unreleased](https://github.com/DFE-Digital/academies-academisation-api/compare/production-2026-11-25.791...HEAD)
 Note: remember to update unrelease section when creating a new release.
-
+- [311062](https://dfe-gov-uk.visualstudio.com/Academies-and-Free-Schools-SIP/_boards/board/t/Significant%20changes/Stories?workitem=311062) - Add Trust experience and governance task endpoint and migration
 
 ---
 ## [10.2.0][10.2.0] - 2026-11-25

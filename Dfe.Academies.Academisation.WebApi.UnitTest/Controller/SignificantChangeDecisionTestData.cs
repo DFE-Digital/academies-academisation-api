@@ -39,6 +39,7 @@ public static class SignificantChangeDecisionTestData
 			SatelliteSiteArrangement = new() { Status = completed },
 			SpecialSchoolSatelliteConsiderations = new () { Status = completed },
 			MainstreamSchoolSatelliteConsiderations = new() { Status = completed },
+			TrustExperienceAndGovernance = new() { Status = completed },
 			LocalSenPlans = new() { Status = completed },
 			ImpactOnSenProvision = new() { Status = completed }
 		};
@@ -67,8 +68,10 @@ public static class SignificantChangeDecisionTestData
 				(project, status) => project.AdmissionsVariationRecommendation.Status = status,
 				(project, status) => project.Clearance.Status = status,
 				(project, status) => project.SatelliteSiteArrangement = project.SatelliteSiteArrangement with { Status = status },
+				(project, status) => project.MainstreamSchoolSatelliteConsiderations = new() { Status = status },
 				(project, status) => project.LocalSenPlans = new() { Status = status },
 				(project, status) => project.MainstreamSchoolSatelliteConsiderations = new() { Status = status },
+				(project, status) => project.TrustExperienceAndGovernance = new() { Status = status },
 				(project, status) => project.ImpactOnSenProvision = new() { Status = status }
 			];
 			var data = new TheoryData<Action<SignificantChangeProjectGetByIdResponse, string>, SignificantChangeTaskStatus>();

@@ -509,6 +509,34 @@ namespace Dfe.Academies.Academisation.WebApi.Controllers
 			};
 		}
 
+		/// <summary>Updates trust experience and governance for a significant change project.</summary>
+		[HttpPut("{id:int}/TrustExperienceAndGovernance", Name = "SetSignificantChangeTrustExperienceAndGovernance")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult> SetSignificantChangeTrustExperienceAndGovernance(
+			int id,
+			[FromBody] SetSignificantChangeTrustExperienceAndGovernancePublicCommand request,
+			CancellationToken cancellationToken)
+		{
+			var command = new SetSignificantChangeTrustExperienceAndGovernanceCommand(
+				id,
+				request.Answer,
+				request.AdditionalInformation,
+				request.SupportingEvidenceSharepointLink);
+
+			CommandResult result = await _mediator.Send(command, cancellationToken);
+
+			return result switch
+			{
+				CommandSuccessResult => Ok(),
+				NotFoundCommandResult => NotFound(),
+				CommandValidationErrorResult validationErrorResult =>
+					BadRequest(validationErrorResult.ValidationErrors),
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		/// <summary>Updates whether the proposal conflicts with a Local SEN Reform Plan for a significant change project.</summary>
 		[HttpPut("{id:int}/LocalSenPlans", Name = "SetSignificantChangeLocalSenPlans")]
 		[ProducesResponseType(StatusCodes.Status200OK)]

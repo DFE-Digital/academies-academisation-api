@@ -96,6 +96,9 @@ public class SignificantChangeProjectDetails
 	public YesNoNotApplicableAnswer? MainstreamSchoolSatelliteConsiderationsMeetRequirements { get; set; }
 	public string? MainstreamSchoolSatelliteConsiderationsAdditionalInformation { get; set; }
 	public string? MainstreamSchoolSatelliteConsiderationsSupportingEvidence { get; set; }
+	public YesNoNotApplicableAnswer? TrustExperienceAndGovernanceAnswer { get; set; }
+	public string? TrustExperienceAndGovernanceAdditionalInformation { get; set; }
+	public string? TrustExperienceAndGovernanceSupportingEvidence { get; set; }
 
 	public SignificantChangeTaskStatus GetEqualitiesTaskStatus()
 	{
@@ -357,6 +360,18 @@ public class SignificantChangeProjectDetails
 
 		if (MainstreamSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No
 			&& string.IsNullOrWhiteSpace(MainstreamSchoolSatelliteConsiderationsAdditionalInformation))
+			return SignificantChangeTaskStatus.InProgress;
+
+		return SignificantChangeTaskStatus.Completed;
+	}
+
+	public SignificantChangeTaskStatus GetTrustExperienceAndGovernanceTaskStatus()
+	{
+		if (!TrustExperienceAndGovernanceAnswer.HasValue)
+			return SignificantChangeTaskStatus.NotStarted;
+
+		if (TrustExperienceAndGovernanceAnswer == YesNoNotApplicableAnswer.No
+			&& string.IsNullOrWhiteSpace(TrustExperienceAndGovernanceAdditionalInformation))
 			return SignificantChangeTaskStatus.InProgress;
 
 		return SignificantChangeTaskStatus.Completed;

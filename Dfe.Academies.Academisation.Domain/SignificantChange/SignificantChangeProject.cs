@@ -323,6 +323,14 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 			SetProjectTier();
 		}
 
+		public void SetTrustExperienceAndGovernance(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
+		{
+			Details.TrustExperienceAndGovernanceAnswer = answer;
+			Details.TrustExperienceAndGovernanceAdditionalInformation = answer is YesNoNotApplicableAnswer.No ? additionalInformation : null;
+			Details.TrustExperienceAndGovernanceSupportingEvidence = supportingEvidence;
+			SetProjectTier();
+		}
+
 		public void SetLocalSenPlans(YesNoNotApplicableAnswer? answer, string? additionalInformation, string? supportingEvidence)
 		{
 			Details.LocalSenPlansConflict = answer;
@@ -375,6 +383,7 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 				|| SatelliteSiteNotAGenuineExpansion()
 				|| HasSpecialSchoolSatelliteConsiderationsNotMetRequirements()
 				|| HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
+				|| HasTrustExperienceAndGovernanceNotMetRequirements()
 				|| HasLocalSenPlansConflict()
 				|| SenProvisionNotImproved();
 		}
@@ -448,6 +457,9 @@ namespace Dfe.Academies.Academisation.Domain.SignificantChange
 
 		private bool HasMainstreamSchoolSatelliteConsiderationsNotMetRequirements()
 			=> Details.MainstreamSchoolSatelliteConsiderationsMeetRequirements == YesNoNotApplicableAnswer.No;
+
+		private bool HasTrustExperienceAndGovernanceNotMetRequirements()
+			=> Details.TrustExperienceAndGovernanceAnswer == YesNoNotApplicableAnswer.No;
 
 		private bool SenProvisionNotImproved()
 			=> Details.ImpactOnSenProvisionImprovesProvision == YesNoNotApplicableAnswer.No;
